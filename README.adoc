@@ -49,15 +49,16 @@ Here cmake is the version that comes with Visual Studio.
  cmake.exe -G "Visual Studio 16 2019" -A win32 -DNAME_SUFFIX=win32 \
     -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_SYSTEM_NAME=Windows ..
- cmake.exe --build .  --target install --config Release
+ cmake.exe --build . --target install --config Release
 
 * x64
 
  mkdir build
  cd build
  cmake.exe -G "Visual Studio 16 2019" -A x64 -DNAME_SUFFIX=x64 \
-    -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_BUILD_TYPE=Release \         -DCMAKE_SYSTEM_NAME=Windows ..
- cmake.exe --build .  --target install --config Release
+    -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_SYSTEM_NAME=Windows ..
+ cmake.exe --build . --target install --config Release
 
 ==== Mingw
 Here cmake is the mingw version.
