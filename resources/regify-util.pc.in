@@ -1,0 +1,11 @@
+prefix=@CMAKE_INSTALL_PREFIX@
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: @NAME@
+Description: @NAME@ - The regify utility package.
+Requires:
+Version: @NAME_VERSION@-@NAME_REVISION@
+Libs: -L${libdir} -l@NAME@ @NAME_LIBS@
+Cflags: @NAME_INCLUDES@

@@ -1,0 +1,157 @@
+= regify Util
+:author: regify Team
+:toc:
+:doctype: book
+ifdef::env-github[]
+:tip-caption: :bulb:
+:note-caption: :information_source:
+:important-caption: :heavy_exclamation_mark:
+:caution-caption: :fire:
+:warning-caption: :warning:
+endif::[]
+
+== Introduction
+The regify utility package is a collection of general utilities ranging from String Functions, over collections like List Collection or Hash Map to Logging Facility, Regular Expressions and abstracted storage such as Key Value Storage.
+There are also File I/O utilities.
+It is designed to run on Windows and Unix derivatives of which Linux, Android, OS X and iOS is tested.
+
+== Building
+The project is built using https://cmake.org[Cmake].
+The main dependency is https://icu.unicode.org[ICU].
+Aside from the usual cmake variables there is `DEPS_PREFIX` which points to the prefix where ICU can be found.
+Below are examples on how to build regify-util.
+These builds produce static libraries.
+For Linux a shared so can be built by setting `BUILD_SHARED_LIBS`.
+An example of this can be found in the rpm spec.
+
+In the build instructions below `cmake` is assumed to be on the PATH.
+In most cases it is also expected to set `CMAKE_INSTALL_PREFIX` to something sensible.
+When `DEPS_PREFIX` is not set it defaults to `CMAKE_INSTALL_PREFIX`.
+
+=== Linux
+On Linux we currently only build x86_64
+
+ mkdir build
+ cd build
+ cmake -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_NAME=Linux ..
+ make
+
+=== Windows
+On Windows we build MSVC and mingw binaries
+
+==== Visual Studio
+Here cmake is the version that comes with Visual Studio.
+
+* win32
+
+ mkdir build
+ cd build
+ cmake.exe -G "Visual Studio 16 2019" -A win32 -DNAME_SUFFIX=win32 \
+    -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_SYSTEM_NAME=Windows ..
+ cmake.exe --build .  --target install --config Release
+
+* x64
+
+ mkdir build
+ cd build
+ cmake.exe -G "Visual Studio 16 2019" -A x64 -DNAME_SUFFIX=x64 \
+    -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_BUILD_TYPE=Release \         -DCMAKE_SYSTEM_NAME=Windows ..
+ cmake.exe --build .  --target install --config Release
+
+==== Mingw
+Here cmake is the mingw version.
+We also have mingw installed via msys2 under `C:/msys64/mingw{32,64}/bin`.
+
+* mingw32
+
+ mkdir build
+ cd build
+ cmake -G "Unix Makefiles" -DCMAKE_VERBOSE_MAKEFILE=ON \
+    -DCMAKE_BUILD_TYPE=Release -DNAME_SUFFIX=mingw32 \
+    -DCMAKE_SYSTEM_NAME=Windows ..
+ make
+
+* mingw64
+
+ mkdir build
+ cd build
+ cmake -G "Unix Makefiles" -DCMAKE_VERBOSE_MAKEFILE=ON \
+    -DCMAKE_BUILD_TYPE=Release -DNAME_SUFFIX=mingw64 \
+    -DCMAKE_SYSTEM_NAME=Windows ..
+ make
+
+=== Android
+For android builds it is necessary to indicate where the NDK can be found.
+We currently have the following architectures:
+
+* armv7
+
+ mkdir build
+ cd build
+ cmake -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_TOOLCHAIN_FILE=/path/to/ndk/build/cmake/android.toolchain.cmake \
+    -DNAME_SUFFIX=armv7 -DCMAKE_SYSTEM_NAME=Android \
+    -DANDROID_NATIVE_API_LEVEL=23 -DANDROID_ABI=armeabi-v7a ..
+ make
+
+* arm64
+
+ mkdir build
+ cd build
+ cmake -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_TOOLCHAIN_FILE=/path/to/ndk/build/cmake/android.toolchain.cmake \
+    -DNAME_SUFFIX=arm64 -DCMAKE_SYSTEM_NAME=Android \
+    -DANDROID_NATIVE_API_LEVEL=23 -DANDROID_ABI=arm64-v8a ..
+ make
+
+=== OS X
+For OS X only x86_64 is currently supported.
+
+ mkdir build
+ cd build
+ cmake -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_SYSTEM_NAME=Darwin -DNAME_SUFFIX=x86_64 ..
+ make
+
+=== iOS
+For iOS we currently have the following architectures:
+
+* armv7
+
+ mkdir build
+ cd build
+ cmake -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_BUILD_TYPE=Release \
+    -G "Unix Makefiles" -DNAME_SUFFIX=armv7 -DCMAKE_SYSTEM_NAME=iOS \
+    -DCMAKE_OSX_ARCHITECTURES=armv7 -DCMAKE_OSX_DEPLOYMENT_TARGET=9 \
+    -DCMAKE_IOS_INSTALL_COMBINED=YES ..
+ make
+
+* armv7s
+
+ mkdir build
+ cd build
+ cmake -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_BUILD_TYPE=Release \
+    -G "Unix Makefiles" -DNAME_SUFFIX=armv7s -DCMAKE_SYSTEM_NAME=iOS \
+    -DCMAKE_OSX_ARCHITECTURES=armv7s -DCMAKE_OSX_DEPLOYMENT_TARGET=9 \
+    -DCMAKE_IOS_INSTALL_COMBINED=YES ..
+ make
+
+* arm64
+
+ mkdir build
+ cd build
+ cmake -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_BUILD_TYPE=Release \
+    -G "Unix Makefiles" -DNAME_SUFFIX=arm64 -DCMAKE_SYSTEM_NAME=iOS \
+    -DCMAKE_OSX_ARCHITECTURES=arm64 -DCMAKE_OSX_DEPLOYMENT_TARGET=9 \
+    -DCMAKE_IOS_INSTALL_COMBINED=YES ..
+ make
+
+==== utilRunner
+For iOS we have a little iOS Xcode project to build and run the tests under.
+
+* Start open utilRunner in xcode, plug in the iPhone and click on run.
+The logger window should display whether the tests passed or not. The app does not display
+anything nor does it terminate by itself, so you need to do that yourself.
+* The minimum deployment target has been set to ios9 because thread local storage needed
+for error reporting does not work before ios9.
