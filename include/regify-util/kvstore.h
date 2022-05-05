@@ -21,7 +21,18 @@
  */
 /**
  * \defgroup kvstore Key Value Storage
- * \brief This section contains key/value storage interfaces and implementations.
+ * \brief A \ref kvstore is a generic storage interface designed to allow for
+ * flexible data serialization.
+ *
+ * Currently provided implementations are \ref ruFileStore for file system based
+ * storage and \ref ruNullStore to omit local storage altogether.
+ * It consists of a simple \ref kvget, \ref kvset and \ref kvlist call.
+ *
+ * \subsection kvkey kvstore key
+ * This is a space separated string that also accept filesystem type globs like *.
+ * Each intersecting space indicates a sub level much like a folder in a file
+ * system, or a sub branch in a hierarchy. In most cases * is only supported at
+ * the end.
  *
  * @{
  */
@@ -40,7 +51,7 @@ struct KvStore_;
 /**
  * \brief KvStore setter function interface.
  * @param kvs \ref KvStore object.
- * @param key The space separated key to the data in question.
+ * @param key The \ref kvkey to the data in question.
  * @param val The value that will be stored or NULL if the key is to be removed.
  * @param len The number of bytes that make up val.
  * @return \ref RUE_OK on success else an error code.
@@ -51,8 +62,10 @@ typedef int32_t (*kvset) (struct KvStore_* kvs, const char* key,
 /**
  * \brief KvStore getter function interface.
  * @param kvs \ref KvStore object.
- * @param key The space separated key to the data in question.
- * @param val Where the retrieved value will be stored. Caller should copy this.
+ * @param key The \ref kvkey to the data in question.
+ * @param val Where the retrieved value will be stored. Most of the time the
+ *            caller should free this with \ref ruFree when done with it.
+ *            See implementation details.
  * @param len The number of bytes that make up val.
  * @return \ref RUE_OK on success else an error code.
  */
@@ -62,9 +75,9 @@ typedef int32_t (*kvget) (struct KvStore_* kvs, const char* key,
 /**
  * \brief KvStore list function interface.
  * @param kvs KvStore context where data will be retrieved from.
- * @param key The space separated key to the data in question.
- *        Should end with a *.
- * @param list Where the list of found keys will be stored.
+ * @param key The \ref kvkey to the data in question. Should end with a *.
+ * @param list An \ref ruList of \ref kvkey strings. Should be freed with
+ *               \ref ruListFree after use.
  * @return \ref RUE_OK on success else an error code.
  */
 typedef int32_t (*kvlist) (struct KvStore_* kvs, const char* key,
@@ -76,7 +89,9 @@ typedef int32_t (*kvlist) (struct KvStore_* kvs, const char* key,
 typedef void (*kvctxfree) (void*);
 
 /**
- * \brief The key/value store interface type
+ * \brief The key/value store interface type.
+ * This object holds the \ref kvget, \ref kvlist and \ref kvset methods of an
+ * implementation.
  */
 typedef struct KvStore_ {
     /** \brief The method that will be called to set data. */
@@ -123,7 +138,7 @@ RUAPI int32_t ruValidStore(void* obj);
 typedef void* ruFileStore;
 
 /**
- * \brief Returns a newly created file system based KvStore interface.
+ * \brief Returns a newly created file system based \ref KvStore object.
  * If there is already store data in the given folder, it is opened and used.
  * @param folderPath Top level folder under which the data will be stored.
  * @param code Return code willbe \ref RUE_OK on success or error otherwise.
@@ -134,8 +149,9 @@ RUAPI KvStore* ruNewFileStore (const char *folderPath, int32_t* code);
 /**
  * \brief Set the value of key in the given FileStore.
  * @param kvs FileStore context where data will be stored.
- * @param key The space separated key to the data in question.
+ * @param key The \ref kvkey to the data in question.
  * @param val The value that will be stored or NULL if the key is to be removed.
+ *            The value will be copied.
  * @param len The number of bytes that make up val.
  * @return \ref RUE_OK on success else an error code.
  */
@@ -144,8 +160,9 @@ RUAPI int32_t ruFileStoreSet (KvStore *kvs, const char* key, const char *val, ru
 /**
  * \brief Get the value of key from the given FileStore.
  * @param kvs FileStore context where data will be retrieved from.
- * @param key The space separated key to the data in question.
- * @param val Where the retrieved value will be stored. Caller should copy this.
+ * @param key The \ref kvkey to the data in question.
+ * @param val Where the retrieved value will be stored.
+ *            Caller should free this with \ref ruFree when done with it.
  * @param len The number of bytes that make up val.
  * @return \ref RUE_OK on success else an error code.
  */
@@ -154,8 +171,9 @@ RUAPI int32_t ruFileStoreGet (KvStore *kvs, const char* key, char **val, rusize*
 /**
  * \brief Returns a list of keys under the given key.
  * @param kvs FileStore context where key will be listed from.
- * @param key The space separated key to the data in question. May end with " *"
- * @param result A \ref ruList of key strings
+ * @param key The \ref kvkey to the data in question. May end with " *"
+ * @param result An \ref ruList of \ref kvkey strings. Should be freed with
+ *               \ref ruListFree after use.
  * @return \ref RUE_OK on success else an error code.
  */
 RUAPI int32_t ruFileStoreList (KvStore *kvs, const char* key, ruList* result);
@@ -175,7 +193,7 @@ RUAPI KvStore* ruNewNullStore();
 /**
  * \brief Set the value of key in the given FileStore.
  * @param kvs KvStore context where data will be stored.
- * @param key The space separated key to the data in question.
+ * @param key The \ref kvkey to the data in question.
  * @param val The value that will be stored or NULL if the key is to be removed.
  * @param len The number of bytes that make up val.
  * @return \ref RUE_OK on success else an error code.
@@ -185,7 +203,7 @@ RUAPI int32_t ruNullStoreSet (KvStore *kvs, const char* key, const char *val, ru
 /**
  * \brief Get the value of key from the given KvStore.
  * @param kvs KvStore context where data will be retrieved from.
- * @param key The space separated key to the data in question.
+ * @param key The \ref kvkey to the data in question.
  * @param val Where the retrieved value will be stored. Will always be NULL.
  * @param len The number of bytes that make up val. Will always be 0.
  * @return \ref RUE_OK on success else an error code.
@@ -195,9 +213,8 @@ RUAPI int32_t ruNullStoreGet (KvStore *kvs, const char* key, char **val, rusize*
 /**
  * \brief Returns a list of items under given key.
  * @param kvs KvStore context where data will be retrieved from.
- * @param key The space separated key to the data in question.
- *        Should end with a *.
- * @param list A list of keys that were found.
+ * @param key The \ref kvkey to the data in question. Should end with a *.
+ * @param list A NULL \ref ruList of keys that would normally be found.
  * @return \ref RUE_OK on success else an error code.
  */
 RUAPI int32_t ruNullStoreList (KvStore *kvs, const char* key, ruList* list);

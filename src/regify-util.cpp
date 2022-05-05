@@ -25,16 +25,6 @@
 */
 #include "lib.h"
 
-#ifdef RUMS
-    #define RU_THREAD_LOCAL __declspec(thread)
-#else
-    #ifdef DO_IOS
-        #define RU_THREAD_LOCAL thread_local
-    #else
-        #define RU_THREAD_LOCAL __thread
-    #endif
-#endif
-
 #ifdef BUILD_VERSION
     #define RU_VERSION BUILD_VERSION
 #else

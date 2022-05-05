@@ -503,11 +503,20 @@ START_TEST ( buffer ) {
 
     test = "ruBufferAppend";
     exp = RUE_OK;
-    want = "foo";
+    want = "f\x00o";
     explen = 3;
-    data = "foo";
+    data = "f\x00o";
     ret = ruBufferAppend(rb, data, 3);
     fail_unless(ret == exp, retText, test, exp, ret);
+    len = ruBufferLen(rb, &ret);
+    fail_unless(explen == len, retText, test, explen, len);
+    data = ruBufferGetData(rb);
+    ck_assert_mem_eq(data, want, explen);
+
+    ret = ruBufferAppendUriEncoded(rb, data, 3);
+    fail_unless(ret == exp, retText, test, exp, ret);
+    explen = 8;
+    want = "f\x00of%00o";
     len = ruBufferLen(rb, &ret);
     fail_unless(explen == len, retText, test, explen, len);
     data = ruBufferGetData(rb);

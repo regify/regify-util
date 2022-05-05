@@ -147,13 +147,18 @@ RUAPI int32_t ruStringAppend(ruString rs, const char* instr) {
     return ruStringAppendn(rs, instr, strlen(instr));
 }
 
-RUAPI int32_t ruStringAppendUriEncoded(ruString rs, const char* instr) {
+RUAPI int32_t ruBufferAppendUriEncoded(ruString rs, const char* instr, rusize len) {
     ruClearError();
     int32_t ret;
     String *str = StringGet(rs, &ret);
     if (!str) return ret;
     if (!instr) return RUE_PARAMETER_NOT_SET;
-    rusize i, olen, ilen = strlen(instr);
+    rusize i, olen, ilen;
+    if (len) {
+        ilen = len;
+    } else {
+        ilen = strlen(instr);
+    }
     for (i = 0; i < ilen; i++) {
         char out[4];
         uchar c = instr[i];
@@ -170,6 +175,10 @@ RUAPI int32_t ruStringAppendUriEncoded(ruString rs, const char* instr) {
     }
     *(str->start + str->idx) = '\0';
     return ret;
+}
+
+RUAPI int32_t ruStringAppendUriEncoded(ruString rs, const char* instr) {
+    return ruBufferAppendUriEncoded(rs, instr, 0);
 }
 
 RUAPI int32_t ruStringAppendn(ruString rs, const char* instr, rusize len) {

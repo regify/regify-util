@@ -380,17 +380,22 @@ RUAPI void ruStripChars(char *instr, const char* chars);
  * \defgroup ruBuffer Buffer Object
  * \brief A data buffer implementation.
  * This implementation allows for dynamically creating a buffer and appending to
- * it in a reasonably efficient matter.
+ * it in a reasonably efficient matter. It is like \ref ruString but is not NULL
+ * terminated. Functions of both may be used interchangeably.
  * \ingroup buffer
  * @{
  */
 /**
- * \brief An opaque data type representing a regify-util string object.
+ * \brief An opaque data type representing a regify-util string object that is
+ * not NULL terminated.
  */
 typedef void* ruBuffer;
 
 /**
  * \brief Creates a new buffer object of given initial size.
+ * A \ref ruBuffer is essentially a \ref ruString that is not NULL terminated
+ * and therefore has a length parameter. \ref ruString and \ref ruBuffer may be
+ * used interchangeably.
  * @param initialSize Initial buffer to allocate.
  * @return The newly created \ref ruBuffer object to be freed with \ref
  *         ruBufferFree or NULL on error. Check \ref ruLastError in case of NULL;
@@ -398,13 +403,22 @@ typedef void* ruBuffer;
 #define ruBufferNew(initialSize) (ruBuffer) ruStringNewn(NULL, initialSize)
 
 /**
- * \brief Append given data to \ref ruString.
+ * \brief Append given data to \ref ruBuffer.
  * @param rb Data buffer to append data to.
  * @param buf data to append.
  * @param len Number of bytes of data to append.
  * @return \ref RUE_OK on success else a regify error code.
  */
 #define ruBufferAppend(rb, buf, len) ruStringAppendn(rb, buf, len)
+
+/**
+ * \brief Append given string URI encoded to \ref ruString.
+ * @param rs Data buffer to append data to.
+ * @param buf Data to append.
+ * @param len Number of bytes of data to append.
+ * @return \ref RUE_OK on success else a regify error code.
+ */
+RUAPI int32_t ruBufferAppendUriEncoded(ruString rs, const char* buf, rusize len);
 
 /**
  * \brief Returns the underlying char* of the given \ref ruBuffer.

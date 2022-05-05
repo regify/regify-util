@@ -135,6 +135,16 @@ extern "C" {
 
 #endif
 
+#ifdef RUMS
+#define RU_THREAD_LOCAL __declspec(thread)
+#else
+#ifdef DO_IOS
+#define RU_THREAD_LOCAL thread_local
+#else
+#define RU_THREAD_LOCAL __thread
+#endif
+#endif
+
 
 /**
  * \brief Abstracted version of size_t.
