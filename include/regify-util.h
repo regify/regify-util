@@ -49,19 +49,30 @@ extern "C" {
 #include <stdbool.h>
 
 /** \cond noworry */
-#ifdef REGIFY_UTIL_HIDDEN
-    #define RUAPI
-#else
-    #if defined(WINDOWS) || defined(WIN32) || defined(__BORLANDC__)
-        #define RUAPI extern __declspec(dllexport)
+#if defined(RU_SHARED)
+    #if (defined(WINDOWS) || defined(WIN32) || defined(__BORLANDC__))
+        #ifdef RU_BUILDING
+            #define RUAPI extern __declspec(dllexport)
+        #else
+            #define RUAPI extern __declspec(dllimport)
+        #endif
     #else
-        #define RUAPI __attribute__ ((visibility ("default")))
+        #if defined(__GNUC__) && (__GNUC__ * 100 + __GNUC_MINOR__) >= 303
+            #define RUAPI __attribute__ ((visibility ("default")))
+        #endif
     #endif
+#else
+    #define RUAPI
 #endif
 /** \endcond */
 
 #if defined(WINDOWS) || defined(WIN32) || defined(__BORLANDC__)
     /** \cond noworry */
+    #ifdef _MSC_VER
+        // running non posix
+        #define RUMS
+    #endif
+
     #ifdef RUMS
         #pragma comment(lib, "Ws2_32.lib")
     #endif

@@ -22,24 +22,22 @@
 #ifndef REGIFY_UTIL_LIB_H
 #define REGIFY_UTIL_LIB_H
 
-#ifdef _MSC_VER
-// running non posix
-#define RUMS
+#ifdef _WIN64
+    // needed for our logger
+    // https://sourceforge.net/p/mingw-w64/wiki2/gnu%20printf/
+    #define __USE_MINGW_ANSI_STDIO 1
 #endif
-
+#define RU_BUILDING
+#include <regify-util.h>
 #ifndef RUMS
-#include <dirent.h>
-#include <sys/time.h>
-#include <unistd.h>
+    #include <dirent.h>
+    #include <sys/time.h>
+    #include <unistd.h>
 #else
-#include <io.h>
+    #include <io.h>
 #endif
 #ifdef _WIN32
-#include <windows.h>
-#ifdef _WIN64
-// https://sourceforge.net/p/mingw-w64/wiki2/gnu%20printf/
-#define __USE_MINGW_ANSI_STDIO 1
-#endif
+    #include <windows.h>
 #endif
 #include <stdio.h>
 #include <limits.h>
@@ -49,7 +47,6 @@
 #include <sys/stat.h>
 #include <errno.h>
 #include <fcntl.h>
-#include <regify-util.h>
 #include "unicode/uchar.h"
 #include "unicode/ustring.h"
 #include "unicode/utypes.h"
@@ -174,8 +171,6 @@ typedef struct Map_ {
 } Map;
 #define MapMagic 23014206
 
-u_int32_t ruStrHash(const void *key);
-bool ruStrMatch(const void* s1, const void* s2);
 int32_t MapGetData(Map *mp, void *key, void **value);
 
 /*

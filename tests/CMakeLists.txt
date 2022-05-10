@@ -18,23 +18,25 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+set(CHECK_LIBRARY_DIRS ${ICU_LIBRARY_DIRS} CACHE STRING "Where the check libraries are located")
+
 if(MSVC)
-    set(CHECK_LIBRARIES "${DEPS_LIB}/check.lib")
+    set(CHECK_LIBRARIES "${CHECK_LIBRARY_DIRS}/check.lib")
 elseif(MAC OR MINGW)
-    set(CHECK_LIBRARIES ${DEPS_LIB}/libcheck.a)
+    set(CHECK_LIBRARIES ${CHECK_LIBRARY_DIRS}/libcheck.a)
 else()
-    set(CHECK_LIBRARIES ${DEPS_LIB}/libcheck.a -lm -lrt -lsubunit)
+    set(CHECK_LIBRARIES ${CHECK_LIBRARY_DIRS}/libcheck.a -lm -lrt -lsubunit)
 endif()
 doLog(LOG_VERB "CHECK_LIBRARIES ${CHECK_LIBRARIES}")
 
-include_directories(${PROJECT_SOURCE_DIR}/include/ ${DEPS_INCLUDES})
+include_directories(${PROJECT_SOURCE_DIR}/include/ ${CHECK_INCLUDES})
 
 file(GLOB HEADERS ${PROJECT_SOURCE_DIR}/include/*.h)
 file(GLOB TESTS runTests.cpp *.[ch])
 
 if(IOS)
     set(PBX_ARCH ${NAME_SUFFIX})
-    set(PBX_INCLUDES ${DEPS_INCLUDES})
+    set(PBX_INCLUDES ${CHECK_INCLUDES})
     set(PBX_LDFLAGS "${LDIR}/libcheck.a ${PROJECT_BINARY_DIR}/libregify-util.a ${LDIR}/libicui18n.a ${LDIR}/libicuuc.a ${LDIR}/libicudata.a -lm")
     configure_file (
             "${PROJECT_SOURCE_DIR}/utilRunner/utilRunner.xcodeproj/project.pbxproj.in"

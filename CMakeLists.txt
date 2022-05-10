@@ -45,9 +45,10 @@ set(NAME_REVISION dev CACHE STRING "The build revision")
 set(CMAKE_BUILD_TYPE Debug CACHE STRING "What to build")
 set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS Debug Release)
 set(BUILD_SHARED_LIBS OFF CACHE BOOL "Whether to build dynamic libraries")
+set(ICU_STATICLIB ON CACHE BOOL "Whether to statically link ICU")
 set(TESTING OFF CACHE BOOL "Whether to build the tests")
 
-set(DEPS_PREFIX ${CMAKE_INSTALL_PREFIX} CACHE STRING "Prefix path under which to find ICU")
+set(ICU_PREFIX ${CMAKE_INSTALL_PREFIX} CACHE STRING "Prefix path under which to find ICU")
 
 # regify utility functionality
 set(LOG_NONE 0)
@@ -133,10 +134,9 @@ if(NOT NAME_SUFFIX)
     message(FATAL_ERROR "NAME_SUFFIX not set")
 endif()
 
-set(LDIR ${DEPS_PREFIX}/lib)
 # where static dependencies are found
-set(DEPS_LIB ${DEPS_PREFIX}/lib)
-set(DEPS_INCLUDES ${DEPS_PREFIX}/include)
+set(ICU_LIBRARY_DIRS ${ICU_PREFIX}/lib)
+set(ICU_INCLUDE_DIRS ${ICU_PREFIX}/include)
 
 if (${CMAKE_PROJECT_NAME} MATCHES ${NAME})
     set(INCLUDED 0)
@@ -151,8 +151,14 @@ if(LINUX OR MAC)
     find_package(Threads REQUIRED)
 endif()
 
+link_directories(${ICU_LIBRARY_DIRS})
+
 if(WIN AND NOT MINGW)
-    set(ICU_LIBRARIES icuio.lib icuin.lib icuuc.lib icudt.lib)
+    if(BUILD_SHARED_LIBS AND NOT ICU_STATICLIB)
+        set(ICU_LIBRARIES icuio.dll.lib icuin.dll.lib icuuc.dll.lib icudt.dll.lib)
+    else()
+        set(ICU_LIBRARIES icuio.lib icuin.lib icuuc.lib icudt.lib)
+    endif()
 elseif(LINUX AND BUILD_SHARED_LIBS)
     # for appliance builds
     set(ICU_LIBRARIES -licuio -licui18n -licuuc -licudata -lm -ldl)
@@ -168,7 +174,7 @@ if(NOT BUILD_SHARED_LIBS)
 
     foreach(lib IN LISTS ICU_LIBRARIES)
         if(NOT "${lib}" MATCHES "^-")
-            configure_file(${DEPS_LIB}/${lib} ${RF_LIB_DIR}/${lib} COPYONLY)
+            configure_file(${ICU_LIBRARY_DIRS}/${lib} ${RF_LIB_DIR}/${lib} COPYONLY)
             list(APPEND RF_LIBRARIES ${RF_LIB_DIR}/${lib})
         else()
             list(APPEND RF_LIBRARIES ${lib})
@@ -176,9 +182,9 @@ if(NOT BUILD_SHARED_LIBS)
     endforeach()
 
     # includes
-    docopy(${DEPS_INCLUDES}/unicode ${RF_INCLUDE_DIR}/unicode *) # ICU
+    docopy(${ICU_INCLUDE_DIRS}/unicode ${RF_INCLUDE_DIR}/unicode *) # ICU
     if(CMAKE_BUILD_TYPE MATCHES "^Release$")
-        docopy(${DEPS_PREFIX}/share/icu ${PKG_DIR}/share/icu LICENSE )
+        docopy(${ICU_PREFIX}/share/icu ${PKG_DIR}/share/icu LICENSE )
     endif()
 else()
     set(RF_LIBRARIES ${ICU_LIBRARIES})
@@ -195,6 +201,9 @@ if(MSVC)
         /wd4625 /wd4626 /wd4668 /wd4710 /wd4711
         /wd4820 /wd5039 /wd5045
     )
+    if(BUILD_SHARED_LIBS)
+        add_definitions ( -DRU_SHARED )
+    endif()
 else(MSVC)
     if (NOT ANDROID)
         set(L_PTHREAD -lpthread)
@@ -213,8 +222,8 @@ else(MSVC)
             -Wl,--gc-sections \
             -Wl,--exclude-libs,ALL")
 endif(MSVC)
-add_definitions(-DBUILD_VERSION=\"${NAME_VERSION}-${NAME_REVISION}\")
 
+add_definitions(-DBUILD_VERSION=\"${NAME_VERSION}-${NAME_REVISION}\")
 
 file(GLOB HEADERS include/*.h)
 file(GLOB SRCS src/*.[hc] src/*.cpp)
@@ -223,16 +232,19 @@ add_library(${NAME} ${SRCS} ${HEADERS})
 add_library(${CLEANER} src/cleaner.c)
 target_compile_definitions(${CLEANER} PUBLIC CLEANER_ONLY)
 
+target_link_libraries(${NAME} ${RF_LIBRARIES})
+
 set_target_properties(${NAME} PROPERTIES
         SOVERSION ${NAME_SOVERSION})
 
 target_include_directories(${NAME} PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-        ${DEPS_INCLUDES}
+        ${ICU_INCLUDE_DIRS}
         $<INSTALL_INTERFACE:include>)
 
 install(TARGETS ${NAME} DESTINATION lib)
 install(TARGETS ${CLEANER} DESTINATION lib)
+
 if (NOT BUILD_SHARED_LIBS)
     install(DIRECTORY include/ DESTINATION include)
 else()
@@ -245,7 +257,7 @@ else()
 endif()
 
 if (NOT INCLUDED)
-    if(TESTING)
+    if(TESTING AND NOT BUILD_SHARED_LIBS)
         doLog(LOG_INFO "Adding unit tests")
         enable_testing()
         add_subdirectory(tests)
