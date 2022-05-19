@@ -28,9 +28,6 @@
 #ifndef REGIFY_UTIL_REGEX_H
 #define REGIFY_UTIL_REGEX_H
 
-// for URegexpFlag
-#include <unicode/uregex.h>
-
 /* Only need to export C interface if used by C++ source code */
 #ifdef __cplusplus
 extern "C" {
@@ -48,7 +45,7 @@ extern "C" {
  * ruRegex rr = NULL;
  * ruList matches = NULL;
  * do {
- *   rr = ruRegexNew("^(\\w+)^", UREGEX_CASE_INSENSITIVE, &ret);
+ *   rr = ruRegexNew("^(\\w+)^", RUREGEX_CASE_INSENSITIVE, &ret);
  *   if (ret != RUE_OK) break;
  *   char *orig = "text with a ^tag^ in it.";
  *   matches = ruRegexFindGroups(rr, orig, &ret);
@@ -63,6 +60,66 @@ extern "C" {
  * ~~~~~
  *
  */
+
+/**
+ * Constants for Regular Expression Match Modes. These are mirrored from ICU to
+ * avoid having to pull the entire includes folders when using regify-utils.
+ */
+typedef enum ruRegexpFlag {
+
+    /** Forces normalization of pattern and strings.
+    Not implemented yet, just a placeholder, hence draft. */
+    RUREGEX_CANON_EQ         = 128,
+    /**  Enable case insensitive matching. */
+    RUREGEX_CASE_INSENSITIVE = 2,
+
+    /**  Allow white space and comments within patterns */
+    RUREGEX_COMMENTS         = 4,
+
+    /**  If set, '.' matches line terminators,
+     * otherwise '.' matching stops at line end. */
+    RUREGEX_DOTALL           = 32,
+
+    /**  If set, treat the entire pattern as a literal string.
+      *  Metacharacters or escape sequences in the input sequence will be given
+      *  no special meaning.
+      *
+      *  The flag RUREGEX_CASE_INSENSITIVE retains its impact
+      *  on matching when used in conjunction with this flag.
+      *  The other flags become superfluous.
+      */
+    RUREGEX_LITERAL = 16,
+
+    /**   Control behavior of "$" and "^"
+      *    If set, recognize line terminators within string,
+      *    otherwise, match only at start and end of input string.
+      */
+    RUREGEX_MULTILINE        = 8,
+
+    /**   Unix-only line endings.
+      *   When this mode is enabled, only \\u000a is recognized as a line ending
+      *    in the behavior of ., ^, and $.
+      */
+    RUREGEX_UNIX_LINES = 1,
+
+    /**  Unicode word boundaries.
+      *     If set, \b uses the Unicode TR 29 definition of word boundaries.
+      *     Warning: Unicode word boundaries are quite different from
+      *     traditional regular expression word boundaries.  See
+      *     http://unicode.org/reports/tr29/#Word_Boundaries
+      */
+    RUREGEX_UWORD            = 256,
+
+    /**  Error on Unrecognized backslash escapes.
+      *     If set, fail with an error on patterns that contain
+      *     backslash-escaped ASCII letters without a known special
+      *     meaning.  If this flag is not set, these
+      *     escaped letters represent themselves.
+      */
+    RUREGEX_ERROR_ON_UNKNOWN_ESCAPES = 512
+
+}  ruRegexpFlag;
+
 /**
  * \brief Opaque pointer to regular expression object.
  * \ingroup regex
@@ -81,14 +138,12 @@ RUAPI void ruRegexFree(ruRegex rr);
  * free with \ref ruRegexFree after use.
  * @param pattern The pattern representing the regular expression without delimiters.
  * @param flags Flags influencing the behavior of the expression. These are from
- *              ICU and are one of UREGEX_CASE_INSENSITIVE, UREGEX_COMMENTS,
- *              UREGEX_DOTALL, UREGEX_LITERAL, UREGEX_MULTILINE, UREGEX_UNIX_LINES,
- *              UREGEX_UWORD, UREGEX_ERROR_ON_UNKNOWN_ESCAPES.
+ *              ICU and we provide \ref ruRegexpFlag.
  * @param code (Optional) Where the return result of this operation such as
  *             \ref RUE_OK on success will be stored.
  * @return The newly created ruRegex object or NULL on failure.
  */
-RUAPI ruRegex ruRegexNew(const char* pattern, URegexpFlag flags, int32_t* code);
+RUAPI ruRegex ruRegexNew(const char* pattern, ruRegexpFlag flags, int32_t* code);
 
 /**
  * \brief Replace the found expression instances in original with the content

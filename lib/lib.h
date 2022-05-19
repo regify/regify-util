@@ -185,9 +185,9 @@ bool ruIsunreserved(unsigned char in);
 UConverter* getConverter();
 UChar* strToUni(UConverter *conv, const char *instr);
 UChar* charToUni(const char *instr);
-char* uniToStr(UConverter *conv, UChar *udst, int32_t uclen);
-char* uniNToChar(UChar *udst, int32_t len);
-char* uniToChar(UChar *udst);
+char* uniToStr(UConverter *conv, UChar *usrc, int32_t uclen);
+char* uniNToChar(UChar *usrc, int32_t len);
+char* uniToChar(UChar *usrc);
 UChar* uniSwitchCase(UChar* usrc, bool isUpper);
 char* utf8SwitchCase(const char *instr, bool isUpper);
 

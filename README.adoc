@@ -29,12 +29,14 @@ In most cases it is also expected to set `CMAKE_INSTALL_PREFIX` to something sen
 When `ICU_PREFIX` is not set it defaults to `CMAKE_INSTALL_PREFIX`.
 
 === Linux
-On Linux we currently only build x86_64
+On Linux we currently only build x86_64 and assume that ICU dev package are installed on the system
 
  mkdir build
  cd build
- cmake -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_NAME=Linux ..
- make
+ cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_VERBOSE_MAKEFILE=ON  \
+    -DDOCS=ON -DINCLUDE_ICU=OFF -DBUILD_SHARED_LIBS=ON ..
+ make package
 
 === Windows
 On Windows we build MSVC and mingw binaries
@@ -46,19 +48,23 @@ Here cmake is the version that comes with Visual Studio.
 
  mkdir build
  cd build
- cmake.exe -G "Visual Studio 16 2019" -A win32 -DNAME_SUFFIX=win32 \
-    -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_BUILD_TYPE=Release \
-    -DCMAKE_SYSTEM_NAME=Windows ..
- cmake.exe --build . --target install --config Release
+ cmake -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_SYSTEM_NAME=Windows -DBUILD_ARCH=win32 \
+    -DICU_PREFIX=../../win32 \
+    -DCMAKE_VERBOSE_MAKEFILE=ON  \
+    -DDOCS=ON -DINCLUDE_ICU=ON -DBUILD_SHARED_LIBS=ON ..
+ nmake package
 
 * x64
 
  mkdir build
  cd build
- cmake.exe -G "Visual Studio 16 2019" -A x64 -DNAME_SUFFIX=x64 \
-    -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_BUILD_TYPE=Release \
-    -DCMAKE_SYSTEM_NAME=Windows ..
- cmake.exe --build . --target install --config Release
+ cmake -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_SYSTEM_NAME=Windows -DBUILD_ARCH=x64 \
+    -DICU_PREFIX=../../x64 \
+    -DCMAKE_VERBOSE_MAKEFILE=ON \
+    -DDOCS=ON -DINCLUDE_ICU=ON -DBUILD_SHARED_LIBS=ON ..
+ nmake package
 
 ==== Mingw
 Here cmake is the mingw version.
@@ -68,19 +74,23 @@ We also have mingw installed via msys2 under `C:/msys64/mingw{32,64}/bin`.
 
  mkdir build
  cd build
- cmake -G "Unix Makefiles" -DCMAKE_VERBOSE_MAKEFILE=ON \
-    -DCMAKE_BUILD_TYPE=Release -DNAME_SUFFIX=mingw32 \
-    -DCMAKE_SYSTEM_NAME=Windows ..
- make
+ cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_SYSTEM_NAME=Windows -DBUILD_ARCH=mingw32 \
+    -DICU_PREFIX=../../mingw32 \
+    -DCMAKE_VERBOSE_MAKEFILE=ON \
+    -DDOCS=ON -DINCLUDE_ICU=ON -DBUILD_SHARED_LIBS=ON ..
+ make package
 
 * mingw64
 
  mkdir build
  cd build
- cmake -G "Unix Makefiles" -DCMAKE_VERBOSE_MAKEFILE=ON \
-    -DCMAKE_BUILD_TYPE=Release -DNAME_SUFFIX=mingw64 \
-    -DCMAKE_SYSTEM_NAME=Windows ..
- make
+ cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_SYSTEM_NAME=Windows -DBUILD_ARCH=mingw64 \
+    -DICU_PREFIX=../../mingw64 \
+    -DCMAKE_VERBOSE_MAKEFILE=ON \
+    -DDOCS=ON -DINCLUDE_ICU=ON -DBUILD_SHARED_LIBS=ON ..
+ make package
 
 === Android
 For android builds it is necessary to indicate where the NDK can be found.
@@ -92,7 +102,7 @@ We currently have the following architectures:
  cd build
  cmake -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_TOOLCHAIN_FILE=/path/to/ndk/build/cmake/android.toolchain.cmake \
-    -DNAME_SUFFIX=armv7 -DCMAKE_SYSTEM_NAME=Android \
+    -DBUILD_ARCH=armv7 -DCMAKE_SYSTEM_NAME=Android \
     -DANDROID_NATIVE_API_LEVEL=23 -DANDROID_ABI=armeabi-v7a ..
  make
 
@@ -102,7 +112,7 @@ We currently have the following architectures:
  cd build
  cmake -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_TOOLCHAIN_FILE=/path/to/ndk/build/cmake/android.toolchain.cmake \
-    -DNAME_SUFFIX=arm64 -DCMAKE_SYSTEM_NAME=Android \
+    -DBUILD_ARCH=arm64 -DCMAKE_SYSTEM_NAME=Android \
     -DANDROID_NATIVE_API_LEVEL=23 -DANDROID_ABI=arm64-v8a ..
  make
 
@@ -112,7 +122,7 @@ For OS X only x86_64 is currently supported.
  mkdir build
  cd build
  cmake -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_BUILD_TYPE=Release \
-    -DCMAKE_SYSTEM_NAME=Darwin -DNAME_SUFFIX=x86_64 ..
+    -DCMAKE_SYSTEM_NAME=Darwin -DBUILD_ARCH=x86_64 ..
  make
 
 === iOS
@@ -123,7 +133,7 @@ For iOS we currently have the following architectures:
  mkdir build
  cd build
  cmake -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_BUILD_TYPE=Release \
-    -G "Unix Makefiles" -DNAME_SUFFIX=armv7 -DCMAKE_SYSTEM_NAME=iOS \
+    -G "Unix Makefiles" -DBUILD_ARCH=armv7 -DCMAKE_SYSTEM_NAME=iOS \
     -DCMAKE_OSX_ARCHITECTURES=armv7 -DCMAKE_OSX_DEPLOYMENT_TARGET=9 \
     -DCMAKE_IOS_INSTALL_COMBINED=YES ..
  make
@@ -133,7 +143,7 @@ For iOS we currently have the following architectures:
  mkdir build
  cd build
  cmake -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_BUILD_TYPE=Release \
-    -G "Unix Makefiles" -DNAME_SUFFIX=armv7s -DCMAKE_SYSTEM_NAME=iOS \
+    -G "Unix Makefiles" -DBUILD_ARCH=armv7s -DCMAKE_SYSTEM_NAME=iOS \
     -DCMAKE_OSX_ARCHITECTURES=armv7s -DCMAKE_OSX_DEPLOYMENT_TARGET=9 \
     -DCMAKE_IOS_INSTALL_COMBINED=YES ..
  make
@@ -143,7 +153,7 @@ For iOS we currently have the following architectures:
  mkdir build
  cd build
  cmake -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_BUILD_TYPE=Release \
-    -G "Unix Makefiles" -DNAME_SUFFIX=arm64 -DCMAKE_SYSTEM_NAME=iOS \
+    -G "Unix Makefiles" -DBUILD_ARCH=arm64 -DCMAKE_SYSTEM_NAME=iOS \
     -DCMAKE_OSX_ARCHITECTURES=arm64 -DCMAKE_OSX_DEPLOYMENT_TARGET=9 \
     -DCMAKE_IOS_INSTALL_COMBINED=YES ..
  make

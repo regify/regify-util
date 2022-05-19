@@ -6,6 +6,5 @@ includedir=${prefix}/include
 Name: @NAME@
 Description: @NAME@ - The regify utility package.
 Requires:
-Version: @NAME_VERSION@-@NAME_REVISION@
-Libs: -L${libdir} -l@NAME@ @NAME_LIBS@
-Cflags: @NAME_INCLUDES@
+Version: @VERSION@-@REVISION@
+Libs: -L${libdir} -l@sharedlib@ @ICU_LIBS@

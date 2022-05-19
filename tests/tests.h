@@ -32,7 +32,7 @@
 #pragma clang diagnostic pop
 #endif
 #include <regify-util.h>
-#include "../src/lib.h"
+#include "../lib/lib.h"
 
 /* Only need to export C interface if used by C++ source code */
 #ifdef __cplusplus

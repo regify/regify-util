@@ -21,7 +21,7 @@
  */
 #include "lib.h"
 
-RUAPI ruRegex ruRegexNew(const char* pattern, URegexpFlag flags, int32_t* code) {
+RUAPI ruRegex ruRegexNew(const char* pattern, ruRegexpFlag flags, int32_t* code) {
     ruClearError();
 
     if (!pattern) ruRetWithCode(code, RUE_PARAMETER_NOT_SET, NULL);

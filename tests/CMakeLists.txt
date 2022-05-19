@@ -18,49 +18,59 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-set(CHECK_LIBRARY_DIRS ${ICU_LIBRARY_DIRS} CACHE STRING "Where the check libraries are located")
+set(CHECK_LIBRARY_DIRS ${ICU_LIBRARY_DIRS} CACHE STRING
+        "Where the check libraries are located")
+set(CHECK_INCLUDE_DIR ${ICU_INCLUDE_DIRS} CACHE STRING
+        "Where the check libraries are located")
 
 if(MSVC)
-    set(CHECK_LIBRARIES "${CHECK_LIBRARY_DIRS}/check.lib")
+    set(CHECK_LIBRARIES check.lib)
 elseif(MAC OR MINGW)
-    set(CHECK_LIBRARIES ${CHECK_LIBRARY_DIRS}/libcheck.a)
+    set(CHECK_LIBRARIES check)
 else()
-    set(CHECK_LIBRARIES ${CHECK_LIBRARY_DIRS}/libcheck.a -lm -lrt -lsubunit)
+    set(CHECK_LIBRARIES -lcheck -lm -lrt -lsubunit)
 endif()
-doLog(LOG_VERB "CHECK_LIBRARIES ${CHECK_LIBRARIES}")
+dump("CHECK_LIBRARIES")
 
-include_directories(${PROJECT_SOURCE_DIR}/include/ ${CHECK_INCLUDES})
-
-file(GLOB HEADERS ${PROJECT_SOURCE_DIR}/include/*.h)
-file(GLOB TESTS runTests.cpp *.[ch])
+#file(GLOB HEADERS ${PROJECT_SOURCE_DIR}/include/*.h)
+#file(GLOB TESTS runTests.cpp *.[ch])
 
 if(IOS)
-    set(PBX_ARCH ${NAME_SUFFIX})
-    set(PBX_INCLUDES ${CHECK_INCLUDES})
-    set(PBX_LDFLAGS "${LDIR}/libcheck.a ${PROJECT_BINARY_DIR}/libregify-util.a ${LDIR}/libicui18n.a ${LDIR}/libicuuc.a ${LDIR}/libicudata.a -lm")
+    set(PBX_ARCH ${BUILD_ARCH})
+    set(PBX_INCLUDES ${CHECK_INCLUDE_DIR})
+    set(PBX_LDFLAGS "${LDIR}/libcheck.a ${PROJECT_BINARY_DIR}/libregify-util.a
+        ${LDIR}/libicui18n.a ${LDIR}/libicuuc.a ${LDIR}/libicudata.a -lm")
     configure_file (
             "${PROJECT_SOURCE_DIR}/utilRunner/utilRunner.xcodeproj/project.pbxproj.in"
             "${PROJECT_SOURCE_DIR}/utilRunner/utilRunner.xcodeproj/project.pbxproj"
             @ONLY)
-else(IOS)
-    add_executable(runTests ${TESTS} ${HEADERS})
-    add_dependencies(runTests regify-util)
-endif(IOS)
+else()
+    add_executable(runTests EXCLUDE_FROM_ALL
+            runTests.cpp testCleaner.c testIo.c testList.c
+            testMap.c testMisc.c testRegex.c testStore.c testString.c
+            )
+#    add_dependencies(runTests ${staticlib})
+endif()
 
 add_definitions(-DTEST_BASE=\"${CMAKE_CURRENT_SOURCE_DIR}/tree\")
 
-if(NOT MSVC)
-    set(rlink "${CMAKE_BINARY_DIR}/libregify-util.a")
-    if(NAME_SUFFIX MATCHES "^mingw")
-        set(rlink ${rlink} -lws2_32)
-    endif()
-else()
-    set(rlink "$<TARGET_LINKER_FILE_DIR:regify-util>/regify-util.lib")
-endif()
+#if(NOT MSVC)
+#    set(rlink "${CMAKE_BINARY_DIR}/libregify-util.a")
+#    if(MINGW)
+#        set(rlink ${rlink} -lws2_32)
+#    endif()
+#else()
+#    set(rlink "$<TARGET_LINKER_FILE_DIR:regify-util>/regify-util.lib")
+#endif()
 
+target_include_directories(runTests
+        PUBLIC ${PROJECT_SOURCE_DIR}/include/ ${CHECK_INCLUDE_DIR}
+        )
 
-target_link_libraries(runTests ${rlink} ${RF_LIBRARIES}
-        ${CHECK_LIBRARIES} ${L_PTHREAD})
+#target_link_libraries(runTests ${rlink} ${RF_LIBRARIES}
+#        ${CHECK_LIBRARIES} ${L_PTHREAD})
+target_link_directories(runTests PUBLIC ${CHECK_LIBRARY_DIRS})
+target_link_libraries(runTests PUBLIC ${staticlib} ${CHECK_LIBRARIES})
 
 add_test(runTests ${CMAKE_CURRENT_BINARY_DIR}/runTests)
 

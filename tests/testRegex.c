@@ -184,7 +184,7 @@ START_TEST ( groups ) {
     const char *retText = "%s failed wanted ret '%d' but got '%d'";
 
     exp = RUE_OK;
-    ruRegex rr = ruRegexNew(".*@(\\w+)@.*", UREGEX_CASE_INSENSITIVE, &ret);
+    ruRegex rr = ruRegexNew(".*@(\\w+)@.*", RUREGEX_CASE_INSENSITIVE, &ret);
     fail_unless(ret == exp, retText, test, exp, ret);
     fail_if(rr == NULL, retText, test, NULL, rr);
 

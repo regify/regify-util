@@ -59,6 +59,8 @@ extern "C" {
     #else
         #if defined(__GNUC__) && (__GNUC__ * 100 + __GNUC_MINOR__) >= 303
             #define RUAPI __attribute__ ((visibility ("default")))
+        #else
+            #define RUAPI
         #endif
     #endif
 #else
@@ -182,7 +184,7 @@ typedef struct {
  * \ingroup memory
  * @param p resource to be freed and NULLed if not NULL already
  */
-#define ruFree(p) ruMacStart { if(p) free((void*)p); p = NULL; } ruMacEnd
+#define ruFree(p) ruMacStart { if(p) { free((void*)p); } p = NULL; } ruMacEnd
 
 /**
  * \brief Convenience macro for setting a potentially passed in result pointer
@@ -190,7 +192,7 @@ typedef struct {
  * \ingroup misc
  */
 #define ruRetWithCode(ptr, code, res) ruMacStart { \
-    if (ptr) *ptr = code; return res; \
+    if (ptr) { *ptr = code; } return res; \
     } ruMacEnd
 
 #ifdef __cplusplus

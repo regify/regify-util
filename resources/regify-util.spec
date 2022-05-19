@@ -33,15 +33,15 @@ regify C packages.
 %build
 mkdir build-so
 (cd build-so && cmake -DCMAKE_VERBOSE_MAKEFILE=ON \
-    -DCMAKE_BUILD_TYPE=Release -DNAME_SOVERSION=%{sover}\
-    -DCMAKE_SYSTEM_NAME=Linux -DNAME_VERSION=%{ver} \
-    -DNAME_REVISION=%{buildrev} \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_SYSTEM_NAME=Linux -DVERSION=%{ver} \
+    -DREVISION=%{buildrev} \
     -DBUILD_SHARED_LIBS=ON .. && make %{name})
 # mkdir build-a
 # (cd build-a && cmake -DCMAKE_VERBOSE_MAKEFILE=ON \
 #     -DCMAKE_BUILD_TYPE=Release \
-#     -DCMAKE_SYSTEM_NAME=Linux -DNAME_VERSION=%{ver} \
-#     -DNAME_REVISION=%{buildrev} \
+#     -DCMAKE_SYSTEM_NAME=Linux -DVERSION=%{ver} \
+#     -DREVISION=%{buildrev} \
 #     -DBUILD_SHARED_LIBS=OFF .. && make %{name})
 
 %install

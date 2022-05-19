@@ -91,18 +91,18 @@ UChar* charToUni(const char *instr) {
     return upat;
 }
 
-char* uniToStr(UConverter *conv, UChar *udst, int32_t uclen) {
+char* uniToStr(UConverter *conv, UChar *usrc, int32_t uclen) {
     UErrorCode errorCode = U_ZERO_ERROR;
     // convert it back
     char *out = ruMalloc0(uclen, char);
-    int32_t needed = ucnv_fromUChars(conv, out, uclen, udst, -1, &errorCode);
+    int32_t needed = ucnv_fromUChars(conv, out, uclen, usrc, -1, &errorCode);
     uclen = needed+1; // terminator
     if (errorCode == U_BUFFER_OVERFLOW_ERROR) {
         // cache miss?
         ruVerbLogf("size mismatch in ucnv_fromUChars needed: %ld", needed);
         out = ruRealloc(out, uclen, char);
         errorCode = U_ZERO_ERROR;
-        ucnv_fromUChars(conv, out, uclen, udst, -1, &errorCode);
+        ucnv_fromUChars(conv, out, uclen, usrc, -1, &errorCode);
     }
     if(U_FAILURE(errorCode)) {
         ruSetError("error in ucnv_fromUChars error=%s\n", u_errorName(errorCode));
@@ -112,16 +112,16 @@ char* uniToStr(UConverter *conv, UChar *udst, int32_t uclen) {
     return out;
 }
 
-char* uniNToChar(UChar *udst, int32_t len) {
+char* uniNToChar(UChar *usrc, int32_t len) {
     UConverter *conv = getConverter();
-    char *upat = uniToStr(conv, udst, len);
+    char *upat = uniToStr(conv, usrc, len);
     ucnv_close(conv);
     return upat;
 }
 
-char* uniToChar(UChar *udst) {
-    int32_t len = (u_strlen(udst)+1) * 2;
-    return uniNToChar(udst, len);
+char* uniToChar(UChar *usrc) {
+    int32_t len = (u_strlen(usrc) + 1) * 2;
+    return uniNToChar(usrc, len);
 }
 
 

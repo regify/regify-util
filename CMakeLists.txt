@@ -17,11 +17,27 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-cmake_minimum_required(VERSION 3.5)
 
-# The main project
+# options
+set(VERSION 1.2.0 CACHE STRING "The package version")
+set(REVISION dev CACHE STRING "The build revision")
+set(ICU_PREFIX "" CACHE STRING "Prefix path under which to find ICU")
+option(BUILD_SHARED_LIBS "Whether to build dynamic libraries" OFF)
+option(INCLUDE_ICU "Whether to include ICU statically" ON)
+option(DOCS "Whether to generate the documentation" OFF)
+option(TESTING "Whether to build the tests" OFF)
+
+# general
+cmake_minimum_required(VERSION 3.13)
 set(NAME regify-util)
-project(${NAME})
+set(staticlib ${NAME}_static)
+set(sharedlib ${NAME})
+project(${NAME}
+        LANGUAGES C CXX
+        VERSION ${VERSION}
+        )
+set(CMAKE_C_STANDARD 99)
+set(CMAKE_CXX_STANDARD 11)
 
 # A separate sub project that only cleans passwords. Does not need ICU.
 set(CLEANER pwcleaner)
@@ -39,67 +55,20 @@ set(CLEANER pwcleaner)
 #  increment age.
 #  If any interfaces have been removed since the last public release, then set
 #  age to 0.
-set(NAME_SOVERSION 0.1.0 CACHE STRING "The library version")
-set(NAME_VERSION 1.2.0 CACHE STRING "The package version")
-set(NAME_REVISION dev CACHE STRING "The build revision")
-set(CMAKE_BUILD_TYPE Debug CACHE STRING "What to build")
-set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS Debug Release)
-set(BUILD_SHARED_LIBS OFF CACHE BOOL "Whether to build dynamic libraries")
-set(ICU_STATICLIB ON CACHE BOOL "Whether to statically link ICU")
-set(TESTING OFF CACHE BOOL "Whether to build the tests")
+set(SOVERSION 0.1.0)
 
-set(ICU_PREFIX ${CMAKE_INSTALL_PREFIX} CACHE STRING "Prefix path under which to find ICU")
-
-# regify utility functionality
-set(LOG_NONE 0)
-set(LOG_INFO 1)
-set(LOG_VERB 2)
-function (doLog level msg)
-    if (${logLevel} EQUAL ${level} OR ${logLevel} GREATER ${level})
-        message(${msg})
-    endif()
-endfunction()
-
-function(docopy srcDir destDir fileglob)
-    file(GLOB includes RELATIVE ${srcDir} ${srcDir}/${fileglob})
-    foreach(file ${includes})
-        if(NOT IS_DIRECTORY ${srcDir}/${file})
-            configure_file(${srcDir}/${file} ${destDir}/${file} COPYONLY)
-        endif()
-    endforeach()
-endfunction()
-
-function (dojoin mylist myseparator myoutvar)
-    if(CMAKE_VERSION VERSION_GREATER 3.11.99)
-        # JOIN came in 3.12
-        list(JOIN mylist "${myseparator}" myvar)
-    else()
-        foreach(l IN LISTS mylist)
-            if (myvar)
-                set(myvar "${myvar}${myseparator}${l}")
-            else()
-                set(myvar ${l})
-            endif()
-        endforeach()
-    endif()
-    set(${myoutvar} "${myvar}" PARENT_SCOPE)
-endfunction()
-
+include(resources/helpers.cmake)
 
 if (CMAKE_BUILD_TYPE MATCHES "Debug")
-    set(logLevel LOG_INFO)
+    set(logLevel LOG_VERB)
     doLog(${logLevel} "Log Level ${logLevel}")
 else()
-    set(logLevel LOG_NONE)
-endif()
-
-if(CMAKE_VERSION VERSION_GREATER 3.7) # greater_equal came in 3.7
-    if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.12)
-        cmake_policy(SET CMP0074 NEW)
-    endif()
+    set(logLevel LOG_INFO)
 endif()
 
 doLog(LOG_VERB "CMAKE_SYSTEM_NAME: ${CMAKE_SYSTEM_NAME}")
+
+# platform switches
 if(CMAKE_SYSTEM_NAME MATCHES "^Linux$")
     set(LINUX 1)
 
@@ -112,7 +81,7 @@ elseif(CMAKE_SYSTEM_NAME MATCHES "^Darwin$")
 
 elseif(CMAKE_SYSTEM_NAME MATCHES "^Windows$")
     set(WIN 1)
-    if(NAME_SUFFIX MATCHES "^mingw")
+    if(BUILD_ARCH MATCHES "^mingw")
         set(MINGW 1)
     endif()
 
@@ -125,130 +94,142 @@ else()
 endif()
 
 if (MAC OR LINUX)
-    if(NOT NAME_SUFFIX)
-        set(NAME_SUFFIX x86_64)
+    if(NOT BUILD_ARCH)
+        set(BUILD_ARCH x86_64)
     endif()
 endif()
 
-if(NOT NAME_SUFFIX)
-    message(FATAL_ERROR "NAME_SUFFIX not set")
+if(NOT BUILD_ARCH)
+    message(FATAL_ERROR "BUILD_ARCH not set")
 endif()
 
-# where static dependencies are found
-set(ICU_LIBRARY_DIRS ${ICU_PREFIX}/lib)
-set(ICU_INCLUDE_DIRS ${ICU_PREFIX}/include)
-
-if (${CMAKE_PROJECT_NAME} MATCHES ${NAME})
-    set(INCLUDED 0)
-else()
-    set(INCLUDED 1)
-endif()
-
-set(CMAKE_C_STANDARD 99)
-set(CMAKE_CXX_STANDARD 11)
-
-if(LINUX OR MAC)
+# dependencies
+if(LINUX OR MAC OR MINGW)
     find_package(Threads REQUIRED)
 endif()
 
-link_directories(${ICU_LIBRARY_DIRS})
-
-if(WIN AND NOT MINGW)
-    if(BUILD_SHARED_LIBS AND NOT ICU_STATICLIB)
-        set(ICU_LIBRARIES icuio.dll.lib icuin.dll.lib icuuc.dll.lib icudt.dll.lib)
-    else()
-        set(ICU_LIBRARIES icuio.lib icuin.lib icuuc.lib icudt.lib)
-    endif()
-elseif(LINUX AND BUILD_SHARED_LIBS)
-    # for appliance builds
-    set(ICU_LIBRARIES -licuio -licui18n -licuuc -licudata -lm -ldl)
+if ("${ICU_PREFIX}" MATCHES "^$")
+    find_package(PkgConfig REQUIRED)
+    pkg_check_modules(ICU REQUIRED icu-io)
 else()
-    set(ICU_LIBRARIES libicuio.a libicui18n.a libicuuc.a libicudata.a -lm)
-endif()
-
-if(NOT BUILD_SHARED_LIBS)
-    # where dependencies are stored for subsequent packaging
-    set(PKG_DIR "${CMAKE_BINARY_DIR}/pkg")
-    set(RF_INCLUDE_DIR ${PKG_DIR}/include)
-    set(RF_LIB_DIR ${PKG_DIR}/lib)
-
-    foreach(lib IN LISTS ICU_LIBRARIES)
-        if(NOT "${lib}" MATCHES "^-")
-            configure_file(${ICU_LIBRARY_DIRS}/${lib} ${RF_LIB_DIR}/${lib} COPYONLY)
-            list(APPEND RF_LIBRARIES ${RF_LIB_DIR}/${lib})
+    # where static dependencies are found
+    set(ICU_INCLUDE_DIRS ${ICU_PREFIX}/include)
+    set(ICU_LIBRARY_DIRS ${ICU_PREFIX}/lib)
+    if(WIN AND NOT MINGW)
+        if(BUILD_SHARED_LIBS AND NOT INCLUDE_ICU)
+            set(ICU_LIBRARIES icuio icuin icuuc icudt)
         else()
-            list(APPEND RF_LIBRARIES ${lib})
+            set(ICU_LIBRARIES sicuio sicuin sicuuc sicudt)
         endif()
-    endforeach()
-
-    # includes
-    docopy(${ICU_INCLUDE_DIRS}/unicode ${RF_INCLUDE_DIR}/unicode *) # ICU
-    if(CMAKE_BUILD_TYPE MATCHES "^Release$")
-        docopy(${ICU_PREFIX}/share/icu ${PKG_DIR}/share/icu LICENSE )
+    else()
+        set(ICU_LIBRARIES -licuio -licui18n -licuuc -licudata -lm)
+#        if (NOT MINGW)
+#            list(APPEND ICU_LIBRARIES  -ldl)
+#        endif()
     endif()
-else()
-    set(RF_LIBRARIES ${ICU_LIBRARIES})
 endif()
 
-doLog(LOG_VERB "ICU libraries at: ${ICU_LIBRARIES}")
-# s/point to install folder
-doLog(LOG_VERB "RF libraries: ${RF_LIBRARIES}")
-
-if(MSVC)
-    add_definitions (
-        /MP -D_CRT_SECURE_NO_DEPRECATE
-        /Wall /WX /wd4100 /wd4204 /wd4255 /wd4464
-        /wd4625 /wd4626 /wd4668 /wd4710 /wd4711
-        /wd4820 /wd5039 /wd5045
-    )
-    if(BUILD_SHARED_LIBS)
-        add_definitions ( -DRU_SHARED )
+if(INCLUDE_ICU AND DOCS)
+    find_file(ICU_LICENSE_PATH
+            name LICENSE
+            PATHS ${ICU_PREFIX}/share/icu
+            DOC "ICU License file to package since we're including ICU.")
+    if(ICU_LICENSE_PATH MATCHES "^ICU_LICENSE_PATH-NOTFOUND$")
+        message(FATAL_ERROR "We need the ICU License file for packaging set ICU_LICENSE_PATH to its location")
     endif()
-else(MSVC)
-    if (NOT ANDROID)
-        set(L_PTHREAD -lpthread)
+endif()
+
+#link_directories(${ICU_LIBRARY_DIRS})
+#
+#if(NOT BUILD_SHARED_LIBS)
+#    # where dependencies are stored for subsequent packaging
+#    set(PKG_DIR "${CMAKE_BINARY_DIR}/pkg")
+#    set(RF_INCLUDE_DIR ${PKG_DIR}/include)
+#    set(RF_LIB_DIR ${PKG_DIR}/lib)
+#
+#    foreach(lib IN LISTS ICU_LIBRARIES)
+#        if(NOT "${lib}" MATCHES "^-")
+#            configure_file(${ICU_LIBRARY_DIRS}/${lib} ${RF_LIB_DIR}/${lib} COPYONLY)
+#            list(APPEND RF_LIBRARIES ${RF_LIB_DIR}/${lib})
+#        else()
+#            list(APPEND RF_LIBRARIES ${lib})
+#        endif()
+#    endforeach()
+#
+#    # includes
+#    docopy(${ICU_INCLUDE_DIRS}/unicode ${RF_INCLUDE_DIR}/unicode *) # ICU
+#    if(CMAKE_BUILD_TYPE MATCHES "^Release$")
+#        docopy(${ICU_PREFIX}/share/icu ${PKG_DIR}/share/icu LICENSE )
+#    endif()
+#
+#else()
+#    set(RF_LIBRARIES ${ICU_LIBRARIES})
+#endif()
+#
+#doLog(LOG_VERB "ICU libraries at: ${ICU_LIBRARIES}")
+## s/point to install folder
+#doLog(LOG_VERB "RF libraries: ${RF_LIBRARIES}")
+#
+#if(MSVC)
+#    add_definitions (
+#        /MP -D_CRT_SECURE_NO_DEPRECATE
+#        /Wall /WX /wd4100 /wd4204 /wd4255 /wd4464
+#        /wd4625 /wd4626 /wd4668 /wd4710 /wd4711
+#        /wd4820 /wd5039 /wd5045
+#    )
+#
+#else(MSVC)
+#    if (NOT ANDROID)
+#        set(L_PTHREAD -lpthread)
+#    endif()
+#    add_definitions (
+#            -Wall
+#            -Werror
+#            --pedantic
+#            -fPIC
+#            -ffunction-sections
+#            -fdata-sections
+#            -fvisibility=hidden
+#    )
+#    set(CMAKE_SHARED_LINKER_FLAGS "-fvisibility=hidden \
+#            -fvisibility-inlines-hidden \
+#            -Wl,--gc-sections \
+#            -Wl,--exclude-libs,ALL")
+#endif(MSVC)
+#
+#if(BUILD_SHARED_LIBS)
+#    add_definitions ( -DRU_SHARED )
+#endif()
+
+add_compile_definitions(BUILD_VERSION=\"${VERSION}-${REVISION}\")
+add_subdirectory(lib)
+
+# installation
+include(CMakePackageConfigHelpers)
+# generate the config file that is includes the exports
+configure_package_config_file(${CMAKE_CURRENT_SOURCE_DIR}/resources/Config.cmake.in
+        "${CMAKE_CURRENT_BINARY_DIR}/${NAME}Config.cmake"
+        INSTALL_DESTINATION "lib/cmake/${NAME}"
+        NO_SET_AND_CHECK_MACRO
+        NO_CHECK_REQUIRED_COMPONENTS_MACRO )
+write_basic_package_version_file(
+        "${CMAKE_CURRENT_BINARY_DIR}/${NAME}ConfigVersion.cmake"
+        VERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}"
+        COMPATIBILITY AnyNewerVersion
+)
+install(DIRECTORY include/ DESTINATION include)
+install(FILES
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}Config.cmake
+        ${CMAKE_CURRENT_BINARY_DIR}/${NAME}ConfigVersion.cmake
+        DESTINATION lib/cmake/${NAME}
+        )
+install(EXPORT ${NAME}Targets
+        FILE ${NAME}Targets.cmake
+        DESTINATION lib/cmake/${NAME} )
+if(NOT MSVC)
+    if(NOT INCLUDE_ICU)
+        dojoin("-l${ICU_LIBRARIES}" " -l" ICU_LIBS)
     endif()
-    add_definitions (
-            -Wall
-            -Werror
-            --pedantic
-            -fPIC
-            -ffunction-sections
-            -fdata-sections
-            -fvisibility=hidden
-    )
-    set(CMAKE_SHARED_LINKER_FLAGS "-fvisibility=hidden \
-            -fvisibility-inlines-hidden \
-            -Wl,--gc-sections \
-            -Wl,--exclude-libs,ALL")
-endif(MSVC)
-
-add_definitions(-DBUILD_VERSION=\"${NAME_VERSION}-${NAME_REVISION}\")
-
-file(GLOB HEADERS include/*.h)
-file(GLOB SRCS src/*.[hc] src/*.cpp)
-
-add_library(${NAME} ${SRCS} ${HEADERS})
-add_library(${CLEANER} src/cleaner.c)
-target_compile_definitions(${CLEANER} PUBLIC CLEANER_ONLY)
-
-target_link_libraries(${NAME} ${RF_LIBRARIES})
-
-set_target_properties(${NAME} PROPERTIES
-        SOVERSION ${NAME_SOVERSION})
-
-target_include_directories(${NAME} PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-        ${ICU_INCLUDE_DIRS}
-        $<INSTALL_INTERFACE:include>)
-
-install(TARGETS ${NAME} DESTINATION lib)
-install(TARGETS ${CLEANER} DESTINATION lib)
-
-if (NOT BUILD_SHARED_LIBS)
-    install(DIRECTORY include/ DESTINATION include)
-else()
-    dojoin("${RF_LIBRARIES}" " " NAME_LIBS)
     configure_file (
             "${PROJECT_SOURCE_DIR}/resources/${NAME}.pc.in"
             "${PROJECT_BINARY_DIR}/${NAME}.pc"
@@ -256,39 +237,66 @@ else()
     install(FILES ${PROJECT_BINARY_DIR}/${NAME}.pc DESTINATION lib/pkgconfig)
 endif()
 
-if (NOT INCLUDED)
-    if(TESTING AND NOT BUILD_SHARED_LIBS)
-        doLog(LOG_INFO "Adding unit tests")
-        enable_testing()
-        add_subdirectory(tests)
-    else()
-        doLog(LOG_INFO "Skipping unit tests")
+# documetation & packaging
+if(DOCS)
+    install(FILES LICENSE DESTINATION share/${NAME})
+    if(INCLUDE_ICU)
+        message("Bundling ICU License ${ICU_LICENSE_PATH}")
+        install(FILES ${ICU_LICENSE_PATH}
+                DESTINATION share/${NAME}
+                RENAME ICU-LICENSE)
     endif()
 
-    # for documentation
-    find_package(Doxygen)
-    if (WIN AND NOT DOXYGEN_FOUND)
-        set(DOXYGEN_EXECUTABLE /msys64/mingw32/bin/doxygen.exe)
-        set(DOXYGEN_FOUND ON)
-        doLog(LOG_INFO "Using hardcoded doxygen path")
-    endif()
+    # add a target to generate API documentation with Doxygen
+    # add these to your PATH id they're not found even though they are installed
+    find_package(Doxygen REQUIRED)
+
+#    if (WIN AND NOT DOXYGEN_FOUND)
+#        set(DOXYGEN_EXECUTABLE /msys64/mingw32/bin/doxygen.exe)
+#        set(DOXYGEN_FOUND ON)
+#        doLog(LOG_INFO "Using hardcoded doxygen path")
+#    endif()
 
     doLog(LOG_VERB "DOXYGEN_EXECUTABLE ${DOXYGEN_EXECUTABLE}")
     # add a target to generate API documentation with Doxygen
-    if(DOXYGEN_FOUND)
-        if (WIN)
-            set(PREDEFS "WINDOWS")
-        else()
-            set(PREDEFS "")
-        endif()
+    if (WIN)
+        set(PREDEFS "WINDOWS")
+    else()
+        set(PREDEFS "")
+    endif()
 
-        configure_file(${CMAKE_SOURCE_DIR}/resources/Doxyfile.in
-                ${CMAKE_BINARY_DIR}/Doxfile @ONLY)
+    configure_file(${CMAKE_SOURCE_DIR}/resources/Doxyfile.in
+            ${CMAKE_BINARY_DIR}/Doxfile @ONLY)
 
-        add_custom_target(doc
-                COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_BINARY_DIR}/Doxfile
-                WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-                COMMENT "Generating API documentation with Doxygen" VERBATIM)
-    endif(DOXYGEN_FOUND)
+    add_custom_target(doc ALL
+            COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_BINARY_DIR}/Doxfile
+            WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+            COMMENT "Generating API documentation with Doxygen" VERBATIM)
+
+    install(DIRECTORY ${CMAKE_BINARY_DIR}/doc/html/
+            DESTINATION share/${NAME}/doc)
+
+    # packaging
+    include(InstallRequiredSystemLibraries)
+    set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/LICENSE")
+    set(CPACK_PACKAGE_NAME ${PROJECT_NAME})
+    set(CPACK_PACKAGE_VERSION ${PROJECT_VERSION}-${REVISION})
+    string(TOLOWER ${CMAKE_SYSTEM_NAME} sysname)
+    set(CPACK_SYSTEM_NAME ${sysname}.${BUILD_ARCH})
+    set(CPACK_GENERATOR ZIP)
+    list(APPEND CPACK_SOURCE_IGNORE_FILES /cmake-.*/ /build.*/ /.git/ /.idea/ .*out$)
+    set(CPACK_SOURCE_PACKAGE_FILE_NAME "${PROJECT_NAME}-${PROJECT_VERSION}-src")
+    set(CPACK_SOURCE_GENERATOR ZIP)
+    include(CPack)
 
 endif()
+
+# tests
+if(TESTING)
+    doLog(LOG_INFO "Adding unit tests")
+    enable_testing()
+    add_subdirectory(tests)
+else()
+    doLog(LOG_INFO "Skipping unit tests")
+endif()
+#dump("")
