@@ -31,34 +31,37 @@ regify C packages.
 %setup -q
 
 %build
-mkdir build-so
-(cd build-so && cmake -DCMAKE_VERBOSE_MAKEFILE=ON \
-    -DCMAKE_BUILD_TYPE=Release \
-    -DCMAKE_SYSTEM_NAME=Linux -DVERSION=%{ver} \
-    -DREVISION=%{buildrev} \
-    -DBUILD_SHARED_LIBS=ON .. && make %{name})
-# mkdir build-a
-# (cd build-a && cmake -DCMAKE_VERBOSE_MAKEFILE=ON \
-#     -DCMAKE_BUILD_TYPE=Release \
-#     -DCMAKE_SYSTEM_NAME=Linux -DVERSION=%{ver} \
-#     -DREVISION=%{buildrev} \
-#     -DBUILD_SHARED_LIBS=OFF .. && make %{name})
+mkdir build
+(cd build && cmake -DCMAKE_VERBOSE_MAKEFILE=ON \
+    -DCMAKE_BUILD_TYPE=Release -DCMAKE_SYSTEM_NAME=Linux \
+    -DREVISION=%{buildrev} -DVERSION=%{ver} \
+    -DCMAKE_INSTALL_PREFIX=%{_prefix} \
+    -DCPACK_PACKAGE_FILE_NAME=%{name} \
+    -DDOCS=ON -DINCLUDE_ICU=OFF -DBUILD_SHARED_LIBS=ON .. && \
+    make package)
 
 %install
 [ "$RPM_BUILD_ROOT" != "/" ] && rm -rf $RPM_BUILD_ROOT
+bld=build/_CPack_Packages/linux.x86_64/ZIP/regify-util/
 
 install -d $RPM_BUILD_ROOT/%{_libdir}
-install -m 755 build-so/%{libname}.so.%{sover} $RPM_BUILD_ROOT%{_libdir}/
-(cd $RPM_BUILD_ROOT%{_libdir}/ && ln -s %{libname}.so.%{sover} %{libname}.so)
+install -m 755 $bld/lib/%{libname}.so.* $RPM_BUILD_ROOT%{_libdir}/
+(cd $RPM_BUILD_ROOT%{_libdir}/ && ln -s %{libname}.so.* %{libname}.so)
 
 # devel
-install -d $RPM_BUILD_ROOT/%{_libdir}
-#install -m 755 build-a/%{libname}.a $RPM_BUILD_ROOT%{_libdir}/
 install -d $RPM_BUILD_ROOT/%{_includedir}/%{name}
-install -m 644 include/%{name}.h $RPM_BUILD_ROOT/%{_includedir}
-install -m 644 include/%{name}/*.h $RPM_BUILD_ROOT/%{_includedir}/%{name}/
+install -m 644 $bld/include/%{name}.h $RPM_BUILD_ROOT/%{_includedir}
+install -m 644 $bld/include/%{name}/*.h $RPM_BUILD_ROOT/%{_includedir}/%{name}/
+
+install -d $RPM_BUILD_ROOT/%{_libdir}
+install -m 755 $bld/lib/%{libname}.a $RPM_BUILD_ROOT%{_libdir}/
+install -d $RPM_BUILD_ROOT/%{_libdir}/cmake/%{name}
+install -m 644 $bld/lib/cmake/%{name}/*.cmake $RPM_BUILD_ROOT/%{_libdir}/cmake/%{name}/
 install -d $RPM_BUILD_ROOT/%{_libdir}/pkgconfig/
-install -m 644 build-so/%{name}.pc $RPM_BUILD_ROOT/%{_libdir}/pkgconfig/
+install -m 644 $bld/lib/pkgconfig/%{name}.pc $RPM_BUILD_ROOT/%{_libdir}/pkgconfig/
+
+install -d $RPM_BUILD_ROOT/%{_datadir}/%{name}
+install -m 644 $bld/share/%{name}/LICENSE $RPM_BUILD_ROOT/%{_datadir}/%{name}/
 
 %post
 ldconfig 
@@ -74,15 +77,20 @@ fi
 %files
 %defattr(-,root,root,-)
 %{_libdir}/%{libname}.so
-%{_libdir}/%{libname}.so.%{sover}
+%{_libdir}/%{libname}.so.*
 
 %files devel
 %defattr(-,root,root,-)
-%{_includedir}/regify-util.h
+%{_datadir}/%{name}/
 %{_includedir}/regify-util/
-#%{_libdir}/%{libname}.a
+%{_includedir}/regify-util.h
+%{_libdir}/cmake/%{name}/
+%{_libdir}/%{libname}.a
 %{_libdir}/pkgconfig/regify-util.pc
 
 %changelog
+* Fri May 20 2022 Mario Theodoridis <mario.theodoridis@regify.com> 1.2.0
+- adjust build for open sourced version
+
 * Mon Jan 20 2020 Mario Theodoridis <mario.theodoridis@regify.com> 1.0.0
 - initial RPM release
