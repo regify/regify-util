@@ -124,9 +124,6 @@ else()
         endif()
     else()
         set(ICU_LIBRARIES -licuio -licui18n -licuuc -licudata -lm)
-#        if (NOT MINGW)
-#            list(APPEND ICU_LIBRARIES  -ldl)
-#        endif()
     endif()
 endif()
 
@@ -136,68 +133,6 @@ if(INCLUDE_ICU AND DOCS)
         message(FATAL_ERROR "We need the ICU License file for packaging set ICU_LICENSE_PATH to its location")
     endif()
 endif()
-
-#link_directories(${ICU_LIBRARY_DIRS})
-#
-#if(NOT BUILD_SHARED_LIBS)
-#    # where dependencies are stored for subsequent packaging
-#    set(PKG_DIR "${CMAKE_BINARY_DIR}/pkg")
-#    set(RF_INCLUDE_DIR ${PKG_DIR}/include)
-#    set(RF_LIB_DIR ${PKG_DIR}/lib)
-#
-#    foreach(lib IN LISTS ICU_LIBRARIES)
-#        if(NOT "${lib}" MATCHES "^-")
-#            configure_file(${ICU_LIBRARY_DIRS}/${lib} ${RF_LIB_DIR}/${lib} COPYONLY)
-#            list(APPEND RF_LIBRARIES ${RF_LIB_DIR}/${lib})
-#        else()
-#            list(APPEND RF_LIBRARIES ${lib})
-#        endif()
-#    endforeach()
-#
-#    # includes
-#    docopy(${ICU_INCLUDE_DIRS}/unicode ${RF_INCLUDE_DIR}/unicode *) # ICU
-#    if(CMAKE_BUILD_TYPE MATCHES "^Release$")
-#        docopy(${ICU_PREFIX}/share/icu ${PKG_DIR}/share/icu LICENSE )
-#    endif()
-#
-#else()
-#    set(RF_LIBRARIES ${ICU_LIBRARIES})
-#endif()
-#
-#doLog(LOG_VERB "ICU libraries at: ${ICU_LIBRARIES}")
-## s/point to install folder
-#doLog(LOG_VERB "RF libraries: ${RF_LIBRARIES}")
-#
-#if(MSVC)
-#    add_definitions (
-#        /MP -D_CRT_SECURE_NO_DEPRECATE
-#        /Wall /WX /wd4100 /wd4204 /wd4255 /wd4464
-#        /wd4625 /wd4626 /wd4668 /wd4710 /wd4711
-#        /wd4820 /wd5039 /wd5045
-#    )
-#
-#else(MSVC)
-#    if (NOT ANDROID)
-#        set(L_PTHREAD -lpthread)
-#    endif()
-#    add_definitions (
-#            -Wall
-#            -Werror
-#            --pedantic
-#            -fPIC
-#            -ffunction-sections
-#            -fdata-sections
-#            -fvisibility=hidden
-#    )
-#    set(CMAKE_SHARED_LINKER_FLAGS "-fvisibility=hidden \
-#            -fvisibility-inlines-hidden \
-#            -Wl,--gc-sections \
-#            -Wl,--exclude-libs,ALL")
-#endif(MSVC)
-#
-#if(BUILD_SHARED_LIBS)
-#    add_definitions ( -DRU_SHARED )
-#endif()
 
 add_compile_definitions(BUILD_VERSION=\"${VERSION}-${REVISION}\")
 add_subdirectory(lib)
@@ -248,13 +183,6 @@ if(DOCS)
     # add a target to generate API documentation with Doxygen
     # add these to your PATH id they're not found even though they are installed
     find_package(Doxygen REQUIRED)
-
-#    if (WIN AND NOT DOXYGEN_FOUND)
-#        set(DOXYGEN_EXECUTABLE /msys64/mingw32/bin/doxygen.exe)
-#        set(DOXYGEN_FOUND ON)
-#        doLog(LOG_INFO "Using hardcoded doxygen path")
-#    endif()
-
     doLog(LOG_VERB "DOXYGEN_EXECUTABLE ${DOXYGEN_EXECUTABLE}")
     # add a target to generate API documentation with Doxygen
     if (WIN)

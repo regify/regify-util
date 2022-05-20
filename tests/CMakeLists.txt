@@ -32,9 +32,6 @@ else()
 endif()
 dump("CHECK_LIBRARIES")
 
-#file(GLOB HEADERS ${PROJECT_SOURCE_DIR}/include/*.h)
-#file(GLOB TESTS runTests.cpp *.[ch])
-
 if(IOS)
     set(PBX_ARCH ${BUILD_ARCH})
     set(PBX_INCLUDES ${CHECK_INCLUDE_DIR})
@@ -49,26 +46,14 @@ else()
             runTests.cpp testCleaner.c testIo.c testList.c
             testMap.c testMisc.c testRegex.c testStore.c testString.c
             )
-#    add_dependencies(runTests ${staticlib})
 endif()
 
 add_definitions(-DTEST_BASE=\"${CMAKE_CURRENT_SOURCE_DIR}/tree\")
-
-#if(NOT MSVC)
-#    set(rlink "${CMAKE_BINARY_DIR}/libregify-util.a")
-#    if(MINGW)
-#        set(rlink ${rlink} -lws2_32)
-#    endif()
-#else()
-#    set(rlink "$<TARGET_LINKER_FILE_DIR:regify-util>/regify-util.lib")
-#endif()
 
 target_include_directories(runTests
         PUBLIC ${PROJECT_SOURCE_DIR}/include/ ${CHECK_INCLUDE_DIR}
         )
 
-#target_link_libraries(runTests ${rlink} ${RF_LIBRARIES}
-#        ${CHECK_LIBRARIES} ${L_PTHREAD})
 target_link_directories(runTests PUBLIC ${CHECK_LIBRARY_DIRS})
 target_link_libraries(runTests PUBLIC ${staticlib} ${CHECK_LIBRARIES})
 

@@ -35,11 +35,6 @@ function (doLink lib shared)
                 PRIVATE /MP /Wall /WX /wd4100 /wd4204 /wd4255 /wd4464 /wd4625
                 /wd4626 /wd4668 /wd4710 /wd4711 /wd4820 /wd5039 /wd5045
                 )
-#        if(shared AND NOT INCLUDE_ICU)
-#            set(ICU_LIBRARIES icuio.dll.lib icuin.dll.lib icuuc.dll.lib icudt.dll.lib)
-#        else()
-#            set(ICU_LIBRARIES icuio.lib icuin.lib icuuc.lib icudt.lib)
-#        endif()
 
     else()
         if (NOT ANDROID)
@@ -49,13 +44,6 @@ function (doLink lib shared)
                 PRIVATE -Wall -Werror --pedantic -fPIC
                 -ffunction-sections -fdata-sections
         )
-#        if(LINUX AND shared)
-#            # for appliance builds
-#            set(ICU_LIBRARIES -licuio -licui18n -licuuc -licudata -lm -ldl)
-#        else()
-#            set(ICU_LIBRARIES libicuio.a libicui18n.a libicuuc.a libicudata.a -lm)
-#        endif()
-
         if(shared)
             if(LINUX)
                 target_link_libraries(${lib} ${icu_scope} -ldl)
