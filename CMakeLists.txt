@@ -131,11 +131,8 @@ else()
 endif()
 
 if(INCLUDE_ICU AND DOCS)
-    find_file(ICU_LICENSE_PATH
-            name LICENSE
-            PATHS ${ICU_PREFIX}/share/icu
-            DOC "ICU License file to package since we're including ICU.")
-    if(ICU_LICENSE_PATH MATCHES "^ICU_LICENSE_PATH-NOTFOUND$")
+    file(GLOB ICU_LICENSE_PATH ${ICU_PREFIX}/share/icu/LICENSE)
+    if(ICU_LICENSE_PATH MATCHES "^$")
         message(FATAL_ERROR "We need the ICU License file for packaging set ICU_LICENSE_PATH to its location")
     endif()
 endif()
@@ -308,4 +305,4 @@ if(TESTING)
 else()
     doLog(LOG_INFO "Skipping unit tests")
 endif()
-dump("")
+#dump("")
