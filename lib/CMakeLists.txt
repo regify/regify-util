@@ -60,10 +60,13 @@ function (doLink lib shared)
             if(LINUX)
                 target_link_libraries(${lib} ${icu_scope} -ldl)
             endif()
+            if(ANDROID)
+                target_link_libraries(${lib} ${icu_scope} -lc++_shared)
+            endif()
             target_link_options(${lib}
                     PRIVATE -fvisibility=hidden -fvisibility-inlines-hidden
                     )
-            if (CMAKE_C_COMPILER_ID MATCHES "Clang$")
+            if (CMAKE_C_COMPILER_ID MATCHES "AppleClang")
                 target_link_options(${lib}
                         PRIVATE -Wl,-dead_strip
                         )
@@ -90,6 +93,7 @@ function (doLink lib shared)
             $<INSTALL_INTERFACE:include>
             # make sure we're using the right version
             PRIVATE ${ICU_INCLUDE_DIRS}
+            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
             )
 
 endfunction()
@@ -106,10 +110,19 @@ if(INCLUDE_ICU)
     endforeach()
 endif()
 
-# pwcleaner.a
-file(GLOB SRCS cleaner.c icu.c io.c kvstore.c lib.c list.c logging.c map.c
-        regex.c regify-util.cpp string.c)
+if (MAC OR IOS)
+    # Compiled as C++ so we can use thread_local on ios9+
+    set(rutilfile ${CMAKE_CURRENT_BINARY_DIR}/regify-util.cpp)
+else()
+    set(rutilfile ${CMAKE_CURRENT_BINARY_DIR}/regify-util.c)
+endif()
 
+configure_file(regify-util.c ${rutilfile} COPYONLY)
+file(GLOB SRCS cleaner.c icu.c io.c kvstore.c lib.c list.c logging.c map.c
+        regex.c string.c ${rutilfile})
+
+
+# pwcleaner.a
 add_library(${CLEANER} STATIC cleaner.c)
 target_compile_definitions(${CLEANER} PRIVATE CLEANER_ONLY )
 install(TARGETS ${CLEANER}

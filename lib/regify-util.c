@@ -19,10 +19,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/*
- *
- * Compiled as C++ so we can use thread_local on ios9+
-*/
 #include "lib.h"
 
 #ifdef BUILD_VERSION
@@ -51,7 +47,10 @@ void ruClearError() {
 }
 
 void ruSetError(const char *format, ...) {
-    if (!format) return ruClearError();
+    if (!format) {
+        ruClearError();
+        return;
+    }
     va_list args;
     va_start (args, format);
     int32_t msgsize  = vsnprintf(ruError, RU_ERRBUF_SIZE, format, args);
