@@ -62,8 +62,17 @@ function (doLink lib shared)
             endif()
             target_link_options(${lib}
                     PRIVATE -fvisibility=hidden -fvisibility-inlines-hidden
-                    -Wl,--gc-sections -Wl,--exclude-libs,ALL
                     )
+            if (CMAKE_C_COMPILER_ID MATCHES "Clang$")
+                target_link_options(${lib}
+                        PRIVATE -Wl,-dead_strip
+                        )
+            else()
+                target_link_options(${lib}
+                        PRIVATE -Wl,--gc-sections -Wl,--exclude-libs,ALL
+                        )
+            endif()
+
             set_target_properties(${lib} PROPERTIES SOVERSION ${SOVERSION})
         endif()
     endif()
