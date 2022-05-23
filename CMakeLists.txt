@@ -128,7 +128,9 @@ else()
 endif()
 
 if(INCLUDE_ICU AND DOCS)
-    file(GLOB ICU_LICENSE_PATH ${ICU_PREFIX}/share/icu/LICENSE)
+    file(GLOB DEF_ICU_LICENSE_PATH ${ICU_PREFIX}/share/icu/LICENSE)
+    set(ICU_LICENSE_PATH ${DEF_ICU_LICENSE_PATH} CACHE STRING
+            "Where the ICU License file for packaging can be found")
     if(ICU_LICENSE_PATH MATCHES "^$")
         message(FATAL_ERROR "We need the ICU License file for packaging set ICU_LICENSE_PATH to its location")
     endif()

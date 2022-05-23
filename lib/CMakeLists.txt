@@ -98,8 +98,9 @@ if(INCLUDE_ICU)
     endforeach()
 endif()
 
-if (MAC OR IOS)
+if (MAC OR IOS OR MINGW)
     # Compiled as C++ so we can use thread_local on ios9+
+    # And also to cope with C++ symbols stemming from ICU
     set(rutilfile ${CMAKE_CURRENT_BINARY_DIR}/regify-util.cpp)
 else()
     set(rutilfile ${CMAKE_CURRENT_BINARY_DIR}/regify-util.c)
