@@ -100,17 +100,10 @@ if(INCLUDE_ICU)
     endforeach()
 endif()
 
-if (MAC OR IOS)
-    # Compiled as C++ so we can use thread_local on ios9+
-    # And also to cope with C++ symbols stemming from ICU
-    set(rutilfile ${CMAKE_CURRENT_BINARY_DIR}/regify-util.cpp)
-else()
-    set(rutilfile ${CMAKE_CURRENT_BINARY_DIR}/regify-util.c)
-endif()
-
-configure_file(regify-util.c ${rutilfile} COPYONLY)
+# icu.cpp compiled as C++ so we can use thread_local on ios9+
+# And also to cope with C++ symbols stemming from ICU
 file(GLOB SRCS cleaner.c icu.cpp io.c kvstore.c lib.c list.c logging.c map.c
-        regex.c string.c ${rutilfile})
+        regex.c string.c regify-util.c)
 
 
 # pwcleaner.a
