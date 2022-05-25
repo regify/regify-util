@@ -38,15 +38,15 @@
 #ifndef UTIL_REGIFY_UTIL_H
 #define UTIL_REGIFY_UTIL_H
 
-/* Only need to export C interface if used by C++ source code */
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
 /* for our error codes only */
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
+
+/* Only need to export C interface if used by C++ source code */
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
 
 /** \cond noworry */
 #if defined(RU_SHARED)
@@ -405,11 +405,11 @@ ctype* ctype ## Get(void* ptr, int32_t* code) { \
     ruRetWithCode(code, RUE_OK, ret); \
 }
 /** \endcond */
-#include <regify-util/logging.h>
-
 
 #ifdef __cplusplus
 }   /* extern "C" */
 #endif /* __cplusplus */
+
+#include <regify-util/logging.h>
 
 #endif //UTIL_REGIFY_UTIL_H

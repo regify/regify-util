@@ -160,6 +160,7 @@ install(FILES
         )
 install(EXPORT ${NAME}Targets
         FILE ${NAME}Targets.cmake
+        NAMESPACE RegifyUtil::
         DESTINATION lib/cmake/${NAME} )
 if(NOT MSVC)
     if(NOT INCLUDE_ICU)

@@ -73,6 +73,8 @@ function (doLink lib shared)
         if (NOT INCLUDE_ICU)
             target_link_directories(${lib} PRIVATE ${ICU_LIBRARY_DIRS})
         endif()
+    else()
+        target_link_directories(${lib} PUBLIC ${ICU_LIBRARY_DIRS})
     endif()
 
 
@@ -107,7 +109,7 @@ else()
 endif()
 
 configure_file(regify-util.c ${rutilfile} COPYONLY)
-file(GLOB SRCS cleaner.c icu.c io.c kvstore.c lib.c list.c logging.c map.c
+file(GLOB SRCS cleaner.c icu.cpp io.c kvstore.c lib.c list.c logging.c map.c
         regex.c string.c ${rutilfile})
 
 
