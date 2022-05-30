@@ -66,18 +66,21 @@ UChar* strToUni(UConverter *conv, const char *instr) {
     int32_t inlen = (int32_t)strlen(instr);
     int32_t uclen = inlen + 1; // terminator
     // make unicode
-    UChar *usrc = ruMalloc0(uclen, UChar);
-    int32_t needed = ucnv_toUChars(conv, usrc, uclen, instr, -1, &errorCode);
+    UChar *usrc = ruMalloc0((rusize)uclen, UChar);
+    int32_t needed = ucnv_toUChars(conv, usrc, uclen,
+                                   instr, -1, &errorCode);
     uclen = needed+1; // terminator
     if (errorCode == U_BUFFER_OVERFLOW_ERROR) {
         // cache miss?
         ruVerbLogf("size mismatch in ucnv_toUChars needed: %ld", needed);
-        usrc = ruRealloc(usrc, uclen, UChar); // terminator
+        usrc = ruRealloc(usrc, (rusize)uclen, UChar); // terminator
         errorCode = U_ZERO_ERROR;
-        ucnv_toUChars(conv, usrc, uclen, instr, -1, &errorCode);
+        ucnv_toUChars(conv, usrc, uclen, instr,
+                      -1, &errorCode);
     }
     if(U_FAILURE(errorCode)) {
-        ruSetError("error in ucnv_toUChars error=%s\n", u_errorName(errorCode));
+        ruSetError("error in ucnv_toUChars error=%s\n",
+                   u_errorName(errorCode));
         ruFree(usrc);
         return NULL;
     }
@@ -94,13 +97,13 @@ UChar* charToUni(const char *instr) {
 char* uniToStr(UConverter *conv, UChar *usrc, int32_t uclen) {
     UErrorCode errorCode = U_ZERO_ERROR;
     // convert it back
-    char *out = ruMalloc0(uclen, char);
+    char *out = ruMalloc0((rusize)uclen, char);
     int32_t needed = ucnv_fromUChars(conv, out, uclen, usrc, -1, &errorCode);
     uclen = needed+1; // terminator
     if (errorCode == U_BUFFER_OVERFLOW_ERROR) {
         // cache miss?
         ruVerbLogf("size mismatch in ucnv_fromUChars needed: %ld", needed);
-        out = ruRealloc(out, uclen, char);
+        out = ruRealloc(out, (rusize)uclen, char);
         errorCode = U_ZERO_ERROR;
         ucnv_fromUChars(conv, out, uclen, usrc, -1, &errorCode);
     }
@@ -130,7 +133,7 @@ UChar* uniSwitchCase(UChar* usrc, bool isUpper) {
     // do the transform
     int32_t slen = u_strlen(usrc);
     int32_t len = slen + 1; // terminator
-    UChar* udst = ruMalloc0(len, UChar);
+    UChar* udst = ruMalloc0((rusize)len, UChar);
     int32_t needed;
     if (isUpper) {
         needed = u_strToUpper(udst, len, usrc, slen, "utf8", &errorCode);
@@ -142,7 +145,7 @@ UChar* uniSwitchCase(UChar* usrc, bool isUpper) {
         errorCode == U_STRING_NOT_TERMINATED_WARNING) { // terminator missing
         // cache miss?
         ruVerbLogf("size mismatch in u_strTo(Lower|Upper) needed: %ld", needed);
-        udst = ruRealloc(udst, slen, UChar);
+        udst = ruRealloc(udst, (rusize)slen, UChar);
         errorCode = U_ZERO_ERROR;
         if (isUpper) {
             needed = u_strToUpper(udst, len, usrc, slen, "utf8", &errorCode);
@@ -167,7 +170,7 @@ char* utf8SwitchCase(const char *instr, bool isUpper) {
     UCaseMap* ucm = ucasemap_open("utf8", 0, &errorCode);
     int32_t inlen = (int32_t)strlen(instr);
     int32_t dstlen = inlen + 1; //terminator
-    char *dst = ruMalloc0(dstlen, char);
+    char *dst = ruMalloc0((rusize)dstlen, char);
     int32_t needed;
     if (isUpper) {
         needed = ucasemap_utf8ToUpper(ucm, dst, dstlen, instr, inlen,
@@ -181,7 +184,7 @@ char* utf8SwitchCase(const char *instr, bool isUpper) {
         // cache miss?
         ruVerbLogf("size mismatch in ucasemap_utf8To(Upper|Lower) needed: %ld",
                 needed);
-        dst = ruRealloc(dst, dstlen, char); // terminator
+        dst = ruRealloc(dst, (rusize)dstlen, char); // terminator
         errorCode = U_ZERO_ERROR;
         if (isUpper) {
             needed = ucasemap_utf8ToUpper(ucm, dst, dstlen, instr, inlen,
@@ -252,7 +255,7 @@ RUAPI char* ruUtf8CaseNormalize(const char *instr, int32_t normMode, int32_t cas
                 break;
             }
             // do the transform
-            utmp = ruMalloc0(dstlen, UChar); // terminator
+            utmp = ruMalloc0((rusize)dstlen, UChar); // terminator
             errorCode = U_ZERO_ERROR;
             unorm2_normalize(un, usrc, -1, utmp, dstlen, &errorCode);
             if(U_FAILURE(errorCode)) {
