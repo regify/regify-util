@@ -41,7 +41,8 @@ function (doLink lib shared)
             target_link_libraries(${lib} PUBLIC pthread)
         endif()
         target_compile_options(${lib}
-                PRIVATE -Wall -Werror --pedantic -fPIC
+                PRIVATE -Wall -Werror --pedantic
+                ${CMAKE_C_COMPILE_OPTIONS_PIC}
                 -ffunction-sections -fdata-sections
         )
         if(shared)
@@ -88,7 +89,7 @@ function (doLink lib shared)
 
 endfunction()
 
-if(INCLUDE_ICU)
+if(INSTALL_ICU AND INCLUDE_ICU)
     foreach(lib IN LISTS ICU_LIBRARIES)
         if("${lib}" MATCHES "^-licu")
             string(SUBSTRING ${lib} 2 -1 base)
@@ -124,7 +125,7 @@ install(TARGETS ${staticlib}
         EXPORT ${NAME}Targets
         DESTINATION lib
         )
-if(INCLUDE_ICU)
+if(INSTALL_ICU AND INCLUDE_ICU)
     install(FILES ${ICU_ARCHIVES} DESTINATION lib)
 endif()
 
