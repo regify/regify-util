@@ -49,7 +49,7 @@ extern "C" {
 #endif /* __cplusplus */
 
 /** \cond noworry */
-#if defined(RU_SHARED)
+#if defined(regify_util_EXPORTS)
     #if (defined(WINDOWS) || defined(WIN32) || defined(__BORLANDC__))
         #ifdef RU_BUILDING
             #define RUAPI extern __declspec(dllexport)

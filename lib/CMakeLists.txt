@@ -20,11 +20,12 @@
 
 function (doLink lib shared)
 
-    set(icu_scope PUBLIC)
-    set(icu_libs ${ICU_LIBRARIES})
-    if (${INCLUDE_ICU} AND ${shared})
+    if (INCLUDE_ICU AND shared)
         set(icu_scope PRIVATE)
         set(icu_libs ${ICU_ARCHIVES})
+    else()
+        set(icu_scope PUBLIC)
+        set(icu_libs ${ICU_LIBRARIES})
     endif()
 
     target_link_libraries(${lib} ${icu_scope} ${icu_libs})
@@ -70,7 +71,6 @@ function (doLink lib shared)
     endif()
 
     if(shared)
-        target_compile_definitions(${lib} PRIVATE RU_SHARED)
         if (NOT INCLUDE_ICU)
             target_link_directories(${lib} PRIVATE ${ICU_LIBRARY_DIRS})
         endif()
@@ -89,7 +89,7 @@ function (doLink lib shared)
 
 endfunction()
 
-if(INSTALL_ICU AND INCLUDE_ICU)
+if(INCLUDE_ICU)
     foreach(lib IN LISTS ICU_LIBRARIES)
         if("${lib}" MATCHES "^-licu")
             string(SUBSTRING ${lib} 2 -1 base)
