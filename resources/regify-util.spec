@@ -42,7 +42,7 @@ mkdir build
 
 %install
 [ "$RPM_BUILD_ROOT" != "/" ] && rm -rf $RPM_BUILD_ROOT
-bld=build/_CPack_Packages/linux.x86_64/ZIP/regify-util/
+bld=build/_CPack_Packages/lin.x86_64/ZIP/regify-util/
 
 install -d $RPM_BUILD_ROOT/%{_libdir}
 install -m 755 $bld/lib/%{libname}.so.* $RPM_BUILD_ROOT%{_libdir}/
