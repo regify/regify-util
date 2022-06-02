@@ -70,6 +70,8 @@ endif()
 
 doLog(LOG_VERB "CMAKE_SYSTEM_NAME: ${CMAKE_SYSTEM_NAME}")
 
+string(TOLOWER ${CMAKE_SYSTEM_NAME} NAME_OS)
+string(SUBSTRING ${NAME_OS} 0 3 NAME_OS)
 # platform switches
 if(CMAKE_SYSTEM_NAME MATCHES "^Linux$")
     set(LINUX 1)
@@ -79,11 +81,12 @@ elseif(CMAKE_SYSTEM_NAME MATCHES "^Android$")
 
 elseif(CMAKE_SYSTEM_NAME MATCHES "^Darwin$")
     set(MAC 1)
+    set(NAME_OS mac)
     add_definitions (-DITS_OSX)
 
 elseif(CMAKE_SYSTEM_NAME MATCHES "^Windows$")
     set(WIN 1)
-    if(BUILD_ARCH MATCHES "^mingw")
+    if(NAME_ARCH MATCHES "^mingw")
         set(MINGW 1)
     endif()
 
@@ -96,13 +99,13 @@ else()
 endif()
 
 if (MAC OR LINUX)
-    if(NOT BUILD_ARCH)
-        set(BUILD_ARCH x86_64)
+    if(NOT NAME_ARCH)
+        set(NAME_ARCH x86_64)
     endif()
 endif()
 
-if(NOT BUILD_ARCH)
-    message(FATAL_ERROR "BUILD_ARCH not set")
+if(NOT NAME_ARCH)
+    message(FATAL_ERROR "NAME_ARCH not set")
 endif()
 
 # dependencies
@@ -211,8 +214,7 @@ if(DOCS)
     set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/LICENSE")
     set(CPACK_PACKAGE_NAME ${PROJECT_NAME})
     set(CPACK_PACKAGE_VERSION ${PROJECT_VERSION}-${REVISION})
-    string(TOLOWER ${CMAKE_SYSTEM_NAME} sysname)
-    set(CPACK_SYSTEM_NAME ${sysname}.${BUILD_ARCH})
+    set(CPACK_SYSTEM_NAME ${NAME_OS}.${NAME_ARCH})
     set(CPACK_GENERATOR ZIP)
     list(APPEND CPACK_SOURCE_IGNORE_FILES ${CMAKE_SOURCE_DIR}/cmake-.*)
     list(APPEND CPACK_SOURCE_IGNORE_FILES ${CMAKE_SOURCE_DIR}/build.*)

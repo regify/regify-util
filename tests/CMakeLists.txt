@@ -33,7 +33,7 @@ endif()
 dump("CHECK_LIBRARIES")
 
 if(IOS)
-    set(PBX_ARCH ${BUILD_ARCH})
+    set(PBX_ARCH ${NAME_ARCH})
     set(PBX_INCLUDES ${CHECK_INCLUDE_DIR})
     set(PBX_LDFLAGS "${LDIR}/libcheck.a ${PROJECT_BINARY_DIR}/libregify-util.a
         ${LDIR}/libicui18n.a ${LDIR}/libicuuc.a ${LDIR}/libicudata.a -lm")
