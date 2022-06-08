@@ -23,7 +23,7 @@ jobs:
 
     - name: Build Docs
       # Actually build the docs
-      run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} --target doc
+      run: cmake --build ${{github.workspace}}/build --target doc
 
     - name: Deploy Docs
       uses: peaceiris/actions-gh-pages@v3
