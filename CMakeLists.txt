@@ -20,7 +20,7 @@
 
 # options
 set(VERSION 1.2.0 CACHE STRING "The package version")
-set(REVISION dev CACHE STRING "The build revision")
+set(REVISION 0 CACHE STRING "The build revision")
 set(ICU_PREFIX "" CACHE STRING "Prefix path under which to find ICU")
 option(BUILD_SHARED_LIBS "Whether to build dynamic libraries" OFF)
 option(INCLUDE_ICU "Whether to include ICU statically" ON)
