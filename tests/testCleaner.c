@@ -87,6 +87,10 @@ START_TEST ( api ) {
     ret = ruCleanAdd(rc, "foo2", "bar2");
     fail_unless(ret == exp, retText, test, exp, ret);
 
+    // test duplicate entries bug 3616
+    ret = ruCleanAdd(rc, "foo2", "bar2");
+    fail_unless(ret == exp, retText, test, exp, ret);
+
     ret = ruCleanAdd(rc, "2foo", "2bar");
     fail_unless(ret == exp, retText, test, exp, ret);
 

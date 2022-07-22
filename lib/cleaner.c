@@ -175,6 +175,8 @@ static void addEntry(Cleaner *c, Tree *t, const char* instr, const char* subst) 
     if (*(instr+1)) {
         addEntry(c, t->kids[i], instr + 1, subst);
     } else {
+        // free up potential duplicate entry
+        ruFree(t->kids[i]->subst);
         t->kids[i]->subst = ruStrdup(subst);
     }
 }
