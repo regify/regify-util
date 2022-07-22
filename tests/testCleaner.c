@@ -127,7 +127,7 @@ END_TEST
 
 void cleanerCb (void* user_data, const char *key, const char* subst) {
     ruString rs = (ruString)user_data;
-    int db = 01;
+    int db = 0;
     if (subst) {
         ruStringAppendf(rs, "%s:%s|", key, subst);
         if(db) ruVerbLogf("%s:%s", key, subst);
