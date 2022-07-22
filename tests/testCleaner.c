@@ -80,18 +80,23 @@ START_TEST ( api ) {
     ret = ruCleanAdd(rc, NULL, "bar");
     fail_unless(ret == exp, retText, test, exp, ret);
 
+    ruCleanRemove(NULL, NULL);
+    fail_unless(ret == exp, retText, test, exp, ret);
+
+    ruCleanRemove(rc, NULL);
+    fail_unless(ret == exp, retText, test, exp, ret);
+
+    ret = ruCleanDump(NULL, NULL, NULL);
+    fail_unless(ret == exp, retText, test, exp, ret);
+
+    ret = ruCleanDump(rc, NULL, NULL);
+    fail_unless(ret == exp, retText, test, exp, ret);
+
     exp = RUE_OK;
     ret = ruCleanAdd(rc, "foo", "bar");
     fail_unless(ret == exp, retText, test, exp, ret);
 
     ret = ruCleanAdd(rc, "foo2", "bar2");
-    fail_unless(ret == exp, retText, test, exp, ret);
-
-    // test duplicate entries bug 3616
-    ret = ruCleanAdd(rc, "foo2", "bar2");
-    fail_unless(ret == exp, retText, test, exp, ret);
-
-    ret = ruCleanAdd(rc, "2foo", "2bar");
     fail_unless(ret == exp, retText, test, exp, ret);
 
     test = "ruCleanIo";
@@ -120,6 +125,18 @@ START_TEST ( api ) {
 }
 END_TEST
 
+void cleanerCb (void* user_data, const char *key, const char* subst) {
+    ruString rs = (ruString)user_data;
+    int db = 01;
+    if (subst) {
+        ruStringAppendf(rs, "%s:%s|", key, subst);
+        if(db) ruVerbLogf("%s:%s", key, subst);
+    } else {
+        ruStringAppendf(rs, "%s|", key);
+        if(db) ruVerbLogf("%s", key);
+    }
+}
+
 START_TEST ( work ) {
     int32_t ret, exp;
     const char *test = "";
@@ -136,12 +153,38 @@ START_TEST ( work ) {
     fail_unless(c != NULL, "cleaner object was null");
 
     test = "ruCleanAdd";
+    ret = ruCleanAdd(c, "zap", "this");
+    fail_unless(ret == exp, retText, test, exp, ret);
+
     ret = ruCleanAdd(c, "foo", "^");
     fail_unless(ret == exp, retText, test, exp, ret);
 
+    ret = ruCleanAdd(c, "foo2", "bar1");
+    fail_unless(ret == exp, retText, test, exp, ret);
+
+    ruString rs = NULL;
+
+    test = "ruCleanDump";
+    rs = ruStringNew("");
+    ret = ruCleanDump(c, cleanerCb, rs);
+    fail_unless(ret == exp, retText, test, exp, ret);
+    ck_assert_str_eq(ruStringGetCString(rs), "foo2:bar1|foo:^|fo|f|zap:this|za|z||");
+    ruStringFree(rs, false);
+
+
+    // test duplicate entries bug 3616
+    test = "ruCleanAdd";
     ret = ruCleanAdd(c, "foo2", "bar2");
     fail_unless(ret == exp, retText, test, exp, ret);
 
+    test = "ruCleanDump";
+    rs = ruStringNew("");
+    ret = ruCleanDump(c, cleanerCb, rs);
+    fail_unless(ret == exp, retText, test, exp, ret);
+    ck_assert_str_eq(ruStringGetCString(rs), "foo2:bar2|foo:^|fo|f|zap:this|za|z||");
+    ruStringFree(rs, false);
+
+    test = "ruCleanAdd";
     ret = ruCleanAdd(c, "2foo", "2bar");
     fail_unless(ret == exp, retText, test, exp, ret);
 
@@ -160,7 +203,37 @@ START_TEST ( work ) {
     ck_assert_str_eq(wc.buf, exStr);
 
     ruFree(wc.buf);
-    test = "ruCleanFree";
+    test = "ruCleanRemove";
+    ruCleanRemove(c, "2foo");
+    fail_unless(ret == exp, retText, test, exp, ret);
+
+    test = "ruCleanDump";
+    rs = ruStringNew("");
+    ret = ruCleanDump(c, cleanerCb, rs);
+    fail_unless(ret == exp, retText, test, exp, ret);
+    ck_assert_str_eq(ruStringGetCString(rs), "foo2:bar2|foo:^|fo|f|zap:this|za|z||");
+    ruStringFree(rs, false);
+
+    test = "ruCleanRemove";
+    ruCleanRemove(c, "2foo");
+    fail_unless(ret == exp, retText, test, exp, ret);
+
+    ruCleanRemove(c, "fo");
+    fail_unless(ret == exp, retText, test, exp, ret);
+
+    ruCleanRemove(c, "foo");
+    fail_unless(ret == exp, retText, test, exp, ret);
+
+    ruCleanRemove(c, "fooooobar");
+    fail_unless(ret == exp, retText, test, exp, ret);
+
+    test = "ruCleanDump";
+    rs = ruStringNew("");
+    ret = ruCleanDump(c, cleanerCb, rs);
+    fail_unless(ret == exp, retText, test, exp, ret);
+    ck_assert_str_eq(ruStringGetCString(rs), "foo2:bar2|foo|fo|f|zap:this|za|z||");
+    ruStringFree(rs, false);
+
     ruCleanFree(c);
 }
 END_TEST
