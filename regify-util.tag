@@ -158,6 +158,13 @@
       <anchor>ga29343db7caf7ceb43470dff97cf2668b</anchor>
       <arglist>(ruMutex m)</arglist>
     </member>
+    <member kind="function">
+      <type>RUAPI ruMutex</type>
+      <name>ruMutexFree</name>
+      <anchorfile>group__threading.html</anchorfile>
+      <anchor>gafa04ae8066591ed11d6494f80527cfa2</anchor>
+      <arglist>(ruMutex m)</arglist>
+    </member>
   </compound>
   <compound kind="group">
     <name>memory</name>

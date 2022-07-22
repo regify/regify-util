@@ -120,6 +120,9 @@ Functions</h2></td></tr>
 <tr class="memitem:ga29343db7caf7ceb43470dff97cf2668b"><td class="memItemLeft" align="right" valign="top">RUAPI void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__threading.html#ga29343db7caf7ceb43470dff97cf2668b">ruMutexUnlock</a> (<a class="el" href="group__threading.html#gaa2f2224294aab80c5b5fdadf8c50a2de">ruMutex</a> m)</td></tr>
 <tr class="memdesc:ga29343db7caf7ceb43470dff97cf2668b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the aquired mutex lock so other threads can use it.  <a href="group__threading.html#ga29343db7caf7ceb43470dff97cf2668b">More...</a><br /></td></tr>
 <tr class="separator:ga29343db7caf7ceb43470dff97cf2668b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gafa04ae8066591ed11d6494f80527cfa2"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__threading.html#gaa2f2224294aab80c5b5fdadf8c50a2de">ruMutex</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__threading.html#gafa04ae8066591ed11d6494f80527cfa2">ruMutexFree</a> (<a class="el" href="group__threading.html#gaa2f2224294aab80c5b5fdadf8c50a2de">ruMutex</a> m)</td></tr>
+<tr class="memdesc:gafa04ae8066591ed11d6494f80527cfa2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Free up given <a class="el" href="group__threading.html#gaa2f2224294aab80c5b5fdadf8c50a2de">ruMutex</a> object.  <a href="group__threading.html#gafa04ae8066591ed11d6494f80527cfa2">More...</a><br /></td></tr>
+<tr class="separator:gafa04ae8066591ed11d6494f80527cfa2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>These functions abstract threading related aspects. </p>
@@ -141,6 +144,33 @@ Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
+<a id="gafa04ae8066591ed11d6494f80527cfa2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gafa04ae8066591ed11d6494f80527cfa2">&#9670;&nbsp;</a></span>ruMutexFree()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI <a class="el" href="group__threading.html#gaa2f2224294aab80c5b5fdadf8c50a2de">ruMutex</a> ruMutexFree </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__threading.html#gaa2f2224294aab80c5b5fdadf8c50a2de">ruMutex</a>&#160;</td>
+          <td class="paramname"><em>m</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Free up given <a class="el" href="group__threading.html#gaa2f2224294aab80c5b5fdadf8c50a2de">ruMutex</a> object. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">m</td><td>The mutex to free. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>NULL </dd></dl>
+
+</div>
+</div>
 <a id="gaab6a38e671e130ff0915670c1d6f8019"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#gaab6a38e671e130ff0915670c1d6f8019">&#9670;&nbsp;</a></span>ruMutexInit()</h2>
 
@@ -218,7 +248,7 @@ Functions</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Fri Jul 22 2022 14:18:21 for regify utility by
+    <li class="footer">Generated on Fri Jul 22 2022 14:59:17 for regify utility by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
