@@ -175,7 +175,7 @@ static bool entryUsed(Cleaner *c, Tree *t) {
 
 static void dumpEntry(Cleaner *c, Tree *t, char* instr, char* cur, rusize inlen,
                       ruCleanerCb lf, void* lctx) {
-    if (cur-instr < inlen) {
+    if ((rusize)(cur-instr) < inlen) {
         for (int i = 0; i < 256; i++) {
             if (t->kids[i]) {
                 *cur = (char)i;
