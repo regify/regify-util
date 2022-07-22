@@ -109,6 +109,8 @@ Typedefs</h2></td></tr>
 <tr class="separator:ga2ef14c6aa2f1434ccc78e1df73d5a31d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gae4bb48307fae422df9dfa3bbbab66cc1"><td class="memItemLeft" align="right" valign="top">typedef rusize_s(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__cleaner.html#gae4bb48307fae422df9dfa3bbbab66cc1">ioFunc</a>) (void *ctx, void *buf, <a class="el" href="group__misc.html#gaaa0102d444a5dd14474b7951caae0459">rusize</a> len)</td></tr>
 <tr class="separator:gae4bb48307fae422df9dfa3bbbab66cc1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga76ef45a462467ab9cc874e52cfd50cad"><td class="memItemLeft" align="right" valign="top">typedef void(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__cleaner.html#ga76ef45a462467ab9cc874e52cfd50cad">ruCleanerCb</a>) (void *user_data, const char *key, const char *subst)</td></tr>
+<tr class="separator:ga76ef45a462467ab9cc874e52cfd50cad"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
@@ -117,8 +119,12 @@ Functions</h2></td></tr>
 <tr class="separator:gae1f001a43bf9b80bbebc76855815fc68"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga6bf6e90d73a1109efb4e0097a4f87d76"><td class="memItemLeft" align="right" valign="top">RUAPI void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__cleaner.html#ga6bf6e90d73a1109efb4e0097a4f87d76">ruCleanFree</a> (<a class="el" href="group__cleaner.html#ga2ef14c6aa2f1434ccc78e1df73d5a31d">ruCleaner</a> rc)</td></tr>
 <tr class="separator:ga6bf6e90d73a1109efb4e0097a4f87d76"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaac05659ca6cad93ae186f7c5910a21f8"><td class="memItemLeft" align="right" valign="top">RUAPI int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__cleaner.html#gaac05659ca6cad93ae186f7c5910a21f8">ruCleanDump</a> (<a class="el" href="group__cleaner.html#ga2ef14c6aa2f1434ccc78e1df73d5a31d">ruCleaner</a> cp, <a class="el" href="group__cleaner.html#ga76ef45a462467ab9cc874e52cfd50cad">ruCleanerCb</a> lf, void *user_data)</td></tr>
+<tr class="separator:gaac05659ca6cad93ae186f7c5910a21f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga2c747bc6e3a5f21c4c638c1be3157c0a"><td class="memItemLeft" align="right" valign="top">RUAPI int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__cleaner.html#ga2c747bc6e3a5f21c4c638c1be3157c0a">ruCleanAdd</a> (<a class="el" href="group__cleaner.html#ga2ef14c6aa2f1434ccc78e1df73d5a31d">ruCleaner</a> rc, const char *instr, const char *substitute)</td></tr>
 <tr class="separator:ga2c747bc6e3a5f21c4c638c1be3157c0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga4bb547fcaf2a8b792282ec675925a55a"><td class="memItemLeft" align="right" valign="top">RUAPI int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__cleaner.html#ga4bb547fcaf2a8b792282ec675925a55a">ruCleanRemove</a> (<a class="el" href="group__cleaner.html#ga2ef14c6aa2f1434ccc78e1df73d5a31d">ruCleaner</a> rc, const char *instr)</td></tr>
+<tr class="separator:ga4bb547fcaf2a8b792282ec675925a55a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga70ae896895986b6521043071ca46026e"><td class="memItemLeft" align="right" valign="top">RUAPI int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__cleaner.html#ga70ae896895986b6521043071ca46026e">ruCleanIo</a> (<a class="el" href="group__cleaner.html#ga2ef14c6aa2f1434ccc78e1df73d5a31d">ruCleaner</a> rc, <a class="el" href="group__cleaner.html#gae4bb48307fae422df9dfa3bbbab66cc1">ioFunc</a> reader, void *readCtx, <a class="el" href="group__cleaner.html#gae4bb48307fae422df9dfa3bbbab66cc1">ioFunc</a> writer, void *writeCtx)</td></tr>
 <tr class="memdesc:ga70ae896895986b6521043071ca46026e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set input/output context to be processed.  <a href="group__cleaner.html#ga70ae896895986b6521043071ca46026e">More...</a><br /></td></tr>
 <tr class="separator:ga70ae896895986b6521043071ca46026e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -213,6 +219,28 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="ga76ef45a462467ab9cc874e52cfd50cad"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga76ef45a462467ab9cc874e52cfd50cad">&#9670;&nbsp;</a></span>ruCleanerCb</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef void(* ruCleanerCb) (void *user_data, const char *key, const char *subst)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>A callback for the <a class="el" href="group__cleaner.html#gaac05659ca6cad93ae186f7c5910a21f8">ruCleanDump</a> function. The given key and subst parameters belong to the cleaner and must not be freed. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">user_data</td><td>The optional context that was given to <a class="el" href="group__cleaner.html#gaac05659ca6cad93ae186f7c5910a21f8">ruCleanDump</a>. </td></tr>
+    <tr><td class="paramname">key</td><td>The secret key to clean. </td></tr>
+    <tr><td class="paramname">subst</td><td>The placeholder to substitute the secret with. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <h2 class="groupheader">Function Documentation</h2>
 <a id="ga2c747bc6e3a5f21c4c638c1be3157c0a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ga2c747bc6e3a5f21c4c638c1be3157c0a">&#9670;&nbsp;</a></span>ruCleanAdd()</h2>
@@ -250,6 +278,49 @@ Functions</h2></td></tr>
     <tr><td class="paramname">rc</td><td>The relevant ruCleaner object </td></tr>
     <tr><td class="paramname">instr</td><td>The string to be replaced. Will be copied. </td></tr>
     <tr><td class="paramname">substitute</td><td>The string to replace instr with. Will be copied. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="group__ruerror.html#ga7e2f97cce8af8020834e685a2482556d">RUE_OK</a> on success else an error code. </dd></dl>
+
+</div>
+</div>
+<a id="gaac05659ca6cad93ae186f7c5910a21f8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaac05659ca6cad93ae186f7c5910a21f8">&#9670;&nbsp;</a></span>ruCleanDump()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI int32_t ruCleanDump </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__cleaner.html#ga2ef14c6aa2f1434ccc78e1df73d5a31d">ruCleaner</a>&#160;</td>
+          <td class="paramname"><em>cp</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__cleaner.html#ga76ef45a462467ab9cc874e52cfd50cad">ruCleanerCb</a>&#160;</td>
+          <td class="paramname"><em>lf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>user_data</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Iterates over the cleaner database and calls given <a class="el" href="group__cleaner.html#ga76ef45a462467ab9cc874e52cfd50cad">ruCleanerCb</a> with each secret and substitute. This function is mainly used for debugging. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">cp</td><td>The relevant ruCleaner object </td></tr>
+    <tr><td class="paramname">lf</td><td>The <a class="el" href="group__cleaner.html#ga76ef45a462467ab9cc874e52cfd50cad">ruCleanerCb</a> to call with each entry </td></tr>
+    <tr><td class="paramname">user_data</td><td>An optional context that will be given to the callbacks user_data parameter. </td></tr>
   </table>
   </dd>
 </dl>
@@ -394,6 +465,42 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="ga4bb547fcaf2a8b792282ec675925a55a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga4bb547fcaf2a8b792282ec675925a55a">&#9670;&nbsp;</a></span>ruCleanRemove()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI int32_t ruCleanRemove </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__cleaner.html#ga2ef14c6aa2f1434ccc78e1df73d5a31d">ruCleaner</a>&#160;</td>
+          <td class="paramname"><em>rc</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>instr</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Removes a string entry from the database. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">rc</td><td>The relevant ruCleaner object </td></tr>
+    <tr><td class="paramname">instr</td><td>The string to be removed </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="group__ruerror.html#ga7e2f97cce8af8020834e685a2482556d">RUE_OK</a> on success else an error code. </dd></dl>
+
+</div>
+</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="agroup__ruerror_html_ga7e2f97cce8af8020834e685a2482556d"><div class="ttname"><a href="group__ruerror.html#ga7e2f97cce8af8020834e685a2482556d">RUE_OK</a></div><div class="ttdeci">#define RUE_OK</div><div class="ttdef"><b>Definition:</b> errors.h:46</div></div>
@@ -408,7 +515,7 @@ Functions</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Fri Jul 22 2022 08:56:49 for regify utility by
+    <li class="footer">Generated on Fri Jul 22 2022 14:14:58 for regify utility by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

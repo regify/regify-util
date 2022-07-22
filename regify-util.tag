@@ -217,6 +217,13 @@
       <anchor>gae4bb48307fae422df9dfa3bbbab66cc1</anchor>
       <arglist>)(void *ctx, void *buf, rusize len)</arglist>
     </member>
+    <member kind="typedef">
+      <type>void(*</type>
+      <name>ruCleanerCb</name>
+      <anchorfile>group__cleaner.html</anchorfile>
+      <anchor>ga76ef45a462467ab9cc874e52cfd50cad</anchor>
+      <arglist>)(void *user_data, const char *key, const char *subst)</arglist>
+    </member>
     <member kind="function">
       <type>RUAPI ruCleaner</type>
       <name>ruCleanNew</name>
@@ -233,10 +240,24 @@
     </member>
     <member kind="function">
       <type>RUAPI int32_t</type>
+      <name>ruCleanDump</name>
+      <anchorfile>group__cleaner.html</anchorfile>
+      <anchor>gaac05659ca6cad93ae186f7c5910a21f8</anchor>
+      <arglist>(ruCleaner cp, ruCleanerCb lf, void *user_data)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI int32_t</type>
       <name>ruCleanAdd</name>
       <anchorfile>group__cleaner.html</anchorfile>
       <anchor>ga2c747bc6e3a5f21c4c638c1be3157c0a</anchor>
       <arglist>(ruCleaner rc, const char *instr, const char *substitute)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI int32_t</type>
+      <name>ruCleanRemove</name>
+      <anchorfile>group__cleaner.html</anchorfile>
+      <anchor>ga4bb547fcaf2a8b792282ec675925a55a</anchor>
+      <arglist>(ruCleaner rc, const char *instr)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI int32_t</type>
