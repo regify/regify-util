@@ -91,11 +91,11 @@ RUAPI ruMutex ruMutexInit() {
     return (ruMutex)mx;
 }
 
-RUAPI void ruMutexFree(ruMutex m) {
+RUAPI ruMutex ruMutexFree(ruMutex m) {
     ruClearError();
     int32_t ret;
     Mux *mux = MuxGet(m, &ret);
-    if (!mux) return;
+    if (!mux) return NULL;
 #ifdef RUMS
     CloseHandle(mux->mux);
 #else
@@ -103,6 +103,7 @@ RUAPI void ruMutexFree(ruMutex m) {
 #endif
     memset(mux, 0, sizeof(Mux));
     ruFree(mux);
+    return NULL;
 }
 
 RUAPI void ruMutexLock(ruMutex m) {

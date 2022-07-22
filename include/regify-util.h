@@ -266,12 +266,14 @@ RUAPI void ruMutexUnlock(ruMutex m);
 /**
  * \brief Free up given \ref ruMutex object.
  * @param m The mutex to free.
- * @}
+ * @return NULL
  */
-RUAPI void ruMutexFree(ruMutex m);
+RUAPI ruMutex ruMutexFree(ruMutex m);
 
 
 /**
+ * @}
+ *
  * \defgroup memory Memory Management
  * \brief Abstracted functions pertaining to memory managment.
  * @{
