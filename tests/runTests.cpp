@@ -43,10 +43,7 @@ Suite* getSuite ( void ) {
 
 char* insureTestFolder(const char* folderName) {
     int ret;
-    const char *tmp = ruGetenv("TEMP");
-    if (!tmp) tmp = ruGetenv("TMPDIR");
-    fail_if(tmp == NULL, "Could get temp folder. Please set TEMP env "
-                         "variable to a writable folder");
+    const char *tmp = TMPDIR;
     char *tmpDir;
     if(folderName) {
         tmpDir = ruDupPrintf("%s/ruTest/%s", tmp, folderName);
@@ -65,11 +62,7 @@ char* insureTestFolder(const char* folderName) {
     return tmpDir;
 }
 
-#ifdef TEST_BASE
 const char* testBase = TEST_BASE;
-#else
-const char* testBase = NULL;
-#endif
 char pathBuffer[1024];
 
 char * makePath(const char *filepath) {
@@ -82,16 +75,13 @@ int32_t mainTest (const char *tmpDir, const char *treepath) {
 #else
 int32_t main ( int32_t argc, char *argv[] ) {
 #endif
-    const char *testDir = ruGetenv("TEST_BASE");
-    if (testDir) testBase = testDir;
-
     int32_t number_failed;
     ruSetLogger(ruStdErrorLogger, RU_LOG_VERB, NULL);
     Suite *suite = getSuite();
     SRunner *runner = srunner_create ( suite );
+    srunner_set_fork_status (runner, CK_NOFORK);
 #ifdef DO_IOS
     setenv("TEMP", tmpDir, 1);
-    srunner_set_fork_status (runner, CK_NOFORK);
     testBase = treepath;
 #endif
     srunner_run_all ( runner, CK_NORMAL );

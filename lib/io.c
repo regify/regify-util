@@ -40,6 +40,14 @@ wchar_t * getWPath(const char *filepath) {
     return wpath;
 }
 
+char* getMbPath(const wchar_t *filepath) {
+    if (!filepath) return NULL;
+    char *path = uniToChar((UChar*)filepath);
+    char *pathFixed = fixPath(path);
+    ruFree (path);
+    return pathFixed;
+}
+
 static int getAttrs(const char* filename) {
     int attributes;
     wchar_t *wfilename = getWPath(filename);
@@ -787,4 +795,37 @@ RUAPI char* ruBaseName(const char *filePath) {
     }
     if (pfile < filePath) return (char*)filePath;
     return pfile;
+}
+
+RUAPI char* ruFullPath(const char* filePath) {
+#ifdef _WIN32
+    ruClearError();
+    char *fixedPath = NULL, *res = NULL;
+    if (filePath) {
+        fixedPath = fixPath(filePath);
+        if (*fixedPath == '/' || *fixedPath == '\\' ||
+            *(fixedPath + 1) == ':') {
+            // path is already absolute
+            return fixedPath;
+        }
+    }
+    char* dir = NULL;
+    UChar fullPath[_MAX_PATH];
+    if (_wgetcwd(fullPath, _MAX_PATH)) {
+        dir = getMbPath(fullPath);
+        if (fixedPath) {
+            res = ruDupPrintf("%s%c%s", dir, RU_SLASH, fixedPath);
+        } else {
+            res = dir;
+            dir = NULL;
+        }
+    } else {
+        ruSetError("no current directory");
+    }
+    ruFree(fixedPath);
+    ruFree(dir);
+    return res;
+#else
+    return NULL;
+#endif
 }

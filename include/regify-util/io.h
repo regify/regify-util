@@ -222,6 +222,17 @@ RUAPI char* ruDirName(const char *filePath);
 RUAPI char* ruBaseName(const char *filePath);
 
 /**
+ * \brief Returns an absolute filepath leading to the given relative path.
+ *
+ * This function merely appends the given path to CWD if it's relative. It does
+ * not validate or process the given path in any other way.
+ * @param filePath File path to append the current working directory to if it is relative.
+ * @return Returns an absolute filepath leading to the given relative path or
+ *         the given path if it was absolute. Path must be freed by the caller.
+ */
+RUAPI char* ruFullPath(const char* filePath);
+
+/**
  * @}
  */
 #ifdef __cplusplus

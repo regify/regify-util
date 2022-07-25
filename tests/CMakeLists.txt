@@ -49,13 +49,14 @@ else()
             )
     target_include_directories(runTests
             PRIVATE ${PROJECT_SOURCE_DIR}/include/ ${CHECK_INCLUDE_DIR})
-    target_compile_definitions(runTests
-            PRIVATE TEST_BASE=\"${CMAKE_CURRENT_SOURCE_DIR}/tree\")
+    target_compile_definitions(runTests PRIVATE
+            TEST_BASE=\"${CMAKE_CURRENT_SOURCE_DIR}/tree\"
+            TMPDIR="${CMAKE_CURRENT_BINARY_DIR}")
     target_link_directories(runTests PRIVATE ${CHECK_LIBRARY_DIRS})
     target_link_libraries(runTests PRIVATE ${staticlib} ${CHECK_LIBRARIES})
 
     add_custom_target(tests
-            COMMAND TEMP=/tmp ${CMAKE_CURRENT_BINARY_DIR}/runTests > run.log 2>&1
+            COMMAND ${CMAKE_CURRENT_BINARY_DIR}/runTests > run.log 2>&1
             COMMAND echo "* * *   Success   * * *"
             DEPENDS runTests)
 
@@ -63,7 +64,7 @@ else()
     if(VALGRIND)
         add_custom_target(grind
                 COMMAND rm -f grind.log
-                COMMAND TEMP=/tmp CK_FORK=no valgrind --num-callers=50
+                COMMAND CK_FORK=no valgrind --num-callers=50
                     --read-var-info=yes --show-reachable=yes
                     --leak-check=full --log-file=grind.log
                     ${CMAKE_CURRENT_BINARY_DIR}/runTests > run.log 2>&1

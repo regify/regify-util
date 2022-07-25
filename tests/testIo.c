@@ -102,7 +102,6 @@ START_TEST ( api ) {
     fail_unless(expi == reti, retText, test, expi, reti);
 #endif
 
-
 }
 END_TEST
 
@@ -281,6 +280,17 @@ START_TEST ( filetest ) {
     expres = NULL;
     res = ruDirName(file);
     fail_unless(expres == res, retText, test, expres, res);
+
+    test = "ruFullPath";
+    expres = NULL;
+    res = ruFullPath("con");
+    fail_if(expres == res, retText, test, expres, res);
+    ruFree(res);
+
+    res = ruFullPath(NULL);
+    fail_if(expres == res, retText, test, expres, res);
+    ruFree(res);
+
 }
 END_TEST
 
