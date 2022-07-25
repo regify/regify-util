@@ -10,7 +10,7 @@ var searchData=
   ['rubufferappenduriencoded_223',['ruBufferAppendUriEncoded',['../group__ru_buffer.html#ga768c2165496db6fd441c4baf4d36608e',1,'string.h']]],
   ['rucleanadd_224',['ruCleanAdd',['../group__cleaner.html#ga2c747bc6e3a5f21c4c638c1be3157c0a',1,'cleaner.h']]],
   ['rucleandump_225',['ruCleanDump',['../group__cleaner.html#gaac05659ca6cad93ae186f7c5910a21f8',1,'cleaner.h']]],
-  ['rucleanfree_226',['ruCleanFree',['../group__cleaner.html#ga6bf6e90d73a1109efb4e0097a4f87d76',1,'cleaner.h']]],
+  ['rucleanfree_226',['ruCleanFree',['../group__cleaner.html#gab618d626b1824ba7fd21ac61c5132902',1,'cleaner.h']]],
   ['rucleanio_227',['ruCleanIo',['../group__cleaner.html#ga70ae896895986b6521043071ca46026e',1,'cleaner.h']]],
   ['rucleannew_228',['ruCleanNew',['../group__cleaner.html#gae1f001a43bf9b80bbebc76855815fc68',1,'cleaner.h']]],
   ['rucleannow_229',['ruCleanNow',['../group__cleaner.html#gac95b23302e469eaebd780fd4238038cb',1,'cleaner.h']]],

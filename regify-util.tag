@@ -239,10 +239,10 @@
       <arglist>(rusize chunkSize)</arglist>
     </member>
     <member kind="function">
-      <type>RUAPI void</type>
+      <type>RUAPI ruCleaner</type>
       <name>ruCleanFree</name>
       <anchorfile>group__cleaner.html</anchorfile>
-      <anchor>ga6bf6e90d73a1109efb4e0097a4f87d76</anchor>
+      <anchor>gab618d626b1824ba7fd21ac61c5132902</anchor>
       <arglist>(ruCleaner rc)</arglist>
     </member>
     <member kind="function">

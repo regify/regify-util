@@ -115,10 +115,10 @@ Typedefs</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:gae1f001a43bf9b80bbebc76855815fc68"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__cleaner.html#ga2ef14c6aa2f1434ccc78e1df73d5a31d">ruCleaner</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__cleaner.html#gae1f001a43bf9b80bbebc76855815fc68">ruCleanNew</a> (<a class="el" href="group__misc.html#gaaa0102d444a5dd14474b7951caae0459">rusize</a> chunkSize)</td></tr>
-<tr class="memdesc:gae1f001a43bf9b80bbebc76855815fc68"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a new ruCleaner object. To be freed with <a class="el" href="group__cleaner.html#ga6bf6e90d73a1109efb4e0097a4f87d76">ruCleanFree</a>.  <a href="group__cleaner.html#gae1f001a43bf9b80bbebc76855815fc68">More...</a><br /></td></tr>
+<tr class="memdesc:gae1f001a43bf9b80bbebc76855815fc68"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a new ruCleaner object. To be freed with <a class="el" href="group__cleaner.html#gab618d626b1824ba7fd21ac61c5132902">ruCleanFree</a>.  <a href="group__cleaner.html#gae1f001a43bf9b80bbebc76855815fc68">More...</a><br /></td></tr>
 <tr class="separator:gae1f001a43bf9b80bbebc76855815fc68"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga6bf6e90d73a1109efb4e0097a4f87d76"><td class="memItemLeft" align="right" valign="top">RUAPI void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__cleaner.html#ga6bf6e90d73a1109efb4e0097a4f87d76">ruCleanFree</a> (<a class="el" href="group__cleaner.html#ga2ef14c6aa2f1434ccc78e1df73d5a31d">ruCleaner</a> rc)</td></tr>
-<tr class="separator:ga6bf6e90d73a1109efb4e0097a4f87d76"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gab618d626b1824ba7fd21ac61c5132902"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__cleaner.html#ga2ef14c6aa2f1434ccc78e1df73d5a31d">ruCleaner</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__cleaner.html#gab618d626b1824ba7fd21ac61c5132902">ruCleanFree</a> (<a class="el" href="group__cleaner.html#ga2ef14c6aa2f1434ccc78e1df73d5a31d">ruCleaner</a> rc)</td></tr>
+<tr class="separator:gab618d626b1824ba7fd21ac61c5132902"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gaac05659ca6cad93ae186f7c5910a21f8"><td class="memItemLeft" align="right" valign="top">RUAPI int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__cleaner.html#gaac05659ca6cad93ae186f7c5910a21f8">ruCleanDump</a> (<a class="el" href="group__cleaner.html#ga2ef14c6aa2f1434ccc78e1df73d5a31d">ruCleaner</a> cp, <a class="el" href="group__cleaner.html#ga76ef45a462467ab9cc874e52cfd50cad">ruCleanerCb</a> lf, void *user_data)</td></tr>
 <tr class="separator:gaac05659ca6cad93ae186f7c5910a21f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga2c747bc6e3a5f21c4c638c1be3157c0a"><td class="memItemLeft" align="right" valign="top">RUAPI int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__cleaner.html#ga2c747bc6e3a5f21c4c638c1be3157c0a">ruCleanAdd</a> (<a class="el" href="group__cleaner.html#ga2ef14c6aa2f1434ccc78e1df73d5a31d">ruCleaner</a> rc, const char *instr, const char *substitute)</td></tr>
@@ -186,7 +186,7 @@ Functions</h2></td></tr>
 <div class="line"> </div>
 <div class="line">    <span class="keywordflow">if</span> (in) fclose(in);</div>
 <div class="line">    <span class="keywordflow">if</span> (out) fclose(out);</div>
-<div class="line">    <a class="code" href="group__cleaner.html#ga6bf6e90d73a1109efb4e0097a4f87d76">ruCleanFree</a>(rc);</div>
+<div class="line">    <a class="code" href="group__cleaner.html#gab618d626b1824ba7fd21ac61c5132902">ruCleanFree</a>(rc);</div>
 <div class="line">}</div>
 </div><!-- fragment --> <h2 class="groupheader">Typedef Documentation</h2>
 <a id="gae4bb48307fae422df9dfa3bbbab66cc1"></a>
@@ -328,14 +328,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ga6bf6e90d73a1109efb4e0097a4f87d76"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga6bf6e90d73a1109efb4e0097a4f87d76">&#9670;&nbsp;</a></span>ruCleanFree()</h2>
+<a id="gab618d626b1824ba7fd21ac61c5132902"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gab618d626b1824ba7fd21ac61c5132902">&#9670;&nbsp;</a></span>ruCleanFree()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">RUAPI void ruCleanFree </td>
+          <td class="memname">RUAPI <a class="el" href="group__cleaner.html#ga2ef14c6aa2f1434ccc78e1df73d5a31d">ruCleaner</a> ruCleanFree </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="group__cleaner.html#ga2ef14c6aa2f1434ccc78e1df73d5a31d">ruCleaner</a>&#160;</td>
           <td class="paramname"><em>rc</em></td><td>)</td>
@@ -349,6 +349,7 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section return"><dt>Returns</dt><dd>NULL </dd></dl>
 
 </div>
 </div>
@@ -427,7 +428,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Creates a new ruCleaner object. To be freed with <a class="el" href="group__cleaner.html#ga6bf6e90d73a1109efb4e0097a4f87d76">ruCleanFree</a>. </p>
+<p>Creates a new ruCleaner object. To be freed with <a class="el" href="group__cleaner.html#gab618d626b1824ba7fd21ac61c5132902">ruCleanFree</a>. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">chunkSize</td><td>Size of chunk to process at a time. Will be allocated twice. Will be increased to the largest item to clean if that is bigger. Defaults to 1M if set to 0. </td></tr>
@@ -504,8 +505,8 @@ Functions</h2></td></tr>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="agroup__ruerror_html_ga7e2f97cce8af8020834e685a2482556d"><div class="ttname"><a href="group__ruerror.html#ga7e2f97cce8af8020834e685a2482556d">RUE_OK</a></div><div class="ttdeci">#define RUE_OK</div><div class="ttdef"><b>Definition:</b> errors.h:46</div></div>
-<div class="ttc" id="agroup__cleaner_html_ga6bf6e90d73a1109efb4e0097a4f87d76"><div class="ttname"><a href="group__cleaner.html#ga6bf6e90d73a1109efb4e0097a4f87d76">ruCleanFree</a></div><div class="ttdeci">RUAPI void ruCleanFree(ruCleaner rc)</div></div>
 <div class="ttc" id="agroup__cleaner_html_ga2ef14c6aa2f1434ccc78e1df73d5a31d"><div class="ttname"><a href="group__cleaner.html#ga2ef14c6aa2f1434ccc78e1df73d5a31d">ruCleaner</a></div><div class="ttdeci">void * ruCleaner</div><div class="ttdef"><b>Definition:</b> cleaner.h:103</div></div>
+<div class="ttc" id="agroup__cleaner_html_gab618d626b1824ba7fd21ac61c5132902"><div class="ttname"><a href="group__cleaner.html#gab618d626b1824ba7fd21ac61c5132902">ruCleanFree</a></div><div class="ttdeci">RUAPI ruCleaner ruCleanFree(ruCleaner rc)</div></div>
 <div class="ttc" id="agroup__misc_html_gaaa0102d444a5dd14474b7951caae0459"><div class="ttname"><a href="group__misc.html#gaaa0102d444a5dd14474b7951caae0459">rusize</a></div><div class="ttdeci">size_t rusize</div><div class="ttdoc">Abstracted version of size_t.</div><div class="ttdef"><b>Definition:</b> regify-util.h:166</div></div>
 <div class="ttc" id="agroup__cleaner_html_gae1f001a43bf9b80bbebc76855815fc68"><div class="ttname"><a href="group__cleaner.html#gae1f001a43bf9b80bbebc76855815fc68">ruCleanNew</a></div><div class="ttdeci">RUAPI ruCleaner ruCleanNew(rusize chunkSize)</div><div class="ttdoc">Creates a new ruCleaner object. To be freed with ruCleanFree.</div></div>
 <div class="ttc" id="agroup__cleaner_html_gac95b23302e469eaebd780fd4238038cb"><div class="ttname"><a href="group__cleaner.html#gac95b23302e469eaebd780fd4238038cb">ruCleanNow</a></div><div class="ttdeci">RUAPI int32_t ruCleanNow(ruCleaner rc)</div><div class="ttdoc">Starts the actual cleaning using the given I/O.</div></div>
@@ -515,7 +516,7 @@ Functions</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Fri Jul 22 2022 15:07:04 for regify utility by
+    <li class="footer">Generated on Mon Jul 25 2022 08:30:47 for regify utility by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

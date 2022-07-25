@@ -24,7 +24,7 @@ var searchData=
   ['rucleandump_40',['ruCleanDump',['../group__cleaner.html#gaac05659ca6cad93ae186f7c5910a21f8',1,'cleaner.h']]],
   ['rucleaner_41',['ruCleaner',['../group__cleaner.html#ga2ef14c6aa2f1434ccc78e1df73d5a31d',1,'cleaner.h']]],
   ['rucleanercb_42',['ruCleanerCb',['../group__cleaner.html#ga76ef45a462467ab9cc874e52cfd50cad',1,'cleaner.h']]],
-  ['rucleanfree_43',['ruCleanFree',['../group__cleaner.html#ga6bf6e90d73a1109efb4e0097a4f87d76',1,'cleaner.h']]],
+  ['rucleanfree_43',['ruCleanFree',['../group__cleaner.html#gab618d626b1824ba7fd21ac61c5132902',1,'cleaner.h']]],
   ['rucleanio_44',['ruCleanIo',['../group__cleaner.html#ga70ae896895986b6521043071ca46026e',1,'cleaner.h']]],
   ['rucleannew_45',['ruCleanNew',['../group__cleaner.html#gae1f001a43bf9b80bbebc76855815fc68',1,'cleaner.h']]],
   ['rucleannow_46',['ruCleanNow',['../group__cleaner.html#gac95b23302e469eaebd780fd4238038cb',1,'cleaner.h']]],
