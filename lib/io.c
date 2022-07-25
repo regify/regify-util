@@ -832,8 +832,7 @@ RUAPI char* ruFullPath(const char* filePath) {
     }
     char fullPath[MAXPATHLEN];
     fullPath[0] = '\0';
-    getcwd(fullPath, MAXPATHLEN);
-    if (fullPath[0] == '/') {
+    if (getcwd(fullPath, MAXPATHLEN) && fullPath[0] == '/') {
         if (filePath) {
             res = ruDupPrintf("%s%c%s", fullPath, RU_SLASH, filePath);
         } else {
