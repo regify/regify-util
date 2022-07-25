@@ -44,6 +44,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdarg.h>
+#include <sys/param.h>
 #include <sys/stat.h>
 #include <errno.h>
 #include <fcntl.h>

@@ -798,9 +798,10 @@ RUAPI char* ruBaseName(const char *filePath) {
 }
 
 RUAPI char* ruFullPath(const char* filePath) {
-#ifdef _WIN32
     ruClearError();
-    char *fixedPath = NULL, *res = NULL;
+    char *res = NULL;
+#ifdef _WIN32
+    char *fixedPath = NULL;
     if (filePath) {
         fixedPath = fixPath(filePath);
         if (*fixedPath == '/' || *fixedPath == '\\' ||
@@ -824,8 +825,23 @@ RUAPI char* ruFullPath(const char* filePath) {
     }
     ruFree(fixedPath);
     ruFree(dir);
-    return res;
 #else
-    return NULL;
+    if (filePath && *filePath == '/') {
+        // path is already absolute
+        return ruStrdup(filePath);
+    }
+    char fullPath[MAXPATHLEN];
+    fullPath[0] = '\0';
+    getcwd(fullPath, MAXPATHLEN);
+    if (fullPath[0] == '/') {
+        if (filePath) {
+            res = ruDupPrintf("%s%c%s", fullPath, RU_SLASH, filePath);
+        } else {
+            res = ruStrdup(fullPath);
+        }
+    } else {
+        ruSetError("invalid current directory '%s'", fullPath);
+    }
 #endif
+    return res;
 }
