@@ -353,9 +353,9 @@ ruCleaner ruCleanNew(rusize chunkSize) {
     return (ruCleaner)c;
 }
 
-void ruCleanFree(ruCleaner cp) {
+ruCleaner ruCleanFree(ruCleaner cp) {
     Cleaner *c = CleanerGet(cp, NULL);
-    if (!c) return;
+    if (!c) return NULL;
     if (c->root) {
         c->root = c->leaf = freeBranch(c, c->root);
     }
@@ -363,6 +363,7 @@ void ruCleanFree(ruCleaner cp) {
     ruFree(c->outBuf);
     c->type = 0;
     ruFree(c);
+    return NULL;
 }
 
 int32_t ruCleanAdd(ruCleaner rc, const char* instr, const char* substitute) {

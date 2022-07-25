@@ -119,8 +119,9 @@ RUAPI ruCleaner ruCleanNew(rusize chunkSize);
 /**
  * Frees the given ruCleaner object.
  * @param rc list to free.
+ * @return NULL
  */
-RUAPI void ruCleanFree(ruCleaner rc);
+RUAPI ruCleaner ruCleanFree(ruCleaner rc);
 
 /**
  * A callback for the \ref ruCleanDump function. The given key and subst parameters
