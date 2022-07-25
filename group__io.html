@@ -153,6 +153,9 @@ Functions</h2></td></tr>
 <tr class="memitem:ga5e1c319186a031bc8ac39f171da4ebc1"><td class="memItemLeft" align="right" valign="top">RUAPI char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__io.html#ga5e1c319186a031bc8ac39f171da4ebc1">ruBaseName</a> (const char *filePath)</td></tr>
 <tr class="memdesc:ga5e1c319186a031bc8ac39f171da4ebc1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the filename of a path with the preceeding path removed.  <a href="group__io.html#ga5e1c319186a031bc8ac39f171da4ebc1">More...</a><br /></td></tr>
 <tr class="separator:ga5e1c319186a031bc8ac39f171da4ebc1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gac911387bc1382fb6bffa4a944d983e94"><td class="memItemLeft" align="right" valign="top">RUAPI char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__io.html#gac911387bc1382fb6bffa4a944d983e94">ruFullPath</a> (const char *filePath)</td></tr>
+<tr class="memdesc:gac911387bc1382fb6bffa4a944d983e94"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns an absolute filepath leading to the given relative path.  <a href="group__io.html#gac911387bc1382fb6bffa4a944d983e94">More...</a><br /></td></tr>
+<tr class="separator:gac911387bc1382fb6bffa4a944d983e94"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>This section contains abstracted file system and I/O utilities. </p>
@@ -538,6 +541,33 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="gac911387bc1382fb6bffa4a944d983e94"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gac911387bc1382fb6bffa4a944d983e94">&#9670;&nbsp;</a></span>ruFullPath()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI char* ruFullPath </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>filePath</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns an absolute filepath leading to the given relative path. </p>
+<p>This function merely appends the given path to CWD if it's relative. It does not validate or process the given path in any other way. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">filePath</td><td>File path to append the current working directory to if it is relative. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Returns an absolute filepath leading to the given relative path or the given path if it was absolute. Path must be freed by the caller. </dd></dl>
+
+</div>
+</div>
 <a id="ga1d8e3aea6c159a286cb6c410b32893ca"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ga1d8e3aea6c159a286cb6c410b32893ca">&#9670;&nbsp;</a></span>ruIsDir()</h2>
 
@@ -822,7 +852,7 @@ Functions</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Mon Jul 25 2022 09:11:27 for regify utility by
+    <li class="footer">Generated on Mon Jul 25 2022 12:52:11 for regify utility by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

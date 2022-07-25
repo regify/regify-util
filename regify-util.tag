@@ -500,6 +500,13 @@
       <anchor>ga5e1c319186a031bc8ac39f171da4ebc1</anchor>
       <arglist>(const char *filePath)</arglist>
     </member>
+    <member kind="function">
+      <type>RUAPI char *</type>
+      <name>ruFullPath</name>
+      <anchorfile>group__io.html</anchorfile>
+      <anchor>gac911387bc1382fb6bffa4a944d983e94</anchor>
+      <arglist>(const char *filePath)</arglist>
+    </member>
   </compound>
   <compound kind="group">
     <name>kvstore</name>

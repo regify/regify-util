@@ -12,6 +12,7 @@ var group__io =
     [ "ruFolderRemove", "group__io.html#gac255625488ddf62907efa965ea5b54e2", null ],
     [ "ruFolderWalk", "group__io.html#ga0e6c319fd0cd0f9cab8e1371209089f7", null ],
     [ "ruFOpen", "group__io.html#ga3716b147f53dd26c805547556b9608be", null ],
+    [ "ruFullPath", "group__io.html#gac911387bc1382fb6bffa4a944d983e94", null ],
     [ "ruIsDir", "group__io.html#ga1d8e3aea6c159a286cb6c410b32893ca", null ],
     [ "ruIsExecutable", "group__io.html#ga8de64b54e1e68f46b1a79e5c264138ba", null ],
     [ "ruIsFile", "group__io.html#gae7723e5ef579dbfd3d862286365d41f1", null ],

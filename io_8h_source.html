@@ -167,10 +167,12 @@ $(document).ready(function(){initNavTree('io_8h_source.html',''); initResizable(
 <div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160; </div>
 <div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;RUAPI <span class="keywordtype">char</span>* <a class="code" href="group__io.html#ga5e1c319186a031bc8ac39f171da4ebc1">ruBaseName</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *filePath);</div>
 <div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160; </div>
-<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;<span class="preprocessor">#ifdef __cplusplus</span></div>
-<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;}</div>
-<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* __cplusplus */</span><span class="preprocessor"></span></div>
-<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;<span class="preprocessor">#endif //REGIFY_UTIL_IO_H</span></div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;RUAPI <span class="keywordtype">char</span>* <a class="code" href="group__io.html#gac911387bc1382fb6bffa4a944d983e94">ruFullPath</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* filePath);</div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160; </div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;<span class="preprocessor">#ifdef __cplusplus</span></div>
+<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;}</div>
+<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* __cplusplus */</span><span class="preprocessor"></span></div>
+<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;<span class="preprocessor">#endif //REGIFY_UTIL_IO_H</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="agroup__io_html_ga920bc0bfa5bb35a204bdaf8172ba228e"><div class="ttname"><a href="group__io.html#ga920bc0bfa5bb35a204bdaf8172ba228e">ruFileExists</a></div><div class="ttdeci">RUAPI bool ruFileExists(const char *filename)</div></div>
@@ -187,6 +189,7 @@ $(document).ready(function(){initNavTree('io_8h_source.html',''); initResizable(
 <div class="ttc" id="agroup__io_html_ga62d813403b374ccf7de8f72a957914e1"><div class="ttname"><a href="group__io.html#ga62d813403b374ccf7de8f72a957914e1">ruFileGetContents</a></div><div class="ttdeci">RUAPI int ruFileGetContents(const char *filename, char **contents, rusize *length)</div></div>
 <div class="ttc" id="agroup__io_html_ga037f61b6aa2a41e5966e75799c3b7626"><div class="ttname"><a href="group__io.html#ga037f61b6aa2a41e5966e75799c3b7626">ruFileRemove</a></div><div class="ttdeci">RUAPI int ruFileRemove(const char *filename)</div></div>
 <div class="ttc" id="agroup__io_html_gacf30a0eee9096e022b112167988a4f06"><div class="ttname"><a href="group__io.html#gacf30a0eee9096e022b112167988a4f06">ruOpenTmp</a></div><div class="ttdeci">RUAPI int ruOpenTmp(char *pathTemplate, int flags, int mode, int32_t *code)</div></div>
+<div class="ttc" id="agroup__io_html_gac911387bc1382fb6bffa4a944d983e94"><div class="ttname"><a href="group__io.html#gac911387bc1382fb6bffa4a944d983e94">ruFullPath</a></div><div class="ttdeci">RUAPI char * ruFullPath(const char *filePath)</div><div class="ttdoc">Returns an absolute filepath leading to the given relative path.</div></div>
 <div class="ttc" id="agroup__io_html_gac255625488ddf62907efa965ea5b54e2"><div class="ttname"><a href="group__io.html#gac255625488ddf62907efa965ea5b54e2">ruFolderRemove</a></div><div class="ttdeci">RUAPI int ruFolderRemove(const char *folder)</div><div class="ttdoc">Recursively delete given folder and all it's sub contents.</div></div>
 <div class="ttc" id="agroup__io_html_ga8f8cf9398240f654b7168706eb8a1095"><div class="ttname"><a href="group__io.html#ga8f8cf9398240f654b7168706eb8a1095">ruFileRename</a></div><div class="ttdeci">RUAPI int ruFileRename(const char *oldName, const char *newName)</div></div>
 <div class="ttc" id="agroup__io_html_ga3716b147f53dd26c805547556b9608be"><div class="ttname"><a href="group__io.html#ga3716b147f53dd26c805547556b9608be">ruFOpen</a></div><div class="ttdeci">RUAPI FILE * ruFOpen(const char *filepath, const char *mode, int32_t *code)</div></div>
@@ -198,7 +201,7 @@ $(document).ready(function(){initNavTree('io_8h_source.html',''); initResizable(
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_02ca080d44dff245433198a8d6f82776.html">regify-util</a></li><li class="navelem"><b>io.h</b></li>
-    <li class="footer">Generated on Mon Jul 25 2022 09:11:27 for regify utility by
+    <li class="footer">Generated on Mon Jul 25 2022 12:52:11 for regify utility by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
