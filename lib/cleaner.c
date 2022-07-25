@@ -141,6 +141,9 @@ typedef struct {
     void *readCtx;
     ioFunc write;
     void *writeCtx;
+#ifndef CLEANER_ONLY
+    ruMutex mux;
+#endif
 
     rusize memsize;
 } Cleaner;
@@ -350,6 +353,9 @@ ruCleaner ruCleanNew(rusize chunkSize) {
     c->chunkSize = chunkSize;
     if (!c->chunkSize) c->chunkSize = 1024 * 1024;
     c->type = CleanerMagic;
+#ifndef CLEANER_ONLY
+    c->mux = ruMutexInit();
+#endif
     return (ruCleaner)c;
 }
 
@@ -361,6 +367,9 @@ ruCleaner ruCleanFree(ruCleaner cp) {
     }
     ruFree(c->inBuf);
     ruFree(c->outBuf);
+#ifndef CLEANER_ONLY
+    c->mux = ruMutexFree(c->mux);
+#endif
     c->type = 0;
     ruFree(c);
     return NULL;
@@ -372,6 +381,9 @@ int32_t ruCleanAdd(ruCleaner rc, const char* instr, const char* substitute) {
     if (!c) return code;
     if (!instr || !substitute) return RUE_PARAMETER_NOT_SET;
 
+#ifndef CLEANER_ONLY
+    ruMutexLock(c->mux);
+#endif
     addEntry(c, c->root, instr, substitute);
     rusize len = strlen(instr);
     if (len > c->longestEntry) {
@@ -381,6 +393,9 @@ int32_t ruCleanAdd(ruCleaner rc, const char* instr, const char* substitute) {
             ruFree(c->outBuf);
         }
     }
+#ifndef CLEANER_ONLY
+    ruMutexUnlock(c->mux);
+#endif
     return code;
 }
 
@@ -390,7 +405,13 @@ int32_t ruCleanRemove(ruCleaner rc, const char* instr) {
     if (!c) return code;
     if (!instr) return RUE_PARAMETER_NOT_SET;
 
+#ifndef CLEANER_ONLY
+    ruMutexLock(c->mux);
+#endif
     addEntry(c, c->root, instr, NULL);
+#ifndef CLEANER_ONLY
+    ruMutexUnlock(c->mux);
+#endif
     return code;
 }
 
@@ -425,6 +446,9 @@ int32_t ruCleanNow(ruCleaner rc) {
     if (!c) return code;
     if (!c->read || !c->write) return RUE_PARAMETER_NOT_SET;
 
+#ifndef CLEANER_ONLY
+    ruMutexLock(c->mux);
+#endif
     if (!c->inBuf || !c->outBuf) {
         c->bufLen = c->chunkSize;
         if (c->bufLen < c->longestEntry) {
@@ -447,5 +471,8 @@ int32_t ruCleanNow(ruCleaner rc) {
     if (!c->error) {
         flush(c);
     }
+#ifndef CLEANER_ONLY
+    ruMutexUnlock(c->mux);
+#endif
     return c->error;
 }

@@ -109,6 +109,11 @@ typedef rusize_s (*ioFunc) (void* ctx, void* buf, rusize len);
 
 /**
  * \brief Creates a new ruCleaner object. To be freed with \ref ruCleanFree.
+ *
+ * Unless the ruCleaner comes from a pwcleaner library which lacks the remaining
+ * regify-util functionality, it is made thread safe by the internal use of a
+ * mutex. pwcleaner users need to do their own locking in multi threaded use cases.
+ *
  * @param chunkSize Size of chunk to process at a time. Will be allocated twice.
  *                  Will be increased to the largest item to clean if that is
  *                  bigger. Defaults to 1M if set to 0.
