@@ -42,7 +42,7 @@ void ruStdErrorLogger(void* udata, const char *msg) {
     fputs(msg, stderr);
 }
 
-u_int32_t ruGetLogLevel() {
+u_int32_t ruGetLogLevel(void) {
     if (!logger_) return RU_LOG_NONE;
     return logLevel_;
 }
@@ -82,7 +82,13 @@ static char* makeLogMsg(u_int32_t log_level, const char *filePath, const char *f
 #ifdef _WIN32
     _localtime32_s(&tm, &tv.sec);
 #else
+#ifdef __EMSCRIPTEN__
+    time_t sec = 0;
+    localtime_r(&sec, &tm);
+    tv.sec = sec;
+#else
     localtime_r(&tv.sec, &tm);
+#endif
 #endif
     strftime(timeStr, 20, "%Y-%m-%d %H:%M:%S", &tm);
 #ifdef RUMS

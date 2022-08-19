@@ -87,7 +87,7 @@ RUAPI void ruSetLogger(ruLogFunc logger, u_int32_t logLevel, void* userData);
  * \brief Returns the currently set log level.
  * @return The currently set log level.
  */
-RUAPI u_int32_t ruGetLogLevel();
+RUAPI u_int32_t ruGetLogLevel(void);
 
 /**
  * \brief Returns whether the given log level should log.

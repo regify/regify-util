@@ -66,6 +66,14 @@ extern "C" {
 #else
     #define RUAPI
 #endif
+#if defined(WINDOWS) || defined(WIN32) || defined(__BORLANDC__) || defined(__EMSCRIPTEN__)
+    #ifndef u_int8_t
+        typedef unsigned char u_int8_t;
+    #endif
+    #ifndef u_int32_t
+        typedef unsigned int u_int32_t;
+    #endif
+#endif
 /** \endcond */
 
 #if defined(WINDOWS) || defined(WIN32) || defined(__BORLANDC__)
@@ -80,14 +88,8 @@ extern "C" {
     #endif
     #include <windows.h>
 
-    #ifndef u_int8_t
-        typedef unsigned char u_int8_t;
-    #endif
     #ifndef int32_t
         typedef int int32_t;
-    #endif
-    #ifndef u_int32_t
-        typedef unsigned int u_int32_t;
     #endif
     #ifndef int64_t
         typedef long long int64_t;
@@ -221,7 +223,7 @@ typedef unsigned char uchar;
  * \ingroup misc
  * @return Version of this package. This string is static and must not be freed.
  */
-RUAPI const char* ruVersion();
+RUAPI const char* ruVersion(void);
 
 /**
  * \brief Returns an English textual representation of the last error this thread
@@ -233,7 +235,7 @@ RUAPI const char* ruVersion();
  * \ingroup errors
  * @return Ephemeral error message. Must be copied if it is to persist.
  */
-RUAPI const char* ruLastError();
+RUAPI const char* ruLastError(void);
 
 /**
  * \defgroup threading Threading Related
@@ -249,7 +251,7 @@ typedef void* ruMutex;
  * \brief Initialize a new \ref ruMutex
  * @return The new mutex or NULL in which case call \ref ruLastError for details.
  */
-RUAPI ruMutex ruMutexInit();
+RUAPI ruMutex ruMutexInit(void);
 
 /**
  * \brief Aquire a lock for the given \ref ruMutex blocking until it is given.
@@ -337,13 +339,13 @@ RUAPI void* ruMemDup(void *buf, rusize size);
  * Currently knows about windows, android, linux, osx, ios and unix.
  * @return os string. Caller should copy this for persistence.
  */
-RUAPI const char* ruGetOs();
+RUAPI const char* ruGetOs(void);
 
 /**
  * \brief Returns the name of this host.
  * @return hostname. Caller should free this with \ref ruFree.
  */
-RUAPI char* ruGetHostname();
+RUAPI char* ruGetHostname(void);
 
 /**
  * \brief Returns the value of the requested environment vartiable or NULL if it is not
@@ -364,7 +366,7 @@ RUAPI int32_t ruGetTimeVal(ruTimeVal *result);
  * \brief Returns the ISO-639-1 2 letter country code pertaining to the running system,
  * @return The country code. Caller must free with \ref ruFree.
  */
-RUAPI char* ruGetLanguage();
+RUAPI char* ruGetLanguage(void);
 
 /**
  * \brief Sleeps for the given number of micro seconds.

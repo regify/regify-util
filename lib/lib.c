@@ -24,7 +24,7 @@
 
 ruMakeTypeGetter(Mux, MuxMagic)
 
-void ruAbort() {
+void ruAbort(void) {
     exit(1);
 }
 
@@ -69,7 +69,7 @@ bool ruIsunreserved(unsigned char in) {
     return false;
 }
 
-RUAPI ruMutex ruMutexInit() {
+RUAPI ruMutex ruMutexInit(void) {
     ruClearError();
     Mux *mx = ruMalloc0(1, Mux);
     mx->type = MuxMagic;
@@ -163,7 +163,7 @@ RUAPI int32_t ruGetTimeVal(ruTimeVal *result) {
     return RUE_OK;
 }
 
-RUAPI char* ruGetLanguage() {
+RUAPI char* ruGetLanguage(void) {
     char* lc = setlocale(LC_ALL, NULL);
     if (!lc) return NULL;
     return ruStrndup(lc, 2);

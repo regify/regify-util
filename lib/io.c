@@ -170,40 +170,40 @@ RUAPI FILE* ruFOpen(const char *filepath, const char *mode, int32_t* code) {
 RUAPI bool ruIsSymlink(const char* filename) {
     ruClearError();
     struct stat s;
-    if (lstat(filename, &s) == 0 && S_ISLNK (s.st_mode)) return TRUE;
-    return FALSE;
+    if (lstat(filename, &s) == 0 && S_ISLNK (s.st_mode)) return true;
+    return false;
 }
 #endif
 
 RUAPI bool ruFileExists(const char* filename) {
     ruClearError();
     struct stat s;
-    if (stat(filename, &s) == 0) return TRUE;
-    return FALSE;
+    if (stat(filename, &s) == 0) return true;
+    return false;
 }
 
 RUAPI bool ruIsFile(const char* filename) {
     ruClearError();
     struct stat s;
-    if (stat(filename, &s) == 0 && S_ISREG (s.st_mode)) return TRUE;
-    return FALSE;
+    if (stat(filename, &s) == 0 && S_ISREG (s.st_mode)) return true;
+    return false;
 }
 
 RUAPI bool ruIsDir(const char* filename) {
     ruClearError();
     struct stat s;
-    if (stat (filename, &s) == 0 && S_ISDIR (s.st_mode)) return TRUE;
-    return FALSE;
+    if (stat (filename, &s) == 0 && S_ISDIR (s.st_mode)) return true;
+    return false;
 }
 
 RUAPI bool ruIsExecutable(const char* filename) {
     ruClearError();
     struct stat s;
-    if (stat(filename, &s) != 0) return FALSE;
+    if (stat(filename, &s) != 0) return false;
     if((s.st_mode & S_IXOTH) || (s.st_mode & S_IXUSR) || (s.st_mode & S_IXGRP)) {
-        return TRUE;
+        return true;
     }
-    return FALSE;
+    return false;
 }
 
 RUAPI int ruOpen(const char *filepath, int flags, int mode, int32_t* code) {

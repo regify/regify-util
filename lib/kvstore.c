@@ -23,7 +23,7 @@
 
 ruMakeTypeGetter(KvStore, KvStoreMagic)
 
-RUAPI KvStore* ruNewStore() {
+RUAPI KvStore* ruNewStore(void) {
     ruClearError();
     KvStore* kvs = ruMalloc0(1, KvStore);
     kvs->type = KvStoreMagic;
@@ -277,7 +277,7 @@ RUAPI int32_t ruFileStoreList (KvStore *kvs, const char* key, ruList* result) {
     return ret;
 }
 
-RUAPI KvStore* ruNewNullStore() {
+RUAPI KvStore* ruNewNullStore(void) {
     KvStore* kvs = ruNewStore();
     kvs->get = ruNullStoreGet;
     kvs->set = ruNullStoreSet;

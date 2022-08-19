@@ -107,13 +107,15 @@ file(GLOB SRCS cleaner.c icu.cpp io.c kvstore.c lib.c list.c logging.c map.c
         regex.c string.c regify-util.c)
 
 
-# pwcleaner.a
-add_library(${CLEANER} STATIC cleaner.c)
-target_compile_definitions(${CLEANER} PRIVATE CLEANER_ONLY )
-install(TARGETS ${CLEANER}
-        EXPORT ${NAME}Targets
-        DESTINATION lib
-        )
+if(NOT WASM)
+    # pwcleaner.a
+    add_library(${CLEANER} STATIC cleaner.c)
+    target_compile_definitions(${CLEANER} PRIVATE CLEANER_ONLY )
+    install(TARGETS ${CLEANER}
+            EXPORT ${NAME}Targets
+            DESTINATION lib
+            )
+endif()
 
 # regify-util.a
 add_library(${staticlib} STATIC ${SRCS})

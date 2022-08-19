@@ -117,7 +117,7 @@ typedef struct KvStore_ {
  * This function is mainly used by those implementing the KvStore interface.
  * @return A new empty \ref KvStore object;
  */
-RUAPI KvStore* ruNewStore();
+RUAPI KvStore* ruNewStore(void);
 
 /**
  * \brief Public function to free the given \ref KvStore object.
@@ -188,7 +188,7 @@ typedef void* ruNullStore;
  * This keystore silently ignores setters and never returns data.
  * @return \ref KvStore object.
  */
-RUAPI KvStore* ruNewNullStore();
+RUAPI KvStore* ruNewNullStore(void);
 
 /**
  * \brief Set the value of key in the given FileStore.

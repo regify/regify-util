@@ -479,7 +479,7 @@ RUAPI char* ruUtf8ToUpper(const char *instr) {
 
 RUAPI int64_t ruStrToll(const char *start, char **endptr, int base) {
     ruClearError();
-    bool negative = FALSE;
+    bool negative = false;
     bool overflow;
     int64_t cutoff;
     int64_t cutlim;
@@ -504,7 +504,7 @@ RUAPI int64_t ruStrToll(const char *start, char **endptr, int base) {
 
         /* Check for a sign.  */
         if (*s == '-') {
-            negative = TRUE;
+            negative = true;
             ++s;
         } else if (*s == '+') {
             ++s;
@@ -527,7 +527,7 @@ RUAPI int64_t ruStrToll(const char *start, char **endptr, int base) {
         cutoff = RU_MAX_INT64 / base;
         cutlim = RU_MAX_INT64 % base;
 
-        overflow = FALSE;
+        overflow = false;
         i64 = 0;
         c = *s;
         for (; c; c = *++s) {
@@ -546,7 +546,7 @@ RUAPI int64_t ruStrToll(const char *start, char **endptr, int base) {
             if (c >= base) break;
             /* Check for overflow.  */
             if (i64 > cutoff || (i64 == cutoff && c > cutlim)) {
-                overflow = TRUE;
+                overflow = true;
             } else {
                 i64 *= base;
                 i64 += c;

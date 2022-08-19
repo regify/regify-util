@@ -27,14 +27,14 @@
     #define RU_VERSION "0.0.0-dev"
 #endif
 
-RUAPI const char* ruVersion() {
+RUAPI const char* ruVersion(void) {
     return RU_VERSION;
 }
 
 RU_THREAD_LOCAL char ruError[RU_ERRBUF_SIZE];
 RU_THREAD_LOCAL int ruErrInit = 0;
 
-RUAPI const char* ruLastError() {
+RUAPI const char* ruLastError(void) {
     if (!ruErrInit) {
         ruError[0] = '\0';
         ruErrInit = 1;
@@ -42,7 +42,7 @@ RUAPI const char* ruLastError() {
     return &ruError[0];
 }
 
-void ruClearError() {
+void ruClearError(void) {
     ruError[0] = '\0';
 }
 
@@ -60,7 +60,7 @@ void ruSetError(const char *format, ...) {
     }
 }
 
-RUAPI const char* ruGetOs() {
+RUAPI const char* ruGetOs(void) {
 #if defined (_WIN32)
     return "windows";
 #elif defined(__ANDROID__)
@@ -76,7 +76,7 @@ RUAPI const char* ruGetOs() {
 #endif
 }
 
-RUAPI char* ruGetHostname() {
+RUAPI char* ruGetHostname(void) {
     char name[256] = "";
 #ifdef _WIN32
     DWORD len = 256;

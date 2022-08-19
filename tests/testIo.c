@@ -29,7 +29,7 @@ START_TEST ( api ) {
     const char *test = "ruFileExists";
     const char *retText = "%s failed wanted ret '%d' but got '%d'";
 
-    exp = FALSE;
+    exp = false;
     ret = ruFileExists(NULL);
     fail_unless(exp == ret, retText, test, exp, ret);
 
@@ -53,7 +53,7 @@ START_TEST ( api ) {
 
     test = "ruMkdir";
     int expi = RUE_PARAMETER_NOT_SET;
-    int reti = ruMkdir(NULL, 0, FALSE);
+    int reti = ruMkdir(NULL, 0, false);
     fail_unless(expi == reti, retText, test, expi, reti);
 
 #ifdef _WIN32
@@ -61,12 +61,12 @@ START_TEST ( api ) {
 #else
     expi = RUE_INVALID_PARAMETER;
 #endif
-    reti = ruMkdir("/foo/bar", 0, FALSE);
+    reti = ruMkdir("/foo/bar", 0, false);
     fail_unless(expi == reti, retText, test, expi, reti);
 
 #ifdef _WIN32
     expi = RUE_INVALID_PARAMETER;
-    reti = ruMkdir("//foo/bar", 0666, FALSE);
+    reti = ruMkdir("//foo/bar", 0666, false);
     fail_unless(expi == reti, retText, test, expi, reti);
 #endif
 
@@ -113,7 +113,7 @@ START_TEST ( filetest ) {
     const char *test = "ruFileExists";
     const char *retText = "%s failed wanted ret '%d' but got '%d'";
 
-    exp = TRUE;
+    exp = true;
     ret = ruFileExists(file);
     fail_unless(exp == ret, retText, test, exp, ret);
 
@@ -125,7 +125,7 @@ START_TEST ( filetest ) {
     reti = ruStat(file, &rst);
     fail_unless(expi == reti, retText, test, expi, reti);
 
-    exp = FALSE;
+    exp = false;
     ret = ruIsDir(file);
     fail_unless(exp == ret, retText, test, exp, ret);
 
@@ -139,14 +139,14 @@ START_TEST ( filetest ) {
 
     file = makePath("föss");
 
-    exp = TRUE;
+    exp = true;
     ret = ruFileExists(file);
     fail_unless(exp == ret, retText, test, exp, ret);
 
     ret = ruIsFile(file);
     fail_unless(exp == ret, retText, test, exp, ret);
 
-    exp = FALSE;
+    exp = false;
     ret = ruIsDir(file);
     fail_unless(exp == ret, retText, test, exp, ret);
 
@@ -160,7 +160,7 @@ START_TEST ( filetest ) {
 
     file = makePath("föss.bat");
 
-    exp = TRUE;
+    exp = true;
     ret = ruFileExists(file);
     fail_unless(exp == ret, retText, test, exp, ret);
 
@@ -172,27 +172,27 @@ START_TEST ( filetest ) {
     fail_unless(exp == ret, retText, test, exp, ret);
 #endif
 
-    exp = FALSE;
+    exp = false;
     ret = ruIsDir(file);
     fail_unless(exp == ret, retText, test, exp, ret);
 
     file = makePath("döh");
 
-    exp = TRUE;
+    exp = true;
     ret = ruFileExists(file);
     fail_unless(exp == ret, retText, test, exp, ret);
 
     ret = ruIsDir(file);
     fail_unless(exp == ret, retText, test, exp, ret);
 
-    exp = FALSE;
+    exp = false;
     ret = ruIsFile(file);
     fail_unless(exp == ret, retText, test, exp, ret);
 
 #ifndef _WIN32
     file = makePath("löss");
 
-    exp = TRUE;
+    exp = true;
     ret = ruFileExists(file);
     fail_unless(exp == ret, retText, test, exp, ret);
 
@@ -204,7 +204,7 @@ START_TEST ( filetest ) {
     ret = ruIsFile(file);
     fail_unless(exp == ret, retText, test, exp, ret);
 
-    exp = FALSE;
+    exp = false;
     ret = ruIsExecutable(file);
     fail_unless(exp == ret, retText, test, exp, ret);
 
@@ -213,7 +213,7 @@ START_TEST ( filetest ) {
 
     file = makePath("loeh");
 
-    exp = TRUE;
+    exp = true;
     ret = ruFileExists(file);
     fail_unless(exp == ret, retText, test, exp, ret);
 
@@ -228,7 +228,7 @@ START_TEST ( filetest ) {
     ret = ruIsExecutable(file);
     fail_unless(exp == ret, retText, test, exp, ret);
 
-    exp = FALSE;
+    exp = false;
     ret = ruIsFile(file);
     fail_unless(exp == ret, retText, test, exp, ret);
 
@@ -430,7 +430,7 @@ START_TEST ( fileopen ) {
     // w/trailing slash
     newFolder = ruDupPrintf("%s/that/", base);
     test = "ruMkdir";
-    ret = ruMkdir(newFolder, 0775, TRUE);
+    ret = ruMkdir(newFolder, 0775, true);
     fail_unless(exp == ret, retText, test, exp, ret);
     fail_unless(true == ruIsDir(newFolder), retText, test, true, false);
 
@@ -448,7 +448,7 @@ START_TEST ( fileopen ) {
     // build up a folder structure
     newFolder = ruDupPrintf("%s/some/deep/dirs/", base);
     test = "ruMkdir";
-    ret = ruMkdir(newFolder, 0775, TRUE);
+    ret = ruMkdir(newFolder, 0775, true);
     fail_unless(exp == ret, retText, test, exp, ret);
     fail_unless(true == ruIsDir(newFolder), retText, test, true, false);
     ruFree(newFolder);

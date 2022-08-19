@@ -41,7 +41,7 @@ void pthread_cond_bug() {
 #pragma GCC diagnostic pop
 #endif
 
-UConverter* getConverter() {
+UConverter* getConverter(void) {
     UErrorCode errorCode = U_ZERO_ERROR;
 #ifdef TRACING
     const void* context = NULL;

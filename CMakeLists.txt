@@ -76,6 +76,10 @@ string(SUBSTRING ${NAME_OS} 0 3 NAME_OS)
 if(CMAKE_SYSTEM_NAME MATCHES "^Linux$")
     set(LINUX 1)
 
+elseif(CMAKE_SYSTEM_NAME MATCHES "^Emscripten$")
+    set(LINUX 1)
+    set(WASM 1)
+
 elseif(CMAKE_SYSTEM_NAME MATCHES "^Android$")
     set(ANDROID 1)
 
@@ -166,7 +170,7 @@ install(EXPORT ${NAME}Targets
         FILE ${NAME}Targets.cmake
         NAMESPACE RegifyUtil::
         DESTINATION lib/cmake/${NAME} )
-if(NOT MSVC)
+if(NOT MSVC AND NOT WASM)
     if(NOT INCLUDE_ICU)
         dojoin("-l${ICU_LIBRARIES}" " -l" ICU_LIBS)
     endif()

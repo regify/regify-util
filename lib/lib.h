@@ -92,7 +92,7 @@ extern "C" {
 extern unsigned int ruIntChunk;
 
 void ruSetError(const char *format, ...);
-void ruClearError();
+void ruClearError(void);
 
 // limits
 #define RU_MIN_INT64	(int64_t)-0x8000000000000000L
@@ -176,13 +176,13 @@ int32_t MapGetData(Map *mp, void *key, void **value);
 /*
  *  Misc - Lib
  */
-void ruAbort();
+void ruAbort(void);
 void U_CALLCONV traceData( const void *context, int32_t fnNumber, int32_t level,
                            const char *fmt, va_list args);
 bool ruIsunreserved(unsigned char in);
 
 // ICU stuff
-UConverter* getConverter();
+UConverter* getConverter(void);
 UChar* strToUni(UConverter *conv, const char *instr);
 UChar* charToUni(const char *instr);
 char* uniToStr(UConverter *conv, UChar *usrc, int32_t uclen);
