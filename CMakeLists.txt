@@ -19,7 +19,7 @@
 # SOFTWARE.
 
 # options
-set(VERSION 1.2.0 CACHE STRING "The package version")
+set(VERSION 1.3.0 CACHE STRING "The package version")
 set(REVISION 0 CACHE STRING "The build revision")
 set(ICU_PREFIX "" CACHE STRING "Prefix path under which to find ICU")
 option(BUILD_SHARED_LIBS "Whether to build dynamic libraries" OFF)
@@ -238,7 +238,6 @@ endif()
 # tests
 if(TESTING)
     doLog(LOG_INFO "Adding unit tests")
-    enable_testing()
     add_subdirectory(tests)
 else()
     doLog(LOG_INFO "Skipping unit tests")

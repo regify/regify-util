@@ -42,29 +42,34 @@ if(IOS)
             "${PROJECT_SOURCE_DIR}/utilRunner/utilRunner.xcodeproj/project.pbxproj"
             @ONLY)
 else()
+
     add_executable(runTests EXCLUDE_FROM_ALL
             runTests.cpp testCleaner.c testIo.c testList.c
             testMap.c testMisc.c testRegex.c testStore.c testString.c
             )
+    target_include_directories(runTests
+            PRIVATE ${PROJECT_SOURCE_DIR}/include/ ${CHECK_INCLUDE_DIR})
+    target_compile_definitions(runTests PRIVATE
+            TEST_BASE=\"${CMAKE_CURRENT_SOURCE_DIR}/tree\"
+            TMPDIR="${CMAKE_CURRENT_BINARY_DIR}")
+    target_link_directories(runTests PRIVATE ${CHECK_LIBRARY_DIRS})
+    target_link_libraries(runTests PRIVATE ${staticlib} ${CHECK_LIBRARIES})
+
+    add_custom_target(tests
+            COMMAND ${CMAKE_CURRENT_BINARY_DIR}/runTests > run.log 2>&1
+            COMMAND echo "* * *   Success   * * *"
+            DEPENDS runTests)
+
+    find_program(VALGRIND valgrind)
+    if(VALGRIND)
+        add_custom_target(grind
+                COMMAND rm -f grind.log
+                COMMAND CK_FORK=no valgrind --num-callers=50
+                    --read-var-info=yes --show-reachable=yes
+                    --leak-check=full --log-file=grind.log
+                    ${CMAKE_CURRENT_BINARY_DIR}/runTests > run.log 2>&1
+                COMMAND ! grep -A5 'are definitely lost' grind.log
+                COMMAND echo "* * *   Success   * * *"
+                DEPENDS runTests)
+    endif()
 endif()
-
-add_definitions(-DTEST_BASE=\"${CMAKE_CURRENT_SOURCE_DIR}/tree\")
-
-target_include_directories(runTests
-        PUBLIC ${PROJECT_SOURCE_DIR}/include/ ${CHECK_INCLUDE_DIR}
-        )
-
-target_link_directories(runTests PUBLIC ${CHECK_LIBRARY_DIRS})
-target_link_libraries(runTests PUBLIC ${staticlib} ${CHECK_LIBRARIES})
-
-add_test(runTests ${CMAKE_CURRENT_BINARY_DIR}/runTests)
-
-add_custom_target(grind make runTests
-        COMMAND rm -f ${CMAKE_CURRENT_BINARY_DIR}/grind.log
-        COMMAND TEMP=/tmp CK_FORK=no valgrind --num-callers=24
-        --read-var-info=yes --show-reachable=yes
-        --leak-check=full --log-file=grind.log
-        ${CMAKE_CURRENT_BINARY_DIR}/runTests
-        COMMAND ! grep -A5 'are definitely lost'
-        ${CMAKE_CURRENT_BINARY_DIR}/grind.log
-        COMMAND echo "* * *   Success   * * *")

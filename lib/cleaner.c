@@ -36,6 +36,7 @@
 #define RUE_INVALID_PARAMETER 64
 #define RUE_PARAMETER_NOT_SET 77
 #define ruFree(p) if(p) free((void*)(p)); (p) = NULL;
+typedef void (*ruCleanerCb) (void* user_data, const char *key, const char* subst);
 typedef size_t rusize;
 #if defined(WINDOWS) || defined(WIN32) || defined(__BORLANDC__)
     #ifndef u_int8_t
@@ -140,6 +141,9 @@ typedef struct {
     void *readCtx;
     ioFunc write;
     void *writeCtx;
+#ifndef CLEANER_ONLY
+    ruMutex mux;
+#endif
 
     rusize memsize;
 } Cleaner;
@@ -154,28 +158,64 @@ static Tree* newBranch(Cleaner *c, char letter) {
     return t;
 }
 
-static void freeBranch(Cleaner *c, Tree *t) {
+static Tree* freeBranch(Cleaner *c, Tree *t) {
     for (int i = 0; i < 256; i++) {
         if (! t->kids[i]) continue;
-        freeBranch(c, t->kids[i]);
-        t->kids[i] = NULL;
+        t->kids[i] = freeBranch(c, t->kids[i]);
     }
     ruFree(t->subst);
     c->memsize -= sizeof(Tree);
     ruFree(t);
+    return NULL;
+}
+
+static bool entryUsed(Cleaner *c, Tree *t) {
+    for (int i = 0; i < 256; i++) {
+        if (t->kids[i]) return true;
+    }
+    return false;
+}
+
+static void dumpEntry(Cleaner *c, Tree *t, char* instr, char* cur, rusize inlen,
+                      ruCleanerCb lf, void* lctx) {
+    if ((rusize)(cur-instr) < inlen) {
+        for (int i = 0; i < 256; i++) {
+            if (t->kids[i]) {
+                *cur = (char)i;
+                *(cur+1) = '\0';
+                dumpEntry(c, t->kids[i], instr, cur+1, inlen, lf, lctx);
+            }
+        }
+    }
+    *cur = '\0';
+    lf(lctx, instr, t->subst);
 }
 
 static void addEntry(Cleaner *c, Tree *t, const char* instr, const char* subst) {
     char b = *instr;
     int i = (int) b;
     if (!t->kids[i]) {
+        if (!subst) return; // should happen, but anyway
         t->kids[i] = newBranch(c, b);
-
     }
+
     if (*(instr+1)) {
         addEntry(c, t->kids[i], instr + 1, subst);
+        if (!subst) {
+            if (!entryUsed(c, t->kids[i])) {
+                t->kids[i] = freeBranch(c, t->kids[i]);
+            }
+        }
     } else {
-        t->kids[i]->subst = ruStrdup(subst);
+        // free up potential duplicate entry
+        ruFree(t->kids[i]->subst);
+        if (subst) {
+            t->kids[i]->subst = ruStrdup(subst);
+        } else {
+            if (!entryUsed(c, t->kids[i])) {
+                t->kids[i] = freeBranch(c, t->kids[i]);
+            }
+        }
     }
 }
 
@@ -313,20 +353,26 @@ ruCleaner ruCleanNew(rusize chunkSize) {
     c->chunkSize = chunkSize;
     if (!c->chunkSize) c->chunkSize = 1024 * 1024;
     c->type = CleanerMagic;
+#ifndef CLEANER_ONLY
+    c->mux = ruMutexInit();
+#endif
     return (ruCleaner)c;
 }
 
-void ruCleanFree(ruCleaner cp) {
+ruCleaner ruCleanFree(ruCleaner cp) {
     Cleaner *c = CleanerGet(cp, NULL);
-    if (!c) return;
+    if (!c) return NULL;
     if (c->root) {
-        freeBranch(c, c->root);
-        c->root = c->leaf = NULL;
+        c->root = c->leaf = freeBranch(c, c->root);
     }
     ruFree(c->inBuf);
     ruFree(c->outBuf);
+#ifndef CLEANER_ONLY
+    c->mux = ruMutexFree(c->mux);
+#endif
     c->type = 0;
     ruFree(c);
+    return NULL;
 }
 
 int32_t ruCleanAdd(ruCleaner rc, const char* instr, const char* substitute) {
@@ -335,6 +381,9 @@ int32_t ruCleanAdd(ruCleaner rc, const char* instr, const char* substitute) {
     if (!c) return code;
     if (!instr || !substitute) return RUE_PARAMETER_NOT_SET;
 
+#ifndef CLEANER_ONLY
+    ruMutexLock(c->mux);
+#endif
     addEntry(c, c->root, instr, substitute);
     rusize len = strlen(instr);
     if (len > c->longestEntry) {
@@ -344,6 +393,38 @@ int32_t ruCleanAdd(ruCleaner rc, const char* instr, const char* substitute) {
             ruFree(c->outBuf);
         }
     }
+#ifndef CLEANER_ONLY
+    ruMutexUnlock(c->mux);
+#endif
+    return code;
+}
+
+int32_t ruCleanRemove(ruCleaner rc, const char* instr) {
+    int32_t code;
+    Cleaner *c = CleanerGet(rc, &code);
+    if (!c) return code;
+    if (!instr) return RUE_PARAMETER_NOT_SET;
+
+#ifndef CLEANER_ONLY
+    ruMutexLock(c->mux);
+#endif
+    addEntry(c, c->root, instr, NULL);
+#ifndef CLEANER_ONLY
+    ruMutexUnlock(c->mux);
+#endif
+    return code;
+}
+
+int32_t ruCleanDump(ruCleaner cp, ruCleanerCb lf, void* user_data) {
+    int32_t code;
+    Cleaner *c = CleanerGet(cp, &code);
+    if (!c) return code;
+    if (!lf) return RUE_PARAMETER_NOT_SET;
+
+    char* instr = malloc(c->longestEntry + 1);
+    *instr = '\0';
+    dumpEntry(c, c->root, instr, instr, c->longestEntry, lf, user_data);
+    free(instr);
     return code;
 }
 
@@ -365,6 +446,9 @@ int32_t ruCleanNow(ruCleaner rc) {
     if (!c) return code;
     if (!c->read || !c->write) return RUE_PARAMETER_NOT_SET;
 
+#ifndef CLEANER_ONLY
+    ruMutexLock(c->mux);
+#endif
     if (!c->inBuf || !c->outBuf) {
         c->bufLen = c->chunkSize;
         if (c->bufLen < c->longestEntry) {
@@ -387,5 +471,8 @@ int32_t ruCleanNow(ruCleaner rc) {
     if (!c->error) {
         flush(c);
     }
+#ifndef CLEANER_ONLY
+    ruMutexUnlock(c->mux);
+#endif
     return c->error;
 }

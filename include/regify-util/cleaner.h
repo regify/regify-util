@@ -109,6 +109,11 @@ typedef rusize_s (*ioFunc) (void* ctx, void* buf, rusize len);
 
 /**
  * \brief Creates a new ruCleaner object. To be freed with \ref ruCleanFree.
+ *
+ * Unless the ruCleaner comes from a pwcleaner library which lacks the remaining
+ * regify-util functionality, it is made thread safe by the internal use of a
+ * mutex. pwcleaner users need to do their own locking in multi threaded use cases.
+ *
  * @param chunkSize Size of chunk to process at a time. Will be allocated twice.
  *                  Will be increased to the largest item to clean if that is
  *                  bigger. Defaults to 1M if set to 0.
@@ -119,8 +124,28 @@ RUAPI ruCleaner ruCleanNew(rusize chunkSize);
 /**
  * Frees the given ruCleaner object.
  * @param rc list to free.
+ * @return NULL
  */
-RUAPI void ruCleanFree(ruCleaner rc);
+RUAPI ruCleaner ruCleanFree(ruCleaner rc);
+
+/**
+ * A callback for the \ref ruCleanDump function. The given key and subst parameters
+ * belong to the cleaner and must not be freed.
+ * @param user_data The optional context that was given to \ref ruCleanDump.
+ * @param key The secret key to clean.
+ * @param subst The placeholder to substitute the secret with.
+ */
+typedef void (*ruCleanerCb) (void* user_data, const char *key, const char* subst);
+
+/**
+ * Iterates over the cleaner database and calls given \ref ruCleanerCb with
+ * each secret and substitute. This function is mainly used for debugging.
+ * @param cp The relevant ruCleaner object
+ * @param lf The \ref ruCleanerCb to call with each entry
+ * @param user_data An optional context that will be given to the callbacks user_data parameter.
+ * @return \ref RUE_OK on success else an error code.
+ */
+RUAPI int32_t ruCleanDump(ruCleaner cp, ruCleanerCb lf, void* user_data);
 
 /**
  * Adds a new string to be replaced.
@@ -130,6 +155,14 @@ RUAPI void ruCleanFree(ruCleaner rc);
  * @return \ref RUE_OK on success else an error code.
  */
 RUAPI int32_t ruCleanAdd(ruCleaner rc, const char* instr, const char* substitute);
+
+/**
+ * Removes a string entry from the database.
+ * @param rc The relevant ruCleaner object
+ * @param instr The string to be removed
+ * @return \ref RUE_OK on success else an error code.
+ */
+RUAPI int32_t ruCleanRemove(ruCleaner rc, const char* instr);
 
 /**
  * \brief Set input/output context to be processed.

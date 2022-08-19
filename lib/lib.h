@@ -38,6 +38,8 @@
 #endif
 #ifdef _WIN32
     #include <windows.h>
+#else
+    #include <sys/param.h>
 #endif
 #include <stdio.h>
 #include <limits.h>
