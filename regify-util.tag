@@ -73,22 +73,22 @@
       <type>const RUAPI char *</type>
       <name>ruVersion</name>
       <anchorfile>group__misc.html</anchorfile>
-      <anchor>ga04667affdd77323501331d4d04737a24</anchor>
-      <arglist>()</arglist>
+      <anchor>ga7ea4383fc7ba882ca5caaa704ba7b601</anchor>
+      <arglist>(void)</arglist>
     </member>
     <member kind="function">
       <type>const RUAPI char *</type>
       <name>ruGetOs</name>
       <anchorfile>group__misc.html</anchorfile>
-      <anchor>ga8d136c4e95597fe6e31a1e074330e520</anchor>
-      <arglist>()</arglist>
+      <anchor>gaacf00f2d5a07f8659bad09fadd3063fa</anchor>
+      <arglist>(void)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI char *</type>
       <name>ruGetHostname</name>
       <anchorfile>group__misc.html</anchorfile>
-      <anchor>ga62baf9c58b3a0d19676181b43a052a90</anchor>
-      <arglist>()</arglist>
+      <anchor>ga6a20bd1023801d00e1d6d5915476c484</anchor>
+      <arglist>(void)</arglist>
     </member>
     <member kind="function">
       <type>const RUAPI char *</type>
@@ -108,8 +108,8 @@
       <type>RUAPI char *</type>
       <name>ruGetLanguage</name>
       <anchorfile>group__misc.html</anchorfile>
-      <anchor>ga4c2f6c1d4bc86515b05798a6a9ec6f1b</anchor>
-      <arglist>()</arglist>
+      <anchor>ga0b228b90657650ddfb874cca51f3e4a6</anchor>
+      <arglist>(void)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI void</type>
@@ -141,8 +141,8 @@
       <type>RUAPI ruMutex</type>
       <name>ruMutexInit</name>
       <anchorfile>group__threading.html</anchorfile>
-      <anchor>gaab6a38e671e130ff0915670c1d6f8019</anchor>
-      <arglist>()</arglist>
+      <anchor>gac8236a5017586c076516fb17dae0809c</anchor>
+      <arglist>(void)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI void</type>
@@ -566,8 +566,8 @@
       <type>RUAPI KvStore *</type>
       <name>ruNewStore</name>
       <anchorfile>group__kvstore.html</anchorfile>
-      <anchor>gae49e7687dcafb2b6387042917dab6cff</anchor>
-      <arglist>()</arglist>
+      <anchor>ga04115021798bd77f9cba634740c97de7</anchor>
+      <arglist>(void)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI void</type>
@@ -615,8 +615,8 @@
       <type>RUAPI KvStore *</type>
       <name>ruNewNullStore</name>
       <anchorfile>group__kvstore.html</anchorfile>
-      <anchor>ga830b088c3c6574a0caa24f6f511cf188</anchor>
-      <arglist>()</arglist>
+      <anchor>gac738af5f4a57eb5a8c6c5d31e585bf8e</anchor>
+      <arglist>(void)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI int32_t</type>
@@ -948,8 +948,8 @@
       <type>RUAPI u_int32_t</type>
       <name>ruGetLogLevel</name>
       <anchorfile>group__logging.html</anchorfile>
-      <anchor>ga195ad93c9316d9f4e9a2062b60302cea</anchor>
-      <arglist>()</arglist>
+      <anchor>ga5567addda268c2f3d4ff8cb72ce1a918</anchor>
+      <arglist>(void)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI bool</type>

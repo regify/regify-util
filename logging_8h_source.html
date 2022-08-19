@@ -141,7 +141,7 @@ $(document).ready(function(){initNavTree('logging_8h_source.html',''); initResiz
 <div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
 <div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;RUAPI <span class="keywordtype">void</span> <a class="code" href="group__logging.html#gae2da372352496e9d84b59c07b15f82ed">ruSetLogger</a>(<a class="code" href="group__logging.html#ga85b04f67f72140eacdded6c016bdac96">ruLogFunc</a> logger, u_int32_t logLevel, <span class="keywordtype">void</span>* userData);</div>
 <div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160; </div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;RUAPI u_int32_t <a class="code" href="group__logging.html#ga195ad93c9316d9f4e9a2062b60302cea">ruGetLogLevel</a>();</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;RUAPI u_int32_t <a class="code" href="group__logging.html#ga5567addda268c2f3d4ff8cb72ce1a918">ruGetLogLevel</a>(<span class="keywordtype">void</span>);</div>
 <div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160; </div>
 <div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;RUAPI <span class="keywordtype">bool</span> <a class="code" href="group__logging.html#gab3ef0712708ff05243d4275723c1cba4">ruDoesLog</a>(u_int32_t log_level);</div>
 <div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160; </div>
@@ -179,16 +179,16 @@ $(document).ready(function(){initNavTree('logging_8h_source.html',''); initResiz
 <div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;<span class="preprocessor">#endif //REGIFY_UTIL_LOGGING_H</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
+<div class="ttc" id="agroup__logging_html_ga5567addda268c2f3d4ff8cb72ce1a918"><div class="ttname"><a href="group__logging.html#ga5567addda268c2f3d4ff8cb72ce1a918">ruGetLogLevel</a></div><div class="ttdeci">RUAPI u_int32_t ruGetLogLevel(void)</div><div class="ttdoc">Returns the currently set log level.</div></div>
 <div class="ttc" id="agroup__logging_html_ga0a90f3d97148451be043efff143fd5a7"><div class="ttname"><a href="group__logging.html#ga0a90f3d97148451be043efff143fd5a7">ruStdErrorLogger</a></div><div class="ttdeci">RUAPI void ruStdErrorLogger(void *udata, const char *msg)</div><div class="ttdoc">A convenience logging implementation that logs to stderr.</div></div>
 <div class="ttc" id="agroup__logging_html_ga85b04f67f72140eacdded6c016bdac96"><div class="ttname"><a href="group__logging.html#ga85b04f67f72140eacdded6c016bdac96">ruLogFunc</a></div><div class="ttdeci">void(* ruLogFunc)(void *user_data, const char *message)</div><div class="ttdoc">The type of function to pass to ruSetLogger in order to hook up logging.</div><div class="ttdef"><b>Definition:</b> logging.h:67</div></div>
-<div class="ttc" id="agroup__logging_html_ga195ad93c9316d9f4e9a2062b60302cea"><div class="ttname"><a href="group__logging.html#ga195ad93c9316d9f4e9a2062b60302cea">ruGetLogLevel</a></div><div class="ttdeci">RUAPI u_int32_t ruGetLogLevel()</div><div class="ttdoc">Returns the currently set log level.</div></div>
 <div class="ttc" id="agroup__logging_html_gae2da372352496e9d84b59c07b15f82ed"><div class="ttname"><a href="group__logging.html#gae2da372352496e9d84b59c07b15f82ed">ruSetLogger</a></div><div class="ttdeci">RUAPI void ruSetLogger(ruLogFunc logger, u_int32_t logLevel, void *userData)</div><div class="ttdoc">Sets the global logging function for this process.</div></div>
 <div class="ttc" id="agroup__logging_html_gab3ef0712708ff05243d4275723c1cba4"><div class="ttname"><a href="group__logging.html#gab3ef0712708ff05243d4275723c1cba4">ruDoesLog</a></div><div class="ttdeci">RUAPI bool ruDoesLog(u_int32_t log_level)</div><div class="ttdoc">Returns whether the given log level should log.</div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_02ca080d44dff245433198a8d6f82776.html">regify-util</a></li><li class="navelem"><b>logging.h</b></li>
-    <li class="footer">Generated on Tue Jul 26 2022 09:30:08 for regify utility by
+    <li class="footer">Generated on Fri Aug 19 2022 14:12:27 for regify utility by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

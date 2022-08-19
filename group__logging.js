@@ -15,7 +15,7 @@ var group__logging =
     [ "ruWarnLogf", "group__logging.html#gaebf1e2035fa3c2d930c925c93e2e6706", null ],
     [ "ruLogFunc", "group__logging.html#ga85b04f67f72140eacdded6c016bdac96", null ],
     [ "ruDoesLog", "group__logging.html#gab3ef0712708ff05243d4275723c1cba4", null ],
-    [ "ruGetLogLevel", "group__logging.html#ga195ad93c9316d9f4e9a2062b60302cea", null ],
+    [ "ruGetLogLevel", "group__logging.html#ga5567addda268c2f3d4ff8cb72ce1a918", null ],
     [ "ruSetLogger", "group__logging.html#gae2da372352496e9d84b59c07b15f82ed", null ],
     [ "ruStdErrorLogger", "group__logging.html#ga0a90f3d97148451be043efff143fd5a7", null ]
 ];
