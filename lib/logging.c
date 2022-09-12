@@ -55,10 +55,6 @@ bool ruDoesLog(u_int32_t log_level) {
 static char* makeLogMsg(u_int32_t log_level, const char *filePath, const char *func,
                    int32_t line, const char *format, va_list args) {
     char *lv;
-    char timeStr[20]; /* yyyy/mm/dd HH:MM:SS */
-    struct tm tm;
-    ruTimeVal tv;
-
     if (log_level >= RU_LOG_VERB)
         lv = "VERB";
     else if (log_level >= RU_LOG_INFO)
@@ -70,25 +66,26 @@ static char* makeLogMsg(u_int32_t log_level, const char *filePath, const char *f
     else
         lv = "????";
 
+#ifdef __EMSCRIPTEN__
+    #define prefix "%s:%d %s() %s: "
+#else
+    char timeStr[20]; /* yyyy/mm/dd HH:MM:SS */
+    struct tm tm;
+    ruTimeVal tv;
     // https://stackoverflow.com/questions/3673226/how-to-print-time-in-format-2009-08-10-181754-811
     ruGetTimeVal(&tv);
     // Round to nearest millis
     int millis = lrint(tv.usec / 1000.0);
     if (millis >= 1000) {
-        // Allow for rounding up to nearest second
+        // Allow for rounding up to the nearest second
         millis -=1000;
         tv.sec++;
     }
+
 #ifdef _WIN32
     _localtime32_s(&tm, &tv.sec);
 #else
-#ifdef __EMSCRIPTEN__
-    time_t sec = 0;
-    localtime_r(&sec, &tm);
-    tv.sec = sec;
-#else
     localtime_r(&tv.sec, &tm);
-#endif
 #endif
     strftime(timeStr, 20, "%Y-%m-%d %H:%M:%S", &tm);
 #ifdef RUMS
@@ -106,12 +103,17 @@ static char* makeLogMsg(u_int32_t log_level, const char *filePath, const char *f
         #define prefix "%s.%03d [%d] (%s:%d %s()) %s: "
     #endif
 #endif
+#endif
     char *file = ruBaseName((char*)filePath);
 
     // estimate
     char *ret = NULL;
+#ifdef __EMSCRIPTEN__
+    int32_t prefixSize = snprintf(ret, 0, prefix, file, line, func, lv);
+#else
     int32_t prefixSize = snprintf(ret, 0, prefix,
                                   timeStr, millis, pid, file, line, func, lv);
+#endif
     va_list args2;
     va_copy(args2, args);
     int32_t msgsize  = vsnprintf(ret, 0, format, args2);
@@ -120,7 +122,11 @@ static char* makeLogMsg(u_int32_t log_level, const char *filePath, const char *f
     // do it +2 = \n\0
     ret = ruMalloc0(prefixSize+msgsize+2, char);
     char *ptr = ret;
+#ifdef __EMSCRIPTEN__
+    snprintf(ret, prefixSize+1, prefix, file, line, func, lv);
+#else
     snprintf(ret, prefixSize+1, prefix, timeStr, millis, pid, file, line, func, lv);
+#endif
     ptr += prefixSize;
 #undef prefix
     vsnprintf(ptr, msgsize+1, format, args);
