@@ -240,6 +240,20 @@
     </member>
     <member kind="function">
       <type>RUAPI ruCleaner</type>
+      <name>ruCleanNoBufferNew</name>
+      <anchorfile>group__cleaner.html</anchorfile>
+      <anchor>ga109fa56eedae83aea5ebaaa4ed71ede9</anchor>
+      <arglist>(rusize chunkSize)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI int32_t</type>
+      <name>ruCleanBuffer</name>
+      <anchorfile>group__cleaner.html</anchorfile>
+      <anchor>gaa8e3c856e4a9883ff9ee093655949d5b</anchor>
+      <arglist>(ruCleaner rc, const char *in, rusize len, ruString *out)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI ruCleaner</type>
       <name>ruCleanFree</name>
       <anchorfile>group__cleaner.html</anchorfile>
       <anchor>gab618d626b1824ba7fd21ac61c5132902</anchor>
