@@ -35,6 +35,7 @@
 #define RUE_OK 0
 #define RUE_INVALID_PARAMETER 64
 #define RUE_PARAMETER_NOT_SET 77
+#define RUE_INVALID_STATE	325
 #define ruFree(p) if(p) free((void*)(p)); (p) = NULL;
 typedef void (*ruCleanerCb) (void* user_data, const char *key, const char* subst);
 typedef size_t rusize;
@@ -120,6 +121,7 @@ typedef struct {
     Tree *root;
     Tree *leaf;
 
+    bool buffered;
     char *inBuf;
     char *inEnd;
     char *matchStart;
@@ -232,7 +234,9 @@ static void matchToStart(Cleaner *c) {
 
 static void bufferedRead(Cleaner *c) {
     c->cur++;
+    if (!c->buffered) return; // inc only op
     if (c->cur < c->inEnd) return;
+
     if (c->matchStart) {
         matchToStart(c);
     } else {
@@ -346,12 +350,13 @@ static bool walkText(Cleaner *c) {
     return c->error == 0;
 }
 
-ruCleaner ruCleanNew(rusize chunkSize) {
+static ruCleaner newCleaner(rusize chunkSize, bool buffering) {
     Cleaner *c = ruMalloc0(1, Cleaner);
     c->memsize += sizeof(Cleaner);
     c->root = newBranch(c, '\0');
     c->chunkSize = chunkSize;
     if (!c->chunkSize) c->chunkSize = 1024 * 1024;
+    c->buffered = buffering;
     c->type = CleanerMagic;
 #ifndef CLEANER_ONLY
     c->mux = ruMutexInit();
@@ -359,13 +364,53 @@ ruCleaner ruCleanNew(rusize chunkSize) {
     return (ruCleaner)c;
 }
 
+ruCleaner ruCleanNew(rusize chunkSize) {
+    return newCleaner(chunkSize, true);
+}
+
+#ifndef CLEANER_ONLY
+ruCleaner ruCleanNoBufferNew(rusize chunkSize) {
+    return newCleaner(chunkSize, false);
+}
+
+static rusize_s myappend(void* ctx, void *buf, rusize len) {
+    ruString io = (ruString)ctx;
+    if (RUE_OK == ruBufferAppend(io, buf, len)) return len;
+    return 0;
+}
+
+int32_t ruCleanBuffer(ruCleaner rc, const char *in, rusize len, ruString *out) {
+    int32_t code;
+    Cleaner *c = CleanerGet(rc, &code);
+    if (!c) return code;
+    if (c->buffered) return RUE_INVALID_STATE;
+    if (!in || !out) return RUE_PARAMETER_NOT_SET;
+    if (!len) len = strlen(in);
+
+    ruBuffer wc = ruBufferNew(len * 1.1); // 10% margin
+    c->inBuf = (char*) in;
+    c->inEnd = c->inBuf + len;
+    c->write = &myappend;
+    c->writeCtx = wc;
+
+    code = ruCleanNow(rc);
+    if (code == RUE_OK) {
+        *out = wc;
+    } else {
+        ruStringFree(wc, true);
+        *out = NULL;
+    }
+    return code;
+}
+#endif
+
 ruCleaner ruCleanFree(ruCleaner cp) {
     Cleaner *c = CleanerGet(cp, NULL);
     if (!c) return NULL;
     if (c->root) {
         c->root = c->leaf = freeBranch(c, c->root);
     }
-    ruFree(c->inBuf);
+    if (c->buffered) ruFree(c->inBuf);
     ruFree(c->outBuf);
 #ifndef CLEANER_ONLY
     c->mux = ruMutexFree(c->mux);
@@ -433,6 +478,7 @@ int32_t ruCleanIo(ruCleaner rc, ioFunc reader, void* readCtx,
     int32_t code;
     Cleaner *c = CleanerGet(rc, &code);
     if (!c) return code;
+    if (!c->buffered) return RUE_INVALID_STATE;
     c->read = reader;
     c->readCtx = readCtx;
     c->write = writer;
@@ -444,7 +490,7 @@ int32_t ruCleanNow(ruCleaner rc) {
     int32_t code;
     Cleaner *c = CleanerGet(rc, &code);
     if (!c) return code;
-    if (!c->read || !c->write) return RUE_PARAMETER_NOT_SET;
+    if (c->buffered && (!c->read || !c->write)) return RUE_PARAMETER_NOT_SET;
 
 #ifndef CLEANER_ONLY
     ruMutexLock(c->mux);
@@ -465,8 +511,13 @@ int32_t ruCleanNow(ruCleaner rc) {
     }
     // initialize
     c->leaf = c->root;
-    c->cur = c->inEnd; // trigger initial read
     c->outCur = c->outBuf;
+    if (c->buffered) {
+        c->cur = c->inEnd; // trigger initial read
+    } else {
+        // set to start -1 because bufferedRead increments first.
+        c->cur = c->inBuf - 1;
+    }
     while(walkText(c));
     if (!c->error) {
         flush(c);

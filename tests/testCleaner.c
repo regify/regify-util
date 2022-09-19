@@ -99,6 +99,11 @@ START_TEST ( api ) {
     ret = ruCleanAdd(rc, "foo2", "bar2");
     fail_unless(ret == exp, retText, test, exp, ret);
 
+    test = "ruCleanBuffer";
+    exp = RUE_INVALID_STATE;
+    ret = ruCleanBuffer(rc, "foo", 0, NULL);
+    fail_unless(ret == exp, retText, test, exp, ret);
+
     test = "ruCleanIo";
     exp = RUE_PARAMETER_NOT_SET;
     ret = ruCleanIo(NULL, NULL, NULL, NULL, NULL);
@@ -121,7 +126,23 @@ START_TEST ( api ) {
     ruCleanFree(&"foo");
     ruCleanFree(rc);
     // shouldn't crash;
-    ruCleanFree(rc);
+    rc = ruCleanFree(rc);
+
+    exp = RUE_OK;
+    rc = ruCleanNoBufferNew(0);
+    fail_unless(rc != NULL, "cleaner object was null");
+
+    exp = RUE_PARAMETER_NOT_SET;
+    ret = ruCleanBuffer(NULL, NULL, 0, NULL);
+    fail_unless(ret == exp, retText, test, exp, ret);
+
+    ret = ruCleanBuffer(rc, NULL, 0, NULL);
+    fail_unless(ret == exp, retText, test, exp, ret);
+
+    ret = ruCleanBuffer(rc, "foo", 0, NULL);
+    fail_unless(ret == exp, retText, test, exp, ret);
+
+    rc = ruCleanFree(rc);
 }
 END_TEST
 
@@ -136,6 +157,44 @@ void cleanerCb (void* user_data, const char *key, const char* subst) {
         if(db) ruVerbLogf("%s", key);
     }
 }
+
+START_TEST ( bufferless ) {
+    int32_t ret, exp;
+    const char *test = "";
+    const char *retText = "%s failed wanted ret '%d' but got '%d'";
+    struct ioCtx rc, wc;
+
+    exp = RUE_OK;
+    ruCleaner c = ruCleanNoBufferNew(0);
+    fail_unless(c != NULL, "cleaner object was null");
+
+    test = "ruCleanAdd";
+    ret = ruCleanAdd(c, "@ZAP@", "the zap");
+    fail_unless(ret == exp, retText, test, exp, ret);
+
+    test = "ruCleanAdd";
+    ret = ruCleanAdd(c, "@POW@", "Pow this!");
+    fail_unless(ret == exp, retText, test, exp, ret);
+
+    test = "ruCleanIo";
+    exp = RUE_INVALID_STATE;
+    ret = ruCleanIo(c, &myread, &rc, &mywrite, &wc);
+    fail_unless(ret == exp, retText, test, exp, ret);
+
+    test = "ruCleanNow";
+    exp = RUE_OK;
+    const char* inStr = "@POW@ And then do @ZAP@.";
+    const char* exStr = "Pow this! And then do the zap.";
+    ruString out = NULL;
+    ret = ruCleanBuffer(c, inStr, 0, &out);
+    fail_unless(ret == exp, retText, test, exp, ret);
+    char *res = ruStringGetCString(out);
+    ck_assert_str_eq(res, exStr);
+
+    ruStringFree(out, false);
+    c = ruCleanFree(c);
+}
+END_TEST
 
 START_TEST ( work ) {
     int32_t ret, exp;
@@ -1487,6 +1546,7 @@ TCase* cleanerTests ( void ) {
     TCase *tcase = tcase_create ( "cleaner" );
     tcase_add_test ( tcase, api );
     tcase_add_test ( tcase, work );
+    tcase_add_test ( tcase, bufferless );
     tcase_add_test ( tcase, regibox );
     tcase_add_test ( tcase, regibox2 );
     return tcase;
