@@ -240,20 +240,6 @@
     </member>
     <member kind="function">
       <type>RUAPI ruCleaner</type>
-      <name>ruCleanNoBufferNew</name>
-      <anchorfile>group__cleaner.html</anchorfile>
-      <anchor>ga109fa56eedae83aea5ebaaa4ed71ede9</anchor>
-      <arglist>(rusize chunkSize)</arglist>
-    </member>
-    <member kind="function">
-      <type>RUAPI int32_t</type>
-      <name>ruCleanBuffer</name>
-      <anchorfile>group__cleaner.html</anchorfile>
-      <anchor>gaa8e3c856e4a9883ff9ee093655949d5b</anchor>
-      <arglist>(ruCleaner rc, const char *in, rusize len, ruString *out)</arglist>
-    </member>
-    <member kind="function">
-      <type>RUAPI ruCleaner</type>
       <name>ruCleanFree</name>
       <anchorfile>group__cleaner.html</anchorfile>
       <anchor>gab618d626b1824ba7fd21ac61c5132902</anchor>
@@ -289,10 +275,17 @@
     </member>
     <member kind="function">
       <type>RUAPI int32_t</type>
-      <name>ruCleanNow</name>
+      <name>ruCleanToWriter</name>
       <anchorfile>group__cleaner.html</anchorfile>
-      <anchor>gac95b23302e469eaebd780fd4238038cb</anchor>
-      <arglist>(ruCleaner rc)</arglist>
+      <anchor>gae33fadbe16de2d8c2b901e34cdb69411</anchor>
+      <arglist>(ruCleaner rc, const char *in, rusize len, ioFunc writer, void *writeCtx)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI int32_t</type>
+      <name>ruCleanToString</name>
+      <anchorfile>group__cleaner.html</anchorfile>
+      <anchor>ga0f202a4f86276f8410d1918a9ed9cca4</anchor>
+      <arglist>(ruCleaner rc, const char *in, rusize len, ruString *out)</arglist>
     </member>
   </compound>
   <compound kind="group">
