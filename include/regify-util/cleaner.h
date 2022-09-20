@@ -121,33 +121,6 @@ typedef rusize_s (*ioFunc) (void* ctx, void* buf, rusize len);
  */
 RUAPI ruCleaner ruCleanNew(rusize chunkSize);
 
-#ifndef CLEANER_ONLY
-/**
- * \brief Creates a new thread safe unbuffered ruCleaner object for in memory
- * string replacement operations. To be freed with \ref ruCleanFree.
- *
- * @param chunkSize Size of output chunk to process at a time.
- *                  Will be increased to the largest item to clean if that is
- *                  bigger. Defaults to 1M if set to 0.
- * @return Guaranteed to return new ruCleaner object, or process abort.
- */
-RUAPI ruCleaner ruCleanNoBufferNew(rusize chunkSize);
-
-/**
- * \brief Does replacements in given string and returns out in given \ref ruString.
- * Can only be called when rc was created using \ref ruCleanNoBufferNew.
- *
- * @param rc The relevant ruCleaner object
- * @param in String to replace tokens in.
- * @param len Length of the string or 0 to use the null terminator for length
- *            detection.
- * @param out Where the \ref ruString containing the result will be stored.
- *            Caller must free with \ref ruStringFree after use.
- * @return \ref RUE_OK on success else an error code.
- */
-RUAPI int32_t ruCleanBuffer(ruCleaner rc, const char *in, rusize len, ruString *out);
-#endif
-
 /**
  * Frees the given ruCleaner object.
  * @param rc list to free.
@@ -192,11 +165,11 @@ RUAPI int32_t ruCleanAdd(ruCleaner rc, const char* instr, const char* substitute
 RUAPI int32_t ruCleanRemove(ruCleaner rc, const char* instr);
 
 /**
- * \brief Set input/output context to be processed.
+ * \brief Does replacements using the given I/O functions.
  *
  * This can be an opened file with the corresponding file handle as context.
- * This function may be called in conjunction with \ref ruCleanNow as many times
- * as there are data to clean.
+ * This function may be called multiple times and interchangeably with the
+ * ruCleanTo* functions.
  * @param rc The relevant ruCleaner object
  * @param reader The read function to be called for data input.
  * @param readCtx The context to be passed to the read function.
@@ -205,14 +178,41 @@ RUAPI int32_t ruCleanRemove(ruCleaner rc, const char* instr);
  * @return \ref RUE_OK on success else an error code.
  */
 RUAPI int32_t ruCleanIo(ruCleaner rc, ioFunc reader, void* readCtx,
-                     ioFunc writer, void* writeCtx);
+                        ioFunc writer, void* writeCtx);
 
 /**
- * \brief Starts the actual cleaning using the given I/O.
+ * \brief Does replacements on given string using the given Output function.
+ *
+ * This can be an opened file with the corresponding file handle as context.
+ * This function may be called multiple times and interchangeably with the
+ * ruCleanTo*, ruCleanIo functions.
  * @param rc The relevant ruCleaner object
+ * @param in String to replace tokens in.
+ * @param len Length of the string or 0 to use the null terminator for length
+ *            detection.
+ * @param writer The write function to be called for data output.
+ * @param writeCtx The context to be passed to the write function.
  * @return \ref RUE_OK on success else an error code.
  */
-RUAPI int32_t ruCleanNow(ruCleaner rc);
+RUAPI int32_t ruCleanToWriter(ruCleaner rc, const char *in, rusize len,
+                              ioFunc writer, void* writeCtx);
+
+#ifndef CLEANER_ONLY
+/**
+ * \brief Does replacements in given string and returns out in given \ref ruString.
+ *
+ * This function may be called multiple times and interchangeably with the
+ * ruCleanTo*, ruCleanIo functions.
+ * @param rc The relevant ruCleaner object
+ * @param in String to replace tokens in.
+ * @param len Length of the string or 0 to use the null terminator for length
+ *            detection.
+ * @param out Where the \ref ruString containing the result will be stored.
+ *            Caller must free with \ref ruStringFree after use.
+ * @return \ref RUE_OK on success else an error code.
+ */
+RUAPI int32_t ruCleanToString(ruCleaner rc, const char *in, rusize len, ruString *out);
+#endif
 
 /**
  * @}

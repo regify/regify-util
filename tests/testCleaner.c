@@ -99,49 +99,48 @@ START_TEST ( api ) {
     ret = ruCleanAdd(rc, "foo2", "bar2");
     fail_unless(ret == exp, retText, test, exp, ret);
 
-    test = "ruCleanBuffer";
-    exp = RUE_INVALID_STATE;
-    ret = ruCleanBuffer(rc, "foo", 0, NULL);
+    test = "ruCleanToString";
+    ruString str = NULL;
+    exp = RUE_PARAMETER_NOT_SET;
+    ret = ruCleanToString(NULL, "foo", 0, &str);
+    fail_unless(ret == exp, retText, test, exp, ret);
+
+    ret = ruCleanToString(rc, NULL, 0, &str);
+    fail_unless(ret == exp, retText, test, exp, ret);
+
+    ret = ruCleanToString(rc, "foo", 0, NULL);
+    fail_unless(ret == exp, retText, test, exp, ret);
+
+    test = "ruCleanToWriter";
+    ret = ruCleanToWriter(NULL, "foo", 0, &mywrite, NULL);
+    fail_unless(ret == exp, retText, test, exp, ret);
+
+    ret = ruCleanToWriter(rc, NULL, 0, &mywrite, NULL);
+    fail_unless(ret == exp, retText, test, exp, ret);
+
+    ret = ruCleanToWriter(rc, "foo", 0, NULL, NULL);
     fail_unless(ret == exp, retText, test, exp, ret);
 
     test = "ruCleanIo";
-    exp = RUE_PARAMETER_NOT_SET;
     ret = ruCleanIo(NULL, NULL, NULL, NULL, NULL);
     fail_unless(ret == exp, retText, test, exp, ret);
 
-    exp = RUE_OK;
     ret = ruCleanIo(rc, NULL, NULL, NULL, NULL);
     fail_unless(ret == exp, retText, test, exp, ret);
 
-    test = "ruCleanNow";
-    exp = RUE_PARAMETER_NOT_SET;
-    ret = ruCleanNow(NULL);
+    ret = ruCleanToString(NULL, NULL, 0, NULL);
     fail_unless(ret == exp, retText, test, exp, ret);
 
-    exp = RUE_PARAMETER_NOT_SET;
-    ret = ruCleanNow(rc);
+    ret = ruCleanToString(rc, NULL, 0, NULL);
+    fail_unless(ret == exp, retText, test, exp, ret);
+
+    ret = ruCleanToString(rc, "foo", 0, NULL);
     fail_unless(ret == exp, retText, test, exp, ret);
 
     test = "ruCleanFree";
     ruCleanFree(&"foo");
     ruCleanFree(rc);
     // shouldn't crash;
-    rc = ruCleanFree(rc);
-
-    exp = RUE_OK;
-    rc = ruCleanNoBufferNew(0);
-    fail_unless(rc != NULL, "cleaner object was null");
-
-    exp = RUE_PARAMETER_NOT_SET;
-    ret = ruCleanBuffer(NULL, NULL, 0, NULL);
-    fail_unless(ret == exp, retText, test, exp, ret);
-
-    ret = ruCleanBuffer(rc, NULL, 0, NULL);
-    fail_unless(ret == exp, retText, test, exp, ret);
-
-    ret = ruCleanBuffer(rc, "foo", 0, NULL);
-    fail_unless(ret == exp, retText, test, exp, ret);
-
     rc = ruCleanFree(rc);
 }
 END_TEST
@@ -162,10 +161,9 @@ START_TEST ( bufferless ) {
     int32_t ret, exp;
     const char *test = "";
     const char *retText = "%s failed wanted ret '%d' but got '%d'";
-    struct ioCtx rc, wc;
 
     exp = RUE_OK;
-    ruCleaner c = ruCleanNoBufferNew(0);
+    ruCleaner c = ruCleanNew(0);
     fail_unless(c != NULL, "cleaner object was null");
 
     test = "ruCleanAdd";
@@ -176,22 +174,42 @@ START_TEST ( bufferless ) {
     ret = ruCleanAdd(c, "@POW@", "Pow this!");
     fail_unless(ret == exp, retText, test, exp, ret);
 
-    test = "ruCleanIo";
-    exp = RUE_INVALID_STATE;
-    ret = ruCleanIo(c, &myread, &rc, &mywrite, &wc);
-    fail_unless(ret == exp, retText, test, exp, ret);
-
-    test = "ruCleanNow";
+    test = "ruCleanToString";
     exp = RUE_OK;
     const char* inStr = "@POW@ And then do @ZAP@.";
     const char* exStr = "Pow this! And then do the zap.";
+    const char* snipStr = "Pow this! And then do the zap";
     ruString out = NULL;
-    ret = ruCleanBuffer(c, inStr, 0, &out);
+    ret = ruCleanToString(c, inStr, 0, &out);
     fail_unless(ret == exp, retText, test, exp, ret);
     char *res = ruStringGetCString(out);
     ck_assert_str_eq(res, exStr);
-
     ruStringFree(out, false);
+
+    ret = ruCleanToString(c, inStr, strlen(inStr)-1, &out);
+    fail_unless(ret == exp, retText, test, exp, ret);
+    res = ruStringGetCString(out);
+    ck_assert_str_eq(res, snipStr);
+    ruStringFree(out, false);
+
+    struct ioCtx wc;
+    memset(&wc, 0, sizeof(struct ioCtx));
+    wc.len = 1024;
+    wc.buf = ruMalloc0(wc.len, char);
+
+    wc.cur = wc.buf;
+    ret = ruCleanToWriter(c, inStr, 0, &mywrite, &wc);
+    fail_unless(ret == exp, retText, test, exp, ret);
+    ck_assert_str_eq(wc.buf, exStr);
+
+    memset(wc.buf, 0x00, wc.len);
+    wc.cur = wc.buf;
+    ret = ruCleanToWriter(c, inStr, strlen(inStr)-1, &mywrite, &wc);
+    fail_unless(ret == exp, retText, test, exp, ret);
+    ck_assert_str_eq(wc.buf, snipStr);
+
+    ruFree(wc.buf);
+
     c = ruCleanFree(c);
 }
 END_TEST
@@ -247,21 +265,18 @@ START_TEST ( work ) {
     ret = ruCleanAdd(c, "2foo", "2bar");
     fail_unless(ret == exp, retText, test, exp, ret);
 
-    test = "ruCleanIo";
-    ret = ruCleanIo(c, &myread, &rc, &mywrite, &wc);
-    fail_unless(ret == exp, retText, test, exp, ret);
-
     rc.buf = "foo2 and foo2foo had foo for bar2 in foo";
     rc.cur = rc.buf;
     rc.len = strlen(rc.buf);
 
     test = "ruCleanNow";
     const char* exStr = "bar2 and bar2^ had ^ for bar2 in ^";
-    ret = ruCleanNow(c);
+    test = "ruCleanIo";
+    ret = ruCleanIo(c, &myread, &rc, &mywrite, &wc);
     fail_unless(ret == exp, retText, test, exp, ret);
     ck_assert_str_eq(wc.buf, exStr);
-
     ruFree(wc.buf);
+
     test = "ruCleanRemove";
     ruCleanRemove(c, "2foo");
     fail_unless(ret == exp, retText, test, exp, ret);
@@ -342,10 +357,6 @@ START_TEST ( regibox ) {
 
     test = "ruCleanIo";
     ret = ruCleanIo(c, &myfread, rh, &myfwrite, wh);
-    fail_unless(ret == exp, retText, test, exp, ret);
-
-    test = "ruCleanNow";
-    ret = ruCleanNow(c);
     fail_unless(ret == exp, retText, test, exp, ret);
 
     fclose(rh);
@@ -1511,10 +1522,6 @@ START_TEST ( regibox2 ) {
     ret = ruCleanIo(c, &myfread, rh, &myfwrite, wh);
             fail_unless(ret == exp, retText, test, exp, ret);
 
-    test = "ruCleanNow";
-    ret = ruCleanNow(c);
-            fail_unless(ret == exp, retText, test, exp, ret);
-
     fclose(rh);
     fclose(wh);
 
@@ -1528,10 +1535,6 @@ START_TEST ( regibox2 ) {
 
     test = "ruCleanIo";
     ret = ruCleanIo(c, &myfread, rh, &myfwrite, wh);
-            fail_unless(ret == exp, retText, test, exp, ret);
-
-    test = "ruCleanNow";
-    ret = ruCleanNow(c);
             fail_unless(ret == exp, retText, test, exp, ret);
 
     fclose(rh);
