@@ -193,6 +193,28 @@ RUAPI char* ruMakeLogMsg(u_int32_t log_level, const char *file, const char *func
 #define ruVerbLogf(fmt, ...) ruLog_(RU_LOG_VERB, fmt, __VA_ARGS__)
 
 /**
+ * \brief Verbose logs the 8 bytes following start preceded by given message
+ * @param msg prefix message
+ * @param start address from where to start dumping bytes
+ */
+#define ruDump8(msg, start) \
+    ruVerbLogf("%s @0x%x %02x %02x %02x %02x  %02x %02x %02x %02x", msg, (start), \
+        (uint8_t)*(start), (uint8_t)*(start+1), (uint8_t)*(start+2), (uint8_t)*(start+3), \
+        (uint8_t)*(start+4), (uint8_t)*(start+5), (uint8_t)*(start+6), (uint8_t)*(start+7))
+
+/**
+ * \brief Verbose logs the 16 bytes following start preceded by given message
+ * @param msg prefix message
+ * @param start address from where to start dumping bytes
+ */
+#define ruDump16(msg, start) \
+    ruVerbLogf("%s @0x%x %02x %02x %02x %02x  %02x %02x %02x %02x  %02x %02x %02x %02x  %02x %02x %02x %02x", msg, (start), \
+        (uint8_t)*(start), (uint8_t)*(start+1), (uint8_t)*(start+2), (uint8_t)*(start+3), \
+        (uint8_t)*(start+4), (uint8_t)*(start+5), (uint8_t)*(start+6), (uint8_t)*(start+7), \
+        (uint8_t)*(start+8), (uint8_t)*(start+9), (uint8_t)*(start+10), (uint8_t)*(start+11), \
+        (uint8_t)*(start+12), (uint8_t)*(start+13), (uint8_t)*(start+14), (uint8_t)*(start+15))
+
+/**
  * @}
  */
 #ifdef __cplusplus
