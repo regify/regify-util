@@ -930,6 +930,20 @@
       <anchor>ga75167ec8202e6e2a632afdb0a60fabb0</anchor>
       <arglist>(fmt,...)</arglist>
     </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>ruDump8</name>
+      <anchorfile>group__logging.html</anchorfile>
+      <anchor>ga350ca5f040ec24dc02dd77155fbb61d0</anchor>
+      <arglist>(msg, start)</arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>ruDump16</name>
+      <anchorfile>group__logging.html</anchorfile>
+      <anchor>ga28a12b3d8bfbc6022ad920435b2cef72</anchor>
+      <arglist>(msg, start)</arglist>
+    </member>
     <member kind="typedef">
       <type>void(*</type>
       <name>ruLogFunc</name>

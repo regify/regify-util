@@ -7,6 +7,8 @@ var group__logging =
     [ "RU_LOG_WARN", "group__logging.html#ga4388ae060e29101e3458cc625b53f327", null ],
     [ "ruCritLog", "group__logging.html#ga52e07e352dbd0c7be2b0d37bc48cc8ac", null ],
     [ "ruCritLogf", "group__logging.html#ga6cee3b7459f97c8805d9e31ec46ca2c5", null ],
+    [ "ruDump16", "group__logging.html#ga28a12b3d8bfbc6022ad920435b2cef72", null ],
+    [ "ruDump8", "group__logging.html#ga350ca5f040ec24dc02dd77155fbb61d0", null ],
     [ "ruInfoLog", "group__logging.html#gaf9ca44fd51225d8a837745dda302341f", null ],
     [ "ruInfoLogf", "group__logging.html#ga4bf3472aaaf37ec918433cb983102338", null ],
     [ "ruVerbLog", "group__logging.html#ga497ce15cdccb100b54759a94220e6d7f", null ],

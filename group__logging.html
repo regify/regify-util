@@ -145,6 +145,12 @@ Macros</h2></td></tr>
 <tr class="memitem:ga75167ec8202e6e2a632afdb0a60fabb0"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__logging.html#ga75167ec8202e6e2a632afdb0a60fabb0">ruVerbLogf</a>(fmt, ...)&#160;&#160;&#160;ruLog_(<a class="el" href="group__logging.html#gaa48441dca350811c725a8096ccbd59f8">RU_LOG_VERB</a>, fmt, __VA_ARGS__)</td></tr>
 <tr class="memdesc:ga75167ec8202e6e2a632afdb0a60fabb0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Emits a VERB level log message.  <a href="group__logging.html#ga75167ec8202e6e2a632afdb0a60fabb0">More...</a><br /></td></tr>
 <tr class="separator:ga75167ec8202e6e2a632afdb0a60fabb0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga350ca5f040ec24dc02dd77155fbb61d0"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__logging.html#ga350ca5f040ec24dc02dd77155fbb61d0">ruDump8</a>(msg,  start)</td></tr>
+<tr class="memdesc:ga350ca5f040ec24dc02dd77155fbb61d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Verbose logs the 8 bytes following start preceded by given message.  <a href="group__logging.html#ga350ca5f040ec24dc02dd77155fbb61d0">More...</a><br /></td></tr>
+<tr class="separator:ga350ca5f040ec24dc02dd77155fbb61d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga28a12b3d8bfbc6022ad920435b2cef72"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__logging.html#ga28a12b3d8bfbc6022ad920435b2cef72">ruDump16</a>(msg,  start)</td></tr>
+<tr class="memdesc:ga28a12b3d8bfbc6022ad920435b2cef72"><td class="mdescLeft">&#160;</td><td class="mdescRight">Verbose logs the 16 bytes following start preceded by given message.  <a href="group__logging.html#ga28a12b3d8bfbc6022ad920435b2cef72">More...</a><br /></td></tr>
+<tr class="separator:ga28a12b3d8bfbc6022ad920435b2cef72"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
@@ -307,6 +313,88 @@ Functions</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">fmt</td><td>The format specifier for the remaining arguments. </td></tr>
     <tr><td class="paramname">...</td><td>The remaining arguments that make up the log message. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ga28a12b3d8bfbc6022ad920435b2cef72"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga28a12b3d8bfbc6022ad920435b2cef72">&#9670;&nbsp;</a></span>ruDump16</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ruDump16</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">msg, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">start&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">    <a class="code" href="group__logging.html#ga75167ec8202e6e2a632afdb0a60fabb0">ruVerbLogf</a>(<span class="stringliteral">&quot;%s @0x%x %02x %02x %02x %02x  %02x %02x %02x %02x  %02x %02x %02x %02x  %02x %02x %02x %02x&quot;</span>, msg, (start), \</div>
+<div class="line">        (uint8_t)*(start), (uint8_t)*(start+1), (uint8_t)*(start+2), (uint8_t)*(start+3), \</div>
+<div class="line">        (uint8_t)*(start+4), (uint8_t)*(start+5), (uint8_t)*(start+6), (uint8_t)*(start+7), \</div>
+<div class="line">        (uint8_t)*(start+8), (uint8_t)*(start+9), (uint8_t)*(start+10), (uint8_t)*(start+11), \</div>
+<div class="line">        (uint8_t)*(start+12), (uint8_t)*(start+13), (uint8_t)*(start+14), (uint8_t)*(start+15))</div>
+</div><!-- fragment -->
+<p>Verbose logs the 16 bytes following start preceded by given message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">msg</td><td>prefix message </td></tr>
+    <tr><td class="paramname">start</td><td>address from where to start dumping bytes </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ga350ca5f040ec24dc02dd77155fbb61d0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga350ca5f040ec24dc02dd77155fbb61d0">&#9670;&nbsp;</a></span>ruDump8</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ruDump8</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">msg, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">start&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">    <a class="code" href="group__logging.html#ga75167ec8202e6e2a632afdb0a60fabb0">ruVerbLogf</a>(<span class="stringliteral">&quot;%s @0x%x %02x %02x %02x %02x  %02x %02x %02x %02x&quot;</span>, msg, (start), \</div>
+<div class="line">        (uint8_t)*(start), (uint8_t)*(start+1), (uint8_t)*(start+2), (uint8_t)*(start+3), \</div>
+<div class="line">        (uint8_t)*(start+4), (uint8_t)*(start+5), (uint8_t)*(start+6), (uint8_t)*(start+7))</div>
+</div><!-- fragment -->
+<p>Verbose logs the 8 bytes following start preceded by given message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">msg</td><td>prefix message </td></tr>
+    <tr><td class="paramname">start</td><td>address from where to start dumping bytes </td></tr>
   </table>
   </dd>
 </dl>
@@ -651,10 +739,11 @@ Functions</h2></td></tr>
 </div>
 </div><!-- contents -->
 </div><!-- doc-content -->
+<div class="ttc" id="agroup__logging_html_ga75167ec8202e6e2a632afdb0a60fabb0"><div class="ttname"><a href="group__logging.html#ga75167ec8202e6e2a632afdb0a60fabb0">ruVerbLogf</a></div><div class="ttdeci">#define ruVerbLogf(fmt,...)</div><div class="ttdoc">Emits a VERB level log message.</div><div class="ttdef"><b>Definition:</b> logging.h:193</div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Tue Sep 20 2022 12:19:40 for regify utility by
+    <li class="footer">Generated on Mon Oct 10 2022 12:14:24 for regify utility by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
