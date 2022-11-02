@@ -4,8 +4,10 @@ var indexSectionsWithContent =
   1: "kr",
   2: "r",
   3: "cglsu",
-  4: "eikr",
-  5: "bdfhklmrst"
+  4: "eikru",
+  5: "r",
+  6: "r",
+  7: "bdfhiklmrst"
 };
 
 var indexSectionNames =
@@ -15,7 +17,9 @@ var indexSectionNames =
   2: "functions",
   3: "variables",
   4: "typedefs",
-  5: "groups"
+  5: "enums",
+  6: "enumvalues",
+  7: "groups"
 };
 
 var indexSectionLabels =
@@ -25,6 +29,8 @@ var indexSectionLabels =
   2: "Functions",
   3: "Variables",
   4: "Typedefs",
-  5: "Modules"
+  5: "Enumerations",
+  6: "Enumerator",
+  7: "Modules"
 };
 

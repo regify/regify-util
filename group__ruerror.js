@@ -9,5 +9,6 @@ var group__ruerror =
     [ "RUE_INVALID_STATE", "group__ruerror.html#gae2f0ae9ffefaed4e5e72dc15b7bc4699", null ],
     [ "RUE_OK", "group__ruerror.html#ga7e2f97cce8af8020834e685a2482556d", null ],
     [ "RUE_OUT_OF_MEMORY", "group__ruerror.html#gae1cbda5746960b9745a36874eaa9bb45", null ],
-    [ "RUE_PARAMETER_NOT_SET", "group__ruerror.html#ga616dba9a5dafed8351aa98c68fab25e2", null ]
+    [ "RUE_PARAMETER_NOT_SET", "group__ruerror.html#ga616dba9a5dafed8351aa98c68fab25e2", null ],
+    [ "RUE_USER_ABORT", "group__ruerror.html#gae20a9bc093af1bbbb5e42ef8ed05deec", null ]
 ];

@@ -1,5 +1,8 @@
 var group__io =
 [
+    [ "RU_WALK_FOLDER_FIRST", "group__io.html#ga9d311d1dbbf9b207dd8e6832178aa5ad", null ],
+    [ "RU_WALK_FOLDER_LAST", "group__io.html#ga055a96a5883241e585332496a09cf671", null ],
+    [ "RU_WALK_NO_RECURSE", "group__io.html#ga7f8970ea7304cf95817cac910c9070dc", null ],
     [ "entryMgr", "group__io.html#ga02d14b0d2f110532e98796373b5c6b1a", null ],
     [ "ruStat_t", "group__io.html#gae389f0b8ef30d38c2c5ee1be60330ede", null ],
     [ "ruBaseName", "group__io.html#ga5e1c319186a031bc8ac39f171da4ebc1", null ],
@@ -10,7 +13,7 @@ var group__io =
     [ "ruFileRename", "group__io.html#ga8f8cf9398240f654b7168706eb8a1095", null ],
     [ "ruFileSetContents", "group__io.html#ga9610819e2f2bc69b9215c9263a3db93b", null ],
     [ "ruFolderRemove", "group__io.html#gac255625488ddf62907efa965ea5b54e2", null ],
-    [ "ruFolderWalk", "group__io.html#ga0e6c319fd0cd0f9cab8e1371209089f7", null ],
+    [ "ruFolderWalk", "group__io.html#ga38d23ec7fac85ec152aacf0aeb8d2be0", null ],
     [ "ruFOpen", "group__io.html#ga3716b147f53dd26c805547556b9608be", null ],
     [ "ruFullPath", "group__io.html#gac911387bc1382fb6bffa4a944d983e94", null ],
     [ "ruIsDir", "group__io.html#ga1d8e3aea6c159a286cb6c410b32893ca", null ],
@@ -20,5 +23,6 @@ var group__io =
     [ "ruMkdir", "group__io.html#gad899c45123b9d7a04f4b8475ac9bf78f", null ],
     [ "ruOpen", "group__io.html#gae5dc81a0de9eafb956c253be9e66948e", null ],
     [ "ruOpenTmp", "group__io.html#gacf30a0eee9096e022b112167988a4f06", null ],
+    [ "ruPathJoin", "group__io.html#ga748b1cb57a725ffd4fd098a319b56690", null ],
     [ "ruStat", "group__io.html#gaaf51c8fc40cedc893fa5a5397e6882af", null ]
 ];

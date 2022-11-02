@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['regular_20expressions_384',['Regular Expressions',['../group__regex.html',1,'']]],
-  ['regify_2dutil_20error_20codes_385',['regify-util Error Codes',['../group__ruerror.html',1,'']]]
+  ['memory_20management_486',['Memory Management',['../group__memory.html',1,'']]],
+  ['miscellaneous_20functions_487',['Miscellaneous Functions',['../group__misc.html',1,'']]]
 ];

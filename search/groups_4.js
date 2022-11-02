@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['key_20value_20storage_379',['Key Value Storage',['../group__kvstore.html',1,'']]]
+  ['ini_20file_20handling_482',['Ini File Handling',['../group__ini.html',1,'']]]
 ];

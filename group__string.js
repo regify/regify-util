@@ -12,8 +12,10 @@ var group__string =
     [ "ruAsciiToLower", "group__string.html#ga4662fca69acac8f44ed704ef0a25dfb4", null ],
     [ "ruAsciiToUpper", "group__string.html#ga1134e95af367533005a4b0cee4918735", null ],
     [ "ruDupPrintf", "group__string.html#gac02a41b8d206a2e7518420e8647c28b7", null ],
+    [ "ruDupvPrintf", "group__string.html#ga1125ada1e1d67bb70bc518015726fc97", null ],
     [ "ruLastSubstr", "group__string.html#gabf84afa80858cb26fb5fd0648185e4e8", null ],
     [ "ruLastSubstrLen", "group__string.html#gab3d07bb4cd0e514534a479d637fe9375", null ],
+    [ "ruStrByteReplace", "group__string.html#gaa92819ba13930511d9849adaefc2e5bd", null ],
     [ "ruStrcasecmp", "group__string.html#gaaad20d826d045c61abb5e708423c5ea3", null ],
     [ "ruStrcmp", "group__string.html#ga6bfc96ae55637fdb4dcc9364f630f8fe", null ],
     [ "ruStrdup", "group__string.html#gaad01659abccce6ab4d9f9defced8cb0b", null ],
@@ -26,6 +28,7 @@ var group__string =
     [ "ruStrStr", "group__string.html#ga4d37273205efbebfc894057e2a54839f", null ],
     [ "ruStrStrLen", "group__string.html#gad5274e886bf38df0ac0675f0753efa6c", null ],
     [ "ruStrToll", "group__string.html#gab1bd1770a3b7d2485c0cb5d31d995ea9", null ],
+    [ "ruStrTrim", "group__string.html#gac1a4b2248c4858724ebbb61c77ae1df7", null ],
     [ "ruUtf8CaseNormalize", "group__string.html#ga5618cc6aab057d1af3254e05a5127ace", null ],
     [ "ruUtf8ToLower", "group__string.html#ga70c3b427727d7949f148be67fa7225b8", null ],
     [ "ruUtf8ToUpper", "group__string.html#ga736095869cdda732f5704ce657ee85ce", null ]
