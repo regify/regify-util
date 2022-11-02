@@ -82,14 +82,14 @@ static char* makeLogMsg(u_int32_t log_level, const char *filePath, const char *f
     strftime(timeStr, 20, "%Y-%m-%d %H:%M:%S", &tm);
 #ifdef RUMS
     DWORD pid = GetCurrentProcessId();
-    #define prefix "%s.%06d [%ld] (%s:%d %s()) %s: "
+    #define prefix "%s.%06d [%ld%s (%s:%d %s()) %s: "
 #else
     pid_t pid = getpid();
     #ifdef _WIN32
         #ifdef _WIN64
-            #define prefix "%s.%06d [%lld] (%s:%d %s()) %s: "
+            #define prefix "%s.%06d [%lld%s (%s:%d %s()) %s: "
         #else
-            #define prefix "%s.%06d [%d] (%s:%d %s()) %s: "
+            #define prefix "%s.%06d [%d%s (%s:%d %s()) %s: "
         #endif
     #else
         #define prefix "%s.%06d [%d%s (%s:%d %s()) %s: "

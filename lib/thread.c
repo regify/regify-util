@@ -26,6 +26,7 @@ ruMakeTypeGetter(Thr, MagicThr)
 
 RU_THREAD_LOCAL char* logPidEnd = NULL;
 
+#ifndef _WIN32
 static void* threadRunner(void* context) {
     Thr* tc = (Thr*) context;
     if (tc->start) {
@@ -35,12 +36,13 @@ static void* threadRunner(void* context) {
     }
     return tc->exitRes;
 }
+#endif
 
 RUAPI long int ruThreadGetId(void) {
-#ifdef __EMSCRIPTEN__
-    return 0;
-#else
+#ifdef __linux__
     return syscall(SYS_gettid);
+#else
+    return 0;
 #endif
 }
 
@@ -56,6 +58,7 @@ RUAPI ruThread ruThreadCreate(ruStartFunc start, void* context) {
     Thr* tc = ruMalloc0(1, Thr);
     tc->start = start;
     tc->user = context;
+#ifndef _WIN32
     int32_t ret = pthread_create(&tc->tid, NULL,
                                  threadRunner, tc);
     if (ret) {
@@ -63,6 +66,7 @@ RUAPI ruThread ruThreadCreate(ruStartFunc start, void* context) {
         ruFree(tc);
         return NULL;
     }
+#endif
     return tc;
 }
 
@@ -70,8 +74,10 @@ RUAPI ruThread ruThreadFree(ruThread tid) {
     Thr* tc = ThrGet(tid, NULL);
     if (!tc) return NULL;
     if (!tc->finished) {
+#ifndef _WIN32
 #ifndef __EMSCRIPTEN__
         ruThreadKill(tc);
+#endif
 #endif
     }
     ruFree(tc);
@@ -88,8 +94,10 @@ RUAPI int32_t ruThreadKill(ruThread tid) {
     int32_t code;
     Thr* tc = ThrGet(tid, &code);
     if (tc) {
+#ifndef _WIN32
 #ifndef __EMSCRIPTEN__
         pthread_kill(tc->tid, SIGKILL);
+#endif
 #endif
     }
     return code;
@@ -99,11 +107,13 @@ RUAPI int ruThreadJoin(ruThread tid, void** exitVal ) {
     int32_t code;
     Thr* tc = ThrGet(tid, &code);
     if (!tc) return code;
+#ifndef _WIN32
     code = pthread_join(tc->tid, &tc->exitRes);
     if (code) {
         ruSetError("thread join failed ec: %d", code);
         return RUE_GENERAL;
     }
+#endif
     if (exitVal) {
         *exitVal = tc->exitRes;
     }

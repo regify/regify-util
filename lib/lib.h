@@ -40,6 +40,7 @@
     #include <windows.h>
 #else
     #include <sys/param.h>
+    #include <sys/syscall.h>
 #endif
 #include <ctype.h>
 #include <stdio.h>
@@ -48,7 +49,6 @@
 #include <stdlib.h>
 #include <stdarg.h>
 #include <sys/stat.h>
-#include <sys/syscall.h>
 #include <errno.h>
 #include <fcntl.h>
 #include <time.h>
@@ -132,7 +132,9 @@ typedef struct mux_ {
 
 typedef struct thr_ {
     uint64_t type;
+#ifndef _WIN32
     pthread_t tid;
+#endif
     ruStartFunc start;
     void* user;
     void* exitRes;

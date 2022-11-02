@@ -661,13 +661,13 @@ static int32_t folderWalk(const char* folder, u_int32_t flags,
 char* fixSlashes(const char** filePath) {
     char* path = NULL;
 #ifdef _WIN32
-    path = fixPath(*folder);
+    path = fixPath(*filePath);
     if (!ruStrEndsWith(path, "\\", NULL)) {
         char *p2 = ruDupPrintf("%s\\", *path);
         ruFree(path);
         path = p2;
     }
-    *folder = path;
+    *filePath = path;
 #else
     if (!ruStrEndsWith(*filePath, "/", NULL)) {
         path = ruDupPrintf("%s/", *filePath);
@@ -692,7 +692,7 @@ RUAPI int ruFolderRemove(const char* folder) {
 #ifdef _WIN32
     if (strcmp("\\", folder) == 0) return RUE_INVALID_PARAMETER;
 #endif
-    return ruFolderWalk(folder, RU_WALK_FOLDER_LAST,remover, NULL);
+    return ruFolderWalk(folder, RU_WALK_FOLDER_LAST, remover, NULL);
 }
 
 RUAPI int ruFileRemove(const char* filename) {
