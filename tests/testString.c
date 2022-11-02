@@ -71,11 +71,17 @@ START_TEST ( api ) {
     num = ruStrToll("", NULL, 0);
     fail_unless(0 == num, retText, test, 0, num);
 
+    ruStrTrim(NULL);
+    ruStrTrim("");
+
     ruStripChars(NULL, NULL);
     ruStripChars("", NULL);
     ruStripChars("", "");
     ruStripChars(" ", "");
     ruStripChars("", " ");
+
+    ruStrByteReplace(NULL, 0, 0);
+    ruStrByteReplace(0, 0, 0);
 
 }
 END_TEST
@@ -178,6 +184,14 @@ START_TEST ( run ) {
 
     ptr = ruLastSubstr(subst, "");
     ck_assert_str_eq(ptr, subst);
+
+    char* heap = ruStrdup(subst);
+    ruStrByteReplace(heap, '^', 'v');
+    ck_assert_str_eq("testvfoo", heap);
+
+    ruStrByteReplace(heap, 'v', '\0');
+    ck_assert_str_eq("test", heap);
+    ruFree(heap);
 
     test = "ruStrToll";
     int64_t expNum = 666;
@@ -411,14 +425,14 @@ START_TEST ( util ) {
     fail_if(NULL == rl, retText, test, NULL, rl);
     got = ruListSize(rl, NULL);
     fail_unless(want == got, retText, test, want, got);
-    ruListFree(rl);
+    rl = ruListFree(rl);
 
     want = 2;
     rl = ruStrsplit(istr, delim, 0);
     fail_if(NULL == rl, retText, test, NULL, rl);
     got = ruListSize(rl, NULL);
     fail_unless(want == got, retText, test, want, got);
-    ruListFree(rl);
+    rl = ruListFree(rl);
 
     istr = ":foo:bar:";
     want = 4;
@@ -426,7 +440,7 @@ START_TEST ( util ) {
     fail_if(NULL == rl, retText, test, NULL, rl);
     got = ruListSize(rl, NULL);
     fail_unless(want == got, retText, test, want, got);
-    ruListFree(rl);
+    rl = ruListFree(rl);
 
     test = "ruStrAciiToLower";
     str = "!Foo¡";
@@ -483,6 +497,11 @@ START_TEST ( util ) {
     str = ruStrdup("foo was\there");
     ruStripChars(str, "\n");
     ck_assert_str_eq(str, "foo was\there");
+    ruFree(str);
+
+    str = ruStrdup("  foo\t \n\r");
+    ruStrTrim(str);
+    ck_assert_str_eq(str, "  foo");
     ruFree(str);
 
 }

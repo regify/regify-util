@@ -25,7 +25,7 @@
  *
  * The regify utility package is a collection of general utilities ranging from
  * \ref string, over collections like \ref list or \ref map to \ref logging,
- * \ref regex and abstracted storage such as \ref kvstore. There are also \ref
+ * \ref regex and abstracted storage such as \ref kvstore_sec. There are also \ref
  * io utilities.
  * It is designed to run on Unix derivatives (Linux, Mac OSX tested), Windows,
  * Android and iOS.
@@ -40,6 +40,7 @@
 
 /* for our error codes only */
 #include <stdlib.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdbool.h>
 
@@ -144,28 +145,37 @@ extern "C" {
     #include <dirent.h>
 
     /**
+     * @{
      * \brief Abstracted version of size_t but signed
      */
     typedef signed long rusize_s;
 
 #endif
 
-#ifdef RUMS
-#define RU_THREAD_LOCAL __declspec(thread)
-#else
-#ifdef DO_IOS
-#define RU_THREAD_LOCAL thread_local
-#else
-#define RU_THREAD_LOCAL __thread
-#endif
-#endif
-
-
 /**
  * \brief Abstracted version of size_t.
  * \ingroup misc
  */
 typedef size_t rusize;
+
+/**
+ * \brief Signature of a generic clone function.
+ * \ingroup misc
+ */
+typedef void* (*ruCloneFunc)(void*);
+
+/**
+ * \brief Signature of a generic free function returning NULL.
+ * \ingroup misc
+ */
+typedef void* (*ruClearFunc)(void*);
+
+/**
+ * \brief Signature of a generic free function.
+ * \ingroup misc
+ */
+typedef void (*ruFreeFunc)(void*);
+
 
 /**
  * \brief Abstracted version of the Posix struct timeval.
@@ -202,11 +212,13 @@ typedef struct {
 #endif /* __cplusplus */
 
 #include <regify-util/errors.h>
+#include <regify-util/thread.h>
 #include <regify-util/list.h>
 #include <regify-util/logging.h>
 #include <regify-util/string.h>
 #include <regify-util/map.h>
 #include <regify-util/cleaner.h>
+#include <regify-util/ini.h>
 #include <regify-util/io.h>
 #include <regify-util/kvstore.h>
 #include <regify-util/regex.h>
@@ -236,42 +248,6 @@ RUAPI const char* ruVersion(void);
  * @return Ephemeral error message. Must be copied if it is to persist.
  */
 RUAPI const char* ruLastError(void);
-
-/**
- * \defgroup threading Threading Related
- * \brief These functions abstract threading related aspects.
- * @{
- */
- /**
-  * \brief Opaque object abstracting object locking.
-  */
-typedef void* ruMutex;
-
-/**
- * \brief Initialize a new \ref ruMutex
- * @return The new mutex or NULL in which case call \ref ruLastError for details.
- */
-RUAPI ruMutex ruMutexInit(void);
-
-/**
- * \brief Aquire a lock for the given \ref ruMutex blocking until it is given.
- * @param m The mutex to lock.
- */
-RUAPI void ruMutexLock(ruMutex m);
-
-/**
- * \brief Return the aquired mutex lock so other threads can use it.
- * @param m The mutex to unlock.
- */
-RUAPI void ruMutexUnlock(ruMutex m);
-
-/**
- * \brief Free up given \ref ruMutex object.
- * @param m The mutex to free.
- * @return NULL
- */
-RUAPI ruMutex ruMutexFree(ruMutex m);
-
 
 /**
  * @}
@@ -358,11 +334,30 @@ RUAPI char* ruGetHostname(void);
 RUAPI const char* ruGetenv(const char *variable);
 
 /**
+ * Returns true if given string contains a valid 64 bit integer
+ * @param numstr String to parse
+ * @return parse result overflow returns as false
+ */
+RUAPI bool ruIsInt64(const char* numstr);
+
+/**
  * \brief Returns a \ref ruTimeVal representing the current time.
  * @param result Pointer to the \ref ruTimeVal structure to populate.
  * @return Return code of the operation or \ref RUE_OK on success.
  */
 RUAPI int32_t ruGetTimeVal(ruTimeVal *result);
+
+/**
+ * \brief Return the current local time in milliseconds since Jan. 1 1970
+ * @return Milli seconds since epoch
+ */
+RUAPI uint64_t ruTimeMs(void);
+
+/**
+ * \brief Return the current local time in microseconds since Jan. 1 1970
+ * @return Micro seconds since epoch
+ */
+RUAPI uint64_t ruTimeUs(void);
 
 /**
  * \brief Returns the ISO-639-1 2 letter country code pertaining to the running system,
@@ -375,6 +370,12 @@ RUAPI char* ruGetLanguage(void);
  * @param microseconds
  */
 RUAPI void ruUsleep(unsigned long microseconds);
+
+/**
+ * \brief Sleeps for the given number of milli seconds.
+ * @param milliseconds
+ */
+RUAPI void ruMsleep(unsigned long milliseconds);
 
 /**
  * \brief Returns a quasi ramdom number between 0 and max + offset.
@@ -403,7 +404,7 @@ ctype* ctype ## Get(void* ptr, int32_t* code) { \
     if (!ptr) { \
         ruRetWithCode(code, RUE_PARAMETER_NOT_SET, NULL); \
     } \
-    if (ptr < (void*)1000 || magic != ret->type) { \
+    if (ptr < (void*)0xffff || magic != ret->type) { \
         ruRetWithCode(code, RUE_INVALID_PARAMETER, NULL); \
     } \
     ruRetWithCode(code, RUE_OK, ret); \

@@ -79,6 +79,10 @@ extern "C" {
  */
 #define RUE_OUT_OF_MEMORY	68
 /**
+ * User aborted
+ */
+#define RUE_USER_ABORT	98
+/**
  * There has been a general error. Please consult your logs.
  */
 #define RUE_GENERAL	        99

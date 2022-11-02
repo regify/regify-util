@@ -55,6 +55,7 @@ TCase* regexTests ( void );
 TCase* stringTests ( void );
 TCase* mapTests ( void );
 TCase* ioTests ( void );
+TCase* iniTests ( void );
 TCase* storeTests ( void );
 TCase* cleanerTests ( void );
 

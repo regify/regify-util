@@ -291,6 +291,24 @@ START_TEST ( filetest ) {
     fail_if(expres == res, retText, test, expres, res);
     ruFree(res);
 
+    test = "ruPathJoin";
+    expres = NULL;
+    res = ruPathJoin(NULL, NULL);
+    fail_unless(expres == res, retText, test, expres, res);
+
+    expres = "base";
+    res = ruPathJoin(expres, NULL);
+    ck_assert_str_eq(expres, res);
+    ruFree(res);
+
+    res = ruPathJoin(NULL, expres);
+    ck_assert_str_eq(expres, res);
+    ruFree(res);
+
+    res = ruPathJoin(expres, expres);
+    expres = "base" RU_SLASH_S "base";
+    ck_assert_str_eq(expres, res);
+    ruFree(res);
 }
 END_TEST
 

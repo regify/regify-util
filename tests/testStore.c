@@ -129,8 +129,7 @@ START_TEST ( run ) {
     fail_unless(exp == ret, retText, test, exp, ret);
     fail_unless(1 == sz, retText, test, 1, sz);
 
-    ruListFree(lst);
-    lst = NULL;
+    lst = ruListFree(lst);
 
     test = "ruFileStoreGet";
     char* eval = NULL, *rval = NULL;

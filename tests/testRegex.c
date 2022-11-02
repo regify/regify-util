@@ -209,8 +209,7 @@ START_TEST ( groups ) {
     fail_unless(exp == ret, retText, test, exp, ret);
     ck_assert_str_eq(entry, foo);
 
-    ruListFree(matches);
-    matches = NULL;
+    matches = ruListFree(matches);
 
     test = "ruRegexMatchGroups";
     matches = ruRegexMatchGroups(rr, orig, &ret);
@@ -229,8 +228,7 @@ START_TEST ( groups ) {
     fail_unless(exp == ret, retText, test, exp, ret);
     ck_assert_str_eq(entry, foo);
 
-    ruListFree(matches);
-    matches = NULL;
+    matches = ruListFree(matches);
 
     ruRegexFree(rr);
 

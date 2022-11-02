@@ -311,7 +311,8 @@ RUAPI int ruStat(const char*filepath, ruStat_t *dest) {
     if (!filepath || !dest) return RUE_PARAMETER_NOT_SET;
     if (!stat(filepath, dest)) return RUE_OK;
     if(errno == ENOENT) return RUE_FILE_NOT_FOUND;
-    ruSetError("failed accessing '%s' errno: %d", filepath, errno);
+    ruSetError("failed accessing '%s' errno: %d - %s",
+               filepath, errno, strerror(errno));
     return RUE_CANT_OPEN_FILE;
 }
 
@@ -372,8 +373,8 @@ RUAPI int32_t ruFileSetContents(const char *filename, const char *contents,
                 int saved_errno = errno;
                 if (saved_errno == EINTR) continue;
 
-                ruSetError("Failed to write file “%s”: write() failed: %d",
-                           tmpName, saved_errno);
+                ruSetError("Failed to write file '%s' errno: %d - %s",
+                           tmpName, saved_errno, strerror(saved_errno));
                 ret = RUE_CANT_WRITE;
                 break;
             }
@@ -414,7 +415,8 @@ RUAPI int ruFileGetContents(const char *filename, char **contents, rusize *lengt
     int fd = open(filename, O_RDONLY);
 
     if (fd < 0) {
-        ruSetError("Failed to open file “%s”: %s", filename, errno);
+        ruSetError("Failed to open file '%s' errno: %d - %s",
+                   filename, errno, strerror(errno));
         return RUE_CANT_OPEN_FILE;
     }
 
@@ -422,8 +424,8 @@ RUAPI int ruFileGetContents(const char *filename, char **contents, rusize *lengt
     rusize bytes_read = 0, size, alloc_size;
     struct stat stat_buf;
     if (fstat (fd, &stat_buf) < 0) {
-        ruSetError("Failed to get attributes of file “%s”: fstat() failed: %s",
-                 filename, errno);
+        ruSetError("Failed to get attributes of file '%s': errno: %d - %s",
+                 filename, errno, strerror(errno));
         close(fd);
         return RUE_CANT_OPEN_FILE;
     }
@@ -451,8 +453,8 @@ RUAPI int ruFileGetContents(const char *filename, char **contents, rusize *lengt
             if (rc == 0)  break; // done
             if (rc < 0) { // no write
                 if (errno == EINTR) continue; // next chunk
-                ruSetError("Failed to read from file “%s”: %d",
-                        filename, errno);
+                ruSetError("Failed to read from file '%s' errno: %d - %s",
+                        filename, errno, strerror(errno));
                 ret = RUE_CANT_OPEN_FILE;
                 break;
             }
@@ -493,8 +495,8 @@ RUAPI int ruFileRename(const char* oldName, const char* newName) {
     ruFree(new);
 #else
     if(rename(oldName, newName)) {
-        ruSetError("Failed to rename file '%s' to '%s' errno: %d",
-                 oldName, newName, errno);
+        ruSetError("Failed to rename file '%s' to '%s' errno: %d - %s",
+                 oldName, newName, errno, strerror(errno));
         ret = RUE_CANT_WRITE;
     }
 #endif
@@ -531,21 +533,25 @@ static int remover(const char*fullPath, bool isDir, void *ctx) {
     if (strcmp("/", fullPath) == 0) return RUE_INVALID_PARAMETER;
     if (!ruFileExists(fullPath)) return RUE_OK;
     if(ruFileRemove(fullPath)) {
-        ruSetError("failed removing '%s' error: %d",
-                 fullPath, errno);
+        ruSetError("failed removing '%s' error: %d - %s",
+                 fullPath, errno, strerror(errno));
         return RUE_GENERAL;
     }
     return RUE_OK;
 }
 
-static int32_t ruIntFolderWalk(const char* folder, entryMgr actor, void *ctx) {
+static int32_t folderWalk(const char* folder, u_int32_t flags,
+                          entryMgr actor, void *ctx) {
     // sanity checks
     if (!folder) return RUE_PARAMETER_NOT_SET;
     int32_t ret = RUE_OK;
     bool isFolder = ruIsDir(folder);
 
     if (isFolder) {
-
+        if (flags & RU_WALK_FOLDER_FIRST) {
+            ret = actor(folder, isFolder, ctx);
+            if (ret != RUE_OK) return ret;
+        }
 #ifdef _WIN32
         WIN32_FIND_DATAW ffd;
         WCHAR szDir[MAX_PATH];
@@ -581,14 +587,20 @@ static int32_t ruIntFolderWalk(const char* folder, entryMgr actor, void *ctx) {
             if (ruStrcmp("..", fileName) == 0 ||
                 ruStrcmp(".", fileName) == 0)
                 continue;
+
             ruFree(path);
-            path = ruDupPrintf("%s\\%s", folder, fileName);
             if (ffd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
-                ret = ruIntFolderWalk(path, actor, ctx);
+                path = ruDupPrintf("%s%s%c", folder, fileName, RU_SLASH);
+            } else {
+                path = ruDupPrintf("%s%s", folder, fileName);
+            }
+            if ((flags & RU_WALK_NO_RECURSE) ||
+                !(ffd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
+                ret = actor(path, false, ctx);
                 if (ret != RUE_OK) break;
                 continue;
             }
-            ret = actor(path, false, ctx);
+            ret = folderWalk(path, flags, actor, ctx);
             if (ret != RUE_OK) break;
 
         } while (FindNextFileW(hFind, &ffd) != 0);
@@ -600,17 +612,13 @@ static int32_t ruIntFolderWalk(const char* folder, entryMgr actor, void *ctx) {
 #else
         DIR *d = opendir(folder);
         if (!d) {
-            ruSetError("failed opening '%s' error: %d", folder, errno);
+            ruSetError("failed opening '%s' errno: %d - %s",
+                       folder, errno, strerror(errno));
             return RUE_FILE_NOT_FOUND;
         }
 
         struct dirent *dir;
-        char *path = NULL, *format;
-        if (ruStrEndsWith(folder, "/", NULL)) {
-            format = "%s%s";
-        } else {
-            format = "%s/%s";
-        }
+        char *path = NULL;
 
         while ((dir = readdir(d)) != NULL) {
             if (ruStrcmp("..", dir->d_name) == 0 ||
@@ -618,38 +626,61 @@ static int32_t ruIntFolderWalk(const char* folder, entryMgr actor, void *ctx) {
                 continue;
 
             ruFree(path);
-            path = ruDupPrintf(format, folder, dir->d_name);
-            if (dir->d_type != DT_DIR) {
+            if (dir->d_type == DT_DIR) {
+                path = ruDupPrintf("%s%s%c", folder, dir->d_name, RU_SLASH);
+            } else {
+                path = ruDupPrintf("%s%s", folder, dir->d_name);
+            }
+            if ((flags & RU_WALK_NO_RECURSE) || dir->d_type != DT_DIR) {
                 ret = actor(path, false, ctx);
                 if (ret != RUE_OK) break;
                 continue;
             }
-            ret = ruIntFolderWalk(path, actor, ctx);
+            ret = folderWalk(path, flags, actor, ctx);
             if (ret != RUE_OK) break;
         }
         ruFree(path);
         closedir(d);
 #endif
     }
-    if (ret == RUE_OK) {
-        ret = actor(folder, isFolder, ctx);
+    if ((flags & RU_WALK_FOLDER_LAST) || !isFolder) {
+        if (ret == RUE_OK) {
+            ret = actor(folder, isFolder, ctx);
+        }
     }
     return ret;
 }
-
-RUAPI int32_t ruFolderWalk(const char* folder, entryMgr actor, void *ctx) {
-    int ret;
+/**
+ * Fixes path slashes to be proper and to contain a trailing slash. Result to be
+ * freed will be returned and given file pointer will be updated to returned path
+ * as needed.
+ *
+ * @param filePath path to examine, will be set to returned path if it was created
+ * @return new created path to free after use or NULL
+ */
+char* fixSlashes(const char** filePath) {
+    char* path = NULL;
 #ifdef _WIN32
-    char *path = fixPath(folder);
-    if (ruStrEndsWith(path, "/", NULL) ||
-        ruStrEndsWith(path, "\\", NULL)) {
-        *(path+strlen(path)-1) = '\0';
+    path = fixPath(*folder);
+    if (!ruStrEndsWith(path, "\\", NULL)) {
+        char *p2 = ruDupPrintf("%s\\", *path);
+        ruFree(path);
+        path = p2;
     }
-    ret = ruIntFolderWalk(path, actor, ctx);
-    ruFree(path);
+    *folder = path;
 #else
-    ret = ruIntFolderWalk(folder, actor, ctx);
+    if (!ruStrEndsWith(*filePath, "/", NULL)) {
+        path = ruDupPrintf("%s/", *filePath);
+        *filePath = path;
+    }
 #endif
+    return path;
+}
+
+RUAPI int32_t ruFolderWalk(const char* folder, u_int32_t flags, entryMgr actor, void *ctx) {
+    char* path = fixSlashes(&folder);
+    int32_t ret = folderWalk(folder, flags, actor, ctx);
+    ruFree(path);
     return ret;
 }
 
@@ -661,7 +692,7 @@ RUAPI int ruFolderRemove(const char* folder) {
 #ifdef _WIN32
     if (strcmp("\\", folder) == 0) return RUE_INVALID_PARAMETER;
 #endif
-    return ruFolderWalk(folder, remover, NULL);
+    return ruFolderWalk(folder, RU_WALK_FOLDER_LAST,remover, NULL);
 }
 
 RUAPI int ruFileRemove(const char* filename) {
@@ -843,4 +874,14 @@ RUAPI char* ruFullPath(const char* filePath) {
     }
 #endif
     return res;
+}
+
+RUAPI char* ruPathJoin(const char* base, const char* file) {
+    if (!base && !file) return NULL;
+    if (!file) return ruStrdup(base);
+    if (!base) return ruStrdup(file);
+    if (ruStrEndsWith(base, RU_SLASH_S, NULL)) {
+        return ruDupPrintf("%s%s", base, file);
+    }
+    return ruDupPrintf("%s%s%s", base, RU_SLASH_S, file);
 }

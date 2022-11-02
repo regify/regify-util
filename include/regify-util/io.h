@@ -170,22 +170,38 @@ RUAPI int ruFileRename(const char* oldName, const char* newName);
 RUAPI int ruFileRemove(const char* filename);
 
 /**
+ * Used by \ref ruFolderWalk to specify that the folder be handled before its contents.
+ */
+#define RU_WALK_FOLDER_FIRST 0x1
+/**
+ * Used by \ref ruFolderWalk to specify that the folder be handled after its contents.
+ */
+#define RU_WALK_FOLDER_LAST 0x2
+/**
+ * Used by \ref ruFolderWalk to specify whether to recurse into subfolders.
+ */
+#define RU_WALK_NO_RECURSE 0x4
+
+/**
  * \brief A function that is called with each entry of a \ref ruFolderWalk.
- * @param fullPath The full file path to the entry in question.
+ * @param fullPath The full file path to the entry in question. Must be copied
+ *        to persist. Folder may or may not contain a trailing slash.
  * @param isFolder whether this is a folder.
  * @param ctx a user definable context.
  */
 typedef int (*entryMgr) (const char *fullPath, bool isFolder, void* ctx);
 
 /**
- * \brief Decends into giver folder depth first and calls actor on each entry.
+ * \brief Decends into given folder depth first and calls actor on each entry.
  * Folder entries . and .. are not passed to actor.
- * @param folder Folder to start decending into.
+ * @param folder Folder to start descending into. Does not accept / or \\
+ * @param flags Flags of type RU_WALK_* to specify walking behavior. All flags
+ *        may be specified.
  * @param actor Function to call with each entry
  * @param ctx a user definable context to be passed to the \ref entryMgr function.
  * @return
  */
-RUAPI int32_t ruFolderWalk(const char* folder, entryMgr actor, void *ctx);
+RUAPI int32_t ruFolderWalk(const char* folder, u_int32_t flags, entryMgr actor, void *ctx);
 
 /**
  * \brief Recursively delete given folder and all it's sub contents.
@@ -231,6 +247,14 @@ RUAPI char* ruBaseName(const char *filePath);
  *         the given path if it was absolute. Path must be freed by the caller.
  */
 RUAPI char* ruFullPath(const char* filePath);
+
+/**
+ * \brief Returns base and file joined with the filesystem slash in a new string
+ * @param base folder with or without trailing slash
+ * @param file file anme to append
+ * @return Returns a new filepath to be freed by the caller after use.
+ */
+RUAPI char* ruPathJoin(const char* base, const char* file);
 
 /**
  * @}

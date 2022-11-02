@@ -24,41 +24,77 @@
  */
 #include "lib.h"
 
-ruMakeTypeGetter(ListElmt, ListElmtMagic)
+//ruMakeTypeGetter(ListElmt, ListElmtMagic)
 ruMakeTypeGetter(List, ListMagic)
 
-List* ListNew(void (*destructor)(void *data)) {
+ListElmt* ListElmtGet(void* ptr, int32_t* code) {
+    ListElmt* ret = (ListElmt*) ptr;
+    if (!ptr) {
+        do {
+            if (code) { *code = 64; }
+            return ((void*) 0);
+        }
+        while (0);
+    }
+    if (ptr < (void*) 0xffff || 2304 != ret->type) {
+        do {
+            if (code) { *code = 77; }
+            return ((void*) 0);
+        }
+        while (0);
+    }
+    do {
+        if (code) { *code = 0; }
+        return ret;
+    }
+    while (0);
+}
+
+List* ListNew(ruFreeFunc freefn) {
     List *list = ruMalloc0(1, List);
-    list->destroy = destructor;
+    list->destroy = freefn;
     list->type = ListMagic;
     return list;
 }
 
-RUAPI ruList ruListNew(void (*destructor)(void *data)) {
+RUAPI ruList ruListNew(ruFreeFunc freefn) {
     ruClearError();
-    return (ruList)ListNew(destructor);
+    return (ruList)ListNew(freefn);
 }
 
-void ListFree(List *list) {
-    void *data;
+void ListClear(List *list) {
     int32_t ret;
     // Remove each element.
     while (list->size > 0) {
-        data = ListRemoveAfter(list, NULL, &ret);
+        void *data = ListRemoveAfter(list, NULL, &ret);
         if (ret == RUE_OK && list->destroy != NULL) {
             list->destroy(data);
         }
     }
+}
+
+void ListFree(List *list) {
+    ListClear(list);
     // No operations are allowed now, but clear the structure as a precaution.
     memset(list, 0, sizeof(ruList));
     ruFree(list);
 }
 
-RUAPI void ruListFree(ruList rl) {
+RUAPI ruList ruListFree(ruList rl) {
     ruClearError();
     List *list = ListGet(rl, NULL);
-    if (!list) return;
+    if (!list) return NULL;
     ListFree(list);
+    return NULL;
+}
+
+RUAPI int32_t ruListClear(ruList rl) {
+    ruClearError();
+    int32_t code;
+    List *list = ListGet(rl, &code);
+    if (code != RUE_OK) return code;
+    ListClear(list);
+    return RUE_OK;
 }
 
 RUAPI int32_t ruListAppendPtr(ruList rl, const void *data) {

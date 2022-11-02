@@ -42,6 +42,14 @@ static void kvFree(void *o) {
     ruFree(item);
 }
 
+RUAPI u_int32_t ruIntHash(const void* key) {
+    return (uintptr_t)key;
+}
+
+RUAPI bool ruIntMatch(const void* s1, const void* s2) {
+    return s1 == s2;
+}
+
 RUAPI u_int32_t ruStrHash(const void *key) {
     const char *ptr = key;
     u_int32_t val = 0;
@@ -62,14 +70,14 @@ RUAPI bool ruStrMatch(const void* s1, const void* s2) {
     return ruStrcmp(s1, s2) == 0;
 }
 
-RUAPI ruMap ruMapNewString(void (*keyFree)(void *key), void (*valFree)(void *val)) {
+RUAPI ruMap ruMapNewString(ruFreeFunc keyFree, ruFreeFunc valFree) {
     return ruMapNew(ruStrHash, ruStrMatch, keyFree, valFree, 0);
 }
 
 RUAPI ruMap ruMapNew(u_int32_t (*hash)(const void *key),
-                   bool (*match)(const void *key1, const void *key2),
-                   void (*keyFree)(void *key),
-                   void (*valFree)(void *val), u_int32_t expectedSize) {
+                     bool (*match)(const void *key1, const void *key2),
+                     ruFreeFunc keyFree, ruFreeFunc valFree,
+                     u_int32_t expectedSize) {
     ruClearError();
     if (!hash || !match) return NULL;
 
@@ -95,36 +103,35 @@ RUAPI ruMap ruMapNew(u_int32_t (*hash)(const void *key),
     mp->valFree = valFree;
     /* Initialize the number of elements in the table. */
     mp->size = 0;
+    mp->mux = ruMutexInit();
     return (ruMap)mp;
 }
 
-RUAPI void ruMapFree(ruMap rm) {
+RUAPI ruMap ruMapFree(ruMap rm) {
     ruClearError();
     u_int32_t i;
     Map *mp = MapGet(rm, NULL);
     if(!mp) {
-        return;
+        return NULL;
     }
+    mp->doQuit = true;
+    ruMutexLock(mp->mux);
+    ruMutexUnlock(mp->mux);
+
     /* Destroy each bucket. */
     for (i = 0; i < mp->buckets; i++) {
         ListFree(mp->table[i]);
     }
     /* Free the storage allocated for the hash table. */
     ruFree(mp->table);
+    if (mp->mux) mp->mux = ruMutexFree(mp->mux);
     /* No operations are allowed now, but clear the structure as a precaution. */
     memset(mp, 0, sizeof(Map));
     ruFree(mp);
+    return NULL;
 }
 
-RUAPI int32_t ruMapPut(ruMap map, void *key, void *val) {
-    ruClearError();
-    int32_t ret;
-    Map *mp = MapGet(map, &ret);
-    if (!mp) {
-        return ret;
-    }
-    if (!key) return RUE_PARAMETER_NOT_SET;
-
+static int32_t MapPut(Map* mp, void *key, void *val) {
     /* Hash the key. */
     mp->iterActive = false;
     int32_t bucket = mp->hash(key) % mp->buckets;
@@ -145,7 +152,7 @@ RUAPI int32_t ruMapPut(ruMap map, void *key, void *val) {
     item->value = val;
     item->mp = mp;
     /* Insert the data into the bucket. */
-    ret = ListInsertAfter(mp->table[bucket], NULL, item);
+    int32_t ret = ListInsertAfter(mp->table[bucket], NULL, item);
     if (ret == RUE_OK) {
         mp->size++;
     } else {
@@ -154,19 +161,29 @@ RUAPI int32_t ruMapPut(ruMap map, void *key, void *val) {
     return ret;
 }
 
-RUAPI int32_t ruMapRemove(ruMap rm, void *key, void **val) {
+RUAPI int32_t ruMapPutData(ruMap map, void *key, void *val) {
     ruClearError();
     int32_t ret;
-    Map *mp = MapGet(rm, &ret);
+    Map *mp = MapGet(map, &ret);
     if (!mp) {
         return ret;
     }
     if (!key) return RUE_PARAMETER_NOT_SET;
 
+    ret = RUE_USER_ABORT;
+    if (mp->doQuit) return ret;
+    ruMutexLock(mp->mux);
+    if (!mp->doQuit) {
+        ret = MapPut(mp, key, val);
+    }
+    ruMutexUnlock(mp->mux);
+    return ret;
+}
+
+static int32_t MapRemove(Map *mp, void *key, void **val) {
     ListElmt *prev;
     /* Hash the key. */
     int32_t bucket = mp->hash(key) % mp->buckets;
-
     mp->iterActive = false;
     /* Search for the data in the bucket. */
     prev = NULL;
@@ -178,6 +195,7 @@ RUAPI int32_t ruMapRemove(ruMap rm, void *key, void **val) {
                 *val = item->value;
                 item->value = NULL;
             }
+            int32_t ret;
             ListRemoveAfter(mp->table[bucket], prev, &ret);
             if (ret == RUE_OK) {
                 mp->size--;
@@ -191,7 +209,28 @@ RUAPI int32_t ruMapRemove(ruMap rm, void *key, void **val) {
     return RUE_GENERAL;
 }
 
-int32_t MapGetData(Map *mp, void *key, void **value) {
+RUAPI int32_t ruMapRemoveData(ruMap rm, void *key, void **val) {
+    ruClearError();
+    int32_t ret;
+    Map *mp = MapGet(rm, &ret);
+    if (!mp) {
+        return ret;
+    }
+    if (!key) return RUE_PARAMETER_NOT_SET;
+
+    // thread safe version
+    ret = RUE_USER_ABORT;
+    if (!mp->doQuit) {
+        ruMutexLock(mp->mux);
+        if (!mp->doQuit) {
+            ret = MapRemove(mp, key, val);
+        }
+        ruMutexUnlock(mp->mux);
+    }
+    return ret;
+}
+
+static int32_t MapGetData(Map *mp, void *key, void **value) {
     /* Hash the key. */
     int32_t bucket = mp->hash(key) % mp->buckets;
     /* Search for the data in the bucket. */
@@ -207,14 +246,23 @@ int32_t MapGetData(Map *mp, void *key, void **value) {
     return RUE_GENERAL;
 }
 
-RUAPI bool ruMapHas(ruMap rm, void *key, int32_t *code) {
+RUAPI bool ruMapHasKey(ruMap rm, void *key, int32_t *code) {
     ruClearError();
     int32_t ret;
     Map *mp = MapGet(rm, &ret);
     if (!mp) ruRetWithCode(code, ret, false);
     if (!key) ruRetWithCode(code, RUE_PARAMETER_NOT_SET, false);
-    void *val;
-    ret = MapGetData(mp, key, &val);
+
+    ret = RUE_USER_ABORT;
+    if (!mp->doQuit) {
+        ruMutexLock(mp->mux);
+        if (!mp->doQuit) {
+            void *val;
+            ret = MapGetData(mp, key, &val);
+        }
+        ruMutexUnlock(mp->mux);
+    }
+
     if (ret == RUE_OK) {
         ruRetWithCode(code, RUE_OK, true);
     }
@@ -229,32 +277,19 @@ RUAPI int32_t ruMapGetValue(ruMap rm, void *key, void **value) {
         return ret;
     }
     if (!key || !value) return RUE_PARAMETER_NOT_SET;
-    return MapGetData(mp, key, value);
+
+    ret = RUE_USER_ABORT;
+    if (mp->doQuit) return ret;
+    ruMutexLock(mp->mux);
+    if (!mp->doQuit) {
+        ret = MapGetData(mp, key, value);
+    }
+    ruMutexUnlock(mp->mux);
+    return ret;
 }
 
-RUAPI int32_t ruMapIterInit(ruMap rm) {
-    ruClearError();
-    int32_t ret;
-    Map *mp = MapGet(rm, &ret);
-    if (!mp) {
-        return ret;
-    }
-    mp->iterBucket = 0;
-    mp->iterElmt = NULL;
-    mp->iterActive = true;
-    return RUE_OK;
-}
-
-RUAPI int32_t ruMapNextSet(ruMap rm, void **key, void **value) {
-    ruClearError();
-    int32_t ret;
-    Map *mp = MapGet(rm, &ret);
-    if (!mp) {
-        return ret;
-    }
+static int32_t MapNextSet(Map *mp, void **key, void **value) {
     if (!mp->iterActive) return RUE_INVALID_STATE;
-    if (!key && !value) return RUE_PARAMETER_NOT_SET;
-
     if (!mp->iterElmt) {
         do {
             if (mp->iterBucket >= mp->buckets) break;
@@ -274,11 +309,101 @@ RUAPI int32_t ruMapNextSet(ruMap rm, void **key, void **value) {
     return RUE_OK;
 }
 
+RUAPI int32_t ruMapFirstSet(ruMap rm, void **key, void **value) {
+    ruClearError();
+    int32_t ret;
+    Map *mp = MapGet(rm, &ret);
+    if (!mp) {
+        return ret;
+    }
+    if (!key && !value) return RUE_PARAMETER_NOT_SET;
+
+    if (mp->doQuit) return RUE_USER_ABORT;
+    ruMutexLock(mp->mux);
+    if (mp->doQuit) {
+        ruMutexUnlock(mp->mux);
+        return RUE_USER_ABORT;
+    }
+    mp->iterBucket = 0;
+    mp->iterElmt = NULL;
+    mp->iterActive = true;
+    ret = MapNextSet(mp, key, value);
+    ruMutexUnlock(mp->mux);
+    return ret;
+}
+
+RUAPI int32_t ruMapNextSet(ruMap rm, void **key, void **value) {
+    ruClearError();
+    int32_t ret;
+    Map *mp = MapGet(rm, &ret);
+    if (!mp) {
+        return ret;
+    }
+    if (!key && !value) return RUE_PARAMETER_NOT_SET;
+    ret = RUE_USER_ABORT;
+    if (mp->doQuit) return ret;
+    ruMutexLock(mp->mux);
+    if (!mp->doQuit) {
+        ret = MapNextSet(mp, key, value);
+    }
+    ruMutexUnlock(mp->mux);
+    return ret;
+}
+
+RUAPI int32_t ruMapKeySet(ruMap rm, ruCloneFunc copy, ruList* keys, ruFreeFunc listFree) {
+    ruClearError();
+    int32_t ret;
+    Map *mp = MapGet(rm, &ret);
+    if (!mp) {
+        return ret;
+    }
+    if (!keys) return RUE_PARAMETER_NOT_SET;
+
+    ret = RUE_USER_ABORT;
+    if (mp->doQuit) return ret;
+    ruList set = NULL;
+    ruMutexLock(mp->mux);
+    if (!mp->doQuit) {
+
+        if (!listFree) listFree = mp->keyFree;
+        set = ruListNew(listFree);
+        mp->iterBucket = 0;
+        mp->iterElmt = NULL;
+        mp->iterActive = true;
+        void* key = NULL;
+        for (ret = MapNextSet(rm, &key, NULL); ret == RUE_OK;
+             ret = MapNextSet(rm, &key, NULL)) {
+            if (copy) {
+                ret = ruListAppend(set, copy(key));
+            } else {
+                ret = ruListAppend(set, key);
+            }
+        }
+
+    }
+    ruMutexUnlock(mp->mux);
+
+    if (ret == RUE_FILE_NOT_FOUND) ret = RUE_OK;
+    if (ret == RUE_OK) {
+        *keys = set;
+    } else {
+        set = ruListFree(set);
+    }
+    return ret;
+}
+
 RUAPI int32_t ruMapRemoveAll(ruMap rm) {
     ruClearError();
     int32_t ret;
     Map *mp = MapGet(rm, &ret);
     if (!mp) return ret;
+
+    if (mp->doQuit) return RUE_USER_ABORT;
+    ruMutexLock(mp->mux);
+    if (mp->doQuit) {
+        ruMutexUnlock(mp->mux);
+        return RUE_USER_ABORT;
+    }
 
     for (u_int32_t i = 0; i < mp->buckets; i++) {
         while (ruListSize(mp->table[i], NULL) > 0) {
@@ -289,6 +414,7 @@ RUAPI int32_t ruMapRemoveAll(ruMap rm) {
             }
         }
     }
+    ruMutexUnlock(mp->mux);
     return RUE_OK;
 }
 
@@ -299,6 +425,17 @@ RUAPI u_int32_t ruMapSize(ruMap rm, int32_t *code) {
     if (!mp) {
         ruRetWithCode(code, ret, 0);
     }
-    ruRetWithCode(code, ret, mp->size);
+
+    uint32_t sz = 0;
+    ret = RUE_USER_ABORT;
+    if (!mp->doQuit) {
+        ruMutexLock(mp->mux);
+        if (!mp->doQuit) {
+            sz = mp->size;
+            ret = RUE_OK;
+        }
+        ruMutexUnlock(mp->mux);
+    }
+    ruRetWithCode(code, ret, sz);
 }
 

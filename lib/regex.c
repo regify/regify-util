@@ -21,7 +21,7 @@
  */
 #include "lib.h"
 
-RUAPI ruRegex ruRegexNew(const char* pattern, ruRegexpFlag flags, int32_t* code) {
+RUAPI ruRegex ruRegexNew(const char* pattern, ruRegexFlag flags, int32_t* code) {
     ruClearError();
 
     if (!pattern) ruRetWithCode(code, RUE_PARAMETER_NOT_SET, NULL);
@@ -49,10 +49,11 @@ RUAPI ruRegex ruRegexNew(const char* pattern, ruRegexpFlag flags, int32_t* code)
     ruRetWithCode(code, RUE_OK, (ruRegex)regex);
 }
 
-RUAPI void ruRegexFree(ruRegex rr) {
+RUAPI ruRegex ruRegexFree(ruRegex rr) {
     ruClearError();
-    if (!rr) return;
+    if (!rr) return NULL;
     uregex_close((URegularExpression*)rr);
+    return NULL;
 }
 
 RUAPI char* ruRegexReplace(ruRegex rr, const char* original, const char* replacement,
@@ -191,12 +192,10 @@ RUAPI ruList ruRegexMatchGroups(ruRegex rr, const char* original, int32_t* code)
     ruClearError();
     ruList out = ruListNew(free);
     if (!ruRegexSearch(rr, original, true, out, code)) {
-        ruListFree(out);
-        return NULL;
+        return ruListFree(out);
     }
     if (!ruListSize(out, NULL)) {
-        ruListFree(out);
-        return NULL;
+        return ruListFree(out);
     }
     return out;
 }
@@ -205,12 +204,10 @@ RUAPI ruList ruRegexFindGroups(ruRegex rr, const char* original, int32_t* code) 
     ruClearError();
     ruList out = ruListNew(free);
     if (!ruRegexSearch(rr, original, false, out, code)) {
-        ruListFree(out);
-        return NULL;
+        return ruListFree(out);
     }
     if (!ruListSize(out, NULL)) {
-        ruListFree(out);
-        return NULL;
+        return ruListFree(out);
     }
     return out;
 }

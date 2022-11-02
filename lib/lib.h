@@ -41,14 +41,18 @@
 #else
     #include <sys/param.h>
 #endif
+#include <ctype.h>
 #include <stdio.h>
 #include <limits.h>
 #include <string.h>
 #include <stdlib.h>
 #include <stdarg.h>
 #include <sys/stat.h>
+#include <sys/syscall.h>
 #include <errno.h>
 #include <fcntl.h>
+#include <time.h>
+#include <math.h>
 #include "unicode/uchar.h"
 #include "unicode/ustring.h"
 #include "unicode/utypes.h"
@@ -92,14 +96,24 @@ extern "C" {
 #endif
 
 extern unsigned int ruIntChunk;
+extern RU_THREAD_LOCAL char* logPidEnd;
 
 void ruSetError(const char *format, ...);
 void ruClearError(void);
 
 // limits
-#define RU_MIN_INT64	(int64_t)-0x8000000000000000L
+//#define RU_MIN_INT64	(int64_t)-0x8000000000000000L
 #define RU_MAX_INT64	0x7fffffffffffffffL
 #define RU_MAX_UINT64	0xffffffffffffffffL
+
+// Type checking is done with the first element being uint64_t magic must be < u_int16_t
+#define MuxMagic        2301
+#define StringMagic     2302
+#define ListElmtMagic   2304
+#define ListMagic       2305
+#define MapMagic        2306
+#define MagicThr        2307
+#define MagicIni        2308
 
 /*
  *  Mutex
@@ -112,41 +126,52 @@ typedef HANDLE ruMutex_t;
 typedef pthread_mutex_t ruMutex_t;
 #endif
 typedef struct mux_ {
+    uint64_t type;
     ruMutex_t mux;
-    u_int32_t type;
 } Mux;
-#define MuxMagic 23014201
+
+typedef struct thr_ {
+    uint64_t type;
+    pthread_t tid;
+    ruStartFunc start;
+    void* user;
+    void* exitRes;
+    bool finished;
+} Thr;
+
 
 /*
  *  Strings
  */
 typedef struct String_ {
+    uint64_t type;
     char *start;
     rusize idx;
     rusize len;
-    u_int32_t type;
 } String;
-#define StringMagic 23014202
+/**
+ * Replaces non standard file slashes with the proper ones
+ * @param inPath path to convert
+ * @return converted path to be freed by the caller
+ */
 char* fixPath(const char *inPath);
 
 /*
  *  Lists
  */
 typedef struct ListElmt_ {
+    uint64_t type;
     void               *data;
     struct ListElmt_   *next;
-    u_int32_t type;
 } ListElmt;
-#define ListElmtMagic 23014204
 
 typedef struct List_ {
+    uint64_t type;
     int32_t                size;
     void               (*destroy)(void *data);
     ListElmt           *head;
     ListElmt           *tail;
-    u_int32_t type;
 } List;
-#define ListMagic 23014205
 
 List* ListNew(void (*destructor)(void *data));
 void ListFree(List *list);
@@ -158,6 +183,7 @@ int32_t ListInsertAfter(List *list, ruListElmt rle, const void *data);
  *  Maps
  */
 typedef struct Map_ {
+    uint64_t type;
     u_int32_t   buckets;
     u_int32_t   (*hash)(const void *key);
     bool   (*match)(const void *key1, const void *key2);
@@ -165,15 +191,64 @@ typedef struct Map_ {
     void   (*valFree)(void *val);
     u_int32_t   size;
     List   **table;
+    // optional thread safety
+    ruMutex mux;
+    bool doQuit;    // flag to initiate map shutdown
     // iterator
     bool iterActive;
     u_int32_t iterBucket;
     ListElmt *iterElmt;
-    u_int32_t type;
 } Map;
-#define MapMagic 23014206
 
-int32_t MapGetData(Map *mp, void *key, void **value);
+
+/*
+ * Ini Files
+ */
+typedef struct Ini_ {
+    uint64_t type;     // magic
+    ruMap keys;         // char*: char*
+    ruMap sections;     // char*: ruMap(char*: char*)
+} Ini;
+
+/**
+ * Callback that will be called with ini file content
+ *
+ * @param user The user context that was passed to \ref ruIniRead
+ * @param section The current section
+ *                NULL if there is no section
+ * @param name The field name, maybe be repeated if value spans multiple lines
+ *             NULL on new section
+ * @param value The value of the field
+ *              NULL on new section
+ *              NULL if the entry was just name
+ *              blank if the entry was name =
+ * @param lineno the line number where this callback occurred
+ * @return true to continue of false to exit
+ */
+typedef bool (*ruIniCallback)(void* user, const char* section,
+                             const char* name, const char* value,
+                             int lineno);
+
+typedef int (*writer)(void* stream, const char* format, ...);
+
+/**
+ * \brief Parse given zero-terminated IONI file data string.
+ * May have [section]s, name=value pairs (whitespace stripped), and comments
+ * starting with ';' (semicolon). Section is "" if name=value pair parsed before
+ * any section heading. name:value pairs are also supported as a concession to
+ * Python's configparser.
+ *
+ * For each name=value pair parsed, call handler function with given user
+ * pointer as well as section, name, and value (data only valid for duration
+ * of handler call). Handler should return nonzero on success, zero on error.
+ *
+ * @param string
+ * @param handler The user specified callback
+ * @param user The context to be passed to the handler
+ * @return \ref RUE_OK on success else an error code
+ */
+int32_t iniParseString(const char* string, ruIniCallback handler, void* user);
+
 
 /*
  *  Misc - Lib

@@ -80,6 +80,13 @@ char* fixPath(const char *inPath) {
 }
 
 // Public
+RUAPI void ruStrByteReplace(char* string, char search, char replace) {
+    if (!string) return;
+    for (char* c = string; *c; c++) {
+        if (*c == search) *c = replace;
+    }
+}
+
 RUAPI ruString ruStringNew(const char* instr) {
     return ruStringNewn(instr, 0);
 }
@@ -129,16 +136,17 @@ RUAPI ruString ruStringNewf(const char* format, ...) {
     return (ruString)str;
 }
 
-RUAPI void ruStringFree(ruString rs, bool keepBuffer) {
+RUAPI ruString ruStringFree(ruString rs, bool keepBuffer) {
     ruClearError();
     String *str = StringGet(rs, NULL);
     if (!str) {
         ruSetError("object to free was not a String, ignoring");
-        return;
+        return NULL;
     }
     if (!keepBuffer) ruFree(str->start);
     memset(str, 0, sizeof(String));
     ruFree(str);
+    return NULL;
 }
 
 RUAPI int32_t ruStringAppend(ruString rs, const char* instr) {
@@ -243,25 +251,35 @@ RUAPI bool ruStringEndsWith(ruString rs, const char *suffix, int32_t *code) {
     ruRetWithCode(code, RUE_OK, false);
 }
 
-/*
- *  General string utilities
- *
- */
-RUAPI char* ruDupPrintf(const char* format, ...) {
+RUAPI char* ruDupvPrintf(const char* format, va_list arglist) {
     ruClearError();
     va_list args;
     char *ret = NULL;
     if (!format) return ret;
-    va_start (args, format);
+    va_copy (args, arglist);
     int32_t size  = vsnprintf(ret, 0, format, args);
     va_end (args);
     if (size > 0) {
         size++; // terminator
         ret = ruMalloc0(size, char);
-        va_start (args, format);
+        va_copy (args, arglist);
         vsnprintf(ret, size, format, args);
         va_end (args);
     }
+    return ret;
+}
+
+/*
+ *  General string utilities
+ *
+ */
+RUAPI char* ruDupPrintf(const char* format, ...) {
+    va_list args;
+    char *ret = NULL;
+    if (!format) return ret;
+    va_start (args, format);
+    ret = ruDupvPrintf(format, args);
+    va_end (args);
     return ret;
 }
 
@@ -583,6 +601,14 @@ RUAPI int64_t ruStrToll(const char *start, char **endptr, int base) {
         }
     }
     return 0;
+}
+
+RUAPI char* ruStrTrim(char* instr) {
+    if (instr) {
+        char* p = instr + strlen(instr);
+        while (p > instr && isspace((unsigned char) (*--p))) *p = '\0';
+    }
+    return instr;
 }
 
 RUAPI void ruStripChars(char *instr, const char* chars) {

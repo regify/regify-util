@@ -51,11 +51,12 @@ typedef struct FileKvStore_ {
 #define FileKvStoreMagic 23044207
 ruMakeTypeGetter(FileKvStore, FileKvStoreMagic)
 
-void ruKvFileFree(ruFileStore ctx) {
+ruFileStore ruKvFileFree(ruFileStore ctx) {
     FileKvStore *fks = FileKvStoreGet(ctx, NULL);
-    if (!fks) return;
+    if (!fks) return NULL;
     ruFree(fks->folderPath);
     ruFree(fks);
+    return NULL;
 }
 
 RUAPI KvStore* ruNewFileStore(const char *folderPath, int32_t* code) {
@@ -72,7 +73,7 @@ RUAPI KvStore* ruNewFileStore(const char *folderPath, int32_t* code) {
     fks->type = FileKvStoreMagic;
     fks->folderPath = ruStrdup(folderPath);
     kvs->ctx = fks;
-    kvs->ctxFree = ruKvFileFree;
+    kvs->ctxFree = (ruFreeFunc)ruKvFileFree;
     kvs->get = ruFileStoreGet;
     kvs->set = ruFileStoreSet;
     kvs->list = ruFileStoreList;
@@ -204,7 +205,8 @@ RUAPI int32_t ruFileStoreSet (KvStore *kvs, const char* key,
             }
         } else {
             if(ruFileRemove(filepath) != 0) {
-                ruVerbLogf("failed deleting '%s' errno: %d", filepath, errno);
+                ruVerbLogf("failed deleting '%s' errno: %d - %s",
+                           filepath, errno, strerror(errno));
                 ret = errno2rfec(errno);
                 break;
             }
@@ -264,14 +266,11 @@ RUAPI int32_t ruFileStoreList (KvStore *kvs, const char* key, ruList* result) {
     struct _storeList sl;
     sl.fks = fks;
     sl.lst = lst;
-    do {
-        ret = ruFolderWalk(path, lister, &sl);
-    } while (0);
+    ret = ruFolderWalk(path, RU_WALK_FOLDER_LAST,lister, &sl);
     ruFree(dirpath);
     ruFree(filepath);
     if (ret != RUE_OK) {
-        ruListFree(lst);
-        lst = NULL;
+        lst = ruListFree(lst);
     }
     *result = lst;
     return ret;

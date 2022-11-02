@@ -37,7 +37,6 @@ extern "C" {
  * \brief A String buffer implementation.
  * This implementation allows for dynamically creating string and appending to
  * them in a reasonably efficient matter.
- * \ingroup string
  * @{
  */
 /**
@@ -76,7 +75,7 @@ RUAPI ruString ruStringNewf(const char* format, ...);
  * @param rs String to free
  * @param keepBuffer Whether to also free the underlying char* buffer.
  */
-RUAPI void ruStringFree(ruString rs, bool keepBuffer);
+RUAPI ruString ruStringFree(ruString rs, bool keepBuffer);
 
 /**
  * \brief Append given string to \ref ruString.
@@ -173,6 +172,18 @@ RUAPI bool ruStringEndsWith(ruString rs, const char *suffix, int32_t *code);
  *         NULL incase of error. In that case call \ref ruLastError for details.
  */
 RUAPI char* ruUtf8CaseNormalize(const char *instr, int32_t normMode, int32_t caseMode);
+
+/**
+ * \brief Replaces any occurrence of search in string with replace.
+ *
+ * This function works byte level not character level.
+ * NOTE: Calling this function with strings on the stack will segfault.
+ *
+ * @param string String to process
+ * @param search Character to replace
+ * @param replace Character to replace search with
+ */
+RUAPI void ruStrByteReplace(char* string, char search, char replace);
 
 /**
  * \brief Returns what libc strcmp would return but in a manner that gracefully
@@ -340,6 +351,14 @@ RUAPI char* ruStrdup(const char* str);
 RUAPI char* ruStrndup(const char* str, rusize len);
 
 /**
+ * \brief Returns an allocated string from given vprintf call.
+ * @param format Printf style format string
+ * @param arglist a va_start initialized argument list
+ * @return Allocated string copy of formatted string. Free with \ref ruFree.
+ */
+RUAPI char* ruDupvPrintf(const char* format, va_list arglist);
+
+/**
  * \brief Returns an allocated string from given printf call.
  * @param format Printf style format string
  * @param ... Remaining arguments for the format string.
@@ -356,6 +375,16 @@ RUAPI char* ruDupPrintf(const char* format, ...);
  * @return The number result.
  */
 RUAPI int64_t ruStrToll(const char *instr, char **endptr, int base);
+
+/**
+ * \brief Removes trailing whitespace from string in place.
+ *
+ * The given string should be on the heap, else a segfault may occur when trying
+ * to modify something on the stack.
+ * @param instr The string to trim
+ * @return instr
+ */
+RUAPI char* ruStrTrim(char* instr);
 
 /**
  * \brief Removes the characters in chars from the string instr.
@@ -382,8 +411,6 @@ RUAPI void ruStripChars(char *instr, const char* chars);
  * This implementation allows for dynamically creating a buffer and appending to
  * it in a reasonably efficient matter. It is like \ref ruString but is not NULL
  * terminated. Functions of both may be used interchangeably.
- * \ingroup buffer
- * @{
  */
 /**
  * \brief An opaque data type representing a regify-util string object that is
@@ -429,7 +456,7 @@ RUAPI int32_t ruBufferAppendUriEncoded(ruString rs, const char* buf, rusize len)
 
 /**
  * \brief Returns the current length of the \ref ruBuffer.
- * @param rs Data buffer to return the length of.
+ * @param rb Data buffer to return the length of.
  * @param code (Optional) Stores \ref RUE_OK on success or regify error code.
  * @return The length of the string or 0 in case of an error.
  */
@@ -437,14 +464,10 @@ RUAPI int32_t ruBufferAppendUriEncoded(ruString rs, const char* buf, rusize len)
 
 /**
  * \brief Frees the given \ref ruString object.
- * @param rs String to free
- * @param keepBuffer Whether to also free the underlying char* buffer.
+ * @param rb String to free
+ * @param keep Whether to also free the underlying char* buffer.
  */
 #define ruBufferFree(rb, keep) ruStringFree(rb, keep);
-
-/**
- * @}
- */
 
 /**
  * @}

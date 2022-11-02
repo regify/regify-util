@@ -19,8 +19,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-#include <time.h>
-#include <math.h>
 #include "lib.h"
 #ifdef RUMS
 #else
@@ -74,13 +72,7 @@ static char* makeLogMsg(u_int32_t log_level, const char *filePath, const char *f
     ruTimeVal tv;
     // https://stackoverflow.com/questions/3673226/how-to-print-time-in-format-2009-08-10-181754-811
     ruGetTimeVal(&tv);
-    // Round to nearest millis
-    int millis = lrint(tv.usec / 1000.0);
-    if (millis >= 1000) {
-        // Allow for rounding up to the nearest second
-        millis -=1000;
-        tv.sec++;
-    }
+    int micros = (int)tv.usec;
 
 #ifdef _WIN32
     _localtime32_s(&tm, &tv.sec);
@@ -90,29 +82,34 @@ static char* makeLogMsg(u_int32_t log_level, const char *filePath, const char *f
     strftime(timeStr, 20, "%Y-%m-%d %H:%M:%S", &tm);
 #ifdef RUMS
     DWORD pid = GetCurrentProcessId();
-    #define prefix "%s.%03d [%ld] (%s:%d %s()) %s: "
+    #define prefix "%s.%06d [%ld] (%s:%d %s()) %s: "
 #else
     pid_t pid = getpid();
     #ifdef _WIN32
         #ifdef _WIN64
-            #define prefix "%s.%03d [%lld] (%s:%d %s()) %s: "
+            #define prefix "%s.%06d [%lld] (%s:%d %s()) %s: "
         #else
-            #define prefix "%s.%03d [%d] (%s:%d %s()) %s: "
+            #define prefix "%s.%06d [%d] (%s:%d %s()) %s: "
         #endif
     #else
-        #define prefix "%s.%03d [%d] (%s:%d %s()) %s: "
+        #define prefix "%s.%06d [%d%s (%s:%d %s()) %s: "
     #endif
 #endif
 #endif
     char *file = ruBaseName((char*)filePath);
-
+#ifndef __EMSCRIPTEN__
+    char* pidEnd = "]";
+    if (logPidEnd) {
+        pidEnd = logPidEnd;
+    }
+#endif
     // estimate
     char *ret = NULL;
 #ifdef __EMSCRIPTEN__
     int32_t prefixSize = snprintf(ret, 0, prefix, file, line, func, lv);
 #else
     int32_t prefixSize = snprintf(ret, 0, prefix,
-                                  timeStr, millis, pid, file, line, func, lv);
+                                  timeStr, micros, pid, pidEnd, file, line, func, lv);
 #endif
     va_list args2;
     va_copy(args2, args);
@@ -125,7 +122,8 @@ static char* makeLogMsg(u_int32_t log_level, const char *filePath, const char *f
 #ifdef __EMSCRIPTEN__
     snprintf(ret, prefixSize+1, prefix, file, line, func, lv);
 #else
-    snprintf(ret, prefixSize+1, prefix, timeStr, millis, pid, file, line, func, lv);
+    snprintf(ret, prefixSize+1, prefix,
+             timeStr, micros, pid, pidEnd, file, line, func, lv);
 #endif
     ptr += prefixSize;
 #undef prefix

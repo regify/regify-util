@@ -36,6 +36,7 @@ Suite* getSuite ( void ) {
     suite_add_tcase ( suite, mapTests() );
     suite_add_tcase ( suite, regexTests() );
     suite_add_tcase ( suite, ioTests() );
+    suite_add_tcase ( suite, iniTests() );
     suite_add_tcase ( suite, storeTests() );
     suite_add_tcase ( suite, cleanerTests() );
     return suite;

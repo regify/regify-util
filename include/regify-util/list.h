@@ -71,13 +71,20 @@ typedef void* ruIterator;
  * @param destructor (Optional) destructor for list elements.
  * @return Guaranteed to return new list object, or process abort.
  */
-RUAPI ruList ruListNew(void (*destructor)(void *data));
+RUAPI ruList ruListNew(ruFreeFunc destructor);
 
 /**
  * Frees the given list object.
  * @param rl list to free.
  */
-RUAPI void ruListFree(ruList rl);
+RUAPI ruList ruListFree(ruList rl);
+
+/**
+ * Clears the given list.
+ * @param rl list to clear
+ * @return \ref RUE_OK on success or regify error code.
+ */
+RUAPI int32_t ruListClear(ruList rl);
 
 /**
  * Appends the given object to the list.
@@ -122,6 +129,8 @@ RUAPI int32_t ruListInsertAfter(ruList rl, ruListElmt rle, const void *data);
 RUAPI void* ruListRemoveAfter(ruList rl, ruListElmt rle, int32_t *code);
 
 /**
+ * \brief Return first element of the list.
+ *
  * Stack usage synonym for \ref ruListRemoveAfter at head.
  * @param rl List to pop object from.
  * @param code (Optional) Stores \ref RUE_OK on success or regify error code.
@@ -150,7 +159,7 @@ RUAPI ruListElmt ruListHead(ruList rl, int32_t* code);
  * @param rl List to return element of.
  * @return The first element of the list or NULL on failure.
  */
-#define ruListIter(list) ruListHead(list, NULL)
+#define ruListIter(rl) ruListHead(rl, NULL)
 
 /**
  * Returns the last element in the given list.
@@ -187,22 +196,12 @@ RUAPI ruListElmt ruListNextElmt(ruListElmt re, int32_t* code);
 
 /**
  * Returns the data payload of the next list element.
- * @param re Current list element to get the follower of.
+ * @param re Address of current list element to be updated with the next one.
  * @param code (Optional) Stores \ref RUE_OK on success or regify error code.
  * @return NULL if error or given element was the last or the data of the next
  *         element.
  */
 RUAPI void* ruListNextData(ruListElmt *re, int32_t* code);
-
-/**
- * Returns the data payload of the next list element casted to type.
- * @param re Current list element to get the follower of.
- * @param type Data type to cast the returned data payload to.
- * @param code (Optional) Stores \ref RUE_OK on success or regify error code.
- * @return NULL if error or given element was the last or the data of the next
- *         element.
- */
-#define ruListNext(re, type, code) (type) ruListNextData(re, code)
 
 /**
  * Returns the data payload of the next list element casted to type.
@@ -219,15 +218,6 @@ RUAPI void* ruListNextData(ruListElmt *re, int32_t* code);
  * @return Data of the given element including NULL or NULL if there was an error.
  */
 RUAPI void* ruListElmtData(ruListElmt re, int32_t* code);
-
-/**
- * Returns the data payload of the given list element casted to type.
- * @param re List element to return data from.
- * @param type Data type to cast the returned data payload to.
- * @param code (Optional) Stores \ref RUE_OK on success or regify error code.
- * @return Data of the given element including NULL or NULL if there was an error.
- */
-#define ruListData(re, type, code) (type)ruListElmtData(re, code)
 
 /**
  * Returns the data payload of the given list element casted to type.

@@ -22,8 +22,6 @@
 #include <locale.h>
 #include "lib.h"
 
-ruMakeTypeGetter(Mux, MuxMagic)
-
 void ruAbort(void) {
     exit(1);
 }
@@ -69,75 +67,14 @@ bool ruIsunreserved(unsigned char in) {
     return false;
 }
 
-RUAPI ruMutex ruMutexInit(void) {
-    ruClearError();
-    Mux *mx = ruMalloc0(1, Mux);
-    mx->type = MuxMagic;
-#ifdef RUMS
-    mx->mux = CreateMutex( NULL, FALSE, NULL);
-    if (mx->mux == NULL) {
-        ruSetError("mutex init failed: %d\n", GetLastError());
-		ruFree(mx);
-		return NULL;
-    }
-#else
-    int ret;
-    if ((ret = pthread_mutex_init(&mx->mux, NULL))) {
-        ruSetError("mutex init failed ec: %d", ret);
-        ruFree(mx);
-        return NULL;
-    }
-#endif
-    return (ruMutex)mx;
+RUAPI bool ruIsInt64(const char* numstr) {
+    errno = 0;
+    char* end = (char*)numstr;
+    strtoll(numstr, &end, 10);
+    if (*end || errno == ERANGE) return false;
+    return true;
 }
 
-RUAPI ruMutex ruMutexFree(ruMutex m) {
-    ruClearError();
-    int32_t ret;
-    Mux *mux = MuxGet(m, &ret);
-    if (!mux) return NULL;
-#ifdef RUMS
-    CloseHandle(mux->mux);
-#else
-    pthread_mutex_destroy(&mux->mux);
-#endif
-    memset(mux, 0, sizeof(Mux));
-    ruFree(mux);
-    return NULL;
-}
-
-RUAPI void ruMutexLock(ruMutex m) {
-    ruClearError();
-    int32_t ret;
-    Mux *mux = MuxGet(m, &ret);
-    if (!mux) {
-        ruCritLogf("failed getting mutex %d", ret);
-        ruAbort();
-    }
-#ifdef RUMS
-    if (WAIT_OBJECT_0 != WaitForSingleObject(mux->mux, INFINITE)) {
-        ruCritLog("failed unlocking mutex");
-        ruAbort();
-    }
-#else
-    pthread_mutex_lock(&mux->mux);
-#endif
-}
-
-RUAPI void ruMutexUnlock(ruMutex m) {
-    ruClearError();
-    int32_t ret;
-    Mux *mux = MuxGet(m, &ret);
-    if (!mux) {
-        ruCritLogf("failed getting mutex %d", ret);
-        ruAbort();
-    }
-#ifdef RUMS
-    ReleaseMutex(mux->mux);
-#else
-    pthread_mutex_unlock(&mux->mux);
-#endif
-}
 
 RUAPI int32_t ruGetTimeVal(ruTimeVal *result) {
     ruClearError();
@@ -164,6 +101,24 @@ RUAPI int32_t ruGetTimeVal(ruTimeVal *result) {
     return RUE_OK;
 }
 
+RUAPI uint64_t ruTimeMs(void) {
+    ruClearError();
+    ruTimeVal tv;
+    ruGetTimeVal(&tv);
+    // Round to nearest millis
+    int64_t millis = tv.sec * 1000;
+    millis += tv.usec / 1000;
+    return millis;
+}
+
+RUAPI uint64_t ruTimeUs(void) {
+    ruClearError();
+    ruTimeVal tv;
+    ruGetTimeVal(&tv);
+    int64_t micros = tv.sec * 1000000;
+    return micros + tv.usec;
+}
+
 RUAPI char* ruGetLanguage(void) {
     char* lc = setlocale(LC_ALL, NULL);
     if (!lc) return NULL;
@@ -178,5 +133,16 @@ RUAPI void ruUsleep(unsigned long microseconds) {
   request.tv_sec = microseconds / 1000000;
   request.tv_nsec = 1000 * (microseconds % 1000000);
   while (nanosleep (&request, &remaining) == -1 && errno == EINTR) request = remaining;
+#endif
+}
+
+RUAPI void ruMsleep(unsigned long milliseconds) {
+#ifdef RUMS
+    Sleep (milliseconds);
+#else
+    struct timespec request, remaining;
+    request.tv_sec = milliseconds / 1000;
+    request.tv_nsec = 1000000 * (milliseconds % 1000);
+    while (nanosleep (&request, &remaining) == -1 && errno == EINTR) request = remaining;
 #endif
 }

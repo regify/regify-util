@@ -59,13 +59,15 @@ extern "C" {
  * if (rr) ruRegexFree(rr);
  * ~~~~~
  *
- */
-
+ * @{
+*/
 /**
- * Constants for Regular Expression Match Modes. These are mirrored from ICU to
- * avoid having to pull the entire includes folders when using regify-utils.
+ * \brief Constants for Regular Expression Match Modes.
+ *
+ * These are mirrored from ICU to avoid having to pull the entire includes
+ * folders when using regify-utils.
  */
-typedef enum ruRegexpFlag {
+typedef enum ruRegexFlag_ {
 
     /** Forces normalization of pattern and strings.
     Not implemented yet, just a placeholder, hence draft. */
@@ -118,12 +120,10 @@ typedef enum ruRegexpFlag {
       */
     RUREGEX_ERROR_ON_UNKNOWN_ESCAPES = 512
 
-}  ruRegexpFlag;
+} ruRegexFlag;
 
 /**
  * \brief Opaque pointer to regular expression object.
- * \ingroup regex
- * @{
  */
 typedef void* ruRegex;
 
@@ -131,19 +131,19 @@ typedef void* ruRegex;
  * \brief Frees up the resources of the given \ref ruRegex object.
  * @param rr object to free.
  */
-RUAPI void ruRegexFree(ruRegex rr);
+RUAPI ruRegex ruRegexFree(ruRegex rr);
 
 /**
  * \brief Creates a new regular expression object to be used with ruRegex(Replace|Match|...)
  * free with \ref ruRegexFree after use.
  * @param pattern The pattern representing the regular expression without delimiters.
  * @param flags Flags influencing the behavior of the expression. These are from
- *              ICU and we provide \ref ruRegexpFlag.
+ *              ICU and we provide \ref ruRegexFlag.
  * @param code (Optional) Where the return result of this operation such as
  *             \ref RUE_OK on success will be stored.
  * @return The newly created ruRegex object or NULL on failure.
  */
-RUAPI ruRegex ruRegexNew(const char* pattern, ruRegexpFlag flags, int32_t* code);
+RUAPI ruRegex ruRegexNew(const char* pattern, ruRegexFlag flags, int32_t* code);
 
 /**
  * \brief Replace the found expression instances in original with the content

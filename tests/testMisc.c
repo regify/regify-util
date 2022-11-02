@@ -132,6 +132,30 @@ START_TEST ( misc ) {
     ruSetError("foo #%d", 2);
     ck_assert_str_eq("foo #2", ruLastError());
 
+    bool is, want = true;
+    test = "ruIsInt64";
+    is = ruIsInt64("123");
+    fail_unless(want == is, retText, test, want, is);
+
+    is = ruIsInt64(" 123");
+    fail_unless(want == is, retText, test, want, is);
+
+    is = ruIsInt64(" +123");
+    fail_unless(want == is, retText, test, want, is);
+
+    is = ruIsInt64(" -123");
+    fail_unless(want == is, retText, test, want, is);
+
+    want = false;
+    is = ruIsInt64(" *123");
+    fail_unless(want == is, retText, test, want, is);
+
+    is = ruIsInt64(" 123a  ");
+    fail_unless(want == is, retText, test, want, is);
+
+    is = ruIsInt64(" a123  ");
+    fail_unless(want == is, retText, test, want, is);
+
     test = "ruSemiRandomNumber";
     ret = ruSemiRandomNumber(11, 0);
     fail_if(ret < 0, retText, test, 0, ret);

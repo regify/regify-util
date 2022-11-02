@@ -20,13 +20,18 @@
  * SOFTWARE.
  */
 /**
- * \defgroup kvstore Key Value Storage
- * \brief A \ref kvstore is a generic storage interface designed to allow for
- * flexible data serialization.
+ * \defgroup kvstore_sec Key Value Storage
+ * \brief A generic storage interface.
+ *
+ * \section kvstore_sec Key Value Storage
  *
  * Currently provided implementations are \ref ruFileStore for file system based
  * storage and \ref ruNullStore to omit local storage altogether.
  * It consists of a simple \ref kvget, \ref kvset and \ref kvlist call.
+ *
+ * \subsection kvstore Key Value Storage
+ * A Key Value Store is a generic storage interface designed to allow for
+ * flexible data serialization.
  *
  * \subsection kvkey kvstore key
  * This is a space separated string that also accept filesystem type globs like *.
@@ -84,11 +89,6 @@ typedef int32_t (*kvlist) (struct KvStore_* kvs, const char* key,
                           ruList* list);
 
 /**
- * Function signature of a free function for the KvStore ctx.
- */
-typedef void (*kvctxfree) (void*);
-
-/**
  * \brief The key/value store interface type.
  * This object holds the \ref kvget, \ref kvlist and \ref kvset methods of an
  * implementation.
@@ -104,7 +104,7 @@ typedef struct KvStore_ {
     void* ctx;
 /** \cond noworry */
     // internal
-    kvctxfree ctxFree;
+    ruFreeFunc ctxFree;
     u_int32_t type;
 /** \endcond */
 } KvStore;

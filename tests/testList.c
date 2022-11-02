@@ -41,7 +41,17 @@ START_TEST ( api ) {
     rl = ruListNew(NULL);
     fail_unless(rl != NULL, retText, test, 0, RUE_OUT_OF_MEMORY);
 
+    test = "ruListClear";
+    exp = RUE_PARAMETER_NOT_SET;
+    ret = ruListClear(NULL);
+    fail_unless(ret == exp, retText, test, exp, ret);
+
     exp = RUE_OK;
+    ret = ruListClear(rl);
+    fail_unless(ret == exp, retText, test, exp, ret);
+
+    exp = RUE_OK;
+    test = "ruListAppend";
     ret = ruListAppend(rl, retText);
     fail_unless(ret == exp, retText, test, exp, ret);
 
@@ -197,17 +207,17 @@ START_TEST ( api ) {
     exp = RUE_PARAMETER_NOT_SET;
     void* ptr = ruListElmtData(NULL, &ret);
     fail_unless(ret == exp, retText, test, exp, ret);
-    fail_unless(ptr == 0, retText, test, 0, ptr);
+    fail_unless(0 == ptr, retText, test, 0, ptr);
 
     exp = RUE_INVALID_PARAMETER;
     rle = ruListElmtData(rl, &ret);
     fail_unless(ret == exp, retText, test, exp, ret);
-    fail_unless(ptr == 0, retText, test, 0, ptr);
+    fail_unless(0 == ptr, retText, test, 0, ptr);
 
     exp = RUE_OK;
     ptr = ruListElmtData(head, &ret);
     fail_unless(ret == exp, retText, test, exp, ret);
-    fail_if(ptr == 0, retText, test, -1, ptr);
+    fail_if(0 == ptr, retText, test, -1, ptr);
 
     ruListFree(rl);
 
@@ -242,7 +252,7 @@ START_TEST ( usage ) {
     // check it
     head = ruListHead(rl, &ret);
     fail_unless(ret == exp, retText, test, exp, ret);
-    ck_assert_str_eq(ruListData(head, char*, &ret), f[0]);
+    ck_assert_str_eq(ruIterCurrent(head, char*), f[0]);
 
     // add one on top
     ret = ruListInsertAfter(rl, rle, f[1]);
@@ -281,9 +291,9 @@ START_TEST ( usage ) {
     // iterate over the list
     int32_t i = 0;
     rle = ruListHead(rl, &ret);
-    for (char*field = ruListData(rle, char*, &ret);
-         ret == RUE_OK && field;
-        field = ruListNext(&rle, char*, &ret)) {
+    for (char*field = ruIterCurrent(rle, char*);
+         rle && field;
+        field = ruIterNext(rle, char*)) {
         ck_assert_str_eq(field, f[i++]);
     }
     fail_unless(i == esz, retText, test, i, esz);
@@ -329,9 +339,8 @@ START_TEST ( memalloc ) {
     // iterate over the list
     i = 1;
     rle = ruListHead(rl, &ret);
-    for (char*field = ruListData(rle, char*, &ret);
-         ret == RUE_OK && field;
-        field = ruListNext(rle, char*, &ret)) {
+    for (char*field = ruIterCurrent(rle, char*);
+         rle && field; field = ruIterNext(rle, char*)) {
         snprintf(&buf[0], 18, fieldText, i++);
         ck_assert_str_eq(field, buf);
     }

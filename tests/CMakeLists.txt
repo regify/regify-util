@@ -44,7 +44,7 @@ if(IOS)
 else()
 
     add_executable(runTests EXCLUDE_FROM_ALL
-            runTests.cpp testCleaner.c testIo.c testList.c
+            runTests.cpp testCleaner.c testIni.c testIo.c testList.c
             testMap.c testMisc.c testRegex.c testStore.c testString.c
             )
     target_include_directories(runTests
