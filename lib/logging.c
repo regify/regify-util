@@ -65,7 +65,7 @@ static char* makeLogMsg(u_int32_t log_level, const char *filePath, const char *f
         lv = "????";
 
 #ifdef __EMSCRIPTEN__
-    #define prefix "%s:%d %s() %s: "
+    #define prefix "%s: %s(%s:%d): "
 #else
     char timeStr[20]; /* yyyy/mm/dd HH:MM:SS */
     struct tm tm;
@@ -82,23 +82,23 @@ static char* makeLogMsg(u_int32_t log_level, const char *filePath, const char *f
     strftime(timeStr, 20, "%Y-%m-%d %H:%M:%S", &tm);
 #ifdef RUMS
     DWORD pid = GetCurrentProcessId();
-    #define prefix "%s.%06d [%ld%s (%s:%d %s()) %s: "
+    #define prefix "%s.%06d [%ld%s %s: %s(%s:%d): "
 #else
     pid_t pid = getpid();
     #ifdef _WIN32
         #ifdef _WIN64
-            #define prefix "%s.%06d [%lld%s (%s:%d %s()) %s: "
+            #define prefix "%s.%06d [%lld%s %s: %s(%s:%d): "
         #else
-            #define prefix "%s.%06d [%d%s (%s:%d %s()) %s: "
+            #define prefix "%s.%06d [%d%s %s: %s(%s:%d): "
         #endif
     #else
-        #define prefix "%s.%06d [%d%s (%s:%d %s()) %s: "
+        #define prefix "%s.%06d [%d%s %s: %s(%s:%d): "
     #endif
 #endif
 #endif
     char *file = ruBaseName((char*)filePath);
 #ifndef __EMSCRIPTEN__
-    char* pidEnd = "]";
+    char* pidEnd = "]:";
     if (logPidEnd) {
         pidEnd = logPidEnd;
     }
@@ -106,10 +106,10 @@ static char* makeLogMsg(u_int32_t log_level, const char *filePath, const char *f
     // estimate
     char *ret = NULL;
 #ifdef __EMSCRIPTEN__
-    int32_t prefixSize = snprintf(ret, 0, prefix, file, line, func, lv);
+    int32_t prefixSize = snprintf(ret, 0, prefix, lv, func, file, line);
 #else
     int32_t prefixSize = snprintf(ret, 0, prefix,
-                                  timeStr, micros, pid, pidEnd, file, line, func, lv);
+                                  timeStr, micros, pid, pidEnd, lv, func, file, line);
 #endif
     va_list args2;
     va_copy(args2, args);
@@ -120,10 +120,10 @@ static char* makeLogMsg(u_int32_t log_level, const char *filePath, const char *f
     ret = ruMalloc0(prefixSize+msgsize+2, char);
     char *ptr = ret;
 #ifdef __EMSCRIPTEN__
-    snprintf(ret, prefixSize+1, prefix, file, line, func, lv);
+    snprintf(ret, prefixSize+1, prefix, lv, func, file, line);
 #else
     snprintf(ret, prefixSize+1, prefix,
-             timeStr, micros, pid, pidEnd, file, line, func, lv);
+             timeStr, micros, pid, pidEnd, lv, func, file, line);
 #endif
     ptr += prefixSize;
 #undef prefix

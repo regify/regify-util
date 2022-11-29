@@ -79,9 +79,13 @@ START_TEST ( api ) {
     ruListRemoveAfter(rl, (ruListElmt) test, &ret);
     fail_unless(ret == exp, retText, test, exp, ret);
 
+    test = "ruListTryPop";
+    exp = RUE_PARAMETER_NOT_SET;
+    void* res = ruListTryPop(NULL, 0, &ret);
+    fail_unless(ret == exp, retText, test, exp, ret);
+    fail_unless(NULL == res, retText, test, NULL, res);
 
     test = "ruListSize";
-    exp = RUE_PARAMETER_NOT_SET;
     sz = ruListSize(NULL, &ret);
     fail_unless(ret == exp, retText, test, exp, ret);
     fail_unless(sz == -1, retText, test, -1, sz);
@@ -227,6 +231,11 @@ START_TEST ( api ) {
     fail_unless(ret == exp, retText, test, exp, ret);
     fail_unless(0 == ptr, retText, test, 0, ptr);
 
+    test = "ruListJoin";
+    exp = RUE_PARAMETER_NOT_SET;
+    ptr = ruListJoin(NULL, NULL, &ret);
+    fail_unless(ret == exp, retText, test, exp, ret);
+    fail_unless(0 == ptr, retText, test, 0, ptr);
 }
 END_TEST
 
@@ -288,6 +297,18 @@ START_TEST ( usage ) {
     sz = ruListSize(rl, &ret);
     fail_unless(sz == esz, retText, test, esz, sz);
 
+    test = "ruListJoin";
+//    exp = RUE_OK;
+    alloc_chars str = ruListJoin(rl, NULL, &ret);
+    fail_unless(ret == exp, retText, test, exp, ret);
+    ck_assert_str_eq(str, "field0field1field2");
+    ruFree(str);
+
+    str = ruListJoin(rl, ", ", &ret);
+    fail_unless(ret == exp, retText, test, exp, ret);
+    ck_assert_str_eq(str, "field0, field1, field2");
+    ruFree(str);
+
     // iterate over the list
     int32_t i = 0;
     rle = ruListHead(rl, &ret);
@@ -316,6 +337,18 @@ START_TEST ( usage ) {
 
     exp = RUE_INVALID_PARAMETER;
     res = ruListIdxData(rl, esz, char*, &ret);
+    fail_unless(ret == exp, retText, test, exp, ret);
+    fail_unless(NULL == res, retText, test, NULL, res);
+
+    test = "ruListTryPop";
+    exp = RUE_OK;
+    while(esz--) {
+        res = ruListTryPop(rl, 0, &ret);
+        fail_unless(ret == exp, retText, test, exp, ret);
+        fail_if(NULL == res, retText, test, NULL, res);
+    }
+    exp = RUE_FILE_NOT_FOUND;
+    res = ruListTryPop(rl, 0, &ret);
     fail_unless(ret == exp, retText, test, exp, ret);
     fail_unless(NULL == res, retText, test, NULL, res);
 

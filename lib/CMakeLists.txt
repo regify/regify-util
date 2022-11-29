@@ -38,6 +38,10 @@ function (doLink lib shared)
                 )
 
     else()
+        if(LINUX)
+            target_compile_definitions(${lib} PRIVATE _GNU_SOURCE)
+        endif()
+
         if (NOT ANDROID)
             target_link_libraries(${lib} PUBLIC pthread)
         endif()

@@ -21,6 +21,7 @@
  */
 #include "lib.h"
 
+//<editor-fold desc="generic store">
 ruMakeTypeGetter(KvStore, KvStoreMagic)
 
 RUAPI KvStore* ruNewStore(void) {
@@ -43,13 +44,14 @@ RUAPI int32_t ruValidStore(void* obj) {
     KvStoreGet(obj, &ret);
     return ret;
 }
+//</editor-fold>
 
+//<editor-fold desc="file store">
 typedef struct FileKvStore_ {
+    u_int64_t type;
     char *folderPath;
-    u_int32_t type;
 } FileKvStore;
-#define FileKvStoreMagic 23044207
-ruMakeTypeGetter(FileKvStore, FileKvStoreMagic)
+ruMakeTypeGetter(FileKvStore, MagicFileKvStore)
 
 ruFileStore ruKvFileFree(ruFileStore ctx) {
     FileKvStore *fks = FileKvStoreGet(ctx, NULL);
@@ -70,7 +72,7 @@ RUAPI KvStore* ruNewFileStore(const char *folderPath, int32_t* code) {
 
     KvStore* kvs = ruNewStore();
     FileKvStore* fks = ruMalloc0(1, FileKvStore);
-    fks->type = FileKvStoreMagic;
+    fks->type = MagicFileKvStore;
     fks->folderPath = ruStrdup(folderPath);
     kvs->ctx = fks;
     kvs->ctxFree = (ruFreeFunc)ruKvFileFree;
@@ -275,7 +277,12 @@ RUAPI int32_t ruFileStoreList (KvStore *kvs, const char* key, ruList* result) {
     *result = lst;
     return ret;
 }
+//</editor-fold>
 
+//<editor-fold desc="ini store">
+//</editor-fold>
+
+//<editor-fold desc="null store">
 RUAPI KvStore* ruNewNullStore(void) {
     KvStore* kvs = ruNewStore();
     kvs->get = ruNullStoreGet;
@@ -309,3 +316,4 @@ RUAPI int32_t ruNullStoreList (KvStore *kvs, const char* key, ruList* list) {
     *list = NULL;
     return RUE_OK;
 }
+//</editor-fold>

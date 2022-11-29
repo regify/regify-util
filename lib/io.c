@@ -397,7 +397,7 @@ RUAPI int32_t ruFileSetContents(const char *filename, const char *contents,
     return ret;
 }
 
-RUAPI int ruFileGetContents(const char *filename, char **contents, rusize *length) {
+RUAPI int ruFileGetContents(trans_chars filename, alloc_chars* contents, rusize* length) {
     ruClearError();
     if (!filename || !contents) return RUE_PARAMETER_NOT_SET;
     *contents = NULL;

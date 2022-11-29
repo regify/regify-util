@@ -150,9 +150,8 @@ typedef struct {
 
     rusize memsize;
 } Cleaner;
-#define CleanerMagic 23014207
-
-ruMakeTypeGetter(Cleaner, CleanerMagic)
+#define MagicCleaner        2310
+ruMakeTypeGetter(Cleaner, MagicCleaner)
 
 static Tree* newBranch(Cleaner *c, char letter) {
     Tree *t = ruMalloc0(1, Tree);
@@ -403,7 +402,7 @@ ruCleaner ruCleanNew(rusize chunkSize) {
     c->root = newBranch(c, '\0');
     c->chunkSize = chunkSize;
     if (!c->chunkSize) c->chunkSize = 1024 * 1024;
-    c->type = CleanerMagic;
+    c->type = MagicCleaner;
 #ifndef CLEANER_ONLY
     c->mux = ruMutexInit();
 #endif

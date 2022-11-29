@@ -151,7 +151,7 @@ RUAPI int32_t ruFileSetContents(const char *filename, const char *contents, rusi
  * @param length Number of bytes in contents.
  * @return Return code of the operation or \ref RUE_OK on success.
  */
-RUAPI int ruFileGetContents(const char *filename, char **contents, rusize *length);
+RUAPI int ruFileGetContents(trans_chars filename, alloc_chars* contents, rusize* length);
 
 /**
  * Renames a given file. This is equivalent to moving a file. Any previous file

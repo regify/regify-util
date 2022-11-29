@@ -153,6 +153,74 @@ extern "C" {
 #endif
 
 /**
+ * \brief A permanent NULL terminated string pointer.
+ *
+ * \ingroup misc
+ * On input it needs to persist through the life of a given context.
+ * On output it is guaranteed to live as long as it's context or until it has
+ * been explicitly finalized. It must not be freed.
+ * Within functions this can also be used for string pointers that must not be freed.
+ */
+typedef const char* perm_chars;
+
+/**
+ * \brief A transient NULL terminated string pointer.
+ *
+ * \ingroup misc
+ * On input this string must only persist for the duration of the function call.
+ * On output this string is valid until another call with the given context is
+ * performed and must not be freed.
+ */
+typedef const char* trans_chars;
+
+/**
+ * \brief An allocated NULL terminated string pointer.
+ *
+ * \ingroup misc
+ * On input this represents a place on the stack or heap that will be written to
+ * by the called function. Usually accompanied by a length parameter.
+ * On output this string belongs to the caller and must be freed after use.
+ * Within functions this can also be used for string pointers that must be freed.
+ */
+typedef char* alloc_chars;
+
+/**
+ * \brief A permanent pointer.
+ *
+ * \ingroup misc
+ * On input it needs to persist through the life of a given context.
+ * On output it is guaranteed to live as long as it's context or until it has
+ * been explicitly finalized. It must not be freed.
+ */
+typedef const void* perm_ptr;
+
+/**
+ * \brief A transient pointer.
+ *
+ * \ingroup misc
+ * On input this string must only persist for the duration of the function call.
+ * On output this string is valid until another call with the given context is
+ * performed and must not be freed.
+ */
+typedef const void* trans_ptr;
+
+/**
+ * \brief An allocated pointer.
+ *
+ * \ingroup misc
+ * On input this represents a place on the stack or heap that will be written to
+ * by the called function. Usually accompanied by a length parameter.
+ * On output this string belongs to the caller and must be freed after use.
+ */
+typedef void* alloc_ptr;
+
+/**
+ * \brief A generic pointer.
+ * * \ingroup misc
+ */
+typedef void* ptr;
+
+/**
  * \brief Abstracted version of size_t.
  * \ingroup misc
  */
@@ -348,6 +416,26 @@ RUAPI bool ruIsInt64(const char* numstr);
 RUAPI int32_t ruGetTimeVal(ruTimeVal *result);
 
 /**
+ * \brief Return the current local time in seconds since Jan. 1 1970
+ * @return Seconds since epoch
+ */
+RUAPI long ruTimeSec(void);
+
+/**
+ * \brief Converts given local time stamp to UTC
+ * @param stamp seconds since epoch in local time
+ * @return UTC seconds since epoch
+ */
+RUAPI long ruTimeLocalToUtc(long stamp);
+
+/**
+ * \brief Converts given UTC time stamp to local time
+ * @param stamp UTC seconds since epoch
+ * @return seconds since epoch in local time
+ */
+RUAPI long ruTimeUtcToLocal(long stamp);
+
+/**
  * \brief Return the current local time in milliseconds since Jan. 1 1970
  * @return Milli seconds since epoch
  */
@@ -363,7 +451,7 @@ RUAPI uint64_t ruTimeUs(void);
  * \brief Returns the ISO-639-1 2 letter country code pertaining to the running system,
  * @return The country code. Caller must free with \ref ruFree.
  */
-RUAPI char* ruGetLanguage(void);
+RUAPI alloc_chars ruGetLanguage(void);
 
 /**
  * \brief Sleeps for the given number of micro seconds.
@@ -378,6 +466,12 @@ RUAPI void ruUsleep(unsigned long microseconds);
 RUAPI void ruMsleep(unsigned long milliseconds);
 
 /**
+ * \brief Sleeps for the given number of seconds.
+ * @param seconds
+ */
+#define ruSleep(secs) ruMsleep((secs)*1000)
+
+/**
  * \brief Returns a quasi ramdom number between 0 and max + offset.
  *
  * This function ORs timevals usec with sec, so it is not designed for
@@ -389,6 +483,29 @@ RUAPI void ruMsleep(unsigned long milliseconds);
 RUAPI unsigned long ruSemiRandomNumber(unsigned long max, long offset);
 
 /**
+ * \brief Return the current local time formatted in given buffer
+ * @param format format string for strftime
+ * @param len length of the given buffer must include room for the null terminator
+ * @param timeStr buffer where formatted null terminated  string will be place
+ * @param timesecs datestamp in seconds since epoch or 0 to use current time
+ * @return microsecond part of the current time or -1 on error;
+ */
+RUAPI int ruDateFormat(const char* format, rusize len, char* timeStr, long timesecs);
+
+/**
+ * \brief Compares 2 version strings
+ * This function compares version number strings that are made up of real numbers.
+ * The advantage is that the delimiter does not matter. It will work with, for
+ * example, 141.01.03, 141:1:3, or even 141A1P3. It also handles
+ * mismatched tails so that 141.1.3 will come before 141.1.3.1. Finally NULLs
+ * are also properly compared.
+ *
+ * @param ver1 First version to check
+ * @param ver2 Second version to check
+ * @return -1, 0 or 1 depending on whether ver1 is less equal or greater ver2
+ */
+RUAPI int ruVersionComp(trans_chars ver1, trans_chars ver2);
+/**
  * @}
  */
 
@@ -397,7 +514,7 @@ RUAPI unsigned long ruSemiRandomNumber(unsigned long max, long offset);
  * Some convenience Macros
  */
 
-// the ptr < (void*)1000 is feeble attempt at address validation
+// the ptr < (void*)0xffff is feeble attempt at address validation
 #define ruMakeTypeGetter(ctype, magic) \
 ctype* ctype ## Get(void* ptr, int32_t* code) { \
     ctype* ret = (ctype*) ptr; \
@@ -409,6 +526,10 @@ ctype* ctype ## Get(void* ptr, int32_t* code) { \
     } \
     ruRetWithCode(code, RUE_OK, ret); \
 }
+
+#define ruMakeTypeGetHeader(ctype) \
+ctype* ctype ## Get(void* ptr, int32_t* code)
+
 /** \endcond */
 
 #ifdef __cplusplus

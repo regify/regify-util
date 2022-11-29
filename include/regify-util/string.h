@@ -192,7 +192,16 @@ RUAPI void ruStrByteReplace(char* string, char search, char replace);
  * @param str2 The second string to compare to the first.
  * @return -1, 1 or 0 in case of them being equal or both NULL.
  */
-RUAPI int32_t ruStrcmp(const char* str1, const char* str2);
+RUAPI int32_t ruStrcmp(trans_chars str1, trans_chars str2);
+
+/**
+ * \brief Returns true when libc strcmp would return 0 but in a manner that gracefully
+ * handles NULL imputs.
+ * @param str1 The first string to check.
+ * @param str2 The second string to compare to the first.
+ * @return true if both strings are the same or NULL
+ */
+RUAPI bool ruStrEquals(trans_chars str1, trans_chars str2);
 
 /**
  * \brief Returns what libc strcasecmp would return but in a manner that gracefully
@@ -201,7 +210,7 @@ RUAPI int32_t ruStrcmp(const char* str1, const char* str2);
  * @param str2 The second string to compare to the first.
  * @return -1, 1 or 0 in case of them being equal or both NULL.
  */
-RUAPI int32_t ruStrcasecmp(const char* str1, const char* str2);
+RUAPI int32_t ruStrcasecmp(trans_chars str1, trans_chars str2);
 
 /**
  * \brief Whether given string starts with given prefix.
@@ -210,7 +219,7 @@ RUAPI int32_t ruStrcasecmp(const char* str1, const char* str2);
  * @param code (Optional) Stores \ref RUE_OK on success or regify error code.
  * @return Whether string starts with the prefix.
  */
-RUAPI bool ruStrStartsWith(const char* str, const char *prefix, int32_t *code);
+RUAPI bool ruStrStartsWith(trans_chars str, trans_chars prefix, int32_t *code);
 
 /**
  * \brief Whether given string ends with given suffix.
@@ -219,7 +228,7 @@ RUAPI bool ruStrStartsWith(const char* str, const char *prefix, int32_t *code);
  * @param code (Optional) Stores \ref RUE_OK on success or regify error code.
  * @return Whether string ends with the suffix.
  */
-RUAPI bool ruStrEndsWith(const char* str, const char *suffix, int32_t *code);
+RUAPI bool ruStrEndsWith(trans_chars str, trans_chars suffix, int32_t *code);
 
 /**
  * \brief Whether given string ends with given suffix ignoring case.
@@ -228,7 +237,7 @@ RUAPI bool ruStrEndsWith(const char* str, const char *suffix, int32_t *code);
  * @param code (Optional) Stores \ref RUE_OK on success or regify error code.
  * @return Whether string ends with the suffix.
  */
-RUAPI bool ruStrEndsCaseWith(const char* str, const char *suffix, int32_t *code);
+RUAPI bool ruStrEndsCaseWith(trans_chars str, trans_chars suffix, int32_t *code);
 
 /**
  * \brief Searches the first instance of needle in haystack up to len bytes.
@@ -333,7 +342,7 @@ RUAPI char* ruUtf8ToLower(const char *instr);
  * @param instr String to uppercase.
  * @return Uppercase representation of given string. Free with \ref ruFree.
  */
-RUAPI char* ruUtf8ToUpper(const char *instr);
+RUAPI alloc_chars ruUtf8ToUpper(trans_chars instr);
 
 /**
  * \brief Returns a copy of given string
@@ -374,7 +383,35 @@ RUAPI char* ruDupPrintf(const char* format, ...);
  * @param base a number between 2 and 36
  * @return The number result.
  */
-RUAPI int64_t ruStrToll(const char *instr, char **endptr, int base);
+RUAPI int64_t ruStrParseInt64(const char *instr, char **endptr, int base);
+
+/**
+ * \brief Like \ref ruStrParseInt64 but ignores overflow and trailing garbage
+ * @param numstr String to contain numerals to parse
+ * @return whatever strtoll returns
+ */
+RUAPI int64_t ruStrToInt64(const char* numstr);
+
+/**
+ * \brief Returns long from parsed string.
+ * Overflow or trailing non numeric characters invalidate the result.
+ *
+ * @param numstr String to contain numerals to parse
+ * @return The number on success or 0 with errno set.
+ */
+RUAPI long ruStrParseLong(const char* numstr);
+
+/**
+ * \brief Like \ref ruStrParseLong but ignores overflow and trailing garbage
+ * @param numstr String to contain numerals to parse
+ * @return whatever strtol returns
+ */
+RUAPI long ruStrToLong(const char* numstr);
+
+/**
+ * \brief Alias for \ref ruStrParseInt64
+ */
+#define ruStrToll ruStrParseInt64
 
 /**
  * \brief Removes trailing whitespace from string in place.
@@ -387,6 +424,13 @@ RUAPI int64_t ruStrToll(const char *instr, char **endptr, int base);
 RUAPI char* ruStrTrim(char* instr);
 
 /**
+ * \brief Checks whether given string has any content other than whitespace
+ * @param str String to inspect
+ * @return true if NULL empty or only white space
+ */
+RUAPI bool ruStrEmpty(trans_chars str);
+
+/**
  * \brief Removes the characters in chars from the string instr.
  * The given string should be on the heap, else a segfault may occur when trying
  * to modify something on the stack.
@@ -394,6 +438,7 @@ RUAPI char* ruStrTrim(char* instr);
  * @param chars Characters to remove from instr.
  */
 RUAPI void ruStripChars(char *instr, const char* chars);
+
 /**
  * @}
  */

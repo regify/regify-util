@@ -24,45 +24,18 @@
  */
 #include "lib.h"
 
-//ruMakeTypeGetter(ListElmt, ListElmtMagic)
-ruMakeTypeGetter(List, ListMagic)
-
-ListElmt* ListElmtGet(void* ptr, int32_t* code) {
-    ListElmt* ret = (ListElmt*) ptr;
-    if (!ptr) {
-        do {
-            if (code) { *code = 64; }
-            return ((void*) 0);
-        }
-        while (0);
-    }
-    if (ptr < (void*) 0xffff || 2304 != ret->type) {
-        do {
-            if (code) { *code = 77; }
-            return ((void*) 0);
-        }
-        while (0);
-    }
-    do {
-        if (code) { *code = 0; }
-        return ret;
-    }
-    while (0);
-}
+ruMakeTypeGetter(ListElmt, MagicListElmt)
+ruMakeTypeGetter(List, MagicList)
 
 List* ListNew(ruFreeFunc freefn) {
     List *list = ruMalloc0(1, List);
     list->destroy = freefn;
-    list->type = ListMagic;
+    list->type = MagicList;
+    list->mux = ruMutexInit();
     return list;
 }
 
-RUAPI ruList ruListNew(ruFreeFunc freefn) {
-    ruClearError();
-    return (ruList)ListNew(freefn);
-}
-
-void ListClear(List *list) {
+static void ListClear(List *list) {
     int32_t ret;
     // Remove each element.
     while (list->size > 0) {
@@ -76,33 +49,9 @@ void ListClear(List *list) {
 void ListFree(List *list) {
     ListClear(list);
     // No operations are allowed now, but clear the structure as a precaution.
-    memset(list, 0, sizeof(ruList));
+    list->mux = ruMutexFree(list->mux);
+    memset(list, 0, sizeof(List));
     ruFree(list);
-}
-
-RUAPI ruList ruListFree(ruList rl) {
-    ruClearError();
-    List *list = ListGet(rl, NULL);
-    if (!list) return NULL;
-    ListFree(list);
-    return NULL;
-}
-
-RUAPI int32_t ruListClear(ruList rl) {
-    ruClearError();
-    int32_t code;
-    List *list = ListGet(rl, &code);
-    if (code != RUE_OK) return code;
-    ListClear(list);
-    return RUE_OK;
-}
-
-RUAPI int32_t ruListAppendPtr(ruList rl, const void *data) {
-    ruClearError();
-    int32_t code;
-    ruListElmt rle = ruListTail(rl, &code);
-    if (code != RUE_OK) return code;
-    return ruListInsertAfter(rl, rle, data);
 }
 
 int32_t ListInsertAfter(List *list, ruListElmt rle, const void *data) {
@@ -112,7 +61,7 @@ int32_t ListInsertAfter(List *list, ruListElmt rle, const void *data) {
     ListElmt *new_element;
 
     new_element = ruMalloc0(1, ListElmt);
-    new_element->type = ListElmtMagic;
+    new_element->type = MagicListElmt;
     new_element->data = (void *)data;
     if (element == NULL) {
         /* Handle insertion at the head of the list. */
@@ -128,14 +77,6 @@ int32_t ListInsertAfter(List *list, ruListElmt rle, const void *data) {
     /* Adjust the size of the list to account for the inserted element. */
     list->size++;
     return RUE_OK;
-}
-
-RUAPI int32_t ruListInsertAfter(ruList rl, ruListElmt rle, const void *data) {
-    ruClearError();
-    int32_t code;
-    List *list = ListGet(rl, &code);
-    if (!list) return code;
-    return ListInsertAfter(list, rle, data);
 }
 
 void* ListRemoveAfter(List *list, ruListElmt rle, int32_t *code) {
@@ -168,16 +109,90 @@ void* ListRemoveAfter(List *list, ruListElmt rle, int32_t *code) {
         if (element->next == NULL) list->tail = element;
     }
     /* Free the storage allocated by the abstract data type. */
+    memset(old_element, 0, sizeof(ListElmt));
     free(old_element);
     /* Adjust the size of the list to account for the removed element. */
     list->size--;
     ruRetWithCode(code, RUE_OK, data);
 }
 
+RUAPI ruList ruListNew(ruFreeFunc freefn) {
+    ruClearError();
+    return (ruList)ListNew(freefn);
+}
+
+RUAPI ruList ruListFree(ruList rl) {
+    ruClearError();
+    List *list = ListGet(rl, NULL);
+    if (!list) return NULL;
+    list->doQuit = true;
+    ruMutexLock(list->mux);
+    ruMutexUnlock(list->mux);
+    ListFree(list);
+    return NULL;
+}
+
+RUAPI int32_t ruListClear(ruList rl) {
+    ruClearError();
+    int32_t code;
+    List *list = ListGet(rl, &code);
+    if (code != RUE_OK) return code;
+    if (list->doQuit) return RUE_USER_ABORT;
+    ruMutexLock(list->mux);
+    if (list->doQuit) {
+        ruMutexUnlock(list->mux);
+        return RUE_USER_ABORT;
+    }
+    ListClear(list);
+    ruMutexUnlock(list->mux);
+    return RUE_OK;
+}
+
+RUAPI int32_t ruListAppendPtr(ruList rl, const void *data) {
+    ruClearError();
+    int32_t code;
+    List *list = ListGet(rl, &code);
+    if (!list) return code;
+    if (list->doQuit) return RUE_USER_ABORT;
+    ruMutexLock(list->mux);
+    if (list->doQuit) {
+        ruMutexUnlock(list->mux);
+        return RUE_USER_ABORT;
+    }
+    ruListElmt rle = list->tail;
+    code = ListInsertAfter(list, rle, data);
+    ruMutexUnlock(list->mux);
+    return code;
+}
+
+RUAPI int32_t ruListInsertAfter(ruList rl, ruListElmt rle, const void *data) {
+    ruClearError();
+    int32_t code;
+    List *list = ListGet(rl, &code);
+    if (!list) return code;
+    if (list->doQuit) return RUE_USER_ABORT;
+    ruMutexLock(list->mux);
+    if (list->doQuit) {
+        ruMutexUnlock(list->mux);
+        return RUE_USER_ABORT;
+    }
+    code = ListInsertAfter(list, rle, data);
+    ruMutexUnlock(list->mux);
+    return code;
+}
+
 RUAPI void* ruListRemoveAfter(ruList rl, ruListElmt rle, int32_t *code) {
     List *list = ListGet(rl, code);
     if (!list) return NULL;
-    return ListRemoveAfter(list, rle, code);
+    if (list->doQuit) ruRetWithCode(code, RUE_USER_ABORT, NULL);
+    ruMutexLock(list->mux);
+    if (list->doQuit) {
+        ruMutexUnlock(list->mux);
+        ruRetWithCode(code, RUE_USER_ABORT, NULL);
+    }
+    void* ret = ListRemoveAfter(list, rle, code);
+    ruMutexUnlock(list->mux);
+    return ret;
 }
 
 RUAPI int32_t ruListSize(ruList rl, int32_t *code) {
@@ -187,23 +202,17 @@ RUAPI int32_t ruListSize(ruList rl, int32_t *code) {
     return list->size;
 }
 
-ListElmt* ListHead(List *list) {
-    if (!list->head) return NULL;
-    return list->head;
-}
-
 RUAPI ruListElmt ruListHead(ruList rl, int32_t* code) {
     ruClearError();
     List *list = ListGet(rl, code);
     if (!list) return NULL;
-    return ListHead(list);
+    return list->head;
 }
 
 RUAPI ruListElmt ruListTail(ruList rl, int32_t* code) {
     ruClearError();
     List *list = ListGet(rl, code);
     if (!list) return NULL;
-    if (!list->tail) return NULL;
     return list->tail;
 }
 
@@ -212,10 +221,17 @@ RUAPI bool ruListElmtIsHead(ruList rl, ruListElmt re, int32_t* code) {
     List *list = ListGet(rl, code);
     if (!list) return false;
     if (!list->head) return false;
+    bool ret = false;
+    if (list->doQuit) ruRetWithCode(code, RUE_USER_ABORT, ret);
+    ruMutexLock(list->mux);
+    if (list->doQuit) {
+        ruMutexUnlock(list->mux);
+        ruRetWithCode(code, RUE_USER_ABORT, ret);
+    }
     ListElmt *el = ListElmtGet(re, code);
-    if (!el) return false;
-    if (el == list->head) return true;
-    return false;
+    if (el && el == list->head) ret = true;
+    ruMutexUnlock(list->mux);
+    return ret;
 }
 
 RUAPI bool ruListElmtIsTail(ruListElmt re, int32_t* code) {
@@ -256,8 +272,73 @@ RUAPI void* ruListIdxElmtData(ruList rl, int32_t index, int32_t* code) {
     List *list = ListGet(rl, code);
     if (!list) return NULL;
     if (index >= list->size) ruRetWithCode(code, RUE_INVALID_PARAMETER, NULL);
+    if (list->doQuit) ruRetWithCode(code, RUE_USER_ABORT, NULL);
+    ruMutexLock(list->mux);
+    if (list->doQuit) {
+        ruMutexUnlock(list->mux);
+        ruRetWithCode(code, RUE_USER_ABORT, NULL);
+    }
     ListElmt *rle = list->head;
     while(--index >= 0 && rle) rle = rle->next;
+    ruMutexUnlock(list->mux);
     if (!rle) ruRetWithCode(code, RUE_OK, NULL);
     ruRetWithCode(code, RUE_OK, rle->data);
 }
+
+RUAPI void* ruListTryPop(ruList rl, uint32_t timeoutMs, int32_t *code) {
+    List *list = ListGet(rl, code);
+    if (!list) return NULL;
+    void* res = NULL;
+    bool done = false;
+    int delay = 50;
+    int try = delay;
+    uint64_t end = ruTimeMs()+timeoutMs;
+    do {
+        if (list->doQuit) ruRetWithCode(code, RUE_USER_ABORT, NULL);
+        if (!ruMutexTryLock(list->mux)) {
+            ruUsleep(1);
+            try--;
+            if (try) continue;
+            try = delay;
+        } else {
+            if (list->doQuit) {
+                ruMutexUnlock(list->mux);
+                ruRetWithCode(code, RUE_USER_ABORT, NULL);
+            }
+            if (list->size) {
+                res = ListRemoveAfter(list, NULL, code);
+                done = true;
+            }
+            ruMutexUnlock(list->mux);
+            if (done) return res;
+            ruUsleep(delay);
+            try = delay;
+        }
+    } while (end > ruTimeMs());
+    ruRetWithCode(code, RUE_FILE_NOT_FOUND, NULL);
+}
+
+RUAPI alloc_chars ruListJoin(ruList rl, trans_chars delim, int32_t* code) {
+    List *list = ListGet(rl, code);
+    if (!list) return NULL;
+
+    if (!delim) delim = "";
+    ruString buf = ruStringNew("");
+    ruIterator li = ruListIter(list);
+    bool started = false;
+
+    for(char* item = ruIterCurrent(li, char*);
+        li; item = ruIterNext(li, char*)) {
+        if (started) {
+            ruStringAppendf(buf, "%s%s", delim, item);
+        } else {
+            ruStringAppendf(buf, "%s", item);
+            started = true;
+        }
+    }
+
+    alloc_chars out = ruStringGetCString(buf);
+    buf = ruStringFree(buf, true);
+    ruRetWithCode(code, RUE_OK, out);
+}
+

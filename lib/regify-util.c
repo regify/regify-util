@@ -134,6 +134,59 @@ RUAPI unsigned long ruSemiRandomNumber(unsigned long max, long offset) {
     return (value % max) + offset;
 }
 
+RUAPI int ruDateFormat(const char* format, rusize len, char* timeStr, long timesecs) {
+    if (!format || ! len || !timeStr) return -1;
+    struct tm tm;
+    ruTimeVal tv;
+    if (timesecs) {
+        tv.sec = timesecs;
+        tv.usec = 0;
+    } else {
+        // https://stackoverflow.com/questions/3673226/how-to-print-time-in-format-2009-08-10-181754-811
+        ruGetTimeVal(&tv);
+    }
+
+#ifdef _WIN32
+    _localtime32_s(&tm, &tv.sec);
+#else
+    localtime_r(&tv.sec, &tm);
+#endif
+    strftime(timeStr, len, format, &tm);
+    return (int) tv.usec;
+}
+
+RUAPI int ruVersionComp(trans_chars ver1, trans_chars ver2) {
+    // Cope with NULLs
+    if (!ver1 && !ver2) return 0;
+    if (!ver1) return -1;
+    if (!ver2) return 1;
+    // Courtesy
+    // https://stackoverflow.com/questions/15057010/comparing-version-numbers-in-c/15059401#15059401
+    // loop through each level of the version string
+    while (true) {
+        // extract leading version numbers
+        char* tail1;
+        char* tail2;
+        unsigned long v1 = strtoul(ver1, &tail1, 10 );
+        unsigned long v2 = strtoul(ver2, &tail2, 10 );
+        // if numbers differ, then set the result
+        if (v1 < v2) return -1;
+        if (v1 > v2) return 1;
+
+        // if numbers are the same, go to next level
+        ver1 = tail1;
+        ver2 = tail2;
+        // if we reach the end of both, then they are identical
+        if (*ver1 == '\0' && *ver2 == '\0') return 0;
+        // if we reach the end of one only, it is the smaller
+        if (*ver1 == '\0') return -1;
+        if (*ver2 == '\0') return 1;
+        //  not at end ... so far they match so keep going
+        ver1++;
+        ver2++;
+    }
+}
+
 #if defined(_WIN32)
 RUAPI int32_t ruGetVolumeInfo(const char* mountPoint,
         u_long* serialNo, u_long* maxCompLen, u_long* fsFlags,

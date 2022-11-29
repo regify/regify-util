@@ -107,13 +107,16 @@ void ruClearError(void);
 #define RU_MAX_UINT64	0xffffffffffffffffL
 
 // Type checking is done with the first element being uint64_t magic must be < u_int16_t
-#define MuxMagic        2301
-#define StringMagic     2302
-#define ListElmtMagic   2304
-#define ListMagic       2305
-#define MapMagic        2306
-#define MagicThr        2307
-#define MagicIni        2308
+#define MagicMux            2301
+#define MagicString         2302
+#define MagicFileKvStore    2303
+#define MagicListElmt       2304
+#define MagicList           2305
+#define MagicMap            2306
+#define MagicThr            2307
+#define MagicIni            2308
+#define KvStoreMagic        2309
+// cleaner.c #define MagicCleaner 2310
 
 /*
  *  Mutex
@@ -123,6 +126,7 @@ void ruClearError(void);
 typedef HANDLE ruMutex_t;
 #else
 #include <pthread.h>
+#include <sched.h>
 typedef pthread_mutex_t ruMutex_t;
 #endif
 typedef struct mux_ {
@@ -173,12 +177,14 @@ typedef struct List_ {
     void               (*destroy)(void *data);
     ListElmt           *head;
     ListElmt           *tail;
+    // optional thread safety
+    ruMutex mux;
+    bool doQuit;    // flag to initiate map shutdown
 } List;
 
 List* ListNew(void (*destructor)(void *data));
 void ListFree(List *list);
 void* ListRemoveAfter(List *list, ruListElmt rle, int32_t *code);
-ListElmt* ListHead(List *list);
 int32_t ListInsertAfter(List *list, ruListElmt rle, const void *data);
 
 /*

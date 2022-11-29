@@ -24,7 +24,7 @@
  */
 #include "lib.h"
 
-ruMakeTypeGetter(Map, MapMagic)
+ruMakeTypeGetter(Map, MagicMap)
 
 typedef struct {
     char *key;
@@ -82,7 +82,7 @@ RUAPI ruMap ruMapNew(u_int32_t (*hash)(const void *key),
     if (!hash || !match) return NULL;
 
     Map *mp = ruMalloc0(1, Map);
-    mp->type = MapMagic;
+    mp->type = MagicMap;
 
     // default start value?
     if (!expectedSize) expectedSize = 10;
@@ -135,7 +135,7 @@ static int32_t MapPut(Map* mp, void *key, void *val) {
     /* Hash the key. */
     mp->iterActive = false;
     int32_t bucket = mp->hash(key) % mp->buckets;
-    for (ListElmt *le = ListHead(mp->table[bucket]); le != NULL; le = le->next) {
+    for (ListElmt *le = mp->table[bucket]->head; le != NULL; le = le->next) {
         kv* item = le->data;
         if (mp->match(key, item->key)) {
             // update the exisiting item
@@ -187,7 +187,7 @@ static int32_t MapRemove(Map *mp, void *key, void **val) {
     mp->iterActive = false;
     /* Search for the data in the bucket. */
     prev = NULL;
-    for (ListElmt *le = ListHead(mp->table[bucket]); le != NULL; le = le->next) {
+    for (ListElmt *le = mp->table[bucket]->head; le != NULL; le = le->next) {
         kv* item = le->data;
         if (mp->match(key, item->key)) {
             /* Remove the data from the bucket.*/
@@ -234,7 +234,7 @@ static int32_t MapGetData(Map *mp, void *key, void **value) {
     /* Hash the key. */
     int32_t bucket = mp->hash(key) % mp->buckets;
     /* Search for the data in the bucket. */
-    for (ListElmt *le = ListHead(mp->table[bucket]); le != NULL; le = le->next) {
+    for (ListElmt *le = mp->table[bucket]->head; le != NULL; le = le->next) {
         kv* item = le->data;
         if (mp->match(key, item->key)) {
             /* Pass back the data from the table. */
@@ -293,7 +293,7 @@ static int32_t MapNextSet(Map *mp, void **key, void **value) {
     if (!mp->iterElmt) {
         do {
             if (mp->iterBucket >= mp->buckets) break;
-            mp->iterElmt = ListHead(mp->table[mp->iterBucket]);
+            mp->iterElmt = mp->table[mp->iterBucket]->head;
             mp->iterBucket++;
         } while(!mp->iterElmt);
     }

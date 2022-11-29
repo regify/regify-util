@@ -65,18 +65,36 @@ typedef void* (*ruStartFunc) (void* context);
  * Creates a new thread
  * @param start The start function
  * @param context The start function's argument.
- * @return The thread id or 0 on failure in which case call \ref ruLastError for details.
+ * @return The thread identifier or NULL on failure in which case call \ref ruLastError for details.
  */
 RUAPI ruThread ruThreadCreate(ruStartFunc start, void* context);
 
 /**
- *
- * @param tid thread id to free
- * @return NULL
+ * \brief Creates a new thread with background priority
+ * @param start The start function
+ * @param context The start function's argument.
+ * @return The thread identifier or NULL on failure in which case call \ref ruLastError for details.
  */
-RUAPI ruThread ruThreadFree(ruThread tid);
+RUAPI ruThread ruThreadCreateBg(ruStartFunc start, void* context);
 
+/**
+ * \brief Whether thraed has finished and is joinable
+ * @param tid Thread id of thread to join.
+ * @param code Optional where error code will be stored
+ * @return true if joinable
+ */
 RUAPI bool ruThreadFinished(ruThread tid, int32_t* code);
+
+/**
+ * Waits for given thread to terminate for tosecs seconds and kill it after that
+ *
+ * @param tid Thread id of thread to join.
+ * @param tosecs Number of seconds to wait before killing the thread.
+ * @param exitVal Where the threads return value will be store if not NULL and
+ *                thread wasn't killed.
+ * @return false if thread timed out
+ */
+RUAPI bool ruThreadWait(ruThread tid, long tosecs, void** exitVal);
 
 /**
  * Waits for given thread to terminate
@@ -103,6 +121,13 @@ typedef void* ruMutex;
  * @return The new mutex or NULL in which case call \ref ruLastError for details.
  */
 RUAPI ruMutex ruMutexInit(void);
+
+/**
+ * \brief Tries to aquire a lock for the given \ref ruMutex without blocking.
+ * @param m The mutex to lock.
+ * @return false if the mutex was locked. If true the acquired lock must be unlocked after use.
+ */
+RUAPI bool ruMutexTryLock(ruMutex m);
 
 /**
  * \brief Aquire a lock for the given \ref ruMutex blocking until it is given.

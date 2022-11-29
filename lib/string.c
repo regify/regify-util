@@ -25,7 +25,7 @@
 /*
  *  ruString class
  */
-ruMakeTypeGetter(String, StringMagic)
+ruMakeTypeGetter(String, MagicString)
 
 static void maybeAdd(String *str, rusize ilen) {
     rusize newlen = str->idx + ilen + 1;
@@ -103,7 +103,7 @@ RUAPI ruString ruStringNewn(const char* instr, rusize size) {
     }
     if (size > len) len = size;
     String *str = ruMalloc0(1, String);
-    str->type = StringMagic;
+    str->type = MagicString;
     str->start = ruMalloc0(len, char);
     if (instr) {
         strncpy(str->start, instr, slen);
@@ -120,7 +120,7 @@ RUAPI ruString ruStringNewf(const char* format, ...) {
         return NULL;
     }
     String *str = ruMalloc0(1, String);
-    str->type = StringMagic;
+    str->type = MagicString;
     va_start (args, format);
     int32_t size  = vsnprintf(str->start, 0, format, args);
     va_end (args);
@@ -298,7 +298,7 @@ RUAPI char* ruStrdup(const char* str) {
     return ret;
 }
 
-RUAPI char* ruStrndup(const char* str, rusize len) {
+RUAPI char* ruStrndup(trans_chars str, rusize len) {
     ruClearError();
     if (!str) return NULL;
     rusize inlen = strlen(str);
@@ -308,9 +308,9 @@ RUAPI char* ruStrndup(const char* str, rusize len) {
     return ret;
 }
 
-RUAPI int32_t ruStrcmp(const char* str1, const char* str2) {
+RUAPI int32_t ruStrcmp(trans_chars str1, trans_chars str2) {
     ruClearError();
-    if (!str1 && !str2) return 0;
+    if (str1 == str2) return 0;      // same pointer both NULL
     if (!str1) return -1;
     if (!str2) return 1;
     int32_t ret = strcmp(str1, str2);
@@ -318,7 +318,14 @@ RUAPI int32_t ruStrcmp(const char* str1, const char* str2) {
     return ret > 0 ? 1 : -1;
 }
 
-RUAPI int32_t ruStrcasecmp(const char* str1, const char* str2) {
+RUAPI bool ruStrEquals(trans_chars str1, trans_chars str2) {
+    ruClearError();
+    if (str1 == str2) return true;      // same pointer both NULL
+    if (!str1 || !str2) return false;   // one NULL
+    return strcmp(str1, str2) == 0;     // same string
+}
+
+RUAPI int32_t ruStrcasecmp(trans_chars str1, trans_chars str2) {
     ruClearError();
     if (!str1 && !str2) return 0;
     if (!str1) return -1;
@@ -328,7 +335,7 @@ RUAPI int32_t ruStrcasecmp(const char* str1, const char* str2) {
     return ret > 0 ? 1 : -1;
 }
 
-RUAPI bool ruStrStartsWith(const char* str, const char *prefix, int32_t *code) {
+RUAPI bool ruStrStartsWith(trans_chars str, trans_chars prefix, int32_t *code) {
     ruClearError();
     if (!str || !prefix) ruRetWithCode(code, RUE_PARAMETER_NOT_SET, false);
 
@@ -495,7 +502,7 @@ RUAPI char* ruUtf8ToUpper(const char *instr) {
     return utf8SwitchCase(instr, true);
 }
 
-RUAPI int64_t ruStrToll(const char *start, char **endptr, int base) {
+RUAPI int64_t ruStrParseInt64(const char *start, char **endptr, int base) {
     ruClearError();
     bool negative = false;
     bool overflow;
@@ -505,6 +512,7 @@ RUAPI int64_t ruStrToll(const char *start, char **endptr, int base) {
     char *s, *save;
     uchar c;
     char *ptr = (char*)start;
+    errno = 0;
 
     if (!start || base == 1 || base > 36) {
         errno = EINVAL;
@@ -603,12 +611,48 @@ RUAPI int64_t ruStrToll(const char *start, char **endptr, int base) {
     return 0;
 }
 
+RUAPI int64_t ruStrToInt64(const char* numstr) {
+    return ruStrParseInt64(numstr, NULL, 10);
+}
+
+static long parseLong(const char* numstr, bool strict) {
+    char* end = (char*)numstr;
+    int64_t num = ruStrParseInt64(numstr, &end, 10);
+    if (!strict) return (long)num;
+    if (!numstr || *end) return 0;
+    if (sizeof(long) < sizeof(int64_t)) {
+        int64_t lng = (long)num;
+        if (lng < num) {
+            errno = ERANGE;
+        }
+    }
+    if (errno == ERANGE) return 0;
+    return num;
+}
+
+RUAPI long ruStrParseLong(const char* numstr) {
+    return parseLong(numstr,true);
+}
+
+RUAPI long ruStrToLong(const char* numstr) {
+    return parseLong(numstr,false);
+}
+
 RUAPI char* ruStrTrim(char* instr) {
     if (instr) {
         char* p = instr + strlen(instr);
         while (p > instr && isspace((unsigned char) (*--p))) *p = '\0';
     }
     return instr;
+}
+
+RUAPI bool ruStrEmpty(trans_chars str) {
+    if (!str) return true;
+    while (*str) {
+        if (!isspace(*str)) return false;
+        str++;
+    }
+    return true;
 }
 
 RUAPI void ruStripChars(char *instr, const char* chars) {

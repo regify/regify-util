@@ -94,6 +94,11 @@ typedef int32_t (*kvlist) (struct KvStore_* kvs, const char* key,
  * implementation.
  */
 typedef struct KvStore_ {
+/** \cond noworry */
+    // internal
+    u_int64_t type;
+    ruFreeFunc ctxFree;
+/** \endcond */
     /** \brief The method that will be called to set data. */
     kvset set;
     /** \brief The method that will be called to retrieve data. */
@@ -102,15 +107,7 @@ typedef struct KvStore_ {
     kvlist list;
     /** \brief A user defined context that will be passed to all given methods. */
     void* ctx;
-/** \cond noworry */
-    // internal
-    ruFreeFunc ctxFree;
-    u_int32_t type;
-/** \endcond */
 } KvStore;
-/** \cond noworry */
-#define KvStoreMagic 23044203
-/** \endcond */
 
 /**
  * \brief Returns a generic \ref KvStore interface.

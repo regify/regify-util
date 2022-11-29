@@ -68,13 +68,16 @@ bool ruIsunreserved(unsigned char in) {
 }
 
 RUAPI bool ruIsInt64(const char* numstr) {
+    if (!numstr) {
+        errno = EFAULT;
+        return false;
+    }
     errno = 0;
     char* end = (char*)numstr;
     strtoll(numstr, &end, 10);
     if (*end || errno == ERANGE) return false;
     return true;
 }
-
 
 RUAPI int32_t ruGetTimeVal(ruTimeVal *result) {
     ruClearError();
@@ -101,6 +104,25 @@ RUAPI int32_t ruGetTimeVal(ruTimeVal *result) {
     return RUE_OK;
 }
 
+RUAPI long ruTimeSec(void) {
+    ruClearError();
+    ruTimeVal tv;
+    ruGetTimeVal(&tv);
+    return tv.sec;
+}
+
+RUAPI long ruTimeLocalToUtc(long stamp) {
+    struct tm lt;
+    localtime_r(&stamp, &lt);
+    return stamp - lt.tm_gmtoff;
+}
+
+RUAPI long ruTimeUtcToLocal(long stamp) {
+    struct tm lt;
+    localtime_r(&stamp, &lt);
+    return stamp + lt.tm_gmtoff;
+}
+
 RUAPI uint64_t ruTimeMs(void) {
     ruClearError();
     ruTimeVal tv;
@@ -119,8 +141,8 @@ RUAPI uint64_t ruTimeUs(void) {
     return micros + tv.usec;
 }
 
-RUAPI char* ruGetLanguage(void) {
-    char* lc = setlocale(LC_ALL, NULL);
+RUAPI alloc_chars ruGetLanguage(void) {
+    alloc_chars lc = setlocale(LC_ALL, NULL);
     if (!lc) return NULL;
     return ruStrndup(lc, 2);
 }

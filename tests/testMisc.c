@@ -147,6 +147,9 @@ START_TEST ( misc ) {
     fail_unless(want == is, retText, test, want, is);
 
     want = false;
+    is = ruIsInt64(NULL);
+    fail_unless(want == is, retText, test, want, is);
+
     is = ruIsInt64(" *123");
     fail_unless(want == is, retText, test, want, is);
 
@@ -164,6 +167,59 @@ START_TEST ( misc ) {
     ret = ruSemiRandomNumber(11, -6);
     fail_if(ret < -6, retText, test, -6, ret);
     fail_if(ret > 5, retText, test, 5, ret);
+
+    test = "ruDateFormat";
+    char timeStr[20];
+    rusize stlen = sizeof(timeStr);
+    memset(timeStr, 0, stlen);
+    const char* format = "%Y-%m-%d %H:%M:%S";
+    ret = ruDateFormat(NULL, stlen, timeStr, 0);
+    ck_assert_str_eq(timeStr, "");
+
+    ret = ruDateFormat(format, 0, timeStr, 0);
+    ck_assert_str_eq(timeStr, "");
+
+    ret = ruDateFormat(format, stlen, NULL, 0);
+    ck_assert_str_eq(timeStr, "");
+
+    ret = ruDateFormat(format, stlen, timeStr, 0);
+    fail_unless(timeStr[2] == '2', retText, test, timeStr[2], '2');
+    int alen = strlen(timeStr)+1;
+    fail_unless(alen == stlen, retText, test, alen, stlen);
+
+    ret = ruDateFormat(format, stlen, timeStr, 1667912973);
+    ck_assert_str_eq(timeStr, "2022-11-08 14:09:33");
+
+    test = "ruVersionComp";
+    exp = 0;
+    ret = ruVersionComp(NULL, NULL);
+    fail_unless(exp == ret, retText, test, exp, ret);
+
+    ret = ruVersionComp("01", "1");
+    fail_unless(exp == ret, retText, test, exp, ret);
+
+    ret = ruVersionComp("10.11.23-12324", "10.011.23-012324");
+    fail_unless(exp == ret, retText, test, exp, ret);
+
+    exp = -1;
+    ret = ruVersionComp(NULL, "0");
+    fail_unless(exp == ret, retText, test, exp, ret);
+
+    ret = ruVersionComp("09", "10");
+    fail_unless(exp == ret, retText, test, exp, ret);
+
+    ret = ruVersionComp("10.11.23-12324", "10.011.23-112324");
+    fail_unless(exp == ret, retText, test, exp, ret);
+
+    exp = 1;
+    ret = ruVersionComp("1", NULL);
+    fail_unless(exp == ret, retText, test, exp, ret);
+
+    ret = ruVersionComp("109", "10");
+    fail_unless(exp == ret, retText, test, exp, ret);
+
+    ret = ruVersionComp("10.11.24-12324", "10.011.23-112324");
+    fail_unless(exp == ret, retText, test, exp, ret);
 
     test = "ruGetLanguage";
     char *lang = ruGetLanguage();

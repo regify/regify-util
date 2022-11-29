@@ -197,12 +197,12 @@ RUAPI bool ruMapHasKey(ruMap rm, void *key, int32_t *code);
  *
  * Example:
  * ~~~~~{.c}
- * int ret;
- * void *key = NULL, *val = NULL;
- * for (ret = ruMapFirst(map, &key, &val); ret == RUE_OK;
- *     ret = ruMapNext(map, &key, &val)) {
- *     // work with key and/or val
- * }
+   int ret;
+   void *key = NULL, *val = NULL;
+   for (ret = ruMapFirst(map, &key, &val); ret == RUE_OK;
+       ret = ruMapNext(map, &key, &val)) {
+       // work with key and/or val
+   }
  * ~~~~~
  *
  * NOTE: Either key or value must be set.

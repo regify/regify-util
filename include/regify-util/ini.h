@@ -25,13 +25,17 @@
  *
  * Example:
  * ~~~~~{.c}
- * ruIni cf = NULL;
- * // We are going to ignore some return codes for brevity.
- * int32_t ret = ruIniRead("/path/to/file.ini", &cf);
- * const char* name = NULL;
- * ret = ruIniGet(cf, NULL, "username", &name);
- * printf("Username: %s", name);
- * cf = ruIniFree(cf);
+   ruIni cf = NULL;
+   const char* inipath = "/path/to/file.ini";
+   // We are going to ignore some return codes for brevity.
+   int32_t ret = ruIniRead(inipath, &cf);
+   const char* name = NULL;
+   ret = ruIniGet(cf, NULL, "username", &name);
+   printf("Username: %s", name);
+   // make some changes
+   ret = ruIniSet(cf, NULL, "password", "secret");
+   ret = ruIniWrite(cf, inipath);
+   cf = ruIniFree(cf);
  * ~~~~~
  *
  * @{
