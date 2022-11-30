@@ -113,7 +113,7 @@ if(NOT WASM)
     target_compile_definitions(${CLEANER} PRIVATE CLEANER_ONLY )
     install(TARGETS ${CLEANER}
             EXPORT ${NAME}Targets
-            DESTINATION lib
+            DESTINATION ${LIB_FOLDER}
             )
 endif()
 
@@ -125,10 +125,10 @@ if(NOT WIN OR MINGW)
 endif()
 install(TARGETS ${staticlib}
         EXPORT ${NAME}Targets
-        DESTINATION lib
+        DESTINATION ${LIB_FOLDER}
         )
 if(INSTALL_ICU AND INCLUDE_ICU)
-    install(FILES ${ICU_ARCHIVES} DESTINATION lib)
+    install(FILES ${ICU_ARCHIVES} DESTINATION ${LIB_FOLDER})
 endif()
 
 # regify-util.so
@@ -137,6 +137,6 @@ if(BUILD_SHARED_LIBS)
     doLink(${sharedlib} ON)
     install(TARGETS ${sharedlib}
             EXPORT ${NAME}Targets
-            DESTINATION lib
+            DESTINATION ${LIB_FOLDER}
             )
 endif()

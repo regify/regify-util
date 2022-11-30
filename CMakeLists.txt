@@ -22,6 +22,7 @@
 set(VERSION 1.3.0 CACHE STRING "The package version")
 set(REVISION 0 CACHE STRING "The build revision")
 set(ICU_PREFIX "" CACHE STRING "Prefix path under which to find ICU")
+set(LIB_FOLDER "lib" CACHE STRING "Folder under prefix where the libs are stored")
 option(BUILD_SHARED_LIBS "Whether to build dynamic libraries" OFF)
 option(INCLUDE_ICU "Whether to include ICU statically" ON)
 option(INSTALL_ICU "Whether this configuration installs its included ICU dependency. Used for packaging" OFF)
@@ -123,7 +124,7 @@ if ("${ICU_PREFIX}" MATCHES "^$")
 else()
     # where static dependencies are found
     set(ICU_INCLUDE_DIRS ${ICU_PREFIX}/include)
-    set(ICU_LIBRARY_DIRS ${ICU_PREFIX}/lib)
+    set(ICU_LIBRARY_DIRS ${ICU_PREFIX}/${LIB_FOLDER})
     if(WIN AND NOT MINGW)
         if(BUILD_SHARED_LIBS AND NOT INCLUDE_ICU)
             set(ICU_LIBRARIES icuio icuin icuuc icudt)
@@ -152,7 +153,7 @@ include(CMakePackageConfigHelpers)
 # generate the config file that is includes the exports
 configure_package_config_file(${CMAKE_CURRENT_SOURCE_DIR}/resources/Config.cmake.in
         "${CMAKE_CURRENT_BINARY_DIR}/${NAME}Config.cmake"
-        INSTALL_DESTINATION "lib/cmake/${NAME}"
+        INSTALL_DESTINATION "${LIB_FOLDER}/cmake/${NAME}"
         NO_SET_AND_CHECK_MACRO
         NO_CHECK_REQUIRED_COMPONENTS_MACRO )
 write_basic_package_version_file(
@@ -164,12 +165,12 @@ install(DIRECTORY include/ DESTINATION include)
 install(FILES
         ${CMAKE_CURRENT_BINARY_DIR}/${NAME}Config.cmake
         ${CMAKE_CURRENT_BINARY_DIR}/${NAME}ConfigVersion.cmake
-        DESTINATION lib/cmake/${NAME}
+        DESTINATION ${LIB_FOLDER}/cmake/${NAME}
         )
 install(EXPORT ${NAME}Targets
         FILE ${NAME}Targets.cmake
         NAMESPACE RegifyUtil::
-        DESTINATION lib/cmake/${NAME} )
+        DESTINATION ${LIB_FOLDER}/cmake/${NAME} )
 if(NOT MSVC AND NOT WASM)
     if(NOT INCLUDE_ICU)
         dojoin("-l${ICU_LIBRARIES}" " -l" ICU_LIBS)
@@ -178,7 +179,7 @@ if(NOT MSVC AND NOT WASM)
             "${PROJECT_SOURCE_DIR}/resources/${NAME}.pc.in"
             "${PROJECT_BINARY_DIR}/${NAME}.pc"
             @ONLY)
-    install(FILES ${PROJECT_BINARY_DIR}/${NAME}.pc DESTINATION lib/pkgconfig)
+    install(FILES ${PROJECT_BINARY_DIR}/${NAME}.pc DESTINATION ${LIB_FOLDER}/pkgconfig)
 endif()
 
 # documetation & packaging
