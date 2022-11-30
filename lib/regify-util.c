@@ -101,10 +101,10 @@ RUAPI void* ruMallocSize(rusize count, rusize ofsize) {
     return p;
 }
 
-RUAPI void* ruReallocSize(void *buf, rusize count, rusize ofsize) {
+RUAPI alloc_ptr ruReallocSize(alloc_ptr buf, rusize count, rusize ofsize) {
     ruClearError();
     if (!count || !ofsize || !buf) return NULL;
-    void *p = realloc(buf, count*ofsize);
+    alloc_ptr p = realloc(buf, count*ofsize);
     if (!p) {
         ruCritLogf("failed to reallocate %lu bytes", count*ofsize);
         ruAbort();
@@ -112,10 +112,10 @@ RUAPI void* ruReallocSize(void *buf, rusize count, rusize ofsize) {
     return p;
 }
 
-RUAPI void* ruMemDup(void *buf, rusize size) {
+RUAPI alloc_ptr ruMemDup(trans_ptr buf, rusize size) {
     ruClearError();
     if (!size || !buf) return NULL;
-    void *dest = ruMallocSize(size, 1);
+    alloc_ptr dest = ruMallocSize(size, 1);
     memcpy(dest, buf, size);
     return dest;
 }

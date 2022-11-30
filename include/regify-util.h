@@ -264,7 +264,7 @@ typedef struct {
  * \ingroup memory
  * @param p resource to be freed and NULLed if not NULL already
  */
-#define ruFree(p) ruMacStart { if(p) { free((void*)p); } p = NULL; } ruMacEnd
+#define ruFree(p) ruMacStart { if(p) { free((void*)p); p = NULL; } } ruMacEnd
 
 /**
  * \brief Convenience macro for setting a potentially passed in result pointer
@@ -331,7 +331,7 @@ RUAPI const char* ruLastError(void);
  * @return Guarateed to return the requested memory block or the process will
  *         terminate.
  */
-RUAPI void* ruMallocSize(rusize count, rusize ofsize);
+RUAPI alloc_ptr ruMallocSize(rusize count, rusize ofsize);
 
 /**
  * \brief Allocate and zero requested memory.
@@ -350,7 +350,7 @@ RUAPI void* ruMallocSize(rusize count, rusize ofsize);
  * @return Guarateed to return the requested memory block or the process will
  *         terminate.
  */
-RUAPI void* ruReallocSize(void *buf, rusize count, rusize ofsize);
+RUAPI alloc_ptr ruReallocSize(alloc_ptr buf, rusize count, rusize ofsize);
 
 /**
  * \brief Reallocate requested memory without zeroing.
@@ -370,7 +370,7 @@ RUAPI void* ruReallocSize(void *buf, rusize count, rusize ofsize);
  *         terminate.
  * @}
  */
-RUAPI void* ruMemDup(void *buf, rusize size);
+RUAPI alloc_ptr ruMemDup(trans_ptr buf, rusize size);
 
 
 /**

@@ -135,7 +135,7 @@ RUAPI ruCleaner ruCleanFree(ruCleaner rc);
  * @param key The secret key to clean.
  * @param subst The placeholder to substitute the secret with.
  */
-typedef void (*ruCleanerCb) (void* user_data, const char *key, const char* subst);
+typedef void (*ruCleanerCb) (void* user_data, trans_chars key, trans_chars subst);
 
 /**
  * Iterates over the cleaner database and calls given \ref ruCleanerCb with
@@ -154,7 +154,7 @@ RUAPI int32_t ruCleanDump(ruCleaner cp, ruCleanerCb lf, void* user_data);
  * @param substitute The string to replace instr with. Will be copied.
  * @return \ref RUE_OK on success else an error code.
  */
-RUAPI int32_t ruCleanAdd(ruCleaner rc, const char* instr, const char* substitute);
+RUAPI int32_t ruCleanAdd(ruCleaner rc, trans_chars instr, trans_chars substitute);
 
 /**
  * Removes a string entry from the database.
@@ -162,7 +162,7 @@ RUAPI int32_t ruCleanAdd(ruCleaner rc, const char* instr, const char* substitute
  * @param instr The string to be removed
  * @return \ref RUE_OK on success else an error code.
  */
-RUAPI int32_t ruCleanRemove(ruCleaner rc, const char* instr);
+RUAPI int32_t ruCleanRemove(ruCleaner rc, trans_chars instr);
 
 /**
  * \brief Does replacements using the given I/O functions.
@@ -194,7 +194,7 @@ RUAPI int32_t ruCleanIo(ruCleaner rc, ioFunc reader, void* readCtx,
  * @param writeCtx The context to be passed to the write function.
  * @return \ref RUE_OK on success else an error code.
  */
-RUAPI int32_t ruCleanToWriter(ruCleaner rc, const char *in, rusize len,
+RUAPI int32_t ruCleanToWriter(ruCleaner rc, trans_chars in, rusize len,
                               ioFunc writer, void* writeCtx);
 
 #ifndef CLEANER_ONLY

@@ -80,6 +80,9 @@ START_TEST ( api ) {
     ret = ruCleanAdd(rc, NULL, "bar");
     fail_unless(ret == exp, retText, test, exp, ret);
 
+    ret = ruCleanAdd(rc, "", "bar");
+    fail_unless(ret == exp, retText, test, exp, ret);
+
     ruCleanRemove(NULL, NULL);
     fail_unless(ret == exp, retText, test, exp, ret);
 

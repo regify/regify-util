@@ -31,13 +31,18 @@
 #include <string.h>
 #include <errno.h>
 #include <stdbool.h>
+#include <ctype.h>
+
+typedef const char* perm_chars;
+typedef const char* trans_chars;
+typedef char* alloc_chars;
 
 #define RUE_OK 0
 #define RUE_INVALID_PARAMETER 64
 #define RUE_PARAMETER_NOT_SET 77
 #define RUE_INVALID_STATE	325
 #define ruFree(p) if(p) free((void*)(p)); (p) = NULL;
-typedef void (*ruCleanerCb) (void* user_data, const char *key, const char* subst);
+typedef void (*ruCleanerCb) (void* user_data, trans_chars key, trans_chars subst);
 typedef size_t rusize;
 #if defined(WINDOWS) || defined(WIN32) || defined(__BORLANDC__)
     #ifndef u_int8_t
@@ -80,7 +85,7 @@ ctype* ctype ## Get(void* ptr, int32_t* code) { \
     if (!ptr) { \
         ruRetWithCode(code, RUE_PARAMETER_NOT_SET, NULL); \
     } \
-    if (ptr < (void*)1000 || (magic) != ret->type) { \
+    if (ptr < (void*)0xffff || (magic) != ret->type) { \
         ruRetWithCode(code, RUE_INVALID_PARAMETER, NULL); \
     } \
     ruRetWithCode(code, RUE_OK, ret); \
@@ -98,6 +103,15 @@ char* ruStrdup(const char* str) {
     return ret;
 }
 
+bool ruStrEmpty(trans_chars str) {
+    if (!str) return true;
+    while (*str) {
+        if (!isspace(*str)) return false;
+        str++;
+    }
+    return true;
+}
+
 typedef void* ruCleaner;
 typedef rusize_s (*ioFunc) (void* ctx, void* buf, rusize len);
 #else
@@ -113,7 +127,7 @@ typedef struct Tree_ Tree;
 struct Tree_ {
     char me;
     Tree* kids[256];
-    char* subst;
+    alloc_chars subst;
 };
 
 typedef struct {
@@ -193,7 +207,7 @@ static void dumpEntry(Cleaner *c, Tree *t, char* instr, char* cur, rusize inlen,
     lf(lctx, instr, t->subst);
 }
 
-static void addEntry(Cleaner *c, Tree *t, const char* instr, const char* subst) {
+static void addEntry(Cleaner *c, Tree *t, trans_chars instr, trans_chars subst) {
     char b = *instr;
     int i = (int) b;
     if (!t->kids[i]) {
@@ -275,8 +289,8 @@ static void flush(Cleaner *c) {
     }
 }
 
-static void bufferedWrite(Cleaner *c, char* buf, rusize len) {
-    char *end = buf + len;
+static void bufferedWrite(Cleaner *c, trans_chars buf, rusize len) {
+    trans_chars end = buf + len;
     while (buf < end) {
         if (c->outCur >= c->outEnd) {
             flush(c);
@@ -308,7 +322,7 @@ static void getNext(Cleaner *c) {
     }
 }
 
-static void doCharacter(Cleaner *c, char* subst) {
+static void doCharacter(Cleaner *c, trans_chars subst) {
     if (!subst && !c->matchStart) {
         // write character
         bufferedWrite(c, c->cur, 1);
@@ -425,11 +439,11 @@ ruCleaner ruCleanFree(ruCleaner cp) {
     return NULL;
 }
 
-int32_t ruCleanAdd(ruCleaner rc, const char* instr, const char* substitute) {
+int32_t ruCleanAdd(ruCleaner rc, trans_chars instr, trans_chars substitute) {
     int32_t code;
     Cleaner *c = CleanerGet(rc, &code);
     if (!c) return code;
-    if (!instr || !substitute) return RUE_PARAMETER_NOT_SET;
+    if (ruStrEmpty(instr) || !substitute) return RUE_PARAMETER_NOT_SET;
 
 #ifndef CLEANER_ONLY
     ruMutexLock(c->mux);
@@ -449,7 +463,7 @@ int32_t ruCleanAdd(ruCleaner rc, const char* instr, const char* substitute) {
     return code;
 }
 
-int32_t ruCleanRemove(ruCleaner rc, const char* instr) {
+int32_t ruCleanRemove(ruCleaner rc, trans_chars instr) {
     int32_t code;
     Cleaner *c = CleanerGet(rc, &code);
     if (!c) return code;
@@ -491,7 +505,7 @@ int32_t ruCleanIo(ruCleaner rc, ioFunc reader, void* readCtx,
     return cleanNow(c);
 }
 
-int32_t ruCleanToWriter(ruCleaner rc, const char *in, rusize len,
+int32_t ruCleanToWriter(ruCleaner rc, trans_chars in, rusize len,
                         ioFunc writer, void* writeCtx) {
     int32_t code;
     Cleaner *c = CleanerGet(rc, &code);
