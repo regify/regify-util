@@ -45,7 +45,7 @@ mkdir build
 bld=build/_CPack_Packages/lin.x86_64/ZIP/regify-util/
 
 install -d $RPM_BUILD_ROOT/%{_libdir}
-install -m 755 $bld/lib/%{libname}.so.* $RPM_BUILD_ROOT%{_libdir}/
+install -m 755 $bld/%{_lib}/%{libname}.so.* $RPM_BUILD_ROOT%{_libdir}/
 (cd $RPM_BUILD_ROOT%{_libdir}/ && ln -s %{libname}.so.* %{libname}.so)
 
 # devel
@@ -54,12 +54,12 @@ install -m 644 $bld/include/%{name}.h $RPM_BUILD_ROOT/%{_includedir}
 install -m 644 $bld/include/%{name}/*.h $RPM_BUILD_ROOT/%{_includedir}/%{name}/
 
 install -d $RPM_BUILD_ROOT/%{_libdir}
-install -m 755 $bld/lib/%{libname}.a $RPM_BUILD_ROOT%{_libdir}/
-install -m 755 $bld/lib/libpwcleaner.a $RPM_BUILD_ROOT%{_libdir}/
+install -m 755 $bld/%{_lib}/%{libname}.a $RPM_BUILD_ROOT%{_libdir}/
+install -m 755 $bld/%{_lib}/libpwcleaner.a $RPM_BUILD_ROOT%{_libdir}/
 install -d $RPM_BUILD_ROOT/%{_libdir}/cmake/%{name}
-install -m 644 $bld/lib/cmake/%{name}/*.cmake $RPM_BUILD_ROOT/%{_libdir}/cmake/%{name}/
+install -m 644 $bld/%{_lib}/cmake/%{name}/*.cmake $RPM_BUILD_ROOT/%{_libdir}/cmake/%{name}/
 install -d $RPM_BUILD_ROOT/%{_libdir}/pkgconfig/
-install -m 644 $bld/lib/pkgconfig/%{name}.pc $RPM_BUILD_ROOT/%{_libdir}/pkgconfig/
+install -m 644 $bld/%{_lib}/pkgconfig/%{name}.pc $RPM_BUILD_ROOT/%{_libdir}/pkgconfig/
 
 install -d $RPM_BUILD_ROOT/%{_datadir}/%{name}
 install -m 644 $bld/share/%{name}/LICENSE $RPM_BUILD_ROOT/%{_datadir}/%{name}/
@@ -91,6 +91,10 @@ fi
 %{_libdir}/pkgconfig/regify-util.pc
 
 %changelog
+* Wed Nov 30 2022 Mario Theodoridis <mario.theodoridis@regify.com> 1.3.0
+- make lib relocatable
+- more features
+
 * Fri May 20 2022 Mario Theodoridis <mario.theodoridis@regify.com> 1.2.0
 - adjust build for open sourced version
 
