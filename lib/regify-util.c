@@ -60,7 +60,7 @@ void ruSetError(const char *format, ...) {
     }
 }
 
-RUAPI const char* ruGetOs(void) {
+RUAPI perm_chars ruGetOs(void) {
 #if defined (_WIN32)
     return "windows";
 #elif defined(__ANDROID__)
@@ -76,7 +76,7 @@ RUAPI const char* ruGetOs(void) {
 #endif
 }
 
-RUAPI char* ruGetHostname(void) {
+RUAPI alloc_chars ruGetHostname(void) {
     char name[256] = "";
 #ifdef _WIN32
     DWORD len = 256;
@@ -120,7 +120,7 @@ RUAPI alloc_ptr ruMemDup(trans_ptr buf, rusize size) {
     return dest;
 }
 
-RUAPI const char * ruGetenv(const char *variable) {
+RUAPI trans_chars ruGetenv(const char *variable) {
     ruClearError();
     if (!variable) return NULL;
     return getenv (variable);
@@ -134,7 +134,7 @@ RUAPI unsigned long ruSemiRandomNumber(unsigned long max, long offset) {
     return (value % max) + offset;
 }
 
-RUAPI int ruDateFormat(const char* format, rusize len, char* timeStr, long timesecs) {
+RUAPI int ruDateFormat(const char* format, rusize len, char* timeStr, sec_t timesecs) {
     if (!format || ! len || !timeStr) return -1;
     struct tm tm;
     ruTimeVal tv;

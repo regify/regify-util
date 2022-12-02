@@ -104,41 +104,49 @@ RUAPI int32_t ruGetTimeVal(ruTimeVal *result) {
     return RUE_OK;
 }
 
-RUAPI long ruTimeSec(void) {
+RUAPI sec_t ruTimeSec(void) {
     ruClearError();
     ruTimeVal tv;
     ruGetTimeVal(&tv);
     return tv.sec;
 }
 
-RUAPI long ruTimeLocalToUtc(long stamp) {
+RUAPI long ruTimeLocalToUtc(sec_t stamp) {
     struct tm lt;
     localtime_r(&stamp, &lt);
     return stamp - lt.tm_gmtoff;
 }
 
-RUAPI long ruTimeUtcToLocal(long stamp) {
+RUAPI long ruTimeUtcToLocal(sec_t stamp) {
     struct tm lt;
     localtime_r(&stamp, &lt);
     return stamp + lt.tm_gmtoff;
 }
 
-RUAPI uint64_t ruTimeMs(void) {
+RUAPI msec_t ruTimeMs(void) {
     ruClearError();
     ruTimeVal tv;
     ruGetTimeVal(&tv);
     // Round to nearest millis
-    int64_t millis = tv.sec * 1000;
+    msec_t millis = tv.sec * 1000;
     millis += tv.usec / 1000;
     return millis;
 }
 
-RUAPI uint64_t ruTimeUs(void) {
+RUAPI bool ruTimeMsEllapsed(msec_t stamp) {
+    return stamp >= ruTimeMs();
+}
+
+RUAPI usec_t ruTimeUs(void) {
     ruClearError();
     ruTimeVal tv;
     ruGetTimeVal(&tv);
-    int64_t micros = tv.sec * 1000000;
+    usec_t micros = tv.sec * 1000000;
     return micros + tv.usec;
+}
+
+RUAPI bool ruTimeUsEllapsed(usec_t stamp) {
+    return stamp >= ruTimeUs();
 }
 
 RUAPI alloc_chars ruGetLanguage(void) {
@@ -147,7 +155,7 @@ RUAPI alloc_chars ruGetLanguage(void) {
     return ruStrndup(lc, 2);
 }
 
-RUAPI void ruUsleep(unsigned long microseconds) {
+RUAPI void ruUsleep(usec_t microseconds) {
 #ifdef RUMS
   Sleep (microseconds / 1000);
 #else
@@ -158,7 +166,7 @@ RUAPI void ruUsleep(unsigned long microseconds) {
 #endif
 }
 
-RUAPI void ruMsleep(unsigned long milliseconds) {
+RUAPI void ruMsleep(msec_t milliseconds) {
 #ifdef RUMS
     Sleep (milliseconds);
 #else

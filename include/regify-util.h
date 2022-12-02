@@ -221,6 +221,24 @@ typedef void* alloc_ptr;
 typedef void* ptr;
 
 /**
+ * \brief A signed type for expressing seconds.
+ * \ingroup misc
+ */
+typedef long sec_t;
+
+/**
+ * \brief A signed type for expressing milli seconds.
+ * \ingroup misc
+ */
+typedef int64_t msec_t;
+
+/**
+ * \brief A signed type for expressing micro seconds.
+ * \ingroup misc
+ */
+typedef int64_t usec_t;
+
+/**
  * \brief Abstracted version of size_t.
  * \ingroup misc
  */
@@ -250,7 +268,7 @@ typedef void (*ruFreeFunc)(void*);
  * \ingroup misc
  */
 typedef struct {
-    long sec;
+    msec_t sec;
     long usec;
 } ruTimeVal;
 
@@ -385,13 +403,13 @@ RUAPI alloc_ptr ruMemDup(trans_ptr buf, rusize size);
  * Currently knows about windows, android, linux, osx, ios and unix.
  * @return os string. Caller should copy this for persistence.
  */
-RUAPI const char* ruGetOs(void);
+RUAPI perm_chars ruGetOs(void);
 
 /**
  * \brief Returns the name of this host.
  * @return hostname. Caller should free this with \ref ruFree.
  */
-RUAPI char* ruGetHostname(void);
+RUAPI alloc_chars ruGetHostname(void);
 
 /**
  * \brief Returns the value of the requested environment vartiable or NULL if it is not
@@ -399,7 +417,7 @@ RUAPI char* ruGetHostname(void);
  * @param variable Variable name to retrieve
  * @return A copy of the value. May not be freed by the caller.
  */
-RUAPI const char* ruGetenv(const char *variable);
+RUAPI trans_chars ruGetenv(const char *variable);
 
 /**
  * Returns true if given string contains a valid 64 bit integer
@@ -426,26 +444,40 @@ RUAPI long ruTimeSec(void);
  * @param stamp seconds since epoch in local time
  * @return UTC seconds since epoch
  */
-RUAPI long ruTimeLocalToUtc(long stamp);
+RUAPI long ruTimeLocalToUtc(sec_t stamp);
 
 /**
  * \brief Converts given UTC time stamp to local time
  * @param stamp UTC seconds since epoch
  * @return seconds since epoch in local time
  */
-RUAPI long ruTimeUtcToLocal(long stamp);
+RUAPI long ruTimeUtcToLocal(sec_t stamp);
 
 /**
  * \brief Return the current local time in milliseconds since Jan. 1 1970
  * @return Milli seconds since epoch
  */
-RUAPI uint64_t ruTimeMs(void);
+RUAPI msec_t ruTimeMs(void);
+
+/**
+ * \brief Checks if given stamp has elapsed.
+ * @param stamp millisecond stamp to compare to.
+ * @return Return true if now is >= stamp
+ */
+RUAPI bool ruTimeMsEllapsed(msec_t stamp);
 
 /**
  * \brief Return the current local time in microseconds since Jan. 1 1970
  * @return Micro seconds since epoch
  */
-RUAPI uint64_t ruTimeUs(void);
+RUAPI usec_t ruTimeUs(void);
+
+/**
+ * \brief Checks if given stamp has elapsed.
+ * @param stamp microsecond stamp to compare to.
+ * @return Return true if now is >= stamp
+ */
+RUAPI bool ruTimeUsEllapsed(usec_t stamp);
 
 /**
  * \brief Returns the ISO-639-1 2 letter country code pertaining to the running system,
@@ -457,19 +489,19 @@ RUAPI alloc_chars ruGetLanguage(void);
  * \brief Sleeps for the given number of micro seconds.
  * @param microseconds
  */
-RUAPI void ruUsleep(unsigned long microseconds);
+RUAPI void ruUsleep(usec_t microseconds);
 
 /**
  * \brief Sleeps for the given number of milli seconds.
  * @param milliseconds
  */
-RUAPI void ruMsleep(unsigned long milliseconds);
+RUAPI void ruMsleep(msec_t milliseconds);
 
 /**
  * \brief Sleeps for the given number of seconds.
  * @param seconds
  */
-#define ruSleep(secs) ruMsleep((secs)*1000)
+#define ruSleep(secs) ruMsleep(((msec_t)(secs))*1000)
 
 /**
  * \brief Returns a quasi ramdom number between 0 and max + offset.
@@ -490,7 +522,7 @@ RUAPI unsigned long ruSemiRandomNumber(unsigned long max, long offset);
  * @param timesecs datestamp in seconds since epoch or 0 to use current time
  * @return microsecond part of the current time or -1 on error;
  */
-RUAPI int ruDateFormat(const char* format, rusize len, char* timeStr, long timesecs);
+RUAPI int ruDateFormat(const char* format, rusize len, char* timeStr, sec_t timesecs);
 
 /**
  * \brief Compares 2 version strings
