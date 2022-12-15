@@ -21,10 +21,12 @@
  */
 #include "tests.h"
 
+const char *failText = "failed wanted ret '%d' but got '%d'";
+
 START_TEST ( api ) {
     int32_t ret, exp;
-    const char *test = "ruStringNewf";
-    const char *retText = "%s failed wanted ret '%d' but got '%d'";
+    perm_chars test = "ruStringNewf";
+    perm_chars retText = "%s failed wanted ret '%d' but got '%d'";
 
     ruString rs = ruStringNewf(NULL, NULL);
     fail_unless(rs == NULL, retText, test, NULL, rs);
@@ -41,7 +43,7 @@ START_TEST ( api ) {
     ret = ruStringAppendf(rs, NULL, NULL);
     fail_unless(ret == exp, retText, test, exp, ret);
 
-    char *foo = ruStringGetCString(rs);
+    trans_chars foo = ruStringGetCString(rs);
     fail_unless(foo == NULL, retText, test, NULL, foo);
 
     rusize explen = 0;
@@ -179,8 +181,8 @@ START_TEST ( run ) {
     ruFree(str);
 
     test = "ruLastSubstr";
-    char *subst = "test^^^^foo";
-    char *ptr = ruLastSubstr(subst, "^^");
+    char* subst = "test^^^^foo";
+    trans_chars ptr = ruLastSubstr(subst, "^^");
     ck_assert_str_eq(ptr, "^^foo");
 
     ptr = ruLastSubstrLen(subst, "^^", 6);
@@ -196,7 +198,7 @@ START_TEST ( run ) {
     ptr = ruLastSubstr(subst, "");
     ck_assert_str_eq(ptr, subst);
 
-    char* heap = ruStrdup(subst);
+    char* heap = ruStrDup(subst);
     ruStrByteReplace(heap, '^', 'v');
     ck_assert_str_eq("testvfoo", heap);
 
@@ -260,7 +262,7 @@ START_TEST ( run ) {
     ck_assert_str_eq(expstr, ptr);
     ruFree(ptr);
 */
-    char *alstr = ptr;
+    trans_chars alstr = ptr;
     expstr = "T\xc3\x84ST"; // Täst
     ptr = ruUtf8CaseNormalize(alstr, ruUtf8Nfc, ruUtf8Upper);
     ck_assert_str_eq(expstr, ptr);
@@ -276,25 +278,25 @@ START_TEST ( util ) {
     const char *retText = "%s failed wanted ret '%d' but got '%d'";
 
 
-    test = "ruStrcmp";
+    test = "ruStrCmp";
     want = 0;
-    got = ruStrcmp(NULL, NULL);
+    got = ruStrCmp(NULL, NULL);
     fail_unless(got == want, retText, test, want, got);
 
     want = 1;
-    got = ruStrcmp("foo", NULL);
+    got = ruStrCmp("foo", NULL);
     fail_unless(got == want, retText, test, want, got);
 
     want = -1;
-    got = ruStrcmp(NULL, "foo");
+    got = ruStrCmp(NULL, "foo");
     fail_unless(got == want, retText, test, want, got);
 
     want = 0;
-    got = ruStrcmp("foo", "foo");
+    got = ruStrCmp("foo", "foo");
     fail_unless(got == want, retText, test, want, got);
 
     want = -1;
-    got = ruStrcmp("bar", "foo");
+    got = ruStrCmp("bar", "foo");
     fail_unless(got == want, retText, test, want, got);
 
     test = "ruStrEquals";
@@ -312,25 +314,52 @@ START_TEST ( util ) {
     is = ruStrEquals(NULL, "foo");
     fail_unless(be == is, retText, test, be, is);
 
-    test = "ruStrcasecmp";
+    test = "ruStrNEquals";
+    be = true;
+    is = ruStrNEquals(NULL, 10, NULL);
+    fail_unless(be == is, retText, test, be, is);
+
+    is = ruStrNEquals("foo", 0, NULL);
+    fail_unless(be == is, retText, test, be, is);
+
+    is = ruStrNEquals(NULL, 0, "foo");
+    fail_unless(be == is, retText, test, be, is);
+
+    is = ruStrNEquals("foobar", 0, "foo");
+    fail_unless(be == is, retText, test, be, is);
+
+    is = ruStrNEquals("foobar", 3, "foo");
+    fail_unless(be == is, retText, test, be, is);
+
+    is = ruStrNEquals("foobar", 4, "foo");
+    fail_unless(be == is, retText, test, be, is);
+
+    be = false;
+    is = ruStrNEquals("foo", 3, "foobar");
+    fail_unless(be == is, retText, test, be, is);
+
+    is = ruStrNEquals("foo", 4, "foobar");
+    fail_unless(be == is, retText, test, be, is);
+
+    test = "ruStrCaseCmp";
     want = 0;
-    got = ruStrcasecmp(NULL, NULL);
+    got = ruStrCaseCmp(NULL, NULL);
     fail_unless(got == want, retText, test, want, got);
 
     want = 1;
-    got = ruStrcasecmp("foo", NULL);
+    got = ruStrCaseCmp("foo", NULL);
     fail_unless(got == want, retText, test, want, got);
 
     want = -1;
-    got = ruStrcasecmp(NULL, "foo");
+    got = ruStrCaseCmp(NULL, "foo");
     fail_unless(got == want, retText, test, want, got);
 
     want = 0;
-    got = ruStrcasecmp("foo", "Foo");
+    got = ruStrCaseCmp("foo", "Foo");
     fail_unless(got == want, retText, test, want, got);
 
     want = -1;
-    got = ruStrcasecmp("bar", "foo");
+    got = ruStrCaseCmp("bar", "foo");
     fail_unless(got == want, retText, test, want, got);
 
     test = "ruStrStartsWith";
@@ -407,7 +436,7 @@ START_TEST ( util ) {
 
     test = "ruStrStrLen";
     char *exStr = NULL;
-    char *str = ruStrStr(NULL, NULL);
+    perm_chars str = ruStrStr(NULL, NULL);
     fail_unless(exStr == str, retText, test, exStr, str);
 
     str = ruStrStrLen(NULL, NULL, 0);
@@ -446,42 +475,6 @@ START_TEST ( util ) {
     exStr = NULL;
     str = ruStrStrLen("foobar", "bar", 5);
     fail_unless(exStr == str, retText, test, exStr, str);
-
-    test = "ruStrsplit";
-    ruList rl = ruStrsplit(NULL, NULL, 0);
-    fail_unless(NULL == rl, retText, test, NULL, rl);
-
-    const char *istr = "foo:bar", *delim = ":";
-    rl = ruStrsplit(NULL, NULL, 0);
-    fail_unless(NULL == rl, retText, test, NULL, rl);
-
-    rl = ruStrsplit(istr, NULL, 0);
-    fail_unless(NULL == rl, retText, test, NULL, rl);
-
-    rl = ruStrsplit(istr, "", 0);
-    fail_unless(NULL == rl, retText, test, NULL, rl);
-
-    want = 1;
-    rl = ruStrsplit(istr, delim, 1);
-    fail_if(NULL == rl, retText, test, NULL, rl);
-    got = ruListSize(rl, NULL);
-    fail_unless(want == got, retText, test, want, got);
-    rl = ruListFree(rl);
-
-    want = 2;
-    rl = ruStrsplit(istr, delim, 0);
-    fail_if(NULL == rl, retText, test, NULL, rl);
-    got = ruListSize(rl, NULL);
-    fail_unless(want == got, retText, test, want, got);
-    rl = ruListFree(rl);
-
-    istr = ":foo:bar:";
-    want = 4;
-    rl = ruStrsplit(istr, delim, 0);
-    fail_if(NULL == rl, retText, test, NULL, rl);
-    got = ruListSize(rl, NULL);
-    fail_unless(want == got, retText, test, want, got);
-    rl = ruListFree(rl);
 
     test = "ruStrAciiToLower";
     str = "!Foo¡";
@@ -525,25 +518,43 @@ START_TEST ( util ) {
     exStr = ruUtf8ToLower(str);
     ck_assert_str_eq("!föo¡", exStr);
 
-    char *out2 = ruUtf8ToUpper(exStr);
+    alloc_chars out2 = ruUtf8ToUpper(exStr);
     ck_assert_str_eq("!FÖO¡", out2);
 
     ruFree(exStr);
     ruFree(out2);
-    str = ruStrdup("foo was\nhere");
-    ruStripChars(str, "\n ");
-    ck_assert_str_eq(str, "foowashere");
-    ruFree(str);
+    out2 = ruStrDup("foo was\nhere");
+    ruStripChars(out2, "\n ");
+    ck_assert_str_eq(out2, "foowashere");
+    ruFree(out2);
 
-    str = ruStrdup("foo was\there");
-    ruStripChars(str, "\n");
-    ck_assert_str_eq(str, "foo was\there");
-    ruFree(str);
+    out2 = ruStrDup("foo was\there");
+    ruStripChars(out2, "\n");
+    ck_assert_str_eq(out2, "foo was\there");
+    ruFree(out2);
 
-    str = ruStrdup("  foo\t \n\r");
-    ruStrTrim(str);
-    ck_assert_str_eq(str, "  foo");
-    ruFree(str);
+    out2 = ruStrDup("  foo\t \n\r");
+    ruStrTrim(out2);
+    ck_assert_str_eq(out2, "  foo");
+    ruFree(out2);
+
+    out2 = ruStrTrimDup(NULL);
+    fail_unless(NULL == out2, retText, test, NULL, out2);
+
+    out2 = ruStrTrimDup("foo");
+    fail_unless(NULL == out2, retText, test, NULL, out2);
+
+    out2 = ruStrTrimDup("  foo\t \n\r");
+    ck_assert_str_eq(out2, "foo");
+    ruFree(out2);
+
+    out2 = ruStrTrimDup("foo\t \n\r");
+    ck_assert_str_eq(out2, "foo");
+    ruFree(out2);
+
+    out2 = ruStrTrimDup("  foo");
+    ck_assert_str_eq(out2, "foo");
+    ruFree(out2);
 
     test = "ruStrEmpty";
     doexp = true;
@@ -565,7 +576,250 @@ START_TEST ( util ) {
 
     does = ruStrEmpty(" 1\n\t ");
     fail_unless(doexp == does, retText, test, doexp, does);
+}
+END_TEST
 
+START_TEST (StrNSplit) {
+    ruList rl = ruStrSplit(NULL, NULL, 0);
+    fail_unless(NULL == rl, failText, NULL, rl);
+
+    perm_chars istr = "foo:bar";
+    perm_chars delim = ":";
+    rusize_s limit = -1;
+    rl = ruStrNSplit(NULL, limit, NULL, 0);
+    fail_unless(NULL == rl, failText, NULL, rl);
+
+    rl = ruStrNSplit(istr, limit, NULL, 0);
+    fail_unless(NULL == rl, failText, NULL, rl);
+
+    rl = ruStrNSplit(istr, limit, "", 0);
+    fail_unless(NULL == rl, failText, NULL, rl);
+
+    limit = 0;
+    rl = ruStrNSplit(istr, limit, delim, 1);
+    fail_unless(NULL == rl, failText, NULL, rl);
+
+    int32_t want = 1;
+    rl = ruStrSplit(istr, delim, 1);
+    fail_if(NULL == rl, failText, NULL, rl);
+    int32_t got = ruListSize(rl, NULL);
+    fail_unless(want == got, failText, want, got);
+    rl = ruListFree(rl);
+
+    want = 2;
+    rl = ruStrSplit(istr, delim, 0);
+    fail_if(NULL == rl, failText, NULL, rl);
+    got = ruListSize(rl, NULL);
+    fail_unless(want == got, failText, want, got);
+    rl = ruListFree(rl);
+
+    limit = 6;
+    rl = ruStrNSplit(istr, limit, delim, 0);
+    fail_if(NULL == rl, failText, NULL, rl);
+    got = ruListSize(rl, NULL);
+    fail_unless(want == got, failText, want, got);
+    alloc_chars pcs = ruListPop(rl, NULL);
+    ck_assert_str_eq(pcs, "foo");
+    ruFree(pcs);
+    pcs = ruListPop(rl, NULL);
+    ck_assert_str_eq(pcs, "ba");
+    ruFree(pcs);
+    rl = ruListFree(rl);
+
+    istr = ":foo:bar:";
+    want = 4;
+    rl = ruStrSplit(istr, delim, 0);
+    fail_if(NULL == rl, failText, NULL, rl);
+    got = ruListSize(rl, NULL);
+    fail_unless(want == got, failText, want, got);
+    rl = ruListFree(rl);
+
+    limit = 7;
+    want = 3;
+    rl = ruStrNSplit(istr, limit, delim, 0);
+    fail_if(NULL == rl, failText, NULL, rl);
+    got = ruListSize(rl, NULL);
+    fail_unless(want == got, failText, want, got);
+    pcs = ruListPop(rl, NULL);
+    ck_assert_str_eq(pcs, "");
+    ruFree(pcs);
+    pcs = ruListPop(rl, NULL);
+    ck_assert_str_eq(pcs, "foo");
+    ruFree(pcs);
+    pcs = ruListPop(rl, NULL);
+    ck_assert_str_eq(pcs, "ba");
+    ruFree(pcs);
+    rl = ruListFree(rl);
+}
+END_TEST
+
+START_TEST (StrTrimBounds) {
+    perm_chars str = ruStrTrimBounds(NULL, 0, NULL);
+    fail_unless(NULL == str, failText, NULL, str);
+
+    rusize len = 99;
+    str = ruStrTrimBounds(NULL, -1, &len);
+    fail_unless(NULL == str, failText, NULL, str);
+    fail_unless(0 == len, failText, 0, len);
+
+    perm_chars instr = " foo ";
+    perm_chars expstr = instr+1;
+    str = ruStrTrimBounds(instr, -1, NULL);
+    ck_assert_str_eq(str, "foo ");
+
+    str = ruStrTrimBounds(instr, 3, &len);
+    fail_unless(expstr == str, failText, expstr, str);
+    fail_unless(2 == len, failText, 2, len);
+
+    str = ruStrTrimBounds(instr, -1, &len);
+    fail_unless(expstr == str, failText, expstr, str);
+    ck_assert_str_eq(str, "foo ");
+    fail_unless(3 == len, failText, 3, len);
+
+    instr = "  ";
+    expstr = NULL;
+    str = ruStrTrimBounds(instr, -1, &len);
+    fail_unless(expstr == str, failText, expstr, str);
+    fail_unless(0 == len, failText, 0, len);
+
+    instr = "";
+    expstr = NULL;
+    str = ruStrTrimBounds(instr, -1, &len);
+    fail_unless(expstr == str, failText, expstr, str);
+    fail_unless(0 == len, failText, 0, len);
+
+}
+END_TEST
+
+START_TEST (StrFindKeyVal) {
+    bool is, be = false;
+    is = ruStrFindKeyVal(NULL, 0, NULL,
+                         NULL, 0,
+                         NULL, 0);
+    fail_unless(be == is, failText, be, is);
+
+    perm_chars instr = " foo ";
+    is = ruStrFindKeyVal(instr, -1, NULL,
+                         NULL, 0,
+                         NULL, 0);
+    fail_unless(be == is, failText, be, is);
+
+    trans_chars keyStart;
+    rusize keyLen;
+    rusize ekLen = 3;
+    trans_chars valStart;
+    rusize valLen;
+    rusize evLen = 0;
+    trans_chars delim = ":";
+    perm_chars ekey = instr + 1;
+    perm_chars eval = NULL;
+    is = ruStrFindKeyVal(instr, -1, delim,
+                         &keyStart, &keyLen,
+                         &valStart, &valLen);
+    fail_unless(be == is, failText, be, is);
+    fail_unless(ekey == keyStart, failText, ekey, keyStart);
+    fail_unless(ekLen == keyLen, failText, ekLen, keyLen);
+    fail_unless(eval == valStart, failText, eval, valStart);
+    fail_unless(evLen == valLen, failText, evLen, valLen);
+
+    instr = "foo : bar ";
+    is = ruStrFindKeyVal(instr, 4, delim,
+                         NULL, 0,
+                         NULL, 0);
+    fail_unless(be == is, failText, be, is);
+
+    be = true;
+    is = ruStrFindKeyVal(instr, -1, delim,
+                         NULL, 0,
+                         NULL, 0);
+    fail_unless(be == is, failText, be, is);
+
+    ekey = instr;
+    eval = instr + 6;
+    ekLen = 3;
+    evLen = 3;
+    is = ruStrFindKeyVal(instr, -1, delim,
+                         &keyStart, &keyLen,
+                         &valStart, &valLen);
+    fail_unless(be == is, failText, be, is);
+    fail_unless(ekey == keyStart, failText, ekey, keyStart);
+    fail_unless(ekLen == keyLen, failText, ekLen, keyLen);
+    fail_unless(eval == valStart, failText, eval, valStart);
+    fail_unless(evLen == valLen, failText, evLen, valLen);
+
+    instr = " foo : bar ";
+    ekey = instr + 1;
+    be = false;
+    ekLen = 9;
+    evLen = 0;
+    eval = NULL;
+    is = ruStrFindKeyVal(instr, -1, NULL,
+                         &keyStart, &keyLen,
+                         &valStart, &valLen);
+    fail_unless(be == is, failText, be, is);
+    fail_unless(ekey == keyStart, failText, ekey, keyStart);
+    fail_unless(ekLen == keyLen, failText, ekLen, keyLen);
+    fail_unless(eval == valStart, failText, eval, valStart);
+    fail_unless(evLen == valLen, failText, evLen, valLen);
+
+    instr = " : bar ";
+    ekey = NULL;
+    eval = instr + 3;
+    ekLen = 0;
+    evLen = 3;
+    be = true;
+    is = ruStrFindKeyVal(instr, -1, delim,
+                         &keyStart, &keyLen,
+                         &valStart, &valLen);
+    fail_unless(be == is, failText, be, is);
+    fail_unless(ekey == keyStart, failText, ekey, keyStart);
+    fail_unless(ekLen == keyLen, failText, ekLen, keyLen);
+    fail_unless(eval == valStart, failText, eval, valStart);
+    fail_unless(evLen == valLen, failText, evLen, valLen);
+
+    instr = " foo : ";
+    ekey = instr + 1;
+    eval = NULL;
+    ekLen = 3;
+    evLen = 0;
+    is = ruStrFindKeyVal(instr, -1, delim,
+                         &keyStart, &keyLen,
+                         &valStart, &valLen);
+    fail_unless(be == is, failText, be, is);
+    fail_unless(ekey == keyStart, failText, ekey, keyStart);
+    fail_unless(ekLen == keyLen, failText, ekLen, keyLen);
+    fail_unless(eval == valStart, failText, eval, valStart);
+    fail_unless(evLen == valLen, failText, evLen, valLen);
+
+    instr = " foo   bahr ";
+    ekey = NULL;
+    eval = instr + 1;
+    delim = " ";
+    ekLen = 0;
+    evLen = 10;
+    is = ruStrFindKeyVal(instr, -1, delim,
+                         &keyStart, &keyLen,
+                         &valStart, &valLen);
+    fail_unless(be == is, failText, be, is);
+    fail_unless(ekey == keyStart, failText, ekey, keyStart);
+    fail_unless(ekLen == keyLen, failText, ekLen, keyLen);
+    fail_unless(eval == valStart, failText, eval, valStart);
+    fail_unless(evLen == valLen, failText, evLen, valLen);
+
+    instr = "foo   bahr ";
+    ekey = instr;
+    eval = instr + 6;
+    delim = " ";
+    ekLen = 3;
+    evLen = 4;
+    is = ruStrFindKeyVal(instr, -1, delim,
+                         &keyStart, &keyLen,
+                         &valStart, &valLen);
+    fail_unless(be == is, failText, be, is);
+    fail_unless(ekey == keyStart, failText, ekey, keyStart);
+    fail_unless(ekLen == keyLen, failText, ekLen, keyLen);
+    fail_unless(eval == valStart, failText, eval, valStart);
+    fail_unless(evLen == valLen, failText, evLen, valLen);
 }
 END_TEST
 
@@ -611,9 +865,12 @@ END_TEST
 
 TCase* stringTests ( void ) {
     TCase *tcase = tcase_create ( "string" );
-    tcase_add_test ( tcase, api );
-    tcase_add_test ( tcase, run );
-    tcase_add_test ( tcase, util );
-    tcase_add_test ( tcase, buffer );
+    tcase_add_test(tcase, api);
+    tcase_add_test(tcase, run);
+    tcase_add_test(tcase, util);
+    tcase_add_test(tcase, StrNSplit);
+    tcase_add_test(tcase, StrTrimBounds);
+    tcase_add_test(tcase, StrFindKeyVal);
+    tcase_add_test(tcase, buffer);
     return tcase;
 }

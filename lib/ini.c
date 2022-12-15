@@ -131,7 +131,7 @@ static int ini_parse_stream(ini_reader reader, void* stream, ruIniCallback handl
             if (*end == ']') {
                 *end = '\0';
                 ruFree(section);
-                section = ruStrdup(start + 1);
+                section = ruStrDup(start + 1);
                 //*prev_name = '\0';
                 ruFree(prev_name);
                 if (!handler(user, section, NULL, NULL, lineno) && !errLineNo) errLineNo = lineno;
@@ -156,7 +156,7 @@ static int ini_parse_stream(ini_reader reader, void* stream, ruIniCallback handl
 
                 /* Valid name[=:]value pair found, call handler */
                 ruFree(prev_name);
-                prev_name = ruStrdup(name);
+                prev_name = ruStrDup(name);
                 //strncpy0(prev_name, name, sizeof(prev_name));
                 if (!handler(user, section, name, value, lineno) && !errLineNo) errLineNo = lineno;
             } else if (!errLineNo) {
@@ -233,7 +233,7 @@ static ruMap getIniMap(Ini* ini, const char* section) {
             ruMapGet(ini->sections, section, &map);
         } else {
             map = ruMapNewString(free, free);
-            ruMapPut(ini->sections, ruStrdup(section), map);
+            ruMapPut(ini->sections, ruStrDup(section), map);
         }
     }
     return map;
@@ -252,10 +252,10 @@ static bool iniParseCb(void* user, const char* section, const char* name,
             if (val || value) {
                 // append new value
                 char *newval = ruDupPrintf("%s%s", val?val:"", value?value:"");
-                ruMapPut(map, ruStrdup(name), newval);
+                ruMapPut(map, ruStrDup(name), newval);
             }
         } else {
-            ruMapPut(map, ruStrdup(name), ruStrdup(value));
+            ruMapPut(map, ruStrDup(name), ruStrDup(value));
         }
     }
     return true;
@@ -348,7 +348,7 @@ RUAPI int32_t ruIniKeys(ruIni iniOb, const char* section, ruList* keys) {
     if (!keys) return RUE_PARAMETER_NOT_SET;
 
     ruMap map = getIniMap(ini, section);
-    return ruMapKeySet(map, (ruCloneFunc)ruStrdup, keys, free);
+    return ruMapKeySet(map, (ruCloneFunc) ruStrDup, keys, free);
 }
 
 RUAPI int32_t ruIniSections(ruIni iniOb, ruList* sections) {
@@ -358,7 +358,7 @@ RUAPI int32_t ruIniSections(ruIni iniOb, ruList* sections) {
     if (!sections) return RUE_PARAMETER_NOT_SET;
 
     ruMap map = ini->sections;
-    return ruMapKeySet(map, (ruCloneFunc)ruStrdup, sections, free);
+    return ruMapKeySet(map, (ruCloneFunc) ruStrDup, sections, free);
 }
 
 RUAPI const char* ruIniGetDef(ruIni iniOb, const char* section, const char* key,
@@ -377,7 +377,7 @@ RUAPI const char* ruIniGetDef(ruIni iniOb, const char* section, const char* key,
     const char* value = NULL;
     ret = ruMapGet(map, key, &value);
     if (def) {
-        if (!value || ruStrcmp(value, "") == 0) {
+        if (!value || ruStrCmp(value, "") == 0) {
             value = def;
             ret = RUE_OK;
         }
@@ -400,7 +400,7 @@ RUAPI int32_t ruIniSet(ruIni iniOb, const char* section, const char* key, const 
 
     ruMap map = getIniMap(ini, section);
     if (key) {
-        ret = ruMapPut(map, ruStrdup(key), ruStrdup(value));
+        ret = ruMapPut(map, ruStrDup(key), ruStrDup(value));
     }
     return ret;
 }

@@ -96,7 +96,7 @@ static char* makeLogMsg(u_int32_t log_level, const char *filePath, const char *f
     #endif
 #endif
 #endif
-    char *file = ruBaseName((char*)filePath);
+    char *file = (char*)ruBaseName((char*)filePath);
 #ifndef __EMSCRIPTEN__
     char* pidEnd = "]:";
     if (logPidEnd) {

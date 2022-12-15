@@ -111,6 +111,10 @@ RUAPI sec_t ruTimeSec(void) {
     return tv.sec;
 }
 
+RUAPI bool ruTimeEllapsed(sec_t stamp) {
+    return stamp <= ruTimeSec();
+}
+
 RUAPI long ruTimeLocalToUtc(sec_t stamp) {
     struct tm lt;
     localtime_r(&stamp, &lt);
@@ -134,7 +138,7 @@ RUAPI msec_t ruTimeMs(void) {
 }
 
 RUAPI bool ruTimeMsEllapsed(msec_t stamp) {
-    return stamp >= ruTimeMs();
+    return stamp <= ruTimeMs();
 }
 
 RUAPI usec_t ruTimeUs(void) {
@@ -146,13 +150,13 @@ RUAPI usec_t ruTimeUs(void) {
 }
 
 RUAPI bool ruTimeUsEllapsed(usec_t stamp) {
-    return stamp >= ruTimeUs();
+    return stamp <= ruTimeUs();
 }
 
 RUAPI alloc_chars ruGetLanguage(void) {
     alloc_chars lc = setlocale(LC_ALL, NULL);
     if (!lc) return NULL;
-    return ruStrndup(lc, 2);
+    return ruStrNDup(lc, 2);
 }
 
 RUAPI void ruUsleep(usec_t microseconds) {

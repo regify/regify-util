@@ -67,7 +67,7 @@ RUAPI u_int32_t ruStrHash(const void *key) {
 }
 
 RUAPI bool ruStrMatch(const void* s1, const void* s2) {
-    return ruStrcmp(s1, s2) == 0;
+    return ruStrCmp(s1, s2) == 0;
 }
 
 RUAPI ruMap ruMapNewString(ruFreeFunc keyFree, ruFreeFunc valFree) {

@@ -222,12 +222,14 @@ RUAPI int ruMkdir(const char *pathname, int mode, bool deep);
 
 /**
  * \brief Returns the dirname part of a full path.
+ *
+ * If there was a slash, it is included in the returned dirname.
  * @param filePath File path to return the dirname of.
  * @return Returns the directory name part of the given path or NULL if no
  *         slashes were found. Caller needs to free the result with \ref ruFree
  *         after use.
  */
-RUAPI char* ruDirName(const char *filePath);
+RUAPI alloc_chars ruDirName(trans_chars filePath);
 
 /**
  * \brief Returns the filename of a path with the preceeding path removed
@@ -235,7 +237,7 @@ RUAPI char* ruDirName(const char *filePath);
  * @return Returns the start of the basename within the given filePath so do not
  *         free this reference and copy it as needed.
  */
-RUAPI char* ruBaseName(const char *filePath);
+RUAPI perm_chars ruBaseName(perm_chars filePath);
 
 /**
  * \brief Returns an absolute filepath leading to the given relative path.
@@ -254,7 +256,20 @@ RUAPI char* ruFullPath(const char* filePath);
  * @param file file anme to append
  * @return Returns a new filepath to be freed by the caller after use.
  */
-RUAPI char* ruPathJoin(const char* base, const char* file);
+RUAPI alloc_chars ruPathJoin(trans_chars base, trans_chars file);
+
+/**
+ * \brief Return a path by concatenating the given parts number of parameters.
+ *
+ * The returned path will have the leading slash supplied with the first folder
+ * argument. There will be no trailing slash returned.
+ *
+ * @param parts Number of folder name that follow
+ * @param ... parts number of folder names to concatenate. Trailing slashes
+ *            and leading slashes after the second folder are accounted for.
+ * @return Allocated path to be freed by the caller. Or NULL if parts was < 1.
+ */
+RUAPI alloc_chars ruPathMultiJoin(int parts, ...);
 
 /**
  * @}

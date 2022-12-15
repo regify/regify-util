@@ -329,7 +329,7 @@ RUAPI int ruOpenTmp(char *pathTemplate, int flags, int mode, int32_t *code) {
     ruTimeVal tv;
     ruGetTimeVal(&tv);
 
-    char *xl8 = ruLastSubstr(pathTemplate, "^^^");
+    char *xl8 = (char*)ruLastSubstr(pathTemplate, "^^^");
     if (!xl8) ruRetWithCode(code, RUE_INVALID_PARAMETER, 0);
 
     long value = (tv.usec ^ tv.sec ) + threadcounter++;
@@ -584,8 +584,8 @@ static int32_t folderWalk(const char* folder, u_int32_t flags,
         do {
             ruFree(fileName);
             fileName = uniToChar(ffd.cFileName);
-            if (ruStrcmp("..", fileName) == 0 ||
-                ruStrcmp(".", fileName) == 0)
+            if (ruStrCmp("..", fileName) == 0 ||
+                ruStrCmp(".", fileName) == 0)
                 continue;
 
             ruFree(path);
@@ -621,8 +621,8 @@ static int32_t folderWalk(const char* folder, u_int32_t flags,
         char *path = NULL;
 
         while ((dir = readdir(d)) != NULL) {
-            if (ruStrcmp("..", dir->d_name) == 0 ||
-                ruStrcmp(".", dir->d_name) == 0)
+            if (ruStrCmp("..", dir->d_name) == 0 ||
+                    ruStrCmp(".", dir->d_name) == 0)
                 continue;
 
             ruFree(path);
@@ -717,7 +717,7 @@ RUAPI int ruFileRemove(const char* filename) {
 #endif
 }
 
-char* getDirNameTerminator(const char *filePath) {
+char* getDirNameTerminator(trans_chars filePath) {
     if (!filePath) return NULL;
     char *pfile = (char*)filePath + strlen(filePath)-1;
     for (; pfile >= filePath; pfile--) {
@@ -774,7 +774,7 @@ RUAPI int ruMkdir(const char *pathname, int mode, bool deep) {
     if (!mode) return RUE_INVALID_PARAMETER;
 #endif
     int ret;
-    char *path = ruStrdup(pathname);
+    char *path = ruStrDup(pathname);
     do {
         char *p = path + strlen(path)-1;
 #ifdef _WIN32
@@ -801,16 +801,16 @@ RUAPI int ruMkdir(const char *pathname, int mode, bool deep) {
     return ret;
 }
 
-RUAPI char* ruDirName(const char *filePath) {
+RUAPI alloc_chars ruDirName(trans_chars filePath) {
     ruClearError();
     if (!filePath) return NULL;
     char *fileTerm = getDirNameTerminator(filePath);
     if (!fileTerm) return NULL;
     rusize len = fileTerm - filePath + 1;
-    return ruStrndup(filePath, len);
+    return ruStrNDup(filePath, len);
 }
 
-RUAPI char* ruBaseName(const char *filePath) {
+RUAPI perm_chars ruBaseName(perm_chars filePath) {
     ruClearError();
     if (!filePath) return NULL;
     char *pfile = (char*)filePath + strlen(filePath)-1;
@@ -859,7 +859,7 @@ RUAPI char* ruFullPath(const char* filePath) {
 #else
     if (filePath && *filePath == '/') {
         // path is already absolute
-        return ruStrdup(filePath);
+        return ruStrDup(filePath);
     }
     char fullPath[MAXPATHLEN];
     fullPath[0] = '\0';
@@ -867,7 +867,7 @@ RUAPI char* ruFullPath(const char* filePath) {
         if (filePath) {
             res = ruDupPrintf("%s%c%s", fullPath, RU_SLASH, filePath);
         } else {
-            res = ruStrdup(fullPath);
+            res = ruStrDup(fullPath);
         }
     } else {
         ruSetError("invalid current directory '%s'", fullPath);
@@ -876,12 +876,38 @@ RUAPI char* ruFullPath(const char* filePath) {
     return res;
 }
 
-RUAPI char* ruPathJoin(const char* base, const char* file) {
+RUAPI alloc_chars ruPathJoin(trans_chars base, trans_chars file) {
     if (!base && !file) return NULL;
-    if (!file) return ruStrdup(base);
-    if (!base) return ruStrdup(file);
+    if (!file) return ruStrDup(base);
+    if (!base) return ruStrDup(file);
     if (ruStrEndsWith(base, RU_SLASH_S, NULL)) {
         return ruDupPrintf("%s%s", base, file);
     }
     return ruDupPrintf("%s%s%s", base, RU_SLASH_S, file);
+}
+
+RUAPI alloc_chars ruPathMultiJoin(int parts, ...) {
+    if (parts < 1) return NULL;
+    va_list args;
+    va_start (args, parts);
+    ruString str = NULL;
+    for (int i = 0; i < parts; i++) {
+        trans_chars piece = va_arg(args, trans_chars);
+        if (str && ruStrStartsWith(piece, RU_SLASH_S, NULL)) piece++;
+        rusize len = strlen(piece);
+        if (ruStrEndsWith(piece, RU_SLASH_S, NULL)) {
+            len--;
+        }
+        if (!str) {
+            str = ruStringNewn(NULL, len * parts);
+            ruStringAppendn(str, piece, len);
+        } else {
+            ruStringAppend(str, RU_SLASH_S);
+            ruStringAppendn(str, piece, len);
+        }
+    }
+    va_end (args);
+    alloc_chars out = ruStringGetCString(str);
+    ruStringFree(str, true);
+    return out;
 }

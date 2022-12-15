@@ -167,16 +167,17 @@ char* fixPath(const char *inPath);
  */
 typedef struct ListElmt_ {
     uint64_t type;
-    void               *data;
-    struct ListElmt_   *next;
+    struct ListElmt_* prev;
+    ptr data;
+    struct ListElmt_* next;
 } ListElmt;
 
 typedef struct List_ {
     uint64_t type;
-    int32_t                size;
-    void               (*destroy)(void *data);
-    ListElmt           *head;
-    ListElmt           *tail;
+    int32_t size;
+    void (*destroy)(void *data);
+    ListElmt* head;
+    ListElmt* tail;
     // optional thread safety
     ruMutex mux;
     bool doQuit;    // flag to initiate map shutdown
@@ -185,7 +186,7 @@ typedef struct List_ {
 List* ListNew(void (*destructor)(void *data));
 void ListFree(List *list);
 void* ListRemoveAfter(List *list, ruListElmt rle, int32_t *code);
-int32_t ListInsertAfter(List *list, ruListElmt rle, const void *data);
+int32_t ListInsertAfter(List *list, ruListElmt rle, ptr data);
 
 /*
  *  Maps

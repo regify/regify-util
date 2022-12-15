@@ -177,12 +177,48 @@ typedef const char* trans_chars;
  * \brief An allocated NULL terminated string pointer.
  *
  * \ingroup misc
- * On input this represents a place on the stack or heap that will be written to
- * by the called function. Usually accompanied by a length parameter.
+ * On input this can represent a place on the stack or heap that will be written
+ * to by the called function. Usually accompanied by a length parameter.
+ * It can also represent a parameter that will be freed in conjunction with an
+ * enclosing object after use.
  * On output this string belongs to the caller and must be freed after use.
  * Within functions this can also be used for string pointers that must be freed.
  */
 typedef char* alloc_chars;
+
+/**
+ * \brief A permanent data bytes pointer.
+ *
+ * \ingroup misc
+ * On input it needs to persist through the life of a given context.
+ * On output it is guaranteed to live as long as it's context or until it has
+ * been explicitly finalized. It must not be freed.
+ * Within functions this can also be used for string pointers that must not be freed.
+ */
+typedef const unsigned char* perm_bytes;
+
+/**
+ * \brief A transient data bytes pointer.
+ *
+ * \ingroup misc
+ * On input this string must only persist for the duration of the function call.
+ * On output this string is valid until another call with the given context is
+ * performed and must not be freed.
+ */
+typedef const unsigned char* trans_bytes;
+
+/**
+ * \brief An allocated data bytes pointer.
+ *
+ * \ingroup misc
+ * On input this can represent a place on the stack or heap that will be written
+ * to by the called function. Usually accompanied by a length parameter.
+ * It can also represent a parameter that will be freed in conjunction with an
+ * enclosing object after use.
+ * On output this data belongs to the caller and must be freed after use.
+ * Within functions this can also be used for data pointers that must be freed.
+ */
+typedef unsigned char* alloc_bytes;
 
 /**
  * \brief A permanent pointer.
@@ -208,9 +244,11 @@ typedef const void* trans_ptr;
  * \brief An allocated pointer.
  *
  * \ingroup misc
- * On input this represents a place on the stack or heap that will be written to
- * by the called function. Usually accompanied by a length parameter.
- * On output this string belongs to the caller and must be freed after use.
+ * On input this can represent a place on the stack or heap that will be written
+ * to by the called function. Usually accompanied by a length parameter.
+ * It can also represent a parameter that will be freed in conjunction with an
+ * enclosing object after use.
+ * On output this object belongs to the caller and must be freed after use.
  */
 typedef void* alloc_ptr;
 
@@ -438,6 +476,13 @@ RUAPI int32_t ruGetTimeVal(ruTimeVal *result);
  * @return Seconds since epoch
  */
 RUAPI long ruTimeSec(void);
+
+/**
+ * \brief Checks if given stamp has elapsed.
+ * @param stamp second stamp to compare to.
+ * @return Return true if now is >= stamp
+ */
+RUAPI bool ruTimeEllapsed(sec_t stamp);
 
 /**
  * \brief Converts given local time stamp to UTC

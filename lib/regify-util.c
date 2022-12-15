@@ -85,7 +85,7 @@ RUAPI alloc_chars ruGetHostname(void) {
     int len = 256;
     if(!gethostname(name, len)) {
 #endif
-        return ruStrdup(name);
+        return ruStrDup(name);
     }
     return NULL;
 }

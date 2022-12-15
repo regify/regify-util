@@ -90,7 +90,7 @@ ctype* ctype ## Get(void* ptr, int32_t* code) { \
     } \
     ruRetWithCode(code, RUE_OK, ret); \
 }
-char* ruStrdup(const char* str) {
+char* ruStrDup(const char* str) {
     if (!str) return NULL;
 #if _WIN32
     char *ret = _strdup(str);
@@ -226,7 +226,7 @@ static void addEntry(Cleaner *c, Tree *t, trans_chars instr, trans_chars subst) 
         // free up potential duplicate entry
         ruFree(t->kids[i]->subst);
         if (subst) {
-            t->kids[i]->subst = ruStrdup(subst);
+            t->kids[i]->subst = ruStrDup(subst);
         } else {
             if (!entryUsed(c, t->kids[i])) {
                 t->kids[i] = freeBranch(c, t->kids[i]);

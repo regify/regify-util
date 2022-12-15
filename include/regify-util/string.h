@@ -192,7 +192,7 @@ RUAPI void ruStrByteReplace(char* string, char search, char replace);
  * @param str2 The second string to compare to the first.
  * @return -1, 1 or 0 in case of them being equal or both NULL.
  */
-RUAPI int32_t ruStrcmp(trans_chars str1, trans_chars str2);
+RUAPI int32_t ruStrCmp(trans_chars str1, trans_chars str2);
 
 /**
  * \brief Returns true when libc strcmp would return 0 but in a manner that gracefully
@@ -204,13 +204,23 @@ RUAPI int32_t ruStrcmp(trans_chars str1, trans_chars str2);
 RUAPI bool ruStrEquals(trans_chars str1, trans_chars str2);
 
 /**
+ * \brief Returns true when str2 is equal to the first len number of bytes in
+ * str1 or both str1 and str2 are NULL or if len is NULL.
+ * @param str1 The first string to check.
+ * @param s1len Number of bytes in str1 to consider
+ * @param str2 The second string to compare to the first.
+ * @return true if both strings are the same or NULL
+ */
+RUAPI bool ruStrNEquals(trans_chars str1, rusize s1len, trans_chars str2);
+
+/**
  * \brief Returns what libc strcasecmp would return but in a manner that gracefully
  * handles NULL imputs.
  * @param str1 The first string to check.
  * @param str2 The second string to compare to the first.
  * @return -1, 1 or 0 in case of them being equal or both NULL.
  */
-RUAPI int32_t ruStrcasecmp(trans_chars str1, trans_chars str2);
+RUAPI int32_t ruStrCaseCmp(trans_chars str1, trans_chars str2);
 
 /**
  * \brief Whether given string starts with given prefix.
@@ -246,7 +256,7 @@ RUAPI bool ruStrEndsCaseWith(trans_chars str, trans_chars suffix, int32_t *code)
  * @param len Maximum number of bytes in haystack to consider.
  * @return Start of the first found instance of haystack or NULL if not found.
  */
-RUAPI char* ruStrStrLen(const char* haystack, const char* needle, rusize len);
+RUAPI trans_chars ruStrStrLen(trans_chars haystack, trans_chars needle, rusize len);
 
 /**
  * \brief Searches the first instance of needle in haystack.
@@ -254,7 +264,7 @@ RUAPI char* ruStrStrLen(const char* haystack, const char* needle, rusize len);
  * @param needle String to find in haystack.
  * @return Start of the first found instance of haystack or NULL if not found.
  */
-RUAPI char* ruStrStr(const char* haystack, const char* needle);
+RUAPI trans_chars ruStrStr(trans_chars haystack, trans_chars needle);
 
 /**
  * \brief Searches the last instance of needle in haystack up to len bytes.
@@ -263,7 +273,7 @@ RUAPI char* ruStrStr(const char* haystack, const char* needle);
  * @param len Maximum number of bytes in haystack to consider.
  * @return Start of the last found instance of haystack or NULL if not found.
  */
-RUAPI char* ruLastSubstrLen(const char* haystack, const char* needle, rusize len);
+RUAPI trans_chars ruLastSubstrLen(trans_chars haystack, trans_chars needle, rusize len);
 
 /**
  * \brief Searches the last instance of needle in haystack.
@@ -271,7 +281,19 @@ RUAPI char* ruLastSubstrLen(const char* haystack, const char* needle, rusize len
  * @param needle String to find in haystack.
  * @return Start of the last found instance of haystack or NULL if not found.
  */
-RUAPI char* ruLastSubstr(const char* haystack, const char* needle);
+RUAPI trans_chars ruLastSubstr(trans_chars haystack, trans_chars needle);
+
+/**
+ * \brief Split given instr up to inlen bytes with delim into a \ref ruList.
+ * @param instr String to split.
+ * @param inlen Optional length delimiter. Use -1 to omit.
+ * @param delim Delimiter to split string on.
+ * @param maxCnt Maximum number of pieces to return or 0 for no limit. The
+ *        remainder will be unsplit in the last piece.
+ * @return The list of pieces  to be free by caller with \ref ruListFree or
+ *         NULL in case of a parameter error.
+ */
+RUAPI ruList ruStrNSplit(trans_chars instr, rusize_s inlen, trans_chars delim, int32_t maxCnt);
 
 /**
  * \brief split given instr with delim into a \ref ruList.
@@ -282,7 +304,7 @@ RUAPI char* ruLastSubstr(const char* haystack, const char* needle);
  * @return The list of pieces  to be free by caller with \ref ruListFree or
  *         NULL in case of a parameter error.
  */
-RUAPI ruList ruStrsplit (const char *instr, const char *delim, int32_t maxCnt);
+RUAPI ruList ruStrSplit(trans_chars instr, trans_chars delim, int32_t maxCnt);
 
 /**
  * \brief Returns lowercase representation of given ASCII character.
@@ -297,7 +319,7 @@ RUAPI char ruAsciiCharToLower(char in);
  * @param instr String to lowercase.
  * @return Lowercase representation of given string. Free with \ref ruFree.
  */
-RUAPI char* ruAsciiToLower(char *instr);
+RUAPI alloc_chars ruAsciiToLower(trans_chars instr);
 
 /**
  * \brief Returns a lowercase copy of len bytes of given ASCII string.
@@ -305,7 +327,7 @@ RUAPI char* ruAsciiToLower(char *instr);
  * @param len The number of bytes to consider
  * @return Lowercase representation of given string. Free with \ref ruFree.
  */
-RUAPI char* ruAsciiNToLower(char *instr, rusize len);
+RUAPI alloc_chars ruAsciiNToLower(trans_chars instr, rusize len);
 
 /**
  * \brief Returns uppercase representation of given ASCII character.
@@ -320,7 +342,7 @@ RUAPI char ruAsciiCharToUpper(char in);
  * @param instr String to uppercase.
  * @return Uppercase representation of given string. Free with \ref ruFree.
  */
-RUAPI char* ruAsciiToUpper(char *instr);
+RUAPI alloc_chars ruAsciiToUpper(trans_chars instr);
 
 /**
  * \brief Returns a uppercase copy of len bytes of given ASCII string.
@@ -328,14 +350,14 @@ RUAPI char* ruAsciiToUpper(char *instr);
  * @param len The number of bytes to consider
  * @return Uppercase representation of given string. Free with \ref ruFree.
  */
-RUAPI char* ruAsciiNToUpper(char *instr, rusize len);
+RUAPI alloc_chars ruAsciiNToUpper(trans_chars instr, rusize len);
 
 /**
  * \brief Returns a lowercase copy of given UTF8 string.
  * @param instr String to lowercase.
  * @return Lowercase representation of given string. Free with \ref ruFree.
  */
-RUAPI char* ruUtf8ToLower(const char *instr);
+RUAPI alloc_chars ruUtf8ToLower(trans_chars instr);
 
 /**
  * \brief Returns a uppercase copy of given UTF8 string.
@@ -349,7 +371,7 @@ RUAPI alloc_chars ruUtf8ToUpper(trans_chars instr);
  * @param str String to copy
  * @return Copy of given string or NULL if NULL was given. Free with \ref ruFree.
  */
-RUAPI char* ruStrdup(const char* str);
+RUAPI char* ruStrDup(const char* str);
 
 /**
  * \brief Returns a copy of len bytes of given string
@@ -357,7 +379,7 @@ RUAPI char* ruStrdup(const char* str);
  * @param len Number of bytes to consider.
  * @return Copy of given string or NULL if NULL was given. Free with \ref ruFree.
  */
-RUAPI char* ruStrndup(const char* str, rusize len);
+RUAPI char* ruStrNDup(const char* str, rusize len);
 
 /**
  * \brief Returns an allocated string from given vprintf call.
@@ -390,7 +412,7 @@ RUAPI int64_t ruStrParseInt64(const char *instr, char **endptr, int base);
  * @param numstr String to contain numerals to parse
  * @return whatever strtoll returns
  */
-RUAPI int64_t ruStrToInt64(const char* numstr);
+RUAPI int64_t ruStrToInt64(trans_chars numstr);
 
 /**
  * \brief Returns long from parsed string.
@@ -399,14 +421,14 @@ RUAPI int64_t ruStrToInt64(const char* numstr);
  * @param numstr String to contain numerals to parse
  * @return The number on success or 0 with errno set.
  */
-RUAPI long ruStrParseLong(const char* numstr);
+RUAPI long ruStrParseLong(trans_chars numstr);
 
 /**
  * \brief Like \ref ruStrParseLong but ignores overflow and trailing garbage
  * @param numstr String to contain numerals to parse
  * @return whatever strtol returns
  */
-RUAPI long ruStrToLong(const char* numstr);
+RUAPI long ruStrToLong(trans_chars numstr);
 
 /**
  * \brief Alias for \ref ruStrParseInt64
@@ -424,6 +446,42 @@ RUAPI long ruStrToLong(const char* numstr);
 RUAPI char* ruStrTrim(char* instr);
 
 /**
+ * \brief Checks given string for leading or trailing whitespace and returns
+ * trimmed copy if needed.
+ * @param instr String to check for trimming
+ * @return NULL if instr was NULL or did not need trimming, else the trimmed
+ *         string to be freed by the caller.
+ */
+RUAPI alloc_chars ruStrTrimDup(trans_chars instr);
+
+/**
+ * \brief Returns the white space trimmed bounds of given string without modifying it.
+ * @param inStart Start address of string to examine
+ * @param inLen Number of bytes to examine
+ * @param outLen Optional, where the length of the returned start address will be stored.
+ * @return Start address of first non whitespace character or NULL
+ */
+RUAPI trans_chars ruStrTrimBounds(trans_chars inStart, rusize_s inLen, rusize* outLen);
+
+/**
+ * \brief Parses whitespace trimmed key / value regions based on delim out of
+ * given input string.
+ *
+ * @param inStart Start of the string to parse
+ * @param inLen Number of bytes to evaluate
+ * @param delim Delimiter sequence to split key / value on
+ * @param keyStart Optional, where the start of the key region will be stored
+ * @param keyLen Optional, where the length of the key region will be stored
+ * @param valStart Optional, where the start of the value region will be stored
+ * @param valLen Optional, where the length of the value region will be stored
+ * @return true if delimiter was found. When false only the key parameters will
+ *          be set.
+ */
+RUAPI bool ruStrFindKeyVal(trans_chars inStart, rusize_s inLen, trans_chars delim,
+                           trans_chars* keyStart, rusize* keyLen,
+                           trans_chars* valStart, rusize* valLen);
+
+/**
  * \brief Checks whether given string has any content other than whitespace
  * @param str String to inspect
  * @return true if NULL empty or only white space
@@ -437,7 +495,21 @@ RUAPI bool ruStrEmpty(trans_chars str);
  * @param instr Input string to be stripped in place
  * @param chars Characters to remove from instr.
  */
-RUAPI void ruStripChars(char *instr, const char* chars);
+RUAPI void ruStripChars(alloc_chars instr, trans_chars chars);
+
+/** @deprecated Use \ref ruStrCmp */
+#define ruStrcmp ruStrCmp;
+
+/** @deprecated Use \ref ruStrCaseCmp */
+#define ruStrcasecmp ruStrCaseCmp
+
+/** @deprecated Use \ref ruStrDup */
+#define ruStrdup ruStrDup
+
+/** @deprecated Use \ref ruStrNDup */
+#define ruStrndup ruStrNDup
+/** @deprecated Use \ref ruStrSplit */
+#define ruStrsplit ruStrSplit
 
 /**
  * @}

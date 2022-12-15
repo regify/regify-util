@@ -46,13 +46,13 @@ START_TEST ( mem ) {
     ck_assert_str_eq((char*)res, exp);
     ruFree(res);
 
-    test = "ruStrdup";
-    res = ruStrdup(exp);
+    test = "ruStrDup";
+    res = ruStrDup(exp);
     ck_assert_str_eq((char*)res, exp);
     ruFree(res);
 
     exp = NULL;
-    res = ruStrdup(exp);
+    res = ruStrDup(exp);
     fail_unless(res == exp, retText, test, exp, res);
 
     test = "ruMalloc0";

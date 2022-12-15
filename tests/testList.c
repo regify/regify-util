@@ -311,13 +311,25 @@ START_TEST ( usage ) {
 
     // iterate over the list
     int32_t i = 0;
-    rle = ruListHead(rl, &ret);
+    rle = ruListIter(rl);
     for (char*field = ruIterCurrent(rle, char*);
-         rle && field;
-        field = ruIterNext(rle, char*)) {
-        ck_assert_str_eq(field, f[i++]);
+         rle; field = ruIterNext(rle, char*), i++) {
+        ck_assert_str_eq(field, f[i]);
+        if (i==1) {
+            field = ruListRemove(rl, &rle, &ret);
+            fail_unless(ret == exp, retText, test, exp, ret);
+            ck_assert_str_eq(field, f[i]);
+        }
     }
     fail_unless(i == esz, retText, test, i, esz);
+
+    str = ruListJoin(rl, NULL, &ret);
+    fail_unless(ret == exp, retText, test, exp, ret);
+    ck_assert_str_eq(str, "field0field2");
+    ruFree(str);
+
+    ret = ruListInsertAt(rl, 1, f[1]);
+    fail_unless(ret == exp, retText, test, exp, ret);
 
     i = 0;
     ruIterator li = ruListIter(rl);

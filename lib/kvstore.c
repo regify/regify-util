@@ -73,7 +73,7 @@ RUAPI KvStore* ruNewFileStore(const char *folderPath, int32_t* code) {
     KvStore* kvs = ruNewStore();
     FileKvStore* fks = ruMalloc0(1, FileKvStore);
     fks->type = MagicFileKvStore;
-    fks->folderPath = ruStrdup(folderPath);
+    fks->folderPath = ruStrDup(folderPath);
     kvs->ctx = fks;
     kvs->ctxFree = (ruFreeFunc)ruKvFileFree;
     kvs->get = ruFileStoreGet;

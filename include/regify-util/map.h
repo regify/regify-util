@@ -86,7 +86,7 @@ RUAPI u_int32_t ruStrHash(const void* key);
  * \brief Convenience match function for Maps.
  * @param s1 First comparison string.
  * @param s2 Second comparison string.
- * @return true if \ref ruStrcmp returns 0
+ * @return true if \ref ruStrCmp returns 0
  */
 RUAPI bool ruStrMatch(const void* s1, const void* s2);
 

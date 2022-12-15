@@ -79,7 +79,7 @@ START_TEST ( api ) {
 
     test = "ruBaseName";
     char *expres = NULL;
-    char *res = ruBaseName(NULL);
+    char *res = (char*)ruBaseName(NULL);
     fail_unless(expres == res, retText, test, expres, res);
 
     test = "ruDirName";
@@ -235,7 +235,7 @@ START_TEST ( filetest ) {
 
     file = "/bar";
     char *expres = "bar";
-    char *res = ruBaseName(file);
+    char *res = (char*)ruBaseName(file);
     ck_assert_str_eq(expres, res);
 
     expres = "/";
@@ -245,7 +245,7 @@ START_TEST ( filetest ) {
 
     file = "/bar/";
     expres = "";
-    res = ruBaseName(file);
+    res = (char*)ruBaseName(file);
     ck_assert_str_eq(expres, res);
 
     expres = "/bar/";
@@ -255,7 +255,7 @@ START_TEST ( filetest ) {
 
     file = "bar";
     expres = "bar";
-    res = ruBaseName(file);
+    res = (char*)ruBaseName(file);
     ck_assert_str_eq(expres, res);
 
     expres = NULL;
@@ -264,7 +264,7 @@ START_TEST ( filetest ) {
 
     file = "/";
     expres = "";
-    res = ruBaseName(file);
+    res = (char*)ruBaseName(file);
     ck_assert_str_eq(expres, res);
 
     expres = "/";
@@ -272,9 +272,19 @@ START_TEST ( filetest ) {
     ck_assert_str_eq(expres, res);
     ruFree(res);
 
+    file = "/foo/bar";
+    expres = "bar";
+    res = (char*)ruBaseName(file);
+    ck_assert_str_eq(expres, res);
+
+    expres = "/foo/";
+    res = ruDirName(file);
+    ck_assert_str_eq(expres, res);
+    ruFree(res);
+
     file = "";
     expres = "";
-    res = ruBaseName(file);
+    res = (char*)ruBaseName(file);
     ck_assert_str_eq(expres, res);
 
     expres = NULL;
@@ -309,6 +319,35 @@ START_TEST ( filetest ) {
     expres = "base" RU_SLASH_S "base";
     ck_assert_str_eq(expres, res);
     ruFree(res);
+
+    test = "ruPathMultiJoin";
+    expres = NULL;
+    res = ruPathMultiJoin(-1);
+    fail_unless(expres == res, retText, test, expres, res);
+
+    res = ruPathMultiJoin(0);
+    fail_unless(expres == res, retText, test, expres, res);
+
+    res = ruPathMultiJoin(1, RU_SLASH_S "foo" RU_SLASH_S);
+    expres = RU_SLASH_S "foo";
+    ck_assert_str_eq(expres, res);
+    ruFree(res);
+
+    res = ruPathMultiJoin(1, "foo", "bar");
+    expres = "foo";
+    ck_assert_str_eq(expres, res);
+    ruFree(res);
+
+    res = ruPathMultiJoin(2, "foo", "bar");
+    expres = "foo" RU_SLASH_S "bar";
+    ck_assert_str_eq(expres, res);
+    ruFree(res);
+
+    res = ruPathMultiJoin(2, RU_SLASH_S "foo" RU_SLASH_S, RU_SLASH_S "bar" RU_SLASH_S);
+    expres = RU_SLASH_S "foo" RU_SLASH_S "bar";
+    ck_assert_str_eq(expres, res);
+    ruFree(res);
+
 }
 END_TEST
 
