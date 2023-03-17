@@ -135,7 +135,7 @@ static int32_t MapPut(Map* mp, ptr key, ptr val, ptr* existingVal) {
     /* Hash the key. */
     mp->iterActive = false;
     int32_t bucket = mp->hash(key) % mp->buckets;
-    for (ListElmt *le = mp->table[bucket]->head; le != NULL; le = le->next) {
+    for (ListElmt *le = mp->table[bucket]->head->next; le != NULL; le = le->next) {
         kv* item = le->data;
         if (mp->match(key, item->key)) {
             if (existingVal) {
@@ -185,13 +185,11 @@ RUAPI int32_t ruMapPutData(ruMap map, ptr key, ptr val, ptr* exisitingVal) {
 }
 
 static int32_t MapRemove(Map *mp, void *key, void **val) {
-    ListElmt *prev;
     /* Hash the key. */
     int32_t bucket = mp->hash(key) % mp->buckets;
     mp->iterActive = false;
     /* Search for the data in the bucket. */
-    prev = NULL;
-    for (ListElmt *le = mp->table[bucket]->head; le != NULL; le = le->next) {
+    for (ListElmt *le = mp->table[bucket]->head->next; le != NULL; le = le->next) {
         kv* item = le->data;
         if (mp->match(key, item->key)) {
             /* Remove the data from the bucket.*/
@@ -200,14 +198,13 @@ static int32_t MapRemove(Map *mp, void *key, void **val) {
                 item->value = NULL;
             }
             int32_t ret;
-            ListRemoveAfter(mp->table[bucket], prev, &ret);
+            ListRemove(mp->table[bucket], le, &ret);
             if (ret == RUE_OK) {
                 mp->size--;
                 kvFree(item);
             }
             return ret;
         }
-        prev = le;
     }
     /* Return that the data was not found. */
     return RUE_GENERAL;
@@ -238,7 +235,7 @@ static int32_t MapGetData(Map *mp, void *key, void **value) {
     /* Hash the key. */
     int32_t bucket = mp->hash(key) % mp->buckets;
     /* Search for the data in the bucket. */
-    for (ListElmt *le = mp->table[bucket]->head; le != NULL; le = le->next) {
+    for (ListElmt *le = mp->table[bucket]->head->next; le != NULL; le = le->next) {
         kv* item = le->data;
         if (mp->match(key, item->key)) {
             /* Pass back the data from the table. */
@@ -297,7 +294,7 @@ static int32_t MapNextSet(Map* mp, void** key, void** value) {
     if (!mp->iterElmt) {
         do {
             if (mp->iterBucket >= mp->buckets) break;
-            mp->iterElmt = mp->table[mp->iterBucket]->head;
+            mp->iterElmt = mp->table[mp->iterBucket]->head->next;
             mp->iterBucket++;
         } while(!mp->iterElmt);
     }
@@ -419,7 +416,7 @@ RUAPI int32_t ruMapRemoveAll(ruMap rm) {
 
     for (u_int32_t i = 0; i < mp->buckets; i++) {
         while (ruListSize(mp->table[i], NULL) > 0) {
-            kv* item = ListRemoveAfter(mp->table[i], NULL, &ret);
+            kv* item = ListRemove(mp->table[i], mp->table[i]->head->next, &ret);
             if (ret == RUE_OK) {
                 mp->size--;
                 kvFree(item);

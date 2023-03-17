@@ -77,14 +77,11 @@ START_TEST ( api ) {
 
     test = "ruListRemoveAfter";
     exp = RUE_PARAMETER_NOT_SET;
-    ruListRemoveAfter(NULL, NULL, &ret);
+    ruListPop(NULL, &ret);
     fail_unless(ret == exp, retText, test, exp, ret);
 
     exp = RUE_INVALID_PARAMETER;
-    ruListRemoveAfter((ruList) test, NULL, &ret);
-    fail_unless(ret == exp, retText, test, exp, ret);
-
-    ruListRemoveAfter(rl, (ruListElmt) test, &ret);
+    ruListPop((ruList) test, &ret);
     fail_unless(ret == exp, retText, test, exp, ret);
 
     test = "ruListTryPop";
@@ -188,6 +185,10 @@ START_TEST ( api ) {
     exp = RUE_OK;
     rle = ruListNextElmt(head, &ret);
     fail_unless(ret == exp, retText, test, exp, ret);
+    fail_if(rle == 0, retText, test, 0, rle);
+
+    rle = ruListNextElmt(rle, &ret);
+    fail_unless(ret == exp, retText, test, exp, ret);
     fail_unless(rle == 0, retText, test, 0, rle);
 
     test = "ruListNextData";
@@ -211,7 +212,11 @@ START_TEST ( api ) {
 
     exp = RUE_OK;
     rle = head;
-    rle = ruListNextData(&rle, &ret);
+    ruListNextData(&rle, &ret);
+    fail_unless(ret == exp, retText, test, exp, ret);
+    fail_if(rle == 0, retText, test, 0, rle);
+
+    ruListNextData(&rle, &ret);
     fail_unless(ret == exp, retText, test, exp, ret);
     fail_unless(rle == 0, retText, test, 0, rle);
 
@@ -229,7 +234,7 @@ START_TEST ( api ) {
     exp = RUE_OK;
     ptr = ruListElmtData(head, &ret);
     fail_unless(ret == exp, retText, test, exp, ret);
-    fail_if(0 == ptr, retText, test, -1, ptr);
+    fail_unless(0 == ptr, retText, test, 0, ptr);
 
     test = "ruListIdxData";
     exp = RUE_PARAMETER_NOT_SET;
@@ -277,7 +282,7 @@ START_TEST ( usage ) {
     // check it
     head = ruListHead(rl, &ret);
     fail_unless(ret == exp, retText, test, exp, ret);
-    ck_assert_str_eq(ruIterCurrent(head, char*), f[0]);
+    ck_assert_str_eq(ruIterNext(head, char*), f[0]);
 
     // add one on top
     ret = ruListInsertAfter(rl, rle, f[1]);
@@ -288,7 +293,7 @@ START_TEST ( usage ) {
     fail_unless(sz == esz, retText, test, esz, sz);
 
     // remove again and check it
-    res = ruListRemoveAfter(rl, rle, &ret);
+    res = ruListPop(rl, &ret);
     fail_unless(ret == exp, retText, test, exp, ret);
     ck_assert_str_eq(res, f[1]);
     // verify the size
@@ -328,7 +333,7 @@ START_TEST ( usage ) {
     // iterate over the list
     int32_t i = 0;
     rle = ruListIter(rl);
-    for (char*field = ruIterCurrent(rle, char*);
+    for (char*field = ruIterNext(rle, char*);
          rle; field = ruIterNext(rle, char*), i++) {
         ck_assert_str_eq(field, f[i]);
         if (i==1) {
@@ -349,7 +354,7 @@ START_TEST ( usage ) {
 
     i = 0;
     ruIterator li = ruListIter(rl);
-    for (char* field = ruIterCurrent(li, char*);
+    for (char* field = ruIterNext(li, char*);
          li; field = ruIterNext(li, char*)) {
         ck_assert_str_eq(field, f[i++]);
     }
@@ -397,9 +402,9 @@ START_TEST ( usage ) {
 
     test = "ruListRemove";
     li = ruListIter(rl);
-    for(char* field = ruIterCurrent(li, char*);
+    for(char* field = ruIterNext(li, char*);
         li; field = ruIterNext(li, char*)) {
-        ruVerbLogf("Deleting %s", field);
+        ruDbgLogf("Deleting %s", field);
         ruListRemove(rl, &li, &ret);
         fail_unless(ret == exp, retText, test, exp, ret);
     }
@@ -455,7 +460,7 @@ START_TEST ( memalloc ) {
     // iterate over the list
     i = 1;
     rle = ruListHead(rl, &ret);
-    for (char*field = ruIterCurrent(rle, char*);
+    for (char*field = ruIterNext(rle, char*);
          rle && field; field = ruIterNext(rle, char*)) {
         snprintf(&buf[0], 18, fieldText, i++);
         ck_assert_str_eq(field, buf);

@@ -30,7 +30,7 @@
    int32_t ret = ruListAppend(recipients, "bob");
    ret = ruListAppend(recipients, "alice");
    ruIterator li = ruListIter(recipients);
-   for(char* recip = ruIterCurrent(li, char*);
+   for(char* recip = ruIterNext(li, char*);
            li; recip = ruIterNext(li, char*)) {
        printf("Recipient: %s", recip);
    }
@@ -156,29 +156,17 @@ RUAPI int32_t ruListInsertAfter(ruList rl, ruListElmt rle, perm_ptr data);
 RUAPI ptr ruListRemove(ruList rl, ruListElmt* rle, int32_t* code);
 
 /**
- * Remove and return the list element after the given element from list.
- * @param rl List to remove object from.
- * @param rle Element after which to remove object. NULL for first element.
- * @param code (Optional) Stores regify error code of this operation.
- *         \ref RUE_OK on success
- *         \ref RUE_USER_ABORT when a threaded list has quit
- *         else a regify error code.
- * @return Object which was removed from list.
- */
-RUAPI ptr ruListRemoveAfter(ruList rl, ruListElmt rle, int32_t *code);
-
-/**
  * \brief Return first element of the list.
  *
- * Stack usage synonym for \ref ruListRemoveAfter at head.
  * @param rl List to pop object from.
  * @param code (Optional) Stores regify error code of this operation.
  *         \ref RUE_OK on success
+ *         \ref RUE_FILE_NOT_FOUND on empty list
  *         \ref RUE_USER_ABORT when a threaded list has quit
  *         else a regify error code.
  * @return Object which was popped off of the list.
  */
-#define ruListPop(rl, code) ruListRemoveAfter(rl, NULL, code)
+RUAPI ptr ruListPop(ruList rl, int32_t *code);
 
 /**
  * \brief Tries to return first element of the list.
@@ -275,14 +263,6 @@ RUAPI ptr ruListNextData(ruListElmt *re, int32_t* code);
  * @return Data of the given element including NULL or NULL if there was an error.
  */
 RUAPI ptr ruListElmtData(ruListElmt re, int32_t* code);
-
-/**
- * Returns the data payload of the given list element casted to type.
- * @param re List element to return data from.
- * @param type Data type to cast the returned data payload to.
- * @return Data of the given element including NULL or NULL if there was an error.
- */
-#define ruIterCurrent(re, type) (type)ruListElmtData(re, NULL)
 
 /**
  * Returns the data payload of the element at given 0 based index.

@@ -197,7 +197,7 @@ typedef struct List_ {
 
 List* ListNew(void (*destructor)(void *data));
 void ListFree(List *list);
-void* ListRemoveAfter(List *list, ruListElmt rle, int32_t *code);
+ptr ListRemove(List* list, ListElmt* old_element, int32_t* code);
 int32_t ListInsertAfter(List *list, ruListElmt rle, ptr data);
 
 /*
