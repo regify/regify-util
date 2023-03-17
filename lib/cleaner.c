@@ -36,13 +36,16 @@
 typedef const char* perm_chars;
 typedef const char* trans_chars;
 typedef char* alloc_chars;
+typedef const void* trans_ptr;
+typedef const void* perm_ptr;
+typedef void* ptr;
 
 #define RUE_OK 0
 #define RUE_INVALID_PARAMETER 64
 #define RUE_PARAMETER_NOT_SET 77
 #define RUE_INVALID_STATE	325
 #define ruFree(p) if(p) free((void*)(p)); (p) = NULL;
-typedef void (*ruCleanerCb) (void* user_data, trans_chars key, trans_chars subst);
+typedef void (*ruCleanerCb) (perm_ptr user_data, trans_chars key, trans_chars subst);
 typedef size_t rusize;
 #if defined(WINDOWS) || defined(WIN32) || defined(__BORLANDC__)
     #ifndef u_int8_t
@@ -113,7 +116,8 @@ bool ruStrEmpty(trans_chars str) {
 }
 
 typedef void* ruCleaner;
-typedef rusize_s (*ioFunc) (void* ctx, void* buf, rusize len);
+typedef rusize_s (*rcWriteFn) (perm_ptr ctx, trans_ptr buf, rusize len);
+typedef rusize_s (*rcReadFn) (perm_ptr ctx, ptr buf, rusize len);
 #else
 // standard part of libregify-util
 #include "lib.h"
@@ -154,10 +158,10 @@ typedef struct {
 
     int32_t error;
 
-    ioFunc read;
-    void *readCtx;
-    ioFunc write;
-    void *writeCtx;
+    rcReadFn read;
+    perm_ptr readCtx;
+    rcWriteFn write;
+    perm_ptr writeCtx;
 #ifndef CLEANER_ONLY
     ruMutex mux;
 #endif
@@ -193,7 +197,7 @@ static bool entryUsed(Cleaner *c, Tree *t) {
 }
 
 static void dumpEntry(Cleaner *c, Tree *t, char* instr, char* cur, rusize inlen,
-                      ruCleanerCb lf, void* lctx) {
+                      ruCleanerCb lf, perm_ptr lctx) {
     if ((rusize)(cur-instr) < inlen) {
         for (int i = 0; i < 256; i++) {
             if (t->kids[i]) {
@@ -271,7 +275,7 @@ static void bufferedRead(Cleaner *c) {
 
 static void flush(Cleaner *c) {
     char *buf = c->outBuf;
-    rusize len =c->outCur - c->outBuf;
+    rusize len = c->outCur - c->outBuf;
     while (true) {
         rusize_s ret = c->write(c->writeCtx, buf, len);
         if (ret < 0) {
@@ -479,7 +483,7 @@ int32_t ruCleanRemove(ruCleaner rc, trans_chars instr) {
     return code;
 }
 
-int32_t ruCleanDump(ruCleaner cp, ruCleanerCb lf, void* user_data) {
+int32_t ruCleanDump(ruCleaner cp, ruCleanerCb lf, perm_ptr user_data) {
     int32_t code;
     Cleaner *c = CleanerGet(cp, &code);
     if (!c) return code;
@@ -492,8 +496,8 @@ int32_t ruCleanDump(ruCleaner cp, ruCleanerCb lf, void* user_data) {
     return code;
 }
 
-int32_t ruCleanIo(ruCleaner rc, ioFunc reader, void* readCtx,
-                  ioFunc writer, void* writeCtx) {
+int32_t ruCleanIo(ruCleaner rc, rcReadFn reader, perm_ptr readCtx,
+                  rcWriteFn writer, perm_ptr writeCtx) {
     int32_t code;
     Cleaner *c = CleanerGet(rc, &code);
     if (!c) return code;
@@ -506,7 +510,7 @@ int32_t ruCleanIo(ruCleaner rc, ioFunc reader, void* readCtx,
 }
 
 int32_t ruCleanToWriter(ruCleaner rc, trans_chars in, rusize len,
-                        ioFunc writer, void* writeCtx) {
+                        rcWriteFn writer, perm_ptr writeCtx) {
     int32_t code;
     Cleaner *c = CleanerGet(rc, &code);
     if (!c) return code;
@@ -523,13 +527,13 @@ int32_t ruCleanToWriter(ruCleaner rc, trans_chars in, rusize len,
 }
 
 #ifndef CLEANER_ONLY
-static rusize_s myappend(void* ctx, void *buf, rusize len) {
+static rusize_s myappend(perm_ptr ctx, trans_ptr buf, rusize len) {
     ruString io = (ruString)ctx;
     if (RUE_OK == ruBufferAppend(io, buf, len)) return len;
     return -1;
 }
 
-int32_t ruCleanToString(ruCleaner rc, const char *in, rusize len, ruString *out) {
+int32_t ruCleanToString(ruCleaner rc, trans_chars in, rusize len, ruString *out) {
     if (!out || !in) return RUE_PARAMETER_NOT_SET;
     if (!len) len = strlen(in);
     ruBuffer res = ruBufferNew((rusize)(len * 1.1)); // 10% margin

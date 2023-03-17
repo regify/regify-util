@@ -193,7 +193,7 @@ RUAPI ptr ruListRemoveAfter(ruList rl, ruListElmt rle, int32_t *code);
  *         else a regify error code.
  * @return Object which was popped off of the list.
  */
-RUAPI ptr ruListTryPop(ruList rl, uint32_t timeoutMs, int32_t *code);
+RUAPI ptr ruListTryPop(ruList rl, msec_t timeoutMs, int32_t *code);
 
 /**
  * Returns the number of elements in the list.
@@ -320,6 +320,16 @@ RUAPI ptr ruListIdxElmtData(ruList rl, int32_t index, int32_t* code);
  * @return Joined string to be freed by the caller
  */
 RUAPI alloc_chars ruListJoin(ruList rl, trans_chars delim, int32_t* code);
+
+/**
+ * \brief Sorts the given list using supplied comparator function
+ * @param rl List to sort
+ * @param sort comparator function to sort with
+ * @return \ref RUE_OK on success
+ *         \ref RUE_USER_ABORT when a threaded list has quit
+ *         else a regify error code.
+ */
+RUAPI int32_t ruListSort(ruList rl, ruCompFunc sort);
 
 /**
  * @}

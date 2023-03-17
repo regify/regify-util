@@ -83,7 +83,7 @@ RUAPI int32_t ruGetTimeVal(ruTimeVal *result) {
     ruClearError();
     if (!result) return RUE_PARAMETER_NOT_SET;
 #ifndef RUMS
-    struct timeval r;
+    ruZeroedStruct(struct timeval, r);
 
     gettimeofday (&r, NULL);
     result->sec = r.tv_sec;
@@ -106,7 +106,7 @@ RUAPI int32_t ruGetTimeVal(ruTimeVal *result) {
 
 RUAPI sec_t ruTimeSec(void) {
     ruClearError();
-    ruTimeVal tv;
+    ruZeroedStruct(ruTimeVal, tv);
     ruGetTimeVal(&tv);
     return tv.sec;
 }
@@ -115,21 +115,77 @@ RUAPI bool ruTimeEllapsed(sec_t stamp) {
     return stamp <= ruTimeSec();
 }
 
-RUAPI long ruTimeLocalToUtc(sec_t stamp) {
-    struct tm lt;
+sec_t timeParse(trans_chars dateformat, trans_chars datestr, bool utc) {
+    ruZeroedStruct(struct tm, t);
+    if (!dateformat || !datestr) return -1;
+    strptime(datestr, dateformat, &t);
+    if (utc) {
+        return timegm(&t);
+    } else {
+        return timelocal(&t);
+    }
+}
+
+RUAPI sec_t ruTimeParse(trans_chars dateformat, trans_chars datestr) {
+    return timeParse(dateformat, datestr, false);
+}
+
+RUAPI sec_t ruUtcParse(trans_chars dateformat, trans_chars datestr) {
+    return timeParse(dateformat, datestr, true);
+}
+
+int timeFormat(trans_chars format, rusize len, alloc_chars timeStr, sec_t timesecs, bool utc) {
+    if (!format || ! len || !timeStr) return -1;
+    ruZeroedStruct(struct tm, tm);
+    ruZeroedStruct(ruTimeVal, tv);
+    if (timesecs) {
+        tv.sec = timesecs;
+        tv.usec = 0;
+    } else {
+        // https://stackoverflow.com/questions/3673226/how-to-print-time-in-format-2009-08-10-181754-811
+        ruGetTimeVal(&tv);
+    }
+
+#ifdef _WIN32
+    if (utc) {
+        gmtime_r(&tv.sec, &tm);
+    } else {
+        _localtime32_s(&tm, &tv.sec);
+    }
+#else
+    if (utc) {
+        gmtime_r(&tv.sec, &tm);
+    } else {
+        localtime_r(&tv.sec, &tm);
+    }
+#endif
+    strftime(timeStr, len, format, &tm);
+    return (int) tv.usec;
+}
+
+RUAPI int ruTimeFormat(trans_chars format, rusize len, alloc_chars timeStr, sec_t timesecs) {
+    return timeFormat(format, len, timeStr, timesecs, false);
+}
+
+RUAPI int ruUtcFormat(trans_chars format, rusize len, alloc_chars timeStr, sec_t timesecs) {
+    return timeFormat(format, len, timeStr, timesecs, true);
+}
+
+RUAPI sec_t ruTimeLocalToUtc(sec_t stamp) {
+    ruZeroedStruct(struct tm, lt);
     localtime_r(&stamp, &lt);
     return stamp - lt.tm_gmtoff;
 }
 
-RUAPI long ruTimeUtcToLocal(sec_t stamp) {
-    struct tm lt;
+RUAPI sec_t ruTimeUtcToLocal(sec_t stamp) {
+    ruZeroedStruct(struct tm, lt);
     localtime_r(&stamp, &lt);
     return stamp + lt.tm_gmtoff;
 }
 
 RUAPI msec_t ruTimeMs(void) {
     ruClearError();
-    ruTimeVal tv;
+    ruZeroedStruct(ruTimeVal, tv);
     ruGetTimeVal(&tv);
     // Round to nearest millis
     msec_t millis = tv.sec * 1000;
@@ -143,7 +199,7 @@ RUAPI bool ruTimeMsEllapsed(msec_t stamp) {
 
 RUAPI usec_t ruTimeUs(void) {
     ruClearError();
-    ruTimeVal tv;
+    ruZeroedStruct(ruTimeVal, tv);
     ruGetTimeVal(&tv);
     usec_t micros = tv.sec * 1000000;
     return micros + tv.usec;
@@ -159,22 +215,24 @@ RUAPI alloc_chars ruGetLanguage(void) {
     return ruStrNDup(lc, 2);
 }
 
-RUAPI void ruUsleep(usec_t microseconds) {
+RUAPI void ruSleepUs(usec_t microseconds) {
 #ifdef RUMS
   Sleep (microseconds / 1000);
 #else
-  struct timespec request, remaining;
-  request.tv_sec = microseconds / 1000000;
-  request.tv_nsec = 1000 * (microseconds % 1000000);
-  while (nanosleep (&request, &remaining) == -1 && errno == EINTR) request = remaining;
+    ruZeroedStruct(struct timespec, request);
+    ruZeroedStruct(struct timespec, remaining);
+    request.tv_sec = microseconds / 1000000;
+    request.tv_nsec = 1000 * (microseconds % 1000000);
+    while (nanosleep (&request, &remaining) == -1 && errno == EINTR) request = remaining;
 #endif
 }
 
-RUAPI void ruMsleep(msec_t milliseconds) {
+RUAPI void ruSleepMs(msec_t milliseconds) {
 #ifdef RUMS
     Sleep (milliseconds);
 #else
-    struct timespec request, remaining;
+    ruZeroedStruct(struct timespec, request);
+    ruZeroedStruct(struct timespec, remaining);
     request.tv_sec = milliseconds / 1000;
     request.tv_nsec = 1000000 * (milliseconds % 1000);
     while (nanosleep (&request, &remaining) == -1 && errno == EINTR) request = remaining;

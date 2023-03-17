@@ -33,6 +33,7 @@
     #include <dirent.h>
     #include <sys/time.h>
     #include <unistd.h>
+    #include <utime.h>
 #else
     #include <io.h>
 #endif
@@ -116,6 +117,7 @@ void ruClearError(void);
 #define MagicThr            2307
 #define MagicIni            2308
 #define KvStoreMagic        2309
+#define MagicTsc            2310
 // cleaner.c #define MagicCleaner 2310
 
 /*
@@ -145,6 +147,16 @@ typedef struct thr_ {
     bool finished;
 } Thr;
 
+Mux* ruMuxInit(void);
+void ruMuxLock(Mux *mux);
+void ruMuxUnlock(Mux *mux);
+
+// thread safe counter
+typedef struct tsc_ {
+    uint64_t type;
+    ruMutex mutex;  // counter mutex
+    int64_t count;  // counter
+} tsc;
 
 /*
  *  Strings

@@ -112,10 +112,13 @@ RUAPI ruMap ruMapFree(ruMap rm);
  * @param map Map to insert key / value pair into.
  * @param key The key to insert.
  * @param val The associated value to go with the key.
- * @return \ref RUE_OK on success \ref RUE_USER_ABORT when a threaded map has
+ * @param exisitingVal Optional. If set the pointer to the associated existing
+ *                  value will be stored here, and key/value will not be updated.
+ * @return \ref RUE_OK on success, \ref RUE_FILE_EXISTS if exisitingVal was set
+ *          and there was one, \ref RUE_USER_ABORT when a threaded map has
  *          quit else a regify error code.
  */
-RUAPI int32_t ruMapPutData(ruMap map, void *key, void *val);
+RUAPI int32_t ruMapPutData(ruMap map, ptr key, ptr val, ptr* exisitingVal);
 
 /**
  * \brief Runs \ref ruMapPutData with void* casts.
@@ -125,7 +128,20 @@ RUAPI int32_t ruMapPutData(ruMap map, void *key, void *val);
  * @return \ref RUE_OK on success \ref RUE_USER_ABORT when a threaded map has
  *          quit else a regify error code.
  */
-#define ruMapPut(map, key, val) ruMapPutData(map, (void*)(key), (void*)(val))
+#define ruMapPut(map, key, val) ruMapPutData(map, (void*)(key), (void*)(val), NULL)
+
+/**
+ * \brief Runs \ref ruMapPutData with void* casts.
+ * @param map Map to insert key / value pair into.
+ * @param key The key to insert.
+ * @param val The associated value to go with the key.
+ * @param exisiting Optional. If set the pointer to the associated existing
+ *                  value will be stored here, and key/value will not be updated.
+ * @return \ref RUE_OK on success, \ref RUE_FILE_EXISTS if exisitingVal was set
+ *          and there was one, \ref RUE_USER_ABORT when a threaded map has
+ *          quit else a regify error code.
+ */
+#define ruMapTryPut(map, key, val, existing) ruMapPutData(map, (void*)(key), (void*)(val), (void**)(existing))
 
 /**
  * \brief Removes an entry from the map.
@@ -142,7 +158,7 @@ RUAPI int32_t ruMapRemoveData(ruMap rm, void *key, void **val);
  * \brief Runs \ref ruMapRemoveData with void* casts.
  * @param rm The map to remove the entry from.
  * @param key The key to be removed.
- * @param val (Optional) Where to store the retrieved value associated wiht the
+ * @param val (Optional) Where to store the retrieved value associated with the
  *            key.
  * @return \ref RUE_OK on success \ref RUE_USER_ABORT when a threaded map has
  *          quit else a regify error code.
@@ -162,8 +178,9 @@ RUAPI int32_t ruMapRemoveAll(ruMap rm);
  * @param rm The map to retrieve the entry from.
  * @param key The key to be retrieved.
  * @param val Where to store the retrieved value associated with the key.
- * @return \ref RUE_OK on success \ref RUE_USER_ABORT when a threaded map has
- *          quit else a regify error code.
+ * @return \ref RUE_OK on success \ref RUE_GENERAL if key was not found
+ *         \ref RUE_USER_ABORT when a threaded map has
+ *         quit else a regify error code.
  */
 RUAPI int32_t ruMapGetValue(ruMap rm, void *key, void **val);
 
@@ -198,7 +215,7 @@ RUAPI bool ruMapHasKey(ruMap rm, void *key, int32_t *code);
  * Example:
  * ~~~~~{.c}
    int ret;
-   void *key = NULL, *val = NULL;
+   void *key = NULL, *val = NULL; // map values must be pointer sized
    for (ret = ruMapFirst(map, &key, &val); ret == RUE_OK;
        ret = ruMapNext(map, &key, &val)) {
        // work with key and/or val

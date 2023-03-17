@@ -28,15 +28,15 @@
 /* log context */
 static ruLogFunc logger_ = NULL;
 static u_int32_t logLevel_ = 0;
-static void* userLogData_ = NULL;
+static perm_ptr userLogData_ = NULL;
 
-void ruSetLogger(ruLogFunc logger, u_int32_t logLevel, void* userData) {
+void ruSetLogger(ruLogFunc logger, u_int32_t logLevel, perm_ptr userData) {
     logger_ = logger;
     logLevel_ = logLevel;
     userLogData_ = userData;
 }
 
-void ruStdErrorLogger(void* udata, const char *msg) {
+void ruStdErrorLogger(perm_ptr udata, trans_chars msg) {
     fputs(msg, stderr);
 }
 
@@ -50,10 +50,12 @@ bool ruDoesLog(u_int32_t log_level) {
     return logLevel_ >= log_level;
 }
 
-static char* makeLogMsg(u_int32_t log_level, const char *filePath, const char *func,
-                   int32_t line, const char *format, va_list args) {
+static char* makeLogMsg(u_int32_t log_level, trans_chars filePath, trans_chars func,
+                   int32_t line, trans_chars format, va_list args) {
     char *lv;
-    if (log_level >= RU_LOG_VERB)
+    if (log_level >= RU_LOG_DBUG)
+        lv = "DBUG";
+    else if (log_level >= RU_LOG_VERB)
         lv = "VERB";
     else if (log_level >= RU_LOG_INFO)
         lv = "INFO";
@@ -134,22 +136,30 @@ static char* makeLogMsg(u_int32_t log_level, const char *filePath, const char *f
     return ret;
 }
 
-char* ruMakeLogMsg(u_int32_t log_level, const char *filePath, const char *func,
-                   int32_t line, const char *format, ...) {
+char* ruMakeLogMsg(u_int32_t log_level, trans_chars filePath, trans_chars func,
+                   int32_t line, trans_chars format, ...) {
+    static Mux* mux = NULL;
+    if (!mux) mux = ruMuxInit();
+    ruMuxLock(mux);
     va_list args;
     va_start(args, format);
     char *out = makeLogMsg(log_level, filePath, func, line, format, args);
     va_end(args);
+    ruMuxUnlock(mux);
     return out;
 }
 
-void ruDoLog(u_int32_t log_level, const char *filePath, const char *func,
-             int32_t line, const char *format, ...) {
+void ruDoLog(u_int32_t log_level, trans_chars filePath, trans_chars func,
+             int32_t line, trans_chars format, ...) {
     if (!ruDoesLog(log_level)) return;
+    static Mux* mux = NULL;
+    if (!mux) mux = ruMuxInit();
+    ruMuxLock(mux);
     va_list args;
     va_start(args, format);
     char * _log_str_ = makeLogMsg(log_level, filePath, func, line, format, args);
     va_end(args);
+    ruMuxUnlock(mux);
     logger_(userLogData_, _log_str_);
     free(_log_str_);
 }

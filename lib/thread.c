@@ -23,6 +23,7 @@
 
 ruMakeTypeGetter(Mux, MagicMux)
 ruMakeTypeGetter(Thr, MagicThr)
+ruMakeTypeGetter(tsc, MagicTsc)
 
 RU_THREAD_LOCAL char* logPidEnd = NULL;
 
@@ -76,7 +77,7 @@ static bool threadWait(Thr* tc, long tosecs, void** exitVal) {
     long end = ruTimeSec()+tosecs;
     while (end > ruTimeSec()) {
         if (tc->finished) break;
-        ruUsleep(10);
+        ruSleepUs(10);
     }
 
     if (tc->finished) {
@@ -194,8 +195,7 @@ RUAPI int ruThreadJoin(ruThread tid, void** exitVal) {
     return code;
 }
 
-RUAPI ruMutex ruMutexInit(void) {
-    ruClearError();
+Mux* ruMuxInit(void) {
     Mux *mx = ruMalloc0(1, Mux);
     mx->type = MagicMux;
 #ifdef RUMS
@@ -213,7 +213,12 @@ RUAPI ruMutex ruMutexInit(void) {
         return NULL;
     }
 #endif
-    return (ruMutex)mx;
+    return mx;
+}
+
+RUAPI ruMutex ruMutexInit(void) {
+    ruClearError();
+    return (ruMutex)ruMuxInit();
 }
 
 RUAPI ruMutex ruMutexFree(ruMutex m) {
@@ -251,6 +256,17 @@ RUAPI bool ruMutexTryLock(ruMutex m) {
 #endif
 }
 
+void ruMuxLock(Mux *mux) {
+#ifdef RUMS
+    if (WAIT_OBJECT_0 != WaitForSingleObject(mux->mux, INFINITE)) {
+        ruCritLogf("failed locking mutex ec:%d", GetLastError());
+        ruAbort();
+    }
+#else
+    pthread_mutex_lock(&mux->mux);
+#endif
+}
+
 RUAPI void ruMutexLock(ruMutex m) {
     ruClearError();
     int32_t ret;
@@ -259,13 +275,14 @@ RUAPI void ruMutexLock(ruMutex m) {
         ruCritLogf("failed getting mutex %d", ret);
         ruAbort();
     }
+    ruMuxLock(mux);
+}
+
+void ruMuxUnlock(Mux *mux) {
 #ifdef RUMS
-    if (WAIT_OBJECT_0 != WaitForSingleObject(mux->mux, INFINITE)) {
-        ruCritLogf("failed locking mutex ec:%d", GetLastError());
-        ruAbort();
-    }
+    ReleaseMutex(mux->mux);
 #else
-    pthread_mutex_lock(&mux->mux);
+    pthread_mutex_unlock(&mux->mux);
 #endif
 }
 
@@ -277,10 +294,47 @@ RUAPI void ruMutexUnlock(ruMutex m) {
         ruCritLogf("failed getting mutex %d", ret);
         ruAbort();
     }
-#ifdef RUMS
-    ReleaseMutex(mux->mux);
-#else
-    pthread_mutex_unlock(&mux->mux);
-#endif
+    ruMuxUnlock(mux);
 }
 
+RUAPI ruCount ruCounterNew(int64_t initialCount) {
+    tsc* ac = ruMalloc0(1, tsc);
+    ac->type = MagicTsc;
+    ac->mutex = ruMutexInit();
+    ac->count = initialCount;
+    return (ruCount)ac;
+}
+
+RUAPI int64_t ruCounterIncValue(ruCount counter, int64_t value, int32_t* code) {
+    tsc* ac = tscGet(counter, code);
+    int64_t val = 0;
+    if (!ac) return val;
+
+    ruMutexLock(ac->mutex);
+    ac->count += value;
+    val = ac->count;
+    ruMutexUnlock(ac->mutex);
+    return val;
+}
+
+RUAPI int64_t ruCountSetValue(ruCount counter, int64_t value, int32_t* code) {
+    tsc* ac = tscGet(counter, code);
+    int64_t val = 0;
+    if (!ac) return val;
+
+    ruMutexLock(ac->mutex);
+    val = ac->count;
+    ac->count = value;
+    ruMutexUnlock(ac->mutex);
+    return val;
+}
+
+RUAPI ruCount ruCountFree(ruCount counter) {
+    tsc* ac = tscGet(counter, NULL);
+    if (!ac) return NULL;
+    ac->type = 0;
+    ac->mutex = ruMutexFree(ac->mutex);
+    ac->count = 0;
+    ruFree(ac);
+    return NULL;
+}

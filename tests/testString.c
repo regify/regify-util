@@ -40,6 +40,9 @@ START_TEST ( api ) {
     ret = ruStringAppend(rs, NULL);
     fail_unless(ret == exp, retText, test, exp, ret);
 
+    ret = ruStringReset(rs);
+    fail_unless(ret == exp, retText, test, exp, ret);
+
     ret = ruStringAppendf(rs, NULL, NULL);
     fail_unless(ret == exp, retText, test, exp, ret);
 
@@ -85,6 +88,9 @@ START_TEST ( api ) {
     ruStrByteReplace(NULL, 0, 0);
     ruStrByteReplace(0, 0, 0);
 
+    ruStrReplace(NULL, NULL, NULL);
+    ruStrReplace(NULL, "", NULL);
+
     long lres = ruStrParseLong(NULL);
     fail_unless(0 == num, retText, test, 0, num);
     fail_unless(EINVAL == errno, retText, test, EINVAL, errno);
@@ -96,6 +102,24 @@ START_TEST ( api ) {
     lres = ruStrToInt64(NULL);
     fail_unless(0 == num, retText, test, 0, num);
     fail_unless(EINVAL == errno, retText, test, EINVAL, errno);
+
+    bool want = false;
+    bool has = ruStrHasChar(NULL, 0);
+    fail_unless(has == want, retText, test, has, want);
+
+    has = ruStrHasChar("x", 0);
+    fail_unless(has == want, retText, test, has, want);
+
+    has = ruStrHasChar(NULL, 'x');
+    fail_unless(has == want, retText, test, has, want);
+
+    alloc_chars stripped = NULL;
+    stripped = ruStrStrip(NULL, NULL);
+    fail_unless(stripped == NULL, retText, test, stripped, NULL);
+
+    stripped = ruStrStrip(NULL, "abc");
+    fail_unless(stripped == NULL, retText, test, stripped, NULL);
+
 }
 END_TEST
 
@@ -125,6 +149,14 @@ START_TEST ( run ) {
 
     rusize explen = 3;
     rusize len = ruStringLen(rs, &ret);
+    fail_unless(explen == len, retText, test, explen, len);
+
+    ret = ruStringReset(rs);
+    fail_unless(ret == exp, retText, test, exp, ret);
+
+    explen = 0;
+    len = ruStringLen(rs, &ret);
+    fail_unless(ret == exp, retText, test, exp, ret);
     fail_unless(explen == len, retText, test, explen, len);
 
     ruStringFree(rs, false);
@@ -198,12 +230,34 @@ START_TEST ( run ) {
     ptr = ruLastSubstr(subst, "");
     ck_assert_str_eq(ptr, subst);
 
-    char* heap = ruStrDup(subst);
+    test = "ruStrReplace";
+    char* heap = ruStrReplace("ain't", "'", "''");
+    ck_assert_str_eq("ain''t", heap);
+    ruFree(heap);
+
+    heap = ruStrReplace("ueber", "ue", "ü");
+    ck_assert_str_eq("über", heap);
+    ruFree(heap);
+
+    heap = ruStrReplace("\r\nueber\r\n", "\r\n", NULL);
+    ck_assert_str_eq("ueber", heap);
+    ruFree(heap);
+
+    heap = ruStrDup(subst);
     ruStrByteReplace(heap, '^', 'v');
     ck_assert_str_eq("testvfoo", heap);
 
     ruStrByteReplace(heap, 'v', '\0');
     ck_assert_str_eq("test", heap);
+
+    test = "ruStrStrip";
+    alloc_chars stripped = NULL;
+    stripped = ruStrStrip(heap, NULL);
+    fail_unless(stripped == heap, retText, test, stripped, heap);
+
+    stripped = ruStrStrip(heap, "atsx");
+    ck_assert_str_eq("te", stripped);
+
     ruFree(heap);
 
     test = "ruStrParseInt64";
@@ -212,7 +266,7 @@ START_TEST ( run ) {
     fail_unless(expNum == num, retText, test, expNum, num);
 
     expNum = -666;
-    num = ruStrParseInt64("-66,6.5", NULL, 10);
+    num = ruStrParseInt64("-666.5", NULL, 10);
     fail_unless(expNum == num, retText, test, expNum, num);
 
     test = "ruStrParseLong";
@@ -230,7 +284,22 @@ START_TEST ( run ) {
     num = ruStrToInt64(" 0666NULL");
     fail_unless(expNum == num, retText, test, expNum, num);
 
-    test = "ruUtf8CaseNormalize";
+    test = "ruStrHasChar";
+    bool be = false;
+    bool has = ruStrHasChar("xyz", 0);
+    fail_unless(has == be, retText, test, has, be);
+
+    has = ruStrHasChar("xyz", 'a');
+    fail_unless(has == be, retText, test, has, be);
+
+    be = true;
+    has = ruStrHasChar("xyz", 'x');
+    fail_unless(has == be, retText, test, has, be);
+
+    has = ruStrHasChar("xyz", 'z');
+    fail_unless(has == be, retText, test, has, be);
+
+   test = "ruUtf8CaseNormalize";
     ptr = ruUtf8CaseNormalize(NULL, 0, 0);
     fail_unless(NULL == ptr, retText, test, NULL, ptr);
 
@@ -314,6 +383,24 @@ START_TEST ( util ) {
     is = ruStrEquals(NULL, "foo");
     fail_unless(be == is, retText, test, be, is);
 
+    test = "ruStrCaseEquals";
+    be = true;
+    is = ruStrCaseEquals(NULL, NULL);
+    fail_unless(be == is, retText, test, be, is);
+
+    is = ruStrCaseEquals("foo", "foo");
+    fail_unless(be == is, retText, test, be, is);
+
+    is = ruStrCaseEquals("fOo", "Foo");
+    fail_unless(be == is, retText, test, be, is);
+
+    be = false;
+    is = ruStrCaseEquals("foo", NULL);
+    fail_unless(be == is, retText, test, be, is);
+
+    is = ruStrCaseEquals(NULL, "foo");
+    fail_unless(be == is, retText, test, be, is);
+
     test = "ruStrNEquals";
     be = true;
     is = ruStrNEquals(NULL, 10, NULL);
@@ -387,6 +474,10 @@ START_TEST ( util ) {
     fail_unless(want == got, retText, test, want, got);
     fail_unless(doexp == does, retText, test, doexp, does);
 
+    does = ruStrCaseStartsWith("fOobar", "Foo", &got);
+    fail_unless(want == got, retText, test, want, got);
+    fail_unless(doexp == does, retText, test, doexp, does);
+
     doexp = false;
     does = ruStrStartsWith("foobar", "oo", &got);
     fail_unless(want == got, retText, test, want, got);
@@ -399,7 +490,7 @@ START_TEST ( util ) {
     fail_unless(want == got, retText, test, want, got);
     fail_unless(doexp == does, retText, test, doexp, does);
 
-    does = ruStrEndsCaseWith(NULL, NULL, &got);
+    does = ruStrCaseEndsWith(NULL, NULL, &got);
     fail_unless(want == got, retText, test, want, got);
     fail_unless(doexp == does, retText, test, doexp, does);
 
@@ -421,7 +512,7 @@ START_TEST ( util ) {
     fail_unless(want == got, retText, test, want, got);
     fail_unless(doexp == does, retText, test, doexp, does);
 
-    does = ruStrEndsCaseWith("fooBaR", "bar", &got);
+    does = ruStrCaseEndsWith("fooBaR", "bar", &got);
     fail_unless(want == got, retText, test, want, got);
     fail_unless(doexp == does, retText, test, doexp, does);
 
@@ -430,7 +521,7 @@ START_TEST ( util ) {
     fail_unless(want == got, retText, test, want, got);
     fail_unless(doexp == does, retText, test, doexp, does);
 
-    does = ruStrEndsCaseWith("fooBaR", "ba", &got);
+    does = ruStrCaseEndsWith("fooBaR", "ba", &got);
     fail_unless(want == got, retText, test, want, got);
     fail_unless(doexp == does, retText, test, doexp, does);
 
@@ -442,16 +533,25 @@ START_TEST ( util ) {
     str = ruStrStrLen(NULL, NULL, 0);
     fail_unless(exStr == str, retText, test, exStr, str);
 
+    str = ruStrCaseStrLen(NULL, NULL, 0);
+    fail_unless(exStr == str, retText, test, exStr, str);
+
     str = ruStrStr("foo", NULL);
     fail_unless(exStr == str, retText, test, exStr, str);
 
     str = ruStrStrLen("foo", NULL, 0);
     fail_unless(exStr == str, retText, test, exStr, str);
 
+    str = ruStrCaseStrLen("foo", NULL, 0);
+    fail_unless(exStr == str, retText, test, exStr, str);
+
     str = ruStrStr(NULL, "bar");
     fail_unless(exStr == str, retText, test, exStr, str);
 
     str = ruStrStrLen(NULL, "bar", 0);
+    fail_unless(exStr == str, retText, test, exStr, str);
+
+    str = ruStrCaseStrLen(NULL, "bar", 0);
     fail_unless(exStr == str, retText, test, exStr, str);
 
     want = RUE_OK;
@@ -462,6 +562,9 @@ START_TEST ( util ) {
     str = ruStrStrLen("foobar", "", 0);
     ck_assert_str_eq(exStr, str);
 
+    str = ruStrCaseStrLen("foobar", "", 0);
+    ck_assert_str_eq(exStr, str);
+
     exStr = "bar";
     str = ruStrStr("foobar", "bar");
     ck_assert_str_eq(exStr, str);
@@ -470,6 +573,13 @@ START_TEST ( util ) {
     ck_assert_str_eq(exStr, str);
 
     str = ruStrStrLen("foobar", "ba", 5);
+    ck_assert_str_eq(exStr, str);
+
+    str = ruStrCaseStrLen("foobar", "bAr", 6);
+    ck_assert_str_eq(exStr, str);
+
+    exStr = "bAr";
+    str = ruStrCaseStrLen("foobAr", "ba", 5);
     ck_assert_str_eq(exStr, str);
 
     exStr = NULL;
@@ -538,22 +648,24 @@ START_TEST ( util ) {
     ck_assert_str_eq(out2, "  foo");
     ruFree(out2);
 
-    out2 = ruStrTrimDup(NULL);
-    fail_unless(NULL == out2, retText, test, NULL, out2);
+    perm_chars trimd = NULL;
+    trimd = ruStrTrimDup(NULL, NULL);
+    fail_unless(NULL == trimd, retText, test, NULL, trimd);
 
-    out2 = ruStrTrimDup("foo");
+    trimd = ruStrTrimDup("foo", &out2);
     fail_unless(NULL == out2, retText, test, NULL, out2);
+    ck_assert_str_eq(trimd, "foo");
 
-    out2 = ruStrTrimDup("  foo\t \n\r");
-    ck_assert_str_eq(out2, "foo");
+    trimd = ruStrTrimDup("  foo\t \n\r", &out2);
+    ck_assert_str_eq(trimd, "foo");
     ruFree(out2);
 
-    out2 = ruStrTrimDup("foo\t \n\r");
-    ck_assert_str_eq(out2, "foo");
+    trimd = ruStrTrimDup("foo\t \n\r", &out2);
+    ck_assert_str_eq(trimd, "foo");
     ruFree(out2);
 
-    out2 = ruStrTrimDup("  foo");
-    ck_assert_str_eq(out2, "foo");
+    trimd = ruStrTrimDup("  foo", &out2);
+    ck_assert_str_eq(trimd, "foo");
     ruFree(out2);
 
     test = "ruStrEmpty";

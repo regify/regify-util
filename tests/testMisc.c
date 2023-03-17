@@ -168,27 +168,47 @@ START_TEST ( misc ) {
     fail_if(ret < -6, retText, test, -6, ret);
     fail_if(ret > 5, retText, test, 5, ret);
 
-    test = "ruDateFormat";
+    test = "ruTimeFormat";
     char timeStr[20];
     rusize stlen = sizeof(timeStr);
     memset(timeStr, 0, stlen);
     const char* format = "%Y-%m-%d %H:%M:%S";
-    ret = ruDateFormat(NULL, stlen, timeStr, 0);
+    ret = ruTimeFormat(NULL, stlen, timeStr, 0);
     ck_assert_str_eq(timeStr, "");
 
-    ret = ruDateFormat(format, 0, timeStr, 0);
+    ret = ruTimeFormat(format, 0, timeStr, 0);
     ck_assert_str_eq(timeStr, "");
 
-    ret = ruDateFormat(format, stlen, NULL, 0);
+    ret = ruTimeFormat(format, stlen, NULL, 0);
     ck_assert_str_eq(timeStr, "");
 
-    ret = ruDateFormat(format, stlen, timeStr, 0);
+    ret = ruTimeFormat(format, stlen, timeStr, 0);
     fail_unless(timeStr[2] == '2', retText, test, timeStr[2], '2');
     int alen = strlen(timeStr)+1;
     fail_unless(alen == stlen, retText, test, alen, stlen);
 
-    ret = ruDateFormat(format, stlen, timeStr, 1667912973);
+    ruTimeFormat(format, stlen, timeStr, 1667912973);
     ck_assert_str_eq(timeStr, "2022-11-08 14:09:33");
+
+    sec_t estamp = -1;
+    sec_t stamp = ruTimeParse(NULL, NULL);
+    fail_unless(estamp == stamp, retText, test, estamp, stamp);
+
+    stamp = ruTimeParse(format, NULL);
+    fail_unless(estamp == stamp, retText, test, estamp, stamp);
+
+    stamp = ruTimeParse(NULL, timeStr);
+    fail_unless(estamp == stamp, retText, test, estamp, stamp);
+
+    estamp = 1667912973;
+    stamp = ruTimeParse(format, timeStr);
+    fail_unless(estamp == stamp, retText, test, estamp, stamp);
+
+    ruUtcFormat(format, stlen, timeStr, 1667912973);
+    ck_assert_str_eq(timeStr, "2022-11-08 13:09:33");
+
+    stamp = ruUtcParse(format, timeStr);
+    fail_unless(estamp == stamp, retText, test, estamp, stamp);
 
     test = "ruVersionComp";
     exp = 0;
@@ -240,6 +260,59 @@ START_TEST ( mux ) {
     ruMutexUnlock(mx);
     ruMutexFree(mx);
     ruMutexFree(mx);
+}
+END_TEST
+
+START_TEST(counter) {
+    const char *retText = "failed wanted ret '%d' but got '%d'";
+    ruCount rc = NULL;
+    int32_t ret, exp = RUE_PARAMETER_NOT_SET;
+    int64_t val, want = 0;
+
+    val = ruCountSetValue(rc, 23, &ret);
+    fail_unless(exp == ret, retText, exp, ret);
+    fail_unless(want == val, retText, want, val);
+
+    val = ruCounterIncValue(rc, 23, &ret);
+    fail_unless(exp == ret, retText, exp, ret);
+    fail_unless(want == val, retText, want, val);
+
+    perm_chars foo = "foo was here";
+    exp = RUE_INVALID_PARAMETER;
+    val = ruCounterIncValue((ruCount)foo, 23, &ret);
+    fail_unless(exp == ret, retText, exp, ret);
+    fail_unless(want == val, retText, want, val);
+
+    rc = ruCountFree(rc);
+    fail_unless(NULL == rc, retText, NULL, rc);
+
+    want = 42;
+    exp = RUE_OK;
+    rc = ruCounterNew(want);
+    fail_if(NULL == rc, retText, NULL, rc);
+
+    val = ruCountSetValue(rc, 23, &ret);
+    fail_unless(exp == ret, retText, exp, ret);
+    fail_unless(want == val, retText, want, val);
+
+    want = 23;
+    val = ruCountSet(rc, 23);
+    fail_unless(want == val, retText, want, val);
+
+    want = 25;
+    val = ruCounterIncValue(rc, 2, &ret);
+    fail_unless(exp == ret, retText, exp, ret);
+    fail_unless(want == val, retText, want, val);
+
+    want = 23;
+    val = ruCounterInc(rc, -2);
+    fail_unless(want == val, retText, want, val);
+
+    val = ruCounterRead(rc);
+    fail_unless(want == val, retText, want, val);
+
+    rc = ruCountFree(rc);
+    fail_unless(NULL == rc, retText, NULL, rc);
 }
 END_TEST
 
@@ -324,11 +397,12 @@ END_TEST
 #endif
 
 
-TCase* miscTests ( void ) {
-    TCase *tcase = tcase_create ( "misc" );
-    tcase_add_test ( tcase, mem );
-    tcase_add_test ( tcase, misc );
-    tcase_add_test ( tcase, mux );
+TCase* miscTests(void) {
+    TCase *tcase = tcase_create("misc");
+    tcase_add_test(tcase, mem);
+    tcase_add_test(tcase, misc);
+    tcase_add_test(tcase, mux);
+    tcase_add_test(tcase, counter);
 #ifdef _WIN32
     tcase_add_test ( tcase, reg );
     tcase_add_test ( tcase, vol );

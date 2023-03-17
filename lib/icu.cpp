@@ -122,11 +122,10 @@ char* uniNToChar(UChar *usrc, int32_t len) {
     return upat;
 }
 
-char* uniToChar(UChar *usrc) {
+alloc_chars uniToChar(UChar* usrc) {
     int32_t len = (u_strlen(usrc) + 1) * 2;
     return uniNToChar(usrc, len);
 }
-
 
 UChar* uniSwitchCase(UChar* usrc, bool isUpper) {
     UErrorCode errorCode = U_ZERO_ERROR;

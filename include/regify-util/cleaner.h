@@ -32,11 +32,11 @@
  * #include <stdio.h>
  * #include <regify-util.h>
  *
- * rusize_s reader(void* in, void* data, rusize len) {
+ * rusize_s reader(const void* in, void* data, rusize len) {
  *     return (rusize_s) fread(data, len, 1, (FILE*)in);
  * }
  *
- * rusize_s writer(void* out, void* data, rusize len) {
+ * rusize_s writer(const void* out, const void* data, rusize len) {
  *     return (rusize_s) fwrite(data, len, 1, (FILE*)out);
  * }
  *
@@ -103,9 +103,14 @@ extern "C" {
 typedef void* ruCleaner;
 
 /**
- * The type function for read and write operations when cleaning a data stream.
+ * The type function for the write operation when cleaning a data stream.
  */
-typedef rusize_s (*ioFunc) (void* ctx, void* buf, rusize len);
+typedef rusize_s (*rcWriteFn) (perm_ptr ctx, trans_ptr buf, rusize len);
+
+/**
+ * The type function for the read operation when cleaning a data stream.
+ */
+typedef rusize_s (*rcReadFn) (perm_ptr ctx, ptr buf, rusize len);
 
 /**
  * \brief Creates a new ruCleaner object. To be freed with \ref ruCleanFree.
@@ -135,7 +140,7 @@ RUAPI ruCleaner ruCleanFree(ruCleaner rc);
  * @param key The secret key to clean.
  * @param subst The placeholder to substitute the secret with.
  */
-typedef void (*ruCleanerCb) (void* user_data, trans_chars key, trans_chars subst);
+typedef void (*ruCleanerCb) (perm_ptr user_data, trans_chars key, trans_chars subst);
 
 /**
  * Iterates over the cleaner database and calls given \ref ruCleanerCb with
@@ -145,7 +150,7 @@ typedef void (*ruCleanerCb) (void* user_data, trans_chars key, trans_chars subst
  * @param user_data An optional context that will be given to the callbacks user_data parameter.
  * @return \ref RUE_OK on success else an error code.
  */
-RUAPI int32_t ruCleanDump(ruCleaner cp, ruCleanerCb lf, void* user_data);
+RUAPI int32_t ruCleanDump(ruCleaner cp, ruCleanerCb lf, perm_ptr user_data);
 
 /**
  * Adds a new string to be replaced.
@@ -177,8 +182,8 @@ RUAPI int32_t ruCleanRemove(ruCleaner rc, trans_chars instr);
  * @param writeCtx The context to be passed to the write function.
  * @return \ref RUE_OK on success else an error code.
  */
-RUAPI int32_t ruCleanIo(ruCleaner rc, ioFunc reader, void* readCtx,
-                        ioFunc writer, void* writeCtx);
+RUAPI int32_t ruCleanIo(ruCleaner rc, rcReadFn reader, perm_ptr readCtx,
+                        rcWriteFn writer, perm_ptr writeCtx);
 
 /**
  * \brief Does replacements on given string using the given Output function.
@@ -195,7 +200,7 @@ RUAPI int32_t ruCleanIo(ruCleaner rc, ioFunc reader, void* readCtx,
  * @return \ref RUE_OK on success else an error code.
  */
 RUAPI int32_t ruCleanToWriter(ruCleaner rc, trans_chars in, rusize len,
-                              ioFunc writer, void* writeCtx);
+                              rcWriteFn writer, perm_ptr writeCtx);
 
 #ifndef CLEANER_ONLY
 /**
@@ -211,7 +216,7 @@ RUAPI int32_t ruCleanToWriter(ruCleaner rc, trans_chars in, rusize len,
  *            Caller must free with \ref ruStringFree after use.
  * @return \ref RUE_OK on success else an error code.
  */
-RUAPI int32_t ruCleanToString(ruCleaner rc, const char *in, rusize len, ruString *out);
+RUAPI int32_t ruCleanToString(ruCleaner rc, trans_chars in, rusize len, ruString *out);
 #endif
 
 /**

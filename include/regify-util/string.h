@@ -71,6 +71,13 @@ RUAPI ruString ruStringNewn(const char* instr, rusize size);
 RUAPI ruString ruStringNewf(const char* format, ...);
 
 /**
+ * \brief Empties the string for reuse without freeing the buffer.
+ * @param rs String to reset
+ * @return \ref RUE_OK on success else a regify error code.
+ */
+RUAPI int32_t ruStringReset(ruString rs);
+
+/**
  * \brief Frees the given \ref ruString object.
  * @param rs String to free
  * @param keepBuffer Whether to also free the underlying char* buffer.
@@ -174,6 +181,13 @@ RUAPI bool ruStringEndsWith(ruString rs, const char *suffix, int32_t *code);
 RUAPI char* ruUtf8CaseNormalize(const char *instr, int32_t normMode, int32_t caseMode);
 
 /**
+ * \brief converts given UCS2 string to UTF-8
+ * @param ucs Unicode string to convert
+ * @return single byte utf-8 string caller must free.
+ */
+RUAPI alloc_chars ruUcsToUtf8(const uint16_t* ucs);
+
+/**
  * \brief Replaces any occurrence of search in string with replace.
  *
  * This function works byte level not character level.
@@ -184,6 +198,17 @@ RUAPI char* ruUtf8CaseNormalize(const char *instr, int32_t normMode, int32_t cas
  * @param replace Character to replace search with
  */
 RUAPI void ruStrByteReplace(char* string, char search, char replace);
+
+/**
+ * \brief Replaces any occurrence of search in instr with replace.
+ *
+ * @param instr String to process
+ * @param search String to replace
+ * @param replace String to replace search with
+ * @return A new string with the replacements made, caller must free.
+ */
+RUAPI alloc_chars ruStrReplace(trans_chars instr, trans_chars search,
+                               trans_chars replace);
 
 /**
  * \brief Returns what libc strcmp would return but in a manner that gracefully
@@ -223,6 +248,15 @@ RUAPI bool ruStrNEquals(trans_chars str1, rusize s1len, trans_chars str2);
 RUAPI int32_t ruStrCaseCmp(trans_chars str1, trans_chars str2);
 
 /**
+ * \brief Returns true when libc strcasecmp would return 0 but in a manner that gracefully
+ * handles NULL imputs.
+ * @param str1 The first string to check.
+ * @param str2 The second string to compare to the first.
+ * @return true if both strings are the same or NULL
+ */
+RUAPI bool ruStrCaseEquals(trans_chars str1, trans_chars str2);
+
+/**
  * \brief Whether given string starts with given prefix.
  * @param str String to check.
  * @param prefix Prefix to test for.
@@ -230,6 +264,15 @@ RUAPI int32_t ruStrCaseCmp(trans_chars str1, trans_chars str2);
  * @return Whether string starts with the prefix.
  */
 RUAPI bool ruStrStartsWith(trans_chars str, trans_chars prefix, int32_t *code);
+
+/**
+ * \brief Whether given string starts with given prefix ignoring case.
+ * @param str String to check.
+ * @param prefix Prefix to test for.
+ * @param code (Optional) Stores \ref RUE_OK on success or regify error code.
+ * @return Whether string starts with the prefix.
+ */
+RUAPI bool ruStrCaseStartsWith(trans_chars str, trans_chars prefix, int32_t *code);
 
 /**
  * \brief Whether given string ends with given suffix.
@@ -247,7 +290,17 @@ RUAPI bool ruStrEndsWith(trans_chars str, trans_chars suffix, int32_t *code);
  * @param code (Optional) Stores \ref RUE_OK on success or regify error code.
  * @return Whether string ends with the suffix.
  */
-RUAPI bool ruStrEndsCaseWith(trans_chars str, trans_chars suffix, int32_t *code);
+RUAPI bool ruStrCaseEndsWith(trans_chars str, trans_chars suffix, int32_t *code);
+
+/**
+ * \brief Searches the first instance of lowercase needle in lowercase haystack
+ * up to len bytes. Lowercasing is only ASCII compatible.
+ * @param haystack String to search needle in.
+ * @param needle String to find in haystack.
+ * @param len Maximum number of bytes in haystack to consider.
+ * @return Start of the first found instance of haystack or NULL if not found.
+ */
+RUAPI trans_chars ruStrCaseStrLen(trans_chars haystack, trans_chars needle, rusize len);
 
 /**
  * \brief Searches the first instance of needle in haystack up to len bytes.
@@ -374,6 +427,13 @@ RUAPI alloc_chars ruUtf8ToUpper(trans_chars instr);
 RUAPI char* ruStrDup(const char* str);
 
 /**
+ * \brief behaves like strlen but returns 0 if NULL is passed in
+ * @param str string to get length of
+ * @return length of given string or 0 if string was NULL.
+ */
+RUAPI rusize ruStrLen(trans_chars str);
+
+/**
  * \brief Returns a copy of len bytes of given string
  * @param str String to copy
  * @param len Number of bytes to consider.
@@ -436,23 +496,54 @@ RUAPI long ruStrToLong(trans_chars numstr);
 #define ruStrToll ruStrParseInt64
 
 /**
+ * Returns true if given haystack contains needle character
+ * @param haystack string to search for needle
+ * @param needle character to search in haystack
+ * @return whether it is found
+ */
+RUAPI bool ruStrHasChar(trans_chars haystack, char needle);
+
+/**
+ * \brief Strips any of the given asciichars off the end of instr
+ *
+ * The given string should be on the heap, else a segfault may occur when trying
+ * to modify it.
+ * @param instr string to remove asciichars from the end
+ * @param asciichars any of the ASCII characters to remove
+ * @return instr potentially shorter than before
+ */
+RUAPI alloc_chars ruStrStrip(alloc_chars instr, trans_chars asciichars);
+
+/**
  * \brief Removes trailing whitespace from string in place.
  *
  * The given string should be on the heap, else a segfault may occur when trying
- * to modify something on the stack.
+ * to modify it.
  * @param instr The string to trim
- * @return instr
+ * @return instr potentially shorter than before
  */
-RUAPI char* ruStrTrim(char* instr);
+RUAPI alloc_chars ruStrTrim(alloc_chars instr);
 
 /**
  * \brief Checks given string for leading or trailing whitespace and returns
  * trimmed copy if needed.
  * @param instr String to check for trimming
- * @return NULL if instr was NULL or did not need trimming, else the trimmed
- *         string to be freed by the caller.
+ * @param newstr Optional. Where the new string will be stored if it was created.
+ *               If not trimming took place this will be NULL.
+ *               This string should be freed by the caller.
+ * @return instr if instr was NULL or did not need trimming, else the trimmed
+ *         string to be freed by the caller. Use newstr to tell the difference.
+ *
+ * Example:
+ * ~~~~~{.c}
+    alloc_chars newstr;
+    perm_chars trimstr = ruStrTrimDup(mystring, &newstr);
+    // do whatever with trimstr
+    ruFree(newstr);
+ * ~~~~~
+ *
  */
-RUAPI alloc_chars ruStrTrimDup(trans_chars instr);
+RUAPI perm_chars ruStrTrimDup(trans_chars instr, alloc_chars* newstr);
 
 /**
  * \brief Returns the white space trimmed bounds of given string without modifying it.

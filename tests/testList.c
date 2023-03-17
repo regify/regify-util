@@ -21,6 +21,14 @@
  */
 #include "tests.h"
 
+int intcomp(trans_ptr a, trans_ptr b) {
+    int64_t x = (intptr_t)a;
+    int64_t y = (intptr_t)b;
+    if (x < y) return -1;
+    if (x > y) return 1;
+    return 0;
+}
+
 START_TEST ( api ) {
     int32_t ret, exp, sz;
     const char *test = "ruListAppendPtr";
@@ -223,8 +231,6 @@ START_TEST ( api ) {
     fail_unless(ret == exp, retText, test, exp, ret);
     fail_if(0 == ptr, retText, test, -1, ptr);
 
-    ruListFree(rl);
-
     test = "ruListIdxData";
     exp = RUE_PARAMETER_NOT_SET;
     ptr = ruListIdxElmtData(NULL, 0, &ret);
@@ -236,6 +242,16 @@ START_TEST ( api ) {
     ptr = ruListJoin(NULL, NULL, &ret);
     fail_unless(ret == exp, retText, test, exp, ret);
     fail_unless(0 == ptr, retText, test, 0, ptr);
+
+    test = "ruListSort";
+    ret = ruListSort(NULL, NULL);
+    fail_unless(ret == exp, retText, test, exp, ret);
+    ret = ruListSort(rl, NULL);
+    fail_unless(ret == exp, retText, test, exp, ret);
+    ret = ruListSort(NULL, intcomp);
+    fail_unless(ret == exp, retText, test, exp, ret);
+
+    ruListFree(rl);
 }
 END_TEST
 
@@ -333,7 +349,7 @@ START_TEST ( usage ) {
 
     i = 0;
     ruIterator li = ruListIter(rl);
-    for (char*field = ruIterCurrent(li, char*);
+    for (char* field = ruIterCurrent(li, char*);
          li; field = ruIterNext(li, char*)) {
         ck_assert_str_eq(field, f[i++]);
     }
@@ -365,6 +381,61 @@ START_TEST ( usage ) {
     fail_unless(NULL == res, retText, test, NULL, res);
 
     // free the list
+    ruListFree(rl);
+
+    exp = RUE_OK;
+    rl = ruListNew(NULL);
+    esz = sizeof(f)/sizeof(f[0]);
+    test = "ruListAppend";
+    for (i = 0; i < esz; i++) {
+        ret = ruListAppend(rl, f[i]);
+        fail_unless(ret == exp, retText, test, exp, ret);
+    }
+    test = "ruListSize";
+    sz = ruListSize(rl, &ret);
+    fail_unless(sz == esz, retText, test, esz, sz);
+
+    test = "ruListRemove";
+    li = ruListIter(rl);
+    for(char* field = ruIterCurrent(li, char*);
+        li; field = ruIterNext(li, char*)) {
+        ruVerbLogf("Deleting %s", field);
+        ruListRemove(rl, &li, &ret);
+        fail_unless(ret == exp, retText, test, exp, ret);
+    }
+
+    esz = 0;
+    test = "ruListSize";
+    sz = ruListSize(rl, &ret);
+    fail_unless(sz == esz, retText, test, esz, sz);
+    // free the list
+    ruListFree(rl);
+}
+END_TEST
+
+START_TEST (sort) {
+    int32_t ret, exp = RUE_OK;
+    const char *test = "ruListAppend";
+    const char *retText = "%s failed wanted ret '%d' but got '%d'";
+
+    int64_t nums[] = {99, 23, 1, 42, 53};
+    int64_t exps[] = { 1, 23,42, 53, 99};
+    ruList rl = ruListNew(NULL);
+    for (int i = 0; i < sizeof(nums)/sizeof(nums[0]); i++) {
+        ret = ruListAppend(rl, nums[i]);
+        fail_unless(ret == exp, retText, test, exp, ret);
+    }
+    test = "ruListSort";
+    ret = ruListSort(rl, intcomp);
+    fail_unless(ret == exp, retText, test, exp, ret);
+
+    test = "sort result";
+    for (int i = 0; i < sizeof(exps)/sizeof(exps[0]); i++) {
+        int64_t num = (int64_t)ruListPop(rl, &ret);
+        fail_unless(ret == exp, retText, test, exp, ret);
+        fail_unless(exps[i] == num, retText, test, exps[i], num);
+    }
+
     ruListFree(rl);
 }
 END_TEST
@@ -401,5 +472,6 @@ TCase* listTests ( void ) {
     tcase_add_test ( tcase, api );
     tcase_add_test ( tcase, usage );
     tcase_add_test ( tcase, memalloc );
+    tcase_add_test ( tcase, sort );
     return tcase;
 }

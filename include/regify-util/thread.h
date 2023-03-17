@@ -46,7 +46,7 @@
 RUAPI long int ruThreadGetId(void);
 
 /**
- * Sets clear clear name of the running thread
+ * Sets or clear name of the running thread
  * @param name New name to set or NULL to clear/free the exisiting name.
  */
 RUAPI void ruThreadSetName(const char* name);
@@ -55,6 +55,11 @@ RUAPI void ruThreadSetName(const char* name);
  * Thread Identifier
  */
 typedef void* ruThread;
+
+/**
+ * Thread Safe Counter
+ */
+typedef void* ruCount;
 
 /**
  * Signature of a thread starting function.
@@ -147,6 +152,53 @@ RUAPI void ruMutexUnlock(ruMutex m);
  * @return NULL
  */
 RUAPI ruMutex ruMutexFree(ruMutex m);
+
+/**
+ * \brief Returns a new thread safe counter initialized to given value.
+ * @param initialCount Value to set at start
+ * @return New \ref ruCount free with \ref ruCountFree
+ */
+RUAPI ruCount ruCounterNew(int64_t initialCount);
+
+/**
+ * \brief Increments the counter by given value and returns the new value
+ * @param counter Counter in question
+ * @param value value to increment counter by
+ * @param code Optional where error code will be stored
+ * @return The new counter value
+ */
+RUAPI int64_t ruCounterIncValue(ruCount counter, int64_t value, int32_t* code);
+
+/**
+ * Calls \ref ruCounterIncValue without the code parameter
+ */
+#define ruCounterInc(counter, value) ruCounterIncValue(counter, value, NULL)
+
+/**
+ * Calls \ref ruCounterIncValue with 0 to simply return the current value
+ */
+#define ruCounterRead(counter) ruCounterIncValue(counter, 0, NULL)
+
+/**
+ * \brief Sets the counter to given value and returns the previous value
+ * @param counter Counter in question
+ * @param value new value to set counter to
+ * @param code Optional where error code will be stored
+ * @return The previous counter value
+ */
+RUAPI int64_t ruCountSetValue(ruCount counter, int64_t value, int32_t* code);
+
+/**
+ * Calls \ref ruCountSetValue without the code parameter
+ */
+#define ruCountSet(counter, value) ruCountSetValue(counter, value, NULL)
+
+/**
+ * \brief Frees given counter
+ * @param counter Counter to free
+ * @return NULL
+ */
+RUAPI ruCount ruCountFree(ruCount counter);
 
 /**
  * @}

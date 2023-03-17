@@ -367,7 +367,7 @@ RUAPI ptr ruListIdxElmtData(ruList rl, int32_t index, int32_t* code) {
     ruRetWithCode(code, RUE_OK, rle->data);
 }
 
-RUAPI ptr ruListTryPop(ruList rl, uint32_t timeoutMs, int32_t *code) {
+RUAPI ptr ruListTryPop(ruList rl, msec_t timeoutMs, int32_t *code) {
     List *list = ListGet(rl, code);
     if (!list) return NULL;
     void* res = NULL;
@@ -378,7 +378,7 @@ RUAPI ptr ruListTryPop(ruList rl, uint32_t timeoutMs, int32_t *code) {
     do {
         if (list->doQuit) ruRetWithCode(code, RUE_USER_ABORT, NULL);
         if (!ruMutexTryLock(list->mux)) {
-            ruUsleep(1);
+            ruSleepUs(1);
             try--;
             if (try) continue;
             try = delay;
@@ -392,8 +392,8 @@ RUAPI ptr ruListTryPop(ruList rl, uint32_t timeoutMs, int32_t *code) {
                 done = true;
             }
             ruMutexUnlock(list->mux);
-            if (done) return res;
-            ruUsleep(delay);
+            if (done) ruRetWithCode(code, RUE_OK, res);
+            ruSleepUs(delay);
             try = delay;
         }
     } while (end > ruTimeMs());
@@ -424,3 +424,43 @@ RUAPI alloc_chars ruListJoin(ruList rl, trans_chars delim, int32_t* code) {
     ruRetWithCode(code, RUE_OK, out);
 }
 
+RU_THREAD_LOCAL ruCompFunc listSort_;
+#define SORT_TYPE ListElmt*
+#define SORT_NAME ruList
+#define SORT_CMP(x, y) listSort_((x), (y))
+#include "sort/sort.h"
+RUAPI int32_t ruListSort(ruList rl, ruCompFunc sort) {
+    int32_t ret;
+    List *list = ListGet(rl, &ret);
+    if (!list) return ret;
+    if (!sort) return RUE_PARAMETER_NOT_SET;
+
+    if (list->doQuit) return RUE_USER_ABORT;
+    ruMutexLock(list->mux);
+    if (list->doQuit) {
+        ruMutexUnlock(list->mux);
+        return RUE_USER_ABORT;
+    }
+
+    // setup
+    ListElmt** arr = ruMalloc0(list->size, ListElmt*);
+    listSort_ = sort;
+    // make the array
+    int i = 0;
+    for (ListElmt* e = list->head; e; e = e->next) {
+        arr[i++] = e->data;
+    }
+    // sort it
+    ruList_tim_sort(arr, list->size);
+    // store the data in the new order
+    i = 0;
+    for (ListElmt* e = list->head; e; e = e->next) {
+        e->data = arr[i++];
+    }
+    // clean up
+    listSort_ = NULL;
+    ruFree(arr);
+
+    ruMutexUnlock(list->mux);
+    return ret;
+}

@@ -38,11 +38,15 @@ static void maybeAdd(String *str, rusize ilen) {
 static int32_t appendf(String *str, const char* format, va_list args) {
     int32_t ret = RUE_OK;
     if (!format) return RUE_PARAMETER_NOT_SET;
+    static Mux* mux = NULL;
+    if (!mux) mux = ruMuxInit();
+    ruMuxLock(mux);
     va_list a2;
     va_copy(a2, args);
     // stream better be NULL else M$ crt craoks with -1
     int32_t size  = vsnprintf(NULL, 0, format, a2);
     va_end (a2);
+    ruMuxUnlock(mux);
     if (size > 0) {
         maybeAdd(str, size);
         size = vsnprintf(str->start+str->idx, size+1, format, args);
@@ -87,6 +91,27 @@ RUAPI void ruStrByteReplace(char* string, char search, char replace) {
     }
 }
 
+RUAPI alloc_chars ruStrReplace(trans_chars instr, trans_chars search,
+                               trans_chars replace) {
+    if (!instr || !search) return NULL;
+    // increment instr by search length - 1 to account for the ptr++ for incrementor
+    rusize findInc = ruStrLen(search) - 1;
+    rusize inLen = ruStrLen(instr);
+    ruString buf = ruStringNewn("", inLen);
+    for (trans_chars ptr = instr; *ptr; ptr++) {
+        if (ruStrStartsWith(ptr, search, NULL)) {
+            // replace
+            ruStringAppend(buf, replace);
+            ptr += findInc;
+        } else {
+            ruStringAppendn(buf, ptr, 1);
+        }
+    }
+    alloc_chars out = ruStringGetCString(buf);
+    ruStringFree(buf, true);
+    return out;
+}
+
 RUAPI ruString ruStringNew(const char* instr) {
     return ruStringNewn(instr, 0);
 }
@@ -114,16 +139,20 @@ RUAPI ruString ruStringNewn(const char* instr, rusize size) {
 
 RUAPI ruString ruStringNewf(const char* format, ...) {
     ruClearError();
-    va_list args;
     if (!format) {
         ruSetError("Ignoring bogus null format");
         return NULL;
     }
     String *str = ruMalloc0(1, String);
     str->type = MagicString;
+    static Mux* mux = NULL;
+    if (!mux) mux = ruMuxInit();
+    ruMuxLock(mux);
+    va_list args;
     va_start (args, format);
     int32_t size  = vsnprintf(str->start, 0, format, args);
     va_end (args);
+    ruMuxUnlock(mux);
     if (size > 0) {
         size++; // terminator
         str->len = size * 2;
@@ -134,6 +163,16 @@ RUAPI ruString ruStringNewf(const char* format, ...) {
         str->idx = size;
     }
     return (ruString)str;
+}
+
+RUAPI int32_t ruStringReset(ruString rs) {
+    ruClearError();
+    int32_t ret;
+    String *str = StringGet(rs, &ret);
+    if (!str) return ret;
+    memset(str->start, 0, str->len);
+    str->idx = 0;
+    return RUE_OK;
 }
 
 RUAPI ruString ruStringFree(ruString rs, bool keepBuffer) {
@@ -211,12 +250,16 @@ RUAPI int32_t ruStringAppendn(ruString rs, const char* instr, rusize len) {
 RUAPI int32_t ruStringAppendf(ruString rs, const char* format, ...) {
     ruClearError();
     int32_t ret;
-    va_list args;
     String *str = StringGet(rs, &ret);
     if (!str) return ret;
+    static Mux* mux = NULL;
+    if (!mux) mux = ruMuxInit();
+    ruMuxLock(mux);
+    va_list args;
     va_start (args, format);
     ret = appendf(str, format, args);
     va_end (args);
+    ruMuxUnlock(mux);
     return ret;
 }
 
@@ -253,12 +296,16 @@ RUAPI bool ruStringEndsWith(ruString rs, const char *suffix, int32_t *code) {
 
 RUAPI char* ruDupvPrintf(const char* format, va_list arglist) {
     ruClearError();
-    va_list args;
     char *ret = NULL;
     if (!format) return ret;
+    static Mux* mux = NULL;
+    if (!mux) mux = ruMuxInit();
+    ruMuxLock(mux);
+    va_list args;
     va_copy (args, arglist);
     int32_t size  = vsnprintf(ret, 0, format, args);
     va_end (args);
+    ruMuxUnlock(mux);
     if (size > 0) {
         size++; // terminator
         ret = ruMalloc0(size, char);
@@ -274,12 +321,16 @@ RUAPI char* ruDupvPrintf(const char* format, va_list arglist) {
  *
  */
 RUAPI char* ruDupPrintf(const char* format, ...) {
-    va_list args;
     char *ret = NULL;
     if (!format) return ret;
+    static Mux* mux = NULL;
+    if (!mux) mux = ruMuxInit();
+    ruMuxLock(mux);
+    va_list args;
     va_start (args, format);
     ret = ruDupvPrintf(format, args);
     va_end (args);
+    ruMuxUnlock(mux);
     return ret;
 }
 
@@ -296,6 +347,11 @@ RUAPI char* ruStrDup(const char* str) {
         ruAbort();
     }
     return ret;
+}
+
+RUAPI rusize ruStrLen(trans_chars str) {
+    if (!str) return 0;
+    return strlen(str);
 }
 
 RUAPI char* ruStrNDup(trans_chars str, rusize len) {
@@ -335,6 +391,13 @@ RUAPI int32_t ruStrCaseCmp(trans_chars str1, trans_chars str2) {
     return ret > 0 ? 1 : -1;
 }
 
+RUAPI bool ruStrCaseEquals(trans_chars str1, trans_chars str2) {
+    ruClearError();
+    if (str1 == str2) return true;      // same pointer both NULL
+    if (!str1 || !str2) return false;   // one NULL
+    return strcasecmp(str1, str2) == 0;     // same string
+}
+
 RUAPI bool ruStrStartsWith(trans_chars str, trans_chars prefix, int32_t *code) {
     ruClearError();
     if (!str || !prefix) ruRetWithCode(code, RUE_PARAMETER_NOT_SET, false);
@@ -344,6 +407,21 @@ RUAPI bool ruStrStartsWith(trans_chars str, trans_chars prefix, int32_t *code) {
     if (!slen) ruRetWithCode(code, RUE_OK, true);
     if(len >= slen) {
         if(!strncmp(str, prefix, slen)) {
+            ruRetWithCode(code, RUE_OK, true);
+        }
+    }
+    ruRetWithCode(code, RUE_OK, false);
+}
+
+RUAPI bool ruStrCaseStartsWith(trans_chars str, trans_chars prefix, int32_t *code) {
+    ruClearError();
+    if (!str || !prefix) ruRetWithCode(code, RUE_PARAMETER_NOT_SET, false);
+
+    rusize len = strlen(str);
+    rusize slen = strlen(prefix);
+    if (!slen) ruRetWithCode(code, RUE_OK, true);
+    if(len >= slen) {
+        if(!strncasecmp(str, prefix, slen)) {
             ruRetWithCode(code, RUE_OK, true);
         }
     }
@@ -365,7 +443,7 @@ RUAPI bool ruStrEndsWith(const char* str, const char *suffix, int32_t *code) {
     ruRetWithCode(code, RUE_OK, false);
 }
 
-RUAPI bool ruStrEndsCaseWith(trans_chars str, trans_chars suffix, int32_t *code) {
+RUAPI bool ruStrCaseEndsWith(trans_chars str, trans_chars suffix, int32_t *code) {
     ruClearError();
     if (!str || !suffix) ruRetWithCode(code, RUE_PARAMETER_NOT_SET, false);
 
@@ -380,7 +458,27 @@ RUAPI bool ruStrEndsCaseWith(trans_chars str, trans_chars suffix, int32_t *code)
     ruRetWithCode(code, RUE_OK, false);
 }
 
-RUAPI char* ruStrTrim(char* instr) {
+RUAPI bool ruStrHasChar(trans_chars haystack, char needle) {
+    if (!haystack) return false;
+    while(*haystack) {
+        if (needle == *haystack) return true;
+        haystack++;
+    }
+    return false;
+}
+
+RUAPI alloc_chars ruStrStrip(alloc_chars instr, trans_chars asciichars) {
+    if (!instr || !asciichars) return instr;
+
+    char* p = instr + strlen(instr);
+    while (p > instr) {
+        if (!ruStrHasChar(asciichars, *--p)) break;
+        *p = '\0';
+    }
+    return instr;
+}
+
+RUAPI alloc_chars ruStrTrim(alloc_chars instr) {
     if (instr) {
         char* p = instr + strlen(instr);
         while (p > instr && isspace((unsigned char) (*--p))) *p = '\0';
@@ -388,15 +486,16 @@ RUAPI char* ruStrTrim(char* instr) {
     return instr;
 }
 
-RUAPI alloc_chars ruStrTrimDup(trans_chars instr) {
-    if (!instr) return NULL;
+RUAPI perm_chars ruStrTrimDup(trans_chars instr, alloc_chars* newstr) {
+    if (!instr) ruRetWithCode(newstr, NULL, NULL);
     rusize inlen = strlen(instr);
     rusize outlen = 0;
     trans_chars start = ruStrTrimBounds(instr, inlen, &outlen);
     if (inlen != outlen || start != instr) {
-        return ruStrNDup(start, outlen);
+        alloc_chars copy = ruStrNDup(start, outlen);
+        ruRetWithCode(newstr, copy, copy);
     }
-    return NULL;
+    ruRetWithCode(newstr, NULL, instr);
 }
 
 RUAPI trans_chars ruStrTrimBounds(trans_chars inStart, rusize_s inLen, rusize* outLen) {
@@ -457,6 +556,35 @@ RUAPI bool ruStrFindKeyVal(trans_chars inStart, rusize_s inLen, trans_chars deli
         *valStart = ruStrTrimBounds(vStart, vLen, valLen);
     }
     return true;
+}
+
+RUAPI trans_chars ruStrCaseStrLen(trans_chars haystack, trans_chars needle, rusize len) {
+    ruClearError();
+    if (!haystack || !needle) return NULL;
+    rusize needleLen = strlen (needle);
+    rusize haystackLen = strlen (haystack);
+    if (len > 0 && len < haystackLen) {
+        haystackLen = len;
+    }
+
+    if (!needleLen) return (char*)haystack;
+
+    if (haystackLen < needleLen) return NULL;
+    char *p = (char*)haystack;
+    const char *stackEnd = haystack + haystackLen - needleLen;
+
+    alloc_chars pin = ruAsciiToLower(needle);
+    while (p <= stackEnd) {
+        for (rusize i = 0; i < needleLen; i++) {
+            if (ruAsciiCharToLower(p[i]) != pin[i]) goto next;
+        }
+        ruFree(pin);
+        return (char *)p;
+        next:
+        p++;
+    }
+    ruFree(pin);
+    return NULL;
 }
 
 RUAPI trans_chars ruStrStrLen(trans_chars haystack, trans_chars needle, rusize len) {
@@ -594,6 +722,10 @@ RUAPI alloc_chars ruUtf8ToUpper(trans_chars instr) {
     return utf8SwitchCase(instr, true);
 }
 
+RUAPI alloc_chars ruUcsToUtf8(const uint16_t* ucs) {
+    return uniToChar((UChar*)ucs);
+}
+
 RUAPI int64_t ruStrParseInt64(const char *start, char **endptr, int base) {
     ruClearError();
     bool negative = false;
@@ -655,9 +787,6 @@ RUAPI int64_t ruStrParseInt64(const char *start, char **endptr, int base) {
                 c = c - 'A' + 10;
             } else if (c >= 'a' && c <= 'z') {
                 c = c - 'a' + 10;
-            } else if (c == ',') {
-                // ignore thousand separators
-                continue;
             } else {
                 break;
             }

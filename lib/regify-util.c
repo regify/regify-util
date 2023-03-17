@@ -51,10 +51,14 @@ void ruSetError(const char *format, ...) {
         ruClearError();
         return;
     }
+    static Mux* mux = NULL;
+    if (!mux) mux = ruMuxInit();
+    ruMuxLock(mux);
     va_list args;
     va_start (args, format);
     int32_t msgsize  = vsnprintf(ruError, RU_ERRBUF_SIZE, format, args);
     va_end (args);
+    ruMuxUnlock(mux);
     if (msgsize >= 0) {
         ruErrInit = 1;
     }
@@ -132,27 +136,6 @@ RUAPI unsigned long ruSemiRandomNumber(unsigned long max, long offset) {
     ruGetTimeVal(&tv);
     long value = (tv.usec ^ tv.sec ) + threadcounter++;
     return (value % max) + offset;
-}
-
-RUAPI int ruDateFormat(const char* format, rusize len, char* timeStr, sec_t timesecs) {
-    if (!format || ! len || !timeStr) return -1;
-    struct tm tm;
-    ruTimeVal tv;
-    if (timesecs) {
-        tv.sec = timesecs;
-        tv.usec = 0;
-    } else {
-        // https://stackoverflow.com/questions/3673226/how-to-print-time-in-format-2009-08-10-181754-811
-        ruGetTimeVal(&tv);
-    }
-
-#ifdef _WIN32
-    _localtime32_s(&tm, &tv.sec);
-#else
-    localtime_r(&tv.sec, &tm);
-#endif
-    strftime(timeStr, len, format, &tm);
-    return (int) tv.usec;
 }
 
 RUAPI int ruVersionComp(trans_chars ver1, trans_chars ver2) {

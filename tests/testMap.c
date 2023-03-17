@@ -38,9 +38,11 @@ START_TEST ( api ) {
 
     ruMapFree(rm);
 
+    ptr exist = NULL;
     exp = RUE_PARAMETER_NOT_SET;
-    ret = ruMapPut(rm, NULL, NULL);
+    ret = ruMapTryPut(rm, NULL, NULL, &exist);
     fail_unless(exp == ret, retText, test, exp, ret);
+    fail_unless(NULL == exist, retText, test, NULL, exist);
 
     ret = ruMapFirstSet(rm, NULL, NULL);
     fail_unless(exp == ret, retText, test, exp, ret);
@@ -117,9 +119,10 @@ END_TEST
 
 START_TEST ( run ) {
     int32_t ret, exp;
-    const char *test = "ruMapNew";
-    const char *retText = "%s failed wanted ret '%d' but got '%d'";
-    const char* foo = "foo";
+    perm_chars test = "ruMapNew";
+    perm_chars retText = "%s failed wanted ret '%d' but got '%d'";
+    perm_chars foo = "foo";
+    perm_chars bar = "bar";
 
     ruMap rm = ruMapNewString(NULL, NULL);
     fail_if(NULL == rm, retText, test, rm, NULL);
@@ -129,9 +132,16 @@ START_TEST ( run ) {
     fail_unless(exp == ret, retText, test, exp, ret);
     fail_unless(esz == sz, retText, test, esz, sz);
 
-    ret = ruMapPut(rm, foo, "bar");
+    ret = ruMapPut(rm, foo, bar);
     fail_unless(exp == ret, retText, test, exp, ret);
 
+    exp = RUE_FILE_EXISTS;
+    perm_chars exist = NULL;
+    ret = ruMapTryPut(rm, foo,bar, &exist);
+    fail_unless(exp == ret, retText, test, exp, ret);
+    fail_unless(bar == exist, retText, test, bar, exist);
+
+    exp = RUE_OK;
     bool ehas = true;
     bool has = ruMapHas(rm, foo, &ret);
     fail_unless(exp == ret, retText, test, exp, ret);
@@ -143,18 +153,18 @@ START_TEST ( run ) {
     fail_unless(ehas == has, retText, test, ehas, has);
 
     char *ekey, *eval;
-    ret = ruMapFirstSet(rm, (void**)&ekey, (void**)&eval);
+    ret = ruMapFirst(rm, &ekey, &eval);
     fail_unless(exp == ret, retText, test, exp, ret);
     ck_assert_str_eq(foo, ekey);
     ck_assert_str_eq("bar", eval);
 
     exp = RUE_FILE_NOT_FOUND;
-    ret = ruMapNext(rm, (void**)&ekey, (void**)&eval);
+    ret = ruMapNext(rm, &ekey, &eval);
     fail_unless(exp == ret, retText, test, exp, ret);
     fail_unless(NULL == ekey, retText, test, NULL, ekey);
     fail_unless(NULL == eval, retText, test, NULL, eval);
 
-    ret = ruMapNext(rm, (void**)&ekey, (void**)&eval);
+    ret = ruMapNext(rm, &ekey, &eval);
     fail_unless(exp == ret, retText, test, exp, ret);
     fail_unless(NULL == ekey, retText, test, NULL, ekey);
     fail_unless(NULL == eval, retText, test, NULL, eval);
@@ -260,9 +270,40 @@ START_TEST ( run ) {
 }
 END_TEST
 
+START_TEST ( iter ) {
+    int32_t ret, exp = RUE_OK;
+    const char *test = "ruMapNew";
+    const char *retText = "%s failed wanted ret '%x' but got '%x'";
+
+    ruMap rm = ruMapNew(ruIntHash, ruIntMatch,
+                        NULL, NULL, 3);
+    fail_if(NULL == rm, retText, test, rm, NULL);
+
+    ret = ruMapPut(rm, rm, true);
+    fail_unless(exp == ret, retText, test, exp, ret);
+
+    uint32_t esz  = 1;
+    uint32_t sz = ruMapSize(rm, &ret);
+    fail_unless(exp == ret, retText, test, exp, ret);
+    fail_unless(esz == sz, retText, test, esz, sz);
+
+    ptr key = NULL;
+    rusize val;
+    bool exb = true;
+    for (ret = ruMapFirst(rm, &key, &val); ret == RUE_OK;
+         ret = ruMapNext(rm, &key, &val)) {
+        fail_unless(rm == key, retText, test, rm, key);
+        fail_unless(exb == val, retText, test, exb, val);
+    }
+
+    ruMapFree(rm);
+}
+END_TEST
+
 TCase* mapTests ( void ) {
     TCase *tcase = tcase_create ( "map" );
     tcase_add_test ( tcase, api );
     tcase_add_test ( tcase, run );
+    tcase_add_test ( tcase, iter );
     return tcase;
 }

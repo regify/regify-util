@@ -131,13 +131,17 @@ RUAPI ruMap ruMapFree(ruMap rm) {
     return NULL;
 }
 
-static int32_t MapPut(Map* mp, void *key, void *val) {
+static int32_t MapPut(Map* mp, ptr key, ptr val, ptr* existingVal) {
     /* Hash the key. */
     mp->iterActive = false;
     int32_t bucket = mp->hash(key) % mp->buckets;
     for (ListElmt *le = mp->table[bucket]->head; le != NULL; le = le->next) {
         kv* item = le->data;
         if (mp->match(key, item->key)) {
+            if (existingVal) {
+                *existingVal = item->value;
+                return RUE_FILE_EXISTS;
+            }
             // update the exisiting item
             if (mp->keyFree) mp->keyFree(item->key);
             if (mp->valFree) mp->valFree(item->value);
@@ -161,7 +165,7 @@ static int32_t MapPut(Map* mp, void *key, void *val) {
     return ret;
 }
 
-RUAPI int32_t ruMapPutData(ruMap map, void *key, void *val) {
+RUAPI int32_t ruMapPutData(ruMap map, ptr key, ptr val, ptr* exisitingVal) {
     ruClearError();
     int32_t ret;
     Map *mp = MapGet(map, &ret);
@@ -174,7 +178,7 @@ RUAPI int32_t ruMapPutData(ruMap map, void *key, void *val) {
     if (mp->doQuit) return ret;
     ruMutexLock(mp->mux);
     if (!mp->doQuit) {
-        ret = MapPut(mp, key, val);
+        ret = MapPut(mp, key, val,exisitingVal);
     }
     ruMutexUnlock(mp->mux);
     return ret;
@@ -269,7 +273,7 @@ RUAPI bool ruMapHasKey(ruMap rm, void *key, int32_t *code) {
     ruRetWithCode(code, RUE_OK, false);
 }
 
-RUAPI int32_t ruMapGetValue(ruMap rm, void *key, void **value) {
+RUAPI int32_t ruMapGetValue(ruMap rm, void* key, void** value) {
     ruClearError();
     int32_t ret;
     Map *mp = MapGet(rm, &ret);
@@ -288,7 +292,7 @@ RUAPI int32_t ruMapGetValue(ruMap rm, void *key, void **value) {
     return ret;
 }
 
-static int32_t MapNextSet(Map *mp, void **key, void **value) {
+static int32_t MapNextSet(Map* mp, void** key, void** value) {
     if (!mp->iterActive) return RUE_INVALID_STATE;
     if (!mp->iterElmt) {
         do {
@@ -298,18 +302,26 @@ static int32_t MapNextSet(Map *mp, void **key, void **value) {
         } while(!mp->iterElmt);
     }
     if (!mp->iterElmt) {
-        if (key) *(key) = NULL;
-        if (value) *(value) = NULL;
+        if (key) {
+            *key = NULL;
+        }
+        if (value) {
+            *value = NULL;
+        }
         return RUE_FILE_NOT_FOUND;
     }
     kv* item = mp->iterElmt->data;
-    if (key) *(key) = item->key;
-    if (value) *(value) = item->value;
+    if (key) {
+        *key = item->key;
+    }
+    if (value) {
+        *value = item->value;
+    }
     mp->iterElmt = mp->iterElmt->next;
     return RUE_OK;
 }
 
-RUAPI int32_t ruMapFirstSet(ruMap rm, void **key, void **value) {
+RUAPI int32_t ruMapFirstSet(ruMap rm, void** key, void** value) {
     ruClearError();
     int32_t ret;
     Map *mp = MapGet(rm, &ret);
@@ -332,7 +344,7 @@ RUAPI int32_t ruMapFirstSet(ruMap rm, void **key, void **value) {
     return ret;
 }
 
-RUAPI int32_t ruMapNextSet(ruMap rm, void **key, void **value) {
+RUAPI int32_t ruMapNextSet(ruMap rm, void** key, void** value) {
     ruClearError();
     int32_t ret;
     Map *mp = MapGet(rm, &ret);

@@ -300,6 +300,11 @@ typedef void* (*ruClearFunc)(void*);
  */
 typedef void (*ruFreeFunc)(void*);
 
+/**
+ * \brief Signature of a generic comparator function for sorting.
+ * \ingroup misc
+ */
+typedef int (*ruCompFunc) (trans_ptr a, trans_ptr b);
 
 /**
  * \brief Abstracted version of the Posix struct timeval.
@@ -321,6 +326,14 @@ typedef struct {
  * @param p resource to be freed and NULLed if not NULL already
  */
 #define ruFree(p) ruMacStart { if(p) { free((void*)p); p = NULL; } } ruMacEnd
+
+/**
+ * \brief Frees given resource and set paramater to new value
+ * \ingroup memory
+ * @param p resource to be freed before new value is assigned
+ * @param n new value to be assigned to freed resource
+ */
+#define ruReplace(p, n) ruMacStart { if(p) { free((void*)p); } p = n; } ruMacEnd
 
 /**
  * \brief Convenience macro for setting a potentially passed in result pointer
@@ -396,7 +409,7 @@ RUAPI alloc_ptr ruMallocSize(rusize count, rusize ofsize);
  * @return Guarateed to return the requested memory block casted to (*ctype)
  *         or the process will terminate.
  */
-#define ruMalloc0(count, ctype) (ctype*) ruMallocSize(count, sizeof(ctype));
+#define ruMalloc0(count, ctype) (ctype*) ruMallocSize((rusize)(count), sizeof(ctype));
 
 /**
  * \brief Reallocate requested memory without zeroing.
@@ -475,7 +488,7 @@ RUAPI int32_t ruGetTimeVal(ruTimeVal *result);
  * \brief Return the current local time in seconds since Jan. 1 1970
  * @return Seconds since epoch
  */
-RUAPI long ruTimeSec(void);
+RUAPI sec_t ruTimeSec(void);
 
 /**
  * \brief Checks if given stamp has elapsed.
@@ -485,18 +498,57 @@ RUAPI long ruTimeSec(void);
 RUAPI bool ruTimeEllapsed(sec_t stamp);
 
 /**
+ * \brief Convert a string representation of time to a time stamp
+ * @param dateformat a strptime type format string
+ * @param datestr the string representation of the given date time
+ * @return given date time in seconds since epoch
+ */
+RUAPI sec_t ruTimeParse(trans_chars dateformat, trans_chars datestr);
+
+/**
+ * \brief UTC version of \ref ruTimeParse
+ * @param dateformat a strptime type format string
+ * @param datestr the string representation of the given date time
+ * @return given date time in seconds since epoch
+ */
+RUAPI sec_t ruUtcParse(trans_chars dateformat, trans_chars datestr);
+
+/**
+ * \brief Return the current local time formatted in given buffer
+ * @param format format string for strftime
+ * @param len length of the given buffer must include room for the null terminator
+ * @param timeStr buffer where formatted null terminated string will be placed
+ * @param timesecs datestamp in seconds since epoch or 0 to use current time
+ * @return microsecond part of the current time or -1 on error;
+ */
+RUAPI int ruTimeFormat(trans_chars format, rusize len, alloc_chars timeStr, sec_t timesecs);
+
+/** Alias for \ref ruTimeFormat */
+#define ruDateFormat ruTimeFormat
+
+/**
+ * \brief UTC version of \ref ruTimeFormat
+ * @param format format string for strftime
+ * @param len length of the given buffer must include room for the null terminator
+ * @param timeStr buffer where formatted null terminated string will be placed
+ * @param timesecs datestamp in seconds since epoch or 0 to use current time
+ * @return microsecond part of the current time or -1 on error;
+ */
+RUAPI int ruUtcFormat(trans_chars format, rusize len, alloc_chars timeStr, sec_t timesecs);
+
+/**
  * \brief Converts given local time stamp to UTC
  * @param stamp seconds since epoch in local time
  * @return UTC seconds since epoch
  */
-RUAPI long ruTimeLocalToUtc(sec_t stamp);
+RUAPI sec_t ruTimeLocalToUtc(sec_t stamp);
 
 /**
  * \brief Converts given UTC time stamp to local time
  * @param stamp UTC seconds since epoch
  * @return seconds since epoch in local time
  */
-RUAPI long ruTimeUtcToLocal(sec_t stamp);
+RUAPI sec_t ruTimeUtcToLocal(sec_t stamp);
 
 /**
  * \brief Return the current local time in milliseconds since Jan. 1 1970
@@ -534,19 +586,22 @@ RUAPI alloc_chars ruGetLanguage(void);
  * \brief Sleeps for the given number of micro seconds.
  * @param microseconds
  */
-RUAPI void ruUsleep(usec_t microseconds);
+RUAPI void ruSleepUs(usec_t microseconds);
 
 /**
  * \brief Sleeps for the given number of milli seconds.
  * @param milliseconds
  */
-RUAPI void ruMsleep(msec_t milliseconds);
+RUAPI void ruSleepMs(msec_t milliseconds);
 
 /**
  * \brief Sleeps for the given number of seconds.
  * @param seconds
  */
 #define ruSleep(secs) ruMsleep(((msec_t)(secs))*1000)
+
+#define ruMsleep ruSleepMs
+#define ruUsleep ruSleepUs
 
 /**
  * \brief Returns a quasi ramdom number between 0 and max + offset.
@@ -558,16 +613,6 @@ RUAPI void ruMsleep(msec_t milliseconds);
  * @return A number between offset and offset + max.
  */
 RUAPI unsigned long ruSemiRandomNumber(unsigned long max, long offset);
-
-/**
- * \brief Return the current local time formatted in given buffer
- * @param format format string for strftime
- * @param len length of the given buffer must include room for the null terminator
- * @param timeStr buffer where formatted null terminated  string will be place
- * @param timesecs datestamp in seconds since epoch or 0 to use current time
- * @return microsecond part of the current time or -1 on error;
- */
-RUAPI int ruDateFormat(const char* format, rusize len, char* timeStr, sec_t timesecs);
 
 /**
  * \brief Compares 2 version strings
@@ -603,6 +648,9 @@ ctype* ctype ## Get(void* ptr, int32_t* code) { \
     } \
     ruRetWithCode(code, RUE_OK, ret); \
 }
+
+#define ruZeroedStruct(type, var) type var; \
+    memset(&(var), 0, sizeof(type))
 
 #define ruMakeTypeGetHeader(ctype) \
 ctype* ctype ## Get(void* ptr, int32_t* code)
