@@ -71,7 +71,7 @@ static char* lskip(const char* s) {
 /* Return pointer to first char (of chars) or inline comment in given string,
    or pointer to NUL at end of string if neither found. Inline comment must
    be prefixed by a whitespace character to register as a comment. */
-static char* find_chars_or_comment(const char* s, const char* chars) {
+static char* find_chars_or_comment(perm_chars s, trans_chars chars) {
     int was_space = 0;
     while (*s && (!chars || !strchr(chars, *s)) &&
            !(was_space && strchr(INI_INLINE_COMMENT_PREFIXES, *s))) {
@@ -211,7 +211,7 @@ static char* ini_reader_string(char* str, int num, void* stream) {
     return str;
 }
 
-int32_t iniParseString(const char* string, ruIniCallback handler, void* user) {
+int32_t iniParseString(trans_chars string, ruIniCallback handler, void* user) {
     ruClearError();
     ini_parse_string_ctx ctx;
     ctx.ptr = string;
@@ -226,7 +226,7 @@ int32_t iniParseString(const char* string, ruIniCallback handler, void* user) {
     return RUE_OK;
 }
 
-static ruMap getIniMap(Ini* ini, const char* section) {
+static ruMap getIniMap(Ini* ini, trans_chars section) {
     ruMap map = ini->keys;
     if (section) {
         if (ruMapHas(ini->sections, section, NULL)) {
@@ -239,8 +239,8 @@ static ruMap getIniMap(Ini* ini, const char* section) {
     return map;
 }
 
-static bool iniParseCb(void* user, const char* section, const char* name,
-                const char* value, int lineno) {
+static bool iniParseCb(void* user, trans_chars section, trans_chars name,
+                       trans_chars value, int lineno) {
     Ini* ctx = IniGet(user, NULL);
     if (!ctx) return true;
 
@@ -295,6 +295,7 @@ static bool dumpMap(FILE* file, ruMap map) {
         if (val) {
             fprintf(file, "%s = %s\n", key, val);
         } else {
+            // should never happen since NULL means remove key
             fprintf(file, "%s\n", key);
         }
         used = true;
@@ -302,7 +303,7 @@ static bool dumpMap(FILE* file, ruMap map) {
     return used;
 }
 
-RUAPI int32_t ruIniWrite(ruIni iniOb, const char* filename) {
+RUAPI int32_t ruIniWrite(ruIni iniOb, trans_chars filename) {
     int32_t ret;
     Ini* ini = IniGet(iniOb, &ret);
     if (!ini) return ret;
@@ -322,7 +323,7 @@ RUAPI int32_t ruIniWrite(ruIni iniOb, const char* filename) {
     return ret;
 }
 
-RUAPI int32_t ruIniRead(const char* filename, ruIni* iniOb) {
+RUAPI int32_t ruIniRead(trans_chars filename, ruIni* iniOb) {
 //    ruClearError(); // already done by ruFOpen
     if (!filename || !iniOb) return RUE_PARAMETER_NOT_SET;
     int32_t code = RUE_OK;
@@ -341,7 +342,7 @@ RUAPI int32_t ruIniRead(const char* filename, ruIni* iniOb) {
     return code;
 }
 
-RUAPI int32_t ruIniKeys(ruIni iniOb, const char* section, ruList* keys) {
+RUAPI int32_t ruIniKeys(ruIni iniOb, trans_chars section, ruList* keys) {
     int32_t ret;
     Ini* ini = IniGet(iniOb, &ret);
     if (!ini) return ret;
@@ -361,8 +362,8 @@ RUAPI int32_t ruIniSections(ruIni iniOb, ruList* sections) {
     return ruMapKeySet(map, (ruCloneFunc) ruStrDup, sections, free);
 }
 
-RUAPI const char* ruIniGetDef(ruIni iniOb, const char* section, const char* key,
-                          const char* def, int32_t* code) {
+RUAPI perm_chars ruIniGetDef(ruIni iniOb, trans_chars section, trans_chars key,
+                             perm_chars def, int32_t* code) {
     int32_t ret;
     Ini* ini = IniGet(iniOb, &ret);
 
@@ -385,14 +386,14 @@ RUAPI const char* ruIniGetDef(ruIni iniOb, const char* section, const char* key,
     ruRetWithCode(code, ret, value);
 }
 
-RUAPI int32_t ruIniGet(ruIni iniOb, const char* section, const char* key, const char** value) {
+RUAPI int32_t ruIniGet(ruIni iniOb, trans_chars section, trans_chars key, perm_chars* value) {
     if (!value) return RUE_PARAMETER_NOT_SET;
     int32_t ret;
     *value = ruIniGetDef(iniOb, section, key, NULL, &ret);
     return ret;
 }
 
-RUAPI int32_t ruIniSet(ruIni iniOb, const char* section, const char* key, const char* value) {
+RUAPI int32_t ruIniSet(ruIni iniOb, trans_chars section, trans_chars key, trans_chars value) {
     int32_t ret;
     Ini* ini = IniGet(iniOb, &ret);
     if (!ini) return ret;
@@ -400,7 +401,11 @@ RUAPI int32_t ruIniSet(ruIni iniOb, const char* section, const char* key, const 
 
     ruMap map = getIniMap(ini, section);
     if (key) {
-        ret = ruMapPut(map, ruStrDup(key), ruStrDup(value));
+        if (value) {
+            ret = ruMapPut(map, ruStrDup(key), ruStrDup(value));
+        } else {
+            ret = ruMapRemove(map, key, NULL);
+        }
     }
     return ret;
 }

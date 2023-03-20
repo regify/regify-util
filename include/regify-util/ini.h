@@ -68,7 +68,7 @@ RUAPI ruIni ruIniNew(void);
  * @param filename Path to ini file
  * @return \ref RUE_OK on success else an error code
  */
-RUAPI int32_t ruIniWrite(ruIni iniOb, const char* filename);
+RUAPI int32_t ruIniWrite(ruIni iniOb, trans_chars filename);
 
 /**
  * \brief Parse given INI-style file.
@@ -85,7 +85,7 @@ RUAPI int32_t ruIniWrite(ruIni iniOb, const char* filename);
  * @param iniOb Where the result \ref ruIni object will be stored. Free with \ref ruIniFree.
  * @return \ref RUE_OK on success else an error code
  */
-RUAPI int32_t ruIniRead(const char* filename, ruIni* iniOb);
+RUAPI int32_t ruIniRead(trans_chars filename, ruIni* iniOb);
 
 /**
  * \brief Returns a list of sections from the given ini object
@@ -102,7 +102,7 @@ RUAPI int32_t ruIniSections(ruIni iniOb, ruList* sections);
  * @param keys List of keys to be freed by caller after use.
  * @return \ref RUE_OK on success else an error code
  */
-RUAPI int32_t ruIniKeys(ruIni iniOb, const char* section, ruList* keys);
+RUAPI int32_t ruIniKeys(ruIni iniOb, trans_chars section, ruList* keys);
 
 /**
  * \brief Retrieves a value or given default from the given ini object.
@@ -113,8 +113,8 @@ RUAPI int32_t ruIniKeys(ruIni iniOb, const char* section, ruList* keys);
  * @param code Optional, where to store the return code of the operation
  * @return The found value or def if the value was not found or blank.
  */
-RUAPI const char* ruIniGetDef(ruIni iniOb, const char* section, const char* key,
-                              const char* def, int32_t* code);
+RUAPI perm_chars ruIniGetDef(ruIni iniOb, trans_chars section, trans_chars key,
+                              trans_chars def, int32_t* code);
 
 /**
  * \brief Retrieves a value from the given ini object.
@@ -124,17 +124,17 @@ RUAPI const char* ruIniGetDef(ruIni iniOb, const char* section, const char* key,
  * @param value Where the value will be stored. Caller should copy as needed
  * @return \ref RUE_OK on success else an error code
  */
-RUAPI int32_t ruIniGet(ruIni iniOb, const char* section, const char* key, const char** value);
+RUAPI int32_t ruIniGet(ruIni iniOb, trans_chars section, trans_chars key, perm_chars* value);
 
 /**
  * \brief Set a value in the given ini object.
  * @param iniOb Object to set value in
  * @param section Section to set value in. NULL for no section.
  * @param key Key name
- * @param value The value to set. Use NULL or blank for an empty entry
+ * @param value The value to set. Use blank for an empty entry and NULL to remove
  * @return \ref RUE_OK on success else an error code
  */
-RUAPI int32_t ruIniSet(ruIni iniOb, const char* section, const char* key, const char* value);
+RUAPI int32_t ruIniSet(ruIni iniOb, trans_chars section, trans_chars key, trans_chars value);
 
 /**
  * @}

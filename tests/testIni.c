@@ -130,6 +130,12 @@ START_TEST ( run ) {
     ret = ruIniSet(cf, sec, key, val);
     fail_unless(exp == ret, retText, test, exp, ret);
 
+    ret = ruIniSet(cf, sec, key, NULL);
+    fail_unless(exp == ret, retText, test, exp, ret);
+
+    ret = ruIniSet(cf, sec, key, val);
+    fail_unless(exp == ret, retText, test, exp, ret);
+
     test = "ruIniWrite";
     ret = ruIniWrite(cf, inifile);
     fail_unless(exp == ret, retText, test, exp, ret);

@@ -859,6 +859,27 @@ RUAPI long ruStrToLong(trans_chars numstr) {
     return parseLong(numstr,false);
 }
 
+static int32_t parseInt(trans_chars numstr, bool strict) {
+    char* end = (char*)numstr;
+    int64_t num = ruStrParseInt64(numstr, &end, 10);
+    if (!strict) return (int32_t)num;
+    if (!numstr || *end) return 0;
+    int32_t intout = (int32_t)num;
+    if (intout < num) {
+        errno = ERANGE;
+        return 0;
+    }
+    return intout;
+}
+
+RUAPI int32_t ruStrParseInt(trans_chars numstr) {
+    return parseInt(numstr,true);
+}
+
+RUAPI int32_t ruStrToInt(trans_chars numstr) {
+    return parseInt(numstr,false);
+}
+
 RUAPI bool ruStrEmpty(trans_chars str) {
     if (!str) return true;
     while (*str) {

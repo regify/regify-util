@@ -486,9 +486,25 @@ RUAPI long ruStrParseLong(trans_chars numstr);
 /**
  * \brief Like \ref ruStrParseLong but ignores overflow and trailing garbage
  * @param numstr String to contain numerals to parse
- * @return whatever strtol returns
+ * @return the number
  */
 RUAPI long ruStrToLong(trans_chars numstr);
+
+/**
+ * \brief Returns int32_t from parsed string.
+ * Overflow or trailing non numeric characters invalidate the result.
+ *
+ * @param numstr String to contain numerals to parse
+ * @return The number on success or 0 with errno set.
+ */
+RUAPI int32_t ruStrParseInt(trans_chars numstr);
+
+/**
+ * \brief Like \ref ruStrParseInt but ignores overflow and trailing garbage
+ * @param numstr String to contain numerals to parse
+ * @return the number
+ */
+RUAPI int32_t ruStrToInt(trans_chars numstr);
 
 /**
  * \brief Alias for \ref ruStrParseInt64

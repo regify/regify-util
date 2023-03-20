@@ -91,6 +91,14 @@ START_TEST ( api ) {
     ruStrReplace(NULL, NULL, NULL);
     ruStrReplace(NULL, "", NULL);
 
+    int32_t ires = ruStrParseInt(NULL);
+    fail_unless(0 == num, retText, test, 0, num);
+    fail_unless(EINVAL == errno, retText, test, EINVAL, errno);
+
+    ires = ruStrToInt(NULL);
+    fail_unless(0 == num, retText, test, 0, num);
+    fail_unless(EINVAL == errno, retText, test, EINVAL, errno);
+
     long lres = ruStrParseLong(NULL);
     fail_unless(0 == num, retText, test, 0, num);
     fail_unless(EINVAL == errno, retText, test, EINVAL, errno);
@@ -269,12 +277,22 @@ START_TEST ( run ) {
     num = ruStrParseInt64("-666.5", NULL, 10);
     fail_unless(expNum == num, retText, test, expNum, num);
 
+    test = "ruStrParseInt";
+    int32_t iexp = 0;
+    int32_t inum = ruStrParseInt(" 0666NULL");
+    fail_unless(iexp == inum, retText, test, iexp, inum);
+
+    test = "ruStrToInt";
+    iexp = 666;
+    inum = ruStrToInt(" 0666NULL");
+    fail_unless(iexp == inum, retText, test, iexp, inum);
+
     test = "ruStrParseLong";
     long lexp = 0;
     long lnum = ruStrParseLong(" 0666NULL");
     fail_unless(lexp == lnum, retText, test, lexp, lnum);
 
-    test = "ruStrParseLong";
+    test = "ruStrToLong";
     lexp = 666;
     lnum = ruStrToLong(" 0666NULL");
     fail_unless(lexp == lnum, retText, test, lexp, lnum);
