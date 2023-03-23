@@ -170,7 +170,7 @@ static char* keyToPath(FileKvStore *fks, const char* key) {
 }
 
 RUAPI int32_t ruFileStoreSet (KvStore *kvs, const char* key,
-                              const char *val, rusize_s len) {
+                              const char *val, rusize len) {
     ruClearError();
     if (!key) return RUE_PARAMETER_NOT_SET;
     if (!strlen(key)) return RUE_INVALID_PARAMETER;
@@ -292,7 +292,7 @@ RUAPI KvStore* ruNewNullStore(void) {
 }
 
 RUAPI int32_t ruNullStoreSet (KvStore *kvs, const char* key,
-                              const char *val, rusize_s len) {
+                              const char *val, rusize len) {
     ruClearError();
     if (!key) return RUE_PARAMETER_NOT_SET;
     if (!strlen(key)) return RUE_INVALID_PARAMETER;

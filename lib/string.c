@@ -235,10 +235,10 @@ RUAPI int32_t ruStringAppendn(ruString rs, const char* instr, rusize len) {
     if (!str) return ret;
     if (!instr) return RUE_PARAMETER_NOT_SET;
     rusize ilen;
-    if (len) {
-        ilen = len;
-    } else {
+    if (len == RU_SIZE_AUTO) {
         ilen = strlen(instr);
+    } else {
+        ilen = len;
     }
     maybeAdd(str, ilen);
     memcpy(str->start + str->idx, instr, ilen);
@@ -498,12 +498,12 @@ RUAPI perm_chars ruStrTrimDup(trans_chars instr, alloc_chars* newstr) {
     ruRetWithCode(newstr, NULL, instr);
 }
 
-RUAPI trans_chars ruStrTrimBounds(trans_chars inStart, rusize_s inLen, rusize* outLen) {
+RUAPI trans_chars ruStrTrimBounds(trans_chars inStart, rusize inLen, rusize* outLen) {
     trans_chars outStart = NULL;
     if (outLen) *outLen = 0;
     if (!inLen || ruStrEmpty(inStart)) return outStart;
 
-    rusize len = (inLen < 0)? strlen(inStart) : inLen;
+    rusize len = (inLen == RU_SIZE_AUTO)? strlen(inStart) : inLen;
     trans_chars inPast = inStart + len;
     trans_chars inLast = inPast - 1;
 
@@ -522,7 +522,7 @@ RUAPI trans_chars ruStrTrimBounds(trans_chars inStart, rusize_s inLen, rusize* o
     return outStart;
 }
 
-RUAPI bool ruStrFindKeyVal(trans_chars inStart, rusize_s inLen, trans_chars delim,
+RUAPI bool ruStrFindKeyVal(trans_chars inStart, rusize inLen, trans_chars delim,
                            trans_chars* keyStart, rusize* keyLen,
                            trans_chars* valStart, rusize* valLen) {
     if (keyStart) {
@@ -536,7 +536,7 @@ RUAPI bool ruStrFindKeyVal(trans_chars inStart, rusize_s inLen, trans_chars deli
     if (!inStart || ! inLen) return false;
 
     rusize len = inLen;
-    if (inLen < 0) len = strlen(inStart);
+    if (inLen == RU_SIZE_AUTO) len = strlen(inStart);
 
     trans_chars inEnd = inStart + len;
     rusize delimLen = delim? strlen(delim) : 0;
@@ -544,7 +544,7 @@ RUAPI bool ruStrFindKeyVal(trans_chars inStart, rusize_s inLen, trans_chars deli
 
     if (keyStart) {
         // trim the key start
-        rusize_s kLen = (rusize_s)len;
+        rusize kLen = len;
         if (delimStart) kLen = delimStart - inStart;
         *keyStart = ruStrTrimBounds(inStart, kLen, keyLen);
     }
@@ -552,7 +552,7 @@ RUAPI bool ruStrFindKeyVal(trans_chars inStart, rusize_s inLen, trans_chars deli
     if (valStart) {
         // trim the value
         trans_chars vStart = delimStart + delimLen;
-        rusize_s vLen = inEnd - vStart;
+        rusize vLen = inEnd - vStart;
         *valStart = ruStrTrimBounds(vStart, vLen, valLen);
     }
     return true;
@@ -657,12 +657,12 @@ RUAPI trans_chars ruLastSubstr(trans_chars haystack, trans_chars needle) {
     return ruLastSubstrLen(haystack, needle, 0);
 }
 
-RUAPI ruList ruStrNSplit(trans_chars instr, rusize_s inlen, trans_chars delim, int32_t maxCnt) {
+RUAPI ruList ruStrNSplit(trans_chars instr, rusize inlen, trans_chars delim, int32_t maxCnt) {
     ruClearError();
     if (!instr || !inlen || !delim || !delim[0]) return NULL;
 
     if (maxCnt < 1) maxCnt = INT_MAX;
-    if (inlen < 0) inlen = strlen(instr);
+    if (inlen == RU_SIZE_AUTO) inlen = strlen(instr);
     trans_chars inPast = instr + inlen;
 
     ruList strList = ruListNew(free);

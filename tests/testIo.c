@@ -566,7 +566,7 @@ START_TEST ( fileopen ) {
     ret = ruFileRemove(writeFile);
     fail_unless(exp == ret, retErrText, test, exp, ret, ruLastError());
 
-    ret = ruFileSetContents(writeFile, writtenText, -1);
+    ret = ruFileSetContents(writeFile, writtenText, RU_SIZE_AUTO);
     fail_unless(exp == ret, retErrText, test, exp, ret, ruLastError());
 
     alloc_chars writeCopy = ruDupPrintf("%s/ru-outcopy.txt", tmpDir);
