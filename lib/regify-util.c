@@ -134,7 +134,7 @@ RUAPI unsigned long ruSemiRandomNumber(unsigned long max, long offset) {
     static long threadcounter = 0;
     ruTimeVal tv;
     ruGetTimeVal(&tv);
-    long value = (tv.usec ^ tv.sec ) + threadcounter++;
+    long value = (long)((tv.usec ^ tv.sec ) + threadcounter++);
     return (value % max) + offset;
 }
 
@@ -185,7 +185,7 @@ RUAPI int32_t ruGetVolumeInfo(const char* mountPoint,
             &serNo, &compLen, &flags,
             (wchar_t*)&fsbuf[0],
             sizeof(fsbuf) / sizeof(fsbuf[0]))) {
-        ruVerbLogf("failed getting volume info for '%s'. EC: %d",
+        ruDbgLogf("failed getting volume info for '%s'. EC: %d",
                 mountPoint, GetLastError());
         return RUE_FILE_NOT_FOUND;
     }

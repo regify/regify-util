@@ -277,6 +277,18 @@ typedef int64_t msec_t;
 typedef int64_t usec_t;
 
 /**
+ * \brief A pointer sized integer type for collections like \ref ruMap or \ref ruList.
+ * \ingroup misc
+ */
+typedef long ru_int;
+
+/**
+ * \brief A pointer sized unsigned integer type for collections like \ref ruMap or \ref ruList.
+ * \ingroup misc
+ */
+typedef unsigned long ru_uint;
+
+/**
  * \brief Abstracted version of size_t.
  * \ingroup misc
  */
@@ -311,8 +323,8 @@ typedef int (*ruCompFunc) (trans_ptr a, trans_ptr b);
  * \ingroup misc
  */
 typedef struct {
-    msec_t sec;
-    long usec;
+    sec_t sec;
+    usec_t usec;
 } ruTimeVal;
 
 /** \cond noworry */
@@ -478,11 +490,54 @@ RUAPI trans_chars ruGetenv(const char *variable);
 RUAPI bool ruIsInt64(const char* numstr);
 
 /**
+ * \brief Returns the ISO-639-1 2 letter country code pertaining to the running system,
+ * @return The country code. Caller must free with \ref ruFree.
+ */
+RUAPI alloc_chars ruGetLanguage(void);
+
+/**
+ * \brief Returns a quasi ramdom number between 0 and max + offset.
+ *
+ * This function ORs timevals usec with sec, so it is not designed for
+ * cryptographic use.
+ * @param max The maximum random value.
+ * @param offset An off set to add to the result to move the range.
+ * @return A number between offset and offset + max.
+ */
+RUAPI unsigned long ruSemiRandomNumber(unsigned long max, long offset);
+
+/**
+ * \brief Compares 2 version strings
+ * This function compares version number strings that are made up of real numbers.
+ * The advantage is that the delimiter does not matter. It will work with, for
+ * example, 141.01.03, 141:1:3, or even 141A1P3. It also handles
+ * mismatched tails so that 141.1.3 will come before 141.1.3.1. Finally NULLs
+ * are also properly compared.
+ *
+ * @param ver1 First version to check
+ * @param ver2 Second version to check
+ * @return -1, 0 or 1 depending on whether ver1 is less equal or greater ver2
+ */
+RUAPI int ruVersionComp(trans_chars ver1, trans_chars ver2);
+
+/**
  * \brief Returns a \ref ruTimeVal representing the current time.
  * @param result Pointer to the \ref ruTimeVal structure to populate.
  * @return Return code of the operation or \ref RUE_OK on success.
  */
 RUAPI int32_t ruGetTimeVal(ruTimeVal *result);
+
+/**
+ * \brief Return the current local time in microseconds since Jan. 1 1970
+ * @return Micro seconds since epoch
+ */
+RUAPI usec_t ruTimeUs(void);
+
+/**
+ * \brief Return the current local time in milliseconds since Jan. 1 1970
+ * @return Milli seconds since epoch
+ */
+RUAPI msec_t ruTimeMs(void);
 
 /**
  * \brief Return the current local time in seconds since Jan. 1 1970
@@ -492,10 +547,42 @@ RUAPI sec_t ruTimeSec(void);
 
 /**
  * \brief Checks if given stamp has elapsed.
+ * @param stamp microsecond stamp to compare to.
+ * @return Return true if now is >= stamp
+ */
+RUAPI bool ruTimeUsEllapsed(usec_t stamp);
+
+/**
+ * \brief Checks if given stamp has elapsed.
+ * @param stamp millisecond stamp to compare to.
+ * @return Return true if now is >= stamp
+ */
+RUAPI bool ruTimeMsEllapsed(msec_t stamp);
+
+/**
+ * \brief Checks if given stamp has elapsed.
  * @param stamp second stamp to compare to.
  * @return Return true if now is >= stamp
  */
 RUAPI bool ruTimeEllapsed(sec_t stamp);
+
+/**
+ * \brief Sleeps for the given number of micro seconds.
+ * @param microseconds
+ */
+RUAPI void ruSleepUs(usec_t microseconds);
+
+/**
+ * \brief Sleeps for the given number of milli seconds.
+ * @param milliseconds
+ */
+RUAPI void ruSleepMs(msec_t milliseconds);
+
+/**
+ * \brief Sleeps for the given number of seconds.
+ * @param seconds
+ */
+#define ruSleep(secs) ruMsleep(((msec_t)(secs))*1000)
 
 /**
  * \brief Convert a string representation of time to a time stamp
@@ -523,9 +610,6 @@ RUAPI sec_t ruUtcParse(trans_chars dateformat, trans_chars datestr);
  */
 RUAPI int ruTimeFormat(trans_chars format, rusize len, alloc_chars timeStr, sec_t timesecs);
 
-/** Alias for \ref ruTimeFormat */
-#define ruDateFormat ruTimeFormat
-
 /**
  * \brief UTC version of \ref ruTimeFormat
  * @param format format string for strftime
@@ -550,83 +634,6 @@ RUAPI sec_t ruTimeLocalToUtc(sec_t stamp);
  */
 RUAPI sec_t ruTimeUtcToLocal(sec_t stamp);
 
-/**
- * \brief Return the current local time in milliseconds since Jan. 1 1970
- * @return Milli seconds since epoch
- */
-RUAPI msec_t ruTimeMs(void);
-
-/**
- * \brief Checks if given stamp has elapsed.
- * @param stamp millisecond stamp to compare to.
- * @return Return true if now is >= stamp
- */
-RUAPI bool ruTimeMsEllapsed(msec_t stamp);
-
-/**
- * \brief Return the current local time in microseconds since Jan. 1 1970
- * @return Micro seconds since epoch
- */
-RUAPI usec_t ruTimeUs(void);
-
-/**
- * \brief Checks if given stamp has elapsed.
- * @param stamp microsecond stamp to compare to.
- * @return Return true if now is >= stamp
- */
-RUAPI bool ruTimeUsEllapsed(usec_t stamp);
-
-/**
- * \brief Returns the ISO-639-1 2 letter country code pertaining to the running system,
- * @return The country code. Caller must free with \ref ruFree.
- */
-RUAPI alloc_chars ruGetLanguage(void);
-
-/**
- * \brief Sleeps for the given number of micro seconds.
- * @param microseconds
- */
-RUAPI void ruSleepUs(usec_t microseconds);
-
-/**
- * \brief Sleeps for the given number of milli seconds.
- * @param milliseconds
- */
-RUAPI void ruSleepMs(msec_t milliseconds);
-
-/**
- * \brief Sleeps for the given number of seconds.
- * @param seconds
- */
-#define ruSleep(secs) ruMsleep(((msec_t)(secs))*1000)
-
-#define ruMsleep ruSleepMs
-#define ruUsleep ruSleepUs
-
-/**
- * \brief Returns a quasi ramdom number between 0 and max + offset.
- *
- * This function ORs timevals usec with sec, so it is not designed for
- * cryptographic use.
- * @param max The maximum random value.
- * @param offset An off set to add to the result to move the range.
- * @return A number between offset and offset + max.
- */
-RUAPI unsigned long ruSemiRandomNumber(unsigned long max, long offset);
-
-/**
- * \brief Compares 2 version strings
- * This function compares version number strings that are made up of real numbers.
- * The advantage is that the delimiter does not matter. It will work with, for
- * example, 141.01.03, 141:1:3, or even 141A1P3. It also handles
- * mismatched tails so that 141.1.3 will come before 141.1.3.1. Finally NULLs
- * are also properly compared.
- *
- * @param ver1 First version to check
- * @param ver2 Second version to check
- * @return -1, 0 or 1 depending on whether ver1 is less equal or greater ver2
- */
-RUAPI int ruVersionComp(trans_chars ver1, trans_chars ver2);
 /**
  * @}
  */

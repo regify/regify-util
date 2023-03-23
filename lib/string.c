@@ -71,7 +71,7 @@ static alloc_chars caseThis(trans_chars instr, rusize len, bool up) {
     return out;
 }
 
-char* fixPath(const char *inPath) {
+alloc_chars fixPath(const char *inPath) {
     if (!inPath) return NULL;
 #ifdef RUMS
     char slash = '/';
@@ -848,7 +848,7 @@ static long parseLong(trans_chars numstr, bool strict) {
         }
     }
     if (errno == ERANGE) return 0;
-    return num;
+    return (long)num;
 }
 
 RUAPI long ruStrParseLong(trans_chars numstr) {

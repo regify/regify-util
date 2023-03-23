@@ -107,7 +107,7 @@ START_TEST ( api ) {
     fail_unless(0 == num, retText, test, 0, num);
     fail_unless(EINVAL == errno, retText, test, EINVAL, errno);
 
-    lres = ruStrToInt64(NULL);
+    num = ruStrToInt64(NULL);
     fail_unless(0 == num, retText, test, 0, num);
     fail_unless(EINVAL == errno, retText, test, EINVAL, errno);
 

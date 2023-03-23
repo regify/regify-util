@@ -39,6 +39,7 @@ Suite* getSuite ( void ) {
     suite_add_tcase ( suite, iniTests() );
     suite_add_tcase ( suite, storeTests() );
     suite_add_tcase ( suite, cleanerTests() );
+    suite_add_tcase ( suite, threadTests() );
     return suite;
 }
 
@@ -66,7 +67,7 @@ char* insureTestFolder(const char* folderName) {
 const char* testBase = TEST_BASE;
 char pathBuffer[1024];
 
-char * makePath(const char *filepath) {
+perm_chars makePath(const char *filepath) {
     snprintf(&pathBuffer[0], 1023, "%s/%s", testBase, filepath);
     return &pathBuffer[0];
 }

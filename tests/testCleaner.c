@@ -350,11 +350,11 @@ START_TEST ( regibox ) {
     ret = ruCleanAdd(c, "61A5434A44087E4E", ac);
     fail_unless(ret == exp, retText, test, exp, ret);
 
-    char *file = makePath("regibox.log");
+    perm_chars file = makePath("regibox.log");
     FILE *rh = ruFOpen(file, "r", &ret);
     fail_unless(ret == exp, retText, test, exp, ret);
 
-    char *outfile = makePath("regibox.out");
+    perm_chars outfile = makePath("regibox.out");
     FILE *wh = ruFOpen(outfile, "w", &ret);
     fail_unless(ret == exp, retText, test, exp, ret);
 
@@ -1513,11 +1513,11 @@ START_TEST ( regibox2 ) {
         fail_unless(ret == exp, retText, test, exp, ret);
     }
 
-    char *file = makePath("regibox2.log");
+    perm_chars file = makePath("regibox2.log");
     FILE *rh = ruFOpen(file, "r", &ret);
             fail_unless(ret == exp, retText, test, exp, ret);
 
-    char *outfile = makePath("regibox2.out");
+    perm_chars outfile = makePath("regibox2.out");
     FILE *wh = ruFOpen(outfile, "w", &ret);
             fail_unless(ret == exp, retText, test, exp, ret);
 

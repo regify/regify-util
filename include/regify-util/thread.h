@@ -43,13 +43,13 @@
  * Returns the id of the running thread
  * @return thread id
  */
-RUAPI long int ruThreadGetId(void);
+RUAPI ru_uint ruThreadGetId(void);
 
 /**
  * Sets or clear name of the running thread
  * @param name New name to set or NULL to clear/free the exisiting name.
  */
-RUAPI void ruThreadSetName(const char* name);
+RUAPI void ruThreadSetName(trans_chars name);
 
 /**
  * Thread Identifier
@@ -99,7 +99,7 @@ RUAPI bool ruThreadFinished(ruThread tid, int32_t* code);
  *                thread wasn't killed.
  * @return false if thread timed out
  */
-RUAPI bool ruThreadWait(ruThread tid, long tosecs, void** exitVal);
+RUAPI bool ruThreadWait(ruThread tid, sec_t tosecs, void** exitVal);
 
 /**
  * Waits for given thread to terminate

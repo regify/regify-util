@@ -145,10 +145,10 @@ END_TEST
 
 START_TEST ( filetest ) {
 
-    const char*file = makePath("foess");
+    perm_chars file = makePath("foess");
     bool ret, exp;
-    const char *test = "ruFileExists";
-    const char *retText = "%s failed wanted ret '%d' but got '%d'";
+    perm_chars test = "ruFileExists";
+    perm_chars retText = "%s failed wanted ret '%d' but got '%d'";
 
     exp = true;
     ret = ruFileExists(file);
@@ -174,11 +174,13 @@ START_TEST ( filetest ) {
     fail_unless(exp == ret, retText, test, exp, ret);
 #endif
 
+    expi = RUE_PARAMETER_NOT_SET;
     test = "ruDiskFree";
     int64_t tot = -1, avail = -1;
     reti = ruDiskFree(file, NULL, NULL);
     fail_unless(expi == reti, retText, test, expi, reti);
 
+    expi = RUE_OK;
     reti = ruDiskFree(file, &tot, &avail);
     fail_unless(expi == reti, retText, test, expi, reti);
     fail_if(0 >= tot, retText, test, 0, tot);
@@ -668,6 +670,7 @@ START_TEST ( fileopen ) {
     ret = ruFileSetContents(writeFile, writtenText, expLen);
     fail_unless(exp == ret, retText, test, exp, ret);
 
+    test = "ruFileSize";
     len = ruFileSize(writeFile, &ret);
     fail_unless(exp == ret, retText, test, exp, ret);
     fail_unless(expLen == len, retText, test, expLen, len);
@@ -676,6 +679,7 @@ START_TEST ( fileopen ) {
     ret = ruFileSetDate(writeFile, 7200);
     fail_unless(exp == ret, retText, test, exp, ret);
 
+    test = "ruFolderRemove";
     ret = ruFolderRemove(base);
     fail_unless(exp == ret, retErrText, test, exp, ret, ruLastError());
 

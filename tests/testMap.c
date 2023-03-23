@@ -204,7 +204,7 @@ START_TEST ( run ) {
 
     // test a copied keyset
     ruList keys = NULL;
-    ret = ruMapKeySet(rm, (ruCloneFunc)strdup , &keys, free);
+    ret = ruMapKeySet(rm, (ruCloneFunc)ruStrDup , &keys, free);
     fail_unless(exp == ret, retText, test, exp, ret);
     fail_if(NULL == keys, retText, test, NULL, keys);
 

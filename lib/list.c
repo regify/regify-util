@@ -248,7 +248,7 @@ RUAPI ptr ruListPop(ruList rl, int32_t *code) {
         ruMutexUnlock(list->mux);
         ruRetWithCode(code, RUE_USER_ABORT, NULL);
     }
-    void* ret = NULL;
+    ptr out = NULL;
     ListElmt *element = NULL;
     do {
         element = list->head;
@@ -256,10 +256,10 @@ RUAPI ptr ruListPop(ruList rl, int32_t *code) {
             if (code) *code = RUE_FILE_NOT_FOUND;
             break;
         }
-        ret = ListRemove(list, element->next, code);
+        out = ListRemove(list, element->next, code);
     } while (0);
     ruMutexUnlock(list->mux);
-    return ret;
+    return out;
 }
 
 RUAPI int32_t ruListSize(ruList rl, int32_t *code) {
@@ -412,6 +412,9 @@ RU_THREAD_LOCAL ruCompFunc listSort_;
 #define SORT_TYPE ListElmt*
 #define SORT_NAME ruList
 #define SORT_CMP(x, y) listSort_((x), (y))
+#ifdef RUMS
+#pragma warning( disable : 4018 4242 4244 4388 )
+#endif
 #include "sort/sort.h"
 RUAPI int32_t ruListSort(ruList rl, ruCompFunc sort) {
     int32_t ret;

@@ -100,7 +100,7 @@ char* uniToStr(UConverter *conv, UChar *usrc, int32_t uclen) {
     char *out = ruMalloc0((rusize)uclen, char);
     int32_t needed = ucnv_fromUChars(conv, out, uclen, usrc, -1, &errorCode);
     uclen = needed+1; // terminator
-    if (errorCode == U_BUFFER_OVERFLOW_ERROR) {
+    if (errorCode == U_BUFFER_OVERFLOW_ERROR || errorCode == U_STRING_NOT_TERMINATED_WARNING) {
         // cache miss?
         ruVerbLogf("size mismatch in ucnv_fromUChars needed: %ld", needed);
         out = ruRealloc(out, (rusize)uclen, char);

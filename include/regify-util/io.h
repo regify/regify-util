@@ -80,14 +80,14 @@ RUAPI bool ruIsSymlink(const char* filename);
 #endif
 
 /**
- * Returns the total and free size of the partition where path resides on.
+ * Returns the total and avail size of the partition where path resides on.
  *
- * @param path Path whose partition to examine
+ * @param path Path whose partition to examine.
  * @param total Optional, Where total partition size will be stored in bytes
- * @param free Optional, Where left over user partition size will be stored in bytes.
+ * @param avail Optional, Where left over user partition size will be stored in bytes.
  * @return RUE_OK on success else RUE_CANT_OPEN_FILE. Then check errno for details.
  */
-RUAPI int ruDiskFree(trans_chars path, int64_t* total, int64_t* free);
+RUAPI int32_t ruDiskFree(trans_chars path, int64_t* total, int64_t* avail);
 
 /**
  * An abstracted version of struct stat.
@@ -103,7 +103,7 @@ typedef struct stat ruStat_t;
  *         or \ref RUE_CANT_OPEN_FILE if it was another error. Check errno or
  *         call \ref ruLastError for details.
  */
-RUAPI int ruStat(const char *filepath, ruStat_t *dest);
+RUAPI int32_t ruStat(trans_chars filepath, ruStat_t *dest);
 
 /**
  * \brief Return the size of the given file if it exists

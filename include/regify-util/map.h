@@ -36,6 +36,10 @@ extern "C" {
  */
 typedef void* ruMap;
 
+typedef ru_uint (*ruHashFunc)(trans_ptr key);
+
+typedef bool (*ruMatchFunc)(trans_ptr key1, trans_ptr key2);
+
 /**
  * \brief Creates a new thread safe map object.
  * This is the long but flexible version to create a hash map.
@@ -52,8 +56,7 @@ typedef void* ruMap;
  * @return The newly created map object to be freed with \ref ruMapFree or NULL
  *         if required arguments weren't given.
  */
-RUAPI ruMap ruMapNew(u_int32_t (*hash)(const void *key),
-                     bool (*match)(const void* key1, const void* key2),
+RUAPI ruMap ruMapNew(ruHashFunc hash, ruMatchFunc match,
                      ruFreeFunc keyFree, ruFreeFunc valFree,
                      u_int32_t expectedSize);
 
@@ -63,7 +66,7 @@ RUAPI ruMap ruMapNew(u_int32_t (*hash)(const void *key),
  * @param key Number to hash
  * @return The hash of the given number which is itself.
  */
-RUAPI u_int32_t ruIntHash(const void* key);
+RUAPI ru_uint ruIntHash(trans_ptr key);
 
 /**
  * \brief Convenience integer match function for Maps.
@@ -71,7 +74,7 @@ RUAPI u_int32_t ruIntHash(const void* key);
  * @param s2 Second comparison int.
  * @return true if they are equal
  */
-RUAPI bool ruIntMatch(const void* s1, const void* s2);
+RUAPI bool ruIntMatch(trans_ptr s1, trans_ptr s2);
 
 /**
  * \brief Returns a hash for given string.
@@ -80,7 +83,7 @@ RUAPI bool ruIntMatch(const void* s1, const void* s2);
  * @param key String to hash.
  * @return The hash of the given string or 0 if NULL was given.
  */
-RUAPI u_int32_t ruStrHash(const void* key);
+RUAPI ru_uint ruStrHash(trans_ptr key);
 
 /**
  * \brief Convenience match function for Maps.
@@ -88,7 +91,7 @@ RUAPI u_int32_t ruStrHash(const void* key);
  * @param s2 Second comparison string.
  * @return true if \ref ruStrCmp returns 0
  */
-RUAPI bool ruStrMatch(const void* s1, const void* s2);
+RUAPI bool ruStrMatch(trans_ptr s1, trans_ptr s2);
 
 /**
  * \brief A convenience constructor for maps with string keys.

@@ -171,6 +171,64 @@ RUAPI FILE* ruFOpen(const char *filepath, const char *mode, int32_t* code) {
     ruRetWithCode(code, RUE_OK, fd);
 }
 
+RUAPI int32_t ruDiskFree(trans_chars path, int64_t* total, int64_t* avail) {
+    alloc_chars dirPath = NULL;
+    if (ruIsFile(path)) {
+        dirPath = ruDirName(path);
+        path = dirPath;
+    }
+    wchar_t* wpath = getWPath(path);
+    if (!wpath || (!total && !avail)) return RUE_PARAMETER_NOT_SET;
+    int32_t ret;
+    ULARGE_INTEGER lfree;
+    ULARGE_INTEGER ltot;
+    if (GetDiskFreeSpaceExW(wpath, &lfree,
+                            &ltot, NULL)) {
+        if (total) *total = (int64_t)ltot.QuadPart;
+        if (avail) *avail = (int64_t)lfree.QuadPart;
+        ret = RUE_OK;
+    } else {
+        if (total) *total = 0;
+        if (avail) *avail = 0;
+        ret = errno2rfec(errno);
+    }
+    ruFree(dirPath);
+    ruFree(wpath);
+    return ret;
+}
+
+RUAPI rusize ruFileSize(trans_chars filePath, int32_t* code) {
+    wchar_t* wfilename = getWPath(filePath);
+    rusize out = 0;
+    if (!wfilename) ruRetWithCode(code, RUE_PARAMETER_NOT_SET, out);
+
+    ruZeroedStruct(struct __stat64, buf);
+    if (0 == _wstat64(wfilename, &buf)) {
+        out = (rusize)buf.st_size;
+        if (code) *code = RUE_OK;
+    } else {
+        if (code) *code = errno2rfec(errno);
+    }
+    ruFree (wfilename);
+    return out;
+}
+
+RUAPI int32_t ruFileSetDate(trans_chars filePath, sec_t date) {
+    if (!filePath) return RUE_PARAMETER_NOT_SET;
+    if (date < 0) return RUE_INVALID_PARAMETER;
+
+    wchar_t* wfilename = getWPath(filePath);
+    struct _utimbuf tb;
+    tb.actime = date;
+    tb.modtime = date;
+    int32_t ret = RUE_OK;
+    if(_wutime(wfilename, &tb)) {
+        ret = errno2rfec(errno);
+    }
+    ruFree (wfilename);
+    return ret;
+}
+
 #else
 
 //#ifndef _WIN32 /* mingw doesn't do symlinks */
@@ -247,20 +305,39 @@ RUAPI FILE* ruFOpen(const char *filepath, const char *mode, int32_t* code) {
     }
     ruRetWithCode(code, RUE_OK, fd);
 }
-#include <sys/vfs.h>
 
-RUAPI int ruDiskFree(trans_chars path, int64_t* total, int64_t* free) {
+#include <sys/vfs.h>
+RUAPI int ruDiskFree(trans_chars path, int64_t* total, int64_t* avail) {
     if (!path) return RUE_PARAMETER_NOT_SET;
     ruZeroedStruct(struct statfs64, sf);
     int ret = statfs64(path, &sf);
     if (!ret) {
         if (total) *total = sf.f_blocks * sf.f_frsize;
-        if (free) *free = sf.f_bavail * sf.f_frsize;
+        if (avail) *avail = sf.f_bavail * sf.f_frsize;
         return  RUE_OK;
     }
     if (total) *total = 0;
-    if (free) *free = 0;
+    if (avail) *avail = 0;
     return RUE_CANT_OPEN_FILE;
+}
+
+RUAPI rusize ruFileSize(trans_chars filePath, int32_t* code) {
+    ruStat_t st;
+    int32_t ret = ruStat(filePath, &st);
+    if(ret != RUE_OK) ruRetWithCode(code, ret, 0);
+    ruRetWithCode(code, ret, st.st_size);
+}
+
+RUAPI int32_t ruFileSetDate(trans_chars filePath, sec_t date) {
+    if (!filePath) return RUE_PARAMETER_NOT_SET;
+    if (date < 0) return RUE_INVALID_PARAMETER;
+    struct utimbuf tb;
+    tb.actime = date;
+    tb.modtime = date;
+    if(utime(filePath, &tb)) {
+        return errno2rfec(errno);
+    }
+    return RUE_OK;
 }
 
 #endif
@@ -330,25 +407,6 @@ RUAPI int ruStat(const char*filepath, ruStat_t *dest) {
     return RUE_CANT_OPEN_FILE;
 }
 
-RUAPI rusize ruFileSize(trans_chars filePath, int32_t* code) {
-    ruStat_t st;
-    int32_t ret = ruStat(filePath, &st);
-    if(ret != RUE_OK) ruRetWithCode(code, ret, 0);
-    ruRetWithCode(code, ret, st.st_size);
-}
-
-RUAPI int32_t ruFileSetDate(trans_chars filePath, sec_t date) {
-    if (!filePath) return RUE_PARAMETER_NOT_SET;
-    if (date < 0) return RUE_INVALID_PARAMETER;
-    struct utimbuf tb;
-    tb.actime = date;
-    tb.modtime = date;
-    if(utime(filePath,&tb)) {
-        return errno2rfec(errno);
-    }
-    return RUE_OK;
-}
-
 RUAPI int ruOpenTmp(char *pathTemplate, int flags, int mode, int32_t *code) {
     ruClearError();
     static const char pool[] = "abcdefghijklmnopqrstuvwxyz";
@@ -365,7 +423,7 @@ RUAPI int ruOpenTmp(char *pathTemplate, int flags, int mode, int32_t *code) {
     char *xl8 = (char*)ruLastSubstr(pathTemplate, "^^^");
     if (!xl8) ruRetWithCode(code, RUE_INVALID_PARAMETER, 0);
 
-    long value = (tv.usec ^ tv.sec ) + threadcounter++;
+    long value = (long)((tv.usec ^ tv.sec ) + threadcounter++);
     int ret = RUE_OK, fd = -1;
     for (int tries = 0; tries < 100; value += 123, tries++) {
         long v = value;
@@ -539,8 +597,7 @@ RUAPI int ruFileCopy(trans_chars srcpath, trans_chars destpath) {
         // copy the data
         int in = read(ih, cpbuf, CP_BUF_SZ);
         if (in <= 0) break;
-        int out = write(oh, cpbuf, in);
-        if (out <= 0) break;
+        if (ruWrite(oh, cpbuf, in) <= 0) break;
     }
 
     if (ih) close(ih);
@@ -712,7 +769,7 @@ static int32_t folderWalk(trans_chars folder, u_int32_t flags,
                 if (ret != RUE_OK) break;
                 continue;
             }
-            ret = folderWalk(path, flags, actor, ctx);
+            ret = folderWalk(path, flags, filter, actor, ctx);
             if (ret != RUE_OK) break;
 
         } while (FindNextFileW(hFind, &ffd) != 0);
@@ -777,12 +834,12 @@ cleanup:
  * @param filePath path to examine, will be set to returned path if it was created
  * @return new created path to free after use or NULL
  */
-char* fixSlashes(const char** filePath) {
-    char* path = NULL;
-#ifdef _WIN32
+alloc_chars fixSlashes(perm_chars* filePath) {
+    alloc_chars path = NULL;
+#ifdef RUMS
     path = fixPath(*filePath);
     if (!ruStrEndsWith(path, "\\", NULL)) {
-        char *p2 = ruDupPrintf("%s\\", *path);
+        alloc_chars p2 = ruDupPrintf("%s\\", path);
         ruFree(path);
         path = p2;
     }
@@ -798,14 +855,14 @@ char* fixSlashes(const char** filePath) {
 
 RUAPI int32_t ruFilteredFolderWalk(trans_chars folder, u_int32_t flags,
                                    entryFilter filter, entryMgr actor, ptr ctx) {
-    char* path = fixSlashes(&folder);
+    alloc_chars path = fixSlashes(&folder);
     int32_t ret = folderWalk(folder, flags, filter, actor, ctx);
     ruFree(path);
     return ret;
 }
 
 RUAPI int32_t ruFolderWalk(trans_chars folder, u_int32_t flags, entryMgr actor, ptr ctx) {
-    char* path = fixSlashes(&folder);
+    alloc_chars path = fixSlashes(&folder);
     int32_t ret = folderWalk(folder, flags, NULL, actor, ctx);
     ruFree(path);
     return ret;

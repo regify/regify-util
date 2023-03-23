@@ -170,44 +170,66 @@ START_TEST ( misc ) {
 
     test = "ruTimeFormat";
     char timeStr[20];
+    char timeStr2[20];
     rusize stlen = sizeof(timeStr);
     memset(timeStr, 0, stlen);
     const char* format = "%Y-%m-%d %H:%M:%S";
-    ret = ruTimeFormat(NULL, stlen, timeStr, 0);
+    ruTimeFormat(NULL, stlen, timeStr, 0);
     ck_assert_str_eq(timeStr, "");
 
-    ret = ruTimeFormat(format, 0, timeStr, 0);
+    ruTimeFormat(format, 0, timeStr, 0);
     ck_assert_str_eq(timeStr, "");
 
-    ret = ruTimeFormat(format, stlen, NULL, 0);
+    ruTimeFormat(format, stlen, NULL, 0);
     ck_assert_str_eq(timeStr, "");
 
-    ret = ruTimeFormat(format, stlen, timeStr, 0);
+    ruTimeFormat(format, stlen, timeStr, 0);
     fail_unless(timeStr[2] == '2', retText, test, timeStr[2], '2');
-    int alen = strlen(timeStr)+1;
+    rusize alen = strlen(timeStr)+1;
     fail_unless(alen == stlen, retText, test, alen, stlen);
 
-    ruTimeFormat(format, stlen, timeStr, 1667912973);
-    ck_assert_str_eq(timeStr, "2022-11-08 14:09:33");
+    sec_t estamp;
+    sec_t stamp;
+    sec_t localStamp;
+    sec_t mystamp = 1234567890;
+    perm_chars utcStr = "2009-02-13 23:31:30";
 
-    sec_t estamp = -1;
-    sec_t stamp = ruTimeParse(NULL, NULL);
+    // format utc for predictability
+    ruUtcFormat(format, stlen, timeStr, mystamp);
+    ck_assert_str_eq(timeStr, utcStr);
+
+    // and back to stamp
+    stamp = ruUtcParse(format, timeStr);
+    fail_unless(mystamp == stamp, retText, test, mystamp, stamp);
+
+    // get local TZ string
+    ruTimeFormat(format, stlen, timeStr, mystamp);
+    // at least in my timezone
+    //ck_assert_str_eq(timeStr, "2009-02-14 00:31:30");
+
+    // parse local string
+    stamp = ruTimeParse(format, timeStr);
+    fail_unless(mystamp == stamp, retText, test, mystamp, stamp);
+
+    // get local TZ stamp
+    localStamp = ruTimeUtcToLocal(mystamp);
+    // should match local TZ string
+    ruUtcFormat(format, stlen, timeStr2, localStamp);
+    ck_assert_str_eq(timeStr, timeStr2);
+
+    // go back to utc
+    stamp = ruTimeLocalToUtc(localStamp);
+    fail_unless(mystamp == stamp, retText, test, mystamp, stamp);
+
+    // misc testing
+    estamp = -1;
+    stamp = ruTimeParse(NULL, NULL);
     fail_unless(estamp == stamp, retText, test, estamp, stamp);
 
     stamp = ruTimeParse(format, NULL);
     fail_unless(estamp == stamp, retText, test, estamp, stamp);
 
     stamp = ruTimeParse(NULL, timeStr);
-    fail_unless(estamp == stamp, retText, test, estamp, stamp);
-
-    estamp = 1667912973;
-    stamp = ruTimeParse(format, timeStr);
-    fail_unless(estamp == stamp, retText, test, estamp, stamp);
-
-    ruUtcFormat(format, stlen, timeStr, 1667912973);
-    ck_assert_str_eq(timeStr, "2022-11-08 13:09:33");
-
-    stamp = ruUtcParse(format, timeStr);
     fail_unless(estamp == stamp, retText, test, estamp, stamp);
 
     test = "ruVersionComp";
@@ -344,7 +366,7 @@ START_TEST ( reg ) {
     fail_unless(exp == ret, retText, test, exp, ret);
 
     exp = RUE_OK;
-    want = "C:\\";
+    want = "c:\\";
     ret = ruGetRegistryEntry(HKEY_LOCAL_MACHINE, "SOFTWARE\\Cygwin\\setup",
                              "rootdir", &out);
     fail_unless(exp == ret, retText, test, exp, ret);

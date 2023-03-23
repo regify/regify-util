@@ -33,7 +33,7 @@ function (doLink lib shared)
     if(WIN AND NOT MINGW)
         target_compile_definitions(${lib} PRIVATE _CRT_SECURE_NO_DEPRECATE)
         target_compile_options(${lib}
-                PRIVATE /MP /Wall /WX /wd4100 /wd4204 /wd4255 /wd4464 /wd4625
+                PRIVATE /MP /Wall /WX /wd4100 /wd4127 /wd4204 /wd4255 /wd4464 /wd4625
                 /wd4626 /wd4668 /wd4710 /wd4711 /wd4800 /wd4820 /wd5039 /wd5045
                 )
 
@@ -42,6 +42,9 @@ function (doLink lib shared)
             target_compile_definitions(${lib} PRIVATE _GNU_SOURCE)
         endif()
 
+        if(MINGW)
+            target_link_options(${lib} PRIVATE -static)
+        endif()
         if (NOT ANDROID)
             target_link_libraries(${lib} PUBLIC pthread)
         endif()
@@ -84,11 +87,11 @@ function (doLink lib shared)
 
 
     target_include_directories(${lib}
-            PUBLIC $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
-            $<INSTALL_INTERFACE:include>
+            PUBLIC $<INSTALL_INTERFACE:include>
             # make sure we're using the right version
-            PRIVATE ${ICU_INCLUDE_DIRS}
+            PRIVATE $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
             $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+            ${ICU_INCLUDE_DIRS}
             )
 
 endfunction()
@@ -110,6 +113,9 @@ endif()
 file(GLOB SRCS cleaner.c icu.cpp ini.c io.c kvstore.c lib.c list.c logging.c map.c
         regex.c string.c thread.c regify-util.c)
 
+if (WIN)
+    list(APPEND SRCS win.cpp)
+endif()
 
 if(NOT WASM)
     # pwcleaner.a

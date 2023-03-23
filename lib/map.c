@@ -42,16 +42,16 @@ static void kvFree(void *o) {
     ruFree(item);
 }
 
-RUAPI u_int32_t ruIntHash(const void* key) {
-    return (u_int32_t)(uintptr_t)key;
+RUAPI ru_uint ruIntHash(trans_ptr key) {
+    return (ru_uint)(intptr_t)key;
 }
 
-RUAPI bool ruIntMatch(const void* s1, const void* s2) {
+RUAPI bool ruIntMatch(trans_ptr s1, trans_ptr s2) {
     return s1 == s2;
 }
 
-RUAPI u_int32_t ruStrHash(const void *key) {
-    const char *ptr = key;
+RUAPI ru_uint ruStrHash(trans_ptr key) {
+    trans_chars ptr = key;
     u_int32_t val = 0;
     /* Hash the key by performing a number of bit operations on it. */
     while (*ptr != '\0') {
@@ -63,19 +63,18 @@ RUAPI u_int32_t ruStrHash(const void *key) {
         }
         ptr++;
     }
-    return val;
+    return (ru_uint)val;
 }
 
-RUAPI bool ruStrMatch(const void* s1, const void* s2) {
-    return ruStrCmp(s1, s2) == 0;
+RUAPI bool ruStrMatch(trans_ptr s1, trans_ptr s2) {
+    return ruStrEquals((trans_chars)s1, (trans_chars)s2);
 }
 
 RUAPI ruMap ruMapNewString(ruFreeFunc keyFree, ruFreeFunc valFree) {
     return ruMapNew(ruStrHash, ruStrMatch, keyFree, valFree, 0);
 }
 
-RUAPI ruMap ruMapNew(u_int32_t (*hash)(const void *key),
-                     bool (*match)(const void *key1, const void *key2),
+RUAPI ruMap ruMapNew(ruHashFunc hash, ruMatchFunc match,
                      ruFreeFunc keyFree, ruFreeFunc valFree,
                      u_int32_t expectedSize) {
     ruClearError();

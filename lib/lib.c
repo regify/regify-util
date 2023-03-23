@@ -79,6 +79,12 @@ RUAPI bool ruIsInt64(const char* numstr) {
     return true;
 }
 
+RUAPI alloc_chars ruGetLanguage(void) {
+    alloc_chars lc = setlocale(LC_ALL, NULL);
+    if (!lc) return NULL;
+    return ruStrNDup(lc, 2);
+}
+
 RUAPI int32_t ruGetTimeVal(ruTimeVal *result) {
     ruClearError();
     if (!result) return RUE_PARAMETER_NOT_SET;
@@ -98,10 +104,28 @@ RUAPI int32_t ruGetTimeVal(ruTimeVal *result) {
     time64 -= 116444736000000000;
     time64 /= 10;
 
-    result->sec = (long)(time64 / 1000000);
-    result->usec = (long)(time64 % 1000000);
+    result->sec = (sec_t)(time64 / 1000000);
+    result->usec = (usec_t)(time64 % 1000000);
 #endif
     return RUE_OK;
+}
+
+RUAPI usec_t ruTimeUs(void) {
+    ruClearError();
+    ruZeroedStruct(ruTimeVal, tv);
+    ruGetTimeVal(&tv);
+    usec_t micros = tv.sec * 1000000;
+    return micros + tv.usec;
+}
+
+RUAPI msec_t ruTimeMs(void) {
+    ruClearError();
+    ruZeroedStruct(ruTimeVal, tv);
+    ruGetTimeVal(&tv);
+    // Round to nearest millis
+    msec_t millis = tv.sec * 1000;
+    millis += tv.usec / 1000;
+    return millis;
 }
 
 RUAPI sec_t ruTimeSec(void) {
@@ -111,10 +135,44 @@ RUAPI sec_t ruTimeSec(void) {
     return tv.sec;
 }
 
+RUAPI bool ruTimeUsEllapsed(usec_t stamp) {
+    return stamp <= ruTimeUs();
+}
+
+RUAPI bool ruTimeMsEllapsed(msec_t stamp) {
+    return stamp <= ruTimeMs();
+}
+
 RUAPI bool ruTimeEllapsed(sec_t stamp) {
     return stamp <= ruTimeSec();
 }
 
+RUAPI void ruSleepMs(msec_t milliseconds) {
+#ifdef RUMS
+    Sleep ((DWORD)milliseconds);
+#else
+    ruZeroedStruct(struct timespec, request);
+    ruZeroedStruct(struct timespec, remaining);
+    request.tv_sec = milliseconds / 1000;
+    request.tv_nsec = 1000000 * (milliseconds % 1000);
+    while (nanosleep (&request, &remaining) == -1 && errno == EINTR) request = remaining;
+#endif
+}
+
+RUAPI void ruSleepUs(usec_t microseconds) {
+#ifdef RUMS
+    DWORD msecs = (DWORD)(microseconds / 1000);
+    Sleep (msecs);
+#else
+    ruZeroedStruct(struct timespec, request);
+    ruZeroedStruct(struct timespec, remaining);
+    request.tv_sec = microseconds / 1000000;
+    request.tv_nsec = 1000 * (microseconds % 1000000);
+    while (nanosleep (&request, &remaining) == -1 && errno == EINTR) request = remaining;
+#endif
+}
+
+#ifndef _WIN32
 sec_t timeParse(trans_chars dateformat, trans_chars datestr, bool utc) {
     ruZeroedStruct(struct tm, t);
     if (!dateformat || !datestr) return -1;
@@ -125,6 +183,7 @@ sec_t timeParse(trans_chars dateformat, trans_chars datestr, bool utc) {
         return timelocal(&t);
     }
 }
+#endif
 
 RUAPI sec_t ruTimeParse(trans_chars dateformat, trans_chars datestr) {
     return timeParse(dateformat, datestr, false);
@@ -138,21 +197,25 @@ int timeFormat(trans_chars format, rusize len, alloc_chars timeStr, sec_t timese
     if (!format || ! len || !timeStr) return -1;
     ruZeroedStruct(struct tm, tm);
     ruZeroedStruct(ruTimeVal, tv);
-    if (timesecs) {
-        tv.sec = timesecs;
-        tv.usec = 0;
-    } else {
-        // https://stackoverflow.com/questions/3673226/how-to-print-time-in-format-2009-08-10-181754-811
-        ruGetTimeVal(&tv);
-    }
 
 #ifdef _WIN32
+    if (!timesecs) {
+        ruGetTimeVal(&tv);
+        timesecs = tv.sec;
+    }
+    const time_t tsecs = (time_t)timesecs;
     if (utc) {
-        gmtime_r(&tv.sec, &tm);
+        gmtime_s(&tm, &tsecs);
     } else {
-        _localtime32_s(&tm, &tv.sec);
+        localtime_s(&tm, &tsecs);
     }
 #else
+    if (!timesecs) {
+        // https://stackoverflow.com/questions/3673226/how-to-print-time-in-format-2009-08-10-181754-811
+        ruGetTimeVal(&tv);
+    } else {
+        tv.sec = timesecs;
+    }
     if (utc) {
         gmtime_r(&tv.sec, &tm);
     } else {
@@ -171,6 +234,21 @@ RUAPI int ruUtcFormat(trans_chars format, rusize len, alloc_chars timeStr, sec_t
     return timeFormat(format, len, timeStr, timesecs, true);
 }
 
+#ifdef _WIN32
+RUAPI sec_t ruTimeLocalToUtc(sec_t stamp) {
+    ruZeroedStruct(struct tm, lt);
+    const time_t tsecs = (time_t)stamp;
+    gmtime_s(&lt, &tsecs);
+    return (sec_t)mktime(&lt);
+}
+
+RUAPI sec_t ruTimeUtcToLocal(sec_t stamp) {
+    ruZeroedStruct(struct tm, lt);
+    const time_t tsecs = (time_t)stamp;
+    localtime_s(&lt, &tsecs);
+    return (sec_t)_mkgmtime(&lt);
+}
+#else
 RUAPI sec_t ruTimeLocalToUtc(sec_t stamp) {
     ruZeroedStruct(struct tm, lt);
     localtime_r(&stamp, &lt);
@@ -182,59 +260,4 @@ RUAPI sec_t ruTimeUtcToLocal(sec_t stamp) {
     localtime_r(&stamp, &lt);
     return stamp + lt.tm_gmtoff;
 }
-
-RUAPI msec_t ruTimeMs(void) {
-    ruClearError();
-    ruZeroedStruct(ruTimeVal, tv);
-    ruGetTimeVal(&tv);
-    // Round to nearest millis
-    msec_t millis = tv.sec * 1000;
-    millis += tv.usec / 1000;
-    return millis;
-}
-
-RUAPI bool ruTimeMsEllapsed(msec_t stamp) {
-    return stamp <= ruTimeMs();
-}
-
-RUAPI usec_t ruTimeUs(void) {
-    ruClearError();
-    ruZeroedStruct(ruTimeVal, tv);
-    ruGetTimeVal(&tv);
-    usec_t micros = tv.sec * 1000000;
-    return micros + tv.usec;
-}
-
-RUAPI bool ruTimeUsEllapsed(usec_t stamp) {
-    return stamp <= ruTimeUs();
-}
-
-RUAPI alloc_chars ruGetLanguage(void) {
-    alloc_chars lc = setlocale(LC_ALL, NULL);
-    if (!lc) return NULL;
-    return ruStrNDup(lc, 2);
-}
-
-RUAPI void ruSleepUs(usec_t microseconds) {
-#ifdef RUMS
-  Sleep (microseconds / 1000);
-#else
-    ruZeroedStruct(struct timespec, request);
-    ruZeroedStruct(struct timespec, remaining);
-    request.tv_sec = microseconds / 1000000;
-    request.tv_nsec = 1000 * (microseconds % 1000000);
-    while (nanosleep (&request, &remaining) == -1 && errno == EINTR) request = remaining;
 #endif
-}
-
-RUAPI void ruSleepMs(msec_t milliseconds) {
-#ifdef RUMS
-    Sleep (milliseconds);
-#else
-    ruZeroedStruct(struct timespec, request);
-    ruZeroedStruct(struct timespec, remaining);
-    request.tv_sec = milliseconds / 1000;
-    request.tv_nsec = 1000000 * (milliseconds % 1000);
-    while (nanosleep (&request, &remaining) == -1 && errno == EINTR) request = remaining;
-#endif
-}
