@@ -283,6 +283,11 @@ typedef int64_t usec_t;
 typedef size_t rusize;
 
 /**
+ * \brief Says to determine the size parameter using strlen or an equivalent.
+ */
+#define RU_SIZE_AUTO (~0)
+
+/**
  * \brief Signature of a generic clone function.
  * \ingroup misc
  */

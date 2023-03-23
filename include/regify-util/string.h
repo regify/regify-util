@@ -104,7 +104,8 @@ RUAPI int32_t ruStringAppendUriEncoded(ruString rs, const char* instr);
  * \brief Append given string to \ref ruString.
  * @param rs String buffer to append string to.
  * @param instr String to append.
- * @param len Number of bytes of string to append.
+ * @param len Number of bytes of string to append or \ref RU_SIZE_AUTO to use
+ *        strlen to determine the length
  * @return \ref RUE_OK on success else a regify error code.
  */
 RUAPI int32_t ruStringAppendn(ruString rs, const char* instr, rusize len);
@@ -339,14 +340,14 @@ RUAPI trans_chars ruLastSubstr(trans_chars haystack, trans_chars needle);
 /**
  * \brief Split given instr up to inlen bytes with delim into a \ref ruList.
  * @param instr String to split.
- * @param inlen Optional length delimiter. Use -1 to omit.
+ * @param inlen Optional length delimiter. Use \ref RU_SIZE_AUTO to omit.
  * @param delim Delimiter to split string on.
  * @param maxCnt Maximum number of pieces to return or 0 for no limit. The
  *        remainder will be unsplit in the last piece.
  * @return The list of pieces  to be free by caller with \ref ruListFree or
  *         NULL in case of a parameter error.
  */
-RUAPI ruList ruStrNSplit(trans_chars instr, rusize_s inlen, trans_chars delim, int32_t maxCnt);
+RUAPI ruList ruStrNSplit(trans_chars instr, rusize inlen, trans_chars delim, int32_t maxCnt);
 
 /**
  * \brief split given instr with delim into a \ref ruList.
@@ -564,18 +565,18 @@ RUAPI perm_chars ruStrTrimDup(trans_chars instr, alloc_chars* newstr);
 /**
  * \brief Returns the white space trimmed bounds of given string without modifying it.
  * @param inStart Start address of string to examine
- * @param inLen Number of bytes to examine
+ * @param inLen Number of bytes to examine or \ref RU_SIZE_AUTO
  * @param outLen Optional, where the length of the returned start address will be stored.
  * @return Start address of first non whitespace character or NULL
  */
-RUAPI trans_chars ruStrTrimBounds(trans_chars inStart, rusize_s inLen, rusize* outLen);
+RUAPI trans_chars ruStrTrimBounds(trans_chars inStart, rusize inLen, rusize* outLen);
 
 /**
  * \brief Parses whitespace trimmed key / value regions based on delim out of
  * given input string.
  *
  * @param inStart Start of the string to parse
- * @param inLen Number of bytes to evaluate
+ * @param inLen Number of bytes to evaluate or \ref RU_SIZE_AUTO.
  * @param delim Delimiter sequence to split key / value on
  * @param keyStart Optional, where the start of the key region will be stored
  * @param keyLen Optional, where the length of the key region will be stored
@@ -584,7 +585,7 @@ RUAPI trans_chars ruStrTrimBounds(trans_chars inStart, rusize_s inLen, rusize* o
  * @return true if delimiter was found. When false only the key parameters will
  *          be set.
  */
-RUAPI bool ruStrFindKeyVal(trans_chars inStart, rusize_s inLen, trans_chars delim,
+RUAPI bool ruStrFindKeyVal(trans_chars inStart, rusize inLen, trans_chars delim,
                            trans_chars* keyStart, rusize* keyLen,
                            trans_chars* valStart, rusize* valLen);
 

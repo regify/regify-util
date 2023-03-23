@@ -168,10 +168,11 @@ RUAPI int ruOpenTmp(char *pathTemplate, int flags, int mode, int32_t *code);
  * @param contents Contents to write into the file. This may be a NULL
  *                 terminated encoding irrelevant string or binary data.
  *                 If contents is NULL an empty file will be created.
- * @param length Length of the content. May be < 0 for a NULL terminated string.
+ * @param length Length of the content. May be \ref RU_SIZE_AUTO for a NULL
+ *               terminated string.
  * @return Return code of the operation or \ref RUE_OK on success.
  */
-RUAPI int32_t ruFileSetContents(const char *filename, const char *contents, rusize_s length);
+RUAPI int32_t ruFileSetContents(const char *filename, const char *contents, rusize length);
 
 /**
  * Reads the contents out of the given filepath into the variable and sets the

@@ -386,12 +386,12 @@ RUAPI int ruOpenTmp(char *pathTemplate, int flags, int mode, int32_t *code) {
 }
 
 RUAPI int32_t ruFileSetContents(trans_chars filename, trans_chars contents,
-                              rusize_s length) {
+                              rusize length) {
     ruClearError();
     if (!filename) return RUE_PARAMETER_NOT_SET;
 
     int32_t ret = RUE_OK;
-    if (length < 0 && contents) length = strlen (contents);
+    if (length == RU_SIZE_AUTO && contents) length = strlen (contents);
     char *tmpName = ruDupPrintf("%s.^^^", filename);
     int oh = ruOpenTmp(tmpName, O_CREAT | O_RDWR, 0666, &ret);
     do {

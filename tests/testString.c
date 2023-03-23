@@ -187,14 +187,25 @@ START_TEST ( run ) {
     char *str = ruStringGetCString(rs);
     ck_assert_str_eq(str, want);
 
-    explen = 5;
+    ret = ruStringAppendn(rs, " & bar", 0);
+    fail_unless(ret == exp, retText, test, exp, ret);
+    str = ruStringGetCString(rs);
+    ck_assert_str_eq(str, want);
+
+    want = "foo & bar";
+    ret = ruStringAppendn(rs, " bar", RU_SIZE_AUTO);
+    fail_unless(ret == exp, retText, test, exp, ret);
+    str = ruStringGetCString(rs);
+    ck_assert_str_eq(str, want);
+
+    explen = 9;
     test = "ruStringLen";
     len = ruStringLen(rs, &ret);
     fail_unless(exp == ret, retText, test, exp, ret);
     fail_unless(explen == len, retText, test, explen, len);
 
     test = "ruStringAppendUriEncoded";
-    want = "foo &%20f%c3%bcr%20bar";
+    want = "foo & bar%20f%c3%bcr%20bar";
     ret = ruStringAppendUriEncoded(rs, " für bar");
     fail_unless(ret == exp, retText, test, exp, ret);
     str = ruStringGetCString(rs);
@@ -715,7 +726,7 @@ START_TEST (StrNSplit) {
 
     perm_chars istr = "foo:bar";
     perm_chars delim = ":";
-    rusize_s limit = -1;
+    rusize limit = RU_SIZE_AUTO;
     rl = ruStrNSplit(NULL, limit, NULL, 0);
     fail_unless(NULL == rl, failText, NULL, rl);
 
@@ -788,33 +799,33 @@ START_TEST (StrTrimBounds) {
     fail_unless(NULL == str, failText, NULL, str);
 
     rusize len = 99;
-    str = ruStrTrimBounds(NULL, -1, &len);
+    str = ruStrTrimBounds(NULL, RU_SIZE_AUTO, &len);
     fail_unless(NULL == str, failText, NULL, str);
     fail_unless(0 == len, failText, 0, len);
 
     perm_chars instr = " foo ";
     perm_chars expstr = instr+1;
-    str = ruStrTrimBounds(instr, -1, NULL);
+    str = ruStrTrimBounds(instr, RU_SIZE_AUTO, NULL);
     ck_assert_str_eq(str, "foo ");
 
     str = ruStrTrimBounds(instr, 3, &len);
     fail_unless(expstr == str, failText, expstr, str);
     fail_unless(2 == len, failText, 2, len);
 
-    str = ruStrTrimBounds(instr, -1, &len);
+    str = ruStrTrimBounds(instr, RU_SIZE_AUTO, &len);
     fail_unless(expstr == str, failText, expstr, str);
     ck_assert_str_eq(str, "foo ");
     fail_unless(3 == len, failText, 3, len);
 
     instr = "  ";
     expstr = NULL;
-    str = ruStrTrimBounds(instr, -1, &len);
+    str = ruStrTrimBounds(instr, RU_SIZE_AUTO, &len);
     fail_unless(expstr == str, failText, expstr, str);
     fail_unless(0 == len, failText, 0, len);
 
     instr = "";
     expstr = NULL;
-    str = ruStrTrimBounds(instr, -1, &len);
+    str = ruStrTrimBounds(instr, RU_SIZE_AUTO, &len);
     fail_unless(expstr == str, failText, expstr, str);
     fail_unless(0 == len, failText, 0, len);
 
@@ -829,7 +840,7 @@ START_TEST (StrFindKeyVal) {
     fail_unless(be == is, failText, be, is);
 
     perm_chars instr = " foo ";
-    is = ruStrFindKeyVal(instr, -1, NULL,
+    is = ruStrFindKeyVal(instr, RU_SIZE_AUTO, NULL,
                          NULL, 0,
                          NULL, 0);
     fail_unless(be == is, failText, be, is);
@@ -843,7 +854,7 @@ START_TEST (StrFindKeyVal) {
     trans_chars delim = ":";
     perm_chars ekey = instr + 1;
     perm_chars eval = NULL;
-    is = ruStrFindKeyVal(instr, -1, delim,
+    is = ruStrFindKeyVal(instr, RU_SIZE_AUTO, delim,
                          &keyStart, &keyLen,
                          &valStart, &valLen);
     fail_unless(be == is, failText, be, is);
@@ -859,7 +870,7 @@ START_TEST (StrFindKeyVal) {
     fail_unless(be == is, failText, be, is);
 
     be = true;
-    is = ruStrFindKeyVal(instr, -1, delim,
+    is = ruStrFindKeyVal(instr, RU_SIZE_AUTO, delim,
                          NULL, 0,
                          NULL, 0);
     fail_unless(be == is, failText, be, is);
@@ -868,7 +879,7 @@ START_TEST (StrFindKeyVal) {
     eval = instr + 6;
     ekLen = 3;
     evLen = 3;
-    is = ruStrFindKeyVal(instr, -1, delim,
+    is = ruStrFindKeyVal(instr, RU_SIZE_AUTO, delim,
                          &keyStart, &keyLen,
                          &valStart, &valLen);
     fail_unless(be == is, failText, be, is);
@@ -883,7 +894,7 @@ START_TEST (StrFindKeyVal) {
     ekLen = 9;
     evLen = 0;
     eval = NULL;
-    is = ruStrFindKeyVal(instr, -1, NULL,
+    is = ruStrFindKeyVal(instr, RU_SIZE_AUTO, NULL,
                          &keyStart, &keyLen,
                          &valStart, &valLen);
     fail_unless(be == is, failText, be, is);
@@ -898,7 +909,7 @@ START_TEST (StrFindKeyVal) {
     ekLen = 0;
     evLen = 3;
     be = true;
-    is = ruStrFindKeyVal(instr, -1, delim,
+    is = ruStrFindKeyVal(instr, RU_SIZE_AUTO, delim,
                          &keyStart, &keyLen,
                          &valStart, &valLen);
     fail_unless(be == is, failText, be, is);
@@ -912,7 +923,7 @@ START_TEST (StrFindKeyVal) {
     eval = NULL;
     ekLen = 3;
     evLen = 0;
-    is = ruStrFindKeyVal(instr, -1, delim,
+    is = ruStrFindKeyVal(instr, RU_SIZE_AUTO, delim,
                          &keyStart, &keyLen,
                          &valStart, &valLen);
     fail_unless(be == is, failText, be, is);
@@ -927,7 +938,7 @@ START_TEST (StrFindKeyVal) {
     delim = " ";
     ekLen = 0;
     evLen = 10;
-    is = ruStrFindKeyVal(instr, -1, delim,
+    is = ruStrFindKeyVal(instr, RU_SIZE_AUTO, delim,
                          &keyStart, &keyLen,
                          &valStart, &valLen);
     fail_unless(be == is, failText, be, is);
@@ -942,7 +953,7 @@ START_TEST (StrFindKeyVal) {
     delim = " ";
     ekLen = 3;
     evLen = 4;
-    is = ruStrFindKeyVal(instr, -1, delim,
+    is = ruStrFindKeyVal(instr, RU_SIZE_AUTO, delim,
                          &keyStart, &keyLen,
                          &valStart, &valLen);
     fail_unless(be == is, failText, be, is);

@@ -58,11 +58,11 @@ struct KvStore_;
  * @param kvs \ref KvStore object.
  * @param key The \ref kvkey to the data in question.
  * @param val The value that will be stored or NULL if the key is to be removed.
- * @param len The number of bytes that make up val.
+ * @param len The number of bytes that make up val or \ref RU_SIZE_AUTO.
  * @return \ref RUE_OK on success else an error code.
  */
 typedef int32_t (*kvset) (struct KvStore_* kvs, const char* key,
-        const char* val, rusize_s len);
+        const char* val, rusize len);
 
 /**
  * \brief KvStore getter function interface.
@@ -149,10 +149,10 @@ RUAPI KvStore* ruNewFileStore (const char *folderPath, int32_t* code);
  * @param key The \ref kvkey to the data in question.
  * @param val The value that will be stored or NULL if the key is to be removed.
  *            The value will be copied.
- * @param len The number of bytes that make up val.
+ * @param len The number of bytes that make up val or \ref RU_SIZE_AUTO.
  * @return \ref RUE_OK on success else an error code.
  */
-RUAPI int32_t ruFileStoreSet (KvStore *kvs, const char* key, const char *val, rusize_s len);
+RUAPI int32_t ruFileStoreSet (KvStore *kvs, const char* key, const char *val, rusize len);
 
 /**
  * \brief Get the value of key from the given FileStore.
@@ -192,10 +192,10 @@ RUAPI KvStore* ruNewNullStore(void);
  * @param kvs KvStore context where data will be stored.
  * @param key The \ref kvkey to the data in question.
  * @param val The value that will be stored or NULL if the key is to be removed.
- * @param len The number of bytes that make up val.
+ * @param len The number of bytes that make up val or \ref RU_SIZE_AUTO.
  * @return \ref RUE_OK on success else an error code.
  */
-RUAPI int32_t ruNullStoreSet (KvStore *kvs, const char* key, const char *val, rusize_s len);
+RUAPI int32_t ruNullStoreSet (KvStore *kvs, const char* key, const char *val, rusize len);
 
 /**
  * \brief Get the value of key from the given KvStore.
