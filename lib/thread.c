@@ -66,10 +66,7 @@ static int32_t threadKill(Thr* tc) {
         TerminateThread(tc->tid, 0);
 #else
 #ifndef __EMSCRIPTEN__
-#ifndef SIGKILL
-#define SIGKILL 9
-#endif
-        pthread_kill(tc->tid, SIGKILL);
+        pthread_cancel(tc->tid);
 #endif
 #endif
         tc->finished = true;

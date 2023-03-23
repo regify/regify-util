@@ -308,7 +308,7 @@ RUAPI FILE* ruFOpen(const char *filepath, const char *mode, int32_t* code) {
 
 #include <sys/vfs.h>
 RUAPI int ruDiskFree(trans_chars path, int64_t* total, int64_t* avail) {
-    if (!path) return RUE_PARAMETER_NOT_SET;
+    if (!path || (!total && !avail)) return RUE_PARAMETER_NOT_SET;
     ruZeroedStruct(struct statfs64, sf);
     int ret = statfs64(path, &sf);
     if (!ret) {
