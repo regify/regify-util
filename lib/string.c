@@ -683,7 +683,7 @@ RUAPI ruList ruStrNSplit(trans_chars instr, rusize inlen, trans_chars delim, int
 }
 
 RUAPI ruList ruStrSplit (trans_chars instr, trans_chars delim, int32_t maxCnt) {
-    return ruStrNSplit(instr, -1, delim, maxCnt);
+    return ruStrNSplit(instr, RU_SIZE_AUTO, delim, maxCnt);
 }
 
 RUAPI char ruAsciiCharToLower(char in) {
