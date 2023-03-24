@@ -118,6 +118,7 @@ RUAPI ru_uint ruThreadGetId(void) {
 #ifdef _WIN32
     return GetCurrentThreadId();
 #else
+    // darwin
     uint64_t tid;
     pthread_threadid_np(NULL, &tid);
     return tid;
