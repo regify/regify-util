@@ -305,28 +305,17 @@ RUAPI FILE* ruFOpen(const char *filepath, const char *mode, int32_t* code) {
     }
     ruRetWithCode(code, RUE_OK, fd);
 }
-#ifdef __linux__
-#include <sys/vfs.h>
-RUAPI int ruDiskFree(trans_chars path, int64_t* total, int64_t* avail) {
+
+RUAPI int ruDiskFree(trans_chars path, uint64_t* total, uint64_t* avail) {
     if (!path || (!total && !avail)) return RUE_PARAMETER_NOT_SET;
+#ifdef __linux__
     ruZeroedStruct(struct statfs64, sf);
     int ret = statfs64(path, &sf);
-    if (!ret) {
-        if (total) *total = sf.f_blocks * sf.f_frsize;
-        if (avail) *avail = sf.f_bavail * sf.f_frsize;
-        return  RUE_OK;
-    }
-    if (total) *total = 0;
-    if (avail) *avail = 0;
-    return RUE_CANT_OPEN_FILE;
-}
 #else
-// darwin
-#include <sys/statvfs.h>
-RUAPI int ruDiskFree(trans_chars path, int64_t* total, int64_t* avail) {
-    if (!path || (!total && !avail)) return RUE_PARAMETER_NOT_SET;
+    // darwin
     ruZeroedStruct(struct statvfs, sf);
     int ret = statvfs(path, &sf);
+#endif
     if (!ret) {
         if (total) *total = sf.f_blocks * sf.f_frsize;
         if (avail) *avail = sf.f_bavail * sf.f_frsize;
@@ -336,7 +325,6 @@ RUAPI int ruDiskFree(trans_chars path, int64_t* total, int64_t* avail) {
     if (avail) *avail = 0;
     return RUE_CANT_OPEN_FILE;
 }
-#endif
 
 RUAPI rusize ruFileSize(trans_chars filePath, int32_t* code) {
     ruStat_t st;

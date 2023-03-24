@@ -15,4 +15,4 @@ Non backward compatible API changes between 1.3 and 2.0
 - ruStrcasecmp - ruStrCaseCmp
 - ruStrcmp - ruStrCmp
 - ruStrEndsCaseWith - ruStrCaseEndsWith
-- ruStrToll - ruStrToLong
+- ruStrToll - ruStrParseLong (different API)

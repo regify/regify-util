@@ -45,6 +45,12 @@
 #else
     #include <sys/param.h>
     #include <sys/syscall.h>
+#ifdef ITS_OSX
+    #include <sys/statvfs.h>
+#endif
+#ifdef __linux__
+    #include <sys/vfs.h>
+#endif
 #endif
 #include <ctype.h>
 #include <stdio.h>

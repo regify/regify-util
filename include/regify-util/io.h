@@ -29,6 +29,7 @@
 #ifndef REGIFY_UTIL_IO_H
 #define REGIFY_UTIL_IO_H
 /* Only need to export C interface if used by C++ source code */
+
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
@@ -87,7 +88,7 @@ RUAPI bool ruIsSymlink(const char* filename);
  * @param avail Optional, Where left over user partition size will be stored in bytes.
  * @return RUE_OK on success else RUE_CANT_OPEN_FILE. Then check errno for details.
  */
-RUAPI int32_t ruDiskFree(trans_chars path, int64_t* total, int64_t* avail);
+RUAPI int32_t ruDiskFree(trans_chars path, uint64_t* total, uint64_t* avail);
 
 /**
  * An abstracted version of struct stat.

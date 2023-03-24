@@ -176,7 +176,7 @@ START_TEST ( filetest ) {
 
     expi = RUE_PARAMETER_NOT_SET;
     test = "ruDiskFree";
-    int64_t tot = -1, avail = -1;
+    uint64_t tot = -1, avail = -1;
     reti = ruDiskFree(file, NULL, NULL);
     fail_unless(expi == reti, retText, test, expi, reti);
 
