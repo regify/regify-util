@@ -115,7 +115,13 @@ RUAPI ru_uint ruThreadGetId(void) {
 #ifdef __linux__
     return syscall(SYS_gettid);
 #else
+#ifdef _WIN32
     return GetCurrentThreadId();
+#else
+    uint64_t tid;
+    pthread_threadid_np(NULL, &tid);
+    return tid;
+#endif
 #endif
 }
 
