@@ -148,7 +148,7 @@ START_TEST ( run ) {
     fail_unless(exp == ret, retText, test, exp, ret);
 
     ruList lst = NULL;
-    int32_t sz, esz = 1;
+    rusize sz, esz = 1;
     test = "ruIniKeys";
     ret = ruIniKeys(cf, NULL, &lst);
     fail_unless(exp == ret, retText, test, exp, ret);

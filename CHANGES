@@ -16,3 +16,5 @@ Non backward compatible API changes between 1.3 and 2.0
 - ruStrcmp - ruStrCmp
 - ruStrEndsCaseWith - ruStrCaseEndsWith
 - ruStrToll - ruStrParseLong (different API)
+
+* ruListSize result is int32_t -> rusize and return on error is -1 -> 0

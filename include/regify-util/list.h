@@ -187,9 +187,9 @@ RUAPI ptr ruListTryPop(ruList rl, msec_t timeoutMs, int32_t *code);
  * Returns the number of elements in the list.
  * @param rl List to return size of.
  * @param code (Optional) Stores \ref RUE_OK on success or regify error code.
- * @return Number of elements in list.
+ * @return Number of elements in list or 0 on error.
  */
-RUAPI int32_t ruListSize(ruList rl, int32_t* code);
+RUAPI rusize ruListSize(ruList rl, int32_t* code);
 
 /**
  * Returns the first element in the given list.

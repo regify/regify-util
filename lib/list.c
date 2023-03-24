@@ -262,10 +262,10 @@ RUAPI ptr ruListPop(ruList rl, int32_t *code) {
     return out;
 }
 
-RUAPI int32_t ruListSize(ruList rl, int32_t *code) {
+RUAPI rusize ruListSize(ruList rl, int32_t *code) {
     ruClearError();
     List *list = ListGet(rl, code);
-    if (!list) return -1;
+    if (!list) return 0;
     return list->size;
 }
 

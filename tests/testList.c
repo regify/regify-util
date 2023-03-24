@@ -93,12 +93,12 @@ START_TEST ( api ) {
     test = "ruListSize";
     sz = ruListSize(NULL, &ret);
     fail_unless(ret == exp, retText, test, exp, ret);
-    fail_unless(sz == -1, retText, test, -1, sz);
+    fail_unless(sz == 0, retText, test, 0, sz);
 
     exp = RUE_INVALID_PARAMETER;
     sz = ruListSize((ruList) test, &ret);
     fail_unless(ret == exp, retText, test, exp, ret);
-    fail_unless(sz == -1, retText, test, -1, sz);
+    fail_unless(sz == 0, retText, test, 0, sz);
 
     exp = RUE_OK;
     sz = ruListSize(rl, &ret);
@@ -262,7 +262,8 @@ START_TEST ( api ) {
 END_TEST
 
 START_TEST ( usage ) {
-    int32_t ret, exp, sz, esz;
+    int32_t ret, exp;
+    rusize sz, esz;
     const char *test = "ruListAppendPtr";
     const char *retText = "%s failed wanted ret '%d' but got '%d'";
     ruList rl = NULL;

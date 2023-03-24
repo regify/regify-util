@@ -754,10 +754,10 @@ START_TEST (StrNSplit) {
     rl = ruStrNSplit(istr, limit, delim, 1);
     fail_unless(NULL == rl, failText, NULL, rl);
 
-    int32_t want = 1;
+    rusize want = 1;
     rl = ruStrSplit(istr, delim, 1);
     fail_if(NULL == rl, failText, NULL, rl);
-    int32_t got = ruListSize(rl, NULL);
+    rusize got = ruListSize(rl, NULL);
     fail_unless(want == got, failText, want, got);
     rl = ruListFree(rl);
 

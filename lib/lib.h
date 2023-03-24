@@ -204,7 +204,7 @@ typedef struct ListElmt_ {
 
 typedef struct List_ {
     ru_uint type;
-    int32_t size;
+    rusize size;
     void (*destroy)(void *data);
     ListElmt* head;
     ListElmt* tail;
