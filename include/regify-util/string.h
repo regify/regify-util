@@ -459,53 +459,70 @@ RUAPI char* ruDupvPrintf(const char* format, va_list arglist);
 RUAPI char* ruDupPrintf(const char* format, ...);
 
 /**
- * Parses long out of given string in given base assuming and ignoring comma
- * thousand separators. The decimal point is a period.
- * @param instr String to parse.
- * @param endptr (Optional) Points to the first character that did not parse properly
- * @param base a number between 2 and 36
- * @return The number result.
+ * Parses the number out of the given string in given base assuming and ignoring
+ * comma thousand separators. The decimal point is a period.
+ *
+ * @param str  String to parse. Leading white space will be skipped.
+ * @param endptr  (Optional) Points to the first character that did not parse properly
+ * @param base a number between 2 and 36 or 0 for detecting hex with prefix 0x,
+ *             octal with prefix 0 and else assuming decimal.
+ * @param num Where the number result will be stored or 0 on error.
+ * @return \ref RUE_OK on success \ref RUE_OVERFLOW when the number did not fit
+ *         the type or \ref RUE_PARAMETER_NOT_SET and \ref RUE_INVALID_PARAMETER
+ *         for not given or invalid input.
  */
-RUAPI int64_t ruStrParseInt64(const char *instr, char **endptr, int base);
+RUAPI int32_t ruStrParseInt64(trans_chars str, perm_chars* endptr, uint32_t base, int64_t* num);
 
 /**
  * \brief Like \ref ruStrParseInt64 but ignores overflow and trailing garbage
- * @param numstr String to contain numerals to parse
+ * @param str String to contain numerals to parse
  * @return whatever strtoll returns
  */
-RUAPI int64_t ruStrToInt64(trans_chars numstr);
+RUAPI int64_t ruStrToInt64(trans_chars str);
 
 /**
- * \brief Returns long from parsed string.
- * Overflow or trailing non numeric characters invalidate the result.
+ * Parses the number out of the given string in given base assuming and ignoring
+ * comma thousand separators. The decimal point is a period.
  *
- * @param numstr String to contain numerals to parse
- * @return The number on success or 0 with errno set.
+ * @param str  String to parse. Leading white space will be skipped.
+ * @param endptr  (Optional) Points to the first character that did not parse properly
+ * @param base a number between 2 and 36 or 0 for detecting hex with prefix 0x,
+ *             octal with prefix 0 and else assuming decimal.
+ * @param num Where the number result will be stored or 0 on error.
+ * @return \ref RUE_OK on success \ref RUE_OVERFLOW when the number did not fit
+ *         the type or \ref RUE_PARAMETER_NOT_SET and \ref RUE_INVALID_PARAMETER
+ *         for not given or invalid input.
  */
-RUAPI long ruStrParseLong(trans_chars numstr);
+RUAPI int32_t ruStrParseLong(trans_chars str, perm_chars* endptr, uint32_t base, long* num);
 
 /**
  * \brief Like \ref ruStrParseLong but ignores overflow and trailing garbage
- * @param numstr String to contain numerals to parse
+ * @param str String to contain numerals to parse
  * @return the number
  */
-RUAPI long ruStrToLong(trans_chars numstr);
+RUAPI long ruStrToLong(trans_chars str);
 
 /**
- * \brief Returns int32_t from parsed string.
- * Overflow or trailing non numeric characters invalidate the result.
+ * Parses the number out of the given string in given base assuming and ignoring
+ * comma thousand separators. The decimal point is a period.
  *
- * @param numstr String to contain numerals to parse
- * @return The number on success or 0 with errno set.
+ * @param str  String to parse. Leading white space will be skipped.
+ * @param endptr  (Optional) Points to the first character that did not parse properly
+ * @param base a number between 2 and 36 or 0 for detecting hex with prefix 0x,
+ *             octal with prefix 0 and else assuming decimal.
+ * @param num Where the number result will be stored or 0 on error.
+ * @return \ref RUE_OK on success \ref RUE_OVERFLOW when the number did not fit
+ *         the type or \ref RUE_PARAMETER_NOT_SET and \ref RUE_INVALID_PARAMETER
+ *         for not given or invalid input.
  */
-RUAPI int32_t ruStrParseInt(trans_chars numstr);
+RUAPI int32_t ruStrParseInt(trans_chars str, perm_chars* endptr, uint32_t base, int32_t* num);
 
 /**
  * \brief Like \ref ruStrParseInt but ignores overflow and trailing garbage
- * @param numstr String to contain numerals to parse
+ * @param str String to contain numerals to parse
  * @return the number
  */
-RUAPI int32_t ruStrToInt(trans_chars numstr);
+RUAPI int32_t ruStrToInt(trans_chars str);
 
 /**
  * \brief Alias for \ref ruStrParseInt64

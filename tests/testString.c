@@ -69,11 +69,13 @@ START_TEST ( api ) {
     foo = ruLastSubstr(NULL, "^^");
     fail_unless(foo == NULL, retText, test, NULL, foo);
 
-    int64_t num = ruStrParseInt64(NULL, NULL, 0);
-    fail_unless(0 == num, retText, test, 0, num);
-    fail_unless(EINVAL == errno, retText, test, EINVAL, errno);
+    int64_t num = -1;
+    ret = ruStrParseInt64(NULL, NULL, 0, NULL);
+    fail_unless(exp == ret, retText, test, exp, ret);
 
-    num = ruStrParseInt64("", NULL, 0);
+    exp = RUE_OK;
+    ret = ruStrParseInt64("", NULL, 0, &num);
+    fail_unless(exp == ret, retText, test, exp, ret);
     fail_unless(0 == num, retText, test, 0, num);
 
     ruStrTrim(NULL);
@@ -91,25 +93,24 @@ START_TEST ( api ) {
     ruStrReplace(NULL, NULL, NULL);
     ruStrReplace(NULL, "", NULL);
 
-    int32_t ires = ruStrParseInt(NULL);
-    fail_unless(0 == num, retText, test, 0, num);
-    fail_unless(EINVAL == errno, retText, test, EINVAL, errno);
+    exp = RUE_PARAMETER_NOT_SET;
+    ret = ruStrParseInt(NULL, NULL, 0, NULL);
+    fail_unless(exp == ret, retText, test, exp, ret);
 
-    ires = ruStrToInt(NULL);
+    int32_t ires = ruStrToInt(NULL);
     fail_unless(0 == num, retText, test, 0, num);
-    fail_unless(EINVAL == errno, retText, test, EINVAL, errno);
 
-    long lres = ruStrParseLong(NULL);
+    long lres = 0;
+    exp = RUE_PARAMETER_NOT_SET;
+    ret = ruStrParseLong(NULL, NULL, 0, &lres);
+    fail_unless(exp == ret, retText, test, exp, ret);
     fail_unless(0 == num, retText, test, 0, num);
-    fail_unless(EINVAL == errno, retText, test, EINVAL, errno);
 
     lres = ruStrToLong(NULL);
     fail_unless(0 == num, retText, test, 0, num);
-    fail_unless(EINVAL == errno, retText, test, EINVAL, errno);
 
     num = ruStrToInt64(NULL);
     fail_unless(0 == num, retText, test, 0, num);
-    fail_unless(EINVAL == errno, retText, test, EINVAL, errno);
 
     bool want = false;
     bool has = ruStrHasChar(NULL, 0);
@@ -280,18 +281,28 @@ START_TEST ( run ) {
     ruFree(heap);
 
     test = "ruStrParseInt64";
-    int64_t expNum = 666;
-    int64_t num = ruStrParseInt64(" 0666NULL", NULL, 10);
+    perm_chars endAddr = NULL;
+    char end = 'N';
+    int64_t expNum = 546;
+    int64_t num = -1;
+    ret = ruStrParseInt64(" 0666NULL", &endAddr, 9, &num);
+    fail_unless(exp == ret, retText, test, exp, ret);
     fail_unless(expNum == num, retText, test, expNum, num);
+    fail_unless(end == *endAddr, retText, test, end, *endAddr);
 
     expNum = -666;
-    num = ruStrParseInt64("-666.5", NULL, 10);
+    num = -1;
+    ret = ruStrParseInt64("-666.5", NULL, 10, &num);
+    fail_unless(exp == ret, retText, test, exp, ret);
     fail_unless(expNum == num, retText, test, expNum, num);
 
     test = "ruStrParseInt";
-    int32_t iexp = 0;
-    int32_t inum = ruStrParseInt(" 0666NULL");
+    int32_t iexp = 1638;
+    int32_t inum = -1;
+    ret = ruStrParseInt(" 0x666NULL", &endAddr, 0, &inum);
+    fail_unless(exp == ret, retText, test, exp, ret);
     fail_unless(iexp == inum, retText, test, iexp, inum);
+    fail_unless(end == *endAddr, retText, test, end, *endAddr);
 
     test = "ruStrToInt";
     iexp = 666;
@@ -299,9 +310,12 @@ START_TEST ( run ) {
     fail_unless(iexp == inum, retText, test, iexp, inum);
 
     test = "ruStrParseLong";
-    long lexp = 0;
-    long lnum = ruStrParseLong(" 0666NULL");
+    long lexp = 438;
+    long lnum = -1;
+    ret = ruStrParseLong(" 0666NULL", &endAddr, 0, &lnum);
+    fail_unless(exp == ret, retText, test, exp, ret);
     fail_unless(lexp == lnum, retText, test, lexp, lnum);
+    fail_unless(end == *endAddr, retText, test, end, *endAddr);
 
     test = "ruStrToLong";
     lexp = 666;
@@ -1004,6 +1018,146 @@ START_TEST ( buffer ) {
 }
 END_TEST
 
+int32_t parseInteger(trans_chars start, perm_chars* endptr,
+                     uint32_t intBitSize, uint32_t base, int64_t* out);
+
+START_TEST ( intParser ) {
+    int32_t ret, exp;
+    const char *retText = "parseInteger failed wanted ret '%d' but got '%d'";
+    perm_chars numStr = "0";
+    perm_chars endAddr = NULL;
+    uint32_t bits = 32;
+    uint32_t base = 0;
+    int64_t have, want = 0;
+
+    exp = RUE_PARAMETER_NOT_SET;
+    ret = parseInteger(NULL, &endAddr,
+                       bits, base, &have);
+    fail_unless(exp == ret, retText, exp, ret);
+    fail_unless(want == have, retText, want, have);
+
+    ret = parseInteger(numStr, &endAddr,
+                       bits, base, NULL);
+    fail_unless(exp == ret, retText, exp, ret);
+
+    exp = RUE_INVALID_PARAMETER;
+    ret = parseInteger(numStr, &endAddr,
+                       100, base, &have);
+    fail_unless(exp == ret, retText, exp, ret);
+    fail_unless(want == have, retText, want, have);
+
+    ret = parseInteger(numStr, &endAddr,
+                       65, base, &have);
+    fail_unless(exp == ret, retText, exp, ret);
+    fail_unless(want == have, retText, want, have);
+
+    ret = parseInteger(numStr, &endAddr,
+                       0, base, &have);
+    fail_unless(exp == ret, retText, exp, ret);
+    fail_unless(want == have, retText, want, have);
+
+    ret = parseInteger(numStr, &endAddr,
+                       bits, 37, &have);
+    fail_unless(exp == ret, retText, exp, ret);
+    fail_unless(want == have, retText, want, have);
+
+    ret = parseInteger(numStr, &endAddr,
+                       bits, 1, &have);
+    fail_unless(exp == ret, retText, exp, ret);
+    fail_unless(want == have, retText, want, have);
+
+    exp = RUE_OK;
+    ret = parseInteger(numStr, &endAddr,
+                       bits, base, &have);
+    fail_unless(exp == ret, retText, exp, ret);
+    fail_unless(want == have, retText, want, have);
+
+    exp = RUE_OVERFLOW;
+    numStr = " \n\t11;";
+    base = 2;
+    bits = 1;
+    want = 1;
+    char end = '1';
+    ret = parseInteger(numStr, &endAddr,
+                       bits, base, &have);
+    fail_unless(exp == ret, retText, exp, ret);
+    fail_unless(want == have, retText, want, have);
+    fail_unless(end == *endAddr, retText, end, *endAddr);
+
+    exp = RUE_OK;
+    numStr = " \n\t1;";
+    end = ';';
+    ret = parseInteger(numStr, &endAddr,
+                       bits, base, &have);
+    fail_unless(exp == ret, retText, exp, ret);
+    fail_unless(want == have, retText, want, have);
+    fail_unless(end == *endAddr, retText, end, *endAddr);
+
+    base = 0;
+    bits = 32;
+    ret = parseInteger(numStr, &endAddr,
+                       bits, base, &have);
+    fail_unless(exp == ret, retText, exp, ret);
+    fail_unless(want == have, retText, want, have);
+
+
+    numStr = " \n\t-1;";
+    want = -1;
+    ret = parseInteger(numStr, &endAddr,
+                       bits, base, &have);
+    fail_unless(exp == ret, retText, exp, ret);
+    fail_unless(want == have, retText, want, have);
+
+    // auto octal
+    numStr = "010";
+    want = 8;
+    end = '\0';
+    ret = parseInteger(numStr, &endAddr,
+                       bits, base, &have);
+    fail_unless(exp == ret, retText, exp, ret);
+    fail_unless(want == have, retText, want, have);
+
+    // manual six
+    numStr = "12";
+    base = 6;
+    want = 8;
+    end = '\0';
+    ret = parseInteger(numStr, &endAddr,
+                       bits, base, &have);
+    fail_unless(exp == ret, retText, exp, ret);
+    fail_unless(want == have, retText, want, have);
+
+    // auto hex
+    numStr = "0x10";
+    base = 0;
+    want = 16;
+    end = '\0';
+    ret = parseInteger(numStr, &endAddr,
+                       bits, base, &have);
+    fail_unless(exp == ret, retText, exp, ret);
+    fail_unless(want == have, retText, want, have);
+
+    numStr = "-0x10";
+    base = 0;
+    want = -16;
+    end = '\0';
+    ret = parseInteger(numStr, &endAddr,
+                       bits, base, &have);
+    fail_unless(exp == ret, retText, exp, ret);
+    fail_unless(want == have, retText, want, have);
+
+    base = 10;
+    want = 0;
+    end = 'x';
+    ret = parseInteger(numStr, &endAddr,
+                       bits, base, &have);
+    fail_unless(exp == ret, retText, exp, ret);
+    fail_unless(want == have, retText, want, have);
+
+}
+END_TEST
+
+
 TCase* stringTests ( void ) {
     TCase *tcase = tcase_create ( "string" );
     tcase_add_test(tcase, api);
@@ -1013,5 +1167,6 @@ TCase* stringTests ( void ) {
     tcase_add_test(tcase, StrTrimBounds);
     tcase_add_test(tcase, StrFindKeyVal);
     tcase_add_test(tcase, buffer);
+    tcase_add_test(tcase, intParser);
     return tcase;
 }

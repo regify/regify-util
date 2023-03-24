@@ -587,7 +587,7 @@ RUAPI void ruSleepMs(msec_t milliseconds);
  * \brief Sleeps for the given number of seconds.
  * @param seconds
  */
-#define ruSleep(secs) ruMsleep(((msec_t)(secs))*1000)
+#define ruSleep(secs) ruSleepMs(((msec_t)(secs))*1000)
 
 /**
  * \brief Convert a string representation of time to a time stamp

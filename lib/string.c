@@ -374,6 +374,15 @@ RUAPI int32_t ruStrCmp(trans_chars str1, trans_chars str2) {
     return ret > 0 ? 1 : -1;
 }
 
+RUAPI bool ruStrEmpty(trans_chars str) {
+    if (!str) return true;
+    while (*str) {
+        if (!isspace(*str)) return false;
+        str++;
+    }
+    return true;
+}
+
 RUAPI bool ruStrEquals(trans_chars str1, trans_chars str2) {
     ruClearError();
     if (str1 == str2) return true;      // same pointer both NULL
@@ -476,6 +485,27 @@ RUAPI alloc_chars ruStrStrip(alloc_chars instr, trans_chars asciichars) {
         *p = '\0';
     }
     return instr;
+}
+
+RUAPI void ruStripChars(alloc_chars instr, trans_chars chars) {
+    if (!instr || !strlen(instr) || ! chars || !strlen(chars)) return;
+    char *end = instr + strlen(instr);
+    const char *cend = chars + strlen(chars);
+    char *o = instr;
+    for (char *p = instr; p < end; p++) {
+        bool skip = false;
+        for (const char *c = chars; c < cend; c++) {
+            if (*p == *c) {
+                skip = true;
+                break;
+            }
+        }
+        if (!skip) {
+            *o = *p;
+            o++;
+        }
+    }
+    *o = '\0';
 }
 
 RUAPI alloc_chars ruStrTrim(alloc_chars instr) {
@@ -726,44 +756,43 @@ RUAPI alloc_chars ruUcsToUtf8(const uint16_t* ucs) {
     return uniToChar((UChar*)ucs);
 }
 
-RUAPI int64_t ruStrParseInt64(const char *start, char **endptr, int base) {
+int32_t parseInteger(trans_chars start, perm_chars* endptr,
+                     uint32_t intBitSize, uint32_t base, int64_t* out) {
     ruClearError();
-    bool negative = false;
-    bool overflow;
-    int64_t cutoff;
-    int64_t cutlim;
-    int64_t i64;
-    char *s, *save;
-    uchar c;
-    char *ptr = (char*)start;
-    errno = 0;
+    if (!out) return RUE_PARAMETER_NOT_SET;
+    *out = 0;
+    if (!start) return RUE_PARAMETER_NOT_SET;
+    if (intBitSize < 1 || intBitSize > 64) return RUE_INVALID_PARAMETER;
+    if (base == 1 || base > 36) return RUE_INVALID_PARAMETER;
 
-    if (!start || base == 1 || base > 36) {
-        errno = EINVAL;
-        if (endptr) *endptr = ptr;
-        return 0;
-    }
+    char* myStart = (char*)start;
+    char* numStart = myStart; // after white space and prefix
 
     do {
-        save = s = ptr;
+        // determine max integer size
+        uint64_t maxInt = 1;
+        for (int i = 1; i < intBitSize; i++) maxInt = maxInt | maxInt << 1;
 
-        /* Skip white space.  */
-        while (*s == ' ' || *s == '\n' || *s == '\r' || *s == '\t') ++s;
+        // Skip white space.
+        char* cur = myStart;
+        while (*cur == ' ' || *cur == '\n' || *cur == '\r' || *cur == '\t') ++cur;
 
-        if (*s == '\0') break; // done
+        if (*cur == '\0') break; // done
 
         /* Check for a sign.  */
-        if (*s == '-') {
+        bool negative = false;
+        if (*cur == '-') {
             negative = true;
-            ++s;
-        } else if (*s == '+') {
-            ++s;
+            ++cur;
+        } else if (*cur == '+') {
+            ++cur;
         }
 
-        /* Recognize number prefix and if BASE is zero, figure it out ourselves.  */
-        if (*s == '0') {
-            if ((base == 0 || base == 16) && (s[1] == 'x' || s[1] == 'X')) {
-                s += 2;
+        // Recognize number prefix and if BASE is zero, figure it out ourselves.
+        if (*cur == '0') {
+            if ((base == 0 || base == 16) &&
+                (cur[1] == 'x' || cur[1] == 'X')) {
+                cur += 2;
                 base = 16;
             } else if (base == 0) {
                 base = 8;
@@ -772,15 +801,15 @@ RUAPI int64_t ruStrParseInt64(const char *start, char **endptr, int base) {
             base = 10;
         }
 
-        /* Save the pointer so we can check later if anything happened.  */
-        save = s;
-        cutoff = RU_MAX_INT64 / base;
-        cutlim = RU_MAX_INT64 % base;
+        // Save the pointer so we can check later if anything happened.
+        numStart = cur;
+        uint64_t cutoff = maxInt / base;
+        uint64_t cutlim = maxInt % base;
 
-        overflow = false;
-        i64 = 0;
-        c = *s;
-        for (; c; c = *++s) {
+        bool overflow = false;
+        int64_t parsedNum = 0;
+        uchar c = *cur;
+        for (; c; c = *++cur) {
             if (c >= '0' && c <= '9') {
                 c -= '0'; // add number
             } else if (c >= 'A' && c <= 'Z') {
@@ -791,121 +820,94 @@ RUAPI int64_t ruStrParseInt64(const char *start, char **endptr, int base) {
                 break;
             }
             if (c >= base) break;
-            /* Check for overflow.  */
-            if (i64 > cutoff || (i64 == cutoff && c > cutlim)) {
+            // Check for overflow.
+            if (parsedNum > cutoff || (parsedNum == cutoff && c > cutlim)) {
                 overflow = true;
+                break;
             } else {
-                i64 *= base;
-                i64 += c;
+                parsedNum *= base;
+                parsedNum += c;
             }
         }
 
-        /* Check if anything actually happened.  */
-        if (s == save) break;
+        // Check if anything actually happened.
+        if (cur == numStart) break;
 
-        /* Store in ENDPTR the address of one character
-           past the last character we converted.  */
-        if (endptr) *endptr = (char *) s;
+        // Store in ENDPTR the address of one character
+        // past the last character we converted.
+        if (endptr) *endptr = cur;
 
-        if (overflow) {
-            errno = ERANGE;
-            return RU_MAX_UINT64;
+        if (negative) {
+            *out = -parsedNum;
+        } else {
+            *out = parsedNum;
         }
-
-        if (negative) return -i64;
-        return i64;
+        if (overflow) {
+            return RUE_OVERFLOW;
+        }
+        return RUE_OK;
 
     } while(0);
 
-    /* We must handle a special case here: the base is 0 or 16 and the
-       first two characters are '0' and 'x', but the rest are no
-       hexadecimal digits.  This is no error case.  We return 0 and
-       ENDPTR points to the `x`.  */
+    // We must handle a special case here: the base is 0 or 16 and the
+    // first two characters are '0' and 'x', but the rest are no
+    // hexadecimal digits.  This is no error case.  We return 0 and
+    // ENDPTR points to the `x`.
     if (endptr) {
-        if (save - ptr >= 2 && (save[-1] == 'x' || save[-1] == 'X') && save[-2] == '0') {
-            *endptr = &save[-1];
+        if (numStart - myStart >= 2 &&
+            (numStart[-1] == 'x' || numStart[-1] == 'X') &&
+             numStart[-2] == '0') {
+            *endptr = &numStart[-1];
         } else {
             /*  There was no number to convert.  */
-            *endptr = ptr;
+            *endptr = myStart;
         }
     }
-    return 0;
+    *out = 0;
+    return RUE_OK;
 }
 
-RUAPI int64_t ruStrToInt64(trans_chars numstr) {
-    return ruStrParseInt64(numstr, NULL, 10);
+RUAPI int32_t ruStrParseInt64(trans_chars str, perm_chars* endptr, uint32_t base, int64_t* num) {
+    if (!str || !num) return RUE_PARAMETER_NOT_SET;
+    int64_t out = 0;
+    int32_t ret = parseInteger(str, endptr, sizeof(int64_t)*8, base, &out);
+    *num = out;
+    return ret;
 }
 
-static long parseLong(trans_chars numstr, bool strict) {
-    char* end = (char*)numstr;
-    int64_t num = ruStrParseInt64(numstr, &end, 10);
-    if (!strict) return (long)num;
-    if (!numstr || *end) return 0;
-    if (sizeof(long) < sizeof(int64_t)) {
-        int64_t lng = (long)num;
-        if (lng < num) {
-            errno = ERANGE;
-        }
-    }
-    if (errno == ERANGE) return 0;
-    return (long)num;
+RUAPI int64_t ruStrToInt64(trans_chars str) {
+    if (!str) return 0;
+    int64_t out = 0;
+    parseInteger(str, NULL, sizeof(int64_t)*8, 10, &out);
+    return out;
 }
 
-RUAPI long ruStrParseLong(trans_chars numstr) {
-    return parseLong(numstr,true);
+RUAPI int32_t ruStrParseLong(trans_chars str, perm_chars* endptr, uint32_t base, long* num) {
+    if (!str || !num) return RUE_PARAMETER_NOT_SET;
+    int64_t out = 0;
+    int32_t ret = parseInteger(str, endptr, sizeof(long)*8, base, &out);
+    *num = (long)out;
+    return ret;
 }
 
-RUAPI long ruStrToLong(trans_chars numstr) {
-    return parseLong(numstr,false);
+RUAPI long ruStrToLong(trans_chars str) {
+    if (!str) return 0;
+    int64_t out = 0;
+    parseInteger(str, NULL, sizeof(long)*8, 10, &out);
+    return (long)out;
 }
 
-static int32_t parseInt(trans_chars numstr, bool strict) {
-    char* end = (char*)numstr;
-    int64_t num = ruStrParseInt64(numstr, &end, 10);
-    if (!strict) return (int32_t)num;
-    if (!numstr || *end) return 0;
-    int32_t intout = (int32_t)num;
-    if (intout < num) {
-        errno = ERANGE;
-        return 0;
-    }
-    return intout;
+RUAPI int32_t ruStrParseInt(trans_chars str, perm_chars* endptr, uint32_t base, int32_t* num) {
+    if (!str || !num) return RUE_PARAMETER_NOT_SET;
+    int64_t out = 0;
+    int32_t ret = parseInteger(str, endptr, sizeof(int32_t)*8, base, &out);
+    *num = (int32_t)out;
+    return ret;
 }
 
-RUAPI int32_t ruStrParseInt(trans_chars numstr) {
-    return parseInt(numstr,true);
-}
-
-RUAPI int32_t ruStrToInt(trans_chars numstr) {
-    return parseInt(numstr,false);
-}
-
-RUAPI bool ruStrEmpty(trans_chars str) {
-    if (!str) return true;
-    while (*str) {
-        if (!isspace(*str)) return false;
-        str++;
-    }
-    return true;
-}
-
-RUAPI void ruStripChars(alloc_chars instr, trans_chars chars) {
-    if (!instr || !strlen(instr) || ! chars || !strlen(chars)) return;
-    char *end = instr + strlen(instr);
-    const char *cend = chars + strlen(chars);
-    char *o = instr;
-    for (char *p = instr; p < end; p++) {
-        bool skip = false;
-        for (const char *c = chars; c < cend; c++) {
-            if (*p == *c) {
-                skip = true;
-                break;
-            }
-        }
-        if (!skip) {
-            *o = *p;
-            o++;
-        }
-    }
-    *o = '\0';
+RUAPI int32_t ruStrToInt(trans_chars str) {
+    if (!str) return 0;
+    int64_t out = 0;
+    parseInteger(str, NULL, sizeof(int32_t)*8, 10, &out);
+    return (int32_t)out;
 }

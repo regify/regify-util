@@ -79,6 +79,10 @@ extern "C" {
  */
 #define RUE_OUT_OF_MEMORY	68
 /**
+ * Overflow
+ */
+#define RUE_OVERFLOW	96
+/**
  * User aborted
  */
 #define RUE_USER_ABORT	98
