@@ -164,10 +164,10 @@ static int32_t MapPut(Map* mp, ptr key, ptr val, ptr* existingVal) {
     return ret;
 }
 
-RUAPI int32_t ruMapPutData(ruMap map, ptr key, ptr val, ptr* exisitingVal) {
+RUAPI int32_t ruMapPutData(ruMap rm, ptr key, ptr val, ptr* exisitingVal) {
     ruClearError();
     int32_t ret;
-    Map *mp = MapGet(map, &ret);
+    Map *mp = MapGet(rm, &ret);
     if (!mp) {
         return ret;
     }
@@ -358,7 +358,8 @@ RUAPI int32_t ruMapNextSet(ruMap rm, void** key, void** value) {
     return ret;
 }
 
-RUAPI int32_t ruMapKeySet(ruMap rm, ruCloneFunc copy, ruList* keys, ruFreeFunc listFree) {
+RUAPI int32_t ruMapKeyList(ruMap rm, ruList* keys,
+                           ruCloneFunc copy, ruFreeFunc listFree) {
     ruClearError();
     int32_t ret;
     Map *mp = MapGet(rm, &ret);
@@ -445,5 +446,52 @@ RUAPI u_int32_t ruMapSize(ruMap rm, int32_t *code) {
         ruMutexUnlock(mp->mux);
     }
     ruRetWithCode(code, ret, sz);
+}
+
+// Set API
+RUAPI ruSet ruSetNewString(ruFreeFunc itemFree) {
+    return ruMapNew(ruStrHash, ruStrMatch, itemFree, NULL, 0);
+}
+
+RUAPI ruSet ruSetNew(ruHashFunc hash, ruMatchFunc match,
+                     ruFreeFunc itemFree, u_int32_t expectedSize) {
+    return ruMapNew(hash, match, itemFree, NULL, expectedSize);
+}
+
+RUAPI ruSet ruSetFree(ruSet rs) {
+    return ruMapFree(rs);
+}
+
+RUAPI int32_t ruSetPutItem(ruSet rs, ptr item) {
+    return ruMapPutData(rs, item, NULL, NULL);
+}
+
+RUAPI int32_t ruSetRemoveItem(ruMap rs, void *item) {
+    return ruMapRemoveData(rs, item, NULL);
+}
+
+RUAPI bool ruSetHasItem(ruSet rs, void *item, int32_t *code) {
+    return ruMapHasKey(rs, item, code);
+}
+
+RUAPI int32_t ruSetFirstSet(ruSet rs, void** item) {
+    return ruMapFirstSet(rs, item, NULL);
+}
+
+RUAPI int32_t ruSetNextSet(ruSet rs, void** item) {
+    return ruMapNextSet(rs, item, NULL);
+}
+
+RUAPI int32_t ruSetItemList(ruSet rs, ruList* items,
+                           ruCloneFunc copy, ruFreeFunc listFree) {
+    return ruMapKeyList(rs, items, copy, listFree);
+}
+
+RUAPI int32_t ruSetRemoveAll(ruSet rs) {
+    return ruMapRemoveAll(rs);
+}
+
+RUAPI u_int32_t ruSetSize(ruSet rs, int32_t *code) {
+    return ruMapSize(rs, code);
 }
 

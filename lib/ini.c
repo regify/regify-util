@@ -349,7 +349,7 @@ RUAPI int32_t ruIniKeys(ruIni iniOb, trans_chars section, ruList* keys) {
     if (!keys) return RUE_PARAMETER_NOT_SET;
 
     ruMap map = getIniMap(ini, section);
-    return ruMapKeySet(map, (ruCloneFunc) ruStrDup, keys, free);
+    return ruMapKeyList(map, keys, (ruCloneFunc) ruStrDup, free);
 }
 
 RUAPI int32_t ruIniSections(ruIni iniOb, ruList* sections) {
@@ -359,7 +359,7 @@ RUAPI int32_t ruIniSections(ruIni iniOb, ruList* sections) {
     if (!sections) return RUE_PARAMETER_NOT_SET;
 
     ruMap map = ini->sections;
-    return ruMapKeySet(map, (ruCloneFunc) ruStrDup, sections, free);
+    return ruMapKeyList(map, sections, (ruCloneFunc) ruStrDup, free);
 }
 
 RUAPI perm_chars ruIniGetDef(ruIni iniOb, trans_chars section, trans_chars key,

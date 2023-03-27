@@ -28,18 +28,19 @@
 #include <stdio.h>
 #include "tests.h"
 
-Suite* getSuite ( void ) {
-    Suite *suite = suite_create ( "util" );
-    suite_add_tcase ( suite, miscTests() );
-    suite_add_tcase ( suite, listTests() );
-    suite_add_tcase ( suite, stringTests() );
-    suite_add_tcase ( suite, mapTests() );
-    suite_add_tcase ( suite, regexTests() );
-    suite_add_tcase ( suite, ioTests() );
-    suite_add_tcase ( suite, iniTests() );
-    suite_add_tcase ( suite, storeTests() );
-    suite_add_tcase ( suite, cleanerTests() );
-    suite_add_tcase ( suite, threadTests() );
+Suite* getSuite(void) {
+    Suite *suite = suite_create("util");
+    suite_add_tcase(suite, miscTests());
+    suite_add_tcase(suite, listTests());
+    suite_add_tcase(suite, stringTests());
+    suite_add_tcase(suite, mapTests());
+    suite_add_tcase(suite, setTests());
+    suite_add_tcase(suite, regexTests());
+    suite_add_tcase(suite, ioTests());
+    suite_add_tcase(suite, iniTests());
+    suite_add_tcase(suite, storeTests());
+    suite_add_tcase(suite, cleanerTests());
+    suite_add_tcase(suite, threadTests());
     return suite;
 }
 
