@@ -762,7 +762,8 @@ int32_t parseInteger(trans_chars start, perm_chars* endptr,
     if (!out) return RUE_PARAMETER_NOT_SET;
     *out = 0;
     if (!start) return RUE_PARAMETER_NOT_SET;
-    if (intBitSize < 1 || intBitSize > 64) return RUE_INVALID_PARAMETER;
+    int64_t maxInt = 1;
+    if (intBitSize < 1 || intBitSize > sizeof(maxInt)*8-1) return RUE_INVALID_PARAMETER;
     if (base == 1 || base > 36) return RUE_INVALID_PARAMETER;
 
     char* myStart = (char*)start;
@@ -770,8 +771,7 @@ int32_t parseInteger(trans_chars start, perm_chars* endptr,
 
     do {
         // determine max integer size
-        uint64_t maxInt = 1;
-        for (int i = 1; i < intBitSize; i++) maxInt = maxInt | maxInt << 1;
+        for (uint32_t i = 1; i < intBitSize; i++) maxInt = maxInt | maxInt << 1;
 
         // Skip white space.
         char* cur = myStart;
@@ -803,8 +803,9 @@ int32_t parseInteger(trans_chars start, perm_chars* endptr,
 
         // Save the pointer so we can check later if anything happened.
         numStart = cur;
-        uint64_t cutoff = maxInt / base;
-        uint64_t cutlim = maxInt % base;
+        int64_t cutoff = maxInt / base;
+        int64_t cutlim = maxInt % base;
+        if (!negative) cutlim++; // positive side gets one more
 
         bool overflow = false;
         int64_t parsedNum = 0;
@@ -870,7 +871,7 @@ int32_t parseInteger(trans_chars start, perm_chars* endptr,
 RUAPI int32_t ruStrParseInt64(trans_chars str, perm_chars* endptr, uint32_t base, int64_t* num) {
     if (!str || !num) return RUE_PARAMETER_NOT_SET;
     int64_t out = 0;
-    int32_t ret = parseInteger(str, endptr, sizeof(int64_t)*8, base, &out);
+    int32_t ret = parseInteger(str, endptr, sizeof(int64_t)*8-1, base, &out);
     *num = out;
     return ret;
 }
@@ -878,14 +879,14 @@ RUAPI int32_t ruStrParseInt64(trans_chars str, perm_chars* endptr, uint32_t base
 RUAPI int64_t ruStrToInt64(trans_chars str) {
     if (!str) return 0;
     int64_t out = 0;
-    parseInteger(str, NULL, sizeof(int64_t)*8, 10, &out);
+    parseInteger(str, NULL, sizeof(int64_t)*8-1, 10, &out);
     return out;
 }
 
 RUAPI int32_t ruStrParseLong(trans_chars str, perm_chars* endptr, uint32_t base, long* num) {
     if (!str || !num) return RUE_PARAMETER_NOT_SET;
     int64_t out = 0;
-    int32_t ret = parseInteger(str, endptr, sizeof(long)*8, base, &out);
+    int32_t ret = parseInteger(str, endptr, sizeof(long)*8-1, base, &out);
     *num = (long)out;
     return ret;
 }
@@ -893,14 +894,14 @@ RUAPI int32_t ruStrParseLong(trans_chars str, perm_chars* endptr, uint32_t base,
 RUAPI long ruStrToLong(trans_chars str) {
     if (!str) return 0;
     int64_t out = 0;
-    parseInteger(str, NULL, sizeof(long)*8, 10, &out);
+    parseInteger(str, NULL, sizeof(long)*8-1, 10, &out);
     return (long)out;
 }
 
 RUAPI int32_t ruStrParseInt(trans_chars str, perm_chars* endptr, uint32_t base, int32_t* num) {
     if (!str || !num) return RUE_PARAMETER_NOT_SET;
     int64_t out = 0;
-    int32_t ret = parseInteger(str, endptr, sizeof(int32_t)*8, base, &out);
+    int32_t ret = parseInteger(str, endptr, sizeof(int32_t)*8-1, base, &out);
     *num = (int32_t)out;
     return ret;
 }
@@ -908,6 +909,6 @@ RUAPI int32_t ruStrParseInt(trans_chars str, perm_chars* endptr, uint32_t base, 
 RUAPI int32_t ruStrToInt(trans_chars str) {
     if (!str) return 0;
     int64_t out = 0;
-    parseInteger(str, NULL, sizeof(int32_t)*8, 10, &out);
+    parseInteger(str, NULL, sizeof(int32_t)*8-1, 10, &out);
     return (int32_t)out;
 }

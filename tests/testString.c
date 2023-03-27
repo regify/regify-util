@@ -304,6 +304,31 @@ START_TEST ( run ) {
     fail_unless(iexp == inum, retText, test, iexp, inum);
     fail_unless(end == *endAddr, retText, test, end, *endAddr);
 
+    iexp = -2147483647;
+    inum = -1;
+    ret = ruStrParseInt("-2147483647NULL", &endAddr, 0, &inum);
+    fail_unless(exp == ret, retText, test, exp, ret);
+    fail_unless(iexp == inum, retText, test, iexp, inum);
+    fail_unless(end == *endAddr, retText, test, end, *endAddr);
+
+    exp = RUE_OVERFLOW;
+    iexp = -214748364;
+    inum = -1;
+    end = '8';
+    ret = ruStrParseInt("-2147483648NULL", &endAddr, 0, &inum);
+    fail_unless(exp == ret, retText, test, exp, ret);
+    fail_unless(iexp == inum, retText, test, iexp, inum);
+    fail_unless(end == *endAddr, retText, test, end, *endAddr);
+
+    exp = RUE_OK;
+    iexp = 2147483648;
+    inum = -1;
+    end = 'N';
+    ret = ruStrParseInt("2147483648NULL", &endAddr, 0, &inum);
+    fail_unless(exp == ret, retText, test, exp, ret);
+    fail_unless(iexp == inum, retText, test, iexp, inum);
+    fail_unless(end == *endAddr, retText, test, end, *endAddr);
+
     test = "ruStrToInt";
     iexp = 666;
     inum = ruStrToInt(" 0666NULL");

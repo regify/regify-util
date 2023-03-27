@@ -263,7 +263,7 @@ END_TEST
 
 START_TEST ( usage ) {
     int32_t ret, exp;
-    rusize sz, esz;
+    uint32_t sz, esz;
     const char *test = "ruListAppendPtr";
     const char *retText = "%s failed wanted ret '%d' but got '%d'";
     ruList rl = NULL;
@@ -363,16 +363,17 @@ START_TEST ( usage ) {
 
     test = "ruListIdxData";
     exp = RUE_OK;
-    for (i = 0; i < esz; i++) {
-        char *field = ruListIdxData(rl, i, char*, &ret);
+    for (uint32_t j = 0; j < esz; j++) {
+        char *field = ruListIdxData(rl, j, char*, &ret);
         fail_unless(ret == exp, retText, test, exp, ret);
-        ck_assert_str_eq(field, f[i]);
+        ck_assert_str_eq(field, f[j]);
     }
 
-     for (i = -1; i >= -esz; i--) {
-        char *field = ruListIdxData(rl, i, char*, &ret);
+    int32_t sesz = -(int32_t)esz;
+    for (int32_t j = -1; j >= sesz; j--) {
+        char *field = ruListIdxData(rl, j, char*, &ret);
         fail_unless(ret == exp, retText, test, exp, ret);
-        ck_assert_str_eq(field, f[esz+i]);
+        ck_assert_str_eq(field, f[esz + j]);
     }
 
     exp = RUE_INVALID_PARAMETER;
@@ -399,8 +400,8 @@ START_TEST ( usage ) {
     rl = ruListNew(NULL);
     esz = sizeof(f)/sizeof(f[0]);
     test = "ruListAppend";
-    for (i = 0; i < esz; i++) {
-        ret = ruListAppend(rl, f[i]);
+    for (uint32_t j = 0; j < esz; j++) {
+        ret = ruListAppend(rl, f[j]);
         fail_unless(ret == exp, retText, test, exp, ret);
     }
     test = "ruListSize";

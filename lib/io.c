@@ -171,7 +171,7 @@ RUAPI FILE* ruFOpen(const char *filepath, const char *mode, int32_t* code) {
     ruRetWithCode(code, RUE_OK, fd);
 }
 
-RUAPI int32_t ruDiskFree(trans_chars path, int64_t* total, int64_t* avail) {
+RUAPI int32_t ruDiskFree(trans_chars path, uint64_t* total, uint64_t* avail) {
     alloc_chars dirPath = NULL;
     if (ruIsFile(path)) {
         dirPath = ruDirName(path);
@@ -184,8 +184,8 @@ RUAPI int32_t ruDiskFree(trans_chars path, int64_t* total, int64_t* avail) {
     ULARGE_INTEGER ltot;
     if (GetDiskFreeSpaceExW(wpath, &lfree,
                             &ltot, NULL)) {
-        if (total) *total = (int64_t)ltot.QuadPart;
-        if (avail) *avail = (int64_t)lfree.QuadPart;
+        if (total) *total = (uint64_t)ltot.QuadPart;
+        if (avail) *avail = (uint64_t)lfree.QuadPart;
         ret = RUE_OK;
     } else {
         if (total) *total = 0;
