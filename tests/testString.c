@@ -321,7 +321,7 @@ START_TEST ( run ) {
     fail_unless(end == *endAddr, retText, test, end, *endAddr);
 
     exp = RUE_OK;
-    iexp = 2147483648;
+    iexp = (int32_t)2147483648;
     inum = -1;
     end = 'N';
     ret = ruStrParseInt("2147483648NULL", &endAddr, 0, &inum);
