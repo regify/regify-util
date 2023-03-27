@@ -262,7 +262,7 @@ RUAPI ptr ruListPop(ruList rl, int32_t *code) {
     return out;
 }
 
-RUAPI rusize ruListSize(ruList rl, int32_t *code) {
+RUAPI uint32_t ruListSize(ruList rl, int32_t *code) {
     ruClearError();
     List *list = ListGet(rl, code);
     if (!list) return 0;
@@ -337,15 +337,35 @@ RUAPI ptr ruListIdxElmtData(ruList rl, int32_t index, int32_t* code) {
     ruClearError();
     List *list = ListGet(rl, code);
     if (!list) return NULL;
-    if (index >= list->size) ruRetWithCode(code, RUE_INVALID_PARAMETER, NULL);
+    uint32_t offset = abs(index);
+    if (index < 0) {
+        // we get one more backwards
+        if (offset > list->size) ruRetWithCode(code, RUE_INVALID_PARAMETER, NULL);
+    } else {
+        if (offset >= list->size) ruRetWithCode(code, RUE_INVALID_PARAMETER, NULL);
+    }
     if (list->doQuit) ruRetWithCode(code, RUE_USER_ABORT, NULL);
     ruMutexLock(list->mux);
     if (list->doQuit) {
         ruMutexUnlock(list->mux);
         ruRetWithCode(code, RUE_USER_ABORT, NULL);
     }
-    ListElmt *rle = list->head->next;
-    while(--index >= 0 && rle) rle = rle->next;
+    ListElmt *rle = NULL;
+    if (index < 0) {
+        rle = list->tail;
+        index++;
+        while(index && rle) {
+            index++;
+            rle = rle->prev;
+        }
+
+    } else {
+        rle = list->head->next;
+        while(index && rle) {
+            rle = rle->next;
+            index--;
+        }
+    }
     ruMutexUnlock(list->mux);
     if (!rle) ruRetWithCode(code, RUE_OK, NULL);
     ruRetWithCode(code, RUE_OK, rle->data);

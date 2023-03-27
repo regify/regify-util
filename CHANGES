@@ -18,4 +18,4 @@ Non backward compatible API changes between 1.3 and 2.0
 - ruStrToll - ruStrParseLong (different API)
 - ruMapKeySet - ruMapKeyList (also changed parameter order to be more natural)
 
-* ruListSize result is int32_t -> rusize and return on error is -1 -> 0
+* ruListSize result is int32_t -> uint32_t and return on error is -1 -> 0

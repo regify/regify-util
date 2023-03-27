@@ -43,7 +43,7 @@ static void kvFree(void *o) {
 }
 
 RUAPI ru_uint ruIntHash(trans_ptr key) {
-    return (ru_uint)(intptr_t)key;
+    return (ru_uint)key;
 }
 
 RUAPI bool ruIntMatch(trans_ptr s1, trans_ptr s2) {

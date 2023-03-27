@@ -321,7 +321,6 @@ START_TEST ( usage ) {
     fail_unless(sz == esz, retText, test, esz, sz);
 
     test = "ruListJoin";
-//    exp = RUE_OK;
     alloc_chars str = ruListJoin(rl, NULL, &ret);
     fail_unless(ret == exp, retText, test, exp, ret);
     ck_assert_str_eq(str, "field0field1field2");
@@ -335,7 +334,7 @@ START_TEST ( usage ) {
     // iterate over the list
     int32_t i = 0;
     rle = ruListIter(rl);
-    for (char*field = ruIterNext(rle, char*);
+    for (char* field = ruIterNext(rle, char*);
          rle; field = ruIterNext(rle, char*), i++) {
         ck_assert_str_eq(field, f[i]);
         if (i==1) {
@@ -368,6 +367,12 @@ START_TEST ( usage ) {
         char *field = ruListIdxData(rl, i, char*, &ret);
         fail_unless(ret == exp, retText, test, exp, ret);
         ck_assert_str_eq(field, f[i]);
+    }
+
+     for (i = -1; i >= -esz; i--) {
+        char *field = ruListIdxData(rl, i, char*, &ret);
+        fail_unless(ret == exp, retText, test, exp, ret);
+        ck_assert_str_eq(field, f[esz+i]);
     }
 
     exp = RUE_INVALID_PARAMETER;

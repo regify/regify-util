@@ -189,7 +189,7 @@ RUAPI ptr ruListTryPop(ruList rl, msec_t timeoutMs, int32_t *code);
  * @param code (Optional) Stores \ref RUE_OK on success or regify error code.
  * @return Number of elements in list or 0 on error.
  */
-RUAPI rusize ruListSize(ruList rl, int32_t* code);
+RUAPI uint32_t ruListSize(ruList rl, int32_t* code);
 
 /**
  * Returns the first element in the given list.
@@ -268,6 +268,7 @@ RUAPI ptr ruListElmtData(ruListElmt re, int32_t* code);
  * Returns the data payload of the element at given 0 based index.
  * @param rl List from which to return the element data payload.
  * @param index Index of the element in question. 0 is the first element.
+ *              -1 is the last element.
  * @param code (Optional) Stores regify error code of this operation.
  *         \ref RUE_OK on success
  *         \ref RUE_USER_ABORT when a threaded list has quit
