@@ -333,6 +333,13 @@ RUAPI rusize ruFileSize(trans_chars filePath, int32_t* code) {
     ruRetWithCode(code, ret, st.st_size);
 }
 
+RUAPI sec_t ruFileUtcTime(trans_chars filePath, int32_t* code) {
+    ruStat_t st;
+    int32_t ret = ruStat(filePath, &st);
+    if(ret != RUE_OK) ruRetWithCode(code, ret, 0);
+    ruRetWithCode(code, ret, st.st_mtim.tv_sec);
+}
+
 RUAPI int32_t ruFileSetDate(trans_chars filePath, sec_t date) {
     if (!filePath) return RUE_PARAMETER_NOT_SET;
     if (date < 0) return RUE_INVALID_PARAMETER;
