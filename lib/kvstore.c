@@ -48,7 +48,7 @@ RUAPI int32_t ruValidStore(void* obj) {
 
 //<editor-fold desc="file store">
 typedef struct FileKvStore_ {
-    u_int64_t type;
+    ru_uint type;
     char *folderPath;
 } FileKvStore;
 ruMakeTypeGetter(FileKvStore, MagicFileKvStore)

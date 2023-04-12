@@ -345,6 +345,8 @@ START_TEST ( reg ) {
     char *want, *out;
     int ret, exp;
 
+    // Note these legacy tests will only pass on a system that has cygwin
+    // installed with root in c:/, i.e. my system --mario
     exp = RUE_PARAMETER_NOT_SET;
     ret = ruGetRegistryEntry(0, NULL, NULL, NULL);
     fail_unless(exp == ret, retText, test, exp, ret);

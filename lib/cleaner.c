@@ -109,7 +109,7 @@ char* ruStrDup(const char* str) {
 bool ruStrEmpty(trans_chars str) {
     if (!str) return true;
     while (*str) {
-        if (!isspace(*str)) return false;
+        if (!isspace((unsigned char)*str)) return false;
         str++;
     }
     return true;
@@ -168,7 +168,7 @@ typedef struct {
 
     rusize memsize;
 } Cleaner;
-#define MagicCleaner        2310
+#define MagicCleaner        2410
 ruMakeTypeGetter(Cleaner, MagicCleaner)
 
 static Tree* newBranch(Cleaner *c, char letter) {

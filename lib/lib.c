@@ -79,6 +79,14 @@ RUAPI bool ruIsInt64(const char* numstr) {
     return true;
 }
 
+RUAPI ru_pid ruProcessId(void) {
+#ifdef RUMS
+    return GetCurrentProcessId();
+#else
+    return getpid();
+#endif
+}
+
 RUAPI alloc_chars ruGetLanguage(void) {
     alloc_chars lc = setlocale(LC_ALL, NULL);
     if (!lc) return NULL;

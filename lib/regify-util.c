@@ -237,7 +237,7 @@ RUAPI int32_t ruGetRegistryEntry(HKEY topKey, const char* tree, const char* leaf
                 ruVerbLogf("Failed querying registry for '%s' %d", leaf, rc);
                 break;
             }
-            *value = uniNToChar(buf, (int32_t)bufSize);
+            *value = uniToChar(buf);
             ret = RUE_OK;
         } else if (type == REG_DWORD) {
             bufSize = sizeof(int);

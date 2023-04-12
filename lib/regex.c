@@ -167,7 +167,7 @@ bool ruRegexSearch(ruRegex rr, const char* original, bool fully, ruList matches,
                 ret = RUE_GENERAL;
                 break;
             }
-            char *buf = uniNToChar(ubuf, needLen);
+            char *buf = uniToChar(ubuf);
             ruListAppend(matches, buf);
             ruFree(ubuf);
         }

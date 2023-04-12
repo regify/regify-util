@@ -421,6 +421,36 @@ RUAPI alloc_chars ruUtf8ToLower(trans_chars instr);
 RUAPI alloc_chars ruUtf8ToUpper(trans_chars instr);
 
 /**
+ * \brief Converts given UTF16 wide character sequence to UTF8
+ * @param unistr UTF16 string to convert.
+ * @param bytelen Length of unistr without terminating bytes or -1 to detect length
+ * @return UTF8 representation of unistr. Caller must free.
+ */
+RUAPI alloc_chars ruStrFromNUtf16(trans_uni unistr, int32_t bytelen);
+
+/**
+ * \brief Converts given UTF16 wide character sequence to UTF8
+ * @param unistr UTF16 string to convert.
+ * @return UTF8 representation of unistr. Caller must free.
+ */
+RUAPI alloc_chars ruStrFromUtf16(trans_uni unistr);
+
+/**
+ * \brief Converts given UTF8 string to UTF16 as it is used on Windows
+ * @param str UTF8 string to convert
+ * @param bytelen Length of str without terminating byte or -1 to detect length.
+ * @return UTF16 wide character string. Caller must free.
+ */
+RUAPI alloc_uni ruStrNToUtf16(trans_chars str, int32_t bytelen);
+
+/**
+ * \brief Converts given UTF8 string to UTF16 as it is used on Windows
+ * @param str UTF8 string to convert
+ * @return UTF16 wide character string. Caller must free.
+ */
+RUAPI alloc_uni ruStrToUtf16(trans_chars str);
+
+/**
  * \brief Returns a copy of given string
  * @param str String to copy
  * @return Copy of given string or NULL if NULL was given. Free with \ref ruFree.

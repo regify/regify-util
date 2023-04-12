@@ -97,17 +97,17 @@ START_TEST ( api ) {
     fail_unless(expi == reti, retText, test, expi, reti);
 
 
-    test = "ruFileSetDate";
+    test = "ruFileSetUtcTime";
     expi = RUE_PARAMETER_NOT_SET;
-    reti = ruFileSetDate(NULL, -1);
+    reti = ruFileSetUtcTime(NULL, -1);
     fail_unless(expi == reti, retText, test, expi, reti);
 
     expi = RUE_INVALID_PARAMETER;
-    reti = ruFileSetDate("/foo", -1);
+    reti = ruFileSetUtcTime("/foo", -1);
     fail_unless(expi == reti, retText, test, expi, reti);
 
     expi = RUE_FILE_NOT_FOUND;
-    reti = ruFileSetDate("/foo", 0);
+    reti = ruFileSetUtcTime("/foo", 0);
     fail_unless(expi == reti, retText, test, expi, reti);
 
     test = "ruFileExtension";
@@ -635,10 +635,25 @@ START_TEST ( fileopen ) {
 
     // w/trailing slash
     newFolder = ruDupPrintf("%s/that/", base);
+
+    ru_int ecnt = 0, cnt;
+    test = "ruFolderEntries";
+    cnt = ruFolderEntries(newFolder);
+    fail_unless(ecnt == cnt, retText, test, ecnt, cnt);
+
     test = "ruMkdir";
     ret = ruMkdir(newFolder, 0775, true);
     fail_unless(exp == ret, retText, test, exp, ret);
     fail_unless(true == ruIsDir(newFolder), retText, test, true, false);
+
+    test = "ruFolderEntries";
+    ecnt = 1;
+    cnt = ruFolderEntries(newFolder);
+    fail_unless(ecnt == cnt, retText, test, ecnt, cnt);
+
+    ecnt = 2;
+    cnt = ruFolderEntries(base);
+    fail_unless(ecnt == cnt, retText, test, ecnt, cnt);
 
     ruFileRemove(newFolder);
     test = "ruFileExists";
@@ -675,9 +690,14 @@ START_TEST ( fileopen ) {
     fail_unless(exp == ret, retText, test, exp, ret);
     fail_unless(expLen == len, retText, test, expLen, len);
 
-    test = "ruFileSetDate";
-    ret = ruFileSetDate(writeFile, 7200);
+    test = "ruFileSetUtcTime";
+    ret = ruFileSetUtcTime(writeFile, 7200);
     fail_unless(exp == ret, retText, test, exp, ret);
+
+    test = "ruFileUtcTime";
+    sec_t tm = ruFileUtcTime(writeFile, &ret);
+    fail_unless(exp == ret, retText, test, exp, ret);
+    fail_unless(7200 == tm, retText, test, 7200, tm);
 
     test = "ruFolderRemove";
     ret = ruFolderRemove(base);

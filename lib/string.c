@@ -377,7 +377,7 @@ RUAPI int32_t ruStrCmp(trans_chars str1, trans_chars str2) {
 RUAPI bool ruStrEmpty(trans_chars str) {
     if (!str) return true;
     while (*str) {
-        if (!isspace(*str)) return false;
+        if (!isspace((unsigned char)*str)) return false;
         str++;
     }
     return true;
@@ -535,15 +535,15 @@ RUAPI trans_chars ruStrTrimBounds(trans_chars inStart, rusize inLen, rusize* out
 
     rusize len = (inLen == RU_SIZE_AUTO)? strlen(inStart) : inLen;
     trans_chars inPast = inStart + len;
-    trans_chars inLast = inPast - 1;
+    trans_bytes inLast = (trans_bytes)(inPast - 1);
 
-    trans_chars trimStart = inStart;
+    trans_bytes trimStart = (trans_bytes)inStart;
     while(isspace(*trimStart) && trimStart < inLast) trimStart++;
     if (!isspace(*trimStart)) {
-        outStart = trimStart;
+        outStart = (trans_chars)trimStart;
         if (outLen) {
-            trans_chars last = inLast; // not terminator
-            while(isspace(*last) && last > trimStart) last--;
+            trans_bytes last = inLast; // not terminator
+            while(last > trimStart && isspace(*last)) last--;
             if (!isspace(*last)) {
                 *outLen = last - trimStart + 1;
             }
