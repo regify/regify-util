@@ -353,7 +353,7 @@ RUAPI sec_t ruFileUtcTime(trans_chars filePath, int32_t* code) {
     ruStat_t st;
     int32_t ret = ruStat(filePath, &st);
     if(ret != RUE_OK) ruRetWithCode(code, ret, 0);
-    ruRetWithCode(code, ret, st.st_mtim.tv_sec);
+    ruRetWithCode(code, ret, st.st_mtime);
 }
 
 RUAPI int32_t ruFileSetUtcTime(trans_chars filePath, sec_t date) {
