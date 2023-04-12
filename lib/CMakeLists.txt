@@ -125,6 +125,11 @@ if(NOT WASM)
             EXPORT ${NAME}Targets
             DESTINATION lib
             )
+    if(MSVC)
+        # ugly hack to install static pdb
+        install(FILES ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/${CLEANER}.dir/${CLEANER}.pdb
+                DESTINATION lib OPTIONAL)
+    endif()
 endif()
 
 # regify-util.a
@@ -137,6 +142,11 @@ install(TARGETS ${staticlib}
         EXPORT ${NAME}Targets
         DESTINATION lib
         )
+if(MSVC)
+    # ugly hack to install static pdb
+    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/${staticlib}.dir/${staticlib}.pdb
+            DESTINATION lib OPTIONAL)
+endif()
 if(INSTALL_ICU AND INCLUDE_ICU)
     install(FILES ${ICU_ARCHIVES} DESTINATION lib)
 endif()
@@ -149,4 +159,8 @@ if(BUILD_SHARED_LIBS)
             EXPORT ${NAME}Targets
             DESTINATION lib
             )
+    if(MSVC)
+        install(FILES $<TARGET_PDB_FILE:${sharedlib}>
+                DESTINATION lib OPTIONAL)
+    endif()
 endif()

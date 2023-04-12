@@ -133,12 +133,12 @@ void ruClearError(void);
 #define MagicIni            2308
 #define KvStoreMagic        2309
 #define MagicTsc            2310
-// cleaner.c #define MagicCleaner 2310
+// cleaner.c #define MagicCleaner 2410
 
 /*
  *  Mutex
  */
-#ifdef RUMS
+#ifdef _WIN32
 #include <windows.h>
 typedef HANDLE ruMutex_t;
 #else
@@ -154,11 +154,7 @@ typedef struct mux_ {
 
 typedef struct thr_ {
     ru_uint type;
-#ifdef RUMS
-    HANDLE tid;
-#else
-    pthread_t tid;
-#endif
+    ruThreadId tid;
     ruStartFunc start;
     void* user;
     void* exitRes;
@@ -300,13 +296,12 @@ sec_t timeParse(trans_chars dateformat, trans_chars datestr, bool utc);
 
 // ICU stuff
 UConverter* getConverter(void);
-UChar* strToUni(UConverter *conv, const char *instr);
+UChar* convToUni(UConverter *conv, trans_chars instr, int32_t inlen);
+alloc_chars convToStr(UConverter *conv, UChar *usrc, int32_t uclen);
 UChar* charToUni(const char *instr);
-char* uniToStr(UConverter *conv, UChar *usrc, int32_t uclen);
-char* uniNToChar(UChar *usrc, int32_t len);
-char* uniToChar(UChar *usrc);
+alloc_chars uniToChar(UChar *usrc);
 UChar* uniSwitchCase(UChar* usrc, bool isUpper);
-char* utf8SwitchCase(const char *instr, bool isUpper);
+alloc_chars utf8SwitchCase(trans_chars instr, bool isUpper);
 
 // io stuff
 int32_t errno2rfec(int err);

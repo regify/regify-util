@@ -96,7 +96,7 @@ typedef int32_t (*kvlist) (struct KvStore_* kvs, const char* key,
 typedef struct KvStore_ {
 /** \cond noworry */
     // internal
-    u_int64_t type;
+    ru_uint type;
     ruFreeFunc ctxFree;
 /** \endcond */
     /** \brief The method that will be called to set data. */

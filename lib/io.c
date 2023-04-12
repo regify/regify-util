@@ -213,7 +213,23 @@ RUAPI rusize ruFileSize(trans_chars filePath, int32_t* code) {
     return out;
 }
 
-RUAPI int32_t ruFileSetDate(trans_chars filePath, sec_t date) {
+RUAPI sec_t ruFileUtcTime(trans_chars filePath, int32_t* code) {
+    wchar_t* wfilename = getWPath(filePath);
+    sec_t out = 0;
+    if (!wfilename) ruRetWithCode(code, RUE_PARAMETER_NOT_SET, out);
+
+    ruZeroedStruct(struct __stat64, buf);
+    if (0 == _wstat64(wfilename, &buf)) {
+        out = (sec_t)buf.st_mtime;
+        if (code) *code = RUE_OK;
+    } else {
+        if (code) *code = errno2rfec(errno);
+    }
+    ruFree (wfilename);
+    return out;
+}
+
+RUAPI int32_t ruFileSetUtcTime(trans_chars filePath, sec_t date) {
     if (!filePath) return RUE_PARAMETER_NOT_SET;
     if (date < 0) return RUE_INVALID_PARAMETER;
 
@@ -333,7 +349,7 @@ RUAPI rusize ruFileSize(trans_chars filePath, int32_t* code) {
     ruRetWithCode(code, ret, st.st_size);
 }
 
-RUAPI int32_t ruFileSetDate(trans_chars filePath, sec_t date) {
+RUAPI int32_t ruFileSetUtcTime(trans_chars filePath, sec_t date) {
     if (!filePath) return RUE_PARAMETER_NOT_SET;
     if (date < 0) return RUE_INVALID_PARAMETER;
     struct utimbuf tb;
@@ -705,6 +721,7 @@ static int32_t folderWalk(trans_chars folder, u_int32_t flags,
     // sanity checks
     if (!folder) return RUE_PARAMETER_NOT_SET;
     int32_t ret = RUE_OK;
+    if (!ruFileExists(folder)) return ret;
     bool isFolder = ruIsDir(folder);
     //#if PB_Compiler_OS  PB_OS_MacOS
     // MAYBE: folder = iconv_preCompose(folder);
@@ -720,8 +737,10 @@ static int32_t folderWalk(trans_chars folder, u_int32_t flags,
     if (isFolder) {
         if (flags & RU_WALK_FOLDER_FIRST) {
             if (!filter || !filter(dirname, basename, isFolder, ctx)) {
-                ret = actor(folder, isFolder, ctx);
-                if (ret != RUE_OK) goto cleanup;
+                if (actor) {
+                    ret = actor(folder, isFolder, ctx);
+                    if (ret != RUE_OK) goto cleanup;
+                }
             }
         }
 #ifdef _WIN32
@@ -770,8 +789,10 @@ static int32_t folderWalk(trans_chars folder, u_int32_t flags,
             }
             if ((flags & RU_WALK_NO_RECURSE) ||
                 !(ffd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
-                ret = actor(path, false, ctx);
-                if (ret != RUE_OK) break;
+                if (actor) {
+                    ret = actor(path, false, ctx);
+                    if (ret != RUE_OK) break;
+                }
                 continue;
             }
             ret = folderWalk(path, flags, filter, actor, ctx);
@@ -807,8 +828,10 @@ static int32_t folderWalk(trans_chars folder, u_int32_t flags,
                 path = ruDupPrintf("%s%s", folder, dir->d_name);
             }
             if ((flags & RU_WALK_NO_RECURSE) || dir->d_type != DT_DIR) {
-                ret = actor(path, false, ctx);
-                if (ret != RUE_OK) break;
+                if (actor) {
+                    ret = actor(path, false, ctx);
+                    if (ret != RUE_OK) break;
+                }
                 continue;
             }
             ret = folderWalk(path, flags, filter, actor, ctx);
@@ -821,7 +844,7 @@ static int32_t folderWalk(trans_chars folder, u_int32_t flags,
     if ((flags & RU_WALK_FOLDER_LAST) || !isFolder) {
         if (ret == RUE_OK) {
             if (!filter || !filter(dirname, basename, isFolder, ctx)) {
-                ret = actor(folder, isFolder, ctx);
+                if (actor) ret = actor(folder, isFolder, ctx);
             }
         }
     }
@@ -873,7 +896,22 @@ RUAPI int32_t ruFolderWalk(trans_chars folder, u_int32_t flags, entryMgr actor, 
     return ret;
 }
 
-RUAPI int ruFolderRemove(const char* folder) {
+static int32_t cntLst(trans_chars fullPath, bool isFolder, ptr o) {
+    ru_int* cnt = (ru_int*)o;
+    (*cnt)++;
+    return RUE_OK;
+}
+
+RUAPI ru_int ruFolderEntries(trans_chars folder) {
+    ru_int cnt = 0;
+    alloc_chars path = fixSlashes(&folder);
+    folderWalk(folder, RU_WALK_NO_RECURSE | RU_WALK_FOLDER_FIRST,
+               NULL, cntLst, &cnt);
+    ruFree(path);
+    return cnt;
+}
+
+RUAPI int ruFolderRemove(trans_chars folder) {
     ruClearError();
     if (!folder) return RUE_PARAMETER_NOT_SET;
     if (strlen(folder) == 0) return RUE_INVALID_PARAMETER;

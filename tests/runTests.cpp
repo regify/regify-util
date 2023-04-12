@@ -79,7 +79,7 @@ int32_t mainTest (const char *tmpDir, const char *treepath) {
 int32_t main ( int32_t argc, char *argv[] ) {
 #endif
     int32_t number_failed;
-    ruSetLogger(ruStdErrorLogger, RU_LOG_VERB, NULL);
+    ruSetLogger(ruStdErrorLogger, RU_LOG_DBUG, NULL);
     Suite *suite = getSuite();
     SRunner *runner = srunner_create ( suite );
     srunner_set_fork_status (runner, CK_NOFORK);

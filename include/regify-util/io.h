@@ -29,6 +29,8 @@
 #ifndef REGIFY_UTIL_IO_H
 #define REGIFY_UTIL_IO_H
 /* Only need to export C interface if used by C++ source code */
+#include <sys/types.h>
+#include <sys/stat.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -99,10 +101,12 @@ typedef struct stat ruStat_t;
  * Populates the given \ref ruStat_t with the data of the filepath if it exists.
  * @param filepath File path to test
  * @param dest Pointer to \ref ruStat_t to populate.
- * @return Returns \ref RUE_OK on success else \ref RUE_PARAMETER_NOT_SET if
- *         filename was NULL or \ref RUE_FILE_NOT_FOUND if file didn't exists
- *         or \ref RUE_CANT_OPEN_FILE if it was another error. Check errno or
- *         call \ref ruLastError for details.
+ * @return Returns
+ *        \ref RUE_OK on success else
+ *        \ref RUE_PARAMETER_NOT_SET if filename was NULL or
+ *        \ref RUE_FILE_NOT_FOUND if file didn't exists or
+ *        \ref RUE_CANT_OPEN_FILE if it was another error.
+ *        Check errno or call \ref ruLastError for details.
  */
 RUAPI int32_t ruStat(trans_chars filepath, ruStat_t *dest);
 
@@ -110,21 +114,35 @@ RUAPI int32_t ruStat(trans_chars filepath, ruStat_t *dest);
  * \brief Return the size of the given file if it exists
  * @param filePath File path to get size of
  * @param code Where the status of the operation will be stored.
- *        \ref RUE_OK on success else \ref RUE_PARAMETER_NOT_SET if
- *        filename was NULL or \ref RUE_FILE_NOT_FOUND if file didn't exists
- *        or \ref RUE_CANT_OPEN_FILE if it was another error. Check errno or
- *        call \ref ruLastError for details.
+ *        \ref RUE_OK on success else
+ *        \ref RUE_PARAMETER_NOT_SET if filename was NULL or
+ *        \ref RUE_FILE_NOT_FOUND if file didn't exists or
+ *        \ref RUE_CANT_OPEN_FILE if it was another error.
+ *        Check errno or call \ref ruLastError for details.
  * @return file size or 0 on error
  */
 RUAPI rusize ruFileSize(trans_chars filePath, int32_t* code);
 
 /**
- * \brief Set access and mod time of given filePath to given date
+ * \brief Return the UTC modification date of the given file if it exists
+ * @param filePath File path to get date of
+ * @param code Where the status of the operation will be stored.
+ *        \ref RUE_OK on success else
+ *        \ref RUE_PARAMETER_NOT_SET if filename was NULL or
+ *        \ref RUE_FILE_NOT_FOUND if file didn't exists or
+ *        \ref RUE_CANT_OPEN_FILE if it was another error.
+ *        Check errno or call \ref ruLastError for details.
+ * @return UTC modification date or 0 on error
+ */
+RUAPI sec_t ruFileUtcTime(trans_chars filePath, int32_t* code);
+
+/**
+ * \brief Set UTC access and mod time of given filePath to given date
  * @param filePath file to set time on
- * @param date time stamp to set file time to
+ * @param date UTC time stamp to set file time to
  * @return Parameter validation error or \ref RUE_OK if parameters are good.
  */
-RUAPI int32_t ruFileSetDate(trans_chars filePath, sec_t date);
+RUAPI int32_t ruFileSetUtcTime(trans_chars filePath, sec_t date);
 
 /**
  * Abstracted version of the Posix open call.
@@ -286,12 +304,21 @@ RUAPI int32_t ruFilteredFolderWalk(trans_chars folder, u_int32_t flags,
 RUAPI int32_t ruFolderWalk(trans_chars folder, u_int32_t flags, entryMgr actor, ptr ctx);
 
 /**
+ * \brief Returns the number of folder entries including itself
+ * @param folder Folder to count entries of
+ * @return 0 if folder is not readable,
+ *         1 if folder is empty or
+ *         the number of entries it has - 1 for itself.
+ */
+RUAPI ru_int ruFolderEntries(trans_chars folder);
+
+/**
  * \brief Recursively delete given folder and all it's sub contents.
  * @param folder Name of folder to delete. May not be "", "/" or "\\"
  * @return \ref RUE_OK on success else \ref RUE_GENERAL and call \ref
  *         ruLastError for details.
  */
-RUAPI int ruFolderRemove(const char* folder);
+RUAPI int ruFolderRemove(trans_chars folder);
 
 /**
  * Creates the requested folder with the requested permissions.
@@ -300,7 +327,7 @@ RUAPI int ruFolderRemove(const char* folder);
  * @param deep Whether to create any upper level folders.
  * @return \ref RUE_OK on success, else a regify error code.
  */
-RUAPI int ruMkdir(const char *pathname, int mode, bool deep);
+RUAPI int ruMkdir(trans_chars pathname, int mode, bool deep);
 
 /**
  * \brief Returns the dirname part of a full path without the trailing slash.

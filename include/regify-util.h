@@ -95,9 +95,6 @@ extern "C" {
     #ifndef int64_t
         typedef long long int64_t;
     #endif
-    #ifndef u_int64_t
-        typedef unsigned long long u_int64_t;
-    #endif
     /** \endcond */
 
     /**
@@ -153,6 +150,17 @@ extern "C" {
 #endif
 
 /**
+ * \brief Abstracted process id type.
+ */
+#ifdef RUMS
+typedef DWORD ru_pid;
+#else
+#include <sys/types.h>
+typedef pid_t ru_pid;
+#endif
+
+
+/**
  * \brief A permanent NULL terminated string pointer.
  *
  * \ingroup misc
@@ -185,6 +193,40 @@ typedef const char* trans_chars;
  * Within functions this can also be used for string pointers that must be freed.
  */
 typedef char* alloc_chars;
+
+/**
+ * \brief A permanent UTF16 wchar_t character type.
+ *
+ * \ingroup misc
+ * On input it needs to persist through the life of a given context.
+ * On output it is guaranteed to live as long as it's context or until it has
+ * been explicitly finalized. It must not be freed.
+ * Within functions this can also be used for string pointers that must not be freed.
+ */
+typedef const uint16_t* perm_uni;
+
+/**
+ * \brief A transient UTF16 wchar_t character type.
+ *
+ * \ingroup misc
+ * On input this string must only persist for the duration of the function call.
+ * On output this string is valid until another call with the given context is
+ * performed and must not be freed.
+ */
+typedef const uint16_t* trans_uni;
+
+/**
+ * \brief An allocated UTF16 wchar_t character type.
+ *
+ * \ingroup misc
+ * On input this can represent a place on the stack or heap that will be written
+ * to by the called function. Usually accompanied by a length parameter.
+ * It can also represent a parameter that will be freed in conjunction with an
+ * enclosing object after use.
+ * On output this data belongs to the caller and must be freed after use.
+ * Within functions this can also be used for data pointers that must be freed.
+ */
+typedef uint16_t* alloc_uni;
 
 /**
  * \brief A permanent data bytes pointer.
@@ -493,6 +535,12 @@ RUAPI trans_chars ruGetenv(const char *variable);
  * @return parse result overflow returns as false
  */
 RUAPI bool ruIsInt64(const char* numstr);
+
+/**
+ * Return the current process id
+ * @return the current process id
+ */
+RUAPI ru_pid ruProcessId(void);
 
 /**
  * \brief Returns the ISO-639-1 2 letter country code pertaining to the running system,

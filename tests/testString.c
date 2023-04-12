@@ -701,6 +701,40 @@ START_TEST ( util ) {
 
     ruFree(exStr);
     ruFree(out2);
+
+    test = "ruStrToUtf16";
+    alloc_uni wstr = ruStrToUtf16(NULL);
+    fail_unless(NULL == wstr, retText, test, NULL, wstr);
+
+    wstr = ruStrToUtf16(str);
+    fail_if(NULL == wstr, retText, test, NULL, wstr);
+
+    test = "ruStrFromUtf16";
+    out2 = ruStrFromUtf16(NULL);
+    fail_unless(NULL == out2, retText, test, NULL, out2);
+
+    out2 = ruStrFromUtf16(wstr);
+    ck_assert_str_eq(out2, str);
+    ruFree(out2);
+    ruFree(wstr);
+
+    test = "ruStrNToUtf16";
+    wstr = ruStrNToUtf16(NULL, 5);
+    fail_unless(NULL == wstr, retText, test, NULL, wstr);
+
+    wstr = ruStrNToUtf16(str, 5);
+    fail_if(NULL == wstr, retText, test, NULL, wstr);
+
+    test = "ruStrFromUtf16";
+    out2 = ruStrFromUtf16(wstr);
+    ck_assert_str_eq(out2, "!FÖO");
+    ruFree(out2);
+
+    out2 = ruStrFromNUtf16(wstr, 6);
+    ck_assert_str_eq(out2, "!FÖ");
+    ruFree(out2);
+    ruFree(wstr);
+
     out2 = ruStrDup("foo was\nhere");
     ruStripChars(out2, "\n ");
     ck_assert_str_eq(out2, "foowashere");
@@ -861,6 +895,12 @@ START_TEST (StrTrimBounds) {
     str = ruStrTrimBounds(instr, RU_SIZE_AUTO, &len);
     fail_unless(expstr == str, failText, expstr, str);
     fail_unless(0 == len, failText, 0, len);
+
+    instr = "Hí from testing123©\r\n";
+    expstr = instr;
+    str = ruStrTrimBounds(instr, RU_SIZE_AUTO, &len);
+    fail_unless(expstr == str, failText, expstr, str);
+    fail_unless(21 == len, failText, 21, len);
 
     instr = "";
     expstr = NULL;

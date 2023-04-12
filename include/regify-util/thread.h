@@ -26,6 +26,7 @@
 #ifdef RUMS
 #define RU_THREAD_LOCAL __declspec(thread)
 #else
+#include <pthread.h>
 #ifdef DO_IOS
 #define RU_THREAD_LOCAL thread_local
 #else
@@ -40,16 +41,18 @@
  */
 
 /**
- * Returns the id of the running thread
- * @return thread id
+ * Thread Id type
  */
-RUAPI ru_uint ruThreadGetId(void);
+typedef unsigned long ru_tid;
 
 /**
- * Sets or clear name of the running thread
- * @param name New name to set or NULL to clear/free the exisiting name.
+ * Native thread identifier
  */
-RUAPI void ruThreadSetName(trans_chars name);
+#ifdef _WIN32
+typedef HANDLE ruThreadId;
+#else
+typedef pthread_t ruThreadId;
+#endif
 
 /**
  * Thread Identifier
@@ -65,6 +68,18 @@ typedef void* ruCount;
  * Signature of a thread starting function.
  */
 typedef void* (*ruStartFunc) (void* context);
+
+/**
+ * Returns the id of the running thread
+ * @return thread id
+ */
+RUAPI ru_tid ruThreadGetId(void);
+
+/**
+ * Sets or clear name of the running thread
+ * @param name New name to set or NULL to clear/free the exisiting name.
+ */
+RUAPI void ruThreadSetName(trans_chars name);
 
 /**
  * Creates a new thread
@@ -89,6 +104,8 @@ RUAPI ruThread ruThreadCreateBg(ruStartFunc start, void* context);
  * @return true if joinable
  */
 RUAPI bool ruThreadFinished(ruThread tid, int32_t* code);
+
+RUAPI ruThreadId ruThreadNativeId(ruThread tid, int32_t* code);
 
 /**
  * Waits for given thread to terminate for tosecs seconds and kill it after that

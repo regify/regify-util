@@ -27,7 +27,7 @@ ruMakeTypeGetter(tsc, MagicTsc)
 
 RU_THREAD_LOCAL char* logPidEnd = NULL;
 
-#ifdef RUMS
+#ifdef _WIN32
 static DWORD WINAPI threadRunner(LPVOID context) {
     Thr *tc = (Thr *) context;
     DWORD res = 0;
@@ -62,7 +62,7 @@ static int32_t threadKill(Thr* tc) {
     int32_t ret = RUE_PARAMETER_NOT_SET;
     if (tc) {
         ret = RUE_OK;
-#ifdef RUMS
+#ifdef _WIN32
         TerminateThread(tc->tid, 0);
 #else
 #ifndef __EMSCRIPTEN__
@@ -76,7 +76,7 @@ static int32_t threadKill(Thr* tc) {
 
 static int threadJoin(Thr* tc, void** exitVal) {
     if (!tc) return RUE_PARAMETER_NOT_SET;
-#ifdef RUMS
+#ifdef _WIN32
     DWORD code = WaitForSingleObject(tc->tid, INFINITE);
     if (code && !tc->finished) {
         ruSetError("thread join failed ec: %d", GetLastError());
@@ -111,7 +111,7 @@ static bool threadWait(Thr* tc, long tosecs, void** exitVal) {
     return false;
 }
 
-RUAPI ru_uint ruThreadGetId(void) {
+RUAPI ru_tid ruThreadGetId(void) {
 #ifdef __linux__
     return syscall(SYS_gettid);
 #else
@@ -143,7 +143,7 @@ RUAPI ruThread ruThreadCreate(ruStartFunc start, void* context) {
     tc->type = MagicThr;
     tc->start = start;
     tc->user = context;
-#ifdef RUMS
+#ifdef _WIN32
     tc->tid = CreateThread(NULL, 0,
                            threadRunner, tc,
                            0, NULL);
@@ -168,7 +168,7 @@ RUAPI ruThread ruThreadCreateBg(ruStartFunc startFunc, void* user) {
     Thr* tc = ruThreadCreate(startFunc, user);
     if(!tc) return tc;
     if (tc->tid) {
-#ifdef RUMS
+#ifdef _WIN32
         if (!SetThreadPriority(tc->tid, THREAD_PRIORITY_BELOW_NORMAL)) {
             ruSetError("Failed setting thread priority. %d", GetLastError());
         }
@@ -210,6 +210,12 @@ RUAPI bool ruThreadFinished(ruThread tid, int32_t* code) {
     return true;
 }
 
+RUAPI ruThreadId ruThreadNativeId(ruThread tid, int32_t* code) {
+    Thr* tc = ThrGet(tid, code);
+    if (!tc) return 0;
+    return tc->tid;
+}
+
 RUAPI int32_t ruThreadKill(ruThread tid) {
     int32_t ret;
     Thr* tc = ThrGet(tid, &ret);
@@ -239,9 +245,9 @@ RUAPI int ruThreadJoin(ruThread tid, void** exitVal) {
 Mux* ruMuxInit(void) {
     Mux *mx = ruMalloc0(1, Mux);
     mx->type = MagicMux;
-#ifdef RUMS
+#ifdef _WIN32
     mx->mux = CreateMutex( NULL, FALSE, NULL);
-    if (mx->mux == NULL) {
+    if (!mx->mux) {
         ruSetError("mutex init failed: %d\n", GetLastError());
 		ruFree(mx);
 		return NULL;
@@ -267,7 +273,7 @@ RUAPI ruMutex ruMutexFree(ruMutex m) {
     int32_t ret;
     Mux *mux = MuxGet(m, &ret);
     if (!mux) return NULL;
-#ifdef RUMS
+#ifdef _WIN32
     CloseHandle(mux->mux);
 #else
     pthread_mutex_destroy(&mux->mux);
@@ -285,7 +291,7 @@ RUAPI bool ruMutexTryLock(ruMutex m) {
         ruCritLogf("failed getting mutex %d", ret);
         ruAbort();
     }
-#ifdef RUMS
+#ifdef _WIN32
     DWORD res = WaitForSingleObject(mux->mux, 0);
     if (res != WAIT_OBJECT_0 && res != WAIT_TIMEOUT) {
         ruCritLogf("failed locking mutex ec:%d", GetLastError());
@@ -298,7 +304,7 @@ RUAPI bool ruMutexTryLock(ruMutex m) {
 }
 
 void ruMuxLock(Mux *mux) {
-#ifdef RUMS
+#ifdef _WIN32
     if (WAIT_OBJECT_0 != WaitForSingleObject(mux->mux, INFINITE)) {
         ruCritLogf("failed locking mutex ec:%d", GetLastError());
         ruAbort();
@@ -320,7 +326,7 @@ RUAPI void ruMutexLock(ruMutex m) {
 }
 
 void ruMuxUnlock(Mux *mux) {
-#ifdef RUMS
+#ifdef _WIN32
     ReleaseMutex(mux->mux);
 #else
     pthread_mutex_unlock(&mux->mux);
