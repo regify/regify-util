@@ -25,16 +25,16 @@
  *
  * Example:
  * ~~~~~{.c}
- * ruList recipients = ruListNew(NULL);
- * // We are going to ignore some return codes for brevity.
- * int32_t ret = ruListAppend(recipients, "bob");
- * ret = ruListAppend(recipients, "alice");
- * ruIterator li = ruListIter(recipients);
- * for(char* recip = ruIterCurrent(li, char*);
- *         li; recip = ruIterNext(li, char*)) {
- *     printf("Recipient: %s", recip);
- * }
- * ruListFree(recipients);
+   ruList recipients = ruListNew(NULL);
+   // We are going to ignore some return codes for brevity.
+   int32_t ret = ruListAppend(recipients, "bob");
+   ret = ruListAppend(recipients, "alice");
+   ruIterator li = ruListIter(recipients);
+   for(char* recip = ruIterNext(li, char*);
+           li; recip = ruIterNext(li, char*)) {
+       printf("Recipient: %s", recip);
+   }
+   ruListFree(recipients);
  * ~~~~~
  *
  * @{
@@ -76,13 +76,16 @@ RUAPI ruList ruListNew(ruFreeFunc destructor);
 /**
  * Frees the given list object.
  * @param rl list to free.
+ * @return NULL
  */
 RUAPI ruList ruListFree(ruList rl);
 
 /**
  * Clears the given list.
  * @param rl list to clear
- * @return \ref RUE_OK on success or regify error code.
+ * @return \ref RUE_OK on success
+ *         \ref RUE_USER_ABORT when a threaded list has quit
+ *         else a regify error code.
  */
 RUAPI int32_t ruListClear(ruList rl);
 
@@ -90,61 +93,103 @@ RUAPI int32_t ruListClear(ruList rl);
  * Appends the given object to the list.
  * @param rl List to append object to.
  * @param data Object to append.
- * @return \ref RUE_OK on success or regify error code.
+ * @return \ref RUE_OK on success
+ *         \ref RUE_USER_ABORT when a threaded list has quit
+ *         else a regify error code.
  */
-RUAPI int32_t ruListAppendPtr(ruList rl, const void *data);
+RUAPI int32_t ruListAppendPtr(ruList rl, perm_ptr data);
 
 /**
  * Calls \ref ruListAppendPtr but handles the void* cast.
  * @param rl List to append object to.
  * @param data Object to append.
- * @return \ref RUE_OK on success or regify error code.
+ * @return \ref RUE_OK on success
+ *         \ref RUE_USER_ABORT when a threaded list has quit
+ *         else a regify error code.
  */
-#define ruListAppend(rl, data) ruListAppendPtr(rl, (void*)data)
+#define ruListAppend(rl, data) ruListAppendPtr(rl, (perm_ptr)(data))
 
 /**
  * Stack usage synonym for \ref ruListAppend.
  * @param rl List to append object to.
  * @param data Object to append.
- * @return \ref RUE_OK on success or regify error code.
+ * @return \ref RUE_OK on success
+ *         \ref RUE_USER_ABORT when a threaded list has quit
+ *         else a regify error code.
  */
-#define ruListPush(rl, data) ruListAppendPtr(rl, (void*)data)
+#define ruListPush(rl, data) ruListAppendPtr(rl, (perm_ptr)(data))
+
+/**
+ * Inserts given object at indexed position in list in given list element.
+ * @param rl List in which to insert object.
+ * @param index Index at which to insert the object. 0 for first element.
+ *              If index is > list size the item will be appended.
+ * @param data Object to insert.
+ * @return \ref RUE_OK on success
+ *         \ref RUE_USER_ABORT when a threaded list has quit
+ *         else a regify error code.
+ */
+RUAPI int32_t ruListInsertAt(ruList rl, int32_t index, perm_ptr data);
 
 /**
  * Inserts given object after given list element.
  * @param rl List in which to insert object.
  * @param rle Element after which to insert object. NULL for first element.
  * @param data Object to insert.
- * @return \ref RUE_OK on success or regify error code.
+ * @return \ref RUE_OK on success
+ *         \ref RUE_USER_ABORT when a threaded list has quit
+ *         else a regify error code.
  */
-RUAPI int32_t ruListInsertAfter(ruList rl, ruListElmt rle, const void *data);
+RUAPI int32_t ruListInsertAfter(ruList rl, ruListElmt rle, perm_ptr data);
 
 /**
- * Remove and return the list element after the given element from list.
+ * Remove and return the current list element from list.
  * @param rl List to remove object from.
- * @param rle Element after which to remove object. NULL for first element.
- * @param code (Optional) Stores \ref RUE_OK on success or regify error code.
+ * @param rle Pointer to element to remove, will be set to the previous element
+ *            to allow for deletion during iteration.
+ * @param code (Optional) Stores regify error code of this operation.
+ *         \ref RUE_OK on success
+ *         \ref RUE_USER_ABORT when a threaded list has quit
+ *         else a regify error code.
  * @return Object which was removed from list.
  */
-RUAPI void* ruListRemoveAfter(ruList rl, ruListElmt rle, int32_t *code);
+RUAPI ptr ruListRemove(ruList rl, ruListElmt* rle, int32_t* code);
 
 /**
  * \brief Return first element of the list.
  *
- * Stack usage synonym for \ref ruListRemoveAfter at head.
  * @param rl List to pop object from.
- * @param code (Optional) Stores \ref RUE_OK on success or regify error code.
+ * @param code (Optional) Stores regify error code of this operation.
+ *         \ref RUE_OK on success
+ *         \ref RUE_FILE_NOT_FOUND on empty list
+ *         \ref RUE_USER_ABORT when a threaded list has quit
+ *         else a regify error code.
  * @return Object which was popped off of the list.
  */
-#define ruListPop(rl, code) ruListRemoveAfter(rl, NULL, code)
+RUAPI ptr ruListPop(ruList rl, int32_t *code);
+
+/**
+ * \brief Tries to return first element of the list.
+ *
+ * @param rl List to pop object from.
+ * @param timeoutMs The number of milliseconds to wait for an entry before
+ *                  returning. Setting this to 0 will return after the first check.
+ * @param code (Optional) Stores regify error code of this operation.
+ *         \ref RUE_OK on success
+ *         \ref RUE_FILE_NOT_FOUND call timed out
+ *         \ref RUE_USER_ABORT when a threaded list has quit
+ *         else a regify error code.
+ * @return Object which was popped off of the list.
+ */
+RUAPI ptr ruListTryPop(ruList rl, msec_t timeoutMs, int32_t *code);
 
 /**
  * Returns the number of elements in the list.
  * @param rl List to return size of.
  * @param code (Optional) Stores \ref RUE_OK on success or regify error code.
- * @return Number of elements in list.
+ * @return Number of elements in list or 0 on error.
  */
-RUAPI int32_t ruListSize(ruList rl, int32_t* code);
+RUAPI uint32_t ruListSize(ruList rl, int32_t* code);
 
 /**
  * Returns the first element in the given list.
@@ -201,7 +246,7 @@ RUAPI ruListElmt ruListNextElmt(ruListElmt re, int32_t* code);
  * @return NULL if error or given element was the last or the data of the next
  *         element.
  */
-RUAPI void* ruListNextData(ruListElmt *re, int32_t* code);
+RUAPI ptr ruListNextData(ruListElmt *re, int32_t* code);
 
 /**
  * Returns the data payload of the next list element casted to type.
@@ -217,34 +262,55 @@ RUAPI void* ruListNextData(ruListElmt *re, int32_t* code);
  * @param code (Optional) Stores \ref RUE_OK on success or regify error code.
  * @return Data of the given element including NULL or NULL if there was an error.
  */
-RUAPI void* ruListElmtData(ruListElmt re, int32_t* code);
-
-/**
- * Returns the data payload of the given list element casted to type.
- * @param re List element to return data from.
- * @param type Data type to cast the returned data payload to.
- * @return Data of the given element including NULL or NULL if there was an error.
- */
-#define ruIterCurrent(re, type) (type)ruListElmtData(re, NULL)
+RUAPI ptr ruListElmtData(ruListElmt re, int32_t* code);
 
 /**
  * Returns the data payload of the element at given 0 based index.
  * @param rl List from which to return the element data payload.
  * @param index Index of the element in question. 0 is the first element.
- * @param code (Optional) Stores \ref RUE_OK on success or regify error code.
+ *              -1 is the last element.
+ * @param code (Optional) Stores regify error code of this operation.
+ *         \ref RUE_OK on success
+ *         \ref RUE_USER_ABORT when a threaded list has quit
+ *         else a regify error code.
  * @return Data of the given element including NULL or NULL if there was an error.
  */
-RUAPI void* ruListIdxElmtData(ruList rl, int32_t index, int32_t* code);
+RUAPI ptr ruListIdxElmtData(ruList rl, int32_t index, int32_t* code);
 
 /**
  * Returns the data payload of the element at given 0 based index casted to type.
  * @param rl List from which to return the element data payload.
  * @param index Index of the element in question. 0 is the first element.
  * @param type Data type to cast the returned data payload to.
- * @param code (Optional) Stores \ref RUE_OK on success or regify error code.
+ * @param code (Optional) Stores regify error code of this operation.
+ *         \ref RUE_OK on success
+ *         \ref RUE_USER_ABORT when a threaded list has quit
+ *         else a regify error code.
  * @return Data of the given element including NULL or NULL if there was an error.
  */
 #define ruListIdxData(rl, index, type, code) (type)ruListIdxElmtData(rl, index, code)
+
+/**
+ * \brief Joins a list of char* item with given delim.
+ *
+ * This function should only be called with char* lists.
+ *
+ * @param rl List to join
+ * @param delim Delimiter to join with or NULL for blank
+ * @param code (Optional) Stores \ref RUE_OK on success or regify error code.
+ * @return Joined string to be freed by the caller
+ */
+RUAPI alloc_chars ruListJoin(ruList rl, trans_chars delim, int32_t* code);
+
+/**
+ * \brief Sorts the given list using supplied comparator function
+ * @param rl List to sort
+ * @param sort comparator function to sort with
+ * @return \ref RUE_OK on success
+ *         \ref RUE_USER_ABORT when a threaded list has quit
+ *         else a regify error code.
+ */
+RUAPI int32_t ruListSort(ruList rl, ruCompFunc sort);
 
 /**
  * @}

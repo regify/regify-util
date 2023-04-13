@@ -46,13 +46,13 @@ START_TEST ( mem ) {
     ck_assert_str_eq((char*)res, exp);
     ruFree(res);
 
-    test = "ruStrdup";
-    res = ruStrdup(exp);
+    test = "ruStrDup";
+    res = ruStrDup(exp);
     ck_assert_str_eq((char*)res, exp);
     ruFree(res);
 
     exp = NULL;
-    res = ruStrdup(exp);
+    res = ruStrDup(exp);
     fail_unless(res == exp, retText, test, exp, res);
 
     test = "ruMalloc0";
@@ -147,6 +147,9 @@ START_TEST ( misc ) {
     fail_unless(want == is, retText, test, want, is);
 
     want = false;
+    is = ruIsInt64(NULL);
+    fail_unless(want == is, retText, test, want, is);
+
     is = ruIsInt64(" *123");
     fail_unless(want == is, retText, test, want, is);
 
@@ -164,6 +167,101 @@ START_TEST ( misc ) {
     ret = ruSemiRandomNumber(11, -6);
     fail_if(ret < -6, retText, test, -6, ret);
     fail_if(ret > 5, retText, test, 5, ret);
+
+    test = "ruTimeFormat";
+    char timeStr[20];
+    char timeStr2[20];
+    rusize stlen = sizeof(timeStr);
+    memset(timeStr, 0, stlen);
+    const char* format = "%Y-%m-%d %H:%M:%S";
+    ruTimeFormat(NULL, stlen, timeStr, 0);
+    ck_assert_str_eq(timeStr, "");
+
+    ruTimeFormat(format, 0, timeStr, 0);
+    ck_assert_str_eq(timeStr, "");
+
+    ruTimeFormat(format, stlen, NULL, 0);
+    ck_assert_str_eq(timeStr, "");
+
+    ruTimeFormat(format, stlen, timeStr, 0);
+    fail_unless(timeStr[2] == '2', retText, test, timeStr[2], '2');
+    rusize alen = strlen(timeStr)+1;
+    fail_unless(alen == stlen, retText, test, alen, stlen);
+
+    sec_t estamp;
+    sec_t stamp;
+    sec_t localStamp;
+    sec_t mystamp = 1234567890;
+    perm_chars utcStr = "2009-02-13 23:31:30";
+
+    // format utc for predictability
+    ruUtcFormat(format, stlen, timeStr, mystamp);
+    ck_assert_str_eq(timeStr, utcStr);
+
+    // and back to stamp
+    stamp = ruUtcParse(format, timeStr);
+    fail_unless(mystamp == stamp, retText, test, mystamp, stamp);
+
+    // get local TZ string
+    ruTimeFormat(format, stlen, timeStr, mystamp);
+    // at least in my timezone
+    //ck_assert_str_eq(timeStr, "2009-02-14 00:31:30");
+
+    // parse local string
+    stamp = ruTimeParse(format, timeStr);
+    fail_unless(mystamp == stamp, retText, test, mystamp, stamp);
+
+    // get local TZ stamp
+    localStamp = ruTimeUtcToLocal(mystamp);
+    // should match local TZ string
+    ruUtcFormat(format, stlen, timeStr2, localStamp);
+    ck_assert_str_eq(timeStr, timeStr2);
+
+    // go back to utc
+    stamp = ruTimeLocalToUtc(localStamp);
+    fail_unless(mystamp == stamp, retText, test, mystamp, stamp);
+
+    // misc testing
+    estamp = -1;
+    stamp = ruTimeParse(NULL, NULL);
+    fail_unless(estamp == stamp, retText, test, estamp, stamp);
+
+    stamp = ruTimeParse(format, NULL);
+    fail_unless(estamp == stamp, retText, test, estamp, stamp);
+
+    stamp = ruTimeParse(NULL, timeStr);
+    fail_unless(estamp == stamp, retText, test, estamp, stamp);
+
+    test = "ruVersionComp";
+    exp = 0;
+    ret = ruVersionComp(NULL, NULL);
+    fail_unless(exp == ret, retText, test, exp, ret);
+
+    ret = ruVersionComp("01", "1");
+    fail_unless(exp == ret, retText, test, exp, ret);
+
+    ret = ruVersionComp("10.11.23-12324", "10.011.23-012324");
+    fail_unless(exp == ret, retText, test, exp, ret);
+
+    exp = -1;
+    ret = ruVersionComp(NULL, "0");
+    fail_unless(exp == ret, retText, test, exp, ret);
+
+    ret = ruVersionComp("09", "10");
+    fail_unless(exp == ret, retText, test, exp, ret);
+
+    ret = ruVersionComp("10.11.23-12324", "10.011.23-112324");
+    fail_unless(exp == ret, retText, test, exp, ret);
+
+    exp = 1;
+    ret = ruVersionComp("1", NULL);
+    fail_unless(exp == ret, retText, test, exp, ret);
+
+    ret = ruVersionComp("109", "10");
+    fail_unless(exp == ret, retText, test, exp, ret);
+
+    ret = ruVersionComp("10.11.24-12324", "10.011.23-112324");
+    fail_unless(exp == ret, retText, test, exp, ret);
 
     test = "ruGetLanguage";
     char *lang = ruGetLanguage();
@@ -187,6 +285,59 @@ START_TEST ( mux ) {
 }
 END_TEST
 
+START_TEST(counter) {
+    const char *retText = "failed wanted ret '%d' but got '%d'";
+    ruCount rc = NULL;
+    int32_t ret, exp = RUE_PARAMETER_NOT_SET;
+    int64_t val, want = 0;
+
+    val = ruCountSetValue(rc, 23, &ret);
+    fail_unless(exp == ret, retText, exp, ret);
+    fail_unless(want == val, retText, want, val);
+
+    val = ruCounterIncValue(rc, 23, &ret);
+    fail_unless(exp == ret, retText, exp, ret);
+    fail_unless(want == val, retText, want, val);
+
+    perm_chars foo = "foo was here";
+    exp = RUE_INVALID_PARAMETER;
+    val = ruCounterIncValue((ruCount)foo, 23, &ret);
+    fail_unless(exp == ret, retText, exp, ret);
+    fail_unless(want == val, retText, want, val);
+
+    rc = ruCountFree(rc);
+    fail_unless(NULL == rc, retText, NULL, rc);
+
+    want = 42;
+    exp = RUE_OK;
+    rc = ruCounterNew(want);
+    fail_if(NULL == rc, retText, NULL, rc);
+
+    val = ruCountSetValue(rc, 23, &ret);
+    fail_unless(exp == ret, retText, exp, ret);
+    fail_unless(want == val, retText, want, val);
+
+    want = 23;
+    val = ruCountSet(rc, 23);
+    fail_unless(want == val, retText, want, val);
+
+    want = 25;
+    val = ruCounterIncValue(rc, 2, &ret);
+    fail_unless(exp == ret, retText, exp, ret);
+    fail_unless(want == val, retText, want, val);
+
+    want = 23;
+    val = ruCounterInc(rc, -2);
+    fail_unless(want == val, retText, want, val);
+
+    val = ruCounterRead(rc);
+    fail_unless(want == val, retText, want, val);
+
+    rc = ruCountFree(rc);
+    fail_unless(NULL == rc, retText, NULL, rc);
+}
+END_TEST
+
 #ifdef _WIN32
 START_TEST ( reg ) {
     const char *test = "ruGetRegistryEntry";
@@ -194,6 +345,8 @@ START_TEST ( reg ) {
     char *want, *out;
     int ret, exp;
 
+    // Note these legacy tests will only pass on a system that has cygwin
+    // installed with root in c:/, i.e. my system --mario
     exp = RUE_PARAMETER_NOT_SET;
     ret = ruGetRegistryEntry(0, NULL, NULL, NULL);
     fail_unless(exp == ret, retText, test, exp, ret);
@@ -215,7 +368,7 @@ START_TEST ( reg ) {
     fail_unless(exp == ret, retText, test, exp, ret);
 
     exp = RUE_OK;
-    want = "C:\\";
+    want = "c:\\";
     ret = ruGetRegistryEntry(HKEY_LOCAL_MACHINE, "SOFTWARE\\Cygwin\\setup",
                              "rootdir", &out);
     fail_unless(exp == ret, retText, test, exp, ret);
@@ -268,11 +421,12 @@ END_TEST
 #endif
 
 
-TCase* miscTests ( void ) {
-    TCase *tcase = tcase_create ( "misc" );
-    tcase_add_test ( tcase, mem );
-    tcase_add_test ( tcase, misc );
-    tcase_add_test ( tcase, mux );
+TCase* miscTests(void) {
+    TCase *tcase = tcase_create("misc");
+    tcase_add_test(tcase, mem);
+    tcase_add_test(tcase, misc);
+    tcase_add_test(tcase, mux);
+    tcase_add_test(tcase, counter);
 #ifdef _WIN32
     tcase_add_test ( tcase, reg );
     tcase_add_test ( tcase, vol );

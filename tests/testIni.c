@@ -130,6 +130,12 @@ START_TEST ( run ) {
     ret = ruIniSet(cf, sec, key, val);
     fail_unless(exp == ret, retText, test, exp, ret);
 
+    ret = ruIniSet(cf, sec, key, NULL);
+    fail_unless(exp == ret, retText, test, exp, ret);
+
+    ret = ruIniSet(cf, sec, key, val);
+    fail_unless(exp == ret, retText, test, exp, ret);
+
     test = "ruIniWrite";
     ret = ruIniWrite(cf, inifile);
     fail_unless(exp == ret, retText, test, exp, ret);
@@ -142,7 +148,7 @@ START_TEST ( run ) {
     fail_unless(exp == ret, retText, test, exp, ret);
 
     ruList lst = NULL;
-    int32_t sz, esz = 1;
+    rusize sz, esz = 1;
     test = "ruIniKeys";
     ret = ruIniKeys(cf, NULL, &lst);
     fail_unless(exp == ret, retText, test, exp, ret);

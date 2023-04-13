@@ -201,7 +201,7 @@ START_TEST ( groups ) {
     fail_unless(exp == ret, retText, test, exp, ret);
     fail_unless(expSz == sz, retText, test, expSz, sz);
 
-    char *entry = ruListIdxData(matches, 0, char*, &ret);
+    char* entry = ruListIdxData(matches, 0, char*, &ret);
     fail_unless(exp == ret, retText, test, exp, ret);
     ck_assert_str_eq(entry, orig);
 

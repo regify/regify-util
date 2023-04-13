@@ -46,18 +46,20 @@ int32_t mainTest (const char *tmpDir, const char *treepath);
 
 extern const char* testBase;
 extern char pathBuffer[];
-char * makePath(const char *filepath);
+perm_chars makePath(const char *filepath);
 char* insureTestFolder(const char* folderName);
 
-TCase* miscTests ( void );
-TCase* listTests ( void );
-TCase* regexTests ( void );
-TCase* stringTests ( void );
-TCase* mapTests ( void );
-TCase* ioTests ( void );
-TCase* iniTests ( void );
-TCase* storeTests ( void );
-TCase* cleanerTests ( void );
+TCase* miscTests(void);
+TCase* listTests(void);
+TCase* regexTests(void);
+TCase* stringTests(void);
+TCase* mapTests(void);
+TCase* setTests(void);
+TCase* ioTests(void);
+TCase* iniTests(void);
+TCase* storeTests(void);
+TCase* cleanerTests(void);
+TCase* threadTests(void);
 
 #ifdef __cplusplus
 }   /* extern "C" */

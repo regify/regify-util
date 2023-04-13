@@ -28,15 +28,15 @@
 /* log context */
 static ruLogFunc logger_ = NULL;
 static u_int32_t logLevel_ = 0;
-static void* userLogData_ = NULL;
+static perm_ptr userLogData_ = NULL;
 
-void ruSetLogger(ruLogFunc logger, u_int32_t logLevel, void* userData) {
+void ruSetLogger(ruLogFunc logger, u_int32_t logLevel, perm_ptr userData) {
     logger_ = logger;
     logLevel_ = logLevel;
     userLogData_ = userData;
 }
 
-void ruStdErrorLogger(void* udata, const char *msg) {
+void ruStdErrorLogger(perm_ptr udata, trans_chars msg) {
     fputs(msg, stderr);
 }
 
@@ -50,10 +50,12 @@ bool ruDoesLog(u_int32_t log_level) {
     return logLevel_ >= log_level;
 }
 
-static char* makeLogMsg(u_int32_t log_level, const char *filePath, const char *func,
-                   int32_t line, const char *format, va_list args) {
+static char* makeLogMsg(u_int32_t log_level, trans_chars filePath, trans_chars func,
+                   int32_t line, trans_chars format, va_list args) {
     char *lv;
-    if (log_level >= RU_LOG_VERB)
+    if (log_level >= RU_LOG_DBUG)
+        lv = "DBUG";
+    else if (log_level >= RU_LOG_VERB)
         lv = "VERB";
     else if (log_level >= RU_LOG_INFO)
         lv = "INFO";
@@ -65,7 +67,7 @@ static char* makeLogMsg(u_int32_t log_level, const char *filePath, const char *f
         lv = "????";
 
 #ifdef __EMSCRIPTEN__
-    #define prefix "%s:%d %s() %s: "
+    #define prefix "%s: %s(%s:%d): "
 #else
     char timeStr[20]; /* yyyy/mm/dd HH:MM:SS */
     struct tm tm;
@@ -82,23 +84,23 @@ static char* makeLogMsg(u_int32_t log_level, const char *filePath, const char *f
     strftime(timeStr, 20, "%Y-%m-%d %H:%M:%S", &tm);
 #ifdef RUMS
     DWORD pid = GetCurrentProcessId();
-    #define prefix "%s.%06d [%ld%s (%s:%d %s()) %s: "
+    #define prefix "%s.%06d [%ld%s %s: %s(%s:%d): "
 #else
     pid_t pid = getpid();
     #ifdef _WIN32
         #ifdef _WIN64
-            #define prefix "%s.%06d [%lld%s (%s:%d %s()) %s: "
+            #define prefix "%s.%06d [%lld%s %s: %s(%s:%d): "
         #else
-            #define prefix "%s.%06d [%d%s (%s:%d %s()) %s: "
+            #define prefix "%s.%06d [%d%s %s: %s(%s:%d): "
         #endif
     #else
-        #define prefix "%s.%06d [%d%s (%s:%d %s()) %s: "
+        #define prefix "%s.%06d [%d%s %s: %s(%s:%d): "
     #endif
 #endif
 #endif
-    char *file = ruBaseName((char*)filePath);
+    char *file = (char*)ruBaseName((char*)filePath);
 #ifndef __EMSCRIPTEN__
-    char* pidEnd = "]";
+    char* pidEnd = "]:";
     if (logPidEnd) {
         pidEnd = logPidEnd;
     }
@@ -106,10 +108,10 @@ static char* makeLogMsg(u_int32_t log_level, const char *filePath, const char *f
     // estimate
     char *ret = NULL;
 #ifdef __EMSCRIPTEN__
-    int32_t prefixSize = snprintf(ret, 0, prefix, file, line, func, lv);
+    int32_t prefixSize = snprintf(ret, 0, prefix, lv, func, file, line);
 #else
     int32_t prefixSize = snprintf(ret, 0, prefix,
-                                  timeStr, micros, pid, pidEnd, file, line, func, lv);
+                                  timeStr, micros, pid, pidEnd, lv, func, file, line);
 #endif
     va_list args2;
     va_copy(args2, args);
@@ -120,10 +122,10 @@ static char* makeLogMsg(u_int32_t log_level, const char *filePath, const char *f
     ret = ruMalloc0(prefixSize+msgsize+2, char);
     char *ptr = ret;
 #ifdef __EMSCRIPTEN__
-    snprintf(ret, prefixSize+1, prefix, file, line, func, lv);
+    snprintf(ret, prefixSize+1, prefix, lv, func, file, line);
 #else
     snprintf(ret, prefixSize+1, prefix,
-             timeStr, micros, pid, pidEnd, file, line, func, lv);
+             timeStr, micros, pid, pidEnd, lv, func, file, line);
 #endif
     ptr += prefixSize;
 #undef prefix
@@ -134,22 +136,30 @@ static char* makeLogMsg(u_int32_t log_level, const char *filePath, const char *f
     return ret;
 }
 
-char* ruMakeLogMsg(u_int32_t log_level, const char *filePath, const char *func,
-                   int32_t line, const char *format, ...) {
+char* ruMakeLogMsg(u_int32_t log_level, trans_chars filePath, trans_chars func,
+                   int32_t line, trans_chars format, ...) {
+    static Mux* mux = NULL;
+    if (!mux) mux = ruMuxInit();
+    ruMuxLock(mux);
     va_list args;
     va_start(args, format);
     char *out = makeLogMsg(log_level, filePath, func, line, format, args);
     va_end(args);
+    ruMuxUnlock(mux);
     return out;
 }
 
-void ruDoLog(u_int32_t log_level, const char *filePath, const char *func,
-             int32_t line, const char *format, ...) {
+void ruDoLog(u_int32_t log_level, trans_chars filePath, trans_chars func,
+             int32_t line, trans_chars format, ...) {
     if (!ruDoesLog(log_level)) return;
+    static Mux* mux = NULL;
+    if (!mux) mux = ruMuxInit();
+    ruMuxLock(mux);
     va_list args;
     va_start(args, format);
     char * _log_str_ = makeLogMsg(log_level, filePath, func, line, format, args);
     va_end(args);
+    ruMuxUnlock(mux);
     logger_(userLogData_, _log_str_);
     free(_log_str_);
 }

@@ -44,14 +44,21 @@ if(IOS)
 else()
 
     add_executable(runTests EXCLUDE_FROM_ALL
-            runTests.cpp testCleaner.c testIni.c testIo.c testList.c
-            testMap.c testMisc.c testRegex.c testStore.c testString.c
+            runTests.cpp testCleaner.c testIni.c testIo.c testList.c testMap.c
+            testMisc.c testRegex.c testSet.c testStore.c testString.c testThread.c
             )
     target_include_directories(runTests
             PRIVATE ${PROJECT_SOURCE_DIR}/include/ ${CHECK_INCLUDE_DIR})
     target_compile_definitions(runTests PRIVATE
             TEST_BASE=\"${CMAKE_CURRENT_SOURCE_DIR}/tree\"
             TMPDIR="${CMAKE_CURRENT_BINARY_DIR}")
+    if(MINGW)
+        # we want this to remove dependencies to:
+        #  /msys64/mingw64/bin/libgcc_s_seh-1.dll
+        #  /msys64/mingw64/bin/libwinpthread-1.dll
+        # ...
+        target_link_options(runTests PRIVATE -static)
+    endif()
     target_link_directories(runTests PRIVATE ${CHECK_LIBRARY_DIRS})
     target_link_libraries(runTests PRIVATE ${staticlib} ${CHECK_LIBRARIES})
 

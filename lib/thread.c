@@ -21,12 +21,25 @@
  */
 #include "lib.h"
 
-ruMakeTypeGetter(Mux, MuxMagic)
+ruMakeTypeGetter(Mux, MagicMux)
 ruMakeTypeGetter(Thr, MagicThr)
+ruMakeTypeGetter(tsc, MagicTsc)
 
 RU_THREAD_LOCAL char* logPidEnd = NULL;
 
-#ifndef _WIN32
+#ifdef _WIN32
+static DWORD WINAPI threadRunner(LPVOID context) {
+    Thr *tc = (Thr *) context;
+    DWORD res = 0;
+    if (tc->start) {
+        tc->exitRes = tc->start(tc->user);
+        res |= (intptr_t) tc->exitRes;
+        tc->finished = true;
+        CloseHandle(tc->tid);
+    }
+    return res;
+}
+#else
 static void* threadRunner(void* context) {
     Thr* tc = (Thr*) context;
     if (tc->start) {
@@ -38,77 +51,39 @@ static void* threadRunner(void* context) {
 }
 #endif
 
-RUAPI long int ruThreadGetId(void) {
-#ifdef __linux__
-    return syscall(SYS_gettid);
-#else
-    return 0;
-#endif
-}
-
-RUAPI void ruThreadSetName(const char* name) {
-    ruFree(logPidEnd);
-    if (name) {
-        logPidEnd = ruDupPrintf(".%ld]:[%s]", ruThreadGetId(), name);
-    }
-}
-
-RUAPI ruThread ruThreadCreate(ruStartFunc start, void* context) {
-    ruClearError();
-    Thr* tc = ruMalloc0(1, Thr);
-    tc->start = start;
-    tc->user = context;
-#ifndef _WIN32
-    int32_t ret = pthread_create(&tc->tid, NULL,
-                                 threadRunner, tc);
-    if (ret) {
-        ruSetError("thread creation failed ec: %d", ret);
-        ruFree(tc);
-        return NULL;
-    }
-#endif
-    return tc;
-}
-
-RUAPI ruThread ruThreadFree(ruThread tid) {
-    Thr* tc = ThrGet(tid, NULL);
+static Thr* threadFree(Thr* tc) {
     if (!tc) return NULL;
-    if (!tc->finished) {
-#ifndef _WIN32
-#ifndef __EMSCRIPTEN__
-        ruThreadKill(tc);
-#endif
-#endif
-    }
+    memset(tc, 0, sizeof(Thr));
     ruFree(tc);
     return NULL;
 }
 
-RUAPI bool ruThreadFinished(ruThread tid, int32_t* code) {
-    Thr* tc = ThrGet(tid, code);
-    if (tc) return tc->finished;
-    return true;
-}
-
-RUAPI int32_t ruThreadKill(ruThread tid) {
-    int32_t code;
-    Thr* tc = ThrGet(tid, &code);
+static int32_t threadKill(Thr* tc) {
+    int32_t ret = RUE_PARAMETER_NOT_SET;
     if (tc) {
-#ifndef _WIN32
+        ret = RUE_OK;
+#ifdef _WIN32
+        TerminateThread(tc->tid, 0);
+#else
 #ifndef __EMSCRIPTEN__
-        pthread_kill(tc->tid, SIGKILL);
+        pthread_cancel(tc->tid);
 #endif
 #endif
+        tc->finished = true;
     }
-    return code;
+    return ret;
 }
 
-RUAPI int ruThreadJoin(ruThread tid, void** exitVal ) {
-    int32_t code;
-    Thr* tc = ThrGet(tid, &code);
-    if (!tc) return code;
-#ifndef _WIN32
-    code = pthread_join(tc->tid, &tc->exitRes);
+static int threadJoin(Thr* tc, void** exitVal) {
+    if (!tc) return RUE_PARAMETER_NOT_SET;
+#ifdef _WIN32
+    DWORD code = WaitForSingleObject(tc->tid, INFINITE);
+    if (code && !tc->finished) {
+        ruSetError("thread join failed ec: %d", GetLastError());
+        return RUE_GENERAL;
+    }
+#else
+    int32_t code = pthread_join(tc->tid, &tc->exitRes);
     if (code) {
         ruSetError("thread join failed ec: %d", code);
         return RUE_GENERAL;
@@ -120,13 +95,159 @@ RUAPI int ruThreadJoin(ruThread tid, void** exitVal ) {
     return RUE_OK;
 }
 
-RUAPI ruMutex ruMutexInit(void) {
+static bool threadWait(Thr* tc, long tosecs, void** exitVal) {
+    long end = ruTimeSec()+tosecs;
+    while (end > ruTimeSec()) {
+        if (tc->finished) break;
+        ruSleepUs(10);
+    }
+
+    if (tc->finished) {
+        threadJoin(tc, exitVal);
+        return true;
+    }
+    threadKill(tc);
+    if (exitVal) *exitVal = NULL;
+    return false;
+}
+
+RUAPI ru_tid ruThreadGetId(void) {
+#ifdef __linux__
+    return syscall(SYS_gettid);
+#else
+#ifdef _WIN32
+    return GetCurrentThreadId();
+#else
+    // darwin
+    uint64_t tid;
+    pthread_threadid_np(NULL, &tid);
+    return tid;
+#endif
+#endif
+}
+
+RUAPI void ruThreadSetName(trans_chars name) {
+    ruFree(logPidEnd);
+    if (name) {
+        logPidEnd = ruDupPrintf(".%ld]:[%s]:", ruThreadGetId(), name);
+    }
+}
+
+RUAPI ruThread ruThreadCreate(ruStartFunc start, void* context) {
     ruClearError();
+    if (!start) {
+        ruSetError("%s", "ruStartFunc is required but NULL");
+        return NULL;
+    }
+    Thr* tc = ruMalloc0(1, Thr);
+    tc->type = MagicThr;
+    tc->start = start;
+    tc->user = context;
+#ifdef _WIN32
+    tc->tid = CreateThread(NULL, 0,
+                           threadRunner, tc,
+                           0, NULL);
+    if (!tc->tid) {
+        ruSetError("thread creation failed ec: %d", GetLastError());
+        ruFree(tc);
+        return NULL;
+    }
+#else
+    int32_t ret = pthread_create(&tc->tid, NULL,
+                                 threadRunner, tc);
+    if (ret) {
+        ruSetError("thread creation failed ec: %d", ret);
+        ruFree(tc);
+        return NULL;
+    }
+#endif
+    return tc;
+}
+
+RUAPI ruThread ruThreadCreateBg(ruStartFunc startFunc, void* user) {
+    Thr* tc = ruThreadCreate(startFunc, user);
+    if(!tc) return tc;
+    if (tc->tid) {
+#ifdef _WIN32
+        if (!SetThreadPriority(tc->tid, THREAD_PRIORITY_BELOW_NORMAL)) {
+            ruSetError("Failed setting thread priority. %d", GetLastError());
+        }
+#endif
+#ifdef __linux__
+        struct sched_param param;
+        param.sched_priority = 0;
+        int res = pthread_setschedparam(tc->tid, SCHED_BATCH, &param);
+        if ( res != 0) {
+            ruSetError("Failed setting thread priority. %d", res);
+        }
+#endif
+#ifdef DARWIN
+//        sched_param param;
+//        long int res;
+//        long int policy;
+//        res = pthread_getschedparam(ThreadID(tid), @policy, @param);
+//
+//         long int minPrio = sched_get_priority_min(policy);
+//         long int maxPrio = sched_get_priority_max(policy);
+//        ruVerbLogf( "Policy: %d Priority: %d", policy, param->sched_priority);
+//        ruVerbLogf( "Priorities Min: %d Max: %d", minPrio, maxPrio);
+//
+//        //SET the priority and/or policy
+//        param->sched_priority = minPrio + ((maxPrio-minPrio) / 4);
+//        ruVerbLogf( "Setting policy to %d and prio to %d", policy, param->sched_priority);
+//        res = pthread_setschedparam(ThreadID(tid), policy, @param);
+//        if ( res != 0) {
+//          ruWarnLogf( "Failed setting thread priority. %d", GetThreadParamErrMsg(res));
+//        }
+#endif
+    }
+    return tc;
+}
+
+RUAPI bool ruThreadFinished(ruThread tid, int32_t* code) {
+    Thr* tc = ThrGet(tid, code);
+    if (tc) return tc->finished;
+    return true;
+}
+
+RUAPI ruThreadId ruThreadNativeId(ruThread tid, int32_t* code) {
+    Thr* tc = ThrGet(tid, code);
+    if (!tc) return 0;
+    return tc->tid;
+}
+
+RUAPI int32_t ruThreadKill(ruThread tid) {
+    int32_t ret;
+    Thr* tc = ThrGet(tid, &ret);
+    if (!tc) return ret;
+    ret = threadKill(tc);
+    threadFree(tc);
+    return ret;
+}
+
+RUAPI bool ruThreadWait(ruThread tid, sec_t tosecs, void** exitVal) {
+    Thr* tc = ThrGet(tid, NULL);
+    if (!tc) return false;
+    bool res = threadWait(tc, tosecs, exitVal);
+    threadFree(tc);
+    return res;
+}
+
+RUAPI int ruThreadJoin(ruThread tid, void** exitVal) {
+    int32_t ret;
+    Thr* tc = ThrGet(tid, &ret);
+    if (!tc) return ret;
+    ret = threadJoin(tc, exitVal);
+    threadFree(tc);
+    return ret;
+}
+
+Mux* ruMuxInit(void) {
     Mux *mx = ruMalloc0(1, Mux);
-    mx->type = MuxMagic;
-#ifdef RUMS
+    mx->type = MagicMux;
+#ifdef _WIN32
     mx->mux = CreateMutex( NULL, FALSE, NULL);
-    if (mx->mux == NULL) {
+    if (!mx->mux) {
         ruSetError("mutex init failed: %d\n", GetLastError());
 		ruFree(mx);
 		return NULL;
@@ -139,7 +260,12 @@ RUAPI ruMutex ruMutexInit(void) {
         return NULL;
     }
 #endif
-    return (ruMutex)mx;
+    return mx;
+}
+
+RUAPI ruMutex ruMutexInit(void) {
+    ruClearError();
+    return (ruMutex)ruMuxInit();
 }
 
 RUAPI ruMutex ruMutexFree(ruMutex m) {
@@ -147,7 +273,7 @@ RUAPI ruMutex ruMutexFree(ruMutex m) {
     int32_t ret;
     Mux *mux = MuxGet(m, &ret);
     if (!mux) return NULL;
-#ifdef RUMS
+#ifdef _WIN32
     CloseHandle(mux->mux);
 #else
     pthread_mutex_destroy(&mux->mux);
@@ -155,6 +281,37 @@ RUAPI ruMutex ruMutexFree(ruMutex m) {
     memset(mux, 0, sizeof(Mux));
     ruFree(mux);
     return NULL;
+}
+
+RUAPI bool ruMutexTryLock(ruMutex m) {
+    ruClearError();
+    int32_t ret;
+    Mux *mux = MuxGet(m, &ret);
+    if (!mux) {
+        ruCritLogf("failed getting mutex %d", ret);
+        ruAbort();
+    }
+#ifdef _WIN32
+    DWORD res = WaitForSingleObject(mux->mux, 0);
+    if (res != WAIT_OBJECT_0 && res != WAIT_TIMEOUT) {
+        ruCritLogf("failed locking mutex ec:%d", GetLastError());
+        ruAbort();
+    }
+    return res == WAIT_OBJECT_0;
+#else
+    return 0 == pthread_mutex_trylock(&mux->mux);
+#endif
+}
+
+void ruMuxLock(Mux *mux) {
+#ifdef _WIN32
+    if (WAIT_OBJECT_0 != WaitForSingleObject(mux->mux, INFINITE)) {
+        ruCritLogf("failed locking mutex ec:%d", GetLastError());
+        ruAbort();
+    }
+#else
+    pthread_mutex_lock(&mux->mux);
+#endif
 }
 
 RUAPI void ruMutexLock(ruMutex m) {
@@ -165,13 +322,14 @@ RUAPI void ruMutexLock(ruMutex m) {
         ruCritLogf("failed getting mutex %d", ret);
         ruAbort();
     }
-#ifdef RUMS
-    if (WAIT_OBJECT_0 != WaitForSingleObject(mux->mux, INFINITE)) {
-        ruCritLog("failed unlocking mutex");
-        ruAbort();
-    }
+    ruMuxLock(mux);
+}
+
+void ruMuxUnlock(Mux *mux) {
+#ifdef _WIN32
+    ReleaseMutex(mux->mux);
 #else
-    pthread_mutex_lock(&mux->mux);
+    pthread_mutex_unlock(&mux->mux);
 #endif
 }
 
@@ -183,10 +341,47 @@ RUAPI void ruMutexUnlock(ruMutex m) {
         ruCritLogf("failed getting mutex %d", ret);
         ruAbort();
     }
-#ifdef RUMS
-    ReleaseMutex(mux->mux);
-#else
-    pthread_mutex_unlock(&mux->mux);
-#endif
+    ruMuxUnlock(mux);
 }
 
+RUAPI ruCount ruCounterNew(int64_t initialCount) {
+    tsc* ac = ruMalloc0(1, tsc);
+    ac->type = MagicTsc;
+    ac->mutex = ruMutexInit();
+    ac->count = initialCount;
+    return (ruCount)ac;
+}
+
+RUAPI int64_t ruCounterIncValue(ruCount counter, int64_t value, int32_t* code) {
+    tsc* ac = tscGet(counter, code);
+    int64_t val = 0;
+    if (!ac) return val;
+
+    ruMutexLock(ac->mutex);
+    ac->count += value;
+    val = ac->count;
+    ruMutexUnlock(ac->mutex);
+    return val;
+}
+
+RUAPI int64_t ruCountSetValue(ruCount counter, int64_t value, int32_t* code) {
+    tsc* ac = tscGet(counter, code);
+    int64_t val = 0;
+    if (!ac) return val;
+
+    ruMutexLock(ac->mutex);
+    val = ac->count;
+    ac->count = value;
+    ruMutexUnlock(ac->mutex);
+    return val;
+}
+
+RUAPI ruCount ruCountFree(ruCount counter) {
+    tsc* ac = tscGet(counter, NULL);
+    if (!ac) return NULL;
+    ac->type = 0;
+    ac->mutex = ruMutexFree(ac->mutex);
+    ac->count = 0;
+    ruFree(ac);
+    return NULL;
+}
