@@ -752,10 +752,6 @@ RUAPI alloc_chars ruUtf8ToUpper(trans_chars instr) {
     return utf8SwitchCase(instr, true);
 }
 
-RUAPI alloc_chars ruUcsToUtf8(const uint16_t* ucs) {
-    return uniToChar((UChar*)ucs);
-}
-
 int32_t parseInteger(trans_chars start, perm_chars* endptr,
                      uint32_t intBitSize, uint32_t base, int64_t* out) {
     ruClearError();

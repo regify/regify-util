@@ -182,13 +182,6 @@ RUAPI bool ruStringEndsWith(ruString rs, const char *suffix, int32_t *code);
 RUAPI char* ruUtf8CaseNormalize(const char *instr, int32_t normMode, int32_t caseMode);
 
 /**
- * \brief converts given UCS2 string to UTF-8
- * @param ucs Unicode string to convert
- * @return single byte utf-8 string caller must free.
- */
-RUAPI alloc_chars ruUcsToUtf8(const uint16_t* ucs);
-
-/**
  * \brief Replaces any occurrence of search in string with replace.
  *
  * This function works byte level not character level.

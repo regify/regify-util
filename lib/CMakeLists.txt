@@ -82,7 +82,8 @@ function (doLink lib shared)
             target_link_directories(${lib} PRIVATE ${ICU_LIBRARY_DIRS})
         endif()
     else()
-        target_link_directories(${lib} PUBLIC ${ICU_LIBRARY_DIRS})
+        target_link_directories(${lib} PUBLIC $<INSTALL_INTERFACE:lib>
+                PRIVATE ${ICU_LIBRARY_DIRS})
     endif()
 
 
