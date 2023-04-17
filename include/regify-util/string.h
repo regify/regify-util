@@ -160,6 +160,11 @@ RUAPI bool ruStringEndsWith(ruString rs, const char *suffix, int32_t *code);
 //#define ruUtf8Nfkd 4
 
 /**
+ * \brief Casemode constant to leave case for \ref ruUtf8CaseNormalize intact.
+ */
+#define ruUtf8NoCase 0
+
+/**
  * \brief Casemode constant to lower case text for \ref ruUtf8CaseNormalize.
  */
 #define ruUtf8Lower 1
@@ -175,11 +180,29 @@ RUAPI bool ruStringEndsWith(ruString rs, const char *suffix, int32_t *code);
  * @param normMode Normalization mode of \ref ruUtf8Nfc, \ref ruUtf8Nfd or 0
  *                 for untouched.
  * @param caseMode Case toggling mode of \ref ruUtf8Lower, \ref ruUtf8Upper or
- *                 0 for untouched.
+ *                 \ref ruUtf8NoCase for untouched.
  * @return A copy of the given string with the requested tranformations made or
  *         NULL incase of error. In that case call \ref ruLastError for details.
  */
 RUAPI char* ruUtf8CaseNormalize(const char *instr, int32_t normMode, int32_t caseMode);
+
+/**
+ * \brief Returns the given decomposed string in precomposed form.
+ *
+ * \see https://en.wikipedia.org/wiki/Unicode_equivalence#Normal_forms
+ * @param instr Decomposed UTF8 string.
+ * @return Standard precomposed UTF8 string.
+ */
+RUAPI alloc_chars ruStrFromNfd(trans_chars instr);
+
+/**
+ * \brief Returns the given string in decomposed form.
+ *
+ * \see https://en.wikipedia.org/wiki/Unicode_equivalence#Normal_forms
+ * @param instr Standard precomposed UTF8 string
+ * @return Decomposed UTF8 string.
+ */
+RUAPI alloc_chars ruStrToNfd(trans_chars instr);
 
 /**
  * \brief Replaces any occurrence of search in string with replace.

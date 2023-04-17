@@ -367,7 +367,7 @@ START_TEST ( run ) {
     has = ruStrHasChar("xyz", 'z');
     fail_unless(has == be, retText, test, has, be);
 
-   test = "ruUtf8CaseNormalize";
+    test = "ruUtf8CaseNormalize";
     ptr = ruUtf8CaseNormalize(NULL, 0, 0);
     fail_unless(NULL == ptr, retText, test, NULL, ptr);
 
@@ -405,6 +405,24 @@ START_TEST ( run ) {
     ck_assert_str_eq(expstr, ptr);
     ruFree(ptr);
     ruFree(alstr);
+
+    test = "ruStrToNfd";
+    ptr = ruStrToNfd(NULL);
+    fail_unless(NULL == ptr, retText, test, NULL, ptr);
+
+    perm_chars pcstr = "t\xc3\x84St"; // TÄst
+    perm_chars dcstr = "tA\xcc\x88St"; // Täst
+    ptr = ruStrToNfd(pcstr);
+    ck_assert_str_eq(dcstr, ptr);
+    ruFree(ptr);
+
+    test = "ruStrFromNfd";
+    ptr = ruStrFromNfd(NULL);
+    fail_unless(NULL == ptr, retText, test, NULL, ptr);
+
+    ptr = ruStrFromNfd(dcstr);
+    ck_assert_str_eq(pcstr, ptr);
+    ruFree(ptr);
 
 }
 END_TEST
