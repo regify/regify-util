@@ -760,10 +760,14 @@ static int32_t folderWalk(trans_chars folder, u_int32_t flags,
     //#endif
 
     alloc_chars dirname = NULL;
-    perm_chars basename = NULL;
+    char* basename = NULL;
     if (filter) {
         dirname = ruDirName(folder);
-        basename = ruBaseName(folder);
+#ifdef ITS_OSX
+        basename = ruStrToNfd(ruBaseName(folder));
+#else
+        basename = (char*)ruBaseName(folder);
+#endif
     }
 
     if (isFolder) {
@@ -851,13 +855,23 @@ static int32_t folderWalk(trans_chars folder, u_int32_t flags,
         while ((dir = readdir(d)) != NULL) {
             if (ruStrEquals("..", dir->d_name) ||
                 ruStrEquals(".", dir->d_name)) continue;
-            if (filter && filter(folder, dir->d_name, dir->d_type == DT_DIR, ctx)) continue;
+#ifdef ITS_OSX
+            char* name = ruStrToNfd(dir->d_name);
+#else
+            char* name = dir->d_name;
+#endif
 
+            if (filter) {
+                if (filter(folder, name,
+                           dir->d_type == DT_DIR, ctx)) {
+                    continue;
+                }
+            }
             ruFree(path);
             if (dir->d_type == DT_DIR) {
-                path = ruDupPrintf("%s%s%c", folder, dir->d_name, RU_SLASH);
+                path = ruDupPrintf("%s%s%c", folder, name, RU_SLASH);
             } else {
-                path = ruDupPrintf("%s%s", folder, dir->d_name);
+                path = ruDupPrintf("%s%s", folder, name);
             }
             if ((flags & RU_WALK_NO_RECURSE) || dir->d_type != DT_DIR) {
                 if (actor) {
@@ -869,6 +883,9 @@ static int32_t folderWalk(trans_chars folder, u_int32_t flags,
             ret = folderWalk(path, flags, filter, actor, ctx);
             if (ret != RUE_OK) break;
         }
+#ifdef ITS_OSX
+        ruFree(name);
+#endif
         ruFree(path);
         closedir(d);
 #endif
@@ -882,6 +899,9 @@ static int32_t folderWalk(trans_chars folder, u_int32_t flags,
     }
 
 cleanup:
+#ifdef ITS_OSX
+    ruFree(basename);
+#endif
     ruFree(dirname);
     return ret;
 }
@@ -909,6 +929,10 @@ alloc_chars fixSlashes(perm_chars* filePath) {
         path = ruDupPrintf("%s/", *filePath);
         *filePath = path;
     }
+#ifdef ITS_OSX
+    ruReplace(path, ruStrToNfd(*filePath));
+    *filePath = path;
+#endif
 #endif
     return path;
 }
