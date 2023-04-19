@@ -755,9 +755,6 @@ static int32_t folderWalk(trans_chars folder, u_int32_t flags,
     int32_t ret = RUE_OK;
     if (!ruFileExists(folder)) return ret;
     bool isFolder = ruIsDir(folder);
-    //#if PB_Compiler_OS  PB_OS_MacOS
-    // MAYBE: folder = iconv_preCompose(folder);
-    //#endif
 
     alloc_chars dirname = NULL;
     char* basename = NULL;
@@ -850,15 +847,16 @@ static int32_t folderWalk(trans_chars folder, u_int32_t flags,
         }
 
         struct dirent *dir;
-        char *path = NULL;
+        char* path = NULL;
+        char* name = NULL;
 
         while ((dir = readdir(d)) != NULL) {
             if (ruStrEquals("..", dir->d_name) ||
                 ruStrEquals(".", dir->d_name)) continue;
 #ifdef ITS_OSX
-            char* name = ruStrToNfd(dir->d_name);
+            ruReplace(name, ruStrToNfd(dir->d_name));
 #else
-            char* name = dir->d_name;
+            name = dir->d_name;
 #endif
 
             if (filter) {
