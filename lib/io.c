@@ -928,7 +928,8 @@ alloc_chars fixSlashes(perm_chars* filePath) {
         *filePath = path;
     }
 #ifdef ITS_OSX
-    ruReplace(path, ruStrToNfd(*filePath));
+    alloc_chars nfdpath = ruStrToNfd(*filePath);
+    ruReplace(path, nfdpath);
     *filePath = path;
 #endif
 #endif
