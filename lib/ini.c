@@ -81,6 +81,15 @@ static char* find_chars_or_comment(perm_chars s, trans_chars chars) {
     return (char*) s;
 }
 
+alloc_chars strTrim(alloc_chars instr) {
+    if (instr) {
+        char* p = instr + strlen(instr);
+        while (p > instr && isspace((unsigned char) (*--p))) *p = '\0';
+    }
+    return instr;
+}
+
+
 static int ini_parse_stream(ini_reader reader, void* stream, ruIniCallback handler,
                      void* user) {
     /* Uses a fair bit of stack (use heap instead if you need to) */
@@ -108,7 +117,7 @@ static int ini_parse_stream(ini_reader reader, void* stream, ruIniCallback handl
                 start += 3;
             }
         }
-        start = lskip(ruStrTrim(start));
+        start = lskip(strTrim(start));
 
         if (strchr(INI_START_COMMENT_PREFIXES, *start)) {
             /* Start-of-line comment */
@@ -119,7 +128,7 @@ static int ini_parse_stream(ini_reader reader, void* stream, ruIniCallback handl
             //#if INI_ALLOW_INLINE_COMMENTS
             end = find_chars_or_comment(start, NULL);
             if (*end) *end = '\0';
-            ruStrTrim(start);
+            strTrim(start);
             //#endif
             /* Non-blank line with leading whitespace, treat as continuation
                of previous name's value (as per Python configparser). */
@@ -145,14 +154,14 @@ static int ini_parse_stream(ini_reader reader, void* stream, ruIniCallback handl
             end = find_chars_or_comment(start, "=:");
             if (*end == '=' || *end == ':') {
                 *end = '\0';
-                name = ruStrTrim(start);
+                name = strTrim(start);
                 value = end + 1;
                 //#if INI_ALLOW_INLINE_COMMENTS
                 end = find_chars_or_comment(value, NULL);
                 if (*end) *end = '\0';
                 //#endif
                 value = lskip(value);
-                ruStrTrim(value);
+                strTrim(value);
 
                 /* Valid name[=:]value pair found, call handler */
                 ruFree(prev_name);
@@ -162,7 +171,7 @@ static int ini_parse_stream(ini_reader reader, void* stream, ruIniCallback handl
             } else if (!errLineNo) {
                 /* No '=' or ':' found on name[=:]value line */
                 *end = '\0';
-                name = ruStrTrim(start);
+                name = strTrim(start);
                 if (!handler(user, section, name, NULL, lineno)) errLineNo = lineno;
             }
         }

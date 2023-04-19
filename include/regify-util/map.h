@@ -150,7 +150,7 @@ RUAPI int32_t ruMapPutData(ruMap rm, ptr key, ptr val, ptr* exisitingVal);
  * \brief Removes an entry from the map.
  * @param rm The map to remove the entry from.
  * @param key The key to be removed.
- * @param val (Optional) Where to store the retrieved value associated wiht the
+ * @param val (Optional) Where to store the retrieved value associated with the
  *            key.
  * @return \ref RUE_OK on success \ref RUE_USER_ABORT when a threaded map has
  *          quit else a regify error code.

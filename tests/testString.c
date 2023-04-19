@@ -78,14 +78,8 @@ START_TEST ( api ) {
     fail_unless(exp == ret, retText, test, exp, ret);
     fail_unless(0 == num, retText, test, 0, num);
 
-    ruStrTrim(NULL);
-    ruStrTrim("");
-
-    ruStripChars(NULL, NULL);
-    ruStripChars("", NULL);
-    ruStripChars("", "");
-    ruStripChars(" ", "");
-    ruStripChars("", " ");
+    ruStrStrip(NULL, NULL, NULL);
+    ruStrStrip(" ", NULL, NULL);
 
     ruStrByteReplace(NULL, 0, 0);
     ruStrByteReplace(0, 0, 0);
@@ -121,14 +115,6 @@ START_TEST ( api ) {
 
     has = ruStrHasChar(NULL, 'x');
     fail_unless(has == want, retText, test, has, want);
-
-    alloc_chars stripped = NULL;
-    stripped = ruStrStrip(NULL, NULL);
-    fail_unless(stripped == NULL, retText, test, stripped, NULL);
-
-    stripped = ruStrStrip(NULL, "abc");
-    fail_unless(stripped == NULL, retText, test, stripped, NULL);
-
 }
 END_TEST
 
@@ -269,15 +255,6 @@ START_TEST ( run ) {
 
     ruStrByteReplace(heap, 'v', '\0');
     ck_assert_str_eq("test", heap);
-
-    test = "ruStrStrip";
-    alloc_chars stripped = NULL;
-    stripped = ruStrStrip(heap, NULL);
-    fail_unless(stripped == heap, retText, test, stripped, heap);
-
-    stripped = ruStrStrip(heap, "atsx");
-    ck_assert_str_eq("te", stripped);
-
     ruFree(heap);
 
     test = "ruStrParseInt64";
@@ -429,8 +406,8 @@ END_TEST
 
 START_TEST ( util ) {
     int32_t want, got;
-    const char *test = "";
-    const char *retText = "%s failed wanted ret '%d' but got '%d'";
+    perm_chars test = "";
+    perm_chars retText = "%s failed wanted ret '%d' but got '%d'";
 
 
     test = "ruStrCmp";
@@ -753,39 +730,67 @@ START_TEST ( util ) {
     ruFree(out2);
     ruFree(wstr);
 
-    out2 = ruStrDup("foo was\nhere");
-    ruStripChars(out2, "\n ");
-    ck_assert_str_eq(out2, "foowashere");
+    test = "ruStrStrip";
+    perm_chars str2;
+    str ="foo was\nhere";
+    str2 = ruStrStrip(str, "\n ", &out2);
+    ck_assert_str_eq(str2, "foowashere");
+    fail_if(NULL == out2, retText, test, NULL, out2);
     ruFree(out2);
 
-    out2 = ruStrDup("foo was\there");
-    ruStripChars(out2, "\n");
-    ck_assert_str_eq(out2, "foo was\there");
+    str = "foo was\there";
+    str2 = ruStrStrip(str, "\n", &out2);
+    ck_assert_str_eq(str, str2);
+    fail_unless(str == str2, retText, test, str, str2);
+    fail_unless(NULL == out2, retText, test, NULL, out2);
+
+    str2 = ruStrStrip(str, NULL, &out2);
+    ck_assert_str_eq(str2, "foowashere");
+    fail_if(NULL == out2, retText, test, NULL, out2);
     ruFree(out2);
 
-    out2 = ruStrDup("  foo\t \n\r");
-    ruStrTrim(out2);
-    ck_assert_str_eq(out2, "  foo");
-    ruFree(out2);
-
+    test = "ruStrTrim";
     perm_chars trimd = NULL;
-    trimd = ruStrTrimDup(NULL, NULL);
+    trimd = ruStrTrim(NULL, NULL, 0, NULL);
     fail_unless(NULL == trimd, retText, test, NULL, trimd);
 
-    trimd = ruStrTrimDup("foo", &out2);
+    str = " foo ";
+    trimd = ruStrTrim(str, NULL, 0, NULL);
+    fail_unless(NULL == trimd, retText, test, NULL, trimd);
+
+    trimd = ruStrTrim(str, NULL, ruTrimBoth, &out2);
+    ck_assert_str_eq(trimd, "foo");
+    fail_if(NULL == out2, retText, test, NULL, out2);
+    ruFree(out2);
+
+    trimd = ruStrTrim(str, NULL, ruTrimStart, &out2);
+    ck_assert_str_eq(trimd, "foo ");
     fail_unless(NULL == out2, retText, test, NULL, out2);
-    ck_assert_str_eq(trimd, "foo");
 
-    trimd = ruStrTrimDup("  foo\t \n\r", &out2);
-    ck_assert_str_eq(trimd, "foo");
+    trimd = ruStrTrim(str, NULL, ruTrimEnd, &out2);
+    ck_assert_str_eq(trimd, " foo");
+    fail_if(NULL == out2, retText, test, NULL, out2);
     ruFree(out2);
 
-    trimd = ruStrTrimDup("foo\t \n\r", &out2);
+    str = "/foo\\";
+    perm_chars nogood = "";
+    trimd = ruStrTrim(str, nogood, 0, &out2);
+    fail_unless(NULL == out2, retText, test, NULL, out2);
+    fail_unless(str == trimd, retText, test, str, trimd);
+
+    nogood = "\\/";
+    trimd = ruStrTrim(str, nogood, ruTrimBoth, &out2);
     ck_assert_str_eq(trimd, "foo");
+    fail_if(NULL == out2, retText, test, NULL, out2);
     ruFree(out2);
 
-    trimd = ruStrTrimDup("  foo", &out2);
-    ck_assert_str_eq(trimd, "foo");
+    trimd = ruStrTrim(str, nogood, ruTrimStart, &out2);
+    ck_assert_str_eq(trimd, "foo\\");
+    fail_unless(NULL == out2, retText, test, NULL, out2);
+
+    trimd = ruStrTrim(str, nogood, ruTrimEnd, &out2);
+    ck_assert_str_eq(trimd, "/foo");
+    fail_if(NULL == out2, retText, test, NULL, out2);
     ruFree(out2);
 
     test = "ruStrEmpty";

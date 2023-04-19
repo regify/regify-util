@@ -571,11 +571,6 @@ RUAPI int32_t ruStrParseInt(trans_chars str, perm_chars* endptr, uint32_t base, 
 RUAPI int32_t ruStrToInt(trans_chars str);
 
 /**
- * \brief Alias for \ref ruStrParseInt64
- */
-#define ruStrToll ruStrParseInt64
-
-/**
  * Returns true if given haystack contains needle character
  * @param haystack string to search for needle
  * @param needle character to search in haystack
@@ -584,46 +579,65 @@ RUAPI int32_t ruStrToInt(trans_chars str);
 RUAPI bool ruStrHasChar(trans_chars haystack, char needle);
 
 /**
- * \brief Strips any of the given asciichars off the end of instr
+ * \brief Removes unwanted characters from instr.
  *
- * The given string should be on the heap, else a segfault may occur when trying
- * to modify it.
- * @param instr string to remove asciichars from the end
- * @param asciichars any of the ASCII characters to remove
- * @return instr potentially shorter than before
+ * @param instr Input string to remove unwanted characters from.
+ * @param unwanted Characters to remove or NULL for white space.
+ * @param newstr Where a potential new copy of the given string will be stored.
+ *               Caller must free.
+ * @return instr if unmodified or *newstr if unwanted characters where found.
  */
-RUAPI alloc_chars ruStrStrip(alloc_chars instr, trans_chars asciichars);
+RUAPI perm_chars ruStrStrip(perm_chars instr, trans_chars unwanted,
+                            alloc_chars* newstr);
 
 /**
- * \brief Removes trailing whitespace from string in place.
- *
- * The given string should be on the heap, else a segfault may occur when trying
- * to modify it.
- * @param instr The string to trim
- * @return instr potentially shorter than before
+ * Constants used by \ref ruStrTrim to indicate the trimming sides.
  */
-RUAPI alloc_chars ruStrTrim(alloc_chars instr);
+enum ruTrimSide {
+/**
+ * Trim character off the beginning and the end of the given string.
+ */
+ruTrimBoth = (uint32_t)0,
 
 /**
- * \brief Checks given string for leading or trailing whitespace and returns
- * trimmed copy if needed.
+ * Trim character off the beginning of the given string.
+ */
+ruTrimStart = 1,
+
+/**
+ * Trim character off the end of the given string.
+ */
+ruTrimEnd = 2
+
+};
+
+/**
+ * \brief Checks given string for leading / trailing unwanted characters and
+ * returns trimmed copy if needed.
+ *
  * @param instr String to check for trimming
+ * @param unwanted String containing all unwanted character bytes or NULL to
+ *                 trim whitespace.
+ * @param ends Indicates which sides to trim
  * @param newstr Optional. Where the new string will be stored if it was created.
- *               If not trimming took place this will be NULL.
+ *               If no trimming took place this will be NULL.
  *               This string should be freed by the caller.
- * @return instr if instr was NULL or did not need trimming, else the trimmed
- *         string to be freed by the caller. Use newstr to tell the difference.
+ * @return instr if instr was NULL or did not need trimming,
+ *         instr + trimmed start character if only the beginning needed trimming
+ *         else the trimmed new string also set in newstr.
+ *         newstr is to be freed by the caller.
  *
  * Example:
  * ~~~~~{.c}
-    alloc_chars newstr;
-    perm_chars trimstr = ruStrTrimDup(mystring, &newstr);
+    alloc_chars newstr = NULL;
+    perm_chars trimstr = ruStrTrim(mystring, NULL, ruTrimBoth, &newstr);
     // do whatever with trimstr
     ruFree(newstr);
  * ~~~~~
  *
  */
-RUAPI perm_chars ruStrTrimDup(trans_chars instr, alloc_chars* newstr);
+RUAPI perm_chars ruStrTrim(perm_chars instr, trans_chars unwanted,
+                           enum ruTrimSide ends, alloc_chars* newstr);
 
 /**
  * \brief Returns the white space trimmed bounds of given string without modifying it.
@@ -658,15 +672,6 @@ RUAPI bool ruStrFindKeyVal(trans_chars inStart, rusize inLen, trans_chars delim,
  * @return true if NULL empty or only white space
  */
 RUAPI bool ruStrEmpty(trans_chars str);
-
-/**
- * \brief Removes the characters in chars from the string instr.
- * The given string should be on the heap, else a segfault may occur when trying
- * to modify something on the stack.
- * @param instr Input string to be stripped in place
- * @param chars Characters to remove from instr.
- */
-RUAPI void ruStripChars(alloc_chars instr, trans_chars chars);
 
 /** @deprecated Use \ref ruStrCmp */
 #define ruStrcmp ruStrCmp;
