@@ -302,7 +302,13 @@ RUAPI int ruOpen(const char *filepath, int flags, int mode, int32_t* code) {
         ruRetWithCode(code, RUE_INVALID_PARAMETER, 0);
     }
     if (!mode) ruRetWithCode(code, RUE_INVALID_PARAMETER, 0);
+#ifdef ITS_OSX
+    alloc_chars nfdpath = ruStrToNfd(filepath);
+    int fd = open(nfdpath, flags, mode);
+    ruFree(nfdpath);
+#else
     int fd = open(filepath, flags, mode);
+#endif
     if (fd < 0) {
         int32_t ret = errno2rfec(errno);
         ruRetWithCode(code, ret, fd);
@@ -314,7 +320,13 @@ RUAPI FILE* ruFOpen(const char *filepath, const char *mode, int32_t* code) {
     ruClearError();
     if (!filepath) ruRetWithCode(code, RUE_PARAMETER_NOT_SET, 0);
     if (!mode) ruRetWithCode(code, RUE_PARAMETER_NOT_SET, 0);
+#ifdef ITS_OSX
+    alloc_chars nfdpath = ruStrToNfd(filepath);
+    FILE* fd = fopen(nfdpath, mode);
+    ruFree(nfdpath);
+#else
     FILE* fd = fopen(filepath, mode);
+#endif
     if (!fd) {
         int32_t ret = errno2rfec(errno);
         ruRetWithCode(code, ret, fd);
@@ -507,7 +519,13 @@ RUAPI int32_t ruFileSetContents(trans_chars filename, trans_chars contents,
     // clean up
     if (oh >= 0) {
         close(oh);
+#ifdef ITS_OSX
+        alloc_chars nfdpath = ruStrToNfd(filename);
+        ret = ruFileRename(tmpName, nfdpath);
+        ruFree(nfdpath);
+#else
         ret = ruFileRename(tmpName, filename);
+#endif
         if (ret != RUE_OK) {
             ruFileRemove(tmpName);
         }
@@ -669,12 +687,19 @@ static int fileRename(const char* oldName, const char* newName, bool force) {
 #else
     // means darwin ATM nopt sure about iOS
     uint flags = force? 0 : RENAME_EXCL;
+#ifdef ITS_OSX
+    alloc_chars nfdpath = ruStrToNfd(newName);
+    newName = nfdpath;
+#endif
     if (renamex_np(oldName, newName, flags)) {
 #endif
         ruSetError("Failed to rename file '%s' to '%s' errno: %d - %s",
                    oldName, newName, errno, strerror(errno));
         ret = RUE_CANT_WRITE;
     }
+#endif
+#ifdef ITS_OSX
+    ruFree(nfdpath);
 #endif
     return ret;
 }
@@ -1008,7 +1033,11 @@ RUAPI int ruMkdir(const char *pathname, int mode, bool deep) {
     if (!mode) return RUE_INVALID_PARAMETER;
 #endif
     int ret;
+#ifdef ITS_OSX
+    char *path = ruStrToNfd(pathname);
+#else
     char *path = ruStrDup(pathname);
+#endif
     do {
         char *p = path + strlen(path)-1;
 #ifdef _WIN32
