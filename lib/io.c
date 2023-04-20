@@ -681,9 +681,14 @@ static int fileRename(const char* oldName, const char* newName, bool force) {
 #else
 #ifdef __linux__
     // not sure about android
+#ifdef RENAME_NOREPLACE
     uint flags = force? 0 : RENAME_NOREPLACE;
     if(renameat2(AT_FDCWD, oldName,
                  AT_FDCWD, newName, flags)) {
+#else
+    // this was needed on Centos 7 due to the old kernel
+    if(rename(oldName, newName)) {
+#endif
 #else
     // means darwin ATM nopt sure about iOS
     uint flags = force? 0 : RENAME_EXCL;
