@@ -1,0 +1,30 @@
+Non backward compatible API changes between 1.3 and 2.0
+* The use of RU_SIZE_AUTO for NULL terminated strings instead of a 0 length rusize parameter in the following functions:
+- ruStringAppendn
+
+* The switch to rusize and the use of RU_SIZE_AUTO for NULL terminated strings instead of negative rusize_s parameters in the following functions:
+- kvset
+- ruFileStoreSet
+- ruNullStoreSet
+- ruFileSetContents
+
+* Renamed the following functions to make the names more consistent:
+- ruStrsplit - ruStrSplit
+- ruStrdup - ruStrDup
+- ruStrndup - ruStrNDup
+- ruStrcasecmp - ruStrCaseCmp
+- ruStrcmp - ruStrCmp
+- ruStrEndsCaseWith - ruStrCaseEndsWith
+- ruStrToll - ruStrParseLong (different API)
+- ruMapKeySet - ruMapKeyList (also changed parameter order to be more natural)
+
+* ruListSize result is int32_t -> uint32_t and return on error is -1 -> 0
+
+* Reworked string trim API to be more sane. Trim means removing off the ends. Strip means removing everywhere.
+Optional malloc API means creating a copy when needed and returning references to both final string and copy.
+The inplace functions have been removed. The following updates are suggested:
+- ruStrTrim: ruStrTrim(instr) -> ruStrTrim(instr, NULL, ruTrimEnd, &newstr)
+- ruStrTrimDup: ruStrTrimDup(instr, &newstr) -> ruStrTrim(instr, NULL, ruTrimBoth, &newstr)
+- ruStrStrip - ruStrStrip(instr, asciichars) -> ruStrTrim(instr, asciichars, ruTrimEnd, &newstr)
+- ruStripChars - ruStripChars(instr, chars) -> ruStrStrip(instr, chars, &newstr)
+

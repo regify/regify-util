@@ -23,204 +23,170 @@
 
 START_TEST ( api ) {
     int32_t ret, exp;
-    const char *test = "ruMapNew";
+    const char *test = "ruSetNew";
     const char *retText = "%s failed wanted ret '%d' but got '%d'";
     ruList keys = NULL;
 
-    ruMap rm = ruMapNew(NULL, NULL, NULL, NULL, 0);
-    fail_unless(NULL == rm, retText, test, NULL, rm);
+    ruSet rs = ruSetNew(NULL, NULL, NULL, 0);
+    fail_unless(NULL == rs, retText, test, NULL, rs);
 
-    rm = ruMapNew(ruStrHash, NULL, NULL, NULL, 0);
-    fail_unless(NULL == rm, retText, test, NULL, rm);
+    rs =  NULL,(ruStrHash, NULL, NULL, NULL, 0);
+    fail_unless(NULL == rs, retText, test, NULL, rs);
 
-    rm = ruMapNew(NULL, ruStrMatch, NULL, NULL, 0);
-    fail_unless(NULL == rm, retText, test, NULL, rm);
+    rs =  NULL,(NULL, ruStrMatch, NULL, 0);
+    fail_unless(NULL == rs, retText, test, NULL, rs);
 
-    ruMapFree(rm);
+    ruSetFree(rs);
 
     ptr exist = NULL;
     exp = RUE_PARAMETER_NOT_SET;
-    ret = ruMapTryPut(rm, NULL, NULL, &exist);
-    fail_unless(exp == ret, retText, test, exp, ret);
-    fail_unless(NULL == exist, retText, test, NULL, exist);
-
-    ret = ruMapFirstSet(rm, NULL, NULL);
+    ret = ruSetFirstSet(rs, NULL);
     fail_unless(exp == ret, retText, test, exp, ret);
 
-    ret = ruMapNext(NULL, NULL, NULL);
+    ret = ruSetNext(NULL, NULL);
     fail_unless(exp == ret, retText, test, exp, ret);
 
-    ret = ruMapRemoveAll(rm);
+    ret = ruSetRemoveAll(rs);
     fail_unless(exp == ret, retText, test, exp, ret);
 
-    rm = ruMapNewString(NULL, NULL);
-    fail_if(NULL == rm, retText, test, rm, NULL);
+    rs = ruSetNewString(NULL);
+    fail_if(NULL == rs, retText, test, rs, NULL);
 
-    ret = ruMapPut(rm, NULL, "foo");
+    ret = ruSetPut(rs, NULL);
     fail_unless(exp == ret, retText, test, exp, ret);
 
-    ret = ruMapRemove(NULL, NULL, NULL);
+    ret = ruSetRemove(NULL, NULL);
     fail_unless(exp == ret, retText, test, exp, ret);
 
-    ret = ruMapRemove(rm, NULL, NULL);
+    ret = ruSetRemove(rs, NULL);
     fail_unless(exp == ret, retText, test, exp, ret);
 
     char *store = "23";
-    ret = ruMapRemove(rm, NULL, (void**)&store);
+    ret = ruSetItemList(rs, NULL, NULL, NULL);
     fail_unless(exp == ret, retText, test, exp, ret);
 
-    ret = ruMapKeyList(rm, NULL, NULL, NULL);
-    fail_unless(exp == ret, retText, test, exp, ret);
-
-    ret = ruMapKeyList(NULL, &keys, NULL, NULL);
+    ret = ruSetItemList(NULL, &keys, NULL, NULL);
     fail_unless(exp == ret, retText, test, exp, ret);
 
     exp = RUE_INVALID_STATE;
-    ret = ruMapNext(rm, NULL, &store);
+    ret = ruSetNext(rs, &store);
     fail_unless(exp == ret, retText, test, exp, ret);
 
     exp = RUE_PARAMETER_NOT_SET;
-    ret = ruMapNext(rm, NULL, NULL);
+    ret = ruSetNext(rs, NULL);
     fail_unless(exp == ret, retText, test, exp, ret);
 
-    ret = ruMapFirstSet(rm, NULL, NULL);
+    ret = ruSetFirstSet(rs, NULL);
     fail_unless(exp == ret, retText, test, exp, ret);
 
 //    exp = RUE_PARAMETER_NOT_SET;
-    ret = ruMapNext(rm, NULL, NULL);
+    ret = ruSetNext(rs, NULL);
     fail_unless(exp == ret, retText, test, exp, ret);
 
     exp = RUE_INVALID_PARAMETER;
-    ret = ruMapGet((void*)store, NULL, NULL);
-    fail_unless(exp == ret, retText, test, exp, ret);
-
-    ruMapHas((void*)store, NULL, &ret);
+    ruSetHas((void*)store, NULL, &ret);
     fail_unless(exp == ret, retText, test, exp, ret);
 
     exp = RUE_PARAMETER_NOT_SET;
-    ret = ruMapGet(NULL, "bar", NULL);
-    fail_unless(exp == ret, retText, test, exp, ret);
-
-    ret = ruMapGet(rm, NULL, (void**)&store);
-    fail_unless(exp == ret, retText, test, exp, ret);
-
     u_int32_t sz = ruMapSize(NULL, &ret);
     fail_unless(exp == ret, retText, test, exp, ret);
     fail_unless(0 == sz, retText, test, 0, sz);
 
     exp = RUE_OK;
-    sz = ruMapSize(rm, &ret);
+    sz = ruSetSize(rs, &ret);
     fail_unless(exp == ret, retText, test, exp, ret);
     fail_unless(0 == sz, retText, test, 0, sz);
 
-    ruMapFree(rm);
+    ruSetFree(rs);
 }
 END_TEST
 
 START_TEST ( run ) {
     int32_t ret, exp;
-    perm_chars test = "ruMapNew";
+    perm_chars test = "ruSetNew";
     perm_chars retText = "%s failed wanted ret '%d' but got '%d'";
     perm_chars foo = "foo";
-    perm_chars bar = "bar";
 
-    ruMap rm = ruMapNewString(NULL, NULL);
-    fail_if(NULL == rm, retText, test, rm, NULL);
+    ruSet rs = ruSetNewString(NULL);
+    fail_if(NULL == rs, retText, test, rs, NULL);
 
     exp = RUE_OK;
-    u_int32_t esz = 0, sz = ruMapSize(rm, &ret);
+    u_int32_t esz = 0, sz = ruSetSize(rs, &ret);
     fail_unless(exp == ret, retText, test, exp, ret);
     fail_unless(esz == sz, retText, test, esz, sz);
 
-    ret = ruMapPut(rm, foo, bar);
+    ret = ruSetPut(rs, foo);
     fail_unless(exp == ret, retText, test, exp, ret);
 
-    exp = RUE_FILE_EXISTS;
-    perm_chars exist = NULL;
-    ret = ruMapTryPut(rm, foo,bar, &exist);
-    fail_unless(exp == ret, retText, test, exp, ret);
-    fail_unless(bar == exist, retText, test, bar, exist);
-
+    test = "ruSetHas";
     exp = RUE_OK;
     bool ehas = true;
-    bool has = ruMapHas(rm, foo, &ret);
+    bool has = ruSetHas(rs, foo, &ret);
     fail_unless(exp == ret, retText, test, exp, ret);
     fail_unless(ehas == has, retText, test, ehas, has);
 
     ehas = false;
-    has = ruMapHas(rm, "Foo", &ret);
+    has = ruSetHas(rs, "Foo", &ret);
     fail_unless(exp == ret, retText, test, exp, ret);
     fail_unless(ehas == has, retText, test, ehas, has);
 
-    char *ekey, *eval;
-    ret = ruMapFirst(rm, &ekey, &eval);
+    test = "ruSetFirst";
+    char *eitem;
+    ret = ruSetFirst(rs, &eitem);
     fail_unless(exp == ret, retText, test, exp, ret);
-    ck_assert_str_eq(foo, ekey);
-    ck_assert_str_eq("bar", eval);
+    ck_assert_str_eq(foo, eitem);
 
+    test = "ruSetNext";
     exp = RUE_FILE_NOT_FOUND;
-    ret = ruMapNext(rm, &ekey, &eval);
+    ret = ruSetNext(rs, &eitem);
     fail_unless(exp == ret, retText, test, exp, ret);
-    fail_unless(NULL == ekey, retText, test, NULL, ekey);
-    fail_unless(NULL == eval, retText, test, NULL, eval);
+    fail_unless(NULL == eitem, retText, test, NULL, eitem);
 
-    ret = ruMapNext(rm, &ekey, &eval);
+    ret = ruSetNext(rs, &eitem);
     fail_unless(exp == ret, retText, test, exp, ret);
-    fail_unless(NULL == ekey, retText, test, NULL, ekey);
-    fail_unless(NULL == eval, retText, test, NULL, eval);
+    fail_unless(NULL == eitem, retText, test, NULL, eitem);
 
+    test = "ruSetSize";
     exp = RUE_OK;
     esz = 1;
-    sz = ruMapSize(rm, &ret);
+    sz = ruSetSize(rs, &ret);
     fail_unless(exp == ret, retText, test, exp, ret);
     fail_unless(esz == sz, retText, test, esz, sz);
 
-    char *store = NULL;
-    exp = RUE_GENERAL;
-    ret = ruMapGet(rm, "fo", (void**)&store);
-    fail_unless(exp == ret, retText, test, exp, ret);
-
-    exp = RUE_PARAMETER_NOT_SET;
-    ret = ruMapGet(rm, foo, NULL);
-    fail_unless(exp == ret, retText, test, exp, ret);
-
-    exp = RUE_OK;
-    ret = ruMapGet(rm, foo, (void**)&store);
-    fail_unless(exp == ret, retText, test, exp, ret);
-    ck_assert_str_eq("bar", store);
-
     // update it
-    ret = ruMapPut(rm, foo, "not");
+    test = "ruSetPut";
+    ret = ruSetPut(rs, foo);
     fail_unless(exp == ret, retText, test, exp, ret);
 
     // should still be 1
-    sz = ruMapSize(rm, &ret);
+    test = "ruSetSize";
+    sz = ruSetSize(rs, &ret);
     fail_unless(exp == ret, retText, test, exp, ret);
     fail_unless(esz == sz, retText, test, esz, sz);
 
-    ret = ruMapGet(rm, foo, (void**)&store);
-    fail_unless(exp == ret, retText, test, exp, ret);
-    ck_assert_str_eq("not", store);
-
-    // test a copied keyset
+    // test a copied item set
+    test = "ruSetItemList";
     ruList keys = NULL;
-    ret = ruMapKeyList(rm, &keys, (ruCloneFunc) ruStrDup, free);
+    ret = ruSetItemList(rs, &keys, (ruCloneFunc) ruStrDup, free);
     fail_unless(exp == ret, retText, test, exp, ret);
     fail_if(NULL == keys, retText, test, NULL, keys);
 
+    test = "ruSetItemList";
     sz = ruListSize(keys, &ret);
     fail_unless(exp == ret, retText, test, exp, ret);
     fail_unless(esz == sz, retText, test, esz, sz);
-    store = ruListPop(keys, &ret);
+    alloc_chars store = ruListPop(keys, &ret);
     ck_assert_str_eq(foo, store);
     keys = ruListFree(keys);
     ruFree(store);
 
     // test a scalar keyset
-    ret = ruMapKeyList(rm, &keys, NULL, NULL);
+    test = "ruSetItemList";
+    ret = ruSetItemList(rs, &keys, NULL, NULL);
     fail_unless(exp == ret, retText, test, exp, ret);
     fail_if(NULL == keys, retText, test, NULL, keys);
 
+    test = "ruListSize";
     sz = ruListSize(keys, &ret);
     fail_unless(exp == ret, retText, test, exp, ret);
     fail_unless(esz == sz, retText, test, esz, sz);
@@ -229,44 +195,51 @@ START_TEST ( run ) {
     fail_unless(foo == store, retText, test, foo, store);
     keys = ruListFree(keys);
 
+    test = "ruSetRemove";
     exp = RUE_GENERAL;
-    ret = ruMapRemove(rm, "fo", (void**)&store);
+    ret = ruSetRemove(rs, "fo");
     fail_unless(exp == ret, retText, test, exp, ret);
 
+    test = "ruSetSize";
     exp = RUE_OK;
-    sz = ruMapSize(rm, &ret);
+    sz = ruSetSize(rs, &ret);
     fail_unless(exp == ret, retText, test, exp, ret);
     fail_unless(esz == sz, retText, test, esz, sz);
 
-    ret = ruMapRemove(rm, foo, (void**)&store);
+    test = "ruSetRemove";
+    ret = ruSetRemove(rs, foo);
     fail_unless(exp == ret, retText, test, exp, ret);
-    ck_assert_str_eq("not", store);
 
+    test = "ruSetSize";
     esz = 0;
-    sz = ruMapSize(rm, &ret);
+    sz = ruSetSize(rs, &ret);
     fail_unless(exp == ret, retText, test, exp, ret);
     fail_unless(esz == sz, retText, test, esz, sz);
 
-    ret = ruMapPut(rm, "foo1", "bar1");
+    test = "ruSetPut";
+    ret = ruSetPut(rs, "foo1");
     fail_unless(exp == ret, retText, test, exp, ret);
 
-    ret = ruMapPut(rm, "foo2", "bar2");
+    ret = ruSetPut(rs, "foo2");
     fail_unless(exp == ret, retText, test, exp, ret);
 
     esz = 2;
-    sz = ruMapSize(rm, &ret);
+    test = "ruSetSize";
+    sz = ruSetSize(rs, &ret);
     fail_unless(exp == ret, retText, test, exp, ret);
     fail_unless(esz == sz, retText, test, esz, sz);
 
-    ret = ruMapRemoveAll(rm);
+    test = "ruSetRemoveAll";
+    ret = ruSetRemoveAll(rs);
     fail_unless(exp == ret, retText, test, exp, ret);
 
+    test = "ruSetSize";
     esz = 0;
-    sz = ruMapSize(rm, &ret);
+    sz = ruSetSize(rs, &ret);
     fail_unless(exp == ret, retText, test, exp, ret);
     fail_unless(esz == sz, retText, test, esz, sz);
 
-    ruMapFree(rm);
+    ruSetFree(rs);
 }
 END_TEST
 
@@ -275,33 +248,34 @@ START_TEST ( iter ) {
     const char *test = "ruMapNew";
     const char *retText = "%s failed wanted ret '%x' but got '%x'";
 
-    ruMap rm = ruMapNew(ruIntHash, ruIntMatch,
-                        NULL, NULL, 3);
-    fail_if(NULL == rm, retText, test, rm, NULL);
+    ruSet rs = ruSetNew(ruIntHash, ruIntMatch,
+                        NULL, 3);
+    fail_if(NULL == rs, retText, test, rs, NULL);
 
-    ret = ruMapPut(rm, rm, true);
+    test = "ruSetPut";
+    ret = ruSetPut(rs, rs);
     fail_unless(exp == ret, retText, test, exp, ret);
 
     uint32_t esz  = 1;
-    uint32_t sz = ruMapSize(rm, &ret);
+    test = "ruSetSize";
+    uint32_t sz = ruSetSize(rs, &ret);
     fail_unless(exp == ret, retText, test, exp, ret);
     fail_unless(esz == sz, retText, test, esz, sz);
 
     ptr key = NULL;
-    rusize val;
+    test = "ruMapNew";
     bool exb = true;
-    for (ret = ruMapFirst(rm, &key, &val); ret == RUE_OK;
-         ret = ruMapNext(rm, &key, &val)) {
-        fail_unless(rm == key, retText, test, rm, key);
-        fail_unless(exb == val, retText, test, exb, val);
+    for (ret = ruSetFirst(rs, &key); ret == RUE_OK;
+         ret = ruSetNext(rs, &key)) {
+        fail_unless(rs == key, retText, test, rs, key);
     }
 
-    ruMapFree(rm);
+    ruSetFree(rs);
 }
 END_TEST
 
-TCase* mapTests(void) {
-    TCase *tcase = tcase_create ( "map" );
+TCase* setTests(void) {
+    TCase *tcase = tcase_create("set");
     tcase_add_test(tcase, api);
     tcase_add_test(tcase, run);
     tcase_add_test(tcase, iter);

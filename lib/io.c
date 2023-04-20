@@ -171,17 +171,90 @@ RUAPI FILE* ruFOpen(const char *filepath, const char *mode, int32_t* code) {
     ruRetWithCode(code, RUE_OK, fd);
 }
 
+RUAPI int32_t ruDiskFree(trans_chars path, uint64_t* total, uint64_t* avail) {
+    alloc_chars dirPath = NULL;
+    if (ruIsFile(path)) {
+        dirPath = ruDirName(path);
+        path = dirPath;
+    }
+    wchar_t* wpath = getWPath(path);
+    if (!wpath || (!total && !avail)) return RUE_PARAMETER_NOT_SET;
+    int32_t ret;
+    ULARGE_INTEGER lfree;
+    ULARGE_INTEGER ltot;
+    if (GetDiskFreeSpaceExW(wpath, &lfree,
+                            &ltot, NULL)) {
+        if (total) *total = (uint64_t)ltot.QuadPart;
+        if (avail) *avail = (uint64_t)lfree.QuadPart;
+        ret = RUE_OK;
+    } else {
+        if (total) *total = 0;
+        if (avail) *avail = 0;
+        ret = errno2rfec(errno);
+    }
+    ruFree(dirPath);
+    ruFree(wpath);
+    return ret;
+}
+
+RUAPI rusize ruFileSize(trans_chars filePath, int32_t* code) {
+    wchar_t* wfilename = getWPath(filePath);
+    rusize out = 0;
+    if (!wfilename) ruRetWithCode(code, RUE_PARAMETER_NOT_SET, out);
+
+    ruZeroedStruct(struct __stat64, buf);
+    if (0 == _wstat64(wfilename, &buf)) {
+        out = (rusize)buf.st_size;
+        if (code) *code = RUE_OK;
+    } else {
+        if (code) *code = errno2rfec(errno);
+    }
+    ruFree (wfilename);
+    return out;
+}
+
+RUAPI sec_t ruFileUtcTime(trans_chars filePath, int32_t* code) {
+    wchar_t* wfilename = getWPath(filePath);
+    sec_t out = 0;
+    if (!wfilename) ruRetWithCode(code, RUE_PARAMETER_NOT_SET, out);
+
+    ruZeroedStruct(struct __stat64, buf);
+    if (0 == _wstat64(wfilename, &buf)) {
+        out = (sec_t)buf.st_mtime;
+        if (code) *code = RUE_OK;
+    } else {
+        if (code) *code = errno2rfec(errno);
+    }
+    ruFree (wfilename);
+    return out;
+}
+
+RUAPI int32_t ruFileSetUtcTime(trans_chars filePath, sec_t date) {
+    if (!filePath) return RUE_PARAMETER_NOT_SET;
+    if (date < 0) return RUE_INVALID_PARAMETER;
+
+    wchar_t* wfilename = getWPath(filePath);
+    struct _utimbuf tb;
+    tb.actime = date;
+    tb.modtime = date;
+    int32_t ret = RUE_OK;
+    if(_wutime(wfilename, &tb)) {
+        ret = errno2rfec(errno);
+    }
+    ruFree (wfilename);
+    return ret;
+}
 
 #else
 
-#ifndef _WIN32 /* mingw doesn't do symlinks */
+//#ifndef _WIN32 /* mingw doesn't do symlinks */
 RUAPI bool ruIsSymlink(const char* filename) {
     ruClearError();
     struct stat s;
     if (lstat(filename, &s) == 0 && S_ISLNK (s.st_mode)) return true;
     return false;
 }
-#endif
+//#endif
 
 RUAPI bool ruFileExists(const char* filename) {
     ruClearError();
@@ -229,7 +302,13 @@ RUAPI int ruOpen(const char *filepath, int flags, int mode, int32_t* code) {
         ruRetWithCode(code, RUE_INVALID_PARAMETER, 0);
     }
     if (!mode) ruRetWithCode(code, RUE_INVALID_PARAMETER, 0);
+#ifdef ITS_OSX
+    alloc_chars nfdpath = ruStrToNfd(filepath);
+    int fd = open(nfdpath, flags, mode);
+    ruFree(nfdpath);
+#else
     int fd = open(filepath, flags, mode);
+#endif
     if (fd < 0) {
         int32_t ret = errno2rfec(errno);
         ruRetWithCode(code, ret, fd);
@@ -241,12 +320,64 @@ RUAPI FILE* ruFOpen(const char *filepath, const char *mode, int32_t* code) {
     ruClearError();
     if (!filepath) ruRetWithCode(code, RUE_PARAMETER_NOT_SET, 0);
     if (!mode) ruRetWithCode(code, RUE_PARAMETER_NOT_SET, 0);
+#ifdef ITS_OSX
+    alloc_chars nfdpath = ruStrToNfd(filepath);
+    FILE* fd = fopen(nfdpath, mode);
+    ruFree(nfdpath);
+#else
     FILE* fd = fopen(filepath, mode);
+#endif
     if (!fd) {
         int32_t ret = errno2rfec(errno);
         ruRetWithCode(code, ret, fd);
     }
     ruRetWithCode(code, RUE_OK, fd);
+}
+
+RUAPI int ruDiskFree(trans_chars path, uint64_t* total, uint64_t* avail) {
+    if (!path || (!total && !avail)) return RUE_PARAMETER_NOT_SET;
+#ifdef __linux__
+    ruZeroedStruct(struct statfs64, sf);
+    int ret = statfs64(path, &sf);
+#else
+    // darwin
+    ruZeroedStruct(struct statvfs, sf);
+    int ret = statvfs(path, &sf);
+#endif
+    if (!ret) {
+        if (total) *total = sf.f_blocks * sf.f_frsize;
+        if (avail) *avail = sf.f_bavail * sf.f_frsize;
+        return  RUE_OK;
+    }
+    if (total) *total = 0;
+    if (avail) *avail = 0;
+    return RUE_CANT_OPEN_FILE;
+}
+
+RUAPI rusize ruFileSize(trans_chars filePath, int32_t* code) {
+    ruStat_t st;
+    int32_t ret = ruStat(filePath, &st);
+    if(ret != RUE_OK) ruRetWithCode(code, ret, 0);
+    ruRetWithCode(code, ret, st.st_size);
+}
+
+RUAPI sec_t ruFileUtcTime(trans_chars filePath, int32_t* code) {
+    ruStat_t st;
+    int32_t ret = ruStat(filePath, &st);
+    if(ret != RUE_OK) ruRetWithCode(code, ret, 0);
+    ruRetWithCode(code, ret, st.st_mtime);
+}
+
+RUAPI int32_t ruFileSetUtcTime(trans_chars filePath, sec_t date) {
+    if (!filePath) return RUE_PARAMETER_NOT_SET;
+    if (date < 0) return RUE_INVALID_PARAMETER;
+    struct utimbuf tb;
+    tb.actime = date;
+    tb.modtime = date;
+    if(utime(filePath, &tb)) {
+        return errno2rfec(errno);
+    }
+    return RUE_OK;
 }
 
 #endif
@@ -329,10 +460,10 @@ RUAPI int ruOpenTmp(char *pathTemplate, int flags, int mode, int32_t *code) {
     ruTimeVal tv;
     ruGetTimeVal(&tv);
 
-    char *xl8 = ruLastSubstr(pathTemplate, "^^^");
+    char *xl8 = (char*)ruLastSubstr(pathTemplate, "^^^");
     if (!xl8) ruRetWithCode(code, RUE_INVALID_PARAMETER, 0);
 
-    long value = (tv.usec ^ tv.sec ) + threadcounter++;
+    long value = (long)((tv.usec ^ tv.sec ) + threadcounter++);
     int ret = RUE_OK, fd = -1;
     for (int tries = 0; tries < 100; value += 123, tries++) {
         long v = value;
@@ -352,13 +483,13 @@ RUAPI int ruOpenTmp(char *pathTemplate, int flags, int mode, int32_t *code) {
     ruRetWithCode(code, ret, fd);
 }
 
-RUAPI int32_t ruFileSetContents(const char *filename, const char *contents,
-                              rusize_s length) {
+RUAPI int32_t ruFileSetContents(trans_chars filename, trans_chars contents,
+                              rusize length) {
     ruClearError();
-    if (!filename || !contents || !length) return RUE_PARAMETER_NOT_SET;
+    if (!filename) return RUE_PARAMETER_NOT_SET;
 
     int32_t ret = RUE_OK;
-    if (length == -1) length = strlen (contents);
+    if (length == RU_SIZE_AUTO && contents) length = strlen (contents);
     char *tmpName = ruDupPrintf("%s.^^^", filename);
     int oh = ruOpenTmp(tmpName, O_CREAT | O_RDWR, 0666, &ret);
     do {
@@ -366,6 +497,7 @@ RUAPI int32_t ruFileSetContents(const char *filename, const char *contents,
             ruSetError("could not open '%s' ec: %d", tmpName, ret);
             break;
         }
+        if (!contents) length = 0;
         while (length > 0) {
             rusize_s s = ruWrite(oh, contents, length);
 
@@ -387,7 +519,13 @@ RUAPI int32_t ruFileSetContents(const char *filename, const char *contents,
     // clean up
     if (oh >= 0) {
         close(oh);
+#ifdef ITS_OSX
+        alloc_chars nfdpath = ruStrToNfd(filename);
+        ret = ruFileRename(tmpName, nfdpath);
+        ruFree(nfdpath);
+#else
         ret = ruFileRename(tmpName, filename);
+#endif
         if (ret != RUE_OK) {
             ruFileRemove(tmpName);
         }
@@ -397,7 +535,7 @@ RUAPI int32_t ruFileSetContents(const char *filename, const char *contents,
     return ret;
 }
 
-RUAPI int ruFileGetContents(const char *filename, char **contents, rusize *length) {
+RUAPI int ruFileGetContents(trans_chars filename, alloc_chars* contents, rusize* length) {
     ruClearError();
     if (!filename || !contents) return RUE_PARAMETER_NOT_SET;
     *contents = NULL;
@@ -475,7 +613,53 @@ RUAPI int ruFileGetContents(const char *filename, char **contents, rusize *lengt
     return ret;
 }
 
-RUAPI int ruFileRename(const char* oldName, const char* newName) {
+#define CP_BUF_SZ 4096
+RU_THREAD_LOCAL char cpbuf[CP_BUF_SZ];
+
+RUAPI int ruFileCopy(trans_chars srcpath, trans_chars destpath) {
+    ruClearError();
+    if (!srcpath || !destpath) return RUE_PARAMETER_NOT_SET;
+
+    int32_t ret = RUE_OK;
+    if (!ruFileExists(srcpath)) {
+        return RUE_FILE_NOT_FOUND;
+    }
+
+    if (!ruIsFile(srcpath)) {
+        ruSetError("File '%s' is not a regular file to read");
+        return RUE_INVALID_PARAMETER;
+    }
+    int ih = open(srcpath, O_RDONLY);
+    if (ih < 0) {
+        ruSetError("Failed to open file '%s' errno: %d - %s",
+                   srcpath, errno, strerror(errno));
+        return RUE_CANT_OPEN_FILE;
+    }
+
+    alloc_chars tmpName = ruDupPrintf("%s.^^^", destpath);
+    ret = RUE_CANT_OPEN_FILE;
+    int oh = ruOpenTmp(tmpName, O_CREAT | O_RDWR, 0666, &ret);
+    while (oh >= 0) {
+        // copy the data
+        int in = read(ih, cpbuf, CP_BUF_SZ);
+        if (in <= 0) break;
+        if (ruWrite(oh, cpbuf, in) <= 0) break;
+    }
+
+    if (ih) close(ih);
+    if (oh >= 0) {
+        close(oh);
+        ret = ruFileRename(tmpName, destpath);
+        if (ret != RUE_OK) {
+            ruFileRemove(tmpName);
+        }
+    }
+    ruFree(tmpName);
+
+    return ret;
+}
+
+static int fileRename(const char* oldName, const char* newName, bool force) {
     ruClearError();
     int ret = RUE_OK;
 #ifdef _WIN32
@@ -483,7 +667,8 @@ RUAPI int ruFileRename(const char* oldName, const char* newName) {
     char *newNameFixed = fixPath(newName);
     wchar_t *old = charToUni(oldNameFixed);
     wchar_t *new = charToUni(newNameFixed);
-    if (!MoveFileExW (old, new, MOVEFILE_REPLACE_EXISTING)) {
+    DWORD flags = force? MOVEFILE_REPLACE_EXISTING : 0;
+    if (!MoveFileExW (old, new, flags)) {
         DWORD err = GetLastError();
         ruSetError("Failed to rename file '%s' to '%s' errno: %d",
                  oldName, newName, err);
@@ -494,13 +679,37 @@ RUAPI int ruFileRename(const char* oldName, const char* newName) {
     ruFree(old);
     ruFree(new);
 #else
-    if(rename(oldName, newName)) {
+#ifdef __linux__
+    // not sure about android
+    uint flags = force? 0 : RENAME_NOREPLACE;
+    if(renameat2(AT_FDCWD, oldName,
+                 AT_FDCWD, newName, flags)) {
+#else
+    // means darwin ATM nopt sure about iOS
+    uint flags = force? 0 : RENAME_EXCL;
+#ifdef ITS_OSX
+    alloc_chars nfdpath = ruStrToNfd(newName);
+    newName = nfdpath;
+#endif
+    if (renamex_np(oldName, newName, flags)) {
+#endif
         ruSetError("Failed to rename file '%s' to '%s' errno: %d - %s",
-                 oldName, newName, errno, strerror(errno));
+                   oldName, newName, errno, strerror(errno));
         ret = RUE_CANT_WRITE;
     }
 #endif
+#ifdef ITS_OSX
+    ruFree(nfdpath);
+#endif
     return ret;
+}
+
+RUAPI int ruFileRename(const char* oldName, const char* newName) {
+    return fileRename(oldName, newName, true);
+}
+
+RUAPI int ruFileTryRename(const char* oldName, const char* newName) {
+    return fileRename(oldName, newName, false);
 }
 
 rusize_s ruWrite(int oh, const void* contents, rusize length) {
@@ -527,8 +736,7 @@ rusize_s ruWrite(int oh, const void* contents, rusize length) {
 #endif
 }
 
-
-static int remover(const char*fullPath, bool isDir, void *ctx) {
+static int remover(trans_chars fullPath, bool isDir, ptr ctx) {
     if (strlen(fullPath) == 0) return RUE_INVALID_PARAMETER;
     if (strcmp("/", fullPath) == 0) return RUE_INVALID_PARAMETER;
     if (!ruFileExists(fullPath)) return RUE_OK;
@@ -540,17 +748,33 @@ static int remover(const char*fullPath, bool isDir, void *ctx) {
     return RUE_OK;
 }
 
-static int32_t folderWalk(const char* folder, u_int32_t flags,
-                          entryMgr actor, void *ctx) {
+static int32_t folderWalk(trans_chars folder, u_int32_t flags,
+                          entryFilter filter, entryMgr actor, ptr ctx) {
     // sanity checks
     if (!folder) return RUE_PARAMETER_NOT_SET;
     int32_t ret = RUE_OK;
+    if (!ruFileExists(folder)) return ret;
     bool isFolder = ruIsDir(folder);
+
+    alloc_chars dirname = NULL;
+    char* basename = NULL;
+    if (filter) {
+        dirname = ruDirName(folder);
+#ifdef ITS_OSX
+        basename = ruStrToNfd(ruBaseName(folder));
+#else
+        basename = (char*)ruBaseName(folder);
+#endif
+    }
 
     if (isFolder) {
         if (flags & RU_WALK_FOLDER_FIRST) {
-            ret = actor(folder, isFolder, ctx);
-            if (ret != RUE_OK) return ret;
+            if (!filter || !filter(dirname, basename, isFolder, ctx)) {
+                if (actor) {
+                    ret = actor(folder, isFolder, ctx);
+                    if (ret != RUE_OK) goto cleanup;
+                }
+            }
         }
 #ifdef _WIN32
         WIN32_FIND_DATAW ffd;
@@ -562,7 +786,8 @@ static int32_t folderWalk(const char* folder, u_int32_t flags,
         if (strlen(folder) > (MAX_PATH - 3)) {
             ruSetError("given folder name '%s' is longer than allowed %d bytes",
                     folder, MAX_PATH);
-            return RUE_INVALID_PARAMETER;
+            ret = RUE_INVALID_PARAMETER;
+            goto cleanup;
         }
 
         WCHAR *fld = charToUni(folder);
@@ -576,7 +801,8 @@ static int32_t folderWalk(const char* folder, u_int32_t flags,
         if (INVALID_HANDLE_VALUE == hFind) {
             ruSetError("failed opening '%s' windows error: %d",
                     szDir, GetLastError());
-            return RUE_FILE_NOT_FOUND;
+            ret = RUE_FILE_NOT_FOUND;
+            goto cleanup;
         }
 
         char *path = NULL, *fileName = NULL;
@@ -584,8 +810,8 @@ static int32_t folderWalk(const char* folder, u_int32_t flags,
         do {
             ruFree(fileName);
             fileName = uniToChar(ffd.cFileName);
-            if (ruStrcmp("..", fileName) == 0 ||
-                ruStrcmp(".", fileName) == 0)
+            if (ruStrCmp("..", fileName) == 0 ||
+                ruStrCmp(".", fileName) == 0)
                 continue;
 
             ruFree(path);
@@ -596,11 +822,13 @@ static int32_t folderWalk(const char* folder, u_int32_t flags,
             }
             if ((flags & RU_WALK_NO_RECURSE) ||
                 !(ffd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
-                ret = actor(path, false, ctx);
-                if (ret != RUE_OK) break;
+                if (actor) {
+                    ret = actor(path, false, ctx);
+                    if (ret != RUE_OK) break;
+                }
                 continue;
             }
-            ret = folderWalk(path, flags, actor, ctx);
+            ret = folderWalk(path, flags, filter, actor, ctx);
             if (ret != RUE_OK) break;
 
         } while (FindNextFileW(hFind, &ffd) != 0);
@@ -614,42 +842,68 @@ static int32_t folderWalk(const char* folder, u_int32_t flags,
         if (!d) {
             ruSetError("failed opening '%s' errno: %d - %s",
                        folder, errno, strerror(errno));
-            return RUE_FILE_NOT_FOUND;
+            ret = RUE_FILE_NOT_FOUND;
+            goto cleanup;
         }
 
         struct dirent *dir;
-        char *path = NULL;
+        char* path = NULL;
+        char* name = NULL;
 
         while ((dir = readdir(d)) != NULL) {
-            if (ruStrcmp("..", dir->d_name) == 0 ||
-                ruStrcmp(".", dir->d_name) == 0)
-                continue;
+            if (ruStrEquals("..", dir->d_name) ||
+                ruStrEquals(".", dir->d_name)) continue;
+#ifdef ITS_OSX
+            ruReplace(name, ruStrToNfd(dir->d_name));
+#else
+            name = dir->d_name;
+#endif
 
+            if (filter) {
+                if (filter(folder, name,
+                           dir->d_type == DT_DIR, ctx)) {
+                    continue;
+                }
+            }
             ruFree(path);
             if (dir->d_type == DT_DIR) {
-                path = ruDupPrintf("%s%s%c", folder, dir->d_name, RU_SLASH);
+                path = ruDupPrintf("%s%s%c", folder, name, RU_SLASH);
             } else {
-                path = ruDupPrintf("%s%s", folder, dir->d_name);
+                path = ruDupPrintf("%s%s", folder, name);
             }
             if ((flags & RU_WALK_NO_RECURSE) || dir->d_type != DT_DIR) {
-                ret = actor(path, false, ctx);
-                if (ret != RUE_OK) break;
+                if (actor) {
+                    ret = actor(path, false, ctx);
+                    if (ret != RUE_OK) break;
+                }
                 continue;
             }
-            ret = folderWalk(path, flags, actor, ctx);
+            ret = folderWalk(path, flags, filter, actor, ctx);
             if (ret != RUE_OK) break;
         }
+#ifdef ITS_OSX
+        ruFree(name);
+#endif
         ruFree(path);
         closedir(d);
 #endif
     }
     if ((flags & RU_WALK_FOLDER_LAST) || !isFolder) {
         if (ret == RUE_OK) {
-            ret = actor(folder, isFolder, ctx);
+            if (!filter || !filter(dirname, basename, isFolder, ctx)) {
+                if (actor) ret = actor(folder, isFolder, ctx);
+            }
         }
     }
+
+cleanup:
+#ifdef ITS_OSX
+    ruFree(basename);
+#endif
+    ruFree(dirname);
     return ret;
 }
+
 /**
  * Fixes path slashes to be proper and to contain a trailing slash. Result to be
  * freed will be returned and given file pointer will be updated to returned path
@@ -658,12 +912,12 @@ static int32_t folderWalk(const char* folder, u_int32_t flags,
  * @param filePath path to examine, will be set to returned path if it was created
  * @return new created path to free after use or NULL
  */
-char* fixSlashes(const char** filePath) {
-    char* path = NULL;
-#ifdef _WIN32
+alloc_chars fixSlashes(perm_chars* filePath) {
+    alloc_chars path = NULL;
+#ifdef RUMS
     path = fixPath(*filePath);
     if (!ruStrEndsWith(path, "\\", NULL)) {
-        char *p2 = ruDupPrintf("%s\\", *path);
+        alloc_chars p2 = ruDupPrintf("%s\\", path);
         ruFree(path);
         path = p2;
     }
@@ -673,18 +927,46 @@ char* fixSlashes(const char** filePath) {
         path = ruDupPrintf("%s/", *filePath);
         *filePath = path;
     }
+#ifdef ITS_OSX
+    alloc_chars nfdpath = ruStrToNfd(*filePath);
+    ruReplace(path, nfdpath);
+    *filePath = path;
+#endif
 #endif
     return path;
 }
 
-RUAPI int32_t ruFolderWalk(const char* folder, u_int32_t flags, entryMgr actor, void *ctx) {
-    char* path = fixSlashes(&folder);
-    int32_t ret = folderWalk(folder, flags, actor, ctx);
+RUAPI int32_t ruFilteredFolderWalk(trans_chars folder, u_int32_t flags,
+                                   entryFilter filter, entryMgr actor, ptr ctx) {
+    alloc_chars path = fixSlashes(&folder);
+    int32_t ret = folderWalk(folder, flags, filter, actor, ctx);
     ruFree(path);
     return ret;
 }
 
-RUAPI int ruFolderRemove(const char* folder) {
+RUAPI int32_t ruFolderWalk(trans_chars folder, u_int32_t flags, entryMgr actor, ptr ctx) {
+    alloc_chars path = fixSlashes(&folder);
+    int32_t ret = folderWalk(folder, flags, NULL, actor, ctx);
+    ruFree(path);
+    return ret;
+}
+
+static int32_t cntLst(trans_chars fullPath, bool isFolder, ptr o) {
+    ru_int* cnt = (ru_int*)o;
+    (*cnt)++;
+    return RUE_OK;
+}
+
+RUAPI ru_int ruFolderEntries(trans_chars folder) {
+    ru_int cnt = 0;
+    alloc_chars path = fixSlashes(&folder);
+    folderWalk(folder, RU_WALK_NO_RECURSE | RU_WALK_FOLDER_FIRST,
+               NULL, cntLst, &cnt);
+    ruFree(path);
+    return cnt;
+}
+
+RUAPI int ruFolderRemove(trans_chars folder) {
     ruClearError();
     if (!folder) return RUE_PARAMETER_NOT_SET;
     if (strlen(folder) == 0) return RUE_INVALID_PARAMETER;
@@ -717,7 +999,7 @@ RUAPI int ruFileRemove(const char* filename) {
 #endif
 }
 
-char* getDirNameTerminator(const char *filePath) {
+char* getDirNameTerminator(trans_chars filePath) {
     if (!filePath) return NULL;
     char *pfile = (char*)filePath + strlen(filePath)-1;
     for (; pfile >= filePath; pfile--) {
@@ -774,7 +1056,11 @@ RUAPI int ruMkdir(const char *pathname, int mode, bool deep) {
     if (!mode) return RUE_INVALID_PARAMETER;
 #endif
     int ret;
-    char *path = ruStrdup(pathname);
+#ifdef ITS_OSX
+    char *path = ruStrToNfd(pathname);
+#else
+    char *path = ruStrDup(pathname);
+#endif
     do {
         char *p = path + strlen(path)-1;
 #ifdef _WIN32
@@ -801,16 +1087,16 @@ RUAPI int ruMkdir(const char *pathname, int mode, bool deep) {
     return ret;
 }
 
-RUAPI char* ruDirName(const char *filePath) {
+RUAPI alloc_chars ruDirName(trans_chars filePath) {
     ruClearError();
     if (!filePath) return NULL;
     char *fileTerm = getDirNameTerminator(filePath);
     if (!fileTerm) return NULL;
-    rusize len = fileTerm - filePath + 1;
-    return ruStrndup(filePath, len);
+    rusize len = fileTerm - filePath;
+    return ruStrNDup(filePath, len);
 }
-
-RUAPI char* ruBaseName(const char *filePath) {
+// 01/
+RUAPI perm_chars ruBaseName(perm_chars filePath) {
     ruClearError();
     if (!filePath) return NULL;
     char *pfile = (char*)filePath + strlen(filePath)-1;
@@ -828,9 +1114,42 @@ RUAPI char* ruBaseName(const char *filePath) {
     return pfile;
 }
 
-RUAPI char* ruFullPath(const char* filePath) {
+RUAPI perm_chars ruFileExtension(perm_chars filePath) {
     ruClearError();
-    char *res = NULL;
+    if (!filePath) return NULL;
+    perm_chars pfile = filePath + strlen(filePath)-1;
+    for (; pfile >= filePath; pfile--) {
+#ifdef _WIN32
+        if (*pfile == '/' || *pfile == '\\' ) {
+#else
+        if (*pfile == '/') {
+#endif
+            // hit folder boundary
+            return NULL;
+        }
+        if (*pfile == '.') {
+            // we do not want dot files al la .foo
+            if (pfile == filePath) return NULL;
+            // or /.foo
+            if (*(pfile - 1) == '/') return NULL;
+#ifdef _WIN32
+            // or c:\\.foo
+            if (*(pfile - 1) == '\\' ) return NULL;
+#endif
+            pfile++;
+            break;
+        }
+    }
+    // dot at the end
+    if (!*pfile) return NULL;
+    // no dot at all
+    if (pfile == filePath) return NULL;
+    return pfile;
+}
+
+RUAPI alloc_chars ruFullPath(trans_chars filePath) {
+    ruClearError();
+    alloc_chars res = NULL;
 #ifdef _WIN32
     char *fixedPath = NULL;
     if (filePath) {
@@ -859,7 +1178,7 @@ RUAPI char* ruFullPath(const char* filePath) {
 #else
     if (filePath && *filePath == '/') {
         // path is already absolute
-        return ruStrdup(filePath);
+        return ruStrDup(filePath);
     }
     char fullPath[MAXPATHLEN];
     fullPath[0] = '\0';
@@ -867,7 +1186,7 @@ RUAPI char* ruFullPath(const char* filePath) {
         if (filePath) {
             res = ruDupPrintf("%s%c%s", fullPath, RU_SLASH, filePath);
         } else {
-            res = ruStrdup(fullPath);
+            res = ruStrDup(fullPath);
         }
     } else {
         ruSetError("invalid current directory '%s'", fullPath);
@@ -876,12 +1195,38 @@ RUAPI char* ruFullPath(const char* filePath) {
     return res;
 }
 
-RUAPI char* ruPathJoin(const char* base, const char* file) {
+RUAPI alloc_chars ruPathJoin(trans_chars base, trans_chars file) {
     if (!base && !file) return NULL;
-    if (!file) return ruStrdup(base);
-    if (!base) return ruStrdup(file);
+    if (!file) return ruStrDup(base);
+    if (!base) return ruStrDup(file);
     if (ruStrEndsWith(base, RU_SLASH_S, NULL)) {
         return ruDupPrintf("%s%s", base, file);
     }
     return ruDupPrintf("%s%s%s", base, RU_SLASH_S, file);
+}
+
+RUAPI alloc_chars ruPathMultiJoin(int parts, ...) {
+    if (parts < 1) return NULL;
+    va_list args;
+    va_start (args, parts);
+    ruString str = NULL;
+    for (int i = 0; i < parts; i++) {
+        trans_chars piece = va_arg(args, trans_chars);
+        if (str && ruStrStartsWith(piece, RU_SLASH_S, NULL)) piece++;
+        rusize len = strlen(piece);
+        if (ruStrEndsWith(piece, RU_SLASH_S, NULL)) {
+            len--;
+        }
+        if (!str) {
+            str = ruStringNewn(NULL, len * parts);
+            ruStringAppendn(str, piece, len);
+        } else {
+            ruStringAppend(str, RU_SLASH_S);
+            ruStringAppendn(str, piece, len);
+        }
+    }
+    va_end (args);
+    alloc_chars out = ruStringGetCString(str);
+    ruStringFree(str, true);
+    return out;
 }

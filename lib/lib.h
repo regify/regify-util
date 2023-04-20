@@ -28,19 +28,29 @@
     #define __USE_MINGW_ANSI_STDIO 1
 #endif
 #define RU_BUILDING
+
 #include <regify-util.h>
 #ifndef RUMS
     #include <dirent.h>
     #include <sys/time.h>
     #include <unistd.h>
+    #include <utime.h>
 #else
     #include <io.h>
+    #include <sys/utime.h>
 #endif
 #ifdef _WIN32
     #include <windows.h>
+    #include <sys/types.h>
 #else
     #include <sys/param.h>
     #include <sys/syscall.h>
+#ifdef ITS_OSX
+    #include <sys/statvfs.h>
+#endif
+#ifdef __linux__
+    #include <sys/vfs.h>
+#endif
 #endif
 #include <ctype.h>
 #include <stdio.h>
@@ -79,6 +89,12 @@ extern "C" {
 #ifdef RUMS
     // running non posix
 #define strcasecmp _stricmp
+#define strncasecmp _strnicmp
+#define timegm _mkgmtime
+#define timelocal mktime
+#define localtime_r localtime_s
+#define utimbuf _utimbuf
+#define utime _utime
 #endif
 
 // Error reporting
@@ -107,46 +123,60 @@ void ruClearError(void);
 #define RU_MAX_UINT64	0xffffffffffffffffL
 
 // Type checking is done with the first element being uint64_t magic must be < u_int16_t
-#define MuxMagic        2301
-#define StringMagic     2302
-#define ListElmtMagic   2304
-#define ListMagic       2305
-#define MapMagic        2306
-#define MagicThr        2307
-#define MagicIni        2308
+#define MagicMux            2301
+#define MagicString         2302
+#define MagicFileKvStore    2303
+#define MagicListElmt       2304
+#define MagicList           2305
+#define MagicMap            2306
+#define MagicThr            2307
+#define MagicIni            2308
+#define KvStoreMagic        2309
+#define MagicTsc            2310
+// cleaner.c #define MagicCleaner 2410
 
 /*
  *  Mutex
  */
-#ifdef RUMS
+#ifdef _WIN32
 #include <windows.h>
 typedef HANDLE ruMutex_t;
 #else
 #include <pthread.h>
+#include <sched.h>
 typedef pthread_mutex_t ruMutex_t;
 #endif
+
 typedef struct mux_ {
-    uint64_t type;
+    ru_uint type;
     ruMutex_t mux;
 } Mux;
 
 typedef struct thr_ {
-    uint64_t type;
-#ifndef _WIN32
-    pthread_t tid;
-#endif
+    ru_uint type;
+    ruThreadId tid;
     ruStartFunc start;
     void* user;
     void* exitRes;
     bool finished;
 } Thr;
 
+Mux* ruMuxInit(void);
+void ruMuxLock(Mux *mux);
+void ruMuxUnlock(Mux *mux);
+
+// thread safe counter
+typedef struct tsc_ {
+    ru_uint type;
+    ruMutex mutex;  // counter mutex
+    int64_t count;  // counter
+} tsc;
 
 /*
  *  Strings
  */
 typedef struct String_ {
-    uint64_t type;
+    ru_uint type;
     char *start;
     rusize idx;
     rusize len;
@@ -156,41 +186,44 @@ typedef struct String_ {
  * @param inPath path to convert
  * @return converted path to be freed by the caller
  */
-char* fixPath(const char *inPath);
+alloc_chars fixPath(const char *inPath);
 
 /*
  *  Lists
  */
 typedef struct ListElmt_ {
-    uint64_t type;
-    void               *data;
-    struct ListElmt_   *next;
+    ru_uint type;
+    struct ListElmt_* prev;
+    ptr data;
+    struct ListElmt_* next;
 } ListElmt;
 
 typedef struct List_ {
-    uint64_t type;
-    int32_t                size;
-    void               (*destroy)(void *data);
-    ListElmt           *head;
-    ListElmt           *tail;
+    ru_uint type;
+    uint32_t size;
+    void (*destroy)(void *data);
+    ListElmt* head;
+    ListElmt* tail;
+    // optional thread safety
+    ruMutex mux;
+    bool doQuit;    // flag to initiate map shutdown
 } List;
 
 List* ListNew(void (*destructor)(void *data));
 void ListFree(List *list);
-void* ListRemoveAfter(List *list, ruListElmt rle, int32_t *code);
-ListElmt* ListHead(List *list);
-int32_t ListInsertAfter(List *list, ruListElmt rle, const void *data);
+ptr ListRemove(List* list, ListElmt* old_element, int32_t* code);
+int32_t ListInsertAfter(List *list, ruListElmt rle, ptr data);
 
 /*
  *  Maps
  */
 typedef struct Map_ {
-    uint64_t type;
+    ru_uint type;
     u_int32_t   buckets;
-    u_int32_t   (*hash)(const void *key);
-    bool   (*match)(const void *key1, const void *key2);
-    void   (*keyFree)(void *key);
-    void   (*valFree)(void *val);
+    ruHashFunc hash;
+    ruMatchFunc match;
+    ruFreeFunc keyFree;
+    ruFreeFunc valFree;
     u_int32_t   size;
     List   **table;
     // optional thread safety
@@ -207,7 +240,7 @@ typedef struct Map_ {
  * Ini Files
  */
 typedef struct Ini_ {
-    uint64_t type;     // magic
+    ru_uint type;     // magic
     ruMap keys;         // char*: char*
     ruMap sections;     // char*: ruMap(char*: char*)
 } Ini;
@@ -259,16 +292,16 @@ void ruAbort(void);
 void U_CALLCONV traceData( const void *context, int32_t fnNumber, int32_t level,
                            const char *fmt, va_list args);
 bool ruIsunreserved(unsigned char in);
+sec_t timeParse(trans_chars dateformat, trans_chars datestr, bool utc);
 
 // ICU stuff
 UConverter* getConverter(void);
-UChar* strToUni(UConverter *conv, const char *instr);
+UChar* convToUni(UConverter *conv, trans_chars instr, int32_t inlen);
+alloc_chars convToStr(UConverter *conv, UChar *usrc, int32_t uclen);
 UChar* charToUni(const char *instr);
-char* uniToStr(UConverter *conv, UChar *usrc, int32_t uclen);
-char* uniNToChar(UChar *usrc, int32_t len);
-char* uniToChar(UChar *usrc);
+alloc_chars uniToChar(UChar *usrc);
 UChar* uniSwitchCase(UChar* usrc, bool isUpper);
-char* utf8SwitchCase(const char *instr, bool isUpper);
+alloc_chars utf8SwitchCase(trans_chars instr, bool isUpper);
 
 // io stuff
 int32_t errno2rfec(int err);

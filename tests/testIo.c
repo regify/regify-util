@@ -71,15 +71,53 @@ START_TEST ( api ) {
 #endif
 
     expi = RUE_PARAMETER_NOT_SET;
+    test = "ruStat";
     reti = ruStat(NULL, NULL);
     fail_unless(exp == ret, retText, test, exp, ret);
 
     reti = ruStat("/tmp", NULL);
     fail_unless(exp == ret, retText, test, exp, ret);
 
-    test = "ruBaseName";
+    test = "ruFileSize";
+    reti = 0;
+    rusize sz = 23;
+    rusize esz = 0;
+    sz = ruFileSize(NULL, &reti);
+    fail_unless(expi == reti, retText, test, expi, reti);
+    fail_unless(esz == sz, retText, test, esz, sz);
+
+    expi = RUE_FILE_NOT_FOUND;
+    sz = ruFileSize("/foo", &reti);
+    fail_unless(expi == reti, retText, test, expi, reti);
+    fail_unless(esz == sz, retText, test, esz, sz);
+
+    test = "ruDiskFree";
+    expi = RUE_PARAMETER_NOT_SET;
+    reti = ruDiskFree(NULL, NULL, NULL);
+    fail_unless(expi == reti, retText, test, expi, reti);
+
+
+    test = "ruFileSetUtcTime";
+    expi = RUE_PARAMETER_NOT_SET;
+    reti = ruFileSetUtcTime(NULL, -1);
+    fail_unless(expi == reti, retText, test, expi, reti);
+
+    expi = RUE_INVALID_PARAMETER;
+    reti = ruFileSetUtcTime("/foo", -1);
+    fail_unless(expi == reti, retText, test, expi, reti);
+
+    expi = RUE_FILE_NOT_FOUND;
+    reti = ruFileSetUtcTime("/foo", 0);
+    fail_unless(expi == reti, retText, test, expi, reti);
+
+    test = "ruFileExtension";
+    expi = RUE_PARAMETER_NOT_SET;
     char *expres = NULL;
-    char *res = ruBaseName(NULL);
+    char *res = (char*)ruFileExtension(NULL);
+    fail_unless(expres == res, retText, test, expres, res);
+
+    test = "ruBaseName";
+    res = (char*)ruBaseName(NULL);
     fail_unless(expres == res, retText, test, expres, res);
 
     test = "ruDirName";
@@ -107,10 +145,10 @@ END_TEST
 
 START_TEST ( filetest ) {
 
-    const char*file = makePath("foess");
+    perm_chars file = makePath("foess");
     bool ret, exp;
-    const char *test = "ruFileExists";
-    const char *retText = "%s failed wanted ret '%d' but got '%d'";
+    perm_chars test = "ruFileExists";
+    perm_chars retText = "%s failed wanted ret '%d' but got '%d'";
 
     exp = true;
     ret = ruFileExists(file);
@@ -136,6 +174,19 @@ START_TEST ( filetest ) {
     fail_unless(exp == ret, retText, test, exp, ret);
 #endif
 
+    expi = RUE_PARAMETER_NOT_SET;
+    test = "ruDiskFree";
+    uint64_t tot = -1, avail = -1;
+    reti = ruDiskFree(file, NULL, NULL);
+    fail_unless(expi == reti, retText, test, expi, reti);
+
+    expi = RUE_OK;
+    reti = ruDiskFree(file, &tot, &avail);
+    fail_unless(expi == reti, retText, test, expi, reti);
+    fail_if(0 >= tot, retText, test, 0, tot);
+    fail_if(0 > avail, retText, test, 0, avail);
+    //ruVerbLogf("Disk space on %s free: %ld of: %ld", file, avail, tot);
+
     file = makePath("föss");
 
     exp = true;
@@ -156,6 +207,14 @@ START_TEST ( filetest ) {
     ret = ruIsSymlink(file);
     fail_unless(exp == ret, retText, test, exp, ret);
 #endif
+
+    test = "ruDiskFree";
+    tot = avail = -1;
+    reti = ruDiskFree(file, &tot, &avail);
+    fail_unless(expi == reti, retText, test, expi, reti);
+    fail_if(0 >= tot, retText, test, 0, tot);
+    fail_if(0 > avail, retText, test, 0, avail);
+    //ruVerbLogf("Disk space on %s free: %ld of: %ld", file, avail, tot);
 
     file = makePath("föss.bat");
 
@@ -233,30 +292,32 @@ START_TEST ( filetest ) {
 
 #endif
 
+    alloc_chars res = NULL;
+    perm_chars pres;
     file = "/bar";
-    char *expres = "bar";
-    char *res = ruBaseName(file);
-    ck_assert_str_eq(expres, res);
+    char* expres = "bar";
+    pres = ruBaseName(file);
+    ck_assert_str_eq(expres, pres);
 
-    expres = "/";
+    expres = "";
     res = ruDirName(file);
     ck_assert_str_eq(expres, res);
     ruFree(res);
 
     file = "/bar/";
     expres = "";
-    res = ruBaseName(file);
-    ck_assert_str_eq(expres, res);
+    pres = ruBaseName(file);
+    ck_assert_str_eq(expres, pres);
 
-    expres = "/bar/";
+    expres = "/bar";
     res = ruDirName(file);
     ck_assert_str_eq(expres, res);
     ruFree(res);
 
     file = "bar";
     expres = "bar";
-    res = ruBaseName(file);
-    ck_assert_str_eq(expres, res);
+    pres = ruBaseName(file);
+    ck_assert_str_eq(expres, pres);
 
     expres = NULL;
     res = ruDirName(file);
@@ -264,22 +325,62 @@ START_TEST ( filetest ) {
 
     file = "/";
     expres = "";
-    res = ruBaseName(file);
-    ck_assert_str_eq(expres, res);
+    pres = ruBaseName(file);
+    ck_assert_str_eq(expres, pres);
 
-    expres = "/";
+    expres = "";
+    res = ruDirName(file);
+    ck_assert_str_eq(expres, res);
+    ruFree(res);
+
+    file = "/foo/bar";
+    expres = "bar";
+    pres = ruBaseName(file);
+    ck_assert_str_eq(expres, pres);
+
+    expres = "/foo";
     res = ruDirName(file);
     ck_assert_str_eq(expres, res);
     ruFree(res);
 
     file = "";
     expres = "";
-    res = ruBaseName(file);
-    ck_assert_str_eq(expres, res);
+    pres = ruBaseName(file);
+    ck_assert_str_eq(expres, pres);
 
     expres = NULL;
     res = ruDirName(file);
     fail_unless(expres == res, retText, test, expres, res);
+
+
+    test = "ruFileExtension";
+    expres = NULL;
+    pres = ruFileExtension("");
+    fail_unless(expres == pres, retText, test, expres, pres);
+
+    pres = ruFileExtension("foo");
+    fail_unless(expres == pres, retText, test, expres, pres);
+
+    pres = ruFileExtension(".foo");
+    fail_unless(expres == pres, retText, test, expres, pres);
+
+    pres = ruFileExtension("fo/.bar");
+    fail_unless(expres == pres, retText, test, expres, pres);
+
+    pres = ruFileExtension("foo.d/bar");
+    fail_unless(expres == pres, retText, test, expres, pres);
+
+    pres = ruFileExtension("foo.d");
+    ck_assert_str_eq("d", pres);
+
+    pres = ruFileExtension("foo/.bar.x");
+    ck_assert_str_eq("x", pres);
+
+    pres = ruFileExtension("bar.x.y");
+    ck_assert_str_eq("y", pres);
+
+    pres = ruFileExtension(".a.b.c");
+    ck_assert_str_eq("c", pres);
 
     test = "ruFullPath";
     expres = NULL;
@@ -309,6 +410,35 @@ START_TEST ( filetest ) {
     expres = "base" RU_SLASH_S "base";
     ck_assert_str_eq(expres, res);
     ruFree(res);
+
+    test = "ruPathMultiJoin";
+    expres = NULL;
+    res = ruPathMultiJoin(-1);
+    fail_unless(expres == res, retText, test, expres, res);
+
+    res = ruPathMultiJoin(0);
+    fail_unless(expres == res, retText, test, expres, res);
+
+    res = ruPathMultiJoin(1, RU_SLASH_S "foo" RU_SLASH_S);
+    expres = RU_SLASH_S "foo";
+    ck_assert_str_eq(expres, res);
+    ruFree(res);
+
+    res = ruPathMultiJoin(1, "foo", "bar");
+    expres = "foo";
+    ck_assert_str_eq(expres, res);
+    ruFree(res);
+
+    res = ruPathMultiJoin(2, "foo", "bar");
+    expres = "foo" RU_SLASH_S "bar";
+    ck_assert_str_eq(expres, res);
+    ruFree(res);
+
+    res = ruPathMultiJoin(2, RU_SLASH_S "foo" RU_SLASH_S, RU_SLASH_S "bar" RU_SLASH_S);
+    expres = RU_SLASH_S "foo" RU_SLASH_S "bar";
+    ck_assert_str_eq(expres, res);
+    ruFree(res);
+
 }
 END_TEST
 
@@ -391,13 +521,7 @@ START_TEST ( fileopen ) {
     ret = ruFileSetContents(NULL, NULL, 0);
     fail_unless(exp == ret, retErrText, test, exp, ret, ruLastError());
 
-    ret = ruFileSetContents(writeFile, NULL, 0);
-    fail_unless(exp == ret, retErrText, test, exp, ret, ruLastError());
-
     ret = ruFileSetContents(NULL, writtenText, 0);
-    fail_unless(exp == ret, retErrText, test, exp, ret, ruLastError());
-
-    ret = ruFileSetContents(writeFile, writtenText, 0);
     fail_unless(exp == ret, retErrText, test, exp, ret, ruLastError());
 
     ret = ruFileGetContents(NULL, NULL, 0);
@@ -406,18 +530,72 @@ START_TEST ( fileopen ) {
     ret = ruFileGetContents(writeFile, NULL, 0);
     fail_unless(exp == ret, retErrText, test, exp, ret, ruLastError());
 
-    exp = RUE_OK;
-    ret = ruFileSetContents(writeFile, writtenText, -1);
+    ret = ruFileCopy(NULL, NULL);
     fail_unless(exp == ret, retErrText, test, exp, ret, ruLastError());
 
-    char *readText = NULL;
+    ret = ruFileCopy(writeFile, NULL);
+    fail_unless(exp == ret, retErrText, test, exp, ret, ruLastError());
+
+    ret = ruFileCopy(NULL, writeFile);
+    fail_unless(exp == ret, retErrText, test, exp, ret, ruLastError());
+
+    exp = RUE_FILE_NOT_FOUND;
+    ret = ruFileCopy("/foo", writeFile);
+    fail_unless(exp == ret, retErrText, test, exp, ret, ruLastError());
+
+    ret = ruFileCopy(writeFile, "/some/path/in/nirvana");
+    fail_unless(exp == ret, retErrText, test, exp, ret, ruLastError());
+
+    exp = RUE_OK;
+    ret = ruFileSetContents(writeFile, NULL, 0);
+    fail_unless(exp == ret, retErrText, test, exp, ret, ruLastError());
+
     rusize len = 0;
+    len = ruFileSize(writeFile, &ret);
+    fail_unless(exp == ret, retErrText, test, exp, ret, ruLastError());
+    fail_unless(0 == len, retText, test, 0, len);
+    ret = ruFileRemove(writeFile);
+    fail_unless(exp == ret, retErrText, test, exp, ret, ruLastError());
+
+    ret = ruFileSetContents(writeFile, writtenText, 0);
+    fail_unless(exp == ret, retErrText, test, exp, ret, ruLastError());
+
+    len = ruFileSize(writeFile, &ret);
+    fail_unless(exp == ret, retErrText, test, exp, ret, ruLastError());
+    fail_unless(0 == len, retText, test, 0, len);
+    ret = ruFileRemove(writeFile);
+    fail_unless(exp == ret, retErrText, test, exp, ret, ruLastError());
+
+    ret = ruFileSetContents(writeFile, writtenText, RU_SIZE_AUTO);
+    fail_unless(exp == ret, retErrText, test, exp, ret, ruLastError());
+
+    alloc_chars writeCopy = ruDupPrintf("%s/ru-outcopy.txt", tmpDir);
+    ret = ruFileCopy(writeFile, writeCopy);
+    fail_unless(exp == ret, retErrText, test, exp, ret, ruLastError());
+
+    exp = RUE_CANT_WRITE;
+    ret = ruFileTryRename(writeFile, writeCopy);
+    fail_unless(exp == ret, retErrText, test, exp, ret, ruLastError());
+
+    exp = RUE_OK;
+    char *readText = NULL;
+    len = 0;
     rusize expLen = strlen(writtenText);
-    ret = ruFileGetContents(writeFile, &readText, &len);
+    ret = ruFileGetContents(writeCopy, &readText, &len);
     fail_unless(exp == ret, retErrText, test, exp, ret, ruLastError());
     fail_unless(expLen == len, retText, test, expLen, len);
     ck_assert_str_eq(writtenText, readText);
     ruFree(readText);
+
+    ret = ruFileRename(writeFile, writeCopy);
+    fail_unless(exp == ret, retErrText, test, exp, ret, ruLastError());
+
+    bool want = false, is = ruFileExists(writeFile);
+    fail_unless(want == is, retText, test, want, is);
+
+    ret = ruFileTryRename(writeCopy, writeFile);
+    fail_unless(exp == ret, retErrText, test, exp, ret, ruLastError());
+    ruFree(writeCopy);
 
     expLen = 11;
     ret = ruFileSetContents(writeFile, writtenText, expLen);
@@ -457,10 +635,25 @@ START_TEST ( fileopen ) {
 
     // w/trailing slash
     newFolder = ruDupPrintf("%s/that/", base);
+
+    ru_int ecnt = 0, cnt;
+    test = "ruFolderEntries";
+    cnt = ruFolderEntries(newFolder);
+    fail_unless(ecnt == cnt, retText, test, ecnt, cnt);
+
     test = "ruMkdir";
     ret = ruMkdir(newFolder, 0775, true);
     fail_unless(exp == ret, retText, test, exp, ret);
     fail_unless(true == ruIsDir(newFolder), retText, test, true, false);
+
+    test = "ruFolderEntries";
+    ecnt = 1;
+    cnt = ruFolderEntries(newFolder);
+    fail_unless(ecnt == cnt, retText, test, ecnt, cnt);
+
+    ecnt = 2;
+    cnt = ruFolderEntries(base);
+    fail_unless(ecnt == cnt, retText, test, ecnt, cnt);
 
     ruFileRemove(newFolder);
     test = "ruFileExists";
@@ -491,11 +684,26 @@ START_TEST ( fileopen ) {
     expLen = 11;
     ret = ruFileSetContents(writeFile, writtenText, expLen);
     fail_unless(exp == ret, retText, test, exp, ret);
-    ruFree(writeFile);
 
+    test = "ruFileSize";
+    len = ruFileSize(writeFile, &ret);
+    fail_unless(exp == ret, retText, test, exp, ret);
+    fail_unless(expLen == len, retText, test, expLen, len);
+
+    test = "ruFileSetUtcTime";
+    ret = ruFileSetUtcTime(writeFile, 7200);
+    fail_unless(exp == ret, retText, test, exp, ret);
+
+    test = "ruFileUtcTime";
+    sec_t tm = ruFileUtcTime(writeFile, &ret);
+    fail_unless(exp == ret, retText, test, exp, ret);
+    fail_unless(7200 == tm, retText, test, 7200, tm);
+
+    test = "ruFolderRemove";
     ret = ruFolderRemove(base);
     fail_unless(exp == ret, retErrText, test, exp, ret, ruLastError());
 
+    ruFree(writeFile);
     ruFree(base);
     ruFree(tmpDir);
 }

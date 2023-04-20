@@ -28,7 +28,7 @@ struct ioCtx {
 };
 typedef struct ioCtx* myio;
 
-rusize_s myread(void* ctx, void *buf, rusize len) {
+rusize_s myread(perm_ptr ctx, ptr buf, rusize len) {
     myio io = (myio)ctx;
     rusize left = io->len - (io->cur-io->buf);
     if (len >left) {
@@ -36,14 +36,14 @@ rusize_s myread(void* ctx, void *buf, rusize len) {
     }
     memcpy(buf, io->cur, len);
     io->cur += len;
-    return len;
+    return (rusize_s)len;
 }
 
-rusize_s myfread(void* ctx, void *buf, rusize len) {
-    return fread(buf, 1, len, (FILE*)ctx);
+rusize_s myfread(perm_ptr ctx, ptr buf, rusize len) {
+    return (rusize_s)fread(buf, 1, len, (FILE*)ctx);
 }
 
-rusize_s mywrite(void* ctx, void *buf, rusize len) {
+rusize_s mywrite(perm_ptr ctx, trans_ptr buf, rusize len) {
     myio io = (myio)ctx;
     rusize left = io->len - (io->cur-io->buf);
     if (len >left) {
@@ -51,11 +51,11 @@ rusize_s mywrite(void* ctx, void *buf, rusize len) {
     }
     memcpy(io->cur, buf, len);
     io->cur += len;
-    return len;
+    return (rusize_s)len;
 }
 
-rusize_s myfwrite(void* ctx, void *buf, rusize len) {
-    return fwrite(buf, 1, len, (FILE*)ctx);
+rusize_s myfwrite(perm_ptr ctx, trans_ptr buf, rusize len) {
+    return (rusize_s)fwrite((ptr)buf, 1, len, (FILE*)ctx);
 }
 
 
@@ -78,6 +78,9 @@ START_TEST ( api ) {
     fail_unless(ret == exp, retText, test, exp, ret);
 
     ret = ruCleanAdd(rc, NULL, "bar");
+    fail_unless(ret == exp, retText, test, exp, ret);
+
+    ret = ruCleanAdd(rc, "", "bar");
     fail_unless(ret == exp, retText, test, exp, ret);
 
     ruCleanRemove(NULL, NULL);
@@ -145,7 +148,7 @@ START_TEST ( api ) {
 }
 END_TEST
 
-void cleanerCb (void* user_data, const char *key, const char* subst) {
+void cleanerCb (perm_ptr user_data, trans_chars key, trans_chars subst) {
     ruString rs = (ruString)user_data;
     int db = 0;
     if (subst) {
@@ -347,11 +350,11 @@ START_TEST ( regibox ) {
     ret = ruCleanAdd(c, "61A5434A44087E4E", ac);
     fail_unless(ret == exp, retText, test, exp, ret);
 
-    char *file = makePath("regibox.log");
+    perm_chars file = makePath("regibox.log");
     FILE *rh = ruFOpen(file, "r", &ret);
     fail_unless(ret == exp, retText, test, exp, ret);
 
-    char *outfile = makePath("regibox.out");
+    perm_chars outfile = makePath("regibox.out");
     FILE *wh = ruFOpen(outfile, "w", &ret);
     fail_unless(ret == exp, retText, test, exp, ret);
 
@@ -1510,11 +1513,11 @@ START_TEST ( regibox2 ) {
         fail_unless(ret == exp, retText, test, exp, ret);
     }
 
-    char *file = makePath("regibox2.log");
+    perm_chars file = makePath("regibox2.log");
     FILE *rh = ruFOpen(file, "r", &ret);
             fail_unless(ret == exp, retText, test, exp, ret);
 
-    char *outfile = makePath("regibox2.out");
+    perm_chars outfile = makePath("regibox2.out");
     FILE *wh = ruFOpen(outfile, "w", &ret);
             fail_unless(ret == exp, retText, test, exp, ret);
 

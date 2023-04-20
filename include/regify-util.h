@@ -95,9 +95,6 @@ extern "C" {
     #ifndef int64_t
         typedef long long int64_t;
     #endif
-    #ifndef u_int64_t
-        typedef unsigned long long u_int64_t;
-    #endif
     /** \endcond */
 
     /**
@@ -153,10 +150,196 @@ extern "C" {
 #endif
 
 /**
+ * \brief Abstracted process id type.
+ */
+#ifdef RUMS
+typedef DWORD ru_pid;
+#else
+#include <sys/types.h>
+typedef pid_t ru_pid;
+#endif
+
+
+/**
+ * \brief A permanent NULL terminated string pointer.
+ *
+ * \ingroup misc
+ * On input it needs to persist through the life of a given context.
+ * On output it is guaranteed to live as long as it's context or until it has
+ * been explicitly finalized. It must not be freed.
+ * Within functions this can also be used for string pointers that must not be freed.
+ */
+typedef const char* perm_chars;
+
+/**
+ * \brief A transient NULL terminated string pointer.
+ *
+ * \ingroup misc
+ * On input this string must only persist for the duration of the function call.
+ * On output this string is valid until another call with the given context is
+ * performed and must not be freed.
+ */
+typedef const char* trans_chars;
+
+/**
+ * \brief An allocated NULL terminated string pointer.
+ *
+ * \ingroup misc
+ * On input this can represent a place on the stack or heap that will be written
+ * to by the called function. Usually accompanied by a length parameter.
+ * It can also represent a parameter that will be freed in conjunction with an
+ * enclosing object after use.
+ * On output this string belongs to the caller and must be freed after use.
+ * Within functions this can also be used for string pointers that must be freed.
+ */
+typedef char* alloc_chars;
+
+/**
+ * \brief A permanent UTF16 wchar_t character type.
+ *
+ * \ingroup misc
+ * On input it needs to persist through the life of a given context.
+ * On output it is guaranteed to live as long as it's context or until it has
+ * been explicitly finalized. It must not be freed.
+ * Within functions this can also be used for string pointers that must not be freed.
+ */
+typedef const uint16_t* perm_uni;
+
+/**
+ * \brief A transient UTF16 wchar_t character type.
+ *
+ * \ingroup misc
+ * On input this string must only persist for the duration of the function call.
+ * On output this string is valid until another call with the given context is
+ * performed and must not be freed.
+ */
+typedef const uint16_t* trans_uni;
+
+/**
+ * \brief An allocated UTF16 wchar_t character type.
+ *
+ * \ingroup misc
+ * On input this can represent a place on the stack or heap that will be written
+ * to by the called function. Usually accompanied by a length parameter.
+ * It can also represent a parameter that will be freed in conjunction with an
+ * enclosing object after use.
+ * On output this data belongs to the caller and must be freed after use.
+ * Within functions this can also be used for data pointers that must be freed.
+ */
+typedef uint16_t* alloc_uni;
+
+/**
+ * \brief A permanent data bytes pointer.
+ *
+ * \ingroup misc
+ * On input it needs to persist through the life of a given context.
+ * On output it is guaranteed to live as long as it's context or until it has
+ * been explicitly finalized. It must not be freed.
+ * Within functions this can also be used for string pointers that must not be freed.
+ */
+typedef const unsigned char* perm_bytes;
+
+/**
+ * \brief A transient data bytes pointer.
+ *
+ * \ingroup misc
+ * On input this string must only persist for the duration of the function call.
+ * On output this string is valid until another call with the given context is
+ * performed and must not be freed.
+ */
+typedef const unsigned char* trans_bytes;
+
+/**
+ * \brief An allocated data bytes pointer.
+ *
+ * \ingroup misc
+ * On input this can represent a place on the stack or heap that will be written
+ * to by the called function. Usually accompanied by a length parameter.
+ * It can also represent a parameter that will be freed in conjunction with an
+ * enclosing object after use.
+ * On output this data belongs to the caller and must be freed after use.
+ * Within functions this can also be used for data pointers that must be freed.
+ */
+typedef unsigned char* alloc_bytes;
+
+/**
+ * \brief A permanent pointer.
+ *
+ * \ingroup misc
+ * On input it needs to persist through the life of a given context.
+ * On output it is guaranteed to live as long as it's context or until it has
+ * been explicitly finalized. It must not be freed.
+ */
+typedef const void* perm_ptr;
+
+/**
+ * \brief A transient pointer.
+ *
+ * \ingroup misc
+ * On input this string must only persist for the duration of the function call.
+ * On output this string is valid until another call with the given context is
+ * performed and must not be freed.
+ */
+typedef const void* trans_ptr;
+
+/**
+ * \brief An allocated pointer.
+ *
+ * \ingroup misc
+ * On input this can represent a place on the stack or heap that will be written
+ * to by the called function. Usually accompanied by a length parameter.
+ * It can also represent a parameter that will be freed in conjunction with an
+ * enclosing object after use.
+ * On output this object belongs to the caller and must be freed after use.
+ */
+typedef void* alloc_ptr;
+
+/**
+ * \brief A generic pointer.
+ * * \ingroup misc
+ */
+typedef void* ptr;
+
+/**
+ * \brief A signed type for expressing seconds.
+ * \ingroup misc
+ */
+typedef long sec_t;
+
+/**
+ * \brief A signed type for expressing milli seconds.
+ * \ingroup misc
+ */
+typedef int64_t msec_t;
+
+/**
+ * \brief A signed type for expressing micro seconds.
+ * \ingroup misc
+ */
+typedef int64_t usec_t;
+
+/**
+ * \brief A pointer sized integer type for collections like \ref ruMap or \ref ruList.
+ * \ingroup misc
+ */
+typedef long ru_int;
+
+/**
+ * \brief A pointer sized unsigned integer type for collections like \ref ruMap or \ref ruList.
+ * \ingroup misc
+ */
+typedef unsigned long ru_uint;
+
+/**
  * \brief Abstracted version of size_t.
  * \ingroup misc
  */
 typedef size_t rusize;
+
+/**
+ * \brief Says to determine the size parameter using strlen or an equivalent.
+ */
+#define RU_SIZE_AUTO (~0LU)
 
 /**
  * \brief Signature of a generic clone function.
@@ -176,14 +359,19 @@ typedef void* (*ruClearFunc)(void*);
  */
 typedef void (*ruFreeFunc)(void*);
 
+/**
+ * \brief Signature of a generic comparator function for sorting.
+ * \ingroup misc
+ */
+typedef int (*ruCompFunc) (trans_ptr a, trans_ptr b);
 
 /**
  * \brief Abstracted version of the Posix struct timeval.
  * \ingroup misc
  */
 typedef struct {
-    long sec;
-    long usec;
+    sec_t sec;
+    usec_t usec;
 } ruTimeVal;
 
 /** \cond noworry */
@@ -196,7 +384,15 @@ typedef struct {
  * \ingroup memory
  * @param p resource to be freed and NULLed if not NULL already
  */
-#define ruFree(p) ruMacStart { if(p) { free((void*)p); } p = NULL; } ruMacEnd
+#define ruFree(p) ruMacStart { if(p) { free((void*)p); p = NULL; } } ruMacEnd
+
+/**
+ * \brief Frees given resource and set paramater to new value
+ * \ingroup memory
+ * @param p resource to be freed before new value is assigned
+ * @param n new value to be assigned to freed resource
+ */
+#define ruReplace(p, n) ruMacStart { if(p) { free((void*)p); } p = n; } ruMacEnd
 
 /**
  * \brief Convenience macro for setting a potentially passed in result pointer
@@ -263,7 +459,7 @@ RUAPI const char* ruLastError(void);
  * @return Guarateed to return the requested memory block or the process will
  *         terminate.
  */
-RUAPI void* ruMallocSize(rusize count, rusize ofsize);
+RUAPI alloc_ptr ruMallocSize(rusize count, rusize ofsize);
 
 /**
  * \brief Allocate and zero requested memory.
@@ -272,7 +468,7 @@ RUAPI void* ruMallocSize(rusize count, rusize ofsize);
  * @return Guarateed to return the requested memory block casted to (*ctype)
  *         or the process will terminate.
  */
-#define ruMalloc0(count, ctype) (ctype*) ruMallocSize(count, sizeof(ctype));
+#define ruMalloc0(count, ctype) (ctype*) ruMallocSize((rusize)(count), sizeof(ctype));
 
 /**
  * \brief Reallocate requested memory without zeroing.
@@ -282,7 +478,7 @@ RUAPI void* ruMallocSize(rusize count, rusize ofsize);
  * @return Guarateed to return the requested memory block or the process will
  *         terminate.
  */
-RUAPI void* ruReallocSize(void *buf, rusize count, rusize ofsize);
+RUAPI alloc_ptr ruReallocSize(alloc_ptr buf, rusize count, rusize ofsize);
 
 /**
  * \brief Reallocate requested memory without zeroing.
@@ -302,7 +498,7 @@ RUAPI void* ruReallocSize(void *buf, rusize count, rusize ofsize);
  *         terminate.
  * @}
  */
-RUAPI void* ruMemDup(void *buf, rusize size);
+RUAPI alloc_ptr ruMemDup(trans_ptr buf, rusize size);
 
 
 /**
@@ -317,13 +513,13 @@ RUAPI void* ruMemDup(void *buf, rusize size);
  * Currently knows about windows, android, linux, osx, ios and unix.
  * @return os string. Caller should copy this for persistence.
  */
-RUAPI const char* ruGetOs(void);
+RUAPI perm_chars ruGetOs(void);
 
 /**
  * \brief Returns the name of this host.
  * @return hostname. Caller should free this with \ref ruFree.
  */
-RUAPI char* ruGetHostname(void);
+RUAPI alloc_chars ruGetHostname(void);
 
 /**
  * \brief Returns the value of the requested environment vartiable or NULL if it is not
@@ -331,7 +527,7 @@ RUAPI char* ruGetHostname(void);
  * @param variable Variable name to retrieve
  * @return A copy of the value. May not be freed by the caller.
  */
-RUAPI const char* ruGetenv(const char *variable);
+RUAPI trans_chars ruGetenv(const char *variable);
 
 /**
  * Returns true if given string contains a valid 64 bit integer
@@ -341,41 +537,16 @@ RUAPI const char* ruGetenv(const char *variable);
 RUAPI bool ruIsInt64(const char* numstr);
 
 /**
- * \brief Returns a \ref ruTimeVal representing the current time.
- * @param result Pointer to the \ref ruTimeVal structure to populate.
- * @return Return code of the operation or \ref RUE_OK on success.
+ * Return the current process id
+ * @return the current process id
  */
-RUAPI int32_t ruGetTimeVal(ruTimeVal *result);
-
-/**
- * \brief Return the current local time in milliseconds since Jan. 1 1970
- * @return Milli seconds since epoch
- */
-RUAPI uint64_t ruTimeMs(void);
-
-/**
- * \brief Return the current local time in microseconds since Jan. 1 1970
- * @return Micro seconds since epoch
- */
-RUAPI uint64_t ruTimeUs(void);
+RUAPI ru_pid ruProcessId(void);
 
 /**
  * \brief Returns the ISO-639-1 2 letter country code pertaining to the running system,
  * @return The country code. Caller must free with \ref ruFree.
  */
-RUAPI char* ruGetLanguage(void);
-
-/**
- * \brief Sleeps for the given number of micro seconds.
- * @param microseconds
- */
-RUAPI void ruUsleep(unsigned long microseconds);
-
-/**
- * \brief Sleeps for the given number of milli seconds.
- * @param milliseconds
- */
-RUAPI void ruMsleep(unsigned long milliseconds);
+RUAPI alloc_chars ruGetLanguage(void);
 
 /**
  * \brief Returns a quasi ramdom number between 0 and max + offset.
@@ -389,6 +560,134 @@ RUAPI void ruMsleep(unsigned long milliseconds);
 RUAPI unsigned long ruSemiRandomNumber(unsigned long max, long offset);
 
 /**
+ * \brief Compares 2 version strings
+ * This function compares version number strings that are made up of real numbers.
+ * The advantage is that the delimiter does not matter. It will work with, for
+ * example, 141.01.03, 141:1:3, or even 141A1P3. It also handles
+ * mismatched tails so that 141.1.3 will come before 141.1.3.1. Finally NULLs
+ * are also properly compared.
+ *
+ * @param ver1 First version to check
+ * @param ver2 Second version to check
+ * @return -1, 0 or 1 depending on whether ver1 is less equal or greater ver2
+ */
+RUAPI int ruVersionComp(trans_chars ver1, trans_chars ver2);
+
+/**
+ * \brief Returns a \ref ruTimeVal representing the current time.
+ * @param result Pointer to the \ref ruTimeVal structure to populate.
+ * @return Return code of the operation or \ref RUE_OK on success.
+ */
+RUAPI int32_t ruGetTimeVal(ruTimeVal *result);
+
+/**
+ * \brief Return the current local time in microseconds since Jan. 1 1970
+ * @return Micro seconds since epoch
+ */
+RUAPI usec_t ruTimeUs(void);
+
+/**
+ * \brief Return the current local time in milliseconds since Jan. 1 1970
+ * @return Milli seconds since epoch
+ */
+RUAPI msec_t ruTimeMs(void);
+
+/**
+ * \brief Return the current local time in seconds since Jan. 1 1970
+ * @return Seconds since epoch
+ */
+RUAPI sec_t ruTimeSec(void);
+
+/**
+ * \brief Checks if given stamp has elapsed.
+ * @param stamp microsecond stamp to compare to.
+ * @return Return true if now is >= stamp
+ */
+RUAPI bool ruTimeUsEllapsed(usec_t stamp);
+
+/**
+ * \brief Checks if given stamp has elapsed.
+ * @param stamp millisecond stamp to compare to.
+ * @return Return true if now is >= stamp
+ */
+RUAPI bool ruTimeMsEllapsed(msec_t stamp);
+
+/**
+ * \brief Checks if given stamp has elapsed.
+ * @param stamp second stamp to compare to.
+ * @return Return true if now is >= stamp
+ */
+RUAPI bool ruTimeEllapsed(sec_t stamp);
+
+/**
+ * \brief Sleeps for the given number of micro seconds.
+ * @param microseconds
+ */
+RUAPI void ruSleepUs(usec_t microseconds);
+
+/**
+ * \brief Sleeps for the given number of milli seconds.
+ * @param milliseconds
+ */
+RUAPI void ruSleepMs(msec_t milliseconds);
+
+/**
+ * \brief Sleeps for the given number of seconds.
+ * @param seconds
+ */
+#define ruSleep(secs) ruSleepMs(((msec_t)(secs))*1000)
+
+/**
+ * \brief Convert a string representation of time to a time stamp
+ * @param dateformat a strptime type format string
+ * @param datestr the string representation of the given date time
+ * @return given date time in seconds since epoch
+ */
+RUAPI sec_t ruTimeParse(trans_chars dateformat, trans_chars datestr);
+
+/**
+ * \brief UTC version of \ref ruTimeParse
+ * @param dateformat a strptime type format string
+ * @param datestr the string representation of the given date time
+ * @return given date time in seconds since epoch
+ */
+RUAPI sec_t ruUtcParse(trans_chars dateformat, trans_chars datestr);
+
+/**
+ * \brief Return the current local time formatted in given buffer
+ * @param format format string for strftime
+ * @param len length of the given buffer must include room for the null terminator
+ * @param timeStr buffer where formatted null terminated string will be placed
+ * @param timesecs datestamp in seconds since epoch or 0 to use current time
+ * @return microsecond part of the current time or -1 on error;
+ */
+RUAPI int ruTimeFormat(trans_chars format, rusize len, alloc_chars timeStr, sec_t timesecs);
+
+/**
+ * \brief UTC version of \ref ruTimeFormat
+ * @param format format string for strftime
+ * @param len length of the given buffer must include room for the null terminator
+ * @param timeStr buffer where formatted null terminated string will be placed
+ * @param timesecs datestamp in seconds since epoch or 0 to use current time
+ * @return microsecond part of the current time or -1 on error;
+ */
+RUAPI int ruUtcFormat(trans_chars format, rusize len, alloc_chars timeStr, sec_t timesecs);
+
+/**
+ * \brief Converts given local time stamp to UTC
+ * @param stamp seconds since epoch in local time
+ * @return UTC seconds since epoch
+ */
+RUAPI sec_t ruTimeLocalToUtc(sec_t stamp);
+
+/**
+ * \brief Converts given UTC time stamp to local time
+ * @param stamp UTC seconds since epoch
+ * @return seconds since epoch in local time
+ */
+RUAPI sec_t ruTimeUtcToLocal(sec_t stamp);
+
+/**
  * @}
  */
 
@@ -397,7 +696,7 @@ RUAPI unsigned long ruSemiRandomNumber(unsigned long max, long offset);
  * Some convenience Macros
  */
 
-// the ptr < (void*)1000 is feeble attempt at address validation
+// the ptr < (void*)0xffff is feeble attempt at address validation
 #define ruMakeTypeGetter(ctype, magic) \
 ctype* ctype ## Get(void* ptr, int32_t* code) { \
     ctype* ret = (ctype*) ptr; \
@@ -409,6 +708,13 @@ ctype* ctype ## Get(void* ptr, int32_t* code) { \
     } \
     ruRetWithCode(code, RUE_OK, ret); \
 }
+
+#define ruZeroedStruct(type, var) type var; \
+    memset(&(var), 0, sizeof(type))
+
+#define ruMakeTypeGetHeader(ctype) \
+ctype* ctype ## Get(void* ptr, int32_t* code)
+
 /** \endcond */
 
 #ifdef __cplusplus

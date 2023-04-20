@@ -19,6 +19,7 @@ A current Linux version of the API Documentation can be found https://regify.git
 == Building
 The project is built using https://cmake.org[Cmake].
 The main dependency is https://icu.unicode.org[ICU].
+The List module also uses https://github.com/swenson/sort[sort.h] from Christopher Swenson via git submodules.
 Aside from the usual cmake variables there is `ICU_PREFIX` which points to the prefix where ICU can be found.
 Below are examples on how to build regify-util.
 These builds produce static libraries.

@@ -157,6 +157,7 @@ bool ruRegexSearch(ruRegex rr, const char* original, bool fully, ruList matches,
                 ret = RUE_GENERAL;
                 break;
             }
+            needLen++; // terminator
             ubuf = ruMalloc0(needLen, UChar);
             errorCode = U_ZERO_ERROR;
             uregex_group(regex, i, ubuf, needLen*(int32_t)sizeof(UChar), &errorCode);
@@ -166,7 +167,7 @@ bool ruRegexSearch(ruRegex rr, const char* original, bool fully, ruList matches,
                 ret = RUE_GENERAL;
                 break;
             }
-            char *buf = uniNToChar(ubuf, needLen);
+            char *buf = uniToChar(ubuf);
             ruListAppend(matches, buf);
             ruFree(ubuf);
         }

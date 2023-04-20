@@ -61,10 +61,17 @@ extern "C" {
 #define RU_LOG_VERB 4
 
 /**
+ * \brief This is a debugging logging level used for debugging things that are
+ * normally assumed to be working. It is usually off because it litters the logs
+ * with often redundant data.
+ */
+#define RU_LOG_DBUG 5
+
+/**
  * \brief The type of function to pass to \ref ruSetLogger in order to hook up
  * logging.
  */
-typedef void (*ruLogFunc) (void* user_data, const char *message);
+typedef void (*ruLogFunc) (perm_ptr user_data, trans_chars message);
 
 
 /**
@@ -72,7 +79,7 @@ typedef void (*ruLogFunc) (void* user_data, const char *message);
  * @param udata User data. This is ignored in this function.
  * @param msg The message to log.
  */
-RUAPI void ruStdErrorLogger(void* udata, const char *msg);
+RUAPI void ruStdErrorLogger(perm_ptr udata, trans_chars msg);
 
 /**
  * \brief Sets the global logging function for this process.
@@ -81,7 +88,7 @@ RUAPI void ruStdErrorLogger(void* udata, const char *msg);
  * @param userData Opaque custum user data that will be passed to the
  *                 \ref ruLogFunc implementation.
  */
-RUAPI void ruSetLogger(ruLogFunc logger, u_int32_t logLevel, void* userData);
+RUAPI void ruSetLogger(ruLogFunc logger, u_int32_t logLevel, perm_ptr userData);
 
 /**
  * \brief Returns the currently set log level.
@@ -111,8 +118,8 @@ RUAPI bool ruDoesLog(u_int32_t log_level);
  * @param format The format specifier for the remaining arguments.
  * @param ... The remaining arguments that make up the log message.
  */
-RUAPI void ruDoLog(u_int32_t log_level, const char *filePath, const char *func,
-                   int32_t line, const char *format, ...);
+RUAPI void ruDoLog(u_int32_t log_level, trans_chars filePath, trans_chars func,
+                   int32_t line, trans_chars format, ...);
 
 /**
  * Internal logging function used by the log macros.
@@ -124,8 +131,8 @@ RUAPI void ruDoLog(u_int32_t log_level, const char *filePath, const char *func,
  * @param ... The remaining arguments that make up the log message.
  * @return The allocated log message to be freed by the caller after usage.
  */
-RUAPI char* ruMakeLogMsg(u_int32_t log_level, const char *file, const char *func,
-                   int32_t line, const char *format, ...);
+RUAPI char* ruMakeLogMsg(u_int32_t log_level, trans_chars file, trans_chars func,
+                   int32_t line, trans_chars format, ...);
 
 /**
  * Internal logging macro used by the public log macros.
@@ -193,26 +200,39 @@ RUAPI char* ruMakeLogMsg(u_int32_t log_level, const char *file, const char *func
 #define ruVerbLogf(fmt, ...) ruLog_(RU_LOG_VERB, fmt, __VA_ARGS__)
 
 /**
- * \brief Verbose logs the 8 bytes following start preceded by given message
+ * \brief Emits a DBUG level log message.
+ * @param msg The message to be logged.
+ */
+#define ruDbgLog(msg) ruLog_(RU_LOG_DBUG, "%s", msg)
+
+/**
+ * \brief Emits a DBUG level log message.
+ * @param fmt The format specifier for the remaining arguments.
+ * @param ... The remaining arguments that make up the log message.
+ */
+#define ruDbgLogf(fmt, ...) ruLog_(RU_LOG_DBUG, fmt, __VA_ARGS__)
+
+/**
+ * \brief Debug logs the 8 bytes following start preceded by given message
  * @param msg prefix message
  * @param start address from where to start dumping bytes
  */
 #define ruDump8(msg, start) \
-    ruVerbLogf("%s @0x%x %02x %02x %02x %02x  %02x %02x %02x %02x", msg, (start), \
-        (uint8_t)*(start), (uint8_t)*(start+1), (uint8_t)*(start+2), (uint8_t)*(start+3), \
-        (uint8_t)*(start+4), (uint8_t)*(start+5), (uint8_t)*(start+6), (uint8_t)*(start+7))
+    ruDbgLogf("%s @0x%x %02x %02x %02x %02x  %02x %02x %02x %02x", msg, (start), \
+        (uint8_t)*(start), (uint8_t)*((start)+1), (uint8_t)*((start)+2), (uint8_t)*((start)+3), \
+        (uint8_t)*((start)+4), (uint8_t)*((start)+5), (uint8_t)*((start)+6), (uint8_t)*((start)+7))
 
 /**
- * \brief Verbose logs the 16 bytes following start preceded by given message
+ * \brief Debug logs the 16 bytes following start preceded by given message
  * @param msg prefix message
  * @param start address from where to start dumping bytes
  */
 #define ruDump16(msg, start) \
-    ruVerbLogf("%s @0x%x %02x %02x %02x %02x  %02x %02x %02x %02x  %02x %02x %02x %02x  %02x %02x %02x %02x", msg, (start), \
-        (uint8_t)*(start), (uint8_t)*(start+1), (uint8_t)*(start+2), (uint8_t)*(start+3), \
-        (uint8_t)*(start+4), (uint8_t)*(start+5), (uint8_t)*(start+6), (uint8_t)*(start+7), \
-        (uint8_t)*(start+8), (uint8_t)*(start+9), (uint8_t)*(start+10), (uint8_t)*(start+11), \
-        (uint8_t)*(start+12), (uint8_t)*(start+13), (uint8_t)*(start+14), (uint8_t)*(start+15))
+    ruDbgLogf("%s @0x%x %02x %02x %02x %02x  %02x %02x %02x %02x  %02x %02x %02x %02x  %02x %02x %02x %02x", msg, (start), \
+        (uint8_t)*(start), (uint8_t)*((start)+1), (uint8_t)*((start)+2), (uint8_t)*((start)+3), \
+        (uint8_t)*((start)+4), (uint8_t)*((start)+5), (uint8_t)*((start)+6), (uint8_t)*((start)+7), \
+        (uint8_t)*((start)+8), (uint8_t)*((start)+9), (uint8_t)*((start)+10), (uint8_t)*((start)+11), \
+        (uint8_t)*((start)+12), (uint8_t)*((start)+13), (uint8_t)*((start)+14), (uint8_t)*((start)+15))
 
 /**
  * @}

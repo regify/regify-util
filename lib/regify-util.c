@@ -51,16 +51,20 @@ void ruSetError(const char *format, ...) {
         ruClearError();
         return;
     }
+    static Mux* mux = NULL;
+    if (!mux) mux = ruMuxInit();
+    ruMuxLock(mux);
     va_list args;
     va_start (args, format);
     int32_t msgsize  = vsnprintf(ruError, RU_ERRBUF_SIZE, format, args);
     va_end (args);
+    ruMuxUnlock(mux);
     if (msgsize >= 0) {
         ruErrInit = 1;
     }
 }
 
-RUAPI const char* ruGetOs(void) {
+RUAPI perm_chars ruGetOs(void) {
 #if defined (_WIN32)
     return "windows";
 #elif defined(__ANDROID__)
@@ -76,7 +80,7 @@ RUAPI const char* ruGetOs(void) {
 #endif
 }
 
-RUAPI char* ruGetHostname(void) {
+RUAPI alloc_chars ruGetHostname(void) {
     char name[256] = "";
 #ifdef _WIN32
     DWORD len = 256;
@@ -85,7 +89,7 @@ RUAPI char* ruGetHostname(void) {
     int len = 256;
     if(!gethostname(name, len)) {
 #endif
-        return ruStrdup(name);
+        return ruStrDup(name);
     }
     return NULL;
 }
@@ -101,10 +105,10 @@ RUAPI void* ruMallocSize(rusize count, rusize ofsize) {
     return p;
 }
 
-RUAPI void* ruReallocSize(void *buf, rusize count, rusize ofsize) {
+RUAPI alloc_ptr ruReallocSize(alloc_ptr buf, rusize count, rusize ofsize) {
     ruClearError();
     if (!count || !ofsize || !buf) return NULL;
-    void *p = realloc(buf, count*ofsize);
+    alloc_ptr p = realloc(buf, count*ofsize);
     if (!p) {
         ruCritLogf("failed to reallocate %lu bytes", count*ofsize);
         ruAbort();
@@ -112,15 +116,15 @@ RUAPI void* ruReallocSize(void *buf, rusize count, rusize ofsize) {
     return p;
 }
 
-RUAPI void* ruMemDup(void *buf, rusize size) {
+RUAPI alloc_ptr ruMemDup(trans_ptr buf, rusize size) {
     ruClearError();
     if (!size || !buf) return NULL;
-    void *dest = ruMallocSize(size, 1);
+    alloc_ptr dest = ruMallocSize(size, 1);
     memcpy(dest, buf, size);
     return dest;
 }
 
-RUAPI const char * ruGetenv(const char *variable) {
+RUAPI trans_chars ruGetenv(const char *variable) {
     ruClearError();
     if (!variable) return NULL;
     return getenv (variable);
@@ -130,8 +134,40 @@ RUAPI unsigned long ruSemiRandomNumber(unsigned long max, long offset) {
     static long threadcounter = 0;
     ruTimeVal tv;
     ruGetTimeVal(&tv);
-    long value = (tv.usec ^ tv.sec ) + threadcounter++;
+    long value = (long)((tv.usec ^ tv.sec ) + threadcounter++);
     return (value % max) + offset;
+}
+
+RUAPI int ruVersionComp(trans_chars ver1, trans_chars ver2) {
+    // Cope with NULLs
+    if (!ver1 && !ver2) return 0;
+    if (!ver1) return -1;
+    if (!ver2) return 1;
+    // Courtesy
+    // https://stackoverflow.com/questions/15057010/comparing-version-numbers-in-c/15059401#15059401
+    // loop through each level of the version string
+    while (true) {
+        // extract leading version numbers
+        char* tail1;
+        char* tail2;
+        unsigned long v1 = strtoul(ver1, &tail1, 10 );
+        unsigned long v2 = strtoul(ver2, &tail2, 10 );
+        // if numbers differ, then set the result
+        if (v1 < v2) return -1;
+        if (v1 > v2) return 1;
+
+        // if numbers are the same, go to next level
+        ver1 = tail1;
+        ver2 = tail2;
+        // if we reach the end of both, then they are identical
+        if (*ver1 == '\0' && *ver2 == '\0') return 0;
+        // if we reach the end of one only, it is the smaller
+        if (*ver1 == '\0') return -1;
+        if (*ver2 == '\0') return 1;
+        //  not at end ... so far they match so keep going
+        ver1++;
+        ver2++;
+    }
 }
 
 #if defined(_WIN32)
@@ -149,7 +185,7 @@ RUAPI int32_t ruGetVolumeInfo(const char* mountPoint,
             &serNo, &compLen, &flags,
             (wchar_t*)&fsbuf[0],
             sizeof(fsbuf) / sizeof(fsbuf[0]))) {
-        ruVerbLogf("failed getting volume info for '%s'. EC: %d",
+        ruDbgLogf("failed getting volume info for '%s'. EC: %d",
                 mountPoint, GetLastError());
         return RUE_FILE_NOT_FOUND;
     }
@@ -201,7 +237,7 @@ RUAPI int32_t ruGetRegistryEntry(HKEY topKey, const char* tree, const char* leaf
                 ruVerbLogf("Failed querying registry for '%s' %d", leaf, rc);
                 break;
             }
-            *value = uniNToChar(buf, (int32_t)bufSize);
+            *value = uniToChar(buf);
             ret = RUE_OK;
         } else if (type == REG_DWORD) {
             bufSize = sizeof(int);

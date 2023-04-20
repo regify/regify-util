@@ -28,17 +28,19 @@
 #include <stdio.h>
 #include "tests.h"
 
-Suite* getSuite ( void ) {
-    Suite *suite = suite_create ( "util" );
-    suite_add_tcase ( suite, miscTests() );
-    suite_add_tcase ( suite, listTests() );
-    suite_add_tcase ( suite, stringTests() );
-    suite_add_tcase ( suite, mapTests() );
-    suite_add_tcase ( suite, regexTests() );
-    suite_add_tcase ( suite, ioTests() );
-    suite_add_tcase ( suite, iniTests() );
-    suite_add_tcase ( suite, storeTests() );
-    suite_add_tcase ( suite, cleanerTests() );
+Suite* getSuite(void) {
+    Suite *suite = suite_create("util");
+    suite_add_tcase(suite, miscTests());
+    suite_add_tcase(suite, listTests());
+    suite_add_tcase(suite, stringTests());
+    suite_add_tcase(suite, mapTests());
+    suite_add_tcase(suite, setTests());
+    suite_add_tcase(suite, regexTests());
+    suite_add_tcase(suite, ioTests());
+    suite_add_tcase(suite, iniTests());
+    suite_add_tcase(suite, storeTests());
+    suite_add_tcase(suite, cleanerTests());
+    suite_add_tcase(suite, threadTests());
     return suite;
 }
 
@@ -66,7 +68,7 @@ char* insureTestFolder(const char* folderName) {
 const char* testBase = TEST_BASE;
 char pathBuffer[1024];
 
-char * makePath(const char *filepath) {
+perm_chars makePath(const char *filepath) {
     snprintf(&pathBuffer[0], 1023, "%s/%s", testBase, filepath);
     return &pathBuffer[0];
 }
@@ -77,7 +79,7 @@ int32_t mainTest (const char *tmpDir, const char *treepath) {
 int32_t main ( int32_t argc, char *argv[] ) {
 #endif
     int32_t number_failed;
-    ruSetLogger(ruStdErrorLogger, RU_LOG_VERB, NULL);
+    ruSetLogger(ruStdErrorLogger, RU_LOG_DBUG, NULL);
     Suite *suite = getSuite();
     SRunner *runner = srunner_create ( suite );
     srunner_set_fork_status (runner, CK_NOFORK);
