@@ -343,7 +343,7 @@ RUAPI trans_chars ruStrStr(trans_chars haystack, trans_chars needle);
  * @param len Maximum number of bytes in haystack to consider.
  * @return Start of the last found instance of haystack or NULL if not found.
  */
-RUAPI trans_chars ruLastSubstrLen(trans_chars haystack, trans_chars needle, rusize len);
+RUAPI trans_chars ruLastSubStrLen(trans_chars haystack, trans_chars needle, rusize len);
 
 /**
  * \brief Searches the last instance of needle in haystack.
@@ -351,7 +351,7 @@ RUAPI trans_chars ruLastSubstrLen(trans_chars haystack, trans_chars needle, rusi
  * @param needle String to find in haystack.
  * @return Start of the last found instance of haystack or NULL if not found.
  */
-RUAPI trans_chars ruLastSubstr(trans_chars haystack, trans_chars needle);
+RUAPI trans_chars ruLastSubStr(trans_chars haystack, trans_chars needle);
 
 /**
  * \brief Split given instr up to inlen bytes with delim into a \ref ruList.

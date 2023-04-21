@@ -725,7 +725,7 @@ RUAPI trans_chars ruStrStr(trans_chars haystack, trans_chars needle) {
     return ruStrStrLen(haystack, needle, 0);
 }
 
-RUAPI trans_chars ruLastSubstrLen(trans_chars haystack, trans_chars needle, rusize len) {
+RUAPI trans_chars ruLastSubStrLen(trans_chars haystack, trans_chars needle, rusize len) {
     ruClearError();
     if (!haystack || !needle) return NULL;
 
@@ -753,8 +753,8 @@ RUAPI trans_chars ruLastSubstrLen(trans_chars haystack, trans_chars needle, rusi
     return NULL;
 }
 
-RUAPI trans_chars ruLastSubstr(trans_chars haystack, trans_chars needle) {
-    return ruLastSubstrLen(haystack, needle, 0);
+RUAPI trans_chars ruLastSubStr(trans_chars haystack, trans_chars needle) {
+    return ruLastSubStrLen(haystack, needle, 0);
 }
 
 RUAPI ruList ruStrNSplit(trans_chars instr, rusize inlen, trans_chars delim, int32_t maxCnt) {

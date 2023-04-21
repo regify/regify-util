@@ -59,14 +59,14 @@ START_TEST ( api ) {
     fail_unless(exp == ret, retText, test, exp, ret);
     fail_unless(doexp == does, retText, test, doexp, does);
 
-    foo = ruLastSubstr(NULL, NULL);
+    foo = ruLastSubStr(NULL, NULL);
     fail_unless(foo == NULL, retText, test, NULL, foo);
 
     char *subst = "test^^^^foo";
-    foo = ruLastSubstr(subst, NULL);
+    foo = ruLastSubStr(subst, NULL);
     fail_unless(foo == NULL, retText, test, NULL, foo);
 
-    foo = ruLastSubstr(NULL, "^^");
+    foo = ruLastSubStr(NULL, "^^");
     fail_unless(foo == NULL, retText, test, NULL, foo);
 
     int64_t num = -1;
@@ -218,22 +218,22 @@ START_TEST ( run ) {
     ruStringFree(rs, true);
     ruFree(str);
 
-    test = "ruLastSubstr";
+    test = "ruLastSubStr";
     char* subst = "test^^^^foo";
-    trans_chars ptr = ruLastSubstr(subst, "^^");
+    trans_chars ptr = ruLastSubStr(subst, "^^");
     ck_assert_str_eq(ptr, "^^foo");
 
-    ptr = ruLastSubstrLen(subst, "^^", 6);
+    ptr = ruLastSubStrLen(subst, "^^", 6);
     ck_assert_str_eq(ptr, "^^^^foo");
 
-    ptr = ruLastSubstrLen(subst, "^^", 5);
+    ptr = ruLastSubStrLen(subst, "^^", 5);
     fail_unless(NULL == ptr, retText, test, NULL, ptr);
 
     subst = "test^foo";
-    ptr = ruLastSubstr(subst, "^^");
+    ptr = ruLastSubStr(subst, "^^");
     fail_unless(NULL == ptr, retText, test, NULL, ptr);
 
-    ptr = ruLastSubstr(subst, "");
+    ptr = ruLastSubStr(subst, "");
     ck_assert_str_eq(ptr, subst);
 
     test = "ruStrReplace";

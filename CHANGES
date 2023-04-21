@@ -9,6 +9,8 @@ Non backward compatible API changes between 1.3 and 2.0
 - ruFileSetContents
 
 * Renamed the following functions to make the names more consistent:
+- ruLastSubstr - ruLastSubStr
+- ruLastSubstrLen - ruLastSubStrLen
 - ruStrsplit - ruStrSplit
 - ruStrdup - ruStrDup
 - ruStrndup - ruStrNDup

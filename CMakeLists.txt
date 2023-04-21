@@ -19,7 +19,7 @@
 # SOFTWARE.
 
 # options
-set(VERSION 1.3.0 CACHE STRING "The package version")
+set(VERSION 2.0.0 CACHE STRING "The package version")
 set(REVISION 0 CACHE STRING "The build revision")
 set(ICU_PREFIX "" CACHE STRING "Prefix path under which to find ICU")
 set(LIB_FOLDER "lib" CACHE STRING "Folder under prefix where the libs are stored")
@@ -58,7 +58,7 @@ set(CLEANER pwcleaner)
 #  increment age.
 #  If any interfaces have been removed since the last public release, then set
 #  age to 0.
-set(SOVERSION 0.1.0)
+set(SOVERSION 1.0.0)
 
 include(resources/helpers.cmake)
 

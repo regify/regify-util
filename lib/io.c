@@ -460,7 +460,7 @@ RUAPI int ruOpenTmp(char *pathTemplate, int flags, int mode, int32_t *code) {
     ruTimeVal tv;
     ruGetTimeVal(&tv);
 
-    char *xl8 = (char*)ruLastSubstr(pathTemplate, "^^^");
+    char *xl8 = (char*) ruLastSubStr(pathTemplate, "^^^");
     if (!xl8) ruRetWithCode(code, RUE_INVALID_PARAMETER, 0);
 
     long value = (long)((tv.usec ^ tv.sec ) + threadcounter++);
