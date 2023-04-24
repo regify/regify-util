@@ -108,8 +108,9 @@ RUAPI bool ruThreadFinished(ruThread tid, int32_t* code);
 RUAPI ruThreadId ruThreadNativeId(ruThread tid, int32_t* code);
 
 /**
- * Waits for given thread to terminate for tosecs seconds and kill it after that
+ * Waits for given thread to terminate for tosecs seconds and kills it after that
  *
+ * NOTE: Killing is currently not supported on Android.
  * @param tid Thread id of thread to join.
  * @param tosecs Number of seconds to wait before killing the thread.
  * @param exitVal Where the threads return value will be store if not NULL and
@@ -127,7 +128,9 @@ RUAPI bool ruThreadWait(ruThread tid, sec_t tosecs, void** exitVal);
 RUAPI int ruThreadJoin(ruThread tid, void** exitVal );
 
 /**
- * Sends a kill signal to the specified thread
+ * Sends a kill signal to the specified thread.
+ *
+ * NOTE: Currently not supported on Android
  * @param tid Thread id to send kill signal to
  * @return \ref RUE_OK if the given thread id was valid
  */

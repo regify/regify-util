@@ -45,7 +45,7 @@
 #else
     #include <sys/param.h>
     #include <sys/syscall.h>
-#ifdef ITS_OSX
+#if defined(ITS_OSX) || defined(ITS_IOS)
     #include <sys/statvfs.h>
 #endif
 #ifdef __linux__

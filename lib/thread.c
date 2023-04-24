@@ -66,7 +66,11 @@ static int32_t threadKill(Thr* tc) {
         TerminateThread(tc->tid, 0);
 #else
 #ifndef __EMSCRIPTEN__
+#if defined(__ANDROID__)
+        ret = RUE_FEATURE_NOT_SUPPORTED;
+#else
         pthread_cancel(tc->tid);
+#endif
 #endif
 #endif
         tc->finished = true;
