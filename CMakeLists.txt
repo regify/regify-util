@@ -182,7 +182,7 @@ if(NOT MSVC AND NOT WASM)
     install(FILES ${PROJECT_BINARY_DIR}/${NAME}.pc DESTINATION ${LIB_FOLDER}/pkgconfig)
 endif()
 
-# documetation & packaging
+# documentation & packaging
 if(DOCS)
     install(FILES LICENSE DESTINATION share/${NAME})
     if(INCLUDE_ICU)
