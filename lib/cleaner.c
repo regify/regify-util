@@ -28,6 +28,7 @@
 #ifdef CLEANER_ONLY
 // for including only the libpwcleaner without ICU and other depenedencies
 #include <stdlib.h>
+#include <stdint.h>
 #include <string.h>
 #include <errno.h>
 #include <stdbool.h>
@@ -48,6 +49,7 @@ typedef void* ptr;
 typedef void (*ruCleanerCb) (perm_ptr user_data, trans_chars key, trans_chars subst);
 typedef size_t rusize;
 #if defined(WINDOWS) || defined(WIN32) || defined(__BORLANDC__)
+    // TODO: still needed since #include <stdint.h>
     #ifndef uint8_t
         typedef unsigned char uint8_t;
     #endif
