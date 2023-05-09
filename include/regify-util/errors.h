@@ -83,6 +83,10 @@ extern "C" {
  */
 #define RUE_OVERFLOW	96
 /**
+ * This functionality is currently not supported.
+ */
+#define RUE_FEATURE_NOT_SUPPORTED	97
+/**
  * User aborted
  */
 #define RUE_USER_ABORT	98

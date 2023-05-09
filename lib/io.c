@@ -302,7 +302,13 @@ RUAPI int ruOpen(const char *filepath, int flags, int mode, int32_t* code) {
         ruRetWithCode(code, RUE_INVALID_PARAMETER, 0);
     }
     if (!mode) ruRetWithCode(code, RUE_INVALID_PARAMETER, 0);
+#ifdef ITS_OSX
+    alloc_chars nfdpath = ruStrToNfd(filepath);
+    int fd = open(nfdpath, flags, mode);
+    ruFree(nfdpath);
+#else
     int fd = open(filepath, flags, mode);
+#endif
     if (fd < 0) {
         int32_t ret = errno2rfec(errno);
         ruRetWithCode(code, ret, fd);
@@ -314,7 +320,13 @@ RUAPI FILE* ruFOpen(const char *filepath, const char *mode, int32_t* code) {
     ruClearError();
     if (!filepath) ruRetWithCode(code, RUE_PARAMETER_NOT_SET, 0);
     if (!mode) ruRetWithCode(code, RUE_PARAMETER_NOT_SET, 0);
+#ifdef ITS_OSX
+    alloc_chars nfdpath = ruStrToNfd(filepath);
+    FILE* fd = fopen(nfdpath, mode);
+    ruFree(nfdpath);
+#else
     FILE* fd = fopen(filepath, mode);
+#endif
     if (!fd) {
         int32_t ret = errno2rfec(errno);
         ruRetWithCode(code, ret, fd);
@@ -448,7 +460,7 @@ RUAPI int ruOpenTmp(char *pathTemplate, int flags, int mode, int32_t *code) {
     ruTimeVal tv;
     ruGetTimeVal(&tv);
 
-    char *xl8 = (char*)ruLastSubstr(pathTemplate, "^^^");
+    char *xl8 = (char*) ruLastSubStr(pathTemplate, "^^^");
     if (!xl8) ruRetWithCode(code, RUE_INVALID_PARAMETER, 0);
 
     long value = (long)((tv.usec ^ tv.sec ) + threadcounter++);
@@ -507,7 +519,13 @@ RUAPI int32_t ruFileSetContents(trans_chars filename, trans_chars contents,
     // clean up
     if (oh >= 0) {
         close(oh);
+#ifdef ITS_OSX
+        alloc_chars nfdpath = ruStrToNfd(filename);
+        ret = ruFileRename(tmpName, nfdpath);
+        ruFree(nfdpath);
+#else
         ret = ruFileRename(tmpName, filename);
+#endif
         if (ret != RUE_OK) {
             ruFileRemove(tmpName);
         }
@@ -663,18 +681,30 @@ static int fileRename(const char* oldName, const char* newName, bool force) {
 #else
 #ifdef __linux__
     // not sure about android
+#ifdef RENAME_NOREPLACE
     uint flags = force? 0 : RENAME_NOREPLACE;
     if(renameat2(AT_FDCWD, oldName,
                  AT_FDCWD, newName, flags)) {
 #else
+    // this was needed on Centos 7 due to the old kernel
+    if(rename(oldName, newName)) {
+#endif
+#else
     // means darwin ATM nopt sure about iOS
     uint flags = force? 0 : RENAME_EXCL;
+#ifdef ITS_OSX
+    alloc_chars nfdpath = ruStrToNfd(newName);
+    newName = nfdpath;
+#endif
     if (renamex_np(oldName, newName, flags)) {
 #endif
         ruSetError("Failed to rename file '%s' to '%s' errno: %d - %s",
                    oldName, newName, errno, strerror(errno));
         ret = RUE_CANT_WRITE;
     }
+#endif
+#ifdef ITS_OSX
+    ruFree(nfdpath);
 #endif
     return ret;
 }
@@ -723,22 +753,23 @@ static int remover(trans_chars fullPath, bool isDir, ptr ctx) {
     return RUE_OK;
 }
 
-static int32_t folderWalk(trans_chars folder, u_int32_t flags,
+static int32_t folderWalk(trans_chars folder, uint32_t flags,
                           entryFilter filter, entryMgr actor, ptr ctx) {
     // sanity checks
     if (!folder) return RUE_PARAMETER_NOT_SET;
     int32_t ret = RUE_OK;
     if (!ruFileExists(folder)) return ret;
     bool isFolder = ruIsDir(folder);
-    //#if PB_Compiler_OS  PB_OS_MacOS
-    // MAYBE: folder = iconv_preCompose(folder);
-    //#endif
 
     alloc_chars dirname = NULL;
-    perm_chars basename = NULL;
+    char* basename = NULL;
     if (filter) {
         dirname = ruDirName(folder);
-        basename = ruBaseName(folder);
+#ifdef ITS_OSX
+        basename = ruStrToNfd(ruBaseName(folder));
+#else
+        basename = (char*)ruBaseName(folder);
+#endif
     }
 
     if (isFolder) {
@@ -821,18 +852,29 @@ static int32_t folderWalk(trans_chars folder, u_int32_t flags,
         }
 
         struct dirent *dir;
-        char *path = NULL;
+        char* path = NULL;
+        char* name = NULL;
 
         while ((dir = readdir(d)) != NULL) {
             if (ruStrEquals("..", dir->d_name) ||
                 ruStrEquals(".", dir->d_name)) continue;
-            if (filter && filter(folder, dir->d_name, dir->d_type == DT_DIR, ctx)) continue;
+#ifdef ITS_OSX
+            ruReplace(name, ruStrToNfd(dir->d_name));
+#else
+            name = dir->d_name;
+#endif
 
+            if (filter) {
+                if (filter(folder, name,
+                           dir->d_type == DT_DIR, ctx)) {
+                    continue;
+                }
+            }
             ruFree(path);
             if (dir->d_type == DT_DIR) {
-                path = ruDupPrintf("%s%s%c", folder, dir->d_name, RU_SLASH);
+                path = ruDupPrintf("%s%s%c", folder, name, RU_SLASH);
             } else {
-                path = ruDupPrintf("%s%s", folder, dir->d_name);
+                path = ruDupPrintf("%s%s", folder, name);
             }
             if ((flags & RU_WALK_NO_RECURSE) || dir->d_type != DT_DIR) {
                 if (actor) {
@@ -844,6 +886,9 @@ static int32_t folderWalk(trans_chars folder, u_int32_t flags,
             ret = folderWalk(path, flags, filter, actor, ctx);
             if (ret != RUE_OK) break;
         }
+#ifdef ITS_OSX
+        ruFree(name);
+#endif
         ruFree(path);
         closedir(d);
 #endif
@@ -857,6 +902,9 @@ static int32_t folderWalk(trans_chars folder, u_int32_t flags,
     }
 
 cleanup:
+#ifdef ITS_OSX
+    ruFree(basename);
+#endif
     ruFree(dirname);
     return ret;
 }
@@ -884,11 +932,16 @@ alloc_chars fixSlashes(perm_chars* filePath) {
         path = ruDupPrintf("%s/", *filePath);
         *filePath = path;
     }
+#ifdef ITS_OSX
+    alloc_chars nfdpath = ruStrToNfd(*filePath);
+    ruReplace(path, nfdpath);
+    *filePath = path;
+#endif
 #endif
     return path;
 }
 
-RUAPI int32_t ruFilteredFolderWalk(trans_chars folder, u_int32_t flags,
+RUAPI int32_t ruFilteredFolderWalk(trans_chars folder, uint32_t flags,
                                    entryFilter filter, entryMgr actor, ptr ctx) {
     alloc_chars path = fixSlashes(&folder);
     int32_t ret = folderWalk(folder, flags, filter, actor, ctx);
@@ -896,7 +949,7 @@ RUAPI int32_t ruFilteredFolderWalk(trans_chars folder, u_int32_t flags,
     return ret;
 }
 
-RUAPI int32_t ruFolderWalk(trans_chars folder, u_int32_t flags, entryMgr actor, ptr ctx) {
+RUAPI int32_t ruFolderWalk(trans_chars folder, uint32_t flags, entryMgr actor, ptr ctx) {
     alloc_chars path = fixSlashes(&folder);
     int32_t ret = folderWalk(folder, flags, NULL, actor, ctx);
     ruFree(path);
@@ -1008,7 +1061,11 @@ RUAPI int ruMkdir(const char *pathname, int mode, bool deep) {
     if (!mode) return RUE_INVALID_PARAMETER;
 #endif
     int ret;
+#ifdef ITS_OSX
+    char *path = ruStrToNfd(pathname);
+#else
     char *path = ruStrDup(pathname);
+#endif
     do {
         char *p = path + strlen(path)-1;
 #ifdef _WIN32

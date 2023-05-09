@@ -59,14 +59,14 @@ START_TEST ( api ) {
     fail_unless(exp == ret, retText, test, exp, ret);
     fail_unless(doexp == does, retText, test, doexp, does);
 
-    foo = ruLastSubstr(NULL, NULL);
+    foo = ruLastSubStr(NULL, NULL);
     fail_unless(foo == NULL, retText, test, NULL, foo);
 
     char *subst = "test^^^^foo";
-    foo = ruLastSubstr(subst, NULL);
+    foo = ruLastSubStr(subst, NULL);
     fail_unless(foo == NULL, retText, test, NULL, foo);
 
-    foo = ruLastSubstr(NULL, "^^");
+    foo = ruLastSubStr(NULL, "^^");
     fail_unless(foo == NULL, retText, test, NULL, foo);
 
     int64_t num = -1;
@@ -78,14 +78,8 @@ START_TEST ( api ) {
     fail_unless(exp == ret, retText, test, exp, ret);
     fail_unless(0 == num, retText, test, 0, num);
 
-    ruStrTrim(NULL);
-    ruStrTrim("");
-
-    ruStripChars(NULL, NULL);
-    ruStripChars("", NULL);
-    ruStripChars("", "");
-    ruStripChars(" ", "");
-    ruStripChars("", " ");
+    ruStrStrip(NULL, NULL, NULL);
+    ruStrStrip(" ", NULL, NULL);
 
     ruStrByteReplace(NULL, 0, 0);
     ruStrByteReplace(0, 0, 0);
@@ -121,14 +115,6 @@ START_TEST ( api ) {
 
     has = ruStrHasChar(NULL, 'x');
     fail_unless(has == want, retText, test, has, want);
-
-    alloc_chars stripped = NULL;
-    stripped = ruStrStrip(NULL, NULL);
-    fail_unless(stripped == NULL, retText, test, stripped, NULL);
-
-    stripped = ruStrStrip(NULL, "abc");
-    fail_unless(stripped == NULL, retText, test, stripped, NULL);
-
 }
 END_TEST
 
@@ -232,22 +218,22 @@ START_TEST ( run ) {
     ruStringFree(rs, true);
     ruFree(str);
 
-    test = "ruLastSubstr";
+    test = "ruLastSubStr";
     char* subst = "test^^^^foo";
-    trans_chars ptr = ruLastSubstr(subst, "^^");
+    trans_chars ptr = ruLastSubStr(subst, "^^");
     ck_assert_str_eq(ptr, "^^foo");
 
-    ptr = ruLastSubstrLen(subst, "^^", 6);
+    ptr = ruLastSubStrLen(subst, "^^", 6);
     ck_assert_str_eq(ptr, "^^^^foo");
 
-    ptr = ruLastSubstrLen(subst, "^^", 5);
+    ptr = ruLastSubStrLen(subst, "^^", 5);
     fail_unless(NULL == ptr, retText, test, NULL, ptr);
 
     subst = "test^foo";
-    ptr = ruLastSubstr(subst, "^^");
+    ptr = ruLastSubStr(subst, "^^");
     fail_unless(NULL == ptr, retText, test, NULL, ptr);
 
-    ptr = ruLastSubstr(subst, "");
+    ptr = ruLastSubStr(subst, "");
     ck_assert_str_eq(ptr, subst);
 
     test = "ruStrReplace";
@@ -269,15 +255,6 @@ START_TEST ( run ) {
 
     ruStrByteReplace(heap, 'v', '\0');
     ck_assert_str_eq("test", heap);
-
-    test = "ruStrStrip";
-    alloc_chars stripped = NULL;
-    stripped = ruStrStrip(heap, NULL);
-    fail_unless(stripped == heap, retText, test, stripped, heap);
-
-    stripped = ruStrStrip(heap, "atsx");
-    ck_assert_str_eq("te", stripped);
-
     ruFree(heap);
 
     test = "ruStrParseInt64";
@@ -367,7 +344,7 @@ START_TEST ( run ) {
     has = ruStrHasChar("xyz", 'z');
     fail_unless(has == be, retText, test, has, be);
 
-   test = "ruUtf8CaseNormalize";
+    test = "ruUtf8CaseNormalize";
     ptr = ruUtf8CaseNormalize(NULL, 0, 0);
     fail_unless(NULL == ptr, retText, test, NULL, ptr);
 
@@ -406,13 +383,31 @@ START_TEST ( run ) {
     ruFree(ptr);
     ruFree(alstr);
 
+    test = "ruStrToNfd";
+    ptr = ruStrToNfd(NULL);
+    fail_unless(NULL == ptr, retText, test, NULL, ptr);
+
+    perm_chars pcstr = "t\xc3\x84St"; // TÄst
+    perm_chars dcstr = "tA\xcc\x88St"; // Täst
+    ptr = ruStrToNfd(pcstr);
+    ck_assert_str_eq(dcstr, ptr);
+    ruFree(ptr);
+
+    test = "ruStrFromNfd";
+    ptr = ruStrFromNfd(NULL);
+    fail_unless(NULL == ptr, retText, test, NULL, ptr);
+
+    ptr = ruStrFromNfd(dcstr);
+    ck_assert_str_eq(pcstr, ptr);
+    ruFree(ptr);
+
 }
 END_TEST
 
 START_TEST ( util ) {
     int32_t want, got;
-    const char *test = "";
-    const char *retText = "%s failed wanted ret '%d' but got '%d'";
+    perm_chars test = "";
+    perm_chars retText = "%s failed wanted ret '%d' but got '%d'";
 
 
     test = "ruStrCmp";
@@ -735,39 +730,73 @@ START_TEST ( util ) {
     ruFree(out2);
     ruFree(wstr);
 
-    out2 = ruStrDup("foo was\nhere");
-    ruStripChars(out2, "\n ");
-    ck_assert_str_eq(out2, "foowashere");
+    test = "ruStrStrip";
+    perm_chars str2;
+    str ="foo was\nhere";
+    str2 = ruStrStrip(str, "\n ", &out2);
+    ck_assert_str_eq(str2, "foowashere");
+    fail_if(NULL == out2, retText, test, NULL, out2);
     ruFree(out2);
 
-    out2 = ruStrDup("foo was\there");
-    ruStripChars(out2, "\n");
-    ck_assert_str_eq(out2, "foo was\there");
+    str = "foo was\there";
+    str2 = ruStrStrip(str, "\n", &out2);
+    ck_assert_str_eq(str, str2);
+    fail_unless(str == str2, retText, test, str, str2);
+    fail_unless(NULL == out2, retText, test, NULL, out2);
+
+    str2 = ruStrStrip(str, NULL, &out2);
+    ck_assert_str_eq(str2, "foowashere");
+    fail_if(NULL == out2, retText, test, NULL, out2);
     ruFree(out2);
 
-    out2 = ruStrDup("  foo\t \n\r");
-    ruStrTrim(out2);
-    ck_assert_str_eq(out2, "  foo");
+    str ="DDP8 CDky Bh13";
+    str2 = ruStrStrip(str, " -/\\\r\n\t", &out2);
+    ck_assert_str_eq(str2, "DDP8CDkyBh13");
+    fail_if(NULL == out2, retText, test, NULL, out2);
     ruFree(out2);
 
+    test = "ruStrTrim";
     perm_chars trimd = NULL;
-    trimd = ruStrTrimDup(NULL, NULL);
+    trimd = ruStrTrim(NULL, NULL, 0, NULL);
     fail_unless(NULL == trimd, retText, test, NULL, trimd);
 
-    trimd = ruStrTrimDup("foo", &out2);
+    str = " foo ";
+    trimd = ruStrTrim(str, NULL, 0, NULL);
+    fail_unless(NULL == trimd, retText, test, NULL, trimd);
+
+    trimd = ruStrTrim(str, NULL, ruTrimBoth, &out2);
+    ck_assert_str_eq(trimd, "foo");
+    fail_if(NULL == out2, retText, test, NULL, out2);
+    ruFree(out2);
+
+    trimd = ruStrTrim(str, NULL, ruTrimStart, &out2);
+    ck_assert_str_eq(trimd, "foo ");
     fail_unless(NULL == out2, retText, test, NULL, out2);
-    ck_assert_str_eq(trimd, "foo");
 
-    trimd = ruStrTrimDup("  foo\t \n\r", &out2);
-    ck_assert_str_eq(trimd, "foo");
+    trimd = ruStrTrim(str, NULL, ruTrimEnd, &out2);
+    ck_assert_str_eq(trimd, " foo");
+    fail_if(NULL == out2, retText, test, NULL, out2);
     ruFree(out2);
 
-    trimd = ruStrTrimDup("foo\t \n\r", &out2);
+    str = "/foo\\";
+    perm_chars nogood = "";
+    trimd = ruStrTrim(str, nogood, 0, &out2);
+    fail_unless(NULL == out2, retText, test, NULL, out2);
+    fail_unless(str == trimd, retText, test, str, trimd);
+
+    nogood = "\\/";
+    trimd = ruStrTrim(str, nogood, ruTrimBoth, &out2);
     ck_assert_str_eq(trimd, "foo");
+    fail_if(NULL == out2, retText, test, NULL, out2);
     ruFree(out2);
 
-    trimd = ruStrTrimDup("  foo", &out2);
-    ck_assert_str_eq(trimd, "foo");
+    trimd = ruStrTrim(str, nogood, ruTrimStart, &out2);
+    ck_assert_str_eq(trimd, "foo\\");
+    fail_unless(NULL == out2, retText, test, NULL, out2);
+
+    trimd = ruStrTrim(str, nogood, ruTrimEnd, &out2);
+    ck_assert_str_eq(trimd, "/foo");
+    fail_if(NULL == out2, retText, test, NULL, out2);
     ruFree(out2);
 
     test = "ruStrEmpty";

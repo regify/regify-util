@@ -91,7 +91,7 @@ typedef void* ruMap;
  */
 RUAPI ruMap ruMapNew(ruHashFunc hash, ruMatchFunc match,
                      ruFreeFunc keyFree, ruFreeFunc valFree,
-                     u_int32_t expectedSize);
+                     uint32_t expectedSize);
 
 /**
  * \brief A convenience constructor for maps with string keys.
@@ -150,7 +150,7 @@ RUAPI int32_t ruMapPutData(ruMap rm, ptr key, ptr val, ptr* exisitingVal);
  * \brief Removes an entry from the map.
  * @param rm The map to remove the entry from.
  * @param key The key to be removed.
- * @param val (Optional) Where to store the retrieved value associated wiht the
+ * @param val (Optional) Where to store the retrieved value associated with the
  *            key.
  * @return \ref RUE_OK on success \ref RUE_USER_ABORT when a threaded map has
  *          quit else a regify error code.
@@ -291,7 +291,7 @@ ruMapKeyList(ruMap rm, ruList* keys, ruCloneFunc copy, ruFreeFunc listFree);
  * @param code (Optional) Stores \ref RUE_OK on success or regify error code.
  * @return Size of the map or 0 on error.
  */
-RUAPI u_int32_t ruMapSize(ruMap rm, int32_t *code);
+RUAPI uint32_t ruMapSize(ruMap rm, int32_t *code);
 
 /**
  * @}
@@ -323,7 +323,7 @@ typedef void* ruSet;
  *         if required arguments weren't given.
  */
 RUAPI ruSet ruSetNew(ruHashFunc hash, ruMatchFunc match,
-                     ruFreeFunc itemFree, u_int32_t expectedSize);
+                     ruFreeFunc itemFree, uint32_t expectedSize);
 
 /**
  * \brief A convenience constructor for sets with string keys.
@@ -484,7 +484,7 @@ RUAPI int32_t ruSetRemoveAll(ruSet rs);
  * @param code (Optional) Stores \ref RUE_OK on success or regify error code.
  * @return Size of the set or 0 on error.
  */
-RUAPI u_int32_t ruSetSize(ruSet rs, int32_t *code);
+RUAPI uint32_t ruSetSize(ruSet rs, int32_t *code);
 
 
 #ifdef __cplusplus

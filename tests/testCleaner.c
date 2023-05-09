@@ -170,18 +170,18 @@ START_TEST ( bufferless ) {
     fail_unless(c != NULL, "cleaner object was null");
 
     test = "ruCleanAdd";
-    ret = ruCleanAdd(c, "@ZAP@", "the zap");
+    ret = ruCleanAdd(c, "@ZÄP@", "the zap");
     fail_unless(ret == exp, retText, test, exp, ret);
 
     test = "ruCleanAdd";
-    ret = ruCleanAdd(c, "@POW@", "Pow this!");
+    ret = ruCleanAdd(c, "@POW@", "Pöw this!");
     fail_unless(ret == exp, retText, test, exp, ret);
 
     test = "ruCleanToString";
     exp = RUE_OK;
-    const char* inStr = "@POW@ And then do @ZAP@.";
-    const char* exStr = "Pow this! And then do the zap.";
-    const char* snipStr = "Pow this! And then do the zap";
+    const char* inStr = "@POW@ And then do @ZÄP@.";
+    const char* exStr = "Pöw this! And then do the zap.";
+    const char* snipStr = "Pöw this! And then do the zap";
     ruString out = NULL;
     ret = ruCleanToString(c, inStr, 0, &out);
     fail_unless(ret == exp, retText, test, exp, ret);

@@ -288,7 +288,7 @@ typedef int32_t (*entryMgr) (trans_chars fullPath, bool isFolder, ptr ctx);
  *            \ref entryMgr functions.
  * @return
  */
-RUAPI int32_t ruFilteredFolderWalk(trans_chars folder, u_int32_t flags,
+RUAPI int32_t ruFilteredFolderWalk(trans_chars folder, uint32_t flags,
                                    entryFilter filter, entryMgr actor, ptr ctx);
 
 /**
@@ -301,7 +301,7 @@ RUAPI int32_t ruFilteredFolderWalk(trans_chars folder, u_int32_t flags,
  * @param ctx a user definable context to be passed to the \ref entryMgr function.
  * @return
  */
-RUAPI int32_t ruFolderWalk(trans_chars folder, u_int32_t flags, entryMgr actor, ptr ctx);
+RUAPI int32_t ruFolderWalk(trans_chars folder, uint32_t flags, entryMgr actor, ptr ctx);
 
 /**
  * \brief Returns the number of folder entries including itself

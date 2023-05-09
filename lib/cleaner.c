@@ -28,6 +28,7 @@
 #ifdef CLEANER_ONLY
 // for including only the libpwcleaner without ICU and other depenedencies
 #include <stdlib.h>
+#include <stdint.h>
 #include <string.h>
 #include <errno.h>
 #include <stdbool.h>
@@ -48,18 +49,6 @@ typedef void* ptr;
 typedef void (*ruCleanerCb) (perm_ptr user_data, trans_chars key, trans_chars subst);
 typedef size_t rusize;
 #if defined(WINDOWS) || defined(WIN32) || defined(__BORLANDC__)
-    #ifndef u_int8_t
-        typedef unsigned char u_int8_t;
-    #endif
-    #ifndef int32_t
-        typedef int int32_t;
-    #endif
-    #ifndef u_int32_t
-        typedef unsigned int u_int32_t;
-    #endif
-    #ifndef int64_t
-        typedef long long int64_t;
-    #endif
     #ifdef _WIN64
         typedef int64_t rusize_s;
     #else
@@ -129,13 +118,13 @@ typedef rusize_s (*rcReadFn) (perm_ptr ctx, ptr buf, rusize len);
 typedef struct Tree_ Tree;
 
 struct Tree_ {
-    char me;
+    uint8_t me;
     Tree* kids[256];
     alloc_chars subst;
 };
 
 typedef struct {
-    u_int32_t type;
+    uint32_t type;
     Tree *root;
     Tree *leaf;
 
@@ -146,7 +135,7 @@ typedef struct {
     char *matchStart;
     char *cur;
     char *next;
-    u_int8_t thisChar;
+    uint8_t thisChar;
 
     char *outBuf;
     char *outEnd;
@@ -171,7 +160,7 @@ typedef struct {
 #define MagicCleaner        2410
 ruMakeTypeGetter(Cleaner, MagicCleaner)
 
-static Tree* newBranch(Cleaner *c, char letter) {
+static Tree* newBranch(Cleaner *c, uint8_t letter) {
     Tree *t = ruMalloc0(1, Tree);
     t->me = letter;
     c->memsize += sizeof(Tree);
@@ -212,7 +201,7 @@ static void dumpEntry(Cleaner *c, Tree *t, char* instr, char* cur, rusize inlen,
 }
 
 static void addEntry(Cleaner *c, Tree *t, trans_chars instr, trans_chars subst) {
-    char b = *instr;
+    uint8_t b = *instr;
     int i = (int) b;
     if (!t->kids[i]) {
         if (!subst) return; // should happen, but anyway
@@ -363,7 +352,7 @@ static bool walkText(Cleaner *c) {
             doCharacter(c, NULL);
             return c->error == 0;
         } else {
-            if (!leaf->kids[(int)(u_int8_t)*c->next]) {
+            if (!leaf->kids[(int)(uint8_t)*c->next]) {
                 doCharacter(c, leaf->subst);
             } else {
                 c->leaf = leaf;

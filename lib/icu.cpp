@@ -91,13 +91,17 @@ alloc_chars convToStr(UConverter *conv, UChar *usrc, int32_t uclen) {
         uclen /= 2;
         if (!usrc[uclen-1]) uclen -= 1; // subtract null teminator
     }
-    int32_t needed = ucnv_fromUChars(conv, NULL, 0, usrc, uclen, &errorCode);
+    int32_t needed = ucnv_fromUChars(conv, NULL, 0,
+                                     usrc, uclen,
+                                     &errorCode);
     int32_t olen = needed + 1; // terminator
     char *out = ruMalloc0((rusize)olen, char);
     errorCode = U_ZERO_ERROR;
-    ucnv_fromUChars(conv, out, olen, usrc, uclen, &errorCode);
+    ucnv_fromUChars(conv, out, olen,
+                    usrc, uclen, &errorCode);
     if(U_FAILURE(errorCode)) {
-        ruSetError("error in ucnv_fromUChars error=%s\n", u_errorName(errorCode));
+        ruSetError("error in ucnv_fromUChars error=%s",
+                   u_errorName(errorCode));
         ruFree(out);
         return NULL;
     }
@@ -126,9 +130,13 @@ UChar* uniSwitchCase(UChar* usrc, bool isUpper) {
     UChar* udst = ruMalloc0((rusize)len, UChar);
     int32_t needed;
     if (isUpper) {
-        needed = u_strToUpper(udst, len, usrc, slen, "utf8", &errorCode);
+        needed = u_strToUpper(udst, len,
+                              usrc, slen,
+                              "utf8", &errorCode);
     } else {
-        needed = u_strToLower(udst, len, usrc, slen, "utf8", &errorCode);
+        needed = u_strToLower(udst, len,
+                              usrc, slen,
+                              "utf8", &errorCode);
     }
     len = needed+1; // terminator
     if (errorCode == U_BUFFER_OVERFLOW_ERROR || // too small
@@ -138,14 +146,18 @@ UChar* uniSwitchCase(UChar* usrc, bool isUpper) {
         udst = ruRealloc(udst, (rusize)slen, UChar);
         errorCode = U_ZERO_ERROR;
         if (isUpper) {
-            needed = u_strToUpper(udst, len, usrc, slen, "utf8", &errorCode);
+            needed = u_strToUpper(udst, len,
+                                  usrc, slen,
+                                  "utf8", &errorCode);
         } else {
-            needed = u_strToLower(udst, len, usrc, slen, "utf8", &errorCode);
+            needed = u_strToLower(udst, len,
+                                  usrc, slen,
+                                  "utf8", &errorCode);
         }
     }
     if(U_FAILURE(errorCode) || udst[needed] != 0) {
-        ruSetError("error in u_strTo(Lower|Upper)=%ld error=%s", needed,
-                   u_errorName(errorCode));
+        ruSetError("error in u_strTo(Lower|Upper)=%ld error=%s",
+                   needed, u_errorName(errorCode));
         ruFree(udst);
         return NULL;
     }
@@ -163,10 +175,12 @@ alloc_chars utf8SwitchCase(trans_chars instr, bool isUpper) {
     char *dst = ruMalloc0((rusize)dstlen, char);
     int32_t needed;
     if (isUpper) {
-        needed = ucasemap_utf8ToUpper(ucm, dst, dstlen, instr, inlen,
+        needed = ucasemap_utf8ToUpper(ucm, dst, dstlen,
+                                      instr, inlen,
                                       &errorCode);
     } else {
-        needed = ucasemap_utf8ToLower(ucm, dst, dstlen, instr, inlen,
+        needed = ucasemap_utf8ToLower(ucm, dst, dstlen,
+                                      instr, inlen,
                                       &errorCode);
     }
     dstlen = needed+1; // terminator
@@ -177,10 +191,12 @@ alloc_chars utf8SwitchCase(trans_chars instr, bool isUpper) {
         dst = ruRealloc(dst, (rusize)dstlen, char); // terminator
         errorCode = U_ZERO_ERROR;
         if (isUpper) {
-            needed = ucasemap_utf8ToUpper(ucm, dst, dstlen, instr, inlen,
+            needed = ucasemap_utf8ToUpper(ucm, dst, dstlen,
+                                          instr, inlen,
                                           &errorCode);
         } else {
-            needed = ucasemap_utf8ToLower(ucm, dst, dstlen, instr, inlen,
+            needed = ucasemap_utf8ToLower(ucm, dst, dstlen,
+                                          instr, inlen,
                                           &errorCode);
         }
     }
@@ -214,6 +230,14 @@ RUAPI alloc_uni ruStrNToUtf16(trans_chars str, int32_t bytelen) {
     alloc_uni upat = (alloc_uni)convToUni(conv, str, bytelen);
     ucnv_close(conv);
     return upat;
+}
+
+RUAPI alloc_chars ruStrFromNfd(trans_chars instr) {
+    return ruUtf8CaseNormalize(instr, ruUtf8Nfc, ruUtf8NoCase);
+}
+
+RUAPI alloc_chars ruStrToNfd(trans_chars instr) {
+    return ruUtf8CaseNormalize(instr, ruUtf8Nfd, ruUtf8NoCase);
 }
 
 RUAPI alloc_chars ruUtf8CaseNormalize(trans_chars  instr, int32_t normMode, int32_t caseMode) {
@@ -258,7 +282,8 @@ RUAPI alloc_chars ruUtf8CaseNormalize(trans_chars  instr, int32_t normMode, int3
                 }
             }
             // get needed transform space
-            needed = unorm2_normalize(un, usrc, -1, NULL, 0, &errorCode);
+            needed = unorm2_normalize(un, usrc, -1,
+                                      NULL, 0, &errorCode);
             dstlen = needed+1; // terminator
             if (errorCode != U_BUFFER_OVERFLOW_ERROR) {
                 ruSetError("error in unorm2_normalize error=%s\n",
@@ -268,7 +293,8 @@ RUAPI alloc_chars ruUtf8CaseNormalize(trans_chars  instr, int32_t normMode, int3
             // do the transform
             utmp = ruMalloc0((rusize)dstlen, UChar); // terminator
             errorCode = U_ZERO_ERROR;
-            unorm2_normalize(un, usrc, -1, utmp, dstlen, &errorCode);
+            unorm2_normalize(un, usrc, -1, utmp,
+                             dstlen, &errorCode);
             if(U_FAILURE(errorCode)) {
                 ruSetError("error in unorm2_normalize error=%s\n",
                          u_errorName(errorCode));
