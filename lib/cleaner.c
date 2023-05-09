@@ -49,19 +49,6 @@ typedef void* ptr;
 typedef void (*ruCleanerCb) (perm_ptr user_data, trans_chars key, trans_chars subst);
 typedef size_t rusize;
 #if defined(WINDOWS) || defined(WIN32) || defined(__BORLANDC__)
-    // TODO: still needed since #include <stdint.h>
-    #ifndef uint8_t
-        typedef unsigned char uint8_t;
-    #endif
-    #ifndef int32_t
-        typedef int int32_t;
-    #endif
-    #ifndef uint32_t
-        typedef unsigned int uint32_t;
-    #endif
-    #ifndef int64_t
-        typedef long long int64_t;
-    #endif
     #ifdef _WIN64
         typedef int64_t rusize_s;
     #else

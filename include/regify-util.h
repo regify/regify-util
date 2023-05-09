@@ -67,15 +67,6 @@ extern "C" {
 #else
     #define RUAPI
 #endif
-#if defined(WINDOWS) || defined(WIN32) || defined(__BORLANDC__) || defined(__EMSCRIPTEN__)
-    // TODO: still needed since #include <stdint.h>
-    #ifndef uint8_t
-        typedef unsigned char uint8_t;
-    #endif
-    #ifndef uint32_t
-        typedef unsigned int uint32_t;
-    #endif
-#endif
 /** \endcond */
 
 #if defined(WINDOWS) || defined(WIN32) || defined(__BORLANDC__)
