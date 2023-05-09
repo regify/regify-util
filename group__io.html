@@ -31,7 +31,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">regify utility
-   &#160;<span id="projectnumber">1.3.0-0</span>
+   &#160;<span id="projectnumber">2.0.0-0</span>
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -117,9 +117,12 @@ Macros</h2></td></tr>
 Typedefs</h2></td></tr>
 <tr class="memitem:gae389f0b8ef30d38c2c5ee1be60330ede"><td class="memItemLeft" align="right" valign="top">typedef struct stat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__io.html#gae389f0b8ef30d38c2c5ee1be60330ede">ruStat_t</a></td></tr>
 <tr class="separator:gae389f0b8ef30d38c2c5ee1be60330ede"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga02d14b0d2f110532e98796373b5c6b1a"><td class="memItemLeft" align="right" valign="top">typedef int(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__io.html#ga02d14b0d2f110532e98796373b5c6b1a">entryMgr</a>) (const char *fullPath, bool isFolder, void *ctx)</td></tr>
-<tr class="memdesc:ga02d14b0d2f110532e98796373b5c6b1a"><td class="mdescLeft">&#160;</td><td class="mdescRight">A function that is called with each entry of a <a class="el" href="group__io.html#ga38d23ec7fac85ec152aacf0aeb8d2be0">ruFolderWalk</a>.  <a href="group__io.html#ga02d14b0d2f110532e98796373b5c6b1a">More...</a><br /></td></tr>
-<tr class="separator:ga02d14b0d2f110532e98796373b5c6b1a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga96b2df183649f58bd746edc4a0c6161c"><td class="memItemLeft" align="right" valign="top">typedef bool(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__io.html#ga96b2df183649f58bd746edc4a0c6161c">entryFilter</a>) (<a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> folderPath, <a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> fileName, bool isFolder, <a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a> ctx)</td></tr>
+<tr class="memdesc:ga96b2df183649f58bd746edc4a0c6161c"><td class="mdescLeft">&#160;</td><td class="mdescRight">A function that is called with each entry of a <a class="el" href="group__io.html#ga1c03fc4af3efaa1db4c1ffccf3f321bf">ruFolderWalk</a> to decide whether that entry should be processed or not.  <a href="group__io.html#ga96b2df183649f58bd746edc4a0c6161c">More...</a><br /></td></tr>
+<tr class="separator:ga96b2df183649f58bd746edc4a0c6161c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gae838891e096d47726baeec65b792fd51"><td class="memItemLeft" align="right" valign="top">typedef int32_t(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__io.html#gae838891e096d47726baeec65b792fd51">entryMgr</a>) (<a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> fullPath, bool isFolder, <a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a> ctx)</td></tr>
+<tr class="memdesc:gae838891e096d47726baeec65b792fd51"><td class="mdescLeft">&#160;</td><td class="mdescRight">A function that is called with each entry of a <a class="el" href="group__io.html#ga1c03fc4af3efaa1db4c1ffccf3f321bf">ruFolderWalk</a>.  <a href="group__io.html#gae838891e096d47726baeec65b792fd51">More...</a><br /></td></tr>
+<tr class="separator:gae838891e096d47726baeec65b792fd51"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
@@ -133,42 +136,71 @@ Functions</h2></td></tr>
 <tr class="separator:ga8de64b54e1e68f46b1a79e5c264138ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gab7628a26fded54a4e19f5a5043d46e16"><td class="memItemLeft" align="right" valign="top">RUAPI bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__io.html#gab7628a26fded54a4e19f5a5043d46e16">ruIsSymlink</a> (const char *filename)</td></tr>
 <tr class="separator:gab7628a26fded54a4e19f5a5043d46e16"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gaaf51c8fc40cedc893fa5a5397e6882af"><td class="memItemLeft" align="right" valign="top">RUAPI int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__io.html#gaaf51c8fc40cedc893fa5a5397e6882af">ruStat</a> (const char *filepath, <a class="el" href="group__io.html#gae389f0b8ef30d38c2c5ee1be60330ede">ruStat_t</a> *dest)</td></tr>
-<tr class="separator:gaaf51c8fc40cedc893fa5a5397e6882af"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaee9962bbf1900c33cf88330b0ca0da23"><td class="memItemLeft" align="right" valign="top">RUAPI int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__io.html#gaee9962bbf1900c33cf88330b0ca0da23">ruDiskFree</a> (<a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> path, uint64_t *total, uint64_t *avail)</td></tr>
+<tr class="separator:gaee9962bbf1900c33cf88330b0ca0da23"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga3c01cc11c4ab4e14c29a12fa5cb1bc7e"><td class="memItemLeft" align="right" valign="top">RUAPI int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__io.html#ga3c01cc11c4ab4e14c29a12fa5cb1bc7e">ruStat</a> (<a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> filepath, <a class="el" href="group__io.html#gae389f0b8ef30d38c2c5ee1be60330ede">ruStat_t</a> *dest)</td></tr>
+<tr class="separator:ga3c01cc11c4ab4e14c29a12fa5cb1bc7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga8916e7542df6ccf0eedd28d8377d1625"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__misc.html#gaaa0102d444a5dd14474b7951caae0459">rusize</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__io.html#ga8916e7542df6ccf0eedd28d8377d1625">ruFileSize</a> (<a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> filePath, int32_t *code)</td></tr>
+<tr class="memdesc:ga8916e7542df6ccf0eedd28d8377d1625"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the size of the given file if it exists.  <a href="group__io.html#ga8916e7542df6ccf0eedd28d8377d1625">More...</a><br /></td></tr>
+<tr class="separator:ga8916e7542df6ccf0eedd28d8377d1625"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga7e71901a25248028c5b9c186c6347035"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__misc.html#ga8573cc8637a470b127a19d54b0e94cb9">sec_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__io.html#ga7e71901a25248028c5b9c186c6347035">ruFileUtcTime</a> (<a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> filePath, int32_t *code)</td></tr>
+<tr class="memdesc:ga7e71901a25248028c5b9c186c6347035"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the UTC modification date of the given file if it exists.  <a href="group__io.html#ga7e71901a25248028c5b9c186c6347035">More...</a><br /></td></tr>
+<tr class="separator:ga7e71901a25248028c5b9c186c6347035"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaa4ef68118fe7d34985d605e2eb4d5b84"><td class="memItemLeft" align="right" valign="top">RUAPI int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__io.html#gaa4ef68118fe7d34985d605e2eb4d5b84">ruFileSetUtcTime</a> (<a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> filePath, <a class="el" href="group__misc.html#ga8573cc8637a470b127a19d54b0e94cb9">sec_t</a> date)</td></tr>
+<tr class="memdesc:gaa4ef68118fe7d34985d605e2eb4d5b84"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set UTC access and mod time of given filePath to given date.  <a href="group__io.html#gaa4ef68118fe7d34985d605e2eb4d5b84">More...</a><br /></td></tr>
+<tr class="separator:gaa4ef68118fe7d34985d605e2eb4d5b84"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gae5dc81a0de9eafb956c253be9e66948e"><td class="memItemLeft" align="right" valign="top">RUAPI int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__io.html#gae5dc81a0de9eafb956c253be9e66948e">ruOpen</a> (const char *filepath, int flags, int mode, int32_t *code)</td></tr>
 <tr class="separator:gae5dc81a0de9eafb956c253be9e66948e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga3716b147f53dd26c805547556b9608be"><td class="memItemLeft" align="right" valign="top">RUAPI FILE *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__io.html#ga3716b147f53dd26c805547556b9608be">ruFOpen</a> (const char *filepath, const char *mode, int32_t *code)</td></tr>
 <tr class="separator:ga3716b147f53dd26c805547556b9608be"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gacf30a0eee9096e022b112167988a4f06"><td class="memItemLeft" align="right" valign="top">RUAPI int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__io.html#gacf30a0eee9096e022b112167988a4f06">ruOpenTmp</a> (char *pathTemplate, int flags, int mode, int32_t *code)</td></tr>
 <tr class="separator:gacf30a0eee9096e022b112167988a4f06"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga9610819e2f2bc69b9215c9263a3db93b"><td class="memItemLeft" align="right" valign="top">RUAPI int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__io.html#ga9610819e2f2bc69b9215c9263a3db93b">ruFileSetContents</a> (const char *filename, const char *contents, <a class="el" href="group__memory.html#gac23a4c7337daa8f22a561f49096b06b8">rusize_s</a> length)</td></tr>
-<tr class="separator:ga9610819e2f2bc69b9215c9263a3db93b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga62d813403b374ccf7de8f72a957914e1"><td class="memItemLeft" align="right" valign="top">RUAPI int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__io.html#ga62d813403b374ccf7de8f72a957914e1">ruFileGetContents</a> (const char *filename, char **contents, <a class="el" href="group__memory.html#gaaa0102d444a5dd14474b7951caae0459">rusize</a> *length)</td></tr>
-<tr class="separator:ga62d813403b374ccf7de8f72a957914e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga2280aaaa8bb5c208cb53a696444c5ebd"><td class="memItemLeft" align="right" valign="top">RUAPI int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__io.html#ga2280aaaa8bb5c208cb53a696444c5ebd">ruFileSetContents</a> (const char *filename, const char *contents, <a class="el" href="group__misc.html#gaaa0102d444a5dd14474b7951caae0459">rusize</a> length)</td></tr>
+<tr class="separator:ga2280aaaa8bb5c208cb53a696444c5ebd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gac2d2628ae0710cfa181d65116b0786c6"><td class="memItemLeft" align="right" valign="top">RUAPI int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__io.html#gac2d2628ae0710cfa181d65116b0786c6">ruFileGetContents</a> (<a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> filename, <a class="el" href="group__misc.html#ga972d4f4f858964bb2381d186ea96d88d">alloc_chars</a> *contents, <a class="el" href="group__misc.html#gaaa0102d444a5dd14474b7951caae0459">rusize</a> *length)</td></tr>
+<tr class="separator:gac2d2628ae0710cfa181d65116b0786c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga56bef69d453747f997eac91cf5a92448"><td class="memItemLeft" align="right" valign="top">RUAPI int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__io.html#ga56bef69d453747f997eac91cf5a92448">ruFileCopy</a> (<a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> srcpath, <a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> destpath)</td></tr>
+<tr class="memdesc:ga56bef69d453747f997eac91cf5a92448"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copies srcpath to destpath.  <a href="group__io.html#ga56bef69d453747f997eac91cf5a92448">More...</a><br /></td></tr>
+<tr class="separator:ga56bef69d453747f997eac91cf5a92448"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga8f8cf9398240f654b7168706eb8a1095"><td class="memItemLeft" align="right" valign="top">RUAPI int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__io.html#ga8f8cf9398240f654b7168706eb8a1095">ruFileRename</a> (const char *oldName, const char *newName)</td></tr>
 <tr class="separator:ga8f8cf9398240f654b7168706eb8a1095"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga73b475d19298205315ec716522eb5005"><td class="memItemLeft" align="right" valign="top">RUAPI int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__io.html#ga73b475d19298205315ec716522eb5005">ruFileTryRename</a> (const char *oldName, const char *newName)</td></tr>
+<tr class="memdesc:ga73b475d19298205315ec716522eb5005"><td class="mdescLeft">&#160;</td><td class="mdescRight">Renames a given file like <a class="el" href="group__io.html#ga8f8cf9398240f654b7168706eb8a1095">ruFileRename</a>, but fails when newName already exists instead of overwriting it.  <a href="group__io.html#ga73b475d19298205315ec716522eb5005">More...</a><br /></td></tr>
+<tr class="separator:ga73b475d19298205315ec716522eb5005"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga037f61b6aa2a41e5966e75799c3b7626"><td class="memItemLeft" align="right" valign="top">RUAPI int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__io.html#ga037f61b6aa2a41e5966e75799c3b7626">ruFileRemove</a> (const char *filename)</td></tr>
 <tr class="separator:ga037f61b6aa2a41e5966e75799c3b7626"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga38d23ec7fac85ec152aacf0aeb8d2be0"><td class="memItemLeft" align="right" valign="top">RUAPI int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__io.html#ga38d23ec7fac85ec152aacf0aeb8d2be0">ruFolderWalk</a> (const char *folder, u_int32_t flags, <a class="el" href="group__io.html#ga02d14b0d2f110532e98796373b5c6b1a">entryMgr</a> actor, void *ctx)</td></tr>
-<tr class="memdesc:ga38d23ec7fac85ec152aacf0aeb8d2be0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decends into given folder depth first and calls actor on each entry. Folder entries . and .. are not passed to actor.  <a href="group__io.html#ga38d23ec7fac85ec152aacf0aeb8d2be0">More...</a><br /></td></tr>
-<tr class="separator:ga38d23ec7fac85ec152aacf0aeb8d2be0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gac255625488ddf62907efa965ea5b54e2"><td class="memItemLeft" align="right" valign="top">RUAPI int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__io.html#gac255625488ddf62907efa965ea5b54e2">ruFolderRemove</a> (const char *folder)</td></tr>
-<tr class="memdesc:gac255625488ddf62907efa965ea5b54e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Recursively delete given folder and all it's sub contents.  <a href="group__io.html#gac255625488ddf62907efa965ea5b54e2">More...</a><br /></td></tr>
-<tr class="separator:gac255625488ddf62907efa965ea5b54e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gad899c45123b9d7a04f4b8475ac9bf78f"><td class="memItemLeft" align="right" valign="top">RUAPI int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__io.html#gad899c45123b9d7a04f4b8475ac9bf78f">ruMkdir</a> (const char *pathname, int mode, bool deep)</td></tr>
-<tr class="separator:gad899c45123b9d7a04f4b8475ac9bf78f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga11de9515b4c216de73d8481b7decc5ba"><td class="memItemLeft" align="right" valign="top">RUAPI char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__io.html#ga11de9515b4c216de73d8481b7decc5ba">ruDirName</a> (const char *filePath)</td></tr>
-<tr class="memdesc:ga11de9515b4c216de73d8481b7decc5ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the dirname part of a full path.  <a href="group__io.html#ga11de9515b4c216de73d8481b7decc5ba">More...</a><br /></td></tr>
-<tr class="separator:ga11de9515b4c216de73d8481b7decc5ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga5e1c319186a031bc8ac39f171da4ebc1"><td class="memItemLeft" align="right" valign="top">RUAPI char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__io.html#ga5e1c319186a031bc8ac39f171da4ebc1">ruBaseName</a> (const char *filePath)</td></tr>
-<tr class="memdesc:ga5e1c319186a031bc8ac39f171da4ebc1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the filename of a path with the preceeding path removed.  <a href="group__io.html#ga5e1c319186a031bc8ac39f171da4ebc1">More...</a><br /></td></tr>
-<tr class="separator:ga5e1c319186a031bc8ac39f171da4ebc1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gac911387bc1382fb6bffa4a944d983e94"><td class="memItemLeft" align="right" valign="top">RUAPI char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__io.html#gac911387bc1382fb6bffa4a944d983e94">ruFullPath</a> (const char *filePath)</td></tr>
-<tr class="memdesc:gac911387bc1382fb6bffa4a944d983e94"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns an absolute filepath leading to the given relative path.  <a href="group__io.html#gac911387bc1382fb6bffa4a944d983e94">More...</a><br /></td></tr>
-<tr class="separator:gac911387bc1382fb6bffa4a944d983e94"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga748b1cb57a725ffd4fd098a319b56690"><td class="memItemLeft" align="right" valign="top">RUAPI char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__io.html#ga748b1cb57a725ffd4fd098a319b56690">ruPathJoin</a> (const char *base, const char *file)</td></tr>
-<tr class="memdesc:ga748b1cb57a725ffd4fd098a319b56690"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns base and file joined with the filesystem slash in a new string.  <a href="group__io.html#ga748b1cb57a725ffd4fd098a319b56690">More...</a><br /></td></tr>
-<tr class="separator:ga748b1cb57a725ffd4fd098a319b56690"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga12acc50821b94d002938710d27c03aa6"><td class="memItemLeft" align="right" valign="top">RUAPI int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__io.html#ga12acc50821b94d002938710d27c03aa6">ruFilteredFolderWalk</a> (<a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> folder, uint32_t flags, <a class="el" href="group__io.html#ga96b2df183649f58bd746edc4a0c6161c">entryFilter</a> filter, <a class="el" href="group__io.html#gae838891e096d47726baeec65b792fd51">entryMgr</a> actor, <a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a> ctx)</td></tr>
+<tr class="memdesc:ga12acc50821b94d002938710d27c03aa6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Like <a class="el" href="group__io.html#ga1c03fc4af3efaa1db4c1ffccf3f321bf">ruFolderWalk</a> with additional filtering capability. Folder entries . and .. are not passed to filter.  <a href="group__io.html#ga12acc50821b94d002938710d27c03aa6">More...</a><br /></td></tr>
+<tr class="separator:ga12acc50821b94d002938710d27c03aa6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga1c03fc4af3efaa1db4c1ffccf3f321bf"><td class="memItemLeft" align="right" valign="top">RUAPI int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__io.html#ga1c03fc4af3efaa1db4c1ffccf3f321bf">ruFolderWalk</a> (<a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> folder, uint32_t flags, <a class="el" href="group__io.html#gae838891e096d47726baeec65b792fd51">entryMgr</a> actor, <a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a> ctx)</td></tr>
+<tr class="memdesc:ga1c03fc4af3efaa1db4c1ffccf3f321bf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decends into given folder depth first and calls actor on each entry. Folder entries . and .. are not passed to actor.  <a href="group__io.html#ga1c03fc4af3efaa1db4c1ffccf3f321bf">More...</a><br /></td></tr>
+<tr class="separator:ga1c03fc4af3efaa1db4c1ffccf3f321bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga1c58cc0d6dd45ca69fbf9878327a0695"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__misc.html#ga9304b6c6b14b62616d983b36f15a7210">ru_int</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__io.html#ga1c58cc0d6dd45ca69fbf9878327a0695">ruFolderEntries</a> (<a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> folder)</td></tr>
+<tr class="memdesc:ga1c58cc0d6dd45ca69fbf9878327a0695"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the number of folder entries including itself.  <a href="group__io.html#ga1c58cc0d6dd45ca69fbf9878327a0695">More...</a><br /></td></tr>
+<tr class="separator:ga1c58cc0d6dd45ca69fbf9878327a0695"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga3770186e0678760f4c6ab93751d6e4ad"><td class="memItemLeft" align="right" valign="top">RUAPI int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__io.html#ga3770186e0678760f4c6ab93751d6e4ad">ruFolderRemove</a> (<a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> folder)</td></tr>
+<tr class="memdesc:ga3770186e0678760f4c6ab93751d6e4ad"><td class="mdescLeft">&#160;</td><td class="mdescRight">Recursively delete given folder and all it's sub contents.  <a href="group__io.html#ga3770186e0678760f4c6ab93751d6e4ad">More...</a><br /></td></tr>
+<tr class="separator:ga3770186e0678760f4c6ab93751d6e4ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga3602170134b8290324e6aca3a0b23650"><td class="memItemLeft" align="right" valign="top">RUAPI int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__io.html#ga3602170134b8290324e6aca3a0b23650">ruMkdir</a> (<a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> pathname, int mode, bool deep)</td></tr>
+<tr class="separator:ga3602170134b8290324e6aca3a0b23650"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gabf71d082e151f87d4f31b819a293236b"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__misc.html#ga972d4f4f858964bb2381d186ea96d88d">alloc_chars</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__io.html#gabf71d082e151f87d4f31b819a293236b">ruDirName</a> (<a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> filePath)</td></tr>
+<tr class="memdesc:gabf71d082e151f87d4f31b819a293236b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the dirname part of a full path without the trailing slash.  <a href="group__io.html#gabf71d082e151f87d4f31b819a293236b">More...</a><br /></td></tr>
+<tr class="separator:gabf71d082e151f87d4f31b819a293236b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gab0cd59807f557f48554a5a4b3a9dc78a"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__misc.html#ga7dd744dc0ee350f7de2c38f51f5c0bbe">perm_chars</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__io.html#gab0cd59807f557f48554a5a4b3a9dc78a">ruBaseName</a> (<a class="el" href="group__misc.html#ga7dd744dc0ee350f7de2c38f51f5c0bbe">perm_chars</a> filePath)</td></tr>
+<tr class="memdesc:gab0cd59807f557f48554a5a4b3a9dc78a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the filename of a path with the preceding path removed.  <a href="group__io.html#gab0cd59807f557f48554a5a4b3a9dc78a">More...</a><br /></td></tr>
+<tr class="separator:gab0cd59807f557f48554a5a4b3a9dc78a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gab0d2743898f8e94ddb0ff54c836862e3"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__misc.html#ga7dd744dc0ee350f7de2c38f51f5c0bbe">perm_chars</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__io.html#gab0d2743898f8e94ddb0ff54c836862e3">ruFileExtension</a> (<a class="el" href="group__misc.html#ga7dd744dc0ee350f7de2c38f51f5c0bbe">perm_chars</a> filePath)</td></tr>
+<tr class="memdesc:gab0d2743898f8e94ddb0ff54c836862e3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the extension part of the given file name if there is one.  <a href="group__io.html#gab0d2743898f8e94ddb0ff54c836862e3">More...</a><br /></td></tr>
+<tr class="separator:gab0d2743898f8e94ddb0ff54c836862e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga89ef11f352fb52312b7f46ec11ec1103"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__misc.html#ga972d4f4f858964bb2381d186ea96d88d">alloc_chars</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__io.html#ga89ef11f352fb52312b7f46ec11ec1103">ruFullPath</a> (<a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> filePath)</td></tr>
+<tr class="memdesc:ga89ef11f352fb52312b7f46ec11ec1103"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns an absolute filepath leading to the given relative path.  <a href="group__io.html#ga89ef11f352fb52312b7f46ec11ec1103">More...</a><br /></td></tr>
+<tr class="separator:ga89ef11f352fb52312b7f46ec11ec1103"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga8f9b928f302905a50cd91860e384c7fa"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__misc.html#ga972d4f4f858964bb2381d186ea96d88d">alloc_chars</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__io.html#ga8f9b928f302905a50cd91860e384c7fa">ruPathJoin</a> (<a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> base, <a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> file)</td></tr>
+<tr class="memdesc:ga8f9b928f302905a50cd91860e384c7fa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns base and file joined with the filesystem slash in a new string.  <a href="group__io.html#ga8f9b928f302905a50cd91860e384c7fa">More...</a><br /></td></tr>
+<tr class="separator:ga8f9b928f302905a50cd91860e384c7fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaa0bd3e2ab8ca42cf6c26dda0f0bf5836"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__misc.html#ga972d4f4f858964bb2381d186ea96d88d">alloc_chars</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__io.html#gaa0bd3e2ab8ca42cf6c26dda0f0bf5836">ruPathMultiJoin</a> (int parts,...)</td></tr>
+<tr class="memdesc:gaa0bd3e2ab8ca42cf6c26dda0f0bf5836"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return a path by concatenating the given parts number of parameters.  <a href="group__io.html#gaa0bd3e2ab8ca42cf6c26dda0f0bf5836">More...</a><br /></td></tr>
+<tr class="separator:gaa0bd3e2ab8ca42cf6c26dda0f0bf5836"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>This section contains abstracted file system and I/O utilities. </p>
@@ -184,7 +216,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Used by <a class="el" href="group__io.html#ga38d23ec7fac85ec152aacf0aeb8d2be0">ruFolderWalk</a> to specify that the folder be handled before its contents. </p>
+<p>Used by <a class="el" href="group__io.html#ga1c03fc4af3efaa1db4c1ffccf3f321bf">ruFolderWalk</a> to specify that the folder be handled before its contents. </p>
 
 </div>
 </div>
@@ -199,7 +231,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Used by <a class="el" href="group__io.html#ga38d23ec7fac85ec152aacf0aeb8d2be0">ruFolderWalk</a> to specify that the folder be handled after its contents. </p>
+<p>Used by <a class="el" href="group__io.html#ga1c03fc4af3efaa1db4c1ffccf3f321bf">ruFolderWalk</a> to specify that the folder be handled after its contents. </p>
 
 </div>
 </div>
@@ -214,24 +246,50 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Used by <a class="el" href="group__io.html#ga38d23ec7fac85ec152aacf0aeb8d2be0">ruFolderWalk</a> to specify whether to recurse into subfolders. </p>
+<p>Used by <a class="el" href="group__io.html#ga1c03fc4af3efaa1db4c1ffccf3f321bf">ruFolderWalk</a> to specify whether to not recurse into subfolders. </p>
 
 </div>
 </div>
 <h2 class="groupheader">Typedef Documentation</h2>
-<a id="ga02d14b0d2f110532e98796373b5c6b1a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga02d14b0d2f110532e98796373b5c6b1a">&#9670;&nbsp;</a></span>entryMgr</h2>
+<a id="ga96b2df183649f58bd746edc4a0c6161c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga96b2df183649f58bd746edc4a0c6161c">&#9670;&nbsp;</a></span>entryFilter</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef int(* entryMgr) (const char *fullPath, bool isFolder, void *ctx)</td>
+          <td class="memname">typedef bool(* entryFilter) (<a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> folderPath, <a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> fileName, bool isFolder, <a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a> ctx)</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>A function that is called with each entry of a <a class="el" href="group__io.html#ga38d23ec7fac85ec152aacf0aeb8d2be0">ruFolderWalk</a>. </p>
+<p>A function that is called with each entry of a <a class="el" href="group__io.html#ga1c03fc4af3efaa1db4c1ffccf3f321bf">ruFolderWalk</a> to decide whether that entry should be processed or not. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">folderPath</td><td>The full file path to the folder under which fileName resides. Must be copied to persist. Folder may or may not contain a trailing slash. </td></tr>
+    <tr><td class="paramname">fileName</td><td>The file base name of the current entry. Must be copied to persist. </td></tr>
+    <tr><td class="paramname">isFolder</td><td>whether this is a folder. </td></tr>
+    <tr><td class="paramname">ctx</td><td>a user definable context. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true to filter the entry or false to continue processing it and its potential sub foilders. </dd></dl>
+
+</div>
+</div>
+<a id="gae838891e096d47726baeec65b792fd51"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gae838891e096d47726baeec65b792fd51">&#9670;&nbsp;</a></span>entryMgr</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef int32_t(* entryMgr) (<a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> fullPath, bool isFolder, <a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a> ctx)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>A function that is called with each entry of a <a class="el" href="group__io.html#ga1c03fc4af3efaa1db4c1ffccf3f321bf">ruFolderWalk</a>. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">fullPath</td><td>The full file path to the entry in question. Must be copied to persist. Folder may or may not contain a trailing slash. </td></tr>
@@ -240,6 +298,7 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="group__ruerror.html#ga7e2f97cce8af8020834e685a2482556d">RUE_OK</a> to continue, else a regify error code. </dd></dl>
 
 </div>
 </div>
@@ -259,23 +318,23 @@ Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="ga5e1c319186a031bc8ac39f171da4ebc1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga5e1c319186a031bc8ac39f171da4ebc1">&#9670;&nbsp;</a></span>ruBaseName()</h2>
+<a id="gab0cd59807f557f48554a5a4b3a9dc78a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gab0cd59807f557f48554a5a4b3a9dc78a">&#9670;&nbsp;</a></span>ruBaseName()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">RUAPI char* ruBaseName </td>
+          <td class="memname">RUAPI <a class="el" href="group__misc.html#ga7dd744dc0ee350f7de2c38f51f5c0bbe">perm_chars</a> ruBaseName </td>
           <td>(</td>
-          <td class="paramtype">const char *&#160;</td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga7dd744dc0ee350f7de2c38f51f5c0bbe">perm_chars</a>&#160;</td>
           <td class="paramname"><em>filePath</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Returns the filename of a path with the preceeding path removed. </p>
+<p>Returns the filename of a path with the preceding path removed. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">filePath</td><td>File path to return the basename of. </td></tr>
@@ -286,30 +345,112 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ga11de9515b4c216de73d8481b7decc5ba"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga11de9515b4c216de73d8481b7decc5ba">&#9670;&nbsp;</a></span>ruDirName()</h2>
+<a id="gabf71d082e151f87d4f31b819a293236b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gabf71d082e151f87d4f31b819a293236b">&#9670;&nbsp;</a></span>ruDirName()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">RUAPI char* ruDirName </td>
+          <td class="memname">RUAPI <a class="el" href="group__misc.html#ga972d4f4f858964bb2381d186ea96d88d">alloc_chars</a> ruDirName </td>
           <td>(</td>
-          <td class="paramtype">const char *&#160;</td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a>&#160;</td>
           <td class="paramname"><em>filePath</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Returns the dirname part of a full path. </p>
+<p>Returns the dirname part of a full path without the trailing slash. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">filePath</td><td>File path to return the dirname of. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Returns the directory name part of the given path or NULL if no slashes were found. Caller needs to free the result with <a class="el" href="group__memory.html#gafcc3628238450c77b4aa61e9d7001a56">ruFree</a> after use. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Returns the directory name part of the given path excluding its trailing slash or NULL if no slashes were found. Caller needs to free the result with <a class="el" href="group__memory.html#gafcc3628238450c77b4aa61e9d7001a56">ruFree</a> after use. </dd></dl>
+
+</div>
+</div>
+<a id="gaee9962bbf1900c33cf88330b0ca0da23"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaee9962bbf1900c33cf88330b0ca0da23">&#9670;&nbsp;</a></span>ruDiskFree()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI int32_t ruDiskFree </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a>&#160;</td>
+          <td class="paramname"><em>path</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint64_t *&#160;</td>
+          <td class="paramname"><em>total</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint64_t *&#160;</td>
+          <td class="paramname"><em>avail</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Returns the total and avail size of the partition where path resides on.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">path</td><td>Path whose partition to examine. </td></tr>
+    <tr><td class="paramname">total</td><td>Optional, Where total partition size will be stored in bytes </td></tr>
+    <tr><td class="paramname">avail</td><td>Optional, Where left over user partition size will be stored in bytes. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>RUE_OK on success else RUE_CANT_OPEN_FILE. Then check errno for details. </dd></dl>
+
+</div>
+</div>
+<a id="ga56bef69d453747f997eac91cf5a92448"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga56bef69d453747f997eac91cf5a92448">&#9670;&nbsp;</a></span>ruFileCopy()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI int ruFileCopy </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a>&#160;</td>
+          <td class="paramname"><em>srcpath</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a>&#160;</td>
+          <td class="paramname"><em>destpath</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Copies srcpath to destpath. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">srcpath</td><td>file to copy </td></tr>
+    <tr><td class="paramname">destpath</td><td>path to copy srcpath to </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Return code of the operation or <a class="el" href="group__ruerror.html#ga7e2f97cce8af8020834e685a2482556d">RUE_OK</a> on success. </dd></dl>
 
 </div>
 </div>
@@ -338,8 +479,35 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ga62d813403b374ccf7de8f72a957914e1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga62d813403b374ccf7de8f72a957914e1">&#9670;&nbsp;</a></span>ruFileGetContents()</h2>
+<a id="gab0d2743898f8e94ddb0ff54c836862e3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gab0d2743898f8e94ddb0ff54c836862e3">&#9670;&nbsp;</a></span>ruFileExtension()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI <a class="el" href="group__misc.html#ga7dd744dc0ee350f7de2c38f51f5c0bbe">perm_chars</a> ruFileExtension </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga7dd744dc0ee350f7de2c38f51f5c0bbe">perm_chars</a>&#160;</td>
+          <td class="paramname"><em>filePath</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the extension part of the given file name if there is one. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">filePath</td><td>File path to get extension from </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>NULL if there's no extension otherwise pointer to where it starts in filePath. </dd></dl>
+
+</div>
+</div>
+<a id="gac2d2628ae0710cfa181d65116b0786c6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gac2d2628ae0710cfa181d65116b0786c6">&#9670;&nbsp;</a></span>ruFileGetContents()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -347,19 +515,19 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">RUAPI int ruFileGetContents </td>
           <td>(</td>
-          <td class="paramtype">const char *&#160;</td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a>&#160;</td>
           <td class="paramname"><em>filename</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">char **&#160;</td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga972d4f4f858964bb2381d186ea96d88d">alloc_chars</a> *&#160;</td>
           <td class="paramname"><em>contents</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="group__memory.html#gaaa0102d444a5dd14474b7951caae0459">rusize</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="group__misc.html#gaaa0102d444a5dd14474b7951caae0459">rusize</a> *&#160;</td>
           <td class="paramname"><em>length</em>&#160;</td>
         </tr>
         <tr>
@@ -442,8 +610,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ga9610819e2f2bc69b9215c9263a3db93b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga9610819e2f2bc69b9215c9263a3db93b">&#9670;&nbsp;</a></span>ruFileSetContents()</h2>
+<a id="ga2280aaaa8bb5c208cb53a696444c5ebd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga2280aaaa8bb5c208cb53a696444c5ebd">&#9670;&nbsp;</a></span>ruFileSetContents()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -463,7 +631,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="group__memory.html#gac23a4c7337daa8f22a561f49096b06b8">rusize_s</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="group__misc.html#gaaa0102d444a5dd14474b7951caae0459">rusize</a>&#160;</td>
           <td class="paramname"><em>length</em>&#160;</td>
         </tr>
         <tr>
@@ -476,8 +644,8 @@ Functions</h2></td></tr>
 <p>Write the string stored in contents into a new file at filename. Any old file at that location will be overwritten by the new file. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">filename</td><td>Path to the file to create. </td></tr>
-    <tr><td class="paramname">contents</td><td>Contents to write into the file. This may be a NULL terminated encoding irrelevant string or binary data. </td></tr>
-    <tr><td class="paramname">length</td><td>Length of the content. May be -1 for a NULL terminated string. </td></tr>
+    <tr><td class="paramname">contents</td><td>Contents to write into the file. This may be a NULL terminated encoding irrelevant string or binary data. If contents is NULL an empty file will be created. </td></tr>
+    <tr><td class="paramname">length</td><td>Length of the content. May be RU_SIZE_AUTO for a NULL terminated string. </td></tr>
   </table>
   </dd>
 </dl>
@@ -485,8 +653,246 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="gac255625488ddf62907efa965ea5b54e2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gac255625488ddf62907efa965ea5b54e2">&#9670;&nbsp;</a></span>ruFolderRemove()</h2>
+<a id="gaa4ef68118fe7d34985d605e2eb4d5b84"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaa4ef68118fe7d34985d605e2eb4d5b84">&#9670;&nbsp;</a></span>ruFileSetUtcTime()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI int32_t ruFileSetUtcTime </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a>&#160;</td>
+          <td class="paramname"><em>filePath</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga8573cc8637a470b127a19d54b0e94cb9">sec_t</a>&#160;</td>
+          <td class="paramname"><em>date</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set UTC access and mod time of given filePath to given date. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">filePath</td><td>file to set time on </td></tr>
+    <tr><td class="paramname">date</td><td>UTC time stamp to set file time to </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Parameter validation error or <a class="el" href="group__ruerror.html#ga7e2f97cce8af8020834e685a2482556d">RUE_OK</a> if parameters are good. </dd></dl>
+
+</div>
+</div>
+<a id="ga8916e7542df6ccf0eedd28d8377d1625"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga8916e7542df6ccf0eedd28d8377d1625">&#9670;&nbsp;</a></span>ruFileSize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI <a class="el" href="group__misc.html#gaaa0102d444a5dd14474b7951caae0459">rusize</a> ruFileSize </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a>&#160;</td>
+          <td class="paramname"><em>filePath</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int32_t *&#160;</td>
+          <td class="paramname"><em>code</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return the size of the given file if it exists. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">filePath</td><td>File path to get size of </td></tr>
+    <tr><td class="paramname">code</td><td>Where the status of the operation will be stored. <a class="el" href="group__ruerror.html#ga7e2f97cce8af8020834e685a2482556d">RUE_OK</a> on success else <a class="el" href="group__ruerror.html#ga616dba9a5dafed8351aa98c68fab25e2">RUE_PARAMETER_NOT_SET</a> if filename was NULL or <a class="el" href="group__ruerror.html#gadb4058c56ea545e1d20d2efa9d6611fd">RUE_FILE_NOT_FOUND</a> if file didn't exists or <a class="el" href="group__ruerror.html#gae9ed1060b946292df9590533fea757f6">RUE_CANT_OPEN_FILE</a> if it was another error. Check errno or call ruLastError for details. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>file size or 0 on error </dd></dl>
+
+</div>
+</div>
+<a id="ga73b475d19298205315ec716522eb5005"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga73b475d19298205315ec716522eb5005">&#9670;&nbsp;</a></span>ruFileTryRename()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI int ruFileTryRename </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>oldName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>newName</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Renames a given file like <a class="el" href="group__io.html#ga8f8cf9398240f654b7168706eb8a1095">ruFileRename</a>, but fails when newName already exists instead of overwriting it. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">oldName</td><td>Old file path. </td></tr>
+    <tr><td class="paramname">newName</td><td>The new file path. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Return code of the operation or <a class="el" href="group__ruerror.html#ga7e2f97cce8af8020834e685a2482556d">RUE_OK</a> on success. </dd></dl>
+
+</div>
+</div>
+<a id="ga7e71901a25248028c5b9c186c6347035"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga7e71901a25248028c5b9c186c6347035">&#9670;&nbsp;</a></span>ruFileUtcTime()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI <a class="el" href="group__misc.html#ga8573cc8637a470b127a19d54b0e94cb9">sec_t</a> ruFileUtcTime </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a>&#160;</td>
+          <td class="paramname"><em>filePath</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int32_t *&#160;</td>
+          <td class="paramname"><em>code</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return the UTC modification date of the given file if it exists. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">filePath</td><td>File path to get date of </td></tr>
+    <tr><td class="paramname">code</td><td>Where the status of the operation will be stored. <a class="el" href="group__ruerror.html#ga7e2f97cce8af8020834e685a2482556d">RUE_OK</a> on success else <a class="el" href="group__ruerror.html#ga616dba9a5dafed8351aa98c68fab25e2">RUE_PARAMETER_NOT_SET</a> if filename was NULL or <a class="el" href="group__ruerror.html#gadb4058c56ea545e1d20d2efa9d6611fd">RUE_FILE_NOT_FOUND</a> if file didn't exists or <a class="el" href="group__ruerror.html#gae9ed1060b946292df9590533fea757f6">RUE_CANT_OPEN_FILE</a> if it was another error. Check errno or call ruLastError for details. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>UTC modification date or 0 on error </dd></dl>
+
+</div>
+</div>
+<a id="ga12acc50821b94d002938710d27c03aa6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga12acc50821b94d002938710d27c03aa6">&#9670;&nbsp;</a></span>ruFilteredFolderWalk()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI int32_t ruFilteredFolderWalk </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a>&#160;</td>
+          <td class="paramname"><em>folder</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>flags</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__io.html#ga96b2df183649f58bd746edc4a0c6161c">entryFilter</a>&#160;</td>
+          <td class="paramname"><em>filter</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__io.html#gae838891e096d47726baeec65b792fd51">entryMgr</a>&#160;</td>
+          <td class="paramname"><em>actor</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a>&#160;</td>
+          <td class="paramname"><em>ctx</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Like <a class="el" href="group__io.html#ga1c03fc4af3efaa1db4c1ffccf3f321bf">ruFolderWalk</a> with additional filtering capability. Folder entries . and .. are not passed to filter. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">folder</td><td>Folder to start descending into. Does not accept / or \ </td></tr>
+    <tr><td class="paramname">flags</td><td>Flags of type RU_WALK_* to specify walking behavior. All flags may be specified. </td></tr>
+    <tr><td class="paramname">filter</td><td>Function to call with each entry to decide filtering </td></tr>
+    <tr><td class="paramname">actor</td><td>Function to call with each entry </td></tr>
+    <tr><td class="paramname">ctx</td><td>a user definable context to be passed to the <a class="el" href="group__io.html#ga96b2df183649f58bd746edc4a0c6161c">entryFilter</a> and <a class="el" href="group__io.html#gae838891e096d47726baeec65b792fd51">entryMgr</a> functions. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+
+</div>
+</div>
+<a id="ga1c58cc0d6dd45ca69fbf9878327a0695"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga1c58cc0d6dd45ca69fbf9878327a0695">&#9670;&nbsp;</a></span>ruFolderEntries()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI <a class="el" href="group__misc.html#ga9304b6c6b14b62616d983b36f15a7210">ru_int</a> ruFolderEntries </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a>&#160;</td>
+          <td class="paramname"><em>folder</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the number of folder entries including itself. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">folder</td><td>Folder to count entries of </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 if folder is not readable, 1 if folder is empty or the number of entries it has - 1 for itself. </dd></dl>
+
+</div>
+</div>
+<a id="ga3770186e0678760f4c6ab93751d6e4ad"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga3770186e0678760f4c6ab93751d6e4ad">&#9670;&nbsp;</a></span>ruFolderRemove()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -494,7 +900,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">RUAPI int ruFolderRemove </td>
           <td>(</td>
-          <td class="paramtype">const char *&#160;</td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a>&#160;</td>
           <td class="paramname"><em>folder</em></td><td>)</td>
           <td></td>
         </tr>
@@ -508,12 +914,12 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd><a class="el" href="group__ruerror.html#ga7e2f97cce8af8020834e685a2482556d">RUE_OK</a> on success else <a class="el" href="group__ruerror.html#ga2f7444b837379ce89b69a94db10781d2">RUE_GENERAL</a> and call <a class="el" href="group__memory.html#gaea3d529fecc1bbad25f943943b6e9ef2">ruLastError</a> for details. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="group__ruerror.html#ga7e2f97cce8af8020834e685a2482556d">RUE_OK</a> on success else <a class="el" href="group__ruerror.html#ga2f7444b837379ce89b69a94db10781d2">RUE_GENERAL</a> and call ruLastError for details. </dd></dl>
 
 </div>
 </div>
-<a id="ga38d23ec7fac85ec152aacf0aeb8d2be0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga38d23ec7fac85ec152aacf0aeb8d2be0">&#9670;&nbsp;</a></span>ruFolderWalk()</h2>
+<a id="ga1c03fc4af3efaa1db4c1ffccf3f321bf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga1c03fc4af3efaa1db4c1ffccf3f321bf">&#9670;&nbsp;</a></span>ruFolderWalk()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -521,25 +927,25 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">RUAPI int32_t ruFolderWalk </td>
           <td>(</td>
-          <td class="paramtype">const char *&#160;</td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a>&#160;</td>
           <td class="paramname"><em>folder</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">u_int32_t&#160;</td>
+          <td class="paramtype">uint32_t&#160;</td>
           <td class="paramname"><em>flags</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="group__io.html#ga02d14b0d2f110532e98796373b5c6b1a">entryMgr</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="group__io.html#gae838891e096d47726baeec65b792fd51">entryMgr</a>&#160;</td>
           <td class="paramname"><em>actor</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">void *&#160;</td>
+          <td class="paramtype"><a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a>&#160;</td>
           <td class="paramname"><em>ctx</em>&#160;</td>
         </tr>
         <tr>
@@ -556,7 +962,7 @@ Functions</h2></td></tr>
     <tr><td class="paramname">folder</td><td>Folder to start descending into. Does not accept / or \ </td></tr>
     <tr><td class="paramname">flags</td><td>Flags of type RU_WALK_* to specify walking behavior. All flags may be specified. </td></tr>
     <tr><td class="paramname">actor</td><td>Function to call with each entry </td></tr>
-    <tr><td class="paramname">ctx</td><td>a user definable context to be passed to the <a class="el" href="group__io.html#ga02d14b0d2f110532e98796373b5c6b1a">entryMgr</a> function. </td></tr>
+    <tr><td class="paramname">ctx</td><td>a user definable context to be passed to the <a class="el" href="group__io.html#gae838891e096d47726baeec65b792fd51">entryMgr</a> function. </td></tr>
   </table>
   </dd>
 </dl>
@@ -607,16 +1013,16 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="gac911387bc1382fb6bffa4a944d983e94"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gac911387bc1382fb6bffa4a944d983e94">&#9670;&nbsp;</a></span>ruFullPath()</h2>
+<a id="ga89ef11f352fb52312b7f46ec11ec1103"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga89ef11f352fb52312b7f46ec11ec1103">&#9670;&nbsp;</a></span>ruFullPath()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">RUAPI char* ruFullPath </td>
+          <td class="memname">RUAPI <a class="el" href="group__misc.html#ga972d4f4f858964bb2381d186ea96d88d">alloc_chars</a> ruFullPath </td>
           <td>(</td>
-          <td class="paramtype">const char *&#160;</td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a>&#160;</td>
           <td class="paramname"><em>filePath</em></td><td>)</td>
           <td></td>
         </tr>
@@ -734,8 +1140,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="gad899c45123b9d7a04f4b8475ac9bf78f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gad899c45123b9d7a04f4b8475ac9bf78f">&#9670;&nbsp;</a></span>ruMkdir()</h2>
+<a id="ga3602170134b8290324e6aca3a0b23650"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga3602170134b8290324e6aca3a0b23650">&#9670;&nbsp;</a></span>ruMkdir()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -743,7 +1149,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">RUAPI int ruMkdir </td>
           <td>(</td>
-          <td class="paramtype">const char *&#160;</td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a>&#160;</td>
           <td class="paramname"><em>pathname</em>, </td>
         </tr>
         <tr>
@@ -877,22 +1283,22 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ga748b1cb57a725ffd4fd098a319b56690"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga748b1cb57a725ffd4fd098a319b56690">&#9670;&nbsp;</a></span>ruPathJoin()</h2>
+<a id="ga8f9b928f302905a50cd91860e384c7fa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga8f9b928f302905a50cd91860e384c7fa">&#9670;&nbsp;</a></span>ruPathJoin()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">RUAPI char* ruPathJoin </td>
+          <td class="memname">RUAPI <a class="el" href="group__misc.html#ga972d4f4f858964bb2381d186ea96d88d">alloc_chars</a> ruPathJoin </td>
           <td>(</td>
-          <td class="paramtype">const char *&#160;</td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a>&#160;</td>
           <td class="paramname"><em>base</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const char *&#160;</td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a>&#160;</td>
           <td class="paramname"><em>file</em>&#160;</td>
         </tr>
         <tr>
@@ -915,16 +1321,55 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="gaaf51c8fc40cedc893fa5a5397e6882af"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gaaf51c8fc40cedc893fa5a5397e6882af">&#9670;&nbsp;</a></span>ruStat()</h2>
+<a id="gaa0bd3e2ab8ca42cf6c26dda0f0bf5836"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaa0bd3e2ab8ca42cf6c26dda0f0bf5836">&#9670;&nbsp;</a></span>ruPathMultiJoin()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">RUAPI int ruStat </td>
+          <td class="memname">RUAPI <a class="el" href="group__misc.html#ga972d4f4f858964bb2381d186ea96d88d">alloc_chars</a> ruPathMultiJoin </td>
           <td>(</td>
-          <td class="paramtype">const char *&#160;</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>parts</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return a path by concatenating the given parts number of parameters. </p>
+<p>The returned path will have the leading slash supplied with the first folder argument. There will be no trailing slash returned.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">parts</td><td>Number of folder name that follow </td></tr>
+    <tr><td class="paramname">...</td><td>parts number of folder names to concatenate. Trailing slashes and leading slashes after the second folder are accounted for. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Allocated path to be freed by the caller. Or NULL if parts was &lt; 1. </dd></dl>
+
+</div>
+</div>
+<a id="ga3c01cc11c4ab4e14c29a12fa5cb1bc7e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga3c01cc11c4ab4e14c29a12fa5cb1bc7e">&#9670;&nbsp;</a></span>ruStat()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI int32_t ruStat </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a>&#160;</td>
           <td class="paramname"><em>filepath</em>, </td>
         </tr>
         <tr>
@@ -947,7 +1392,7 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Returns <a class="el" href="group__ruerror.html#ga7e2f97cce8af8020834e685a2482556d">RUE_OK</a> on success else <a class="el" href="group__ruerror.html#ga616dba9a5dafed8351aa98c68fab25e2">RUE_PARAMETER_NOT_SET</a> if filename was NULL or <a class="el" href="group__ruerror.html#gadb4058c56ea545e1d20d2efa9d6611fd">RUE_FILE_NOT_FOUND</a> if file didn't exists or <a class="el" href="group__ruerror.html#gae9ed1060b946292df9590533fea757f6">RUE_CANT_OPEN_FILE</a> if it was another error. Check errno or call <a class="el" href="group__memory.html#gaea3d529fecc1bbad25f943943b6e9ef2">ruLastError</a> for details. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Returns <a class="el" href="group__ruerror.html#ga7e2f97cce8af8020834e685a2482556d">RUE_OK</a> on success else <a class="el" href="group__ruerror.html#ga616dba9a5dafed8351aa98c68fab25e2">RUE_PARAMETER_NOT_SET</a> if filename was NULL or <a class="el" href="group__ruerror.html#gadb4058c56ea545e1d20d2efa9d6611fd">RUE_FILE_NOT_FOUND</a> if file didn't exists or <a class="el" href="group__ruerror.html#gae9ed1060b946292df9590533fea757f6">RUE_CANT_OPEN_FILE</a> if it was another error. Check errno or call ruLastError for details. </dd></dl>
 
 </div>
 </div>
@@ -956,7 +1401,7 @@ Functions</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Wed Nov 30 2022 14:27:38 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Tue May 9 2023 14:04:29 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

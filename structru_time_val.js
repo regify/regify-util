@@ -1,5 +1,5 @@
 var structru_time_val =
 [
-    [ "sec", "structru_time_val.html#ae730cf043720ac0a7b94c64e7356d9ec", null ],
-    [ "usec", "structru_time_val.html#a63e59ad14d61e70117ccdf2b9cf4d577", null ]
+    [ "sec", "structru_time_val.html#ab79c03c47db0065ef4c2a2d00f33c94f", null ],
+    [ "usec", "structru_time_val.html#aebdd1a6e510874064a7f3a3a6ff935bd", null ]
 ];

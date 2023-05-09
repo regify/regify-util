@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['ini_20file_20handling_8',['Ini File Handling',['../group__ini.html',1,'']]],
-  ['iofunc_9',['ioFunc',['../group__cleaner.html#gae4bb48307fae422df9dfa3bbbab66cc1',1,'cleaner.h']]]
+  ['hash_20map_12',['Hash Map',['../group__map.html',1,'']]],
+  ['hash_20set_13',['Hash Set',['../group__set.html',1,'']]]
 ];

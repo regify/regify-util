@@ -1,26 +1,4 @@
 var searchData=
 [
-  ['rubuffer_443',['ruBuffer',['../group__buffer.html#ga1e5e2b41241f550622126cbecb4820e5',1,'string.h']]],
-  ['rucleaner_444',['ruCleaner',['../group__cleaner.html#ga2ef14c6aa2f1434ccc78e1df73d5a31d',1,'cleaner.h']]],
-  ['rucleanercb_445',['ruCleanerCb',['../group__cleaner.html#ga76ef45a462467ab9cc874e52cfd50cad',1,'cleaner.h']]],
-  ['ruclearfunc_446',['ruClearFunc',['../group__memory.html#ga91dce9b2f482277a0d5ec778e54c5d14',1,'regify-util.h']]],
-  ['ruclonefunc_447',['ruCloneFunc',['../group__memory.html#ga1b23e084ffff15cf965a438497c9f8e2',1,'regify-util.h']]],
-  ['rufilestore_448',['ruFileStore',['../group__kvstore__sec.html#ga1315d700b19c1627f8d71b0e7fb5f9a4',1,'kvstore.h']]],
-  ['rufreefunc_449',['ruFreeFunc',['../group__memory.html#ga8eb4179750e158d78b0b3bc1e4b1bdce',1,'regify-util.h']]],
-  ['ruini_450',['ruIni',['../group__ini.html#ga67d0d212c119eddcdfb53125e8e27e19',1,'ini.h']]],
-  ['ruiterator_451',['ruIterator',['../group__list.html#ga88f5af8c2f8986a0708a06c1d0bb2183',1,'list.h']]],
-  ['rulist_452',['ruList',['../group__list.html#gab25c1662a91a5e0d68a3f04efd1a0cc2',1,'list.h']]],
-  ['rulistelmt_453',['ruListElmt',['../group__list.html#ga8a10b640cc881a4205684a5730c949a2',1,'list.h']]],
-  ['rulogfunc_454',['ruLogFunc',['../group__logging.html#ga85b04f67f72140eacdded6c016bdac96',1,'logging.h']]],
-  ['rumap_455',['ruMap',['../group__map.html#gaad879dbca17e7740cbab5651cafe677d',1,'map.h']]],
-  ['rumutex_456',['ruMutex',['../group__threading.html#gaa2f2224294aab80c5b5fdadf8c50a2de',1,'thread.h']]],
-  ['runullstore_457',['ruNullStore',['../group__kvstore__sec.html#ga125fcd1fe6efdcfeaee1c6464e814224',1,'kvstore.h']]],
-  ['ruregex_458',['ruRegex',['../group__regex.html#ga5c28c3ff50463237640750e9f18b1e56',1,'regex.h']]],
-  ['ruregexflag_459',['ruRegexFlag',['../group__regex.html#ga3120f309b1d9233ced1c84f80ec6482d',1,'regex.h']]],
-  ['rusize_460',['rusize',['../group__memory.html#gaaa0102d444a5dd14474b7951caae0459',1,'regify-util.h']]],
-  ['rusize_5fs_461',['rusize_s',['../group__memory.html#gac23a4c7337daa8f22a561f49096b06b8',1,'regify-util.h']]],
-  ['rustartfunc_462',['ruStartFunc',['../group__threading.html#ga9fb7315bef26c1ae9b399b5779ed230b',1,'thread.h']]],
-  ['rustat_5ft_463',['ruStat_t',['../group__io.html#gae389f0b8ef30d38c2c5ee1be60330ede',1,'io.h']]],
-  ['rustring_464',['ruString',['../group__ru_string.html#ga673263d6113c0dada89347f2b31b5884',1,'string.h']]],
-  ['ruthread_465',['ruThread',['../group__threading.html#gac7df455fe262f5fe1d6a40c48fb5a343',1,'thread.h']]]
+  ['msec_5ft_583',['msec_t',['../group__misc.html#gae416893e8160c5b7c6da3765e4707d5d',1,'regify-util.h']]]
 ];

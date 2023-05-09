@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['hash_20map_7',['Hash Map',['../group__map.html',1,'']]]
+  ['get_11',['get',['../struct_kv_store__.html#a86e65a7a3b43fae351d8c70f705a3748',1,'KvStore_']]]
 ];

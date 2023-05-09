@@ -1,12 +1,15 @@
 var group__logging =
 [
     [ "RU_LOG_CRIT", "group__logging.html#ga5ce14b97da761ebb505b022d7b777600", null ],
+    [ "RU_LOG_DBUG", "group__logging.html#ga87450aef2aa1444e5f86301c28d0907d", null ],
     [ "RU_LOG_INFO", "group__logging.html#gac3860f00aa62056d7ca6cb40fd194bf6", null ],
     [ "RU_LOG_NONE", "group__logging.html#ga4ab0a01a9d5b8c0fe1228e22a4a98b28", null ],
     [ "RU_LOG_VERB", "group__logging.html#gaa48441dca350811c725a8096ccbd59f8", null ],
     [ "RU_LOG_WARN", "group__logging.html#ga4388ae060e29101e3458cc625b53f327", null ],
     [ "ruCritLog", "group__logging.html#ga52e07e352dbd0c7be2b0d37bc48cc8ac", null ],
     [ "ruCritLogf", "group__logging.html#ga6cee3b7459f97c8805d9e31ec46ca2c5", null ],
+    [ "ruDbgLog", "group__logging.html#ga6d7b666987402eb3af7d97e448f021ba", null ],
+    [ "ruDbgLogf", "group__logging.html#ga3d3ffaf6bf4fa6d4c69329ad93f301b3", null ],
     [ "ruDump16", "group__logging.html#ga28a12b3d8bfbc6022ad920435b2cef72", null ],
     [ "ruDump8", "group__logging.html#ga350ca5f040ec24dc02dd77155fbb61d0", null ],
     [ "ruInfoLog", "group__logging.html#gaf9ca44fd51225d8a837745dda302341f", null ],
@@ -15,9 +18,9 @@ var group__logging =
     [ "ruVerbLogf", "group__logging.html#ga75167ec8202e6e2a632afdb0a60fabb0", null ],
     [ "ruWarnLog", "group__logging.html#ga21164d698d4775724fd710a6bf6cfa15", null ],
     [ "ruWarnLogf", "group__logging.html#gaebf1e2035fa3c2d930c925c93e2e6706", null ],
-    [ "ruLogFunc", "group__logging.html#ga85b04f67f72140eacdded6c016bdac96", null ],
-    [ "ruDoesLog", "group__logging.html#gab3ef0712708ff05243d4275723c1cba4", null ],
-    [ "ruGetLogLevel", "group__logging.html#ga5567addda268c2f3d4ff8cb72ce1a918", null ],
-    [ "ruSetLogger", "group__logging.html#gae2da372352496e9d84b59c07b15f82ed", null ],
-    [ "ruStdErrorLogger", "group__logging.html#ga0a90f3d97148451be043efff143fd5a7", null ]
+    [ "ruLogFunc", "group__logging.html#ga20be8e436d37b23248d98325f40a5d9e", null ],
+    [ "ruDoesLog", "group__logging.html#gaccddd3017ad9c9fd2f1bf9865dcbf699", null ],
+    [ "ruGetLogLevel", "group__logging.html#ga55a8b3d268484f95bc91525110491606", null ],
+    [ "ruSetLogger", "group__logging.html#ga45e42503b652bda7bc147f5c514f5172", null ],
+    [ "ruStdErrorLogger", "group__logging.html#gafbb4cdd0ff940ab6a253c3b69dba1fa1", null ]
 ];

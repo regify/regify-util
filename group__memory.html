@@ -31,7 +31,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">regify utility
-   &#160;<span id="projectnumber">1.3.0-0</span>
+   &#160;<span id="projectnumber">2.0.0-0</span>
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -105,50 +105,27 @@ $(document).ready(function(){initNavTree('group__memory.html',''); initResizable
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
-<tr class="memitem:ga7c611f586df1bdfe2b096966c189f853"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__memory.html#ga7c611f586df1bdfe2b096966c189f853">ruMalloc0</a>(count,  ctype)&#160;&#160;&#160;(ctype*) <a class="el" href="group__memory.html#gadc6d4640d79d30847e5a69423151e6d6">ruMallocSize</a>(count, sizeof(ctype));</td></tr>
+<tr class="memitem:ga7c611f586df1bdfe2b096966c189f853"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__memory.html#ga7c611f586df1bdfe2b096966c189f853">ruMalloc0</a>(count,  ctype)&#160;&#160;&#160;(ctype*) <a class="el" href="group__memory.html#ga9aa9dcd1bd646dfc857f63eba32e923c">ruMallocSize</a>((<a class="el" href="group__misc.html#gaaa0102d444a5dd14474b7951caae0459">rusize</a>)(count), sizeof(ctype));</td></tr>
 <tr class="memdesc:ga7c611f586df1bdfe2b096966c189f853"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allocate and zero requested memory.  <a href="group__memory.html#ga7c611f586df1bdfe2b096966c189f853">More...</a><br /></td></tr>
 <tr class="separator:ga7c611f586df1bdfe2b096966c189f853"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga2b0db047653765afa9f51710f491b734"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__memory.html#ga2b0db047653765afa9f51710f491b734">ruRealloc</a>(buf,  count,  ctype)&#160;&#160;&#160;(ctype*) <a class="el" href="group__memory.html#ga20d255456f8dc1cdb107e90ee8b84c73">ruReallocSize</a>(buf, count, sizeof(ctype))</td></tr>
+<tr class="memitem:ga2b0db047653765afa9f51710f491b734"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__memory.html#ga2b0db047653765afa9f51710f491b734">ruRealloc</a>(buf,  count,  ctype)&#160;&#160;&#160;(ctype*) <a class="el" href="group__memory.html#ga94f0a9650d1a2b773e4e85f2341eea02">ruReallocSize</a>(buf, count, sizeof(ctype))</td></tr>
 <tr class="memdesc:ga2b0db047653765afa9f51710f491b734"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reallocate requested memory without zeroing.  <a href="group__memory.html#ga2b0db047653765afa9f51710f491b734">More...</a><br /></td></tr>
 <tr class="separator:ga2b0db047653765afa9f51710f491b734"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:gadc6d4640d79d30847e5a69423151e6d6"><td class="memItemLeft" align="right" valign="top">RUAPI void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__memory.html#gadc6d4640d79d30847e5a69423151e6d6">ruMallocSize</a> (<a class="el" href="group__memory.html#gaaa0102d444a5dd14474b7951caae0459">rusize</a> count, <a class="el" href="group__memory.html#gaaa0102d444a5dd14474b7951caae0459">rusize</a> ofsize)</td></tr>
-<tr class="memdesc:gadc6d4640d79d30847e5a69423151e6d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allocate and zero requested memory.  <a href="group__memory.html#gadc6d4640d79d30847e5a69423151e6d6">More...</a><br /></td></tr>
-<tr class="separator:gadc6d4640d79d30847e5a69423151e6d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga20d255456f8dc1cdb107e90ee8b84c73"><td class="memItemLeft" align="right" valign="top">RUAPI void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__memory.html#ga20d255456f8dc1cdb107e90ee8b84c73">ruReallocSize</a> (void *buf, <a class="el" href="group__memory.html#gaaa0102d444a5dd14474b7951caae0459">rusize</a> count, <a class="el" href="group__memory.html#gaaa0102d444a5dd14474b7951caae0459">rusize</a> ofsize)</td></tr>
-<tr class="memdesc:ga20d255456f8dc1cdb107e90ee8b84c73"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reallocate requested memory without zeroing.  <a href="group__memory.html#ga20d255456f8dc1cdb107e90ee8b84c73">More...</a><br /></td></tr>
-<tr class="separator:ga20d255456f8dc1cdb107e90ee8b84c73"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga71dec8ccc9b4947b4142514696e78795"><td class="memItemLeft" align="right" valign="top">RUAPI const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__memory.html#ga71dec8ccc9b4947b4142514696e78795">ruVersion</a> (void)</td></tr>
-<tr class="memdesc:ga71dec8ccc9b4947b4142514696e78795"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the build version of this package.  <a href="group__memory.html#ga71dec8ccc9b4947b4142514696e78795">More...</a><br /></td></tr>
-<tr class="separator:ga71dec8ccc9b4947b4142514696e78795"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gaea3d529fecc1bbad25f943943b6e9ef2"><td class="memItemLeft" align="right" valign="top">RUAPI const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__memory.html#gaea3d529fecc1bbad25f943943b6e9ef2">ruLastError</a> (void)</td></tr>
-<tr class="memdesc:gaea3d529fecc1bbad25f943943b6e9ef2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns an English textual representation of the last error this thread generated.  <a href="group__memory.html#gaea3d529fecc1bbad25f943943b6e9ef2">More...</a><br /></td></tr>
-<tr class="separator:gaea3d529fecc1bbad25f943943b6e9ef2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gafcc3628238450c77b4aa61e9d7001a56"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__memory.html#gafcc3628238450c77b4aa61e9d7001a56">ruFree</a>(p)&#160;&#160;&#160;ruMacStart { if(p) { free((void*)p); } p = NULL; } ruMacEnd</td></tr>
+<tr class="memitem:ga9aa9dcd1bd646dfc857f63eba32e923c"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__misc.html#ga9f2753cc325fa665aaf7925682462ecb">alloc_ptr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__memory.html#ga9aa9dcd1bd646dfc857f63eba32e923c">ruMallocSize</a> (<a class="el" href="group__misc.html#gaaa0102d444a5dd14474b7951caae0459">rusize</a> count, <a class="el" href="group__misc.html#gaaa0102d444a5dd14474b7951caae0459">rusize</a> ofsize)</td></tr>
+<tr class="memdesc:ga9aa9dcd1bd646dfc857f63eba32e923c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allocate and zero requested memory.  <a href="group__memory.html#ga9aa9dcd1bd646dfc857f63eba32e923c">More...</a><br /></td></tr>
+<tr class="separator:ga9aa9dcd1bd646dfc857f63eba32e923c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga94f0a9650d1a2b773e4e85f2341eea02"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__misc.html#ga9f2753cc325fa665aaf7925682462ecb">alloc_ptr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__memory.html#ga94f0a9650d1a2b773e4e85f2341eea02">ruReallocSize</a> (<a class="el" href="group__misc.html#ga9f2753cc325fa665aaf7925682462ecb">alloc_ptr</a> buf, <a class="el" href="group__misc.html#gaaa0102d444a5dd14474b7951caae0459">rusize</a> count, <a class="el" href="group__misc.html#gaaa0102d444a5dd14474b7951caae0459">rusize</a> ofsize)</td></tr>
+<tr class="memdesc:ga94f0a9650d1a2b773e4e85f2341eea02"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reallocate requested memory without zeroing.  <a href="group__memory.html#ga94f0a9650d1a2b773e4e85f2341eea02">More...</a><br /></td></tr>
+<tr class="separator:ga94f0a9650d1a2b773e4e85f2341eea02"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gafcc3628238450c77b4aa61e9d7001a56"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__memory.html#gafcc3628238450c77b4aa61e9d7001a56">ruFree</a>(p)&#160;&#160;&#160;ruMacStart { if(p) { free((void*)p); p = NULL; } } ruMacEnd</td></tr>
 <tr class="memdesc:gafcc3628238450c77b4aa61e9d7001a56"><td class="mdescLeft">&#160;</td><td class="mdescRight">Frees given resource and set paramater to NULL.  <a href="group__memory.html#gafcc3628238450c77b4aa61e9d7001a56">More...</a><br /></td></tr>
 <tr class="separator:gafcc3628238450c77b4aa61e9d7001a56"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga0bd4973612c1de9454caa98b7792fb8e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__memory.html#ga0bd4973612c1de9454caa98b7792fb8e">ruRetWithCode</a>(ptr,  code,  res)</td></tr>
-<tr class="memdesc:ga0bd4973612c1de9454caa98b7792fb8e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convenience macro for setting a potentially passed in result pointer and returning a result.  <a href="group__memory.html#ga0bd4973612c1de9454caa98b7792fb8e">More...</a><br /></td></tr>
-<tr class="separator:ga0bd4973612c1de9454caa98b7792fb8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gac23a4c7337daa8f22a561f49096b06b8"><td class="memItemLeft" align="right" valign="top">typedef signed long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__memory.html#gac23a4c7337daa8f22a561f49096b06b8">rusize_s</a></td></tr>
-<tr class="memdesc:gac23a4c7337daa8f22a561f49096b06b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Abstracted version of size_t but signed.  <a href="group__memory.html#gac23a4c7337daa8f22a561f49096b06b8">More...</a><br /></td></tr>
-<tr class="separator:gac23a4c7337daa8f22a561f49096b06b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gaaa0102d444a5dd14474b7951caae0459"><td class="memItemLeft" align="right" valign="top">typedef size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__memory.html#gaaa0102d444a5dd14474b7951caae0459">rusize</a></td></tr>
-<tr class="memdesc:gaaa0102d444a5dd14474b7951caae0459"><td class="mdescLeft">&#160;</td><td class="mdescRight">Abstracted version of size_t.  <a href="group__memory.html#gaaa0102d444a5dd14474b7951caae0459">More...</a><br /></td></tr>
-<tr class="separator:gaaa0102d444a5dd14474b7951caae0459"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga1b23e084ffff15cf965a438497c9f8e2"><td class="memItemLeft" align="right" valign="top">typedef void *(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__memory.html#ga1b23e084ffff15cf965a438497c9f8e2">ruCloneFunc</a>) (void *)</td></tr>
-<tr class="memdesc:ga1b23e084ffff15cf965a438497c9f8e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Signature of a generic clone function.  <a href="group__memory.html#ga1b23e084ffff15cf965a438497c9f8e2">More...</a><br /></td></tr>
-<tr class="separator:ga1b23e084ffff15cf965a438497c9f8e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga91dce9b2f482277a0d5ec778e54c5d14"><td class="memItemLeft" align="right" valign="top">typedef void *(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__memory.html#ga91dce9b2f482277a0d5ec778e54c5d14">ruClearFunc</a>) (void *)</td></tr>
-<tr class="memdesc:ga91dce9b2f482277a0d5ec778e54c5d14"><td class="mdescLeft">&#160;</td><td class="mdescRight">Signature of a generic free function returning NULL.  <a href="group__memory.html#ga91dce9b2f482277a0d5ec778e54c5d14">More...</a><br /></td></tr>
-<tr class="separator:ga91dce9b2f482277a0d5ec778e54c5d14"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga8eb4179750e158d78b0b3bc1e4b1bdce"><td class="memItemLeft" align="right" valign="top">typedef void(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__memory.html#ga8eb4179750e158d78b0b3bc1e4b1bdce">ruFreeFunc</a>) (void *)</td></tr>
-<tr class="memdesc:ga8eb4179750e158d78b0b3bc1e4b1bdce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Signature of a generic free function.  <a href="group__memory.html#ga8eb4179750e158d78b0b3bc1e4b1bdce">More...</a><br /></td></tr>
-<tr class="separator:ga8eb4179750e158d78b0b3bc1e4b1bdce"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga65f85814a8290f9797005d3b28e7e5fc"><td class="memItemLeft" align="right" valign="top">typedef unsigned char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__memory.html#ga65f85814a8290f9797005d3b28e7e5fc">uchar</a></td></tr>
-<tr class="separator:ga65f85814a8290f9797005d3b28e7e5fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gafdbf421329129ad39395ca1c48694f9f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__memory.html#gafdbf421329129ad39395ca1c48694f9f">ruReplace</a>(p,  n)&#160;&#160;&#160;ruMacStart { if(p) { free((void*)p); } p = n; } ruMacEnd</td></tr>
+<tr class="memdesc:gafdbf421329129ad39395ca1c48694f9f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Frees given resource and set paramater to new value.  <a href="group__memory.html#gafdbf421329129ad39395ca1c48694f9f">More...</a><br /></td></tr>
+<tr class="separator:gafdbf421329129ad39395ca1c48694f9f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Abstracted functions pertaining to memory managment. </p>
@@ -164,7 +141,7 @@ Functions</h2></td></tr>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname">p</td><td>)</td>
-          <td>&#160;&#160;&#160;ruMacStart { if(p) { free((void*)p); } p = NULL; } ruMacEnd</td>
+          <td>&#160;&#160;&#160;ruMacStart { if(p) { free((void*)p); p = NULL; } } ruMacEnd</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -200,7 +177,7 @@ Functions</h2></td></tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td>&#160;&#160;&#160;(ctype*) <a class="el" href="group__memory.html#gadc6d4640d79d30847e5a69423151e6d6">ruMallocSize</a>(count, sizeof(ctype));</td>
+          <td></td><td>&#160;&#160;&#160;(ctype*) <a class="el" href="group__memory.html#ga9aa9dcd1bd646dfc857f63eba32e923c">ruMallocSize</a>((<a class="el" href="group__misc.html#gaaa0102d444a5dd14474b7951caae0459">rusize</a>)(count), sizeof(ctype));</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -244,7 +221,7 @@ Functions</h2></td></tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td>&#160;&#160;&#160;(ctype*) <a class="el" href="group__memory.html#ga20d255456f8dc1cdb107e90ee8b84c73">ruReallocSize</a>(buf, count, sizeof(ctype))</td>
+          <td></td><td>&#160;&#160;&#160;(ctype*) <a class="el" href="group__memory.html#ga94f0a9650d1a2b773e4e85f2341eea02">ruReallocSize</a>(buf, count, sizeof(ctype))</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -262,179 +239,60 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ga0bd4973612c1de9454caa98b7792fb8e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga0bd4973612c1de9454caa98b7792fb8e">&#9670;&nbsp;</a></span>ruRetWithCode</h2>
+<a id="gafdbf421329129ad39395ca1c48694f9f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gafdbf421329129ad39395ca1c48694f9f">&#9670;&nbsp;</a></span>ruReplace</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define ruRetWithCode</td>
+          <td class="memname">#define ruReplace</td>
           <td>(</td>
           <td class="paramtype">&#160;</td>
-          <td class="paramname">ptr, </td>
+          <td class="paramname">p, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">&#160;</td>
-          <td class="paramname">code, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">res&#160;</td>
+          <td class="paramname">n&#160;</td>
         </tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line">    ruMacStart { \</div>
-<div class="line">    if (ptr) { *ptr = code; } <span class="keywordflow">return</span> res; \</div>
-<div class="line">    } ruMacEnd</div>
-</div><!-- fragment -->
-<p>Convenience macro for setting a potentially passed in result pointer and returning a result. </p>
-
-</div>
-</div>
-<h2 class="groupheader">Typedef Documentation</h2>
-<a id="ga91dce9b2f482277a0d5ec778e54c5d14"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga91dce9b2f482277a0d5ec778e54c5d14">&#9670;&nbsp;</a></span>ruClearFunc</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">typedef void*(* ruClearFunc) (void *)</td>
+          <td></td><td>&#160;&#160;&#160;ruMacStart { if(p) { free((void*)p); } p = n; } ruMacEnd</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Signature of a generic free function returning NULL. </p>
-
-</div>
-</div>
-<a id="ga1b23e084ffff15cf965a438497c9f8e2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga1b23e084ffff15cf965a438497c9f8e2">&#9670;&nbsp;</a></span>ruCloneFunc</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">typedef void*(* ruCloneFunc) (void *)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Signature of a generic clone function. </p>
-
-</div>
-</div>
-<a id="ga8eb4179750e158d78b0b3bc1e4b1bdce"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga8eb4179750e158d78b0b3bc1e4b1bdce">&#9670;&nbsp;</a></span>ruFreeFunc</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">typedef void(* ruFreeFunc) (void *)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Signature of a generic free function. </p>
-
-</div>
-</div>
-<a id="gaaa0102d444a5dd14474b7951caae0459"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gaaa0102d444a5dd14474b7951caae0459">&#9670;&nbsp;</a></span>rusize</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">typedef size_t <a class="el" href="group__memory.html#gaaa0102d444a5dd14474b7951caae0459">rusize</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Abstracted version of size_t. </p>
-
-</div>
-</div>
-<a id="gac23a4c7337daa8f22a561f49096b06b8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gac23a4c7337daa8f22a561f49096b06b8">&#9670;&nbsp;</a></span>rusize_s</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">typedef signed long <a class="el" href="group__memory.html#gac23a4c7337daa8f22a561f49096b06b8">rusize_s</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Abstracted version of size_t but signed. </p>
-
-</div>
-</div>
-<a id="ga65f85814a8290f9797005d3b28e7e5fc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga65f85814a8290f9797005d3b28e7e5fc">&#9670;&nbsp;</a></span>uchar</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">typedef unsigned char <a class="el" href="group__memory.html#ga65f85814a8290f9797005d3b28e7e5fc">uchar</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
+<p>Frees given resource and set paramater to new value. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">p</td><td>resource to be freed before new value is assigned </td></tr>
+    <tr><td class="paramname">n</td><td>new value to be assigned to freed resource </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="gaea3d529fecc1bbad25f943943b6e9ef2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gaea3d529fecc1bbad25f943943b6e9ef2">&#9670;&nbsp;</a></span>ruLastError()</h2>
+<a id="ga9aa9dcd1bd646dfc857f63eba32e923c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga9aa9dcd1bd646dfc857f63eba32e923c">&#9670;&nbsp;</a></span>ruMallocSize()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">RUAPI const char* ruLastError </td>
+          <td class="memname">RUAPI <a class="el" href="group__misc.html#ga9f2753cc325fa665aaf7925682462ecb">alloc_ptr</a> ruMallocSize </td>
           <td>(</td>
-          <td class="paramtype">void&#160;</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Returns an English textual representation of the last error this thread generated. </p>
-<p>Note, not all functions use this, so this function should only be called after a function that does use it is called, else misleading information will appear.</p>
-<dl class="section return"><dt>Returns</dt><dd>Ephemeral error message. Must be copied if it is to persist. </dd></dl>
-
-</div>
-</div>
-<a id="gadc6d4640d79d30847e5a69423151e6d6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gadc6d4640d79d30847e5a69423151e6d6">&#9670;&nbsp;</a></span>ruMallocSize()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">RUAPI void* ruMallocSize </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="group__memory.html#gaaa0102d444a5dd14474b7951caae0459">rusize</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="group__misc.html#gaaa0102d444a5dd14474b7951caae0459">rusize</a>&#160;</td>
           <td class="paramname"><em>count</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="group__memory.html#gaaa0102d444a5dd14474b7951caae0459">rusize</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="group__misc.html#gaaa0102d444a5dd14474b7951caae0459">rusize</a>&#160;</td>
           <td class="paramname"><em>ofsize</em>&#160;</td>
         </tr>
         <tr>
@@ -457,28 +315,28 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ga20d255456f8dc1cdb107e90ee8b84c73"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga20d255456f8dc1cdb107e90ee8b84c73">&#9670;&nbsp;</a></span>ruReallocSize()</h2>
+<a id="ga94f0a9650d1a2b773e4e85f2341eea02"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga94f0a9650d1a2b773e4e85f2341eea02">&#9670;&nbsp;</a></span>ruReallocSize()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">RUAPI void* ruReallocSize </td>
+          <td class="memname">RUAPI <a class="el" href="group__misc.html#ga9f2753cc325fa665aaf7925682462ecb">alloc_ptr</a> ruReallocSize </td>
           <td>(</td>
-          <td class="paramtype">void *&#160;</td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga9f2753cc325fa665aaf7925682462ecb">alloc_ptr</a>&#160;</td>
           <td class="paramname"><em>buf</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="group__memory.html#gaaa0102d444a5dd14474b7951caae0459">rusize</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="group__misc.html#gaaa0102d444a5dd14474b7951caae0459">rusize</a>&#160;</td>
           <td class="paramname"><em>count</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="group__memory.html#gaaa0102d444a5dd14474b7951caae0459">rusize</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="group__misc.html#gaaa0102d444a5dd14474b7951caae0459">rusize</a>&#160;</td>
           <td class="paramname"><em>ofsize</em>&#160;</td>
         </tr>
         <tr>
@@ -502,33 +360,12 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ga71dec8ccc9b4947b4142514696e78795"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga71dec8ccc9b4947b4142514696e78795">&#9670;&nbsp;</a></span>ruVersion()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">RUAPI const char* ruVersion </td>
-          <td>(</td>
-          <td class="paramtype">void&#160;</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Returns the build version of this package. </p>
-<dl class="section return"><dt>Returns</dt><dd>Version of this package. This string is static and must not be freed. </dd></dl>
-
-</div>
-</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Wed Nov 30 2022 14:27:38 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Tue May 9 2023 14:04:28 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

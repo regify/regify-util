@@ -1,17 +1,30 @@
 var group__threading =
 [
+    [ "ruCounterInc", "group__threading.html#ga492be40dd95c10610c21289a393539f2", null ],
+    [ "ruCounterRead", "group__threading.html#ga5f9e0635ce4714e64afebc1e2ad56bd6", null ],
+    [ "ruCountSet", "group__threading.html#gaa34d27a2f63804d04f88054856ea5d20", null ],
+    [ "ru_tid", "group__threading.html#gadaf55aee31fee401108c789338f5a5d0", null ],
+    [ "ruCount", "group__threading.html#ga938ce40d266424abe35f3a21705d829e", null ],
     [ "ruMutex", "group__threading.html#gaa2f2224294aab80c5b5fdadf8c50a2de", null ],
     [ "ruStartFunc", "group__threading.html#ga9fb7315bef26c1ae9b399b5779ed230b", null ],
     [ "ruThread", "group__threading.html#gac7df455fe262f5fe1d6a40c48fb5a343", null ],
+    [ "ruThreadId", "group__threading.html#gacc47be754ef522e477d51aedd1361301", null ],
+    [ "ruCounterIncValue", "group__threading.html#gadc7eb7e92f2f1b0f574f9a1d5779436a", null ],
+    [ "ruCounterNew", "group__threading.html#gafc1d31eb0e26e2aae3ed53a1b38295b2", null ],
+    [ "ruCountFree", "group__threading.html#ga1d4cb711bdf68899277b323cce866233", null ],
+    [ "ruCountSetValue", "group__threading.html#ga3c1c5ad2c95c127a45b20cca74a8b9cc", null ],
     [ "ruMutexFree", "group__threading.html#gafa04ae8066591ed11d6494f80527cfa2", null ],
     [ "ruMutexInit", "group__threading.html#gac8236a5017586c076516fb17dae0809c", null ],
     [ "ruMutexLock", "group__threading.html#ga1ba4661b6f200a9a01182c062b5fc463", null ],
+    [ "ruMutexTryLock", "group__threading.html#ga0856c60adc3b35d8a5eec3937ebcdb51", null ],
     [ "ruMutexUnlock", "group__threading.html#ga29343db7caf7ceb43470dff97cf2668b", null ],
     [ "ruThreadCreate", "group__threading.html#gabb9b39b7a1629a15dac89ba0a450ef13", null ],
+    [ "ruThreadCreateBg", "group__threading.html#ga435c7c75b1ecb5175a42b8010c9581fd", null ],
     [ "ruThreadFinished", "group__threading.html#ga1a85ffdcb7817b11ef0279ddfcc80ee6", null ],
-    [ "ruThreadFree", "group__threading.html#ga056238fdc4af3084cf487b81379a4b0c", null ],
-    [ "ruThreadGetId", "group__threading.html#gae34bde16956fcf4c649a830d921d2033", null ],
+    [ "ruThreadGetId", "group__threading.html#ga6966399aea06d9be87db2004b5b624d2", null ],
     [ "ruThreadJoin", "group__threading.html#gad6e96ffbf89103bede5fbd2274cadac4", null ],
     [ "ruThreadKill", "group__threading.html#ga7f548388deccb5a3e695a8b335684a6c", null ],
-    [ "ruThreadSetName", "group__threading.html#ga3d29dcd418eaeb97399c4d6401fd2dd2", null ]
+    [ "ruThreadNativeId", "group__threading.html#ga60572955d0909ffed16ce77a6c8e4058", null ],
+    [ "ruThreadSetName", "group__threading.html#ga9e6cbe26799920ac795bc967c504ae9f", null ],
+    [ "ruThreadWait", "group__threading.html#gac09b1c7af6581c4cdbbd8232f80a1e53", null ]
 ];

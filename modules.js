@@ -10,6 +10,7 @@ var modules =
     [ "List Collection", "group__list.html", "group__list" ],
     [ "Logging Facility", "group__logging.html", "group__logging" ],
     [ "Hash Map", "group__map.html", "group__map" ],
+    [ "Hash Set", "group__set.html", "group__set" ],
     [ "Regular Expressions", "group__regex.html", "group__regex" ],
     [ "String Functions", "group__string.html", "group__string" ],
     [ "Buffer Functions", "group__buffer.html", "group__buffer" ],

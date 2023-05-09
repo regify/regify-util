@@ -31,7 +31,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">regify utility
-   &#160;<span id="projectnumber">1.3.0-0</span>
+   &#160;<span id="projectnumber">2.0.0-0</span>
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -117,41 +117,47 @@ Functions</h2></td></tr>
 <tr class="memitem:ga311aef3d56820892091456418381534d"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__ini.html#ga67d0d212c119eddcdfb53125e8e27e19">ruIni</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ini.html#ga311aef3d56820892091456418381534d">ruIniNew</a> (void)</td></tr>
 <tr class="memdesc:ga311aef3d56820892091456418381534d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a new empty ini object.  <a href="group__ini.html#ga311aef3d56820892091456418381534d">More...</a><br /></td></tr>
 <tr class="separator:ga311aef3d56820892091456418381534d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga3c7b9038795f4526091cec9f0618f8e6"><td class="memItemLeft" align="right" valign="top">RUAPI int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ini.html#ga3c7b9038795f4526091cec9f0618f8e6">ruIniWrite</a> (<a class="el" href="group__ini.html#ga67d0d212c119eddcdfb53125e8e27e19">ruIni</a> iniOb, const char *filename)</td></tr>
-<tr class="memdesc:ga3c7b9038795f4526091cec9f0618f8e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes given ini object into given filename.  <a href="group__ini.html#ga3c7b9038795f4526091cec9f0618f8e6">More...</a><br /></td></tr>
-<tr class="separator:ga3c7b9038795f4526091cec9f0618f8e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gad2bdee5710c0c731e0a4f0db379ea911"><td class="memItemLeft" align="right" valign="top">RUAPI int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ini.html#gad2bdee5710c0c731e0a4f0db379ea911">ruIniRead</a> (const char *filename, <a class="el" href="group__ini.html#ga67d0d212c119eddcdfb53125e8e27e19">ruIni</a> *iniOb)</td></tr>
-<tr class="memdesc:gad2bdee5710c0c731e0a4f0db379ea911"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parse given INI-style file. May have [section]s, name=value pairs (whitespace stripped), and comments starting with ';' (semicolon). Section is "" if name=value pair parsed before any section heading. name:value pairs are also supported as a concession to Python's configparser.  <a href="group__ini.html#gad2bdee5710c0c731e0a4f0db379ea911">More...</a><br /></td></tr>
-<tr class="separator:gad2bdee5710c0c731e0a4f0db379ea911"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga443f36d34ca689b78ab37fa15e17874b"><td class="memItemLeft" align="right" valign="top">RUAPI int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ini.html#ga443f36d34ca689b78ab37fa15e17874b">ruIniWrite</a> (<a class="el" href="group__ini.html#ga67d0d212c119eddcdfb53125e8e27e19">ruIni</a> iniOb, <a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> filename)</td></tr>
+<tr class="memdesc:ga443f36d34ca689b78ab37fa15e17874b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes given ini object into given filename.  <a href="group__ini.html#ga443f36d34ca689b78ab37fa15e17874b">More...</a><br /></td></tr>
+<tr class="separator:ga443f36d34ca689b78ab37fa15e17874b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga7f42bce2eff7de4e4184c0d0dae6c6d1"><td class="memItemLeft" align="right" valign="top">RUAPI int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ini.html#ga7f42bce2eff7de4e4184c0d0dae6c6d1">ruIniRead</a> (<a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> filename, <a class="el" href="group__ini.html#ga67d0d212c119eddcdfb53125e8e27e19">ruIni</a> *iniOb)</td></tr>
+<tr class="memdesc:ga7f42bce2eff7de4e4184c0d0dae6c6d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parse given INI-style file. May have [section]s, name=value pairs (whitespace stripped), and comments starting with ';' (semicolon). Section is "" if name=value pair parsed before any section heading. name:value pairs are also supported as a concession to Python's configparser.  <a href="group__ini.html#ga7f42bce2eff7de4e4184c0d0dae6c6d1">More...</a><br /></td></tr>
+<tr class="separator:ga7f42bce2eff7de4e4184c0d0dae6c6d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga5033e18d3a910e4600fd3f922b01e04a"><td class="memItemLeft" align="right" valign="top">RUAPI int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ini.html#ga5033e18d3a910e4600fd3f922b01e04a">ruIniSections</a> (<a class="el" href="group__ini.html#ga67d0d212c119eddcdfb53125e8e27e19">ruIni</a> iniOb, <a class="el" href="group__list.html#gab25c1662a91a5e0d68a3f04efd1a0cc2">ruList</a> *sections)</td></tr>
 <tr class="memdesc:ga5033e18d3a910e4600fd3f922b01e04a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a list of sections from the given ini object.  <a href="group__ini.html#ga5033e18d3a910e4600fd3f922b01e04a">More...</a><br /></td></tr>
 <tr class="separator:ga5033e18d3a910e4600fd3f922b01e04a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga2529fb4525d4b15b317f64c58a5e9c91"><td class="memItemLeft" align="right" valign="top">RUAPI int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ini.html#ga2529fb4525d4b15b317f64c58a5e9c91">ruIniKeys</a> (<a class="el" href="group__ini.html#ga67d0d212c119eddcdfb53125e8e27e19">ruIni</a> iniOb, const char *section, <a class="el" href="group__list.html#gab25c1662a91a5e0d68a3f04efd1a0cc2">ruList</a> *keys)</td></tr>
-<tr class="memdesc:ga2529fb4525d4b15b317f64c58a5e9c91"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a list of keys from given section or global.  <a href="group__ini.html#ga2529fb4525d4b15b317f64c58a5e9c91">More...</a><br /></td></tr>
-<tr class="separator:ga2529fb4525d4b15b317f64c58a5e9c91"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga2e2590686eeaf6872700da356622ff04"><td class="memItemLeft" align="right" valign="top">RUAPI const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ini.html#ga2e2590686eeaf6872700da356622ff04">ruIniGetDef</a> (<a class="el" href="group__ini.html#ga67d0d212c119eddcdfb53125e8e27e19">ruIni</a> iniOb, const char *section, const char *key, const char *def, int32_t *code)</td></tr>
-<tr class="memdesc:ga2e2590686eeaf6872700da356622ff04"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves a value or given default from the given ini object.  <a href="group__ini.html#ga2e2590686eeaf6872700da356622ff04">More...</a><br /></td></tr>
-<tr class="separator:ga2e2590686eeaf6872700da356622ff04"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gab08b3947fcd46e96e27ff41ee132b370"><td class="memItemLeft" align="right" valign="top">RUAPI int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ini.html#gab08b3947fcd46e96e27ff41ee132b370">ruIniGet</a> (<a class="el" href="group__ini.html#ga67d0d212c119eddcdfb53125e8e27e19">ruIni</a> iniOb, const char *section, const char *key, const char **value)</td></tr>
-<tr class="memdesc:gab08b3947fcd46e96e27ff41ee132b370"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves a value from the given ini object.  <a href="group__ini.html#gab08b3947fcd46e96e27ff41ee132b370">More...</a><br /></td></tr>
-<tr class="separator:gab08b3947fcd46e96e27ff41ee132b370"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga0cff0329217c53a95b3cf1a116dc32bb"><td class="memItemLeft" align="right" valign="top">RUAPI int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ini.html#ga0cff0329217c53a95b3cf1a116dc32bb">ruIniSet</a> (<a class="el" href="group__ini.html#ga67d0d212c119eddcdfb53125e8e27e19">ruIni</a> iniOb, const char *section, const char *key, const char *value)</td></tr>
-<tr class="memdesc:ga0cff0329217c53a95b3cf1a116dc32bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set a value in the given ini object.  <a href="group__ini.html#ga0cff0329217c53a95b3cf1a116dc32bb">More...</a><br /></td></tr>
-<tr class="separator:ga0cff0329217c53a95b3cf1a116dc32bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gac3565e49cdc4d7fc9f397c1c14986d1c"><td class="memItemLeft" align="right" valign="top">RUAPI int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ini.html#gac3565e49cdc4d7fc9f397c1c14986d1c">ruIniKeys</a> (<a class="el" href="group__ini.html#ga67d0d212c119eddcdfb53125e8e27e19">ruIni</a> iniOb, <a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> section, <a class="el" href="group__list.html#gab25c1662a91a5e0d68a3f04efd1a0cc2">ruList</a> *keys)</td></tr>
+<tr class="memdesc:gac3565e49cdc4d7fc9f397c1c14986d1c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a list of keys from given section or global.  <a href="group__ini.html#gac3565e49cdc4d7fc9f397c1c14986d1c">More...</a><br /></td></tr>
+<tr class="separator:gac3565e49cdc4d7fc9f397c1c14986d1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga6e64a31917c5bd73257a5839cfda14e2"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__misc.html#ga7dd744dc0ee350f7de2c38f51f5c0bbe">perm_chars</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ini.html#ga6e64a31917c5bd73257a5839cfda14e2">ruIniGetDef</a> (<a class="el" href="group__ini.html#ga67d0d212c119eddcdfb53125e8e27e19">ruIni</a> iniOb, <a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> section, <a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> key, <a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> def, int32_t *code)</td></tr>
+<tr class="memdesc:ga6e64a31917c5bd73257a5839cfda14e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves a value or given default from the given ini object.  <a href="group__ini.html#ga6e64a31917c5bd73257a5839cfda14e2">More...</a><br /></td></tr>
+<tr class="separator:ga6e64a31917c5bd73257a5839cfda14e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga3e12017d4a6672f5e3ca63c0504cfb20"><td class="memItemLeft" align="right" valign="top">RUAPI int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ini.html#ga3e12017d4a6672f5e3ca63c0504cfb20">ruIniGet</a> (<a class="el" href="group__ini.html#ga67d0d212c119eddcdfb53125e8e27e19">ruIni</a> iniOb, <a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> section, <a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> key, <a class="el" href="group__misc.html#ga7dd744dc0ee350f7de2c38f51f5c0bbe">perm_chars</a> *value)</td></tr>
+<tr class="memdesc:ga3e12017d4a6672f5e3ca63c0504cfb20"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves a value from the given ini object.  <a href="group__ini.html#ga3e12017d4a6672f5e3ca63c0504cfb20">More...</a><br /></td></tr>
+<tr class="separator:ga3e12017d4a6672f5e3ca63c0504cfb20"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga2b9057f8f137ab2f3839a697e84dd44f"><td class="memItemLeft" align="right" valign="top">RUAPI int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ini.html#ga2b9057f8f137ab2f3839a697e84dd44f">ruIniSet</a> (<a class="el" href="group__ini.html#ga67d0d212c119eddcdfb53125e8e27e19">ruIni</a> iniOb, <a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> section, <a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> key, <a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> value)</td></tr>
+<tr class="memdesc:ga2b9057f8f137ab2f3839a697e84dd44f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set a value in the given ini object.  <a href="group__ini.html#ga2b9057f8f137ab2f3839a697e84dd44f">More...</a><br /></td></tr>
+<tr class="separator:ga2b9057f8f137ab2f3839a697e84dd44f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>This section contains ini file handling support. </p>
 <p>Example: </p><div class="fragment"><div class="line"><a class="code" href="group__ini.html#ga67d0d212c119eddcdfb53125e8e27e19">ruIni</a> cf = NULL;</div>
+<div class="line"><span class="keyword">const</span> <span class="keywordtype">char</span>* inipath = <span class="stringliteral">&quot;/path/to/file.ini&quot;</span>;</div>
 <div class="line"><span class="comment">// We are going to ignore some return codes for brevity.</span></div>
-<div class="line">int32_t ret = <a class="code" href="group__ini.html#gad2bdee5710c0c731e0a4f0db379ea911">ruIniRead</a>(<span class="stringliteral">&quot;/path/to/file.ini&quot;</span>, &amp;cf);</div>
+<div class="line">int32_t ret = <a class="code" href="group__ini.html#ga7f42bce2eff7de4e4184c0d0dae6c6d1">ruIniRead</a>(inipath, &amp;cf);</div>
 <div class="line"><span class="keyword">const</span> <span class="keywordtype">char</span>* name = NULL;</div>
-<div class="line">ret = <a class="code" href="group__ini.html#gab08b3947fcd46e96e27ff41ee132b370">ruIniGet</a>(cf, NULL, <span class="stringliteral">&quot;username&quot;</span>, &amp;name);</div>
+<div class="line">ret = <a class="code" href="group__ini.html#ga3e12017d4a6672f5e3ca63c0504cfb20">ruIniGet</a>(cf, NULL, <span class="stringliteral">&quot;username&quot;</span>, &amp;name);</div>
 <div class="line">printf(<span class="stringliteral">&quot;Username: %s&quot;</span>, name);</div>
+<div class="line"><span class="comment">// make some changes</span></div>
+<div class="line">ret = <a class="code" href="group__ini.html#ga2b9057f8f137ab2f3839a697e84dd44f">ruIniSet</a>(cf, NULL, <span class="stringliteral">&quot;password&quot;</span>, <span class="stringliteral">&quot;secret&quot;</span>);</div>
+<div class="line">ret = <a class="code" href="group__ini.html#ga443f36d34ca689b78ab37fa15e17874b">ruIniWrite</a>(cf, inipath);</div>
 <div class="line">cf = <a class="code" href="group__ini.html#ga5806935fc091c15b8a2a398e573c4f65">ruIniFree</a>(cf);</div>
+<div class="ttc" id="agroup__ini_html_ga2b9057f8f137ab2f3839a697e84dd44f"><div class="ttname"><a href="group__ini.html#ga2b9057f8f137ab2f3839a697e84dd44f">ruIniSet</a></div><div class="ttdeci">RUAPI int32_t ruIniSet(ruIni iniOb, trans_chars section, trans_chars key, trans_chars value)</div><div class="ttdoc">Set a value in the given ini object.</div></div>
+<div class="ttc" id="agroup__ini_html_ga3e12017d4a6672f5e3ca63c0504cfb20"><div class="ttname"><a href="group__ini.html#ga3e12017d4a6672f5e3ca63c0504cfb20">ruIniGet</a></div><div class="ttdeci">RUAPI int32_t ruIniGet(ruIni iniOb, trans_chars section, trans_chars key, perm_chars *value)</div><div class="ttdoc">Retrieves a value from the given ini object.</div></div>
+<div class="ttc" id="agroup__ini_html_ga443f36d34ca689b78ab37fa15e17874b"><div class="ttname"><a href="group__ini.html#ga443f36d34ca689b78ab37fa15e17874b">ruIniWrite</a></div><div class="ttdeci">RUAPI int32_t ruIniWrite(ruIni iniOb, trans_chars filename)</div><div class="ttdoc">Writes given ini object into given filename.</div></div>
 <div class="ttc" id="agroup__ini_html_ga5806935fc091c15b8a2a398e573c4f65"><div class="ttname"><a href="group__ini.html#ga5806935fc091c15b8a2a398e573c4f65">ruIniFree</a></div><div class="ttdeci">RUAPI ruIni ruIniFree(ruIni ini)</div><div class="ttdoc">Frees the given ini object and its members.</div></div>
-<div class="ttc" id="agroup__ini_html_ga67d0d212c119eddcdfb53125e8e27e19"><div class="ttname"><a href="group__ini.html#ga67d0d212c119eddcdfb53125e8e27e19">ruIni</a></div><div class="ttdeci">void * ruIni</div><div class="ttdoc">An opaque type representing an ini object.</div><div class="ttdef"><b>Definition:</b> ini.h:46</div></div>
-<div class="ttc" id="agroup__ini_html_gab08b3947fcd46e96e27ff41ee132b370"><div class="ttname"><a href="group__ini.html#gab08b3947fcd46e96e27ff41ee132b370">ruIniGet</a></div><div class="ttdeci">RUAPI int32_t ruIniGet(ruIni iniOb, const char *section, const char *key, const char **value)</div><div class="ttdoc">Retrieves a value from the given ini object.</div></div>
-<div class="ttc" id="agroup__ini_html_gad2bdee5710c0c731e0a4f0db379ea911"><div class="ttname"><a href="group__ini.html#gad2bdee5710c0c731e0a4f0db379ea911">ruIniRead</a></div><div class="ttdeci">RUAPI int32_t ruIniRead(const char *filename, ruIni *iniOb)</div><div class="ttdoc">Parse given INI-style file. May have [section]s, name=value pairs (whitespace stripped),...</div></div>
+<div class="ttc" id="agroup__ini_html_ga67d0d212c119eddcdfb53125e8e27e19"><div class="ttname"><a href="group__ini.html#ga67d0d212c119eddcdfb53125e8e27e19">ruIni</a></div><div class="ttdeci">void * ruIni</div><div class="ttdoc">An opaque type representing an ini object.</div><div class="ttdef"><b>Definition:</b> ini.h:50</div></div>
+<div class="ttc" id="agroup__ini_html_ga7f42bce2eff7de4e4184c0d0dae6c6d1"><div class="ttname"><a href="group__ini.html#ga7f42bce2eff7de4e4184c0d0dae6c6d1">ruIniRead</a></div><div class="ttdeci">RUAPI int32_t ruIniRead(trans_chars filename, ruIni *iniOb)</div><div class="ttdoc">Parse given INI-style file. May have [section]s, name=value pairs (whitespace stripped),...</div></div>
 </div><!-- fragment --> <h2 class="groupheader">Typedef Documentation</h2>
 <a id="ga67d0d212c119eddcdfb53125e8e27e19"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ga67d0d212c119eddcdfb53125e8e27e19">&#9670;&nbsp;</a></span>ruIni</h2>
@@ -197,8 +203,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="gab08b3947fcd46e96e27ff41ee132b370"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gab08b3947fcd46e96e27ff41ee132b370">&#9670;&nbsp;</a></span>ruIniGet()</h2>
+<a id="ga3e12017d4a6672f5e3ca63c0504cfb20"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga3e12017d4a6672f5e3ca63c0504cfb20">&#9670;&nbsp;</a></span>ruIniGet()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -212,19 +218,19 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const char *&#160;</td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a>&#160;</td>
           <td class="paramname"><em>section</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const char *&#160;</td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a>&#160;</td>
           <td class="paramname"><em>key</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const char **&#160;</td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga7dd744dc0ee350f7de2c38f51f5c0bbe">perm_chars</a> *&#160;</td>
           <td class="paramname"><em>value</em>&#160;</td>
         </tr>
         <tr>
@@ -249,14 +255,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ga2e2590686eeaf6872700da356622ff04"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga2e2590686eeaf6872700da356622ff04">&#9670;&nbsp;</a></span>ruIniGetDef()</h2>
+<a id="ga6e64a31917c5bd73257a5839cfda14e2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga6e64a31917c5bd73257a5839cfda14e2">&#9670;&nbsp;</a></span>ruIniGetDef()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">RUAPI const char* ruIniGetDef </td>
+          <td class="memname">RUAPI <a class="el" href="group__misc.html#ga7dd744dc0ee350f7de2c38f51f5c0bbe">perm_chars</a> ruIniGetDef </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="group__ini.html#ga67d0d212c119eddcdfb53125e8e27e19">ruIni</a>&#160;</td>
           <td class="paramname"><em>iniOb</em>, </td>
@@ -264,19 +270,19 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const char *&#160;</td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a>&#160;</td>
           <td class="paramname"><em>section</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const char *&#160;</td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a>&#160;</td>
           <td class="paramname"><em>key</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const char *&#160;</td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a>&#160;</td>
           <td class="paramname"><em>def</em>, </td>
         </tr>
         <tr>
@@ -308,8 +314,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ga2529fb4525d4b15b317f64c58a5e9c91"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga2529fb4525d4b15b317f64c58a5e9c91">&#9670;&nbsp;</a></span>ruIniKeys()</h2>
+<a id="gac3565e49cdc4d7fc9f397c1c14986d1c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gac3565e49cdc4d7fc9f397c1c14986d1c">&#9670;&nbsp;</a></span>ruIniKeys()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -323,7 +329,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const char *&#160;</td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a>&#160;</td>
           <td class="paramname"><em>section</em>, </td>
         </tr>
         <tr>
@@ -374,8 +380,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="gad2bdee5710c0c731e0a4f0db379ea911"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gad2bdee5710c0c731e0a4f0db379ea911">&#9670;&nbsp;</a></span>ruIniRead()</h2>
+<a id="ga7f42bce2eff7de4e4184c0d0dae6c6d1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga7f42bce2eff7de4e4184c0d0dae6c6d1">&#9670;&nbsp;</a></span>ruIniRead()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -383,7 +389,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">RUAPI int32_t ruIniRead </td>
           <td>(</td>
-          <td class="paramtype">const char *&#160;</td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a>&#160;</td>
           <td class="paramname"><em>filename</em>, </td>
         </tr>
         <tr>
@@ -451,8 +457,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ga0cff0329217c53a95b3cf1a116dc32bb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga0cff0329217c53a95b3cf1a116dc32bb">&#9670;&nbsp;</a></span>ruIniSet()</h2>
+<a id="ga2b9057f8f137ab2f3839a697e84dd44f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga2b9057f8f137ab2f3839a697e84dd44f">&#9670;&nbsp;</a></span>ruIniSet()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -466,19 +472,19 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const char *&#160;</td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a>&#160;</td>
           <td class="paramname"><em>section</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const char *&#160;</td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a>&#160;</td>
           <td class="paramname"><em>key</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const char *&#160;</td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a>&#160;</td>
           <td class="paramname"><em>value</em>&#160;</td>
         </tr>
         <tr>
@@ -495,7 +501,7 @@ Functions</h2></td></tr>
     <tr><td class="paramname">iniOb</td><td>Object to set value in </td></tr>
     <tr><td class="paramname">section</td><td>Section to set value in. NULL for no section. </td></tr>
     <tr><td class="paramname">key</td><td>Key name </td></tr>
-    <tr><td class="paramname">value</td><td>The value to set. Use NULL or blank for an empty entry </td></tr>
+    <tr><td class="paramname">value</td><td>The value to set. Use blank for an empty entry and NULL to remove </td></tr>
   </table>
   </dd>
 </dl>
@@ -503,8 +509,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ga3c7b9038795f4526091cec9f0618f8e6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga3c7b9038795f4526091cec9f0618f8e6">&#9670;&nbsp;</a></span>ruIniWrite()</h2>
+<a id="ga443f36d34ca689b78ab37fa15e17874b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga443f36d34ca689b78ab37fa15e17874b">&#9670;&nbsp;</a></span>ruIniWrite()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -518,7 +524,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const char *&#160;</td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a>&#160;</td>
           <td class="paramname"><em>filename</em>&#160;</td>
         </tr>
         <tr>
@@ -546,7 +552,7 @@ Functions</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Wed Nov 30 2022 14:27:38 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Tue May 9 2023 14:04:29 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

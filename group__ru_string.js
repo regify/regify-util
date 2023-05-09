@@ -11,5 +11,6 @@ var group__ru_string =
     [ "ruStringLen", "group__ru_string.html#ga6af930574e9d67811ac0851a13a3c6f6", null ],
     [ "ruStringNew", "group__ru_string.html#gae4a6f57b247f69721a3f8d5a2b7cab33", null ],
     [ "ruStringNewf", "group__ru_string.html#gad71a92239d506e7f33218175f20b859f", null ],
-    [ "ruStringNewn", "group__ru_string.html#ga71f72b16353217d759ffd92ef17d7916", null ]
+    [ "ruStringNewn", "group__ru_string.html#ga71f72b16353217d759ffd92ef17d7916", null ],
+    [ "ruStringReset", "group__ru_string.html#ga0a63deacf7d5394f3938e17b99e7d397", null ]
 ];

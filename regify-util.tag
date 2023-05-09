@@ -36,17 +36,17 @@
     <name>ruTimeVal</name>
     <filename>structru_time_val.html</filename>
     <member kind="variable">
-      <type>long</type>
+      <type>sec_t</type>
       <name>sec</name>
       <anchorfile>structru_time_val.html</anchorfile>
-      <anchor>ae730cf043720ac0a7b94c64e7356d9ec</anchor>
+      <anchor>ab79c03c47db0065ef4c2a2d00f33c94f</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
-      <type>long</type>
+      <type>usec_t</type>
       <name>usec</name>
       <anchorfile>structru_time_val.html</anchorfile>
-      <anchor>a63e59ad14d61e70117ccdf2b9cf4d577</anchor>
+      <anchor>aebdd1a6e510874064a7f3a3a6ff935bd</anchor>
       <arglist></arglist>
     </member>
   </compound>
@@ -56,123 +56,186 @@
     <filename>group__misc.html</filename>
     <class kind="struct">ruTimeVal</class>
     <member kind="typedef">
+      <type>const char *</type>
+      <name>perm_chars</name>
+      <anchorfile>group__misc.html</anchorfile>
+      <anchor>ga7dd744dc0ee350f7de2c38f51f5c0bbe</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>const char *</type>
+      <name>trans_chars</name>
+      <anchorfile>group__misc.html</anchorfile>
+      <anchor>ga5a4bcdee6a3cc6c7ed75da5bb77d49bc</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>char *</type>
+      <name>alloc_chars</name>
+      <anchorfile>group__misc.html</anchorfile>
+      <anchor>ga972d4f4f858964bb2381d186ea96d88d</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>const uint16_t *</type>
+      <name>perm_uni</name>
+      <anchorfile>group__misc.html</anchorfile>
+      <anchor>ga85d684615b50943fd01e79d07bb1c6d2</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>const uint16_t *</type>
+      <name>trans_uni</name>
+      <anchorfile>group__misc.html</anchorfile>
+      <anchor>ga583a16c595210574018e6bd10fe925b7</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>uint16_t *</type>
+      <name>alloc_uni</name>
+      <anchorfile>group__misc.html</anchorfile>
+      <anchor>ga3b8ffe65acbdde945eb6668ac1226f5b</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>const unsigned char *</type>
+      <name>perm_bytes</name>
+      <anchorfile>group__misc.html</anchorfile>
+      <anchor>gab07884b0d918059732da53117d12b8f8</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>const unsigned char *</type>
+      <name>trans_bytes</name>
+      <anchorfile>group__misc.html</anchorfile>
+      <anchor>gab5445910fbc90fb0a6db407f8f608422</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>unsigned char *</type>
+      <name>alloc_bytes</name>
+      <anchorfile>group__misc.html</anchorfile>
+      <anchor>ga282bddf4c8f74d03e5d1203a240cfa4f</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>const void *</type>
+      <name>perm_ptr</name>
+      <anchorfile>group__misc.html</anchorfile>
+      <anchor>ga517aac830d9ce5c6ab7deec46adf54d5</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>const void *</type>
+      <name>trans_ptr</name>
+      <anchorfile>group__misc.html</anchorfile>
+      <anchor>ga147d80ce3325dd56fbfb0e07cedcf757</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>void *</type>
+      <name>alloc_ptr</name>
+      <anchorfile>group__misc.html</anchorfile>
+      <anchor>ga9f2753cc325fa665aaf7925682462ecb</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>void *</type>
+      <name>ptr</name>
+      <anchorfile>group__misc.html</anchorfile>
+      <anchor>gab4cf5759c3753c2308f163953ee154f0</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>long</type>
+      <name>sec_t</name>
+      <anchorfile>group__misc.html</anchorfile>
+      <anchor>ga8573cc8637a470b127a19d54b0e94cb9</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>int64_t</type>
+      <name>msec_t</name>
+      <anchorfile>group__misc.html</anchorfile>
+      <anchor>gae416893e8160c5b7c6da3765e4707d5d</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>int64_t</type>
+      <name>usec_t</name>
+      <anchorfile>group__misc.html</anchorfile>
+      <anchor>ga02db3ac43a5917535ca3cbc37ac72884</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>long</type>
+      <name>ru_int</name>
+      <anchorfile>group__misc.html</anchorfile>
+      <anchor>ga9304b6c6b14b62616d983b36f15a7210</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>unsigned long</type>
+      <name>ru_uint</name>
+      <anchorfile>group__misc.html</anchorfile>
+      <anchor>ga6bccfa079bb265c356aca7fb702dd71b</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
       <type>size_t</type>
       <name>rusize</name>
-      <anchorfile>group__memory.html</anchorfile>
+      <anchorfile>group__misc.html</anchorfile>
       <anchor>gaaa0102d444a5dd14474b7951caae0459</anchor>
       <arglist></arglist>
     </member>
     <member kind="typedef">
       <type>void *(*</type>
       <name>ruCloneFunc</name>
-      <anchorfile>group__memory.html</anchorfile>
+      <anchorfile>group__misc.html</anchorfile>
       <anchor>ga1b23e084ffff15cf965a438497c9f8e2</anchor>
       <arglist>)(void *)</arglist>
     </member>
     <member kind="typedef">
       <type>void *(*</type>
       <name>ruClearFunc</name>
-      <anchorfile>group__memory.html</anchorfile>
+      <anchorfile>group__misc.html</anchorfile>
       <anchor>ga91dce9b2f482277a0d5ec778e54c5d14</anchor>
       <arglist>)(void *)</arglist>
     </member>
     <member kind="typedef">
       <type>void(*</type>
       <name>ruFreeFunc</name>
-      <anchorfile>group__memory.html</anchorfile>
+      <anchorfile>group__misc.html</anchorfile>
       <anchor>ga8eb4179750e158d78b0b3bc1e4b1bdce</anchor>
       <arglist>)(void *)</arglist>
+    </member>
+    <member kind="typedef">
+      <type>int(*</type>
+      <name>ruCompFunc</name>
+      <anchorfile>group__misc.html</anchorfile>
+      <anchor>ga6f2df974d7fa3462ee789585fcd510ed</anchor>
+      <arglist>)(trans_ptr a, trans_ptr b)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI const char *</type>
       <name>ruVersion</name>
-      <anchorfile>group__memory.html</anchorfile>
+      <anchorfile>group__misc.html</anchorfile>
       <anchor>ga71dec8ccc9b4947b4142514696e78795</anchor>
       <arglist>(void)</arglist>
     </member>
     <member kind="define">
       <type>#define</type>
       <name>ruRetWithCode</name>
-      <anchorfile>group__memory.html</anchorfile>
+      <anchorfile>group__misc.html</anchorfile>
       <anchor>ga0bd4973612c1de9454caa98b7792fb8e</anchor>
       <arglist>(ptr, code, res)</arglist>
     </member>
     <member kind="function">
-      <type>RUAPI const char *</type>
+      <type>RUAPI perm_chars</type>
       <name>ruGetOs</name>
       <anchorfile>group__misc.html</anchorfile>
-      <anchor>gabf35f94b6f49ed38a1f58cf0f343a6a8</anchor>
+      <anchor>ga9514522bf5289236d07a8b714ab8e0b0</anchor>
       <arglist>(void)</arglist>
-    </member>
-    <member kind="function">
-      <type>RUAPI char *</type>
-      <name>ruGetHostname</name>
-      <anchorfile>group__misc.html</anchorfile>
-      <anchor>ga6a20bd1023801d00e1d6d5915476c484</anchor>
-      <arglist>(void)</arglist>
-    </member>
-    <member kind="function">
-      <type>RUAPI const char *</type>
-      <name>ruGetenv</name>
-      <anchorfile>group__misc.html</anchorfile>
-      <anchor>ga8db29a7b509cc5421e867bd6d640b2fa</anchor>
-      <arglist>(const char *variable)</arglist>
-    </member>
-    <member kind="function">
-      <type>RUAPI bool</type>
-      <name>ruIsInt64</name>
-      <anchorfile>group__misc.html</anchorfile>
-      <anchor>ga61f7ab20b2760c5cb849d3b442eb4402</anchor>
-      <arglist>(const char *numstr)</arglist>
-    </member>
-    <member kind="function">
-      <type>RUAPI int32_t</type>
-      <name>ruGetTimeVal</name>
-      <anchorfile>group__misc.html</anchorfile>
-      <anchor>ga23dfc8d19e01fe0aba08aa87b2966989</anchor>
-      <arglist>(ruTimeVal *result)</arglist>
-    </member>
-    <member kind="function">
-      <type>RUAPI uint64_t</type>
-      <name>ruTimeMs</name>
-      <anchorfile>group__misc.html</anchorfile>
-      <anchor>ga89cf717d770799893b09ff2c1122cdeb</anchor>
-      <arglist>(void)</arglist>
-    </member>
-    <member kind="function">
-      <type>RUAPI uint64_t</type>
-      <name>ruTimeUs</name>
-      <anchorfile>group__misc.html</anchorfile>
-      <anchor>gaa2c301a0f95d8b3af2a885ea620c8142</anchor>
-      <arglist>(void)</arglist>
-    </member>
-    <member kind="function">
-      <type>RUAPI char *</type>
-      <name>ruGetLanguage</name>
-      <anchorfile>group__misc.html</anchorfile>
-      <anchor>ga0b228b90657650ddfb874cca51f3e4a6</anchor>
-      <arglist>(void)</arglist>
-    </member>
-    <member kind="function">
-      <type>RUAPI void</type>
-      <name>ruUsleep</name>
-      <anchorfile>group__misc.html</anchorfile>
-      <anchor>ga9185a0fbb023f946e2b55424d14e7143</anchor>
-      <arglist>(unsigned long microseconds)</arglist>
-    </member>
-    <member kind="function">
-      <type>RUAPI void</type>
-      <name>ruMsleep</name>
-      <anchorfile>group__misc.html</anchorfile>
-      <anchor>gaad18cbcc51e536632b9129fa13206217</anchor>
-      <arglist>(unsigned long milliseconds)</arglist>
-    </member>
-    <member kind="function">
-      <type>RUAPI unsigned long</type>
-      <name>ruSemiRandomNumber</name>
-      <anchorfile>group__misc.html</anchorfile>
-      <anchor>gaf71c9663b075c4dbe4f665b51cde059b</anchor>
-      <arglist>(unsigned long max, long offset)</arglist>
     </member>
   </compound>
   <compound kind="group">
@@ -194,32 +257,18 @@
       <arglist>(buf, count, ctype)</arglist>
     </member>
     <member kind="function">
-      <type>RUAPI void *</type>
+      <type>RUAPI alloc_ptr</type>
       <name>ruMallocSize</name>
       <anchorfile>group__memory.html</anchorfile>
-      <anchor>gadc6d4640d79d30847e5a69423151e6d6</anchor>
+      <anchor>ga9aa9dcd1bd646dfc857f63eba32e923c</anchor>
       <arglist>(rusize count, rusize ofsize)</arglist>
     </member>
     <member kind="function">
-      <type>RUAPI void *</type>
+      <type>RUAPI alloc_ptr</type>
       <name>ruReallocSize</name>
       <anchorfile>group__memory.html</anchorfile>
-      <anchor>ga20d255456f8dc1cdb107e90ee8b84c73</anchor>
-      <arglist>(void *buf, rusize count, rusize ofsize)</arglist>
-    </member>
-    <member kind="function">
-      <type>RUAPI const char *</type>
-      <name>ruVersion</name>
-      <anchorfile>group__memory.html</anchorfile>
-      <anchor>ga71dec8ccc9b4947b4142514696e78795</anchor>
-      <arglist>(void)</arglist>
-    </member>
-    <member kind="function">
-      <type>RUAPI const char *</type>
-      <name>ruLastError</name>
-      <anchorfile>group__memory.html</anchorfile>
-      <anchor>gaea3d529fecc1bbad25f943943b6e9ef2</anchor>
-      <arglist>(void)</arglist>
+      <anchor>ga94f0a9650d1a2b773e4e85f2341eea02</anchor>
+      <arglist>(alloc_ptr buf, rusize count, rusize ofsize)</arglist>
     </member>
     <member kind="define">
       <type>#define</type>
@@ -230,52 +279,10 @@
     </member>
     <member kind="define">
       <type>#define</type>
-      <name>ruRetWithCode</name>
+      <name>ruReplace</name>
       <anchorfile>group__memory.html</anchorfile>
-      <anchor>ga0bd4973612c1de9454caa98b7792fb8e</anchor>
-      <arglist>(ptr, code, res)</arglist>
-    </member>
-    <member kind="typedef">
-      <type>signed long</type>
-      <name>rusize_s</name>
-      <anchorfile>group__memory.html</anchorfile>
-      <anchor>gac23a4c7337daa8f22a561f49096b06b8</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="typedef">
-      <type>size_t</type>
-      <name>rusize</name>
-      <anchorfile>group__memory.html</anchorfile>
-      <anchor>gaaa0102d444a5dd14474b7951caae0459</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="typedef">
-      <type>void *(*</type>
-      <name>ruCloneFunc</name>
-      <anchorfile>group__memory.html</anchorfile>
-      <anchor>ga1b23e084ffff15cf965a438497c9f8e2</anchor>
-      <arglist>)(void *)</arglist>
-    </member>
-    <member kind="typedef">
-      <type>void *(*</type>
-      <name>ruClearFunc</name>
-      <anchorfile>group__memory.html</anchorfile>
-      <anchor>ga91dce9b2f482277a0d5ec778e54c5d14</anchor>
-      <arglist>)(void *)</arglist>
-    </member>
-    <member kind="typedef">
-      <type>void(*</type>
-      <name>ruFreeFunc</name>
-      <anchorfile>group__memory.html</anchorfile>
-      <anchor>ga8eb4179750e158d78b0b3bc1e4b1bdce</anchor>
-      <arglist>)(void *)</arglist>
-    </member>
-    <member kind="typedef">
-      <type>unsigned char</type>
-      <name>uchar</name>
-      <anchorfile>group__memory.html</anchorfile>
-      <anchor>ga65f85814a8290f9797005d3b28e7e5fc</anchor>
-      <arglist></arglist>
+      <anchor>gafdbf421329129ad39395ca1c48694f9f</anchor>
+      <arglist>(p, n)</arglist>
     </member>
   </compound>
   <compound kind="group">
@@ -291,17 +298,24 @@
     </member>
     <member kind="typedef">
       <type>rusize_s(*</type>
-      <name>ioFunc</name>
+      <name>rcWriteFn</name>
       <anchorfile>group__cleaner.html</anchorfile>
-      <anchor>gae4bb48307fae422df9dfa3bbbab66cc1</anchor>
-      <arglist>)(void *ctx, void *buf, rusize len)</arglist>
+      <anchor>gaff866bff30cab44b2f0a14c3e0c6fb2b</anchor>
+      <arglist>)(perm_ptr ctx, trans_ptr buf, rusize len)</arglist>
+    </member>
+    <member kind="typedef">
+      <type>rusize_s(*</type>
+      <name>rcReadFn</name>
+      <anchorfile>group__cleaner.html</anchorfile>
+      <anchor>ga3adc6576a1cb10dade26d7ff7cfc04e5</anchor>
+      <arglist>)(perm_ptr ctx, ptr buf, rusize len)</arglist>
     </member>
     <member kind="typedef">
       <type>void(*</type>
       <name>ruCleanerCb</name>
       <anchorfile>group__cleaner.html</anchorfile>
-      <anchor>ga76ef45a462467ab9cc874e52cfd50cad</anchor>
-      <arglist>)(void *user_data, const char *key, const char *subst)</arglist>
+      <anchor>ga13a8daf645da7138fbd06c9d7af8b732</anchor>
+      <arglist>)(perm_ptr user_data, trans_chars key, trans_chars subst)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI ruCleaner</type>
@@ -321,43 +335,43 @@
       <type>RUAPI int32_t</type>
       <name>ruCleanDump</name>
       <anchorfile>group__cleaner.html</anchorfile>
-      <anchor>gaac05659ca6cad93ae186f7c5910a21f8</anchor>
-      <arglist>(ruCleaner cp, ruCleanerCb lf, void *user_data)</arglist>
+      <anchor>gafae28f8ce03c8fa58af8f36a603e424e</anchor>
+      <arglist>(ruCleaner cp, ruCleanerCb lf, perm_ptr user_data)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI int32_t</type>
       <name>ruCleanAdd</name>
       <anchorfile>group__cleaner.html</anchorfile>
-      <anchor>ga2c747bc6e3a5f21c4c638c1be3157c0a</anchor>
-      <arglist>(ruCleaner rc, const char *instr, const char *substitute)</arglist>
+      <anchor>ga10601de10e51a7ce8cb59044be5489fa</anchor>
+      <arglist>(ruCleaner rc, trans_chars instr, trans_chars substitute)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI int32_t</type>
       <name>ruCleanRemove</name>
       <anchorfile>group__cleaner.html</anchorfile>
-      <anchor>ga4bb547fcaf2a8b792282ec675925a55a</anchor>
-      <arglist>(ruCleaner rc, const char *instr)</arglist>
+      <anchor>gaa6b618e644812ee41282ae5fd5d449c0</anchor>
+      <arglist>(ruCleaner rc, trans_chars instr)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI int32_t</type>
       <name>ruCleanIo</name>
       <anchorfile>group__cleaner.html</anchorfile>
-      <anchor>ga70ae896895986b6521043071ca46026e</anchor>
-      <arglist>(ruCleaner rc, ioFunc reader, void *readCtx, ioFunc writer, void *writeCtx)</arglist>
+      <anchor>gae47e57317359df9bc5ccff1124ba31f0</anchor>
+      <arglist>(ruCleaner rc, rcReadFn reader, perm_ptr readCtx, rcWriteFn writer, perm_ptr writeCtx)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI int32_t</type>
       <name>ruCleanToWriter</name>
       <anchorfile>group__cleaner.html</anchorfile>
-      <anchor>gae33fadbe16de2d8c2b901e34cdb69411</anchor>
-      <arglist>(ruCleaner rc, const char *in, rusize len, ioFunc writer, void *writeCtx)</arglist>
+      <anchor>gaf308c52b6c3b3dbaec13f85ff6a81df1</anchor>
+      <arglist>(ruCleaner rc, trans_chars in, rusize len, rcWriteFn writer, perm_ptr writeCtx)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI int32_t</type>
       <name>ruCleanToString</name>
       <anchorfile>group__cleaner.html</anchorfile>
-      <anchor>ga0f202a4f86276f8410d1918a9ed9cca4</anchor>
-      <arglist>(ruCleaner rc, const char *in, rusize len, ruString *out)</arglist>
+      <anchor>gac9cd9445123baff979282056b18430fe</anchor>
+      <arglist>(ruCleaner rc, trans_chars in, rusize len, ruString *out)</arglist>
     </member>
   </compound>
   <compound kind="group">
@@ -422,6 +436,20 @@
     </member>
     <member kind="define">
       <type>#define</type>
+      <name>RUE_OVERFLOW</name>
+      <anchorfile>group__ruerror.html</anchorfile>
+      <anchor>gaaa0637cd2eaa0773f5d45c266cb744f4</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>RUE_FEATURE_NOT_SUPPORTED</name>
+      <anchorfile>group__ruerror.html</anchorfile>
+      <anchor>gaebe638fa43dc94bf0a20f2e2211e7322</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
       <name>RUE_USER_ABORT</name>
       <anchorfile>group__ruerror.html</anchorfile>
       <anchor>gae20a9bc093af1bbbb5e42ef8ed05deec</anchor>
@@ -471,15 +499,15 @@
       <type>RUAPI int32_t</type>
       <name>ruIniWrite</name>
       <anchorfile>group__ini.html</anchorfile>
-      <anchor>ga3c7b9038795f4526091cec9f0618f8e6</anchor>
-      <arglist>(ruIni iniOb, const char *filename)</arglist>
+      <anchor>ga443f36d34ca689b78ab37fa15e17874b</anchor>
+      <arglist>(ruIni iniOb, trans_chars filename)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI int32_t</type>
       <name>ruIniRead</name>
       <anchorfile>group__ini.html</anchorfile>
-      <anchor>gad2bdee5710c0c731e0a4f0db379ea911</anchor>
-      <arglist>(const char *filename, ruIni *iniOb)</arglist>
+      <anchor>ga7f42bce2eff7de4e4184c0d0dae6c6d1</anchor>
+      <arglist>(trans_chars filename, ruIni *iniOb)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI int32_t</type>
@@ -492,29 +520,29 @@
       <type>RUAPI int32_t</type>
       <name>ruIniKeys</name>
       <anchorfile>group__ini.html</anchorfile>
-      <anchor>ga2529fb4525d4b15b317f64c58a5e9c91</anchor>
-      <arglist>(ruIni iniOb, const char *section, ruList *keys)</arglist>
+      <anchor>gac3565e49cdc4d7fc9f397c1c14986d1c</anchor>
+      <arglist>(ruIni iniOb, trans_chars section, ruList *keys)</arglist>
     </member>
     <member kind="function">
-      <type>RUAPI const char *</type>
+      <type>RUAPI perm_chars</type>
       <name>ruIniGetDef</name>
       <anchorfile>group__ini.html</anchorfile>
-      <anchor>ga2e2590686eeaf6872700da356622ff04</anchor>
-      <arglist>(ruIni iniOb, const char *section, const char *key, const char *def, int32_t *code)</arglist>
+      <anchor>ga6e64a31917c5bd73257a5839cfda14e2</anchor>
+      <arglist>(ruIni iniOb, trans_chars section, trans_chars key, trans_chars def, int32_t *code)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI int32_t</type>
       <name>ruIniGet</name>
       <anchorfile>group__ini.html</anchorfile>
-      <anchor>gab08b3947fcd46e96e27ff41ee132b370</anchor>
-      <arglist>(ruIni iniOb, const char *section, const char *key, const char **value)</arglist>
+      <anchor>ga3e12017d4a6672f5e3ca63c0504cfb20</anchor>
+      <arglist>(ruIni iniOb, trans_chars section, trans_chars key, perm_chars *value)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI int32_t</type>
       <name>ruIniSet</name>
       <anchorfile>group__ini.html</anchorfile>
-      <anchor>ga0cff0329217c53a95b3cf1a116dc32bb</anchor>
-      <arglist>(ruIni iniOb, const char *section, const char *key, const char *value)</arglist>
+      <anchor>ga2b9057f8f137ab2f3839a697e84dd44f</anchor>
+      <arglist>(ruIni iniOb, trans_chars section, trans_chars key, trans_chars value)</arglist>
     </member>
   </compound>
   <compound kind="group">
@@ -550,11 +578,18 @@
       <arglist></arglist>
     </member>
     <member kind="typedef">
-      <type>int(*</type>
+      <type>bool(*</type>
+      <name>entryFilter</name>
+      <anchorfile>group__io.html</anchorfile>
+      <anchor>ga96b2df183649f58bd746edc4a0c6161c</anchor>
+      <arglist>)(trans_chars folderPath, trans_chars fileName, bool isFolder, ptr ctx)</arglist>
+    </member>
+    <member kind="typedef">
+      <type>int32_t(*</type>
       <name>entryMgr</name>
       <anchorfile>group__io.html</anchorfile>
-      <anchor>ga02d14b0d2f110532e98796373b5c6b1a</anchor>
-      <arglist>)(const char *fullPath, bool isFolder, void *ctx)</arglist>
+      <anchor>gae838891e096d47726baeec65b792fd51</anchor>
+      <arglist>)(trans_chars fullPath, bool isFolder, ptr ctx)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI bool</type>
@@ -592,11 +627,39 @@
       <arglist>(const char *filename)</arglist>
     </member>
     <member kind="function">
-      <type>RUAPI int</type>
+      <type>RUAPI int32_t</type>
+      <name>ruDiskFree</name>
+      <anchorfile>group__io.html</anchorfile>
+      <anchor>gaee9962bbf1900c33cf88330b0ca0da23</anchor>
+      <arglist>(trans_chars path, uint64_t *total, uint64_t *avail)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI int32_t</type>
       <name>ruStat</name>
       <anchorfile>group__io.html</anchorfile>
-      <anchor>gaaf51c8fc40cedc893fa5a5397e6882af</anchor>
-      <arglist>(const char *filepath, ruStat_t *dest)</arglist>
+      <anchor>ga3c01cc11c4ab4e14c29a12fa5cb1bc7e</anchor>
+      <arglist>(trans_chars filepath, ruStat_t *dest)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI rusize</type>
+      <name>ruFileSize</name>
+      <anchorfile>group__io.html</anchorfile>
+      <anchor>ga8916e7542df6ccf0eedd28d8377d1625</anchor>
+      <arglist>(trans_chars filePath, int32_t *code)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI sec_t</type>
+      <name>ruFileUtcTime</name>
+      <anchorfile>group__io.html</anchorfile>
+      <anchor>ga7e71901a25248028c5b9c186c6347035</anchor>
+      <arglist>(trans_chars filePath, int32_t *code)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI int32_t</type>
+      <name>ruFileSetUtcTime</name>
+      <anchorfile>group__io.html</anchorfile>
+      <anchor>gaa4ef68118fe7d34985d605e2eb4d5b84</anchor>
+      <arglist>(trans_chars filePath, sec_t date)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI int</type>
@@ -623,21 +686,35 @@
       <type>RUAPI int32_t</type>
       <name>ruFileSetContents</name>
       <anchorfile>group__io.html</anchorfile>
-      <anchor>ga9610819e2f2bc69b9215c9263a3db93b</anchor>
-      <arglist>(const char *filename, const char *contents, rusize_s length)</arglist>
+      <anchor>ga2280aaaa8bb5c208cb53a696444c5ebd</anchor>
+      <arglist>(const char *filename, const char *contents, rusize length)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI int</type>
       <name>ruFileGetContents</name>
       <anchorfile>group__io.html</anchorfile>
-      <anchor>ga62d813403b374ccf7de8f72a957914e1</anchor>
-      <arglist>(const char *filename, char **contents, rusize *length)</arglist>
+      <anchor>gac2d2628ae0710cfa181d65116b0786c6</anchor>
+      <arglist>(trans_chars filename, alloc_chars *contents, rusize *length)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI int</type>
+      <name>ruFileCopy</name>
+      <anchorfile>group__io.html</anchorfile>
+      <anchor>ga56bef69d453747f997eac91cf5a92448</anchor>
+      <arglist>(trans_chars srcpath, trans_chars destpath)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI int</type>
       <name>ruFileRename</name>
       <anchorfile>group__io.html</anchorfile>
       <anchor>ga8f8cf9398240f654b7168706eb8a1095</anchor>
+      <arglist>(const char *oldName, const char *newName)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI int</type>
+      <name>ruFileTryRename</name>
+      <anchorfile>group__io.html</anchorfile>
+      <anchor>ga73b475d19298205315ec716522eb5005</anchor>
       <arglist>(const char *oldName, const char *newName)</arglist>
     </member>
     <member kind="function">
@@ -649,52 +726,80 @@
     </member>
     <member kind="function">
       <type>RUAPI int32_t</type>
+      <name>ruFilteredFolderWalk</name>
+      <anchorfile>group__io.html</anchorfile>
+      <anchor>ga12acc50821b94d002938710d27c03aa6</anchor>
+      <arglist>(trans_chars folder, uint32_t flags, entryFilter filter, entryMgr actor, ptr ctx)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI int32_t</type>
       <name>ruFolderWalk</name>
       <anchorfile>group__io.html</anchorfile>
-      <anchor>ga38d23ec7fac85ec152aacf0aeb8d2be0</anchor>
-      <arglist>(const char *folder, u_int32_t flags, entryMgr actor, void *ctx)</arglist>
+      <anchor>ga1c03fc4af3efaa1db4c1ffccf3f321bf</anchor>
+      <arglist>(trans_chars folder, uint32_t flags, entryMgr actor, ptr ctx)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI ru_int</type>
+      <name>ruFolderEntries</name>
+      <anchorfile>group__io.html</anchorfile>
+      <anchor>ga1c58cc0d6dd45ca69fbf9878327a0695</anchor>
+      <arglist>(trans_chars folder)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI int</type>
       <name>ruFolderRemove</name>
       <anchorfile>group__io.html</anchorfile>
-      <anchor>gac255625488ddf62907efa965ea5b54e2</anchor>
-      <arglist>(const char *folder)</arglist>
+      <anchor>ga3770186e0678760f4c6ab93751d6e4ad</anchor>
+      <arglist>(trans_chars folder)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI int</type>
       <name>ruMkdir</name>
       <anchorfile>group__io.html</anchorfile>
-      <anchor>gad899c45123b9d7a04f4b8475ac9bf78f</anchor>
-      <arglist>(const char *pathname, int mode, bool deep)</arglist>
+      <anchor>ga3602170134b8290324e6aca3a0b23650</anchor>
+      <arglist>(trans_chars pathname, int mode, bool deep)</arglist>
     </member>
     <member kind="function">
-      <type>RUAPI char *</type>
+      <type>RUAPI alloc_chars</type>
       <name>ruDirName</name>
       <anchorfile>group__io.html</anchorfile>
-      <anchor>ga11de9515b4c216de73d8481b7decc5ba</anchor>
-      <arglist>(const char *filePath)</arglist>
+      <anchor>gabf71d082e151f87d4f31b819a293236b</anchor>
+      <arglist>(trans_chars filePath)</arglist>
     </member>
     <member kind="function">
-      <type>RUAPI char *</type>
+      <type>RUAPI perm_chars</type>
       <name>ruBaseName</name>
       <anchorfile>group__io.html</anchorfile>
-      <anchor>ga5e1c319186a031bc8ac39f171da4ebc1</anchor>
-      <arglist>(const char *filePath)</arglist>
+      <anchor>gab0cd59807f557f48554a5a4b3a9dc78a</anchor>
+      <arglist>(perm_chars filePath)</arglist>
     </member>
     <member kind="function">
-      <type>RUAPI char *</type>
+      <type>RUAPI perm_chars</type>
+      <name>ruFileExtension</name>
+      <anchorfile>group__io.html</anchorfile>
+      <anchor>gab0d2743898f8e94ddb0ff54c836862e3</anchor>
+      <arglist>(perm_chars filePath)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI alloc_chars</type>
       <name>ruFullPath</name>
       <anchorfile>group__io.html</anchorfile>
-      <anchor>gac911387bc1382fb6bffa4a944d983e94</anchor>
-      <arglist>(const char *filePath)</arglist>
+      <anchor>ga89ef11f352fb52312b7f46ec11ec1103</anchor>
+      <arglist>(trans_chars filePath)</arglist>
     </member>
     <member kind="function">
-      <type>RUAPI char *</type>
+      <type>RUAPI alloc_chars</type>
       <name>ruPathJoin</name>
       <anchorfile>group__io.html</anchorfile>
-      <anchor>ga748b1cb57a725ffd4fd098a319b56690</anchor>
-      <arglist>(const char *base, const char *file)</arglist>
+      <anchor>ga8f9b928f302905a50cd91860e384c7fa</anchor>
+      <arglist>(trans_chars base, trans_chars file)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI alloc_chars</type>
+      <name>ruPathMultiJoin</name>
+      <anchorfile>group__io.html</anchorfile>
+      <anchor>gaa0bd3e2ab8ca42cf6c26dda0f0bf5836</anchor>
+      <arglist>(int parts,...)</arglist>
     </member>
   </compound>
   <compound kind="group">
@@ -706,8 +811,8 @@
       <type>int32_t(*</type>
       <name>kvset</name>
       <anchorfile>group__kvstore__sec.html</anchorfile>
-      <anchor>gab748563c391cb2554af5f832b20fac6e</anchor>
-      <arglist>)(struct KvStore_ *kvs, const char *key, const char *val, rusize_s len)</arglist>
+      <anchor>ga9048fec5cec2283bac868aa9a4a42c74</anchor>
+      <arglist>)(struct KvStore_ *kvs, const char *key, const char *val, rusize len)</arglist>
     </member>
     <member kind="typedef">
       <type>int32_t(*</type>
@@ -776,8 +881,8 @@
       <type>RUAPI int32_t</type>
       <name>ruFileStoreSet</name>
       <anchorfile>group__kvstore__sec.html</anchorfile>
-      <anchor>gafb83ceebcad2dbc68d27fc954e4d916f</anchor>
-      <arglist>(KvStore *kvs, const char *key, const char *val, rusize_s len)</arglist>
+      <anchor>gae33879bb447ccb00cb2ab57e4842a09c</anchor>
+      <arglist>(KvStore *kvs, const char *key, const char *val, rusize len)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI int32_t</type>
@@ -804,8 +909,8 @@
       <type>RUAPI int32_t</type>
       <name>ruNullStoreSet</name>
       <anchorfile>group__kvstore__sec.html</anchorfile>
-      <anchor>gafbbd2467b40399f8cfeae9ea6f35e7f1</anchor>
-      <arglist>(KvStore *kvs, const char *key, const char *val, rusize_s len)</arglist>
+      <anchor>gaf32a7d103a068e73e1eb0fb102af2f4c</anchor>
+      <arglist>(KvStore *kvs, const char *key, const char *val, rusize len)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI int32_t</type>
@@ -845,13 +950,6 @@
     </member>
     <member kind="define">
       <type>#define</type>
-      <name>ruListPop</name>
-      <anchorfile>group__list.html</anchorfile>
-      <anchor>ga77c6f1f771fb7f2183a3477b25aac5d1</anchor>
-      <arglist>(rl, code)</arglist>
-    </member>
-    <member kind="define">
-      <type>#define</type>
       <name>ruListIter</name>
       <anchorfile>group__list.html</anchorfile>
       <anchor>gacc2bc91f4f76b9863603a004dae43194</anchor>
@@ -862,13 +960,6 @@
       <name>ruIterNext</name>
       <anchorfile>group__list.html</anchorfile>
       <anchor>gacb34c9de3d00243458bc91f9a76e2344</anchor>
-      <arglist>(re, type)</arglist>
-    </member>
-    <member kind="define">
-      <type>#define</type>
-      <name>ruIterCurrent</name>
-      <anchorfile>group__list.html</anchorfile>
-      <anchor>ga894fca3f8274753560dc915d6347b8b4</anchor>
       <arglist>(re, type)</arglist>
     </member>
     <member kind="define">
@@ -924,28 +1015,49 @@
       <type>RUAPI int32_t</type>
       <name>ruListAppendPtr</name>
       <anchorfile>group__list.html</anchorfile>
-      <anchor>ga12f894b8ac166c434ba7a12f84353102</anchor>
-      <arglist>(ruList rl, const void *data)</arglist>
+      <anchor>gafe233eb17a583b06810e50372781207a</anchor>
+      <arglist>(ruList rl, perm_ptr data)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI int32_t</type>
+      <name>ruListInsertAt</name>
+      <anchorfile>group__list.html</anchorfile>
+      <anchor>gad362bd738fbd5fdf7e8571ec183249ef</anchor>
+      <arglist>(ruList rl, int32_t index, perm_ptr data)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI int32_t</type>
       <name>ruListInsertAfter</name>
       <anchorfile>group__list.html</anchorfile>
-      <anchor>ga1e34ce50419806d906cad8a8236362bc</anchor>
-      <arglist>(ruList rl, ruListElmt rle, const void *data)</arglist>
+      <anchor>gad87a85ba0ad40486b640c08f5030ee2f</anchor>
+      <arglist>(ruList rl, ruListElmt rle, perm_ptr data)</arglist>
     </member>
     <member kind="function">
-      <type>RUAPI void *</type>
-      <name>ruListRemoveAfter</name>
+      <type>RUAPI ptr</type>
+      <name>ruListRemove</name>
       <anchorfile>group__list.html</anchorfile>
-      <anchor>gac5dd2279c7701d6abb475ef0b75dd4c1</anchor>
-      <arglist>(ruList rl, ruListElmt rle, int32_t *code)</arglist>
+      <anchor>ga00f37a668ae4e6d7b92af8034179c951</anchor>
+      <arglist>(ruList rl, ruListElmt *rle, int32_t *code)</arglist>
     </member>
     <member kind="function">
-      <type>RUAPI int32_t</type>
+      <type>RUAPI ptr</type>
+      <name>ruListPop</name>
+      <anchorfile>group__list.html</anchorfile>
+      <anchor>gac38106311ed611ce8706246e5ebba17a</anchor>
+      <arglist>(ruList rl, int32_t *code)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI ptr</type>
+      <name>ruListTryPop</name>
+      <anchorfile>group__list.html</anchorfile>
+      <anchor>ga2bbfbf34ff189ebf934273395a11f224</anchor>
+      <arglist>(ruList rl, msec_t timeoutMs, int32_t *code)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI uint32_t</type>
       <name>ruListSize</name>
       <anchorfile>group__list.html</anchorfile>
-      <anchor>gaacc40c1777c3ff2ddc3c16d0ef6fe223</anchor>
+      <anchor>gaf068a6ca647d47215c5a805d35ca5ec4</anchor>
       <arglist>(ruList rl, int32_t *code)</arglist>
     </member>
     <member kind="function">
@@ -984,25 +1096,39 @@
       <arglist>(ruListElmt re, int32_t *code)</arglist>
     </member>
     <member kind="function">
-      <type>RUAPI void *</type>
+      <type>RUAPI ptr</type>
       <name>ruListNextData</name>
       <anchorfile>group__list.html</anchorfile>
-      <anchor>gaafa5dcdbd257934d86eb05708f3345ef</anchor>
+      <anchor>ga8a5796acc55b08010cb2bd7160255477</anchor>
       <arglist>(ruListElmt *re, int32_t *code)</arglist>
     </member>
     <member kind="function">
-      <type>RUAPI void *</type>
+      <type>RUAPI ptr</type>
       <name>ruListElmtData</name>
       <anchorfile>group__list.html</anchorfile>
-      <anchor>ga684224f1d65319c3e8a011afc98eb452</anchor>
+      <anchor>ga5d70dcfd4646dea79cfe1ae1ae482cc0</anchor>
       <arglist>(ruListElmt re, int32_t *code)</arglist>
     </member>
     <member kind="function">
-      <type>RUAPI void *</type>
+      <type>RUAPI ptr</type>
       <name>ruListIdxElmtData</name>
       <anchorfile>group__list.html</anchorfile>
-      <anchor>gab5bc226942ac6a563040f45227664e43</anchor>
+      <anchor>gae2fedd16002646e35cc328b88e941cce</anchor>
       <arglist>(ruList rl, int32_t index, int32_t *code)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI alloc_chars</type>
+      <name>ruListJoin</name>
+      <anchorfile>group__list.html</anchorfile>
+      <anchor>ga3f5916035e33df40b498642137ea769f</anchor>
+      <arglist>(ruList rl, trans_chars delim, int32_t *code)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI int32_t</type>
+      <name>ruListSort</name>
+      <anchorfile>group__list.html</anchorfile>
+      <anchor>gace02c8adb52bae50e49aac8123e7e21a</anchor>
+      <arglist>(ruList rl, ruCompFunc sort)</arglist>
     </member>
   </compound>
   <compound kind="group">
@@ -1042,6 +1168,13 @@
       <name>RU_LOG_VERB</name>
       <anchorfile>group__logging.html</anchorfile>
       <anchor>gaa48441dca350811c725a8096ccbd59f8</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>RU_LOG_DBUG</name>
+      <anchorfile>group__logging.html</anchorfile>
+      <anchor>ga87450aef2aa1444e5f86301c28d0907d</anchor>
       <arglist></arglist>
     </member>
     <member kind="define">
@@ -1102,6 +1235,20 @@
     </member>
     <member kind="define">
       <type>#define</type>
+      <name>ruDbgLog</name>
+      <anchorfile>group__logging.html</anchorfile>
+      <anchor>ga6d7b666987402eb3af7d97e448f021ba</anchor>
+      <arglist>(msg)</arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>ruDbgLogf</name>
+      <anchorfile>group__logging.html</anchorfile>
+      <anchor>ga3d3ffaf6bf4fa6d4c69329ad93f301b3</anchor>
+      <arglist>(fmt,...)</arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
       <name>ruDump8</name>
       <anchorfile>group__logging.html</anchorfile>
       <anchor>ga350ca5f040ec24dc02dd77155fbb61d0</anchor>
@@ -1118,36 +1265,36 @@
       <type>void(*</type>
       <name>ruLogFunc</name>
       <anchorfile>group__logging.html</anchorfile>
-      <anchor>ga85b04f67f72140eacdded6c016bdac96</anchor>
-      <arglist>)(void *user_data, const char *message)</arglist>
+      <anchor>ga20be8e436d37b23248d98325f40a5d9e</anchor>
+      <arglist>)(perm_ptr user_data, trans_chars message)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI void</type>
       <name>ruStdErrorLogger</name>
       <anchorfile>group__logging.html</anchorfile>
-      <anchor>ga0a90f3d97148451be043efff143fd5a7</anchor>
-      <arglist>(void *udata, const char *msg)</arglist>
+      <anchor>gafbb4cdd0ff940ab6a253c3b69dba1fa1</anchor>
+      <arglist>(perm_ptr udata, trans_chars msg)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI void</type>
       <name>ruSetLogger</name>
       <anchorfile>group__logging.html</anchorfile>
-      <anchor>gae2da372352496e9d84b59c07b15f82ed</anchor>
-      <arglist>(ruLogFunc logger, u_int32_t logLevel, void *userData)</arglist>
+      <anchor>ga45e42503b652bda7bc147f5c514f5172</anchor>
+      <arglist>(ruLogFunc logger, uint32_t logLevel, perm_ptr userData)</arglist>
     </member>
     <member kind="function">
-      <type>RUAPI u_int32_t</type>
+      <type>RUAPI uint32_t</type>
       <name>ruGetLogLevel</name>
       <anchorfile>group__logging.html</anchorfile>
-      <anchor>ga5567addda268c2f3d4ff8cb72ce1a918</anchor>
+      <anchor>ga55a8b3d268484f95bc91525110491606</anchor>
       <arglist>(void)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI bool</type>
       <name>ruDoesLog</name>
       <anchorfile>group__logging.html</anchorfile>
-      <anchor>gab3ef0712708ff05243d4275723c1cba4</anchor>
-      <arglist>(u_int32_t log_level)</arglist>
+      <anchor>gaccddd3017ad9c9fd2f1bf9865dcbf699</anchor>
+      <arglist>(uint32_t log_level)</arglist>
     </member>
   </compound>
   <compound kind="group">
@@ -1160,6 +1307,13 @@
       <anchorfile>group__map.html</anchorfile>
       <anchor>ga91b1a3cae7702eb9ebb82ba77d896571</anchor>
       <arglist>(map, key, val)</arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>ruMapTryPut</name>
+      <anchorfile>group__map.html</anchorfile>
+      <anchor>ga5ca65fc49ff448367a2f1a799f7fe123</anchor>
+      <arglist>(map, key, val, existing)</arglist>
     </member>
     <member kind="define">
       <type>#define</type>
@@ -1197,6 +1351,20 @@
       <arglist>(rm, key, value)</arglist>
     </member>
     <member kind="typedef">
+      <type>ru_uint(*</type>
+      <name>ruHashFunc</name>
+      <anchorfile>group__map.html</anchorfile>
+      <anchor>ga71667e232bf6a6db737a5ac33535b39b</anchor>
+      <arglist>)(trans_ptr key)</arglist>
+    </member>
+    <member kind="typedef">
+      <type>bool(*</type>
+      <name>ruMatchFunc</name>
+      <anchorfile>group__map.html</anchorfile>
+      <anchor>ga0f46f4998b506c57695ff31d21f6ea65</anchor>
+      <arglist>)(trans_ptr key1, trans_ptr key2)</arglist>
+    </member>
+    <member kind="typedef">
       <type>void *</type>
       <name>ruMap</name>
       <anchorfile>group__map.html</anchorfile>
@@ -1204,39 +1372,39 @@
       <arglist></arglist>
     </member>
     <member kind="function">
-      <type>RUAPI ruMap</type>
-      <name>ruMapNew</name>
-      <anchorfile>group__map.html</anchorfile>
-      <anchor>ga9954819ce1c5b1ce42197c8505227a54</anchor>
-      <arglist>(u_int32_t(*hash)(const void *key), bool(*match)(const void *key1, const void *key2), ruFreeFunc keyFree, ruFreeFunc valFree, u_int32_t expectedSize)</arglist>
-    </member>
-    <member kind="function">
-      <type>RUAPI u_int32_t</type>
+      <type>RUAPI ru_uint</type>
       <name>ruIntHash</name>
       <anchorfile>group__map.html</anchorfile>
-      <anchor>ga583667ddd5ec2f90489bbf1d2823864e</anchor>
-      <arglist>(const void *key)</arglist>
+      <anchor>ga6cfd49276d15ac796a1d49067ef6f6df</anchor>
+      <arglist>(trans_ptr key)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI bool</type>
       <name>ruIntMatch</name>
       <anchorfile>group__map.html</anchorfile>
-      <anchor>gad95b2d6bdee35ac6a0c456443de03751</anchor>
-      <arglist>(const void *s1, const void *s2)</arglist>
+      <anchor>ga430f8d96302a13f878dde7c2180493ca</anchor>
+      <arglist>(trans_ptr s1, trans_ptr s2)</arglist>
     </member>
     <member kind="function">
-      <type>RUAPI u_int32_t</type>
+      <type>RUAPI ru_uint</type>
       <name>ruStrHash</name>
       <anchorfile>group__map.html</anchorfile>
-      <anchor>ga4aa3c0219c76fbee26d1ca44514dd6d1</anchor>
-      <arglist>(const void *key)</arglist>
+      <anchor>ga180c35fbcfa6b598af925bc5b35fa996</anchor>
+      <arglist>(trans_ptr key)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI bool</type>
       <name>ruStrMatch</name>
       <anchorfile>group__map.html</anchorfile>
-      <anchor>ga3a9ac52b3a1b5086b42dc736bb6978a1</anchor>
-      <arglist>(const void *s1, const void *s2)</arglist>
+      <anchor>ga0b39d859aa373ea70eeb6feee16b0ba1</anchor>
+      <arglist>(trans_ptr s1, trans_ptr s2)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI ruMap</type>
+      <name>ruMapNew</name>
+      <anchorfile>group__map.html</anchorfile>
+      <anchor>ga01203552d640f866d8aaa967beb2fa81</anchor>
+      <arglist>(ruHashFunc hash, ruMatchFunc match, ruFreeFunc keyFree, ruFreeFunc valFree, uint32_t expectedSize)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI ruMap</type>
@@ -1256,8 +1424,8 @@
       <type>RUAPI int32_t</type>
       <name>ruMapPutData</name>
       <anchorfile>group__map.html</anchorfile>
-      <anchor>ga0d8990687ac54e2239c0c2e10d981ed5</anchor>
-      <arglist>(ruMap map, void *key, void *val)</arglist>
+      <anchor>ga1e118478f0538bf381369dffd6bd300d</anchor>
+      <arglist>(ruMap rm, ptr key, ptr val, ptr *exisitingVal)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI int32_t</type>
@@ -1303,17 +1471,141 @@
     </member>
     <member kind="function">
       <type>RUAPI int32_t</type>
-      <name>ruMapKeySet</name>
+      <name>ruMapKeyList</name>
       <anchorfile>group__map.html</anchorfile>
-      <anchor>gaac773a120441617364d8b9929502e83a</anchor>
-      <arglist>(ruMap rm, ruCloneFunc copy, ruList *keys, ruFreeFunc listFree)</arglist>
+      <anchor>ga789ce12d5f474b500df9a63f065c0b1d</anchor>
+      <arglist>(ruMap rm, ruList *keys, ruCloneFunc copy, ruFreeFunc listFree)</arglist>
     </member>
     <member kind="function">
-      <type>RUAPI u_int32_t</type>
+      <type>RUAPI uint32_t</type>
       <name>ruMapSize</name>
       <anchorfile>group__map.html</anchorfile>
-      <anchor>gae7f245035a146ef206b48fc33772e609</anchor>
+      <anchor>ga80853f0b20cccf61661b809304029cf5</anchor>
       <arglist>(ruMap rm, int32_t *code)</arglist>
+    </member>
+  </compound>
+  <compound kind="group">
+    <name>set</name>
+    <title>Hash Set</title>
+    <filename>group__set.html</filename>
+    <member kind="define">
+      <type>#define</type>
+      <name>ruSetPut</name>
+      <anchorfile>group__set.html</anchorfile>
+      <anchor>gaca9e36c0372c7f4ebf7a0d073ce09530</anchor>
+      <arglist>(rs, item)</arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>ruSetRemove</name>
+      <anchorfile>group__set.html</anchorfile>
+      <anchor>ga9a4873571e91bbc91d6da8accd739917</anchor>
+      <arglist>(rs, item)</arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>ruSetHas</name>
+      <anchorfile>group__set.html</anchorfile>
+      <anchor>gabd3f4fd671310f44ac6bc899866a909e</anchor>
+      <arglist>(rs, item, code)</arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>ruSetFirst</name>
+      <anchorfile>group__set.html</anchorfile>
+      <anchor>gab4d2404553a40aeb9600be8987a2db6c</anchor>
+      <arglist>(rs, item)</arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>ruSetNext</name>
+      <anchorfile>group__set.html</anchorfile>
+      <anchor>gaaa3f47575f70b0b9414892e735928a91</anchor>
+      <arglist>(rs, item)</arglist>
+    </member>
+    <member kind="typedef">
+      <type>void *</type>
+      <name>ruSet</name>
+      <anchorfile>group__set.html</anchorfile>
+      <anchor>gae7552ee2efa05ecb72079b00ccd81466</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI ruSet</type>
+      <name>ruSetNew</name>
+      <anchorfile>group__set.html</anchorfile>
+      <anchor>ga5152c782ff1c0b189f2c081ff8c862af</anchor>
+      <arglist>(ruHashFunc hash, ruMatchFunc match, ruFreeFunc itemFree, uint32_t expectedSize)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI ruSet</type>
+      <name>ruSetNewString</name>
+      <anchorfile>group__set.html</anchorfile>
+      <anchor>ga92741e23f4a38993fb8457734af3b74f</anchor>
+      <arglist>(ruFreeFunc itemFree)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI ruSet</type>
+      <name>ruSetFree</name>
+      <anchorfile>group__set.html</anchorfile>
+      <anchor>ga9959e3bb0312f3c6cc7724d2395ae21a</anchor>
+      <arglist>(ruSet rs)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI int32_t</type>
+      <name>ruSetPutItem</name>
+      <anchorfile>group__set.html</anchorfile>
+      <anchor>gacfe5e07efc9ccb09baebd6f1e6bc58da</anchor>
+      <arglist>(ruSet rs, ptr item)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI int32_t</type>
+      <name>ruSetRemoveItem</name>
+      <anchorfile>group__set.html</anchorfile>
+      <anchor>ga51c3e995357b9df42e98d9ec388f16ec</anchor>
+      <arglist>(ruMap rs, void *item)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI bool</type>
+      <name>ruSetHasItem</name>
+      <anchorfile>group__set.html</anchorfile>
+      <anchor>gab6a2f03665c7e591d85e37e4ddb5f321</anchor>
+      <arglist>(ruSet rs, void *item, int32_t *code)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI int32_t</type>
+      <name>ruSetFirstSet</name>
+      <anchorfile>group__set.html</anchorfile>
+      <anchor>ga3a03823a946407da763f03e96e6951ae</anchor>
+      <arglist>(ruSet rs, void **item)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI int32_t</type>
+      <name>ruSetNextSet</name>
+      <anchorfile>group__set.html</anchorfile>
+      <anchor>ga15682f6ff5de251efe3016d51bb407d0</anchor>
+      <arglist>(ruSet rs, void **item)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI int32_t</type>
+      <name>ruSetItemList</name>
+      <anchorfile>group__set.html</anchorfile>
+      <anchor>gaeab100699b313d914de89c0d82c299cc</anchor>
+      <arglist>(ruSet rs, ruList *items, ruCloneFunc copy, ruFreeFunc listFree)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI int32_t</type>
+      <name>ruSetRemoveAll</name>
+      <anchorfile>group__set.html</anchorfile>
+      <anchor>ga17efcfbea5d931d75b25a195174a4ecc</anchor>
+      <arglist>(ruSet rs)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI uint32_t</type>
+      <name>ruSetSize</name>
+      <anchorfile>group__set.html</anchorfile>
+      <anchor>ga0ed8990a61b254c49ebbd98c0a4753c7</anchor>
+      <arglist>(ruSet rs, int32_t *code)</arglist>
     </member>
   </compound>
   <compound kind="group">
@@ -1466,6 +1758,13 @@
     </member>
     <member kind="define">
       <type>#define</type>
+      <name>ruUtf8NoCase</name>
+      <anchorfile>group__string.html</anchorfile>
+      <anchor>ga40665d092306a601400f51c82b5f5346</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
       <name>ruUtf8Lower</name>
       <anchorfile>group__string.html</anchorfile>
       <anchor>ga3db4b4277d45b0557ad66500ea3faa38</anchor>
@@ -1478,12 +1777,51 @@
       <anchor>gac57f5894f870fd6f7380305811ec773d</anchor>
       <arglist></arglist>
     </member>
+    <member kind="enumeration">
+      <type></type>
+      <name>ruTrimSide</name>
+      <anchorfile>group__string.html</anchorfile>
+      <anchor>ga1f4eb9b5f88a1b4cb67b9c9414a1377d</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>ruTrimBoth</name>
+      <anchorfile>group__string.html</anchorfile>
+      <anchor>gga1f4eb9b5f88a1b4cb67b9c9414a1377da4d5a24d0b5b4cee3ad211730487a0e0e</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>ruTrimStart</name>
+      <anchorfile>group__string.html</anchorfile>
+      <anchor>gga1f4eb9b5f88a1b4cb67b9c9414a1377da35b70d5acd6a65d5849b0a42640b0808</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>ruTrimEnd</name>
+      <anchorfile>group__string.html</anchorfile>
+      <anchor>gga1f4eb9b5f88a1b4cb67b9c9414a1377da4a5ff93d4ab6a21bcc11735930bb999b</anchor>
+      <arglist></arglist>
+    </member>
     <member kind="function">
       <type>RUAPI char *</type>
       <name>ruUtf8CaseNormalize</name>
       <anchorfile>group__string.html</anchorfile>
       <anchor>ga5618cc6aab057d1af3254e05a5127ace</anchor>
       <arglist>(const char *instr, int32_t normMode, int32_t caseMode)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI alloc_chars</type>
+      <name>ruStrFromNfd</name>
+      <anchorfile>group__string.html</anchorfile>
+      <anchor>gae99bd2511930a6b56942af01a0988557</anchor>
+      <arglist>(trans_chars instr)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI alloc_chars</type>
+      <name>ruStrToNfd</name>
+      <anchorfile>group__string.html</anchorfile>
+      <anchor>gacb4048b4c5656829311166d9d5f58a3c</anchor>
+      <arglist>(trans_chars instr)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI void</type>
@@ -1493,74 +1831,123 @@
       <arglist>(char *string, char search, char replace)</arglist>
     </member>
     <member kind="function">
-      <type>RUAPI int32_t</type>
-      <name>ruStrcmp</name>
+      <type>RUAPI alloc_chars</type>
+      <name>ruStrReplace</name>
       <anchorfile>group__string.html</anchorfile>
-      <anchor>ga6bfc96ae55637fdb4dcc9364f630f8fe</anchor>
-      <arglist>(const char *str1, const char *str2)</arglist>
+      <anchor>ga08fe1c4d77bd06c06ac50a32c2a5ae14</anchor>
+      <arglist>(trans_chars instr, trans_chars search, trans_chars replace)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI int32_t</type>
-      <name>ruStrcasecmp</name>
+      <name>ruStrCmp</name>
       <anchorfile>group__string.html</anchorfile>
-      <anchor>gaaad20d826d045c61abb5e708423c5ea3</anchor>
-      <arglist>(const char *str1, const char *str2)</arglist>
+      <anchor>gaf8c3433629ebca6c711a379ea72b70fe</anchor>
+      <arglist>(trans_chars str1, trans_chars str2)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI bool</type>
+      <name>ruStrEquals</name>
+      <anchorfile>group__string.html</anchorfile>
+      <anchor>ga3e2fbb5baaa755249855216fc8f00e53</anchor>
+      <arglist>(trans_chars str1, trans_chars str2)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI bool</type>
+      <name>ruStrNEquals</name>
+      <anchorfile>group__string.html</anchorfile>
+      <anchor>gae9a59f040a02565995096cbf36afa041</anchor>
+      <arglist>(trans_chars str1, rusize s1len, trans_chars str2)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI int32_t</type>
+      <name>ruStrCaseCmp</name>
+      <anchorfile>group__string.html</anchorfile>
+      <anchor>ga2538deeaef8c7fd41e49cd812729405c</anchor>
+      <arglist>(trans_chars str1, trans_chars str2)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI bool</type>
+      <name>ruStrCaseEquals</name>
+      <anchorfile>group__string.html</anchorfile>
+      <anchor>ga080f9ff044104c9acc0e78d13e012b4e</anchor>
+      <arglist>(trans_chars str1, trans_chars str2)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI bool</type>
       <name>ruStrStartsWith</name>
       <anchorfile>group__string.html</anchorfile>
-      <anchor>ga9355e81bbc66654d086d59bdb65cd604</anchor>
-      <arglist>(const char *str, const char *prefix, int32_t *code)</arglist>
+      <anchor>ga433ae2cd0e78e3fd3420f44be56f65b6</anchor>
+      <arglist>(trans_chars str, trans_chars prefix, int32_t *code)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI bool</type>
+      <name>ruStrCaseStartsWith</name>
+      <anchorfile>group__string.html</anchorfile>
+      <anchor>ga9607e1b7ca1bb13fbc7e8e5d4977d6dd</anchor>
+      <arglist>(trans_chars str, trans_chars prefix, int32_t *code)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI bool</type>
       <name>ruStrEndsWith</name>
       <anchorfile>group__string.html</anchorfile>
-      <anchor>gafecbe84249235a804db2aab4ec936b63</anchor>
-      <arglist>(const char *str, const char *suffix, int32_t *code)</arglist>
+      <anchor>ga5a22ba001c2d50fe0c5225e9a4a678a2</anchor>
+      <arglist>(trans_chars str, trans_chars suffix, int32_t *code)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI bool</type>
-      <name>ruStrEndsCaseWith</name>
+      <name>ruStrCaseEndsWith</name>
       <anchorfile>group__string.html</anchorfile>
-      <anchor>ga558c46b3f4e6e44dcbbe1cd47fbb3c29</anchor>
-      <arglist>(const char *str, const char *suffix, int32_t *code)</arglist>
+      <anchor>gabab41f441838fb278c5a4d44bbcbfd46</anchor>
+      <arglist>(trans_chars str, trans_chars suffix, int32_t *code)</arglist>
     </member>
     <member kind="function">
-      <type>RUAPI char *</type>
+      <type>RUAPI trans_chars</type>
+      <name>ruStrCaseStrLen</name>
+      <anchorfile>group__string.html</anchorfile>
+      <anchor>ga4717f67372cbb5d732775f2f41983e37</anchor>
+      <arglist>(trans_chars haystack, trans_chars needle, rusize len)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI trans_chars</type>
       <name>ruStrStrLen</name>
       <anchorfile>group__string.html</anchorfile>
-      <anchor>gad5274e886bf38df0ac0675f0753efa6c</anchor>
-      <arglist>(const char *haystack, const char *needle, rusize len)</arglist>
+      <anchor>ga2ae6e27059a437ad29a699f5ff4f5cac</anchor>
+      <arglist>(trans_chars haystack, trans_chars needle, rusize len)</arglist>
     </member>
     <member kind="function">
-      <type>RUAPI char *</type>
+      <type>RUAPI trans_chars</type>
       <name>ruStrStr</name>
       <anchorfile>group__string.html</anchorfile>
-      <anchor>ga4d37273205efbebfc894057e2a54839f</anchor>
-      <arglist>(const char *haystack, const char *needle)</arglist>
+      <anchor>ga702a3526b7fbc5354773879185819c60</anchor>
+      <arglist>(trans_chars haystack, trans_chars needle)</arglist>
     </member>
     <member kind="function">
-      <type>RUAPI char *</type>
-      <name>ruLastSubstrLen</name>
+      <type>RUAPI trans_chars</type>
+      <name>ruLastSubStrLen</name>
       <anchorfile>group__string.html</anchorfile>
-      <anchor>gab3d07bb4cd0e514534a479d637fe9375</anchor>
-      <arglist>(const char *haystack, const char *needle, rusize len)</arglist>
+      <anchor>ga5ab766d04763f885efa64087f8193504</anchor>
+      <arglist>(trans_chars haystack, trans_chars needle, rusize len)</arglist>
     </member>
     <member kind="function">
-      <type>RUAPI char *</type>
-      <name>ruLastSubstr</name>
+      <type>RUAPI trans_chars</type>
+      <name>ruLastSubStr</name>
       <anchorfile>group__string.html</anchorfile>
-      <anchor>gabf84afa80858cb26fb5fd0648185e4e8</anchor>
-      <arglist>(const char *haystack, const char *needle)</arglist>
+      <anchor>ga581337c92d1965478d330b050a41e5f4</anchor>
+      <arglist>(trans_chars haystack, trans_chars needle)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI ruList</type>
-      <name>ruStrsplit</name>
+      <name>ruStrNSplit</name>
       <anchorfile>group__string.html</anchorfile>
-      <anchor>ga837c4d29739e4baf89442f4e9fd6ca58</anchor>
-      <arglist>(const char *instr, const char *delim, int32_t maxCnt)</arglist>
+      <anchor>ga71cb977988cd498751cb012d65bda22c</anchor>
+      <arglist>(trans_chars instr, rusize inlen, trans_chars delim, int32_t maxCnt)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI ruList</type>
+      <name>ruStrSplit</name>
+      <anchorfile>group__string.html</anchorfile>
+      <anchor>ga34694b838688c90b72cb5a1ad50a79a9</anchor>
+      <arglist>(trans_chars instr, trans_chars delim, int32_t maxCnt)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI char</type>
@@ -1570,18 +1957,18 @@
       <arglist>(char in)</arglist>
     </member>
     <member kind="function">
-      <type>RUAPI char *</type>
+      <type>RUAPI alloc_chars</type>
       <name>ruAsciiToLower</name>
       <anchorfile>group__string.html</anchorfile>
-      <anchor>ga4662fca69acac8f44ed704ef0a25dfb4</anchor>
-      <arglist>(char *instr)</arglist>
+      <anchor>ga8f33fc35f1c6e0beae717ef06ec8625e</anchor>
+      <arglist>(trans_chars instr)</arglist>
     </member>
     <member kind="function">
-      <type>RUAPI char *</type>
+      <type>RUAPI alloc_chars</type>
       <name>ruAsciiNToLower</name>
       <anchorfile>group__string.html</anchorfile>
-      <anchor>gadcff737cc3aa383ca46c44a5cd745b96</anchor>
-      <arglist>(char *instr, rusize len)</arglist>
+      <anchor>ga35547041f39b88e4e5f77e1e3018a1f4</anchor>
+      <arglist>(trans_chars instr, rusize len)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI char</type>
@@ -1591,45 +1978,80 @@
       <arglist>(char in)</arglist>
     </member>
     <member kind="function">
-      <type>RUAPI char *</type>
+      <type>RUAPI alloc_chars</type>
       <name>ruAsciiToUpper</name>
       <anchorfile>group__string.html</anchorfile>
-      <anchor>ga1134e95af367533005a4b0cee4918735</anchor>
-      <arglist>(char *instr)</arglist>
+      <anchor>ga6dd19f08ad0f98b841cf0b7648475aa8</anchor>
+      <arglist>(trans_chars instr)</arglist>
     </member>
     <member kind="function">
-      <type>RUAPI char *</type>
+      <type>RUAPI alloc_chars</type>
       <name>ruAsciiNToUpper</name>
       <anchorfile>group__string.html</anchorfile>
-      <anchor>gadfb863e1aa1bd1c8a7dd072e75aa3d94</anchor>
-      <arglist>(char *instr, rusize len)</arglist>
+      <anchor>gaa00e586d44f2b85b9077f29f2ad97794</anchor>
+      <arglist>(trans_chars instr, rusize len)</arglist>
     </member>
     <member kind="function">
-      <type>RUAPI char *</type>
+      <type>RUAPI alloc_chars</type>
       <name>ruUtf8ToLower</name>
       <anchorfile>group__string.html</anchorfile>
-      <anchor>ga70c3b427727d7949f148be67fa7225b8</anchor>
-      <arglist>(const char *instr)</arglist>
+      <anchor>ga6b96ca3b0c9644b84eec7f80361f904b</anchor>
+      <arglist>(trans_chars instr)</arglist>
     </member>
     <member kind="function">
-      <type>RUAPI char *</type>
+      <type>RUAPI alloc_chars</type>
       <name>ruUtf8ToUpper</name>
       <anchorfile>group__string.html</anchorfile>
-      <anchor>ga736095869cdda732f5704ce657ee85ce</anchor>
-      <arglist>(const char *instr)</arglist>
+      <anchor>ga4e4c57837044aa39cda523770373ddee</anchor>
+      <arglist>(trans_chars instr)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI alloc_chars</type>
+      <name>ruStrFromNUtf16</name>
+      <anchorfile>group__string.html</anchorfile>
+      <anchor>gae17294d8e290f1656e32835b10f51f06</anchor>
+      <arglist>(trans_uni unistr, int32_t bytelen)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI alloc_chars</type>
+      <name>ruStrFromUtf16</name>
+      <anchorfile>group__string.html</anchorfile>
+      <anchor>ga16107e273f2737161cb0dae2aa6375bc</anchor>
+      <arglist>(trans_uni unistr)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI alloc_uni</type>
+      <name>ruStrNToUtf16</name>
+      <anchorfile>group__string.html</anchorfile>
+      <anchor>ga04c1b9410f8e6b30335c020e7509060c</anchor>
+      <arglist>(trans_chars str, int32_t bytelen)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI alloc_uni</type>
+      <name>ruStrToUtf16</name>
+      <anchorfile>group__string.html</anchorfile>
+      <anchor>gafaf4b6b047bdac6169dce9671e44b219</anchor>
+      <arglist>(trans_chars str)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI char *</type>
-      <name>ruStrdup</name>
+      <name>ruStrDup</name>
       <anchorfile>group__string.html</anchorfile>
-      <anchor>gaad01659abccce6ab4d9f9defced8cb0b</anchor>
+      <anchor>ga337c8eba8887cba279a13dce4d59c7b0</anchor>
       <arglist>(const char *str)</arglist>
     </member>
     <member kind="function">
-      <type>RUAPI char *</type>
-      <name>ruStrndup</name>
+      <type>RUAPI rusize</type>
+      <name>ruStrLen</name>
       <anchorfile>group__string.html</anchorfile>
-      <anchor>gafe5a69e0a362bf5019628738c462c059</anchor>
+      <anchor>gae6486802d2223a0178fbe4b60f1192fe</anchor>
+      <arglist>(trans_chars str)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI char *</type>
+      <name>ruStrNDup</name>
+      <anchorfile>group__string.html</anchorfile>
+      <anchor>gaa7b86a3217edaba9202710d76e142842</anchor>
       <arglist>(const char *str, rusize len)</arglist>
     </member>
     <member kind="function">
@@ -1647,25 +2069,88 @@
       <arglist>(const char *format,...)</arglist>
     </member>
     <member kind="function">
-      <type>RUAPI int64_t</type>
-      <name>ruStrToll</name>
+      <type>RUAPI int32_t</type>
+      <name>ruStrParseInt64</name>
       <anchorfile>group__string.html</anchorfile>
-      <anchor>gab1bd1770a3b7d2485c0cb5d31d995ea9</anchor>
-      <arglist>(const char *instr, char **endptr, int base)</arglist>
+      <anchor>ga7e64fd093ac04b3a5d981894faeee746</anchor>
+      <arglist>(trans_chars str, perm_chars *endptr, uint32_t base, int64_t *num)</arglist>
     </member>
     <member kind="function">
-      <type>RUAPI char *</type>
+      <type>RUAPI int64_t</type>
+      <name>ruStrToInt64</name>
+      <anchorfile>group__string.html</anchorfile>
+      <anchor>ga4e55be57400b2d05ddb2f444c746e5cb</anchor>
+      <arglist>(trans_chars str)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI int32_t</type>
+      <name>ruStrParseLong</name>
+      <anchorfile>group__string.html</anchorfile>
+      <anchor>ga6e95ab22909cd73d93c47270bedc0053</anchor>
+      <arglist>(trans_chars str, perm_chars *endptr, uint32_t base, long *num)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI long</type>
+      <name>ruStrToLong</name>
+      <anchorfile>group__string.html</anchorfile>
+      <anchor>ga29383f55a77054166e1ed9f2f4abb2be</anchor>
+      <arglist>(trans_chars str)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI int32_t</type>
+      <name>ruStrParseInt</name>
+      <anchorfile>group__string.html</anchorfile>
+      <anchor>ga6a5fe3244fd42e0be9bd1fb70cb5bdcf</anchor>
+      <arglist>(trans_chars str, perm_chars *endptr, uint32_t base, int32_t *num)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI int32_t</type>
+      <name>ruStrToInt</name>
+      <anchorfile>group__string.html</anchorfile>
+      <anchor>gad2a5254547aafccfdafe768d5422785f</anchor>
+      <arglist>(trans_chars str)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI bool</type>
+      <name>ruStrHasChar</name>
+      <anchorfile>group__string.html</anchorfile>
+      <anchor>ga7c492d4d6fd91aa66e514c11a5e8c083</anchor>
+      <arglist>(trans_chars haystack, char needle)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI perm_chars</type>
+      <name>ruStrStrip</name>
+      <anchorfile>group__string.html</anchorfile>
+      <anchor>ga38b87e895b58b7f3a2c4f7ee733766cc</anchor>
+      <arglist>(perm_chars instr, trans_chars unwanted, alloc_chars *newstr)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI perm_chars</type>
       <name>ruStrTrim</name>
       <anchorfile>group__string.html</anchorfile>
-      <anchor>gac1a4b2248c4858724ebbb61c77ae1df7</anchor>
-      <arglist>(char *instr)</arglist>
+      <anchor>ga258258f27f95aebd563a5a440f84cd79</anchor>
+      <arglist>(perm_chars instr, trans_chars unwanted, enum ruTrimSide ends, alloc_chars *newstr)</arglist>
     </member>
     <member kind="function">
-      <type>RUAPI void</type>
-      <name>ruStripChars</name>
+      <type>RUAPI trans_chars</type>
+      <name>ruStrTrimBounds</name>
       <anchorfile>group__string.html</anchorfile>
-      <anchor>ga16c4d5ce379e0ed2ac5f70dd43215a53</anchor>
-      <arglist>(char *instr, const char *chars)</arglist>
+      <anchor>ga03bf3ea34de08214815df2b1a1a3628a</anchor>
+      <arglist>(trans_chars inStart, rusize inLen, rusize *outLen)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI bool</type>
+      <name>ruStrFindKeyVal</name>
+      <anchorfile>group__string.html</anchorfile>
+      <anchor>ga7d513fb55d178072c12906fabfb75698</anchor>
+      <arglist>(trans_chars inStart, rusize inLen, trans_chars delim, trans_chars *keyStart, rusize *keyLen, trans_chars *valStart, rusize *valLen)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI bool</type>
+      <name>ruStrEmpty</name>
+      <anchorfile>group__string.html</anchorfile>
+      <anchor>ga5df8af06cf764fc696b3bfc0efc3b39c</anchor>
+      <arglist>(trans_chars str)</arglist>
     </member>
   </compound>
   <compound kind="group">
@@ -1699,6 +2184,13 @@
       <anchorfile>group__ru_string.html</anchorfile>
       <anchor>gad71a92239d506e7f33218175f20b859f</anchor>
       <arglist>(const char *format,...)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI int32_t</type>
+      <name>ruStringReset</name>
+      <anchorfile>group__ru_string.html</anchorfile>
+      <anchor>ga0a63deacf7d5394f3938e17b99e7d397</anchor>
+      <arglist>(ruString rs)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI ruString</type>
@@ -1821,11 +2313,53 @@
     <name>threading</name>
     <title>Threading Related</title>
     <filename>group__threading.html</filename>
+    <member kind="define">
+      <type>#define</type>
+      <name>ruCounterInc</name>
+      <anchorfile>group__threading.html</anchorfile>
+      <anchor>ga492be40dd95c10610c21289a393539f2</anchor>
+      <arglist>(counter, value)</arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>ruCounterRead</name>
+      <anchorfile>group__threading.html</anchorfile>
+      <anchor>ga5f9e0635ce4714e64afebc1e2ad56bd6</anchor>
+      <arglist>(counter)</arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>ruCountSet</name>
+      <anchorfile>group__threading.html</anchorfile>
+      <anchor>gaa34d27a2f63804d04f88054856ea5d20</anchor>
+      <arglist>(counter, value)</arglist>
+    </member>
+    <member kind="typedef">
+      <type>unsigned long</type>
+      <name>ru_tid</name>
+      <anchorfile>group__threading.html</anchorfile>
+      <anchor>gadaf55aee31fee401108c789338f5a5d0</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>pthread_t</type>
+      <name>ruThreadId</name>
+      <anchorfile>group__threading.html</anchorfile>
+      <anchor>gacc47be754ef522e477d51aedd1361301</anchor>
+      <arglist></arglist>
+    </member>
     <member kind="typedef">
       <type>void *</type>
       <name>ruThread</name>
       <anchorfile>group__threading.html</anchorfile>
       <anchor>gac7df455fe262f5fe1d6a40c48fb5a343</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>void *</type>
+      <name>ruCount</name>
+      <anchorfile>group__threading.html</anchorfile>
+      <anchor>ga938ce40d266424abe35f3a21705d829e</anchor>
       <arglist></arglist>
     </member>
     <member kind="typedef">
@@ -1843,18 +2377,18 @@
       <arglist></arglist>
     </member>
     <member kind="function">
-      <type>RUAPI long int</type>
+      <type>RUAPI ru_tid</type>
       <name>ruThreadGetId</name>
       <anchorfile>group__threading.html</anchorfile>
-      <anchor>gae34bde16956fcf4c649a830d921d2033</anchor>
+      <anchor>ga6966399aea06d9be87db2004b5b624d2</anchor>
       <arglist>(void)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI void</type>
       <name>ruThreadSetName</name>
       <anchorfile>group__threading.html</anchorfile>
-      <anchor>ga3d29dcd418eaeb97399c4d6401fd2dd2</anchor>
-      <arglist>(const char *name)</arglist>
+      <anchor>ga9e6cbe26799920ac795bc967c504ae9f</anchor>
+      <arglist>(trans_chars name)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI ruThread</type>
@@ -1865,10 +2399,10 @@
     </member>
     <member kind="function">
       <type>RUAPI ruThread</type>
-      <name>ruThreadFree</name>
+      <name>ruThreadCreateBg</name>
       <anchorfile>group__threading.html</anchorfile>
-      <anchor>ga056238fdc4af3084cf487b81379a4b0c</anchor>
-      <arglist>(ruThread tid)</arglist>
+      <anchor>ga435c7c75b1ecb5175a42b8010c9581fd</anchor>
+      <arglist>(ruStartFunc start, void *context)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI bool</type>
@@ -1876,6 +2410,20 @@
       <anchorfile>group__threading.html</anchorfile>
       <anchor>ga1a85ffdcb7817b11ef0279ddfcc80ee6</anchor>
       <arglist>(ruThread tid, int32_t *code)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI ruThreadId</type>
+      <name>ruThreadNativeId</name>
+      <anchorfile>group__threading.html</anchorfile>
+      <anchor>ga60572955d0909ffed16ce77a6c8e4058</anchor>
+      <arglist>(ruThread tid, int32_t *code)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI bool</type>
+      <name>ruThreadWait</name>
+      <anchorfile>group__threading.html</anchorfile>
+      <anchor>gac09b1c7af6581c4cdbbd8232f80a1e53</anchor>
+      <arglist>(ruThread tid, sec_t tosecs, void **exitVal)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI int</type>
@@ -1899,6 +2447,13 @@
       <arglist>(void)</arglist>
     </member>
     <member kind="function">
+      <type>RUAPI bool</type>
+      <name>ruMutexTryLock</name>
+      <anchorfile>group__threading.html</anchorfile>
+      <anchor>ga0856c60adc3b35d8a5eec3937ebcdb51</anchor>
+      <arglist>(ruMutex m)</arglist>
+    </member>
+    <member kind="function">
       <type>RUAPI void</type>
       <name>ruMutexLock</name>
       <anchorfile>group__threading.html</anchorfile>
@@ -1918,6 +2473,34 @@
       <anchorfile>group__threading.html</anchorfile>
       <anchor>gafa04ae8066591ed11d6494f80527cfa2</anchor>
       <arglist>(ruMutex m)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI ruCount</type>
+      <name>ruCounterNew</name>
+      <anchorfile>group__threading.html</anchorfile>
+      <anchor>gafc1d31eb0e26e2aae3ed53a1b38295b2</anchor>
+      <arglist>(int64_t initialCount)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI int64_t</type>
+      <name>ruCounterIncValue</name>
+      <anchorfile>group__threading.html</anchorfile>
+      <anchor>gadc7eb7e92f2f1b0f574f9a1d5779436a</anchor>
+      <arglist>(ruCount counter, int64_t value, int32_t *code)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI int64_t</type>
+      <name>ruCountSetValue</name>
+      <anchorfile>group__threading.html</anchorfile>
+      <anchor>ga3c1c5ad2c95c127a45b20cca74a8b9cc</anchor>
+      <arglist>(ruCount counter, int64_t value, int32_t *code)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI ruCount</type>
+      <name>ruCountFree</name>
+      <anchorfile>group__threading.html</anchorfile>
+      <anchor>ga1d4cb711bdf68899277b323cce866233</anchor>
+      <arglist>(ruCount counter)</arglist>
     </member>
   </compound>
   <compound kind="page">

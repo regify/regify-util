@@ -31,7 +31,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">regify utility
-   &#160;<span id="projectnumber">1.3.0-0</span>
+   &#160;<span id="projectnumber">2.0.0-0</span>
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -93,6 +93,7 @@ $(document).ready(function(){initNavTree('group__threading.html',''); initResiza
 
 <div class="header">
   <div class="summary">
+<a href="#define-members">Macros</a> &#124;
 <a href="#typedef-members">Typedefs</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
@@ -103,10 +104,25 @@ $(document).ready(function(){initNavTree('group__threading.html',''); initResiza
 <p>These functions abstract threading related aspects.  
 <a href="#details">More...</a></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
+Macros</h2></td></tr>
+<tr class="memitem:ga492be40dd95c10610c21289a393539f2"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__threading.html#ga492be40dd95c10610c21289a393539f2">ruCounterInc</a>(counter,  value)&#160;&#160;&#160;<a class="el" href="group__threading.html#gadc7eb7e92f2f1b0f574f9a1d5779436a">ruCounterIncValue</a>(counter, value, NULL)</td></tr>
+<tr class="separator:ga492be40dd95c10610c21289a393539f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga5f9e0635ce4714e64afebc1e2ad56bd6"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__threading.html#ga5f9e0635ce4714e64afebc1e2ad56bd6">ruCounterRead</a>(counter)&#160;&#160;&#160;<a class="el" href="group__threading.html#gadc7eb7e92f2f1b0f574f9a1d5779436a">ruCounterIncValue</a>(counter, 0, NULL)</td></tr>
+<tr class="separator:ga5f9e0635ce4714e64afebc1e2ad56bd6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaa34d27a2f63804d04f88054856ea5d20"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__threading.html#gaa34d27a2f63804d04f88054856ea5d20">ruCountSet</a>(counter,  value)&#160;&#160;&#160;<a class="el" href="group__threading.html#ga3c1c5ad2c95c127a45b20cca74a8b9cc">ruCountSetValue</a>(counter, value, NULL)</td></tr>
+<tr class="separator:gaa34d27a2f63804d04f88054856ea5d20"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
+<tr class="memitem:gadaf55aee31fee401108c789338f5a5d0"><td class="memItemLeft" align="right" valign="top">typedef unsigned long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__threading.html#gadaf55aee31fee401108c789338f5a5d0">ru_tid</a></td></tr>
+<tr class="separator:gadaf55aee31fee401108c789338f5a5d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gacc47be754ef522e477d51aedd1361301"><td class="memItemLeft" align="right" valign="top">typedef pthread_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__threading.html#gacc47be754ef522e477d51aedd1361301">ruThreadId</a></td></tr>
+<tr class="separator:gacc47be754ef522e477d51aedd1361301"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gac7df455fe262f5fe1d6a40c48fb5a343"><td class="memItemLeft" align="right" valign="top">typedef void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__threading.html#gac7df455fe262f5fe1d6a40c48fb5a343">ruThread</a></td></tr>
 <tr class="separator:gac7df455fe262f5fe1d6a40c48fb5a343"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga938ce40d266424abe35f3a21705d829e"><td class="memItemLeft" align="right" valign="top">typedef void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__threading.html#ga938ce40d266424abe35f3a21705d829e">ruCount</a></td></tr>
+<tr class="separator:ga938ce40d266424abe35f3a21705d829e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga9fb7315bef26c1ae9b399b5779ed230b"><td class="memItemLeft" align="right" valign="top">typedef void *(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__threading.html#ga9fb7315bef26c1ae9b399b5779ed230b">ruStartFunc</a>) (void *context)</td></tr>
 <tr class="separator:ga9fb7315bef26c1ae9b399b5779ed230b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gaa2f2224294aab80c5b5fdadf8c50a2de"><td class="memItemLeft" align="right" valign="top">typedef void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__threading.html#gaa2f2224294aab80c5b5fdadf8c50a2de">ruMutex</a></td></tr>
@@ -115,16 +131,22 @@ Typedefs</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:gae34bde16956fcf4c649a830d921d2033"><td class="memItemLeft" align="right" valign="top">RUAPI long int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__threading.html#gae34bde16956fcf4c649a830d921d2033">ruThreadGetId</a> (void)</td></tr>
-<tr class="separator:gae34bde16956fcf4c649a830d921d2033"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga3d29dcd418eaeb97399c4d6401fd2dd2"><td class="memItemLeft" align="right" valign="top">RUAPI void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__threading.html#ga3d29dcd418eaeb97399c4d6401fd2dd2">ruThreadSetName</a> (const char *name)</td></tr>
-<tr class="separator:ga3d29dcd418eaeb97399c4d6401fd2dd2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga6966399aea06d9be87db2004b5b624d2"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__threading.html#gadaf55aee31fee401108c789338f5a5d0">ru_tid</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__threading.html#ga6966399aea06d9be87db2004b5b624d2">ruThreadGetId</a> (void)</td></tr>
+<tr class="separator:ga6966399aea06d9be87db2004b5b624d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga9e6cbe26799920ac795bc967c504ae9f"><td class="memItemLeft" align="right" valign="top">RUAPI void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__threading.html#ga9e6cbe26799920ac795bc967c504ae9f">ruThreadSetName</a> (<a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> name)</td></tr>
+<tr class="separator:ga9e6cbe26799920ac795bc967c504ae9f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gabb9b39b7a1629a15dac89ba0a450ef13"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__threading.html#gac7df455fe262f5fe1d6a40c48fb5a343">ruThread</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__threading.html#gabb9b39b7a1629a15dac89ba0a450ef13">ruThreadCreate</a> (<a class="el" href="group__threading.html#ga9fb7315bef26c1ae9b399b5779ed230b">ruStartFunc</a> start, void *context)</td></tr>
 <tr class="separator:gabb9b39b7a1629a15dac89ba0a450ef13"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga056238fdc4af3084cf487b81379a4b0c"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__threading.html#gac7df455fe262f5fe1d6a40c48fb5a343">ruThread</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__threading.html#ga056238fdc4af3084cf487b81379a4b0c">ruThreadFree</a> (<a class="el" href="group__threading.html#gac7df455fe262f5fe1d6a40c48fb5a343">ruThread</a> tid)</td></tr>
-<tr class="separator:ga056238fdc4af3084cf487b81379a4b0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga435c7c75b1ecb5175a42b8010c9581fd"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__threading.html#gac7df455fe262f5fe1d6a40c48fb5a343">ruThread</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__threading.html#ga435c7c75b1ecb5175a42b8010c9581fd">ruThreadCreateBg</a> (<a class="el" href="group__threading.html#ga9fb7315bef26c1ae9b399b5779ed230b">ruStartFunc</a> start, void *context)</td></tr>
+<tr class="memdesc:ga435c7c75b1ecb5175a42b8010c9581fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a new thread with background priority.  <a href="group__threading.html#ga435c7c75b1ecb5175a42b8010c9581fd">More...</a><br /></td></tr>
+<tr class="separator:ga435c7c75b1ecb5175a42b8010c9581fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga1a85ffdcb7817b11ef0279ddfcc80ee6"><td class="memItemLeft" align="right" valign="top">RUAPI bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__threading.html#ga1a85ffdcb7817b11ef0279ddfcc80ee6">ruThreadFinished</a> (<a class="el" href="group__threading.html#gac7df455fe262f5fe1d6a40c48fb5a343">ruThread</a> tid, int32_t *code)</td></tr>
+<tr class="memdesc:ga1a85ffdcb7817b11ef0279ddfcc80ee6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether thraed has finished and is joinable.  <a href="group__threading.html#ga1a85ffdcb7817b11ef0279ddfcc80ee6">More...</a><br /></td></tr>
 <tr class="separator:ga1a85ffdcb7817b11ef0279ddfcc80ee6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga60572955d0909ffed16ce77a6c8e4058"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__threading.html#gacc47be754ef522e477d51aedd1361301">ruThreadId</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__threading.html#ga60572955d0909ffed16ce77a6c8e4058">ruThreadNativeId</a> (<a class="el" href="group__threading.html#gac7df455fe262f5fe1d6a40c48fb5a343">ruThread</a> tid, int32_t *code)</td></tr>
+<tr class="separator:ga60572955d0909ffed16ce77a6c8e4058"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gac09b1c7af6581c4cdbbd8232f80a1e53"><td class="memItemLeft" align="right" valign="top">RUAPI bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__threading.html#gac09b1c7af6581c4cdbbd8232f80a1e53">ruThreadWait</a> (<a class="el" href="group__threading.html#gac7df455fe262f5fe1d6a40c48fb5a343">ruThread</a> tid, <a class="el" href="group__misc.html#ga8573cc8637a470b127a19d54b0e94cb9">sec_t</a> tosecs, void **exitVal)</td></tr>
+<tr class="separator:gac09b1c7af6581c4cdbbd8232f80a1e53"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gad6e96ffbf89103bede5fbd2274cadac4"><td class="memItemLeft" align="right" valign="top">RUAPI int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__threading.html#gad6e96ffbf89103bede5fbd2274cadac4">ruThreadJoin</a> (<a class="el" href="group__threading.html#gac7df455fe262f5fe1d6a40c48fb5a343">ruThread</a> tid, void **exitVal)</td></tr>
 <tr class="separator:gad6e96ffbf89103bede5fbd2274cadac4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga7f548388deccb5a3e695a8b335684a6c"><td class="memItemLeft" align="right" valign="top">RUAPI int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__threading.html#ga7f548388deccb5a3e695a8b335684a6c">ruThreadKill</a> (<a class="el" href="group__threading.html#gac7df455fe262f5fe1d6a40c48fb5a343">ruThread</a> tid)</td></tr>
@@ -132,6 +154,9 @@ Functions</h2></td></tr>
 <tr class="memitem:gac8236a5017586c076516fb17dae0809c"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__threading.html#gaa2f2224294aab80c5b5fdadf8c50a2de">ruMutex</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__threading.html#gac8236a5017586c076516fb17dae0809c">ruMutexInit</a> (void)</td></tr>
 <tr class="memdesc:gac8236a5017586c076516fb17dae0809c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize a new <a class="el" href="group__threading.html#gaa2f2224294aab80c5b5fdadf8c50a2de">ruMutex</a>.  <a href="group__threading.html#gac8236a5017586c076516fb17dae0809c">More...</a><br /></td></tr>
 <tr class="separator:gac8236a5017586c076516fb17dae0809c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga0856c60adc3b35d8a5eec3937ebcdb51"><td class="memItemLeft" align="right" valign="top">RUAPI bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__threading.html#ga0856c60adc3b35d8a5eec3937ebcdb51">ruMutexTryLock</a> (<a class="el" href="group__threading.html#gaa2f2224294aab80c5b5fdadf8c50a2de">ruMutex</a> m)</td></tr>
+<tr class="memdesc:ga0856c60adc3b35d8a5eec3937ebcdb51"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tries to aquire a lock for the given <a class="el" href="group__threading.html#gaa2f2224294aab80c5b5fdadf8c50a2de">ruMutex</a> without blocking.  <a href="group__threading.html#ga0856c60adc3b35d8a5eec3937ebcdb51">More...</a><br /></td></tr>
+<tr class="separator:ga0856c60adc3b35d8a5eec3937ebcdb51"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga1ba4661b6f200a9a01182c062b5fc463"><td class="memItemLeft" align="right" valign="top">RUAPI void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__threading.html#ga1ba4661b6f200a9a01182c062b5fc463">ruMutexLock</a> (<a class="el" href="group__threading.html#gaa2f2224294aab80c5b5fdadf8c50a2de">ruMutex</a> m)</td></tr>
 <tr class="memdesc:ga1ba4661b6f200a9a01182c062b5fc463"><td class="mdescLeft">&#160;</td><td class="mdescRight">Aquire a lock for the given <a class="el" href="group__threading.html#gaa2f2224294aab80c5b5fdadf8c50a2de">ruMutex</a> blocking until it is given.  <a href="group__threading.html#ga1ba4661b6f200a9a01182c062b5fc463">More...</a><br /></td></tr>
 <tr class="separator:ga1ba4661b6f200a9a01182c062b5fc463"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -141,10 +166,130 @@ Functions</h2></td></tr>
 <tr class="memitem:gafa04ae8066591ed11d6494f80527cfa2"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__threading.html#gaa2f2224294aab80c5b5fdadf8c50a2de">ruMutex</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__threading.html#gafa04ae8066591ed11d6494f80527cfa2">ruMutexFree</a> (<a class="el" href="group__threading.html#gaa2f2224294aab80c5b5fdadf8c50a2de">ruMutex</a> m)</td></tr>
 <tr class="memdesc:gafa04ae8066591ed11d6494f80527cfa2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Free up given <a class="el" href="group__threading.html#gaa2f2224294aab80c5b5fdadf8c50a2de">ruMutex</a> object.  <a href="group__threading.html#gafa04ae8066591ed11d6494f80527cfa2">More...</a><br /></td></tr>
 <tr class="separator:gafa04ae8066591ed11d6494f80527cfa2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gafc1d31eb0e26e2aae3ed53a1b38295b2"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__threading.html#ga938ce40d266424abe35f3a21705d829e">ruCount</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__threading.html#gafc1d31eb0e26e2aae3ed53a1b38295b2">ruCounterNew</a> (int64_t initialCount)</td></tr>
+<tr class="memdesc:gafc1d31eb0e26e2aae3ed53a1b38295b2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a new thread safe counter initialized to given value.  <a href="group__threading.html#gafc1d31eb0e26e2aae3ed53a1b38295b2">More...</a><br /></td></tr>
+<tr class="separator:gafc1d31eb0e26e2aae3ed53a1b38295b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gadc7eb7e92f2f1b0f574f9a1d5779436a"><td class="memItemLeft" align="right" valign="top">RUAPI int64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__threading.html#gadc7eb7e92f2f1b0f574f9a1d5779436a">ruCounterIncValue</a> (<a class="el" href="group__threading.html#ga938ce40d266424abe35f3a21705d829e">ruCount</a> counter, int64_t value, int32_t *code)</td></tr>
+<tr class="memdesc:gadc7eb7e92f2f1b0f574f9a1d5779436a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Increments the counter by given value and returns the new value.  <a href="group__threading.html#gadc7eb7e92f2f1b0f574f9a1d5779436a">More...</a><br /></td></tr>
+<tr class="separator:gadc7eb7e92f2f1b0f574f9a1d5779436a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga3c1c5ad2c95c127a45b20cca74a8b9cc"><td class="memItemLeft" align="right" valign="top">RUAPI int64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__threading.html#ga3c1c5ad2c95c127a45b20cca74a8b9cc">ruCountSetValue</a> (<a class="el" href="group__threading.html#ga938ce40d266424abe35f3a21705d829e">ruCount</a> counter, int64_t value, int32_t *code)</td></tr>
+<tr class="memdesc:ga3c1c5ad2c95c127a45b20cca74a8b9cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the counter to given value and returns the previous value.  <a href="group__threading.html#ga3c1c5ad2c95c127a45b20cca74a8b9cc">More...</a><br /></td></tr>
+<tr class="separator:ga3c1c5ad2c95c127a45b20cca74a8b9cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga1d4cb711bdf68899277b323cce866233"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__threading.html#ga938ce40d266424abe35f3a21705d829e">ruCount</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__threading.html#ga1d4cb711bdf68899277b323cce866233">ruCountFree</a> (<a class="el" href="group__threading.html#ga938ce40d266424abe35f3a21705d829e">ruCount</a> counter)</td></tr>
+<tr class="memdesc:ga1d4cb711bdf68899277b323cce866233"><td class="mdescLeft">&#160;</td><td class="mdescRight">Frees given counter.  <a href="group__threading.html#ga1d4cb711bdf68899277b323cce866233">More...</a><br /></td></tr>
+<tr class="separator:ga1d4cb711bdf68899277b323cce866233"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>These functions abstract threading related aspects. </p>
+<h2 class="groupheader">Macro Definition Documentation</h2>
+<a id="ga492be40dd95c10610c21289a393539f2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga492be40dd95c10610c21289a393539f2">&#9670;&nbsp;</a></span>ruCounterInc</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ruCounterInc</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">counter, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">value&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td>&#160;&#160;&#160;<a class="el" href="group__threading.html#gadc7eb7e92f2f1b0f574f9a1d5779436a">ruCounterIncValue</a>(counter, value, NULL)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Calls <a class="el" href="group__threading.html#gadc7eb7e92f2f1b0f574f9a1d5779436a">ruCounterIncValue</a> without the code parameter </p>
+
+</div>
+</div>
+<a id="ga5f9e0635ce4714e64afebc1e2ad56bd6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga5f9e0635ce4714e64afebc1e2ad56bd6">&#9670;&nbsp;</a></span>ruCounterRead</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ruCounterRead</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">counter</td><td>)</td>
+          <td>&#160;&#160;&#160;<a class="el" href="group__threading.html#gadc7eb7e92f2f1b0f574f9a1d5779436a">ruCounterIncValue</a>(counter, 0, NULL)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Calls <a class="el" href="group__threading.html#gadc7eb7e92f2f1b0f574f9a1d5779436a">ruCounterIncValue</a> with 0 to simply return the current value </p>
+
+</div>
+</div>
+<a id="gaa34d27a2f63804d04f88054856ea5d20"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaa34d27a2f63804d04f88054856ea5d20">&#9670;&nbsp;</a></span>ruCountSet</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ruCountSet</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">counter, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">value&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td>&#160;&#160;&#160;<a class="el" href="group__threading.html#ga3c1c5ad2c95c127a45b20cca74a8b9cc">ruCountSetValue</a>(counter, value, NULL)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Calls <a class="el" href="group__threading.html#ga3c1c5ad2c95c127a45b20cca74a8b9cc">ruCountSetValue</a> without the code parameter </p>
+
+</div>
+</div>
 <h2 class="groupheader">Typedef Documentation</h2>
+<a id="gadaf55aee31fee401108c789338f5a5d0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gadaf55aee31fee401108c789338f5a5d0">&#9670;&nbsp;</a></span>ru_tid</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef unsigned long <a class="el" href="group__threading.html#gadaf55aee31fee401108c789338f5a5d0">ru_tid</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Thread Id type </p>
+
+</div>
+</div>
+<a id="ga938ce40d266424abe35f3a21705d829e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga938ce40d266424abe35f3a21705d829e">&#9670;&nbsp;</a></span>ruCount</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef void* <a class="el" href="group__threading.html#ga938ce40d266424abe35f3a21705d829e">ruCount</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Thread Safe Counter </p>
+
+</div>
+</div>
 <a id="gaa2f2224294aab80c5b5fdadf8c50a2de"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#gaa2f2224294aab80c5b5fdadf8c50a2de">&#9670;&nbsp;</a></span>ruMutex</h2>
 
@@ -191,7 +336,166 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="gacc47be754ef522e477d51aedd1361301"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gacc47be754ef522e477d51aedd1361301">&#9670;&nbsp;</a></span>ruThreadId</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef pthread_t <a class="el" href="group__threading.html#gacc47be754ef522e477d51aedd1361301">ruThreadId</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Native thread identifier </p>
+
+</div>
+</div>
 <h2 class="groupheader">Function Documentation</h2>
+<a id="gadc7eb7e92f2f1b0f574f9a1d5779436a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gadc7eb7e92f2f1b0f574f9a1d5779436a">&#9670;&nbsp;</a></span>ruCounterIncValue()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI int64_t ruCounterIncValue </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__threading.html#ga938ce40d266424abe35f3a21705d829e">ruCount</a>&#160;</td>
+          <td class="paramname"><em>counter</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int64_t&#160;</td>
+          <td class="paramname"><em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int32_t *&#160;</td>
+          <td class="paramname"><em>code</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Increments the counter by given value and returns the new value. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">counter</td><td>Counter in question </td></tr>
+    <tr><td class="paramname">value</td><td>value to increment counter by </td></tr>
+    <tr><td class="paramname">code</td><td>Optional where error code will be stored </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The new counter value </dd></dl>
+
+</div>
+</div>
+<a id="gafc1d31eb0e26e2aae3ed53a1b38295b2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gafc1d31eb0e26e2aae3ed53a1b38295b2">&#9670;&nbsp;</a></span>ruCounterNew()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI <a class="el" href="group__threading.html#ga938ce40d266424abe35f3a21705d829e">ruCount</a> ruCounterNew </td>
+          <td>(</td>
+          <td class="paramtype">int64_t&#160;</td>
+          <td class="paramname"><em>initialCount</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns a new thread safe counter initialized to given value. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">initialCount</td><td>Value to set at start </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>New <a class="el" href="group__threading.html#ga938ce40d266424abe35f3a21705d829e">ruCount</a> free with <a class="el" href="group__threading.html#ga1d4cb711bdf68899277b323cce866233">ruCountFree</a> </dd></dl>
+
+</div>
+</div>
+<a id="ga1d4cb711bdf68899277b323cce866233"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga1d4cb711bdf68899277b323cce866233">&#9670;&nbsp;</a></span>ruCountFree()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI <a class="el" href="group__threading.html#ga938ce40d266424abe35f3a21705d829e">ruCount</a> ruCountFree </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__threading.html#ga938ce40d266424abe35f3a21705d829e">ruCount</a>&#160;</td>
+          <td class="paramname"><em>counter</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Frees given counter. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">counter</td><td>Counter to free </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>NULL </dd></dl>
+
+</div>
+</div>
+<a id="ga3c1c5ad2c95c127a45b20cca74a8b9cc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga3c1c5ad2c95c127a45b20cca74a8b9cc">&#9670;&nbsp;</a></span>ruCountSetValue()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI int64_t ruCountSetValue </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__threading.html#ga938ce40d266424abe35f3a21705d829e">ruCount</a>&#160;</td>
+          <td class="paramname"><em>counter</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int64_t&#160;</td>
+          <td class="paramname"><em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int32_t *&#160;</td>
+          <td class="paramname"><em>code</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets the counter to given value and returns the previous value. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">counter</td><td>Counter in question </td></tr>
+    <tr><td class="paramname">value</td><td>new value to set counter to </td></tr>
+    <tr><td class="paramname">code</td><td>Optional where error code will be stored </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The previous counter value </dd></dl>
+
+</div>
+</div>
 <a id="gafa04ae8066591ed11d6494f80527cfa2"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#gafa04ae8066591ed11d6494f80527cfa2">&#9670;&nbsp;</a></span>ruMutexFree()</h2>
 
@@ -236,7 +540,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Initialize a new <a class="el" href="group__threading.html#gaa2f2224294aab80c5b5fdadf8c50a2de">ruMutex</a>. </p>
-<dl class="section return"><dt>Returns</dt><dd>The new mutex or NULL in which case call <a class="el" href="group__memory.html#gaea3d529fecc1bbad25f943943b6e9ef2">ruLastError</a> for details. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The new mutex or NULL in which case call ruLastError for details. </dd></dl>
 
 </div>
 </div>
@@ -263,6 +567,33 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="ga0856c60adc3b35d8a5eec3937ebcdb51"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga0856c60adc3b35d8a5eec3937ebcdb51">&#9670;&nbsp;</a></span>ruMutexTryLock()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI bool ruMutexTryLock </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__threading.html#gaa2f2224294aab80c5b5fdadf8c50a2de">ruMutex</a>&#160;</td>
+          <td class="paramname"><em>m</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Tries to aquire a lock for the given <a class="el" href="group__threading.html#gaa2f2224294aab80c5b5fdadf8c50a2de">ruMutex</a> without blocking. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">m</td><td>The mutex to lock. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>false if the mutex was locked. If true the acquired lock must be unlocked after use. </dd></dl>
 
 </div>
 </div>
@@ -324,7 +655,45 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>The thread id or 0 on failure in which case call <a class="el" href="group__memory.html#gaea3d529fecc1bbad25f943943b6e9ef2">ruLastError</a> for details. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The thread identifier or NULL on failure in which case call ruLastError for details. </dd></dl>
+
+</div>
+</div>
+<a id="ga435c7c75b1ecb5175a42b8010c9581fd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga435c7c75b1ecb5175a42b8010c9581fd">&#9670;&nbsp;</a></span>ruThreadCreateBg()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI <a class="el" href="group__threading.html#gac7df455fe262f5fe1d6a40c48fb5a343">ruThread</a> ruThreadCreateBg </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__threading.html#ga9fb7315bef26c1ae9b399b5779ed230b">ruStartFunc</a>&#160;</td>
+          <td class="paramname"><em>start</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>context</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Creates a new thread with background priority. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">start</td><td>The start function </td></tr>
+    <tr><td class="paramname">context</td><td>The start function's argument. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The thread identifier or NULL on failure in which case call ruLastError for details. </dd></dl>
 
 </div>
 </div>
@@ -354,41 +723,26 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-</div>
-</div>
-<a id="ga056238fdc4af3084cf487b81379a4b0c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga056238fdc4af3084cf487b81379a4b0c">&#9670;&nbsp;</a></span>ruThreadFree()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">RUAPI <a class="el" href="group__threading.html#gac7df455fe262f5fe1d6a40c48fb5a343">ruThread</a> ruThreadFree </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="group__threading.html#gac7df455fe262f5fe1d6a40c48fb5a343">ruThread</a>&#160;</td>
-          <td class="paramname"><em>tid</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
+<p>Whether thraed has finished and is joinable. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">tid</td><td>thread id to free </td></tr>
+    <tr><td class="paramname">tid</td><td>Thread id of thread to join. </td></tr>
+    <tr><td class="paramname">code</td><td>Optional where error code will be stored </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>NULL </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>true if joinable </dd></dl>
 
 </div>
 </div>
-<a id="gae34bde16956fcf4c649a830d921d2033"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gae34bde16956fcf4c649a830d921d2033">&#9670;&nbsp;</a></span>ruThreadGetId()</h2>
+<a id="ga6966399aea06d9be87db2004b5b624d2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga6966399aea06d9be87db2004b5b624d2">&#9670;&nbsp;</a></span>ruThreadGetId()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">RUAPI long int ruThreadGetId </td>
+          <td class="memname">RUAPI <a class="el" href="group__threading.html#gadaf55aee31fee401108c789338f5a5d0">ru_tid</a> ruThreadGetId </td>
           <td>(</td>
           <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
@@ -451,7 +805,8 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Sends a kill signal to the specified thread </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Sends a kill signal to the specified thread.</p>
+<p>NOTE: Currently not supported on Android </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">tid</td><td>Thread id to send kill signal to </td></tr>
   </table>
@@ -461,8 +816,36 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ga3d29dcd418eaeb97399c4d6401fd2dd2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga3d29dcd418eaeb97399c4d6401fd2dd2">&#9670;&nbsp;</a></span>ruThreadSetName()</h2>
+<a id="ga60572955d0909ffed16ce77a6c8e4058"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga60572955d0909ffed16ce77a6c8e4058">&#9670;&nbsp;</a></span>ruThreadNativeId()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI <a class="el" href="group__threading.html#gacc47be754ef522e477d51aedd1361301">ruThreadId</a> ruThreadNativeId </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__threading.html#gac7df455fe262f5fe1d6a40c48fb5a343">ruThread</a>&#160;</td>
+          <td class="paramname"><em>tid</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int32_t *&#160;</td>
+          <td class="paramname"><em>code</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ga9e6cbe26799920ac795bc967c504ae9f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga9e6cbe26799920ac795bc967c504ae9f">&#9670;&nbsp;</a></span>ruThreadSetName()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -470,13 +853,13 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">RUAPI void ruThreadSetName </td>
           <td>(</td>
-          <td class="paramtype">const char *&#160;</td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a>&#160;</td>
           <td class="paramname"><em>name</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Sets clear clear name of the running thread </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Sets or clear name of the running thread </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">name</td><td>New name to set or NULL to clear/free the exisiting name. </td></tr>
   </table>
@@ -485,12 +868,56 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="gac09b1c7af6581c4cdbbd8232f80a1e53"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gac09b1c7af6581c4cdbbd8232f80a1e53">&#9670;&nbsp;</a></span>ruThreadWait()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI bool ruThreadWait </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__threading.html#gac7df455fe262f5fe1d6a40c48fb5a343">ruThread</a>&#160;</td>
+          <td class="paramname"><em>tid</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga8573cc8637a470b127a19d54b0e94cb9">sec_t</a>&#160;</td>
+          <td class="paramname"><em>tosecs</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void **&#160;</td>
+          <td class="paramname"><em>exitVal</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Waits for given thread to terminate for tosecs seconds and kills it after that</p>
+<p>NOTE: Killing is currently not supported on Android. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">tid</td><td>Thread id of thread to join. </td></tr>
+    <tr><td class="paramname">tosecs</td><td>Number of seconds to wait before killing the thread. </td></tr>
+    <tr><td class="paramname">exitVal</td><td>Where the threads return value will be store if not NULL and thread wasn't killed. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>false if thread timed out </dd></dl>
+
+</div>
+</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Wed Nov 30 2022 14:27:38 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Tue May 9 2023 14:04:29 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

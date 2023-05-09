@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['iofunc_438',['ioFunc',['../group__cleaner.html#gae4bb48307fae422df9dfa3bbbab66cc1',1,'cleaner.h']]]
+  ['entryfilter_577',['entryFilter',['../group__io.html#ga96b2df183649f58bd746edc4a0c6161c',1,'io.h']]],
+  ['entrymgr_578',['entryMgr',['../group__io.html#gae838891e096d47726baeec65b792fd51',1,'io.h']]]
 ];
