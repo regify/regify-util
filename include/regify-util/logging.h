@@ -88,13 +88,13 @@ RUAPI void ruStdErrorLogger(perm_ptr udata, trans_chars msg);
  * @param userData Opaque custum user data that will be passed to the
  *                 \ref ruLogFunc implementation.
  */
-RUAPI void ruSetLogger(ruLogFunc logger, u_int32_t logLevel, perm_ptr userData);
+RUAPI void ruSetLogger(ruLogFunc logger, uint32_t logLevel, perm_ptr userData);
 
 /**
  * \brief Returns the currently set log level.
  * @return The currently set log level.
  */
-RUAPI u_int32_t ruGetLogLevel(void);
+RUAPI uint32_t ruGetLogLevel(void);
 
 /**
  * \brief Returns whether the given log level should log.
@@ -104,7 +104,7 @@ RUAPI u_int32_t ruGetLogLevel(void);
  * @param log_level Level to be considered.
  * @return Whether to log.
  */
-RUAPI bool ruDoesLog(u_int32_t log_level);
+RUAPI bool ruDoesLog(uint32_t log_level);
 
 /**
  * \cond noworry Internal
@@ -118,7 +118,7 @@ RUAPI bool ruDoesLog(u_int32_t log_level);
  * @param format The format specifier for the remaining arguments.
  * @param ... The remaining arguments that make up the log message.
  */
-RUAPI void ruDoLog(u_int32_t log_level, trans_chars filePath, trans_chars func,
+RUAPI void ruDoLog(uint32_t log_level, trans_chars filePath, trans_chars func,
                    int32_t line, trans_chars format, ...);
 
 /**
@@ -131,7 +131,7 @@ RUAPI void ruDoLog(u_int32_t log_level, trans_chars filePath, trans_chars func,
  * @param ... The remaining arguments that make up the log message.
  * @return The allocated log message to be freed by the caller after usage.
  */
-RUAPI char* ruMakeLogMsg(u_int32_t log_level, trans_chars file, trans_chars func,
+RUAPI char* ruMakeLogMsg(uint32_t log_level, trans_chars file, trans_chars func,
                    int32_t line, trans_chars format, ...);
 
 /**

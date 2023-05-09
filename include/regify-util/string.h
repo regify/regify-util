@@ -673,20 +673,6 @@ RUAPI bool ruStrFindKeyVal(trans_chars inStart, rusize inLen, trans_chars delim,
  */
 RUAPI bool ruStrEmpty(trans_chars str);
 
-/** @deprecated Use \ref ruStrCmp */
-#define ruStrcmp ruStrCmp;
-
-/** @deprecated Use \ref ruStrCaseCmp */
-#define ruStrcasecmp ruStrCaseCmp
-
-/** @deprecated Use \ref ruStrDup */
-#define ruStrdup ruStrDup
-
-/** @deprecated Use \ref ruStrNDup */
-#define ruStrndup ruStrNDup
-/** @deprecated Use \ref ruStrSplit */
-#define ruStrsplit ruStrSplit
-
 /**
  * @}
  */

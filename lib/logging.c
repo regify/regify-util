@@ -27,10 +27,10 @@
 
 /* log context */
 static ruLogFunc logger_ = NULL;
-static u_int32_t logLevel_ = 0;
+static uint32_t logLevel_ = 0;
 static perm_ptr userLogData_ = NULL;
 
-void ruSetLogger(ruLogFunc logger, u_int32_t logLevel, perm_ptr userData) {
+void ruSetLogger(ruLogFunc logger, uint32_t logLevel, perm_ptr userData) {
     logger_ = logger;
     logLevel_ = logLevel;
     userLogData_ = userData;
@@ -40,17 +40,17 @@ void ruStdErrorLogger(perm_ptr udata, trans_chars msg) {
     fputs(msg, stderr);
 }
 
-u_int32_t ruGetLogLevel(void) {
+uint32_t ruGetLogLevel(void) {
     if (!logger_) return RU_LOG_NONE;
     return logLevel_;
 }
 
-bool ruDoesLog(u_int32_t log_level) {
+bool ruDoesLog(uint32_t log_level) {
     if (!logger_ || !logLevel_ || !log_level) return false;
     return logLevel_ >= log_level;
 }
 
-static char* makeLogMsg(u_int32_t log_level, trans_chars filePath, trans_chars func,
+static char* makeLogMsg(uint32_t log_level, trans_chars filePath, trans_chars func,
                    int32_t line, trans_chars format, va_list args) {
     char *lv;
     if (log_level >= RU_LOG_DBUG)
@@ -136,7 +136,7 @@ static char* makeLogMsg(u_int32_t log_level, trans_chars filePath, trans_chars f
     return ret;
 }
 
-char* ruMakeLogMsg(u_int32_t log_level, trans_chars filePath, trans_chars func,
+char* ruMakeLogMsg(uint32_t log_level, trans_chars filePath, trans_chars func,
                    int32_t line, trans_chars format, ...) {
     static Mux* mux = NULL;
     if (!mux) mux = ruMuxInit();
@@ -149,7 +149,7 @@ char* ruMakeLogMsg(u_int32_t log_level, trans_chars filePath, trans_chars func,
     return out;
 }
 
-void ruDoLog(u_int32_t log_level, trans_chars filePath, trans_chars func,
+void ruDoLog(uint32_t log_level, trans_chars filePath, trans_chars func,
              int32_t line, trans_chars format, ...) {
     if (!ruDoesLog(log_level)) return;
     static Mux* mux = NULL;

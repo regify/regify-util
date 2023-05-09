@@ -753,7 +753,7 @@ static int remover(trans_chars fullPath, bool isDir, ptr ctx) {
     return RUE_OK;
 }
 
-static int32_t folderWalk(trans_chars folder, u_int32_t flags,
+static int32_t folderWalk(trans_chars folder, uint32_t flags,
                           entryFilter filter, entryMgr actor, ptr ctx) {
     // sanity checks
     if (!folder) return RUE_PARAMETER_NOT_SET;
@@ -941,7 +941,7 @@ alloc_chars fixSlashes(perm_chars* filePath) {
     return path;
 }
 
-RUAPI int32_t ruFilteredFolderWalk(trans_chars folder, u_int32_t flags,
+RUAPI int32_t ruFilteredFolderWalk(trans_chars folder, uint32_t flags,
                                    entryFilter filter, entryMgr actor, ptr ctx) {
     alloc_chars path = fixSlashes(&folder);
     int32_t ret = folderWalk(folder, flags, filter, actor, ctx);
@@ -949,7 +949,7 @@ RUAPI int32_t ruFilteredFolderWalk(trans_chars folder, u_int32_t flags,
     return ret;
 }
 
-RUAPI int32_t ruFolderWalk(trans_chars folder, u_int32_t flags, entryMgr actor, ptr ctx) {
+RUAPI int32_t ruFolderWalk(trans_chars folder, uint32_t flags, entryMgr actor, ptr ctx) {
     alloc_chars path = fixSlashes(&folder);
     int32_t ret = folderWalk(folder, flags, NULL, actor, ctx);
     ruFree(path);

@@ -88,7 +88,7 @@ START_TEST ( api ) {
     fail_unless(exp == ret, retText, test, exp, ret);
 
     exp = RUE_PARAMETER_NOT_SET;
-    u_int32_t sz = ruMapSize(NULL, &ret);
+    uint32_t sz = ruMapSize(NULL, &ret);
     fail_unless(exp == ret, retText, test, exp, ret);
     fail_unless(0 == sz, retText, test, 0, sz);
 
@@ -111,7 +111,7 @@ START_TEST ( run ) {
     fail_if(NULL == rs, retText, test, rs, NULL);
 
     exp = RUE_OK;
-    u_int32_t esz = 0, sz = ruSetSize(rs, &ret);
+    uint32_t esz = 0, sz = ruSetSize(rs, &ret);
     fail_unless(exp == ret, retText, test, exp, ret);
     fail_unless(esz == sz, retText, test, esz, sz);
 

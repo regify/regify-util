@@ -122,7 +122,7 @@ void ruClearError(void);
 #define RU_MAX_INT64	0x7fffffffffffffffL
 #define RU_MAX_UINT64	0xffffffffffffffffL
 
-// Type checking is done with the first element being uint64_t magic must be < u_int16_t
+// Type checking is done with the first element being uint64_t magic must be < uint16_t
 #define MagicMux            2301
 #define MagicString         2302
 #define MagicFileKvStore    2303
@@ -219,19 +219,19 @@ int32_t ListInsertAfter(List *list, ruListElmt rle, ptr data);
  */
 typedef struct Map_ {
     ru_uint type;
-    u_int32_t   buckets;
+    uint32_t   buckets;
     ruHashFunc hash;
     ruMatchFunc match;
     ruFreeFunc keyFree;
     ruFreeFunc valFree;
-    u_int32_t   size;
+    uint32_t   size;
     List   **table;
     // optional thread safety
     ruMutex mux;
     bool doQuit;    // flag to initiate map shutdown
     // iterator
     bool iterActive;
-    u_int32_t iterBucket;
+    uint32_t iterBucket;
     ListElmt *iterElmt;
 } Map;
 

@@ -104,7 +104,7 @@ START_TEST ( api ) {
     ret = ruMapGet(rm, NULL, (void**)&store);
     fail_unless(exp == ret, retText, test, exp, ret);
 
-    u_int32_t sz = ruMapSize(NULL, &ret);
+    uint32_t sz = ruMapSize(NULL, &ret);
     fail_unless(exp == ret, retText, test, exp, ret);
     fail_unless(0 == sz, retText, test, 0, sz);
 
@@ -128,7 +128,7 @@ START_TEST ( run ) {
     fail_if(NULL == rm, retText, test, rm, NULL);
 
     exp = RUE_OK;
-    u_int32_t esz = 0, sz = ruMapSize(rm, &ret);
+    uint32_t esz = 0, sz = ruMapSize(rm, &ret);
     fail_unless(exp == ret, retText, test, exp, ret);
     fail_unless(esz == sz, retText, test, esz, sz);
 

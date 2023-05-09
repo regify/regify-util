@@ -52,11 +52,11 @@ RUAPI bool ruIntMatch(trans_ptr s1, trans_ptr s2) {
 
 RUAPI ru_uint ruStrHash(trans_ptr key) {
     trans_chars ptr = key;
-    u_int32_t val = 0;
+    uint32_t val = 0;
     /* Hash the key by performing a number of bit operations on it. */
     while (*ptr != '\0') {
         val = (val << 4) + (*ptr);
-        u_int32_t tmp = (val & 0xf0000000);
+        uint32_t tmp = (val & 0xf0000000);
         if (tmp) {
             val = val ^ (tmp >> 24);
             val = val ^ tmp;
@@ -76,7 +76,7 @@ RUAPI ruMap ruMapNewString(ruFreeFunc keyFree, ruFreeFunc valFree) {
 
 RUAPI ruMap ruMapNew(ruHashFunc hash, ruMatchFunc match,
                      ruFreeFunc keyFree, ruFreeFunc valFree,
-                     u_int32_t expectedSize) {
+                     uint32_t expectedSize) {
     ruClearError();
     if (!hash || !match) return NULL;
 
@@ -91,7 +91,7 @@ RUAPI ruMap ruMapNew(ruHashFunc hash, ruMatchFunc match,
 
     /* Initialize the buckets. */
     mp->buckets = expectedSize;
-    for (u_int32_t i = 0; i < mp->buckets; i++) {
+    for (uint32_t i = 0; i < mp->buckets; i++) {
         mp->table[i] = ListNew(kvFree);
     }
 
@@ -108,7 +108,7 @@ RUAPI ruMap ruMapNew(ruHashFunc hash, ruMatchFunc match,
 
 RUAPI ruMap ruMapFree(ruMap rm) {
     ruClearError();
-    u_int32_t i;
+    uint32_t i;
     Map *mp = MapGet(rm, NULL);
     if(!mp) {
         return NULL;
@@ -414,7 +414,7 @@ RUAPI int32_t ruMapRemoveAll(ruMap rm) {
         return RUE_USER_ABORT;
     }
 
-    for (u_int32_t i = 0; i < mp->buckets; i++) {
+    for (uint32_t i = 0; i < mp->buckets; i++) {
         while (ruListSize(mp->table[i], NULL) > 0) {
             kv* item = ListRemove(mp->table[i], mp->table[i]->head->next, &ret);
             if (ret == RUE_OK) {
@@ -427,7 +427,7 @@ RUAPI int32_t ruMapRemoveAll(ruMap rm) {
     return RUE_OK;
 }
 
-RUAPI u_int32_t ruMapSize(ruMap rm, int32_t *code) {
+RUAPI uint32_t ruMapSize(ruMap rm, int32_t *code) {
     ruClearError();
     int32_t ret;
     Map *mp = MapGet(rm, &ret);
@@ -454,7 +454,7 @@ RUAPI ruSet ruSetNewString(ruFreeFunc itemFree) {
 }
 
 RUAPI ruSet ruSetNew(ruHashFunc hash, ruMatchFunc match,
-                     ruFreeFunc itemFree, u_int32_t expectedSize) {
+                     ruFreeFunc itemFree, uint32_t expectedSize) {
     return ruMapNew(hash, match, itemFree, NULL, expectedSize);
 }
 
@@ -491,7 +491,7 @@ RUAPI int32_t ruSetRemoveAll(ruSet rs) {
     return ruMapRemoveAll(rs);
 }
 
-RUAPI u_int32_t ruSetSize(ruSet rs, int32_t *code) {
+RUAPI uint32_t ruSetSize(ruSet rs, int32_t *code) {
     return ruMapSize(rs, code);
 }
 
