@@ -749,6 +749,12 @@ START_TEST ( util ) {
     fail_if(NULL == out2, retText, test, NULL, out2);
     ruFree(out2);
 
+    str ="DDP8 CDky Bh13";
+    str2 = ruStrStrip(str, " -/\\\r\n\t", &out2);
+    ck_assert_str_eq(str2, "DDP8CDkyBh13");
+    fail_if(NULL == out2, retText, test, NULL, out2);
+    ruFree(out2);
+
     test = "ruStrTrim";
     perm_chars trimd = NULL;
     trimd = ruStrTrim(NULL, NULL, 0, NULL);

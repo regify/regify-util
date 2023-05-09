@@ -491,7 +491,7 @@ RUAPI perm_chars ruStrStrip(perm_chars instr, trans_chars unwanted,
     alloc_bytes writeChar = (alloc_bytes)readChar;
 
     if (unwanted) {
-        for (readChar = firstChar; readChar < lastChar; readChar++) {
+        for (readChar = firstChar; readChar <= lastChar; readChar++) {
             trans_bytes haystack = (trans_bytes)unwanted;
             bool skip = false;
             while(*haystack) {
@@ -515,7 +515,7 @@ RUAPI perm_chars ruStrStrip(perm_chars instr, trans_chars unwanted,
         }
 
     } else {
-        for (readChar = firstChar; readChar < lastChar; readChar++) {
+        for (readChar = firstChar; readChar <= lastChar; readChar++) {
             if (isspace(*readChar)) {
                 // found
                 if (!new) {
@@ -531,7 +531,6 @@ RUAPI perm_chars ruStrStrip(perm_chars instr, trans_chars unwanted,
     }
 
     if (new) {
-        writeChar++;
         *writeChar = '\0';
         *newstr = (alloc_chars)new;
         return (perm_chars)new;
