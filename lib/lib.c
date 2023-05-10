@@ -181,6 +181,7 @@ RUAPI void ruSleepUs(usec_t microseconds) {
 }
 
 #ifndef _WIN32
+
 sec_t timeParse(trans_chars dateformat, trans_chars datestr, bool utc) {
     ruZeroedStruct(struct tm, t);
     if (!dateformat || !datestr) return -1;
@@ -188,7 +189,12 @@ sec_t timeParse(trans_chars dateformat, trans_chars datestr, bool utc) {
     if (utc) {
         return timegm(&t);
     } else {
+#ifdef __EMSCRIPTEN__
+        // TODO: find a better way
+        return 0;
+#else
         return timelocal(&t);
+#endif
     }
 }
 #endif
