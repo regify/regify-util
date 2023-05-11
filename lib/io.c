@@ -335,6 +335,7 @@ RUAPI FILE* ruFOpen(const char *filepath, const char *mode, int32_t* code) {
 }
 
 RUAPI int ruDiskFree(trans_chars path, uint64_t* total, uint64_t* avail) {
+#ifndef __EMSCRIPTEN__
     if (!path || (!total && !avail)) return RUE_PARAMETER_NOT_SET;
 #ifdef __linux__
     ruZeroedStruct(struct statfs64, sf);
@@ -351,6 +352,7 @@ RUAPI int ruDiskFree(trans_chars path, uint64_t* total, uint64_t* avail) {
     }
     if (total) *total = 0;
     if (avail) *avail = 0;
+#endif
     return RUE_CANT_OPEN_FILE;
 }
 
@@ -679,7 +681,7 @@ static int fileRename(const char* oldName, const char* newName, bool force) {
     ruFree(old);
     ruFree(new);
 #else
-#ifdef __linux__
+#if defined(__linux__) || defined(__EMSCRIPTEN__)
     // not sure about android
 #ifdef RENAME_NOREPLACE
     uint flags = force? 0 : RENAME_NOREPLACE;

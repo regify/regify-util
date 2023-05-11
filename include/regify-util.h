@@ -296,7 +296,11 @@ typedef void* ptr;
  * \brief A signed type for expressing seconds.
  * \ingroup misc
  */
+#ifdef __EMSCRIPTEN__
+typedef long long sec_t;
+#else
 typedef long sec_t;
+#endif
 
 /**
  * \brief A signed type for expressing milli seconds.

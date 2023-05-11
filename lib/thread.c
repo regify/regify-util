@@ -116,17 +116,17 @@ static bool threadWait(Thr* tc, long tosecs, void** exitVal) {
 }
 
 RUAPI ru_tid ruThreadGetId(void) {
-#ifdef __linux__
+#if defined(__EMSCRIPTEN__)
+    return 0;
+#elif defined(__linux__)
     return syscall(SYS_gettid);
-#else
-#ifdef _WIN32
+#elif defined(_WIN32)
     return GetCurrentThreadId();
 #else
     // darwin
     uint64_t tid;
     pthread_threadid_np(NULL, &tid);
     return tid;
-#endif
 #endif
 }
 
