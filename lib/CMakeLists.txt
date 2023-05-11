@@ -29,6 +29,9 @@ function (doLink lib shared)
     endif()
 
     target_link_libraries(${lib} ${icu_scope} ${icu_libs})
+    if(NAME_ARCH MATCHES "^mingw64")
+        target_link_libraries(${lib} ${icu_scope} atomic)
+    endif()
 
     if(WIN AND NOT MINGW)
         target_compile_definitions(${lib} PRIVATE _CRT_SECURE_NO_DEPRECATE)
