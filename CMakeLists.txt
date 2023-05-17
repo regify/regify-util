@@ -30,6 +30,8 @@ option(DOCS "Whether to generate the documentation" OFF)
 option(TESTING "Whether to build the tests" OFF)
 option(TGZSOURCE "Whether to generate a source tar file instead of zip" OFF)
 
+option(MSVC_STATIC_RUNTIME "Whether to link against the static runtime library" ON)
+
 # general
 cmake_minimum_required(VERSION 3.13)
 set(NAME regify-util)

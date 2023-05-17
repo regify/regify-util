@@ -46,13 +46,13 @@ On Windows we build MSVC and mingw binaries
 ==== Visual Studio
 Here cmake is the version that comes with Visual Studio.
 
-* win32
+* x86
 
  mkdir build
  cd build
  cmake -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=Release \
-    -DCMAKE_SYSTEM_NAME=Windows -DNAME_ARCH=win32 \
-    -DICU_PREFIX=../../win32 \
+    -DCMAKE_SYSTEM_NAME=Windows -DNAME_ARCH=x86 \
+    -DICU_PREFIX=../../x86 \
     -DCMAKE_VERBOSE_MAKEFILE=ON  \
     -DDOCS=ON -DINCLUDE_ICU=ON -DBUILD_SHARED_LIBS=ON ..
  nmake package
