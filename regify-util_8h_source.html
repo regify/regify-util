@@ -308,74 +308,80 @@ $(document).ready(function(){initNavTree('regify-util_8h_source.html',''); initR
 <div class="line"><a name="l00534"></a><span class="lineno">  534</span>&#160; </div>
 <div class="line"><a name="l00539"></a><span class="lineno">  539</span>&#160;RUAPI ru_pid ruProcessId(<span class="keywordtype">void</span>);</div>
 <div class="line"><a name="l00540"></a><span class="lineno">  540</span>&#160; </div>
-<div class="line"><a name="l00545"></a><span class="lineno">  545</span>&#160;RUAPI <a class="code" href="group__misc.html#ga972d4f4f858964bb2381d186ea96d88d">alloc_chars</a> ruGetLanguage(<span class="keywordtype">void</span>);</div>
-<div class="line"><a name="l00546"></a><span class="lineno">  546</span>&#160; </div>
-<div class="line"><a name="l00556"></a><span class="lineno">  556</span>&#160;RUAPI <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> ruSemiRandomNumber(<span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> max, <span class="keywordtype">long</span> offset);</div>
-<div class="line"><a name="l00557"></a><span class="lineno">  557</span>&#160; </div>
-<div class="line"><a name="l00570"></a><span class="lineno">  570</span>&#160;RUAPI <span class="keywordtype">int</span> ruVersionComp(<a class="code" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> ver1, <a class="code" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> ver2);</div>
-<div class="line"><a name="l00571"></a><span class="lineno">  571</span>&#160; </div>
-<div class="line"><a name="l00577"></a><span class="lineno">  577</span>&#160;RUAPI int32_t ruGetTimeVal(<a class="code" href="structru_time_val.html">ruTimeVal</a> *result);</div>
-<div class="line"><a name="l00578"></a><span class="lineno">  578</span>&#160; </div>
-<div class="line"><a name="l00583"></a><span class="lineno">  583</span>&#160;RUAPI <a class="code" href="group__misc.html#ga02db3ac43a5917535ca3cbc37ac72884">usec_t</a> ruTimeUs(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00544"></a><span class="lineno">  544</span>&#160;<span class="preprocessor">#define RU_NON_BLOCK (-1)</span></div>
+<div class="line"><a name="l00545"></a><span class="lineno">  545</span>&#160; </div>
+<div class="line"><a name="l00549"></a><span class="lineno">  549</span>&#160;<span class="preprocessor">#define RU_NO_TIMEOUT 0</span></div>
+<div class="line"><a name="l00550"></a><span class="lineno">  550</span>&#160; </div>
+<div class="line"><a name="l00566"></a><span class="lineno">  566</span>&#160;RUAPI int32_t ruRunProg(<span class="keyword">const</span> <span class="keywordtype">char</span> **argv, <a class="code" href="group__misc.html#ga8573cc8637a470b127a19d54b0e94cb9">sec_t</a> timeout);</div>
+<div class="line"><a name="l00567"></a><span class="lineno">  567</span>&#160; </div>
+<div class="line"><a name="l00572"></a><span class="lineno">  572</span>&#160;RUAPI <a class="code" href="group__misc.html#ga972d4f4f858964bb2381d186ea96d88d">alloc_chars</a> ruGetLanguage(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00573"></a><span class="lineno">  573</span>&#160; </div>
+<div class="line"><a name="l00583"></a><span class="lineno">  583</span>&#160;RUAPI <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> ruSemiRandomNumber(<span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> max, <span class="keywordtype">long</span> offset);</div>
 <div class="line"><a name="l00584"></a><span class="lineno">  584</span>&#160; </div>
-<div class="line"><a name="l00589"></a><span class="lineno">  589</span>&#160;RUAPI <a class="code" href="group__misc.html#gae416893e8160c5b7c6da3765e4707d5d">msec_t</a> ruTimeMs(<span class="keywordtype">void</span>);</div>
-<div class="line"><a name="l00590"></a><span class="lineno">  590</span>&#160; </div>
-<div class="line"><a name="l00595"></a><span class="lineno">  595</span>&#160;RUAPI <a class="code" href="group__misc.html#ga8573cc8637a470b127a19d54b0e94cb9">sec_t</a> ruTimeSec(<span class="keywordtype">void</span>);</div>
-<div class="line"><a name="l00596"></a><span class="lineno">  596</span>&#160; </div>
-<div class="line"><a name="l00602"></a><span class="lineno">  602</span>&#160;RUAPI <span class="keywordtype">bool</span> ruTimeUsEllapsed(<a class="code" href="group__misc.html#ga02db3ac43a5917535ca3cbc37ac72884">usec_t</a> stamp);</div>
-<div class="line"><a name="l00603"></a><span class="lineno">  603</span>&#160; </div>
-<div class="line"><a name="l00609"></a><span class="lineno">  609</span>&#160;RUAPI <span class="keywordtype">bool</span> ruTimeMsEllapsed(<a class="code" href="group__misc.html#gae416893e8160c5b7c6da3765e4707d5d">msec_t</a> stamp);</div>
-<div class="line"><a name="l00610"></a><span class="lineno">  610</span>&#160; </div>
-<div class="line"><a name="l00616"></a><span class="lineno">  616</span>&#160;RUAPI <span class="keywordtype">bool</span> ruTimeEllapsed(<a class="code" href="group__misc.html#ga8573cc8637a470b127a19d54b0e94cb9">sec_t</a> stamp);</div>
+<div class="line"><a name="l00597"></a><span class="lineno">  597</span>&#160;RUAPI <span class="keywordtype">int</span> ruVersionComp(<a class="code" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> ver1, <a class="code" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> ver2);</div>
+<div class="line"><a name="l00598"></a><span class="lineno">  598</span>&#160; </div>
+<div class="line"><a name="l00604"></a><span class="lineno">  604</span>&#160;RUAPI int32_t ruGetTimeVal(<a class="code" href="structru_time_val.html">ruTimeVal</a> *result);</div>
+<div class="line"><a name="l00605"></a><span class="lineno">  605</span>&#160; </div>
+<div class="line"><a name="l00610"></a><span class="lineno">  610</span>&#160;RUAPI <a class="code" href="group__misc.html#ga02db3ac43a5917535ca3cbc37ac72884">usec_t</a> ruTimeUs(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00611"></a><span class="lineno">  611</span>&#160; </div>
+<div class="line"><a name="l00616"></a><span class="lineno">  616</span>&#160;RUAPI <a class="code" href="group__misc.html#gae416893e8160c5b7c6da3765e4707d5d">msec_t</a> ruTimeMs(<span class="keywordtype">void</span>);</div>
 <div class="line"><a name="l00617"></a><span class="lineno">  617</span>&#160; </div>
-<div class="line"><a name="l00622"></a><span class="lineno">  622</span>&#160;RUAPI <span class="keywordtype">void</span> ruSleepUs(<a class="code" href="group__misc.html#ga02db3ac43a5917535ca3cbc37ac72884">usec_t</a> microseconds);</div>
+<div class="line"><a name="l00622"></a><span class="lineno">  622</span>&#160;RUAPI <a class="code" href="group__misc.html#ga8573cc8637a470b127a19d54b0e94cb9">sec_t</a> ruTimeSec(<span class="keywordtype">void</span>);</div>
 <div class="line"><a name="l00623"></a><span class="lineno">  623</span>&#160; </div>
-<div class="line"><a name="l00628"></a><span class="lineno">  628</span>&#160;RUAPI <span class="keywordtype">void</span> ruSleepMs(<a class="code" href="group__misc.html#gae416893e8160c5b7c6da3765e4707d5d">msec_t</a> milliseconds);</div>
-<div class="line"><a name="l00629"></a><span class="lineno">  629</span>&#160; </div>
-<div class="line"><a name="l00634"></a><span class="lineno">  634</span>&#160;<span class="preprocessor">#define ruSleep(secs) ruSleepMs(((msec_t)(secs))*1000)</span></div>
-<div class="line"><a name="l00635"></a><span class="lineno">  635</span>&#160; </div>
-<div class="line"><a name="l00642"></a><span class="lineno">  642</span>&#160;RUAPI <a class="code" href="group__misc.html#ga8573cc8637a470b127a19d54b0e94cb9">sec_t</a> ruTimeParse(<a class="code" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> dateformat, <a class="code" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> datestr);</div>
-<div class="line"><a name="l00643"></a><span class="lineno">  643</span>&#160; </div>
-<div class="line"><a name="l00650"></a><span class="lineno">  650</span>&#160;RUAPI <a class="code" href="group__misc.html#ga8573cc8637a470b127a19d54b0e94cb9">sec_t</a> ruUtcParse(<a class="code" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> dateformat, <a class="code" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> datestr);</div>
-<div class="line"><a name="l00651"></a><span class="lineno">  651</span>&#160; </div>
-<div class="line"><a name="l00660"></a><span class="lineno">  660</span>&#160;RUAPI <span class="keywordtype">int</span> ruTimeFormat(<a class="code" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> format, <a class="code" href="group__misc.html#gaaa0102d444a5dd14474b7951caae0459">rusize</a> len, <a class="code" href="group__misc.html#ga972d4f4f858964bb2381d186ea96d88d">alloc_chars</a> timeStr, <a class="code" href="group__misc.html#ga8573cc8637a470b127a19d54b0e94cb9">sec_t</a> timesecs);</div>
-<div class="line"><a name="l00661"></a><span class="lineno">  661</span>&#160; </div>
-<div class="line"><a name="l00670"></a><span class="lineno">  670</span>&#160;RUAPI <span class="keywordtype">int</span> ruUtcFormat(<a class="code" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> format, <a class="code" href="group__misc.html#gaaa0102d444a5dd14474b7951caae0459">rusize</a> len, <a class="code" href="group__misc.html#ga972d4f4f858964bb2381d186ea96d88d">alloc_chars</a> timeStr, <a class="code" href="group__misc.html#ga8573cc8637a470b127a19d54b0e94cb9">sec_t</a> timesecs);</div>
-<div class="line"><a name="l00671"></a><span class="lineno">  671</span>&#160; </div>
-<div class="line"><a name="l00677"></a><span class="lineno">  677</span>&#160;RUAPI <a class="code" href="group__misc.html#ga8573cc8637a470b127a19d54b0e94cb9">sec_t</a> ruTimeLocalToUtc(<a class="code" href="group__misc.html#ga8573cc8637a470b127a19d54b0e94cb9">sec_t</a> stamp);</div>
+<div class="line"><a name="l00629"></a><span class="lineno">  629</span>&#160;RUAPI <span class="keywordtype">bool</span> ruTimeUsEllapsed(<a class="code" href="group__misc.html#ga02db3ac43a5917535ca3cbc37ac72884">usec_t</a> stamp);</div>
+<div class="line"><a name="l00630"></a><span class="lineno">  630</span>&#160; </div>
+<div class="line"><a name="l00636"></a><span class="lineno">  636</span>&#160;RUAPI <span class="keywordtype">bool</span> ruTimeMsEllapsed(<a class="code" href="group__misc.html#gae416893e8160c5b7c6da3765e4707d5d">msec_t</a> stamp);</div>
+<div class="line"><a name="l00637"></a><span class="lineno">  637</span>&#160; </div>
+<div class="line"><a name="l00643"></a><span class="lineno">  643</span>&#160;RUAPI <span class="keywordtype">bool</span> ruTimeEllapsed(<a class="code" href="group__misc.html#ga8573cc8637a470b127a19d54b0e94cb9">sec_t</a> stamp);</div>
+<div class="line"><a name="l00644"></a><span class="lineno">  644</span>&#160; </div>
+<div class="line"><a name="l00649"></a><span class="lineno">  649</span>&#160;RUAPI <span class="keywordtype">void</span> ruSleepUs(<a class="code" href="group__misc.html#ga02db3ac43a5917535ca3cbc37ac72884">usec_t</a> microseconds);</div>
+<div class="line"><a name="l00650"></a><span class="lineno">  650</span>&#160; </div>
+<div class="line"><a name="l00655"></a><span class="lineno">  655</span>&#160;RUAPI <span class="keywordtype">void</span> ruSleepMs(<a class="code" href="group__misc.html#gae416893e8160c5b7c6da3765e4707d5d">msec_t</a> milliseconds);</div>
+<div class="line"><a name="l00656"></a><span class="lineno">  656</span>&#160; </div>
+<div class="line"><a name="l00661"></a><span class="lineno">  661</span>&#160;<span class="preprocessor">#define ruSleep(secs) ruSleepMs(((msec_t)(secs))*1000)</span></div>
+<div class="line"><a name="l00662"></a><span class="lineno">  662</span>&#160; </div>
+<div class="line"><a name="l00669"></a><span class="lineno">  669</span>&#160;RUAPI <a class="code" href="group__misc.html#ga8573cc8637a470b127a19d54b0e94cb9">sec_t</a> ruTimeParse(<a class="code" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> dateformat, <a class="code" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> datestr);</div>
+<div class="line"><a name="l00670"></a><span class="lineno">  670</span>&#160; </div>
+<div class="line"><a name="l00677"></a><span class="lineno">  677</span>&#160;RUAPI <a class="code" href="group__misc.html#ga8573cc8637a470b127a19d54b0e94cb9">sec_t</a> ruUtcParse(<a class="code" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> dateformat, <a class="code" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> datestr);</div>
 <div class="line"><a name="l00678"></a><span class="lineno">  678</span>&#160; </div>
-<div class="line"><a name="l00684"></a><span class="lineno">  684</span>&#160;RUAPI <a class="code" href="group__misc.html#ga8573cc8637a470b127a19d54b0e94cb9">sec_t</a> ruTimeUtcToLocal(<a class="code" href="group__misc.html#ga8573cc8637a470b127a19d54b0e94cb9">sec_t</a> stamp);</div>
-<div class="line"><a name="l00685"></a><span class="lineno">  685</span>&#160; </div>
-<div class="line"><a name="l00691"></a><span class="lineno">  691</span>&#160;<span class="comment">/*</span></div>
-<div class="line"><a name="l00692"></a><span class="lineno">  692</span>&#160;<span class="comment"> * Some convenience Macros</span></div>
-<div class="line"><a name="l00693"></a><span class="lineno">  693</span>&#160;<span class="comment"> */</span></div>
-<div class="line"><a name="l00694"></a><span class="lineno">  694</span>&#160; </div>
-<div class="line"><a name="l00695"></a><span class="lineno">  695</span>&#160;<span class="comment">// the ptr &lt; (void*)0xffff is feeble attempt at address validation</span></div>
-<div class="line"><a name="l00696"></a><span class="lineno">  696</span>&#160;<span class="preprocessor">#define ruMakeTypeGetter(ctype, magic) \</span></div>
-<div class="line"><a name="l00697"></a><span class="lineno">  697</span>&#160;<span class="preprocessor">ctype* ctype ## Get(void* ptr, int32_t* code) { \</span></div>
-<div class="line"><a name="l00698"></a><span class="lineno">  698</span>&#160;<span class="preprocessor">    ctype* ret = (ctype*) ptr; \</span></div>
-<div class="line"><a name="l00699"></a><span class="lineno">  699</span>&#160;<span class="preprocessor">    if (!ptr) { \</span></div>
-<div class="line"><a name="l00700"></a><span class="lineno">  700</span>&#160;<span class="preprocessor">        ruRetWithCode(code, RUE_PARAMETER_NOT_SET, NULL); \</span></div>
-<div class="line"><a name="l00701"></a><span class="lineno">  701</span>&#160;<span class="preprocessor">    } \</span></div>
-<div class="line"><a name="l00702"></a><span class="lineno">  702</span>&#160;<span class="preprocessor">    if (ptr &lt; (void*)0xffff || magic != ret-&gt;type) { \</span></div>
-<div class="line"><a name="l00703"></a><span class="lineno">  703</span>&#160;<span class="preprocessor">        ruRetWithCode(code, RUE_INVALID_PARAMETER, NULL); \</span></div>
-<div class="line"><a name="l00704"></a><span class="lineno">  704</span>&#160;<span class="preprocessor">    } \</span></div>
-<div class="line"><a name="l00705"></a><span class="lineno">  705</span>&#160;<span class="preprocessor">    ruRetWithCode(code, RUE_OK, ret); \</span></div>
-<div class="line"><a name="l00706"></a><span class="lineno">  706</span>&#160;<span class="preprocessor">}</span></div>
-<div class="line"><a name="l00707"></a><span class="lineno">  707</span>&#160; </div>
-<div class="line"><a name="l00708"></a><span class="lineno">  708</span>&#160;<span class="preprocessor">#define ruZeroedStruct(type, var) type var; \</span></div>
-<div class="line"><a name="l00709"></a><span class="lineno">  709</span>&#160;<span class="preprocessor">    memset(&amp;(var), 0, sizeof(type))</span></div>
-<div class="line"><a name="l00710"></a><span class="lineno">  710</span>&#160; </div>
-<div class="line"><a name="l00711"></a><span class="lineno">  711</span>&#160;<span class="preprocessor">#define ruMakeTypeGetHeader(ctype) \</span></div>
-<div class="line"><a name="l00712"></a><span class="lineno">  712</span>&#160;<span class="preprocessor">ctype* ctype ## Get(void* ptr, int32_t* code)</span></div>
-<div class="line"><a name="l00713"></a><span class="lineno">  713</span>&#160; </div>
-<div class="line"><a name="l00716"></a><span class="lineno">  716</span>&#160;<span class="preprocessor">#ifdef __cplusplus</span></div>
-<div class="line"><a name="l00717"></a><span class="lineno">  717</span>&#160;}   <span class="comment">/* extern &quot;C&quot; */</span></div>
-<div class="line"><a name="l00718"></a><span class="lineno">  718</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* __cplusplus */</span><span class="preprocessor"></span></div>
-<div class="line"><a name="l00719"></a><span class="lineno">  719</span>&#160; </div>
-<div class="line"><a name="l00720"></a><span class="lineno">  720</span>&#160;<span class="preprocessor">#include &lt;regify-util/logging.h&gt;</span></div>
+<div class="line"><a name="l00687"></a><span class="lineno">  687</span>&#160;RUAPI <span class="keywordtype">int</span> ruTimeFormat(<a class="code" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> format, <a class="code" href="group__misc.html#gaaa0102d444a5dd14474b7951caae0459">rusize</a> len, <a class="code" href="group__misc.html#ga972d4f4f858964bb2381d186ea96d88d">alloc_chars</a> timeStr, <a class="code" href="group__misc.html#ga8573cc8637a470b127a19d54b0e94cb9">sec_t</a> timesecs);</div>
+<div class="line"><a name="l00688"></a><span class="lineno">  688</span>&#160; </div>
+<div class="line"><a name="l00697"></a><span class="lineno">  697</span>&#160;RUAPI <span class="keywordtype">int</span> ruUtcFormat(<a class="code" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> format, <a class="code" href="group__misc.html#gaaa0102d444a5dd14474b7951caae0459">rusize</a> len, <a class="code" href="group__misc.html#ga972d4f4f858964bb2381d186ea96d88d">alloc_chars</a> timeStr, <a class="code" href="group__misc.html#ga8573cc8637a470b127a19d54b0e94cb9">sec_t</a> timesecs);</div>
+<div class="line"><a name="l00698"></a><span class="lineno">  698</span>&#160; </div>
+<div class="line"><a name="l00704"></a><span class="lineno">  704</span>&#160;RUAPI <a class="code" href="group__misc.html#ga8573cc8637a470b127a19d54b0e94cb9">sec_t</a> ruTimeLocalToUtc(<a class="code" href="group__misc.html#ga8573cc8637a470b127a19d54b0e94cb9">sec_t</a> stamp);</div>
+<div class="line"><a name="l00705"></a><span class="lineno">  705</span>&#160; </div>
+<div class="line"><a name="l00711"></a><span class="lineno">  711</span>&#160;RUAPI <a class="code" href="group__misc.html#ga8573cc8637a470b127a19d54b0e94cb9">sec_t</a> ruTimeUtcToLocal(<a class="code" href="group__misc.html#ga8573cc8637a470b127a19d54b0e94cb9">sec_t</a> stamp);</div>
+<div class="line"><a name="l00712"></a><span class="lineno">  712</span>&#160; </div>
+<div class="line"><a name="l00718"></a><span class="lineno">  718</span>&#160;<span class="comment">/*</span></div>
+<div class="line"><a name="l00719"></a><span class="lineno">  719</span>&#160;<span class="comment"> * Some convenience Macros</span></div>
+<div class="line"><a name="l00720"></a><span class="lineno">  720</span>&#160;<span class="comment"> */</span></div>
 <div class="line"><a name="l00721"></a><span class="lineno">  721</span>&#160; </div>
-<div class="line"><a name="l00722"></a><span class="lineno">  722</span>&#160;<span class="preprocessor">#endif </span><span class="comment">//UTIL_REGIFY_UTIL_H</span></div>
+<div class="line"><a name="l00722"></a><span class="lineno">  722</span>&#160;<span class="comment">// the ptr &lt; (void*)0xffff is feeble attempt at address validation</span></div>
+<div class="line"><a name="l00723"></a><span class="lineno">  723</span>&#160;<span class="preprocessor">#define ruMakeTypeGetter(ctype, magic) \</span></div>
+<div class="line"><a name="l00724"></a><span class="lineno">  724</span>&#160;<span class="preprocessor">ctype* ctype ## Get(void* ptr, int32_t* code) { \</span></div>
+<div class="line"><a name="l00725"></a><span class="lineno">  725</span>&#160;<span class="preprocessor">    ctype* ret = (ctype*) ptr; \</span></div>
+<div class="line"><a name="l00726"></a><span class="lineno">  726</span>&#160;<span class="preprocessor">    if (!ptr) { \</span></div>
+<div class="line"><a name="l00727"></a><span class="lineno">  727</span>&#160;<span class="preprocessor">        ruRetWithCode(code, RUE_PARAMETER_NOT_SET, NULL); \</span></div>
+<div class="line"><a name="l00728"></a><span class="lineno">  728</span>&#160;<span class="preprocessor">    } \</span></div>
+<div class="line"><a name="l00729"></a><span class="lineno">  729</span>&#160;<span class="preprocessor">    if (ptr &lt; (void*)0xffff || magic != ret-&gt;type) { \</span></div>
+<div class="line"><a name="l00730"></a><span class="lineno">  730</span>&#160;<span class="preprocessor">        ruRetWithCode(code, RUE_INVALID_PARAMETER, NULL); \</span></div>
+<div class="line"><a name="l00731"></a><span class="lineno">  731</span>&#160;<span class="preprocessor">    } \</span></div>
+<div class="line"><a name="l00732"></a><span class="lineno">  732</span>&#160;<span class="preprocessor">    ruRetWithCode(code, RUE_OK, ret); \</span></div>
+<div class="line"><a name="l00733"></a><span class="lineno">  733</span>&#160;<span class="preprocessor">}</span></div>
+<div class="line"><a name="l00734"></a><span class="lineno">  734</span>&#160; </div>
+<div class="line"><a name="l00735"></a><span class="lineno">  735</span>&#160;<span class="preprocessor">#define ruZeroedStruct(type, var) type var; \</span></div>
+<div class="line"><a name="l00736"></a><span class="lineno">  736</span>&#160;<span class="preprocessor">    memset(&amp;(var), 0, sizeof(type))</span></div>
+<div class="line"><a name="l00737"></a><span class="lineno">  737</span>&#160; </div>
+<div class="line"><a name="l00738"></a><span class="lineno">  738</span>&#160;<span class="preprocessor">#define ruMakeTypeGetHeader(ctype) \</span></div>
+<div class="line"><a name="l00739"></a><span class="lineno">  739</span>&#160;<span class="preprocessor">ctype* ctype ## Get(void* ptr, int32_t* code)</span></div>
+<div class="line"><a name="l00740"></a><span class="lineno">  740</span>&#160; </div>
+<div class="line"><a name="l00743"></a><span class="lineno">  743</span>&#160;<span class="preprocessor">#ifdef __cplusplus</span></div>
+<div class="line"><a name="l00744"></a><span class="lineno">  744</span>&#160;}   <span class="comment">/* extern &quot;C&quot; */</span></div>
+<div class="line"><a name="l00745"></a><span class="lineno">  745</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* __cplusplus */</span><span class="preprocessor"></span></div>
+<div class="line"><a name="l00746"></a><span class="lineno">  746</span>&#160; </div>
+<div class="line"><a name="l00747"></a><span class="lineno">  747</span>&#160;<span class="preprocessor">#include &lt;regify-util/logging.h&gt;</span></div>
+<div class="line"><a name="l00748"></a><span class="lineno">  748</span>&#160; </div>
+<div class="line"><a name="l00749"></a><span class="lineno">  749</span>&#160;<span class="preprocessor">#endif </span><span class="comment">//UTIL_REGIFY_UTIL_H</span></div>
 <div class="ttc" id="agroup__memory_html_ga94f0a9650d1a2b773e4e85f2341eea02"><div class="ttname"><a href="group__memory.html#ga94f0a9650d1a2b773e4e85f2341eea02">ruReallocSize</a></div><div class="ttdeci">RUAPI alloc_ptr ruReallocSize(alloc_ptr buf, rusize count, rusize ofsize)</div><div class="ttdoc">Reallocate requested memory without zeroing.</div></div>
 <div class="ttc" id="agroup__memory_html_ga9aa9dcd1bd646dfc857f63eba32e923c"><div class="ttname"><a href="group__memory.html#ga9aa9dcd1bd646dfc857f63eba32e923c">ruMallocSize</a></div><div class="ttdeci">RUAPI alloc_ptr ruMallocSize(rusize count, rusize ofsize)</div><div class="ttdoc">Allocate and zero requested memory.</div></div>
 <div class="ttc" id="agroup__misc_html_ga02db3ac43a5917535ca3cbc37ac72884"><div class="ttname"><a href="group__misc.html#ga02db3ac43a5917535ca3cbc37ac72884">usec_t</a></div><div class="ttdeci">int64_t usec_t</div><div class="ttdoc">A signed type for expressing micro seconds.</div><div class="ttdef"><b>Definition:</b> regify-util.h:315</div></div>
@@ -410,7 +416,7 @@ $(document).ready(function(){initNavTree('regify-util_8h_source.html',''); initR
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><b>regify-util.h</b></li>
-    <li class="footer">Generated on Fri May 19 2023 15:14:47 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Thu May 25 2023 12:11:31 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>
