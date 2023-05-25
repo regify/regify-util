@@ -89,7 +89,7 @@ RUAPI ru_pid ruProcessId(void) {
 
 RUAPI int32_t ruRunProg(const char **argv, sec_t timeout) {
     ru_pid my_pid;
-    int32_t status;
+    int32_t status = 0;
     uint8_t chldfail = 234;
 //    ruDbgLogf("run: %s", argv[0]);
 
