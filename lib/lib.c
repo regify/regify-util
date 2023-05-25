@@ -88,6 +88,7 @@ RUAPI ru_pid ruProcessId(void) {
 }
 
 RUAPI int32_t ruRunProg(const char **argv, sec_t timeout) {
+#ifdef __linux__
     ru_pid my_pid;
     int32_t status = 0;
     uint8_t chldfail = 234;
@@ -128,6 +129,9 @@ RUAPI int32_t ruRunProg(const char **argv, sec_t timeout) {
     }
 //    ruVerbLogf("%s returned: %d", argv[0], WEXITSTATUS(status));
     return WEXITSTATUS(status);
+#else
+    return 0;
+#endif
 }
 
 RUAPI alloc_chars ruGetLanguage(void) {
