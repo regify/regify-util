@@ -42,9 +42,11 @@
 #ifdef _WIN32
     #include <windows.h>
     #include <sys/types.h>
+    #include <process.h>
 #else
     #include <sys/param.h>
     #include <sys/syscall.h>
+    #include <sys/wait.h>
 #if defined(ITS_OSX) || defined(ITS_IOS)
     #include <sys/statvfs.h>
 #endif
@@ -59,7 +61,6 @@
 #include <stdlib.h>
 #include <stdarg.h>
 #include <sys/stat.h>
-#include <sys/wait.h>
 #include <errno.h>
 #include <fcntl.h>
 #include <time.h>
