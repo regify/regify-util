@@ -338,6 +338,47 @@ START_TEST(counter) {
 }
 END_TEST
 
+START_TEST(process) {
+    const char *test = "ruRunProg";
+    const char *retText = "%s failed wanted ret '%d' but got '%d'";
+    int ret, exp = -1;
+    const char* command[] = {"true", NULL, NULL};
+
+    ret = ruRunProg(command, RU_NO_TIMEOUT);
+    fail_unless(exp == ret, retText, test, exp, ret);
+
+    ret = ruRunProg(command, RU_NON_BLOCK);
+    fail_unless(exp == ret, retText, test, exp, ret);
+
+    exp = 0;
+    command[0] = "/bin/true";
+    ret = ruRunProg(command, RU_NO_TIMEOUT);
+    fail_unless(exp == ret, retText, test, exp, ret);
+
+    ret = ruRunProg(command, RU_NON_BLOCK);
+    fail_unless(exp == ret, retText, test, exp, ret);
+
+    exp = 1;
+    command[0] = "/bin/false";
+    ret = ruRunProg(command, RU_NO_TIMEOUT);
+    fail_unless(exp == ret, retText, test, exp, ret);
+
+    ret = ruRunProg(command, RU_NON_BLOCK);
+    fail_unless(exp == ret, retText, test, exp, ret);
+
+    exp = -2;
+    command[0] = "/bin/sleep";
+    command[1] = "3";
+    ret = ruRunProg(command, 1);
+    fail_unless(exp == ret, retText, test, exp, ret);
+
+    exp = 0;
+    command[1] = "1";
+    ret = ruRunProg(command, 3);
+    fail_unless(exp == ret, retText, test, exp, ret);
+}
+END_TEST
+
 #ifdef _WIN32
 START_TEST ( reg ) {
     const char *test = "ruGetRegistryEntry";
@@ -427,6 +468,7 @@ TCase* miscTests(void) {
     tcase_add_test(tcase, misc);
     tcase_add_test(tcase, mux);
     tcase_add_test(tcase, counter);
+    tcase_add_test(tcase, process);
 #ifdef _WIN32
     tcase_add_test ( tcase, reg );
     tcase_add_test ( tcase, vol );

@@ -87,6 +87,49 @@ RUAPI ru_pid ruProcessId(void) {
 #endif
 }
 
+RUAPI int32_t ruRunProg(const char **argv, sec_t timeout) {
+    ru_pid my_pid;
+    int32_t status;
+    uint8_t chldfail = 234;
+//    ruDbgLogf("run: %s", argv[0]);
+
+    if (0 == (my_pid = fork())) {
+        // the child
+        if (-1 == execve(argv[0], (char **)argv , NULL)) {
+            // we're here so thing went bad
+            // we must exit to prevent the child process from wreaking havoc
+            exit(chldfail);
+        }
+        // never reached
+    }
+
+    // the parent
+    if (timeout >= 0) {
+        // blocking
+        int32_t timetaken = 0;
+        while (0 == waitpid(my_pid , &status , WNOHANG)) {
+            if (timeout) {
+                // there is a timeout
+                if (timetaken++ > timeout) {
+                    // it has been reached
+                    ruWarnLogf("%s child process timed out ret: %d", argv[0], -2);
+                    return -2;
+                }
+            }
+            ruSleep(1);
+        }
+    }
+
+//    ruDbgLogf("%s WEXITSTATUS %d WIFEXITED %d [status %d]",
+//              argv[0], WEXITSTATUS(status), WIFEXITED(status), status);
+    if (WEXITSTATUS(status) == chldfail) {
+        ruCritLogf("%s child process execve failed ret: %d", argv[0], -1);
+        return -1;
+    }
+//    ruVerbLogf("%s returned: %d", argv[0], WEXITSTATUS(status));
+    return WEXITSTATUS(status);
+}
+
 RUAPI alloc_chars ruGetLanguage(void) {
     alloc_chars lc = setlocale(LC_ALL, NULL);
     if (!lc) return NULL;

@@ -539,6 +539,33 @@ RUAPI bool ruIsInt64(const char* numstr);
 RUAPI ru_pid ruProcessId(void);
 
 /**
+ * Indicates that an operation is non blocking. Used by \ref ruRunProg
+ */
+#define RU_NON_BLOCK (-1)
+
+/**
+ * Indicates that an operation that has no timeout. Used by \ref ruRunProg
+ */
+#define RU_NO_TIMEOUT 0
+
+/**
+ * Runs given program
+ *
+ * Example:
+ * ~~~~~{.c}
+    const char* command[] = {"/bin/sleep", "3", NULL};
+    int ret = ruRunProg(command, RU_NO_TIMEOUT);
+ * ~~~~~
+ *
+ * @param argv program with params to run
+ * @param timeout Use \ref RU_NON_BLOCK for non blocking, \ref RU_NO_TIMEOUT for
+ *                blocking and > 0 to a timeout in seconds.
+ * @return -1 for a launch failure, -2 for a timeout, else the return code of
+ *         the process or 0 if it was launched non blocking.
+ */
+RUAPI int32_t ruRunProg(const char **argv, sec_t timeout);
+
+/**
  * \brief Returns the ISO-639-1 2 letter country code pertaining to the running system,
  * @return The country code. Caller must free with \ref ruFree.
  */
