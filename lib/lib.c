@@ -93,44 +93,49 @@ RUAPI int32_t ruRunProg(const char **argv, sec_t timeout) {
 #ifdef _WIN32
     if (timeout == RU_NO_TIMEOUT) {
         int ret = (int)_spawnve(_P_WAIT, argv[0], argv, NULL);
-        ruVerbLogf("%s returned: %d", argv[0], ret);
+        //ruVerbLogf("%s returned: %d", argv[0], ret);
         return ret;
     }
-    intptr_t my_ret = _spawnve(_P_NOWAIT, argv[0], argv, NULL);
-    if (my_ret == -1) {
+    intptr_t spres = _spawnve(_P_NOWAIT, argv[0], argv, NULL);
+    if (spres == -1) {
         ruCritLogf("%s _spawnve failed ret: %d", argv[0], -1);
         return -1;
     }
-    HANDLE my_pid = (HANDLE)my_ret;
+    HANDLE pid = (HANDLE)spres;
+    int32_t ret = 0;
     if (timeout > 0) {
+        ret = -4;
         // blocking
-        int32_t timetaken = 0;
+        int32_t timetaken = 1;
         DWORD waitres;
         do {
-            waitres = WaitForSingleObject( my_pid, 1000 );
-            ruVerbLogf("WaitForSingleObject returned: %d", waitres);
+            waitres = WaitForSingleObject(pid, 1000 );
+            //ruVerbLogf("WaitForSingleObject returned: %x timetaken: %d", waitres, timetaken);
             if (waitres == WAIT_TIMEOUT) {
                 // there is a timeout
-                if (timetaken++ > timeout) {
+                if (timetaken++ >= timeout) {
                     // it has been reached
                     ruWarnLogf("%s spawned process timed out ret: %d", argv[0], -2);
-                    return -2;
+                    ret = -2;
+                    break;
                 }
                 ruSleep(1);
             } else {
+                DWORD exitCode = 0;
+                GetExitCodeProcess(pid, &exitCode);
+                ret = (int32_t) exitCode;
                 break;
             }
         } while(1);
     }
-
-//    ruVerbLogf("%s returned: %d", argv[0], WEXITSTATUS(status));
-    CloseHandle(my_pid);
-    return 0;
+    //ruVerbLogf("%s returned: %d", argv[0], ret);
+    CloseHandle(pid);
+    return ret;
 #else
-    ru_pid my_pid;
+    ru_pid pid;
     int32_t status = 0;
     uint8_t chldfail = 234;
-    if (0 == (my_pid = fork())) {
+    if (0 == (pid = fork())) {
         // the child
         if (-1 == execve(argv[0], (char **)argv , NULL)) {
             // we're here so thing went bad
@@ -144,7 +149,7 @@ RUAPI int32_t ruRunProg(const char **argv, sec_t timeout) {
     if (timeout >= 0) {
         // blocking
         int32_t timetaken = 0;
-        while (0 == waitpid(my_pid , &status , WNOHANG)) {
+        while (0 == waitpid(pid , &status , WNOHANG)) {
             if (timeout) {
                 // there is a timeout
                 if (timetaken++ > timeout) {
