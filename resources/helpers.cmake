@@ -79,3 +79,26 @@ endif()
 if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.14)
     cmake_policy(SET CMP0082 NEW)
 endif()
+
+if(MSVC AND MSVC_STATIC_RUNTIME)
+    foreach(flag_var
+            CMAKE_C_FLAGS
+            CMAKE_C_FLAGS_DEBUG
+            CMAKE_C_FLAGS_RELEASE
+            CMAKE_C_FLAGS_MINSIZEREL
+            CMAKE_C_FLAGS_RELWITHDEBINFO
+            CMAKE_C_COMPILE_OPTIONS_MSVC_RUNTIME_LIBRARY_MultiThreadedDLL
+            CMAKE_C_COMPILE_OPTIONS_MSVC_RUNTIME_LIBRARY_MultiThreadedDebugDLL
+            CMAKE_CXX_FLAGS
+            CMAKE_CXX_FLAGS_DEBUG
+            CMAKE_CXX_FLAGS_RELEASE
+            CMAKE_CXX_FLAGS_MINSIZEREL
+            CMAKE_CXX_FLAGS_RELWITHDEBINFO
+            CMAKE_CXX_COMPILE_OPTIONS_MSVC_RUNTIME_LIBRARY_MultiThreadedDLL
+            CMAKE_CXX_COMPILE_OPTIONS_MSVC_RUNTIME_LIBRARY_MultiThreadedDebugDLL
+            )
+        string(REGEX REPLACE "/MD" "/MT" ${flag_var} "${${flag_var}}")
+        string(REGEX REPLACE "-MD" "-MT" ${flag_var} "${${flag_var}}")
+    endforeach(flag_var)
+    message("Using static runtime")
+endif()
