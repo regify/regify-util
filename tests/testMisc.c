@@ -344,7 +344,11 @@ START_TEST(process) {
     const char *retText = "%s failed wanted ret '%d' but got '%d'";
     int ret, exp = RUE_RUN_FAILED;
     const char* command[] = {"true", NULL, NULL};
-
+#ifdef ITS_OSX
+#define bindir  "/usr/bin/"
+#else
+#define bindir  "/bin/"
+#endif
     ret = ruRunProg(command, RU_NO_TIMEOUT);
     fail_unless(exp == ret, retText, test, exp, ret);
 
@@ -352,7 +356,7 @@ START_TEST(process) {
     fail_unless(exp == ret, retText, test, exp, ret);
 
     exp = 0;
-    command[0] = "/usr/bin/true";
+    command[0] = bindir "true";
     ret = ruRunProg(command, RU_NO_TIMEOUT);
     fail_unless(exp == ret, retText, test, exp, ret);
 
@@ -360,7 +364,7 @@ START_TEST(process) {
     fail_unless(exp == ret, retText, test, exp, ret);
 
     exp = 1;
-    command[0] = "/usr/bin/false";
+    command[0] = bindir "false";
     ret = ruRunProg(command, RU_NO_TIMEOUT);
     fail_unless(exp == ret, retText, test, exp, ret);
 

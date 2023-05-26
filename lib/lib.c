@@ -91,18 +91,24 @@ RUAPI int32_t ruRunProg(const char **argv, sec_t timeout) {
 #ifdef _WIN32
     if (timeout == RU_NO_TIMEOUT) {
         int ret = (int)_spawnve(_P_WAIT, argv[0], argv, NULL);
-        //ruVerbLogf("%s returned: %d", argv[0], ret);
+        if (ret == -1) {
+            ruCritLogf("<- %s spawn failed with error: %d ret: %d",
+                       argv[0], GetLastError(), RUE_RUN_FAILED);
+            return RUE_RUN_FAILED;
+        }
+//        ruVerbLogf("<- %s returned: %d", argv[0], ret);
         return ret;
     }
     intptr_t spres = _spawnve(_P_NOWAIT, argv[0], argv, NULL);
     if (spres == -1) {
-        ruCritLogf("%s _spawnve failed ret: %d", argv[0], -1);
-        return -1;
+        ruCritLogf("<- %s spawn failed with error: %d ret: %d",
+                   argv[0], GetLastError(), RUE_RUN_FAILED);
+        return RUE_RUN_FAILED;
     }
     HANDLE pid = (HANDLE)spres;
     int32_t ret = 0;
+
     if (timeout > 0) {
-        ret = -4;
         // blocking
         int32_t timetaken = 1;
         DWORD waitres;
@@ -113,8 +119,10 @@ RUAPI int32_t ruRunProg(const char **argv, sec_t timeout) {
                 // there is a timeout
                 if (timetaken++ >= timeout) {
                     // it has been reached
-                    ruWarnLogf("%s spawned process timed out ret: %d", argv[0], -2);
-                    ret = -2;
+                    ruWarnLogf("<- %s process timed out ret: %d",
+                               argv[0], RUE_TIMEOUT);
+                    TerminateProcess(pid, 3);
+                    ret = RUE_TIMEOUT;
                     break;
                 }
                 ruSleep(1);
@@ -126,7 +134,7 @@ RUAPI int32_t ruRunProg(const char **argv, sec_t timeout) {
             }
         } while(1);
     }
-    //ruVerbLogf("%s returned: %d", argv[0], ret);
+//    ruVerbLogf("<- %s returned: %d", argv[0], ret);
     CloseHandle(pid);
     return ret;
 #else
