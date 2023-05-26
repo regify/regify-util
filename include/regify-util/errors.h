@@ -37,6 +37,25 @@ extern "C" {
 #endif /* __cplusplus */
 
 /**
+ * \name Local Errors
+ * @{
+ */
+/**
+ * The fork call failed
+ */
+#define RUE_FORK_FAILED (-1)
+/**
+ * Failure to run the program
+ */
+#define RUE_RUN_FAILED (-2)
+/**
+ * Program execution timed out
+ */
+#define RUE_TIMEOUT (-3)
+
+/** @} */
+
+/**
  * \name regify Errors
  * @{
  */

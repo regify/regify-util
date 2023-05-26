@@ -138,8 +138,8 @@ RUAPI int32_t ruMapPutData(ruMap rm, ptr key, ptr val, ptr* exisitingVal);
  * @param map Map to insert key / value pair into.
  * @param key The key to insert.
  * @param val The associated value to go with the key.
- * @param exisiting Optional. If set the pointer to the associated existing
- *                  value will be stored here, and key/value will not be updated.
+ * @param existing Optional. If set the pointer to the associated existing
+ *                 value will be stored here, and key/value will not be updated.
  * @return \ref RUE_OK on success, \ref RUE_FILE_EXISTS if exisitingVal was set
  *          and there was one, \ref RUE_USER_ABORT when a threaded map has
  *          quit else a regify error code.
@@ -352,7 +352,7 @@ RUAPI int32_t ruSetPutItem(ruSet rs, ptr item);
 
 /**
  * \brief Runs \ref ruSetPutItem with a void* cast.
- * @param set Set to insert key into.
+ * @param rs Set to insert key into.
  * @param item The item to insert.
  * @return \ref RUE_OK on success \ref RUE_USER_ABORT when a threaded set has
  *          quit else a regify error code.
@@ -371,7 +371,7 @@ RUAPI int32_t ruSetRemoveItem(ruMap rs, void *item);
 
 /**
  * \brief Runs \ref ruSetRemoveItem with a void* cast.
- * @param set The set to remove the entry from.
+ * @param rs The set to remove the entry from.
  * @param item The item to be removed.
  * @return \ref RUE_OK on success
  *         \ref RUE_USER_ABORT when a threaded set has quit
@@ -381,7 +381,7 @@ RUAPI int32_t ruSetRemoveItem(ruMap rs, void *item);
 
 /**
  * \brief Tests whether set contains given item.
- * @param rm The map to check.
+ * @param rs The map to check.
  * @param item The item to be searched.
  * @param code (Optional) Stores \ref RUE_OK on success
  *         \ref RUE_USER_ABORT when a threaded map has quit
@@ -392,7 +392,7 @@ RUAPI bool ruSetHasItem(ruSet rs, void *item, int32_t *code);
 
 /**
  * \brief Runs \ref ruSetHasItem with a void* casted item.
- * @param set The set to check.
+ * @param rs The set to check.
  * @param item The item to be searched.
  * @param code (Optional) Stores \ref RUE_OK on success
  *         \ref RUE_USER_ABORT when a threaded set has quit
@@ -457,7 +457,7 @@ RUAPI int32_t ruSetNextSet(ruSet rs, void** item);
 /**
  * \brief Return an item list of the given set.
  *
- * @param rm The set to get the item list from.
+ * @param rs The set to get the item list from.
  * @param items Where to store the resulting list.
  * @param copy Optional copy function with which the items are copied.
  * @param listFree Optional free function for the list or NULL to use the sets
@@ -486,6 +486,9 @@ RUAPI int32_t ruSetRemoveAll(ruSet rs);
  */
 RUAPI uint32_t ruSetSize(ruSet rs, int32_t *code);
 
+/**
+ * @}
+ */
 
 #ifdef __cplusplus
 }

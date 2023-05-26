@@ -132,10 +132,14 @@ RUAPI int32_t ruRunProg(const char **argv, sec_t timeout) {
     CloseHandle(pid);
     return ret;
 #else
-    ru_pid pid;
     uint8_t chldfail = 234;
     int32_t status = 0;
-    if (0 == (pid = fork())) {
+    ru_pid pid = fork();
+    if (pid == -1) {
+        ruCritLogf("Failed to fork ret: %d", RUE_FORK_FAILED);
+        return RUE_FORK_FAILED;
+    }
+    if (0 == pid) {
         // the child
         if (timeout == RU_NON_BLOCK) {
             // close file handles
@@ -144,13 +148,14 @@ RUAPI int32_t ruRunProg(const char **argv, sec_t timeout) {
             close(0);
             // child becomes daemon
             if (setsid() == -1) {
-                ruCritLog("Daemon failed to become session leader");
+                ruCritLog("failed to become session leader");
+                exit(chldfail);
             }
         }
         if (-1 == execve(argv[0], (char **)argv , NULL)) {
             // we're here so thing went bad
             // we must exit to prevent the child process from wreaking havoc
-            ruCritLogf("%s execve failed ret: %d", argv[0], -1);
+            ruCritLog("execve failed");
             exit(chldfail);
         }
         ruCritLogf("%s never reached failed ret: %d", argv[0], 0);
@@ -172,9 +177,9 @@ RUAPI int32_t ruRunProg(const char **argv, sec_t timeout) {
             // there is a timeout
             if (timetaken++ > timeout) {
                 // it has been reached
-                ruWarnLogf("<- %s process [%d] timed out ret: %d", argv[0], pid, -2);
+                ruWarnLogf("<- process [%d] timed out ret: %d", pid,  RUE_TIMEOUT);
                 kill(pid, SIGKILL);
-                return -2;
+                return RUE_TIMEOUT;
             }
         }
         ruSleep(1);
@@ -183,8 +188,8 @@ RUAPI int32_t ruRunProg(const char **argv, sec_t timeout) {
 //    ruDbgLogf("%s WEXITSTATUS %d WIFEXITED %d [status %d]",
 //              argv[0], WEXITSTATUS(status), WIFEXITED(status), status);
     if (WEXITSTATUS(status) == chldfail) {
-        ruCritLogf("<- %s child process execve failed ret: %d", argv[0], -1);
-        return -1;
+        ruCritLogf("<- child execve failed ret: %d", RUE_RUN_FAILED);
+        return RUE_RUN_FAILED;
     }
 //    ruVerbLogf("<- %s returned: %d", argv[0], WEXITSTATUS(status));
     return WEXITSTATUS(status);

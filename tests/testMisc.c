@@ -342,7 +342,7 @@ START_TEST(process) {
     // these tests assume cygwin root at c:\ for windows
     const char *test = "ruRunProg";
     const char *retText = "%s failed wanted ret '%d' but got '%d'";
-    int ret, exp = -1;
+    int ret, exp = RUE_RUN_FAILED;
     const char* command[] = {"true", NULL, NULL};
 
     ret = ruRunProg(command, RU_NO_TIMEOUT);
@@ -368,7 +368,7 @@ START_TEST(process) {
     //ret = ruRunProg(command, RU_NON_BLOCK);
     //fail_unless(exp == ret, retText, test, exp, ret);
 
-    exp = -2;
+    exp = RUE_TIMEOUT;
     command[0] = "/bin/sleep";
     command[1] = "5";
     ret = ruRunProg(command, 1);

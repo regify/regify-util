@@ -34,6 +34,7 @@
  * \defgroup misc Miscellaneous Functions
  * \brief Abstracted functions pertaining to other areas.
  *
+ * @{
  */
 #ifndef UTIL_REGIFY_UTIL_H
 #define UTIL_REGIFY_UTIL_H
@@ -134,7 +135,6 @@ extern "C" {
     #include <dirent.h>
 
     /**
-     * @{
      * \brief Abstracted version of size_t but signed
      */
     typedef signed long rusize_s;
@@ -288,13 +288,11 @@ typedef void* alloc_ptr;
 
 /**
  * \brief A generic pointer.
- * * \ingroup misc
  */
 typedef void* ptr;
 
 /**
  * \brief A signed type for expressing seconds.
- * \ingroup misc
  */
 #ifdef __EMSCRIPTEN__
 typedef long long sec_t;
@@ -304,31 +302,26 @@ typedef long sec_t;
 
 /**
  * \brief A signed type for expressing milli seconds.
- * \ingroup misc
  */
 typedef int64_t msec_t;
 
 /**
  * \brief A signed type for expressing micro seconds.
- * \ingroup misc
  */
 typedef int64_t usec_t;
 
 /**
  * \brief A pointer sized integer type for collections like \ref ruMap or \ref ruList.
- * \ingroup misc
  */
 typedef long ru_int;
 
 /**
  * \brief A pointer sized unsigned integer type for collections like \ref ruMap or \ref ruList.
- * \ingroup misc
  */
 typedef unsigned long ru_uint;
 
 /**
  * \brief Abstracted version of size_t.
- * \ingroup misc
  */
 typedef size_t rusize;
 
@@ -339,85 +332,31 @@ typedef size_t rusize;
 
 /**
  * \brief Signature of a generic clone function.
- * \ingroup misc
  */
 typedef void* (*ruCloneFunc)(void*);
 
 /**
  * \brief Signature of a generic free function returning NULL.
- * \ingroup misc
  */
 typedef void* (*ruClearFunc)(void*);
 
 /**
  * \brief Signature of a generic free function.
- * \ingroup misc
  */
 typedef void (*ruFreeFunc)(void*);
 
 /**
  * \brief Signature of a generic comparator function for sorting.
- * \ingroup misc
  */
 typedef int (*ruCompFunc) (trans_ptr a, trans_ptr b);
 
 /**
  * \brief Abstracted version of the Posix struct timeval.
- * \ingroup misc
  */
 typedef struct {
     sec_t sec;
     usec_t usec;
 } ruTimeVal;
-
-/** \cond noworry */
-#define ruMacStart do
-#define ruMacEnd while(0)
-/** \endcond */
-
-/**
- * \brief Frees given resource and set paramater to NULL
- * \ingroup memory
- * @param p resource to be freed and NULLed if not NULL already
- */
-#define ruFree(p) ruMacStart { if(p) { free((void*)p); p = NULL; } } ruMacEnd
-
-/**
- * \brief Frees given resource and set paramater to new value
- * \ingroup memory
- * @param p resource to be freed before new value is assigned
- * @param n new value to be assigned to freed resource
- */
-#define ruReplace(p, n) ruMacStart { if(p) { free((void*)p); } p = n; } ruMacEnd
-
-/**
- * \brief Convenience macro for setting a potentially passed in result pointer
- * and returning a result.
- * \ingroup misc
- */
-#define ruRetWithCode(ptr, code, res) ruMacStart { \
-    if (ptr) { *ptr = code; } return res; \
-    } ruMacEnd
-
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
-#include <regify-util/errors.h>
-#include <regify-util/thread.h>
-#include <regify-util/list.h>
-#include <regify-util/logging.h>
-#include <regify-util/string.h>
-#include <regify-util/map.h>
-#include <regify-util/cleaner.h>
-#include <regify-util/ini.h>
-#include <regify-util/io.h>
-#include <regify-util/kvstore.h>
-#include <regify-util/regex.h>
-
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
 
 
 typedef unsigned char uchar;
@@ -442,69 +381,7 @@ RUAPI const char* ruVersion(void);
 RUAPI const char* ruLastError(void);
 
 /**
- * @}
- *
- * \defgroup memory Memory Management
- * \brief Abstracted functions pertaining to memory managment.
- * @{
- */
-/**
- * \brief Allocate and zero requested memory.
- * @param count Number of elements to allocate.
- * @param ofsize The size of each element to allocate.
- * @return Guarateed to return the requested memory block or the process will
- *         terminate.
- */
-RUAPI alloc_ptr ruMallocSize(rusize count, rusize ofsize);
-
-/**
- * \brief Allocate and zero requested memory.
- * @param count Number of elements to allocate
- * @param ctype The type of element to allocate. This will be feed to sizeof().
- * @return Guarateed to return the requested memory block casted to (*ctype)
- *         or the process will terminate.
- */
-#define ruMalloc0(count, ctype) (ctype*) ruMallocSize((rusize)(count), sizeof(ctype));
-
-/**
- * \brief Reallocate requested memory without zeroing.
- * @param buf The initial buffer to extend or reallocated.
- * @param count Number of elements to allocate.
- * @param ofsize The size of each element to allocate.
- * @return Guarateed to return the requested memory block or the process will
- *         terminate.
- */
-RUAPI alloc_ptr ruReallocSize(alloc_ptr buf, rusize count, rusize ofsize);
-
-/**
- * \brief Reallocate requested memory without zeroing.
- * @param buf The initial buffer to extend or reallocated.
- * @param count Number of elements to allocate.
- * @param ctype The type of element to allocate. This will be feed to sizeof().
- * @return Guarateed to return the requested memory block casted to (*ctype)
- *         or the process will terminate.
- */
-#define ruRealloc(buf, count, ctype) (ctype*) ruReallocSize(buf, count, sizeof(ctype))
-
-/**
- * \brief Returns a copy of the given memory block.
- * @param buf The memory area to duplicate.
- * @param size number of bytes to duplicate.
- * @return Guarateed to return the requested memory block or the process will
- *         terminate.
- * @}
- */
-RUAPI alloc_ptr ruMemDup(trans_ptr buf, rusize size);
-
-
-/**
- * \ingroup misc
- * @{
- */
-
-/**
  * \brief Returns a lowercase string representation of the current OS.
- *
  *
  * Currently knows about windows, android, linux, osx, ios and unix.
  * @return os string. Caller should copy this for persistence.
@@ -526,30 +403,30 @@ RUAPI alloc_chars ruGetHostname(void);
 RUAPI trans_chars ruGetenv(const char *variable);
 
 /**
- * Returns true if given string contains a valid 64 bit integer
+ * \brief Returns true if given string contains a valid 64 bit integer
  * @param numstr String to parse
  * @return parse result overflow returns as false
  */
 RUAPI bool ruIsInt64(const char* numstr);
 
 /**
- * Return the current process id
+ * \brief Return the current process id
  * @return the current process id
  */
 RUAPI ru_pid ruProcessId(void);
 
 /**
- * Indicates that an operation is non blocking. Used by \ref ruRunProg
+ * \brief Indicates that an operation is non blocking. Used by \ref ruRunProg
  */
 #define RU_NON_BLOCK (-1)
 
 /**
- * Indicates that an operation that has no timeout. Used by \ref ruRunProg
+ * \brief Indicates that an operation that has no timeout. Used by \ref ruRunProg
  */
 #define RU_NO_TIMEOUT 0
 
 /**
- * Runs given program
+ * \brief Runs given program
  *
  * Example:
  * ~~~~~{.c}
@@ -560,8 +437,11 @@ RUAPI ru_pid ruProcessId(void);
  * @param argv program with params to run
  * @param timeout Use \ref RU_NON_BLOCK for non blocking, \ref RU_NO_TIMEOUT for
  *                blocking and > 0 to a timeout in seconds.
- * @return -1 for a launch failure, -2 for a timeout, else the return code of
- *         the process or 0 if it was launched non blocking.
+ * @return \ref RUE_FORK_FAILED for a fork failure,
+ *         \ref RUE_RUN_FAILED for a launch failure,
+ *         \ref RUE_TIMEOUT for a timeout,
+ *         else the return code of the process
+ *         or 0 if it was launched non blocking.
  */
 RUAPI int32_t ruRunProg(const char **argv, sec_t timeout);
 
@@ -656,7 +536,7 @@ RUAPI void ruSleepMs(msec_t milliseconds);
 
 /**
  * \brief Sleeps for the given number of seconds.
- * @param seconds
+ * @param secs time to sleep
  */
 #define ruSleep(secs) ruSleepMs(((msec_t)(secs))*1000)
 
@@ -709,6 +589,112 @@ RUAPI sec_t ruTimeLocalToUtc(sec_t stamp);
  * @return seconds since epoch in local time
  */
 RUAPI sec_t ruTimeUtcToLocal(sec_t stamp);
+
+/** \cond noworry */
+#define ruMacStart do
+#define ruMacEnd while(0)
+/** \endcond */
+
+/**
+ * \brief Frees given resource and set paramater to NULL
+ * \ingroup memory
+ * @param p resource to be freed and NULLed if not NULL already
+ */
+#define ruFree(p) ruMacStart { if(p) { free((void*)p); p = NULL; } } ruMacEnd
+
+/**
+ * \brief Frees given resource and set paramater to new value
+ * \ingroup memory
+ * @param p resource to be freed before new value is assigned
+ * @param n new value to be assigned to freed resource
+ */
+#define ruReplace(p, n) ruMacStart { if(p) { free((void*)p); } p = n; } ruMacEnd
+
+/**
+ * \brief Convenience macro for setting a potentially passed in result pointer
+ * and returning a result.
+ * \ingroup misc
+ */
+#define ruRetWithCode(ptr, code, res) ruMacStart { \
+    if (ptr) { *ptr = code; } return res; \
+    } ruMacEnd
+
+/**
+ * @}
+ */
+
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
+
+#include <regify-util/errors.h>
+#include <regify-util/thread.h>
+#include <regify-util/list.h>
+#include <regify-util/logging.h>
+#include <regify-util/string.h>
+#include <regify-util/map.h>
+#include <regify-util/cleaner.h>
+#include <regify-util/ini.h>
+#include <regify-util/io.h>
+#include <regify-util/kvstore.h>
+#include <regify-util/regex.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
+
+/**
+ * \defgroup memory Memory Management
+ * \brief Abstracted functions pertaining to memory managment.
+ * @{
+ */
+/**
+ * \brief Allocate and zero requested memory.
+ * @param count Number of elements to allocate.
+ * @param ofsize The size of each element to allocate.
+ * @return Guarateed to return the requested memory block or the process will
+ *         terminate.
+ */
+RUAPI alloc_ptr ruMallocSize(rusize count, rusize ofsize);
+
+/**
+ * \brief Allocate and zero requested memory.
+ * @param count Number of elements to allocate
+ * @param ctype The type of element to allocate. This will be feed to sizeof().
+ * @return Guarateed to return the requested memory block casted to (*ctype)
+ *         or the process will terminate.
+ */
+#define ruMalloc0(count, ctype) (ctype*) ruMallocSize((rusize)(count), sizeof(ctype));
+
+/**
+ * \brief Reallocate requested memory without zeroing.
+ * @param buf The initial buffer to extend or reallocated.
+ * @param count Number of elements to allocate.
+ * @param ofsize The size of each element to allocate.
+ * @return Guarateed to return the requested memory block or the process will
+ *         terminate.
+ */
+RUAPI alloc_ptr ruReallocSize(alloc_ptr buf, rusize count, rusize ofsize);
+
+/**
+ * \brief Reallocate requested memory without zeroing.
+ * @param buf The initial buffer to extend or reallocated.
+ * @param count Number of elements to allocate.
+ * @param ctype The type of element to allocate. This will be feed to sizeof().
+ * @return Guarateed to return the requested memory block casted to (*ctype)
+ *         or the process will terminate.
+ */
+#define ruRealloc(buf, count, ctype) (ctype*) ruReallocSize(buf, count, sizeof(ctype))
+
+/**
+ * \brief Returns a copy of the given memory block.
+ * @param buf The memory area to duplicate.
+ * @param size number of bytes to duplicate.
+ * @return Guarateed to return the requested memory block or the process will
+ *         terminate.
+ */
+RUAPI alloc_ptr ruMemDup(trans_ptr buf, rusize size);
 
 /**
  * @}
