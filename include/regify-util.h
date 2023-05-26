@@ -135,9 +135,13 @@ extern "C" {
 #if defined(__APPLE__) && defined(__MACH__) // Apple OSX and iOS (Darwin)
 #include <TargetConditionals.h>
     #if TARGET_OS_IPHONE == 1
-        #define ITS_IOS
+        #ifndef ITS_IOS
+            #define ITS_IOS 1
+        #endif
     #elif TARGET_OS_MAC == 1
-        #define ITS_OSX
+        #ifndef ITS_OSX
+            #define ITS_OSX 1
+        #endif
     #endif
 #endif
 
