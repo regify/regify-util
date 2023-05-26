@@ -352,7 +352,7 @@ START_TEST(process) {
     fail_unless(exp == ret, retText, test, exp, ret);
 
     exp = 0;
-    command[0] = "/bin/true";
+    command[0] = "/usr/bin/true";
     ret = ruRunProg(command, RU_NO_TIMEOUT);
     fail_unless(exp == ret, retText, test, exp, ret);
 
@@ -360,7 +360,7 @@ START_TEST(process) {
     fail_unless(exp == ret, retText, test, exp, ret);
 
     exp = 1;
-    command[0] = "/bin/false";
+    command[0] = "/usr/bin/false";
     ret = ruRunProg(command, RU_NO_TIMEOUT);
     fail_unless(exp == ret, retText, test, exp, ret);
 

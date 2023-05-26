@@ -48,12 +48,14 @@
     #include <sys/syscall.h>
     #include <sys/wait.h>
 #if defined(ITS_OSX) || defined(ITS_IOS)
+    #include <signal.h>
     #include <sys/statvfs.h>
 #endif
 #ifdef __linux__
     #include <sys/vfs.h>
 #endif
 #endif
+#include <locale.h>
 #include <ctype.h>
 #include <stdio.h>
 #include <limits.h>

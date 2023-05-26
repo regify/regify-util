@@ -30,12 +30,6 @@ START_TEST ( api ) {
     ruSet rs = ruSetNew(NULL, NULL, NULL, 0);
     fail_unless(NULL == rs, retText, test, NULL, rs);
 
-    rs =  NULL,(ruStrHash, NULL, NULL, NULL, 0);
-    fail_unless(NULL == rs, retText, test, NULL, rs);
-
-    rs =  NULL,(NULL, ruStrMatch, NULL, 0);
-    fail_unless(NULL == rs, retText, test, NULL, rs);
-
     ruSetFree(rs);
 
     ptr exist = NULL;
