@@ -1228,7 +1228,7 @@ Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">inStart</td><td>Start of the string to parse </td></tr>
-    <tr><td class="paramname">inLen</td><td>Number of bytes to evaluate or RU_SIZE_AUTO. </td></tr>
+    <tr><td class="paramname">inLen</td><td>Number of bytes to evaluate or <a class="el" href="group__misc.html#ga0282856ae8c37b20f28093d6cdfdd8b7">RU_SIZE_AUTO</a>. </td></tr>
     <tr><td class="paramname">delim</td><td>Delimiter sequence to split key / value on </td></tr>
     <tr><td class="paramname">keyStart</td><td>Optional, where the start of the key region will be stored </td></tr>
     <tr><td class="paramname">keyLen</td><td>Optional, where the length of the key region will be stored </td></tr>
@@ -1522,7 +1522,7 @@ Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">instr</td><td>String to split. </td></tr>
-    <tr><td class="paramname">inlen</td><td>Optional length delimiter. Use RU_SIZE_AUTO to omit. </td></tr>
+    <tr><td class="paramname">inlen</td><td>Optional length delimiter. Use <a class="el" href="group__misc.html#ga0282856ae8c37b20f28093d6cdfdd8b7">RU_SIZE_AUTO</a> to omit. </td></tr>
     <tr><td class="paramname">delim</td><td>Delimiter to split string on. </td></tr>
     <tr><td class="paramname">maxCnt</td><td>Maximum number of pieces to return or 0 for no limit. The remainder will be unsplit in the last piece. </td></tr>
   </table>
@@ -2175,7 +2175,7 @@ Functions</h2></td></tr>
 <div class="line"><a class="code" href="group__misc.html#ga7dd744dc0ee350f7de2c38f51f5c0bbe">perm_chars</a> trimstr = <a class="code" href="group__string.html#ga258258f27f95aebd563a5a440f84cd79">ruStrTrim</a>(mystring, NULL, <a class="code" href="group__string.html#gga1f4eb9b5f88a1b4cb67b9c9414a1377da4d5a24d0b5b4cee3ad211730487a0e0e">ruTrimBoth</a>, &amp;newstr);</div>
 <div class="line"><span class="comment">// do whatever with trimstr</span></div>
 <div class="line"><a class="code" href="group__memory.html#gafcc3628238450c77b4aa61e9d7001a56">ruFree</a>(newstr);</div>
-<div class="ttc" id="agroup__memory_html_gafcc3628238450c77b4aa61e9d7001a56"><div class="ttname"><a href="group__memory.html#gafcc3628238450c77b4aa61e9d7001a56">ruFree</a></div><div class="ttdeci">#define ruFree(p)</div><div class="ttdoc">Frees given resource and set paramater to NULL.</div><div class="ttdef"><b>Definition:</b> regify-util.h:383</div></div>
+<div class="ttc" id="agroup__memory_html_gafcc3628238450c77b4aa61e9d7001a56"><div class="ttname"><a href="group__memory.html#gafcc3628238450c77b4aa61e9d7001a56">ruFree</a></div><div class="ttdeci">#define ruFree(p)</div><div class="ttdoc">Frees given resource and set paramater to NULL.</div><div class="ttdef"><b>Definition:</b> regify-util.h:603</div></div>
 <div class="ttc" id="agroup__misc_html_ga7dd744dc0ee350f7de2c38f51f5c0bbe"><div class="ttname"><a href="group__misc.html#ga7dd744dc0ee350f7de2c38f51f5c0bbe">perm_chars</a></div><div class="ttdeci">const char * perm_chars</div><div class="ttdoc">A permanent NULL terminated string pointer.</div><div class="ttdef"><b>Definition:</b> regify-util.h:164</div></div>
 <div class="ttc" id="agroup__misc_html_ga972d4f4f858964bb2381d186ea96d88d"><div class="ttname"><a href="group__misc.html#ga972d4f4f858964bb2381d186ea96d88d">alloc_chars</a></div><div class="ttdeci">char * alloc_chars</div><div class="ttdoc">An allocated NULL terminated string pointer.</div><div class="ttdef"><b>Definition:</b> regify-util.h:187</div></div>
 <div class="ttc" id="agroup__string_html_ga258258f27f95aebd563a5a440f84cd79"><div class="ttname"><a href="group__string.html#ga258258f27f95aebd563a5a440f84cd79">ruStrTrim</a></div><div class="ttdeci">RUAPI perm_chars ruStrTrim(perm_chars instr, trans_chars unwanted, enum ruTrimSide ends, alloc_chars *newstr)</div><div class="ttdoc">Checks given string for leading / trailing unwanted characters and returns trimmed copy if needed.</div></div>
@@ -2219,7 +2219,7 @@ Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">inStart</td><td>Start address of string to examine </td></tr>
-    <tr><td class="paramname">inLen</td><td>Number of bytes to examine or RU_SIZE_AUTO </td></tr>
+    <tr><td class="paramname">inLen</td><td>Number of bytes to examine or <a class="el" href="group__misc.html#ga0282856ae8c37b20f28093d6cdfdd8b7">RU_SIZE_AUTO</a> </td></tr>
     <tr><td class="paramname">outLen</td><td>Optional, where the length of the returned start address will be stored. </td></tr>
   </table>
   </dd>
@@ -2269,7 +2269,7 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>A copy of the given string with the requested tranformations made or NULL incase of error. In that case call ruLastError for details. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>A copy of the given string with the requested tranformations made or NULL incase of error. In that case call <a class="el" href="group__misc.html#gaea3d529fecc1bbad25f943943b6e9ef2">ruLastError</a> for details. </dd></dl>
 
 </div>
 </div>
@@ -2332,7 +2332,7 @@ Functions</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Fri May 26 2023 07:54:40 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Fri May 26 2023 08:55:03 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

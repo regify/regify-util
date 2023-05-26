@@ -105,6 +105,12 @@ $(document).ready(function(){initNavTree('group__memory.html',''); initResizable
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
+<tr class="memitem:gafcc3628238450c77b4aa61e9d7001a56"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__memory.html#gafcc3628238450c77b4aa61e9d7001a56">ruFree</a>(p)&#160;&#160;&#160;ruMacStart { if(p) { free((void*)p); p = NULL; } } ruMacEnd</td></tr>
+<tr class="memdesc:gafcc3628238450c77b4aa61e9d7001a56"><td class="mdescLeft">&#160;</td><td class="mdescRight">Frees given resource and set paramater to NULL.  <a href="group__memory.html#gafcc3628238450c77b4aa61e9d7001a56">More...</a><br /></td></tr>
+<tr class="separator:gafcc3628238450c77b4aa61e9d7001a56"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gafdbf421329129ad39395ca1c48694f9f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__memory.html#gafdbf421329129ad39395ca1c48694f9f">ruReplace</a>(p,  n)&#160;&#160;&#160;ruMacStart { if(p) { free((void*)p); } p = n; } ruMacEnd</td></tr>
+<tr class="memdesc:gafdbf421329129ad39395ca1c48694f9f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Frees given resource and set paramater to new value.  <a href="group__memory.html#gafdbf421329129ad39395ca1c48694f9f">More...</a><br /></td></tr>
+<tr class="separator:gafdbf421329129ad39395ca1c48694f9f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga7c611f586df1bdfe2b096966c189f853"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__memory.html#ga7c611f586df1bdfe2b096966c189f853">ruMalloc0</a>(count,  ctype)&#160;&#160;&#160;(ctype*) <a class="el" href="group__memory.html#ga9aa9dcd1bd646dfc857f63eba32e923c">ruMallocSize</a>((<a class="el" href="group__misc.html#gaaa0102d444a5dd14474b7951caae0459">rusize</a>)(count), sizeof(ctype));</td></tr>
 <tr class="memdesc:ga7c611f586df1bdfe2b096966c189f853"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allocate and zero requested memory.  <a href="group__memory.html#ga7c611f586df1bdfe2b096966c189f853">More...</a><br /></td></tr>
 <tr class="separator:ga7c611f586df1bdfe2b096966c189f853"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -120,12 +126,9 @@ Functions</h2></td></tr>
 <tr class="memitem:ga94f0a9650d1a2b773e4e85f2341eea02"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__misc.html#ga9f2753cc325fa665aaf7925682462ecb">alloc_ptr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__memory.html#ga94f0a9650d1a2b773e4e85f2341eea02">ruReallocSize</a> (<a class="el" href="group__misc.html#ga9f2753cc325fa665aaf7925682462ecb">alloc_ptr</a> buf, <a class="el" href="group__misc.html#gaaa0102d444a5dd14474b7951caae0459">rusize</a> count, <a class="el" href="group__misc.html#gaaa0102d444a5dd14474b7951caae0459">rusize</a> ofsize)</td></tr>
 <tr class="memdesc:ga94f0a9650d1a2b773e4e85f2341eea02"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reallocate requested memory without zeroing.  <a href="group__memory.html#ga94f0a9650d1a2b773e4e85f2341eea02">More...</a><br /></td></tr>
 <tr class="separator:ga94f0a9650d1a2b773e4e85f2341eea02"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gafcc3628238450c77b4aa61e9d7001a56"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__memory.html#gafcc3628238450c77b4aa61e9d7001a56">ruFree</a>(p)&#160;&#160;&#160;ruMacStart { if(p) { free((void*)p); p = NULL; } } ruMacEnd</td></tr>
-<tr class="memdesc:gafcc3628238450c77b4aa61e9d7001a56"><td class="mdescLeft">&#160;</td><td class="mdescRight">Frees given resource and set paramater to NULL.  <a href="group__memory.html#gafcc3628238450c77b4aa61e9d7001a56">More...</a><br /></td></tr>
-<tr class="separator:gafcc3628238450c77b4aa61e9d7001a56"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gafdbf421329129ad39395ca1c48694f9f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__memory.html#gafdbf421329129ad39395ca1c48694f9f">ruReplace</a>(p,  n)&#160;&#160;&#160;ruMacStart { if(p) { free((void*)p); } p = n; } ruMacEnd</td></tr>
-<tr class="memdesc:gafdbf421329129ad39395ca1c48694f9f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Frees given resource and set paramater to new value.  <a href="group__memory.html#gafdbf421329129ad39395ca1c48694f9f">More...</a><br /></td></tr>
-<tr class="separator:gafdbf421329129ad39395ca1c48694f9f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga5b6817501d84107573e6c7dc15c06fd6"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__misc.html#ga9f2753cc325fa665aaf7925682462ecb">alloc_ptr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__memory.html#ga5b6817501d84107573e6c7dc15c06fd6">ruMemDup</a> (<a class="el" href="group__misc.html#ga147d80ce3325dd56fbfb0e07cedcf757">trans_ptr</a> buf, <a class="el" href="group__misc.html#gaaa0102d444a5dd14474b7951caae0459">rusize</a> size)</td></tr>
+<tr class="memdesc:ga5b6817501d84107573e6c7dc15c06fd6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a copy of the given memory block.  <a href="group__memory.html#ga5b6817501d84107573e6c7dc15c06fd6">More...</a><br /></td></tr>
+<tr class="separator:ga5b6817501d84107573e6c7dc15c06fd6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Abstracted functions pertaining to memory managment. </p>
@@ -315,6 +318,44 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="ga5b6817501d84107573e6c7dc15c06fd6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga5b6817501d84107573e6c7dc15c06fd6">&#9670;&nbsp;</a></span>ruMemDup()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI <a class="el" href="group__misc.html#ga9f2753cc325fa665aaf7925682462ecb">alloc_ptr</a> ruMemDup </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga147d80ce3325dd56fbfb0e07cedcf757">trans_ptr</a>&#160;</td>
+          <td class="paramname"><em>buf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__misc.html#gaaa0102d444a5dd14474b7951caae0459">rusize</a>&#160;</td>
+          <td class="paramname"><em>size</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns a copy of the given memory block. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">buf</td><td>The memory area to duplicate. </td></tr>
+    <tr><td class="paramname">size</td><td>number of bytes to duplicate. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Guarateed to return the requested memory block or the process will terminate. </dd></dl>
+
+</div>
+</div>
 <a id="ga94f0a9650d1a2b773e4e85f2341eea02"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ga94f0a9650d1a2b773e4e85f2341eea02">&#9670;&nbsp;</a></span>ruReallocSize()</h2>
 
@@ -365,7 +406,7 @@ Functions</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Fri May 26 2023 07:54:40 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Fri May 26 2023 08:55:03 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

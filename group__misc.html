@@ -93,7 +93,10 @@ $(document).ready(function(){initNavTree('group__misc.html',''); initResizable()
 
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Data Structures</a>  </div>
+<a href="#nested-classes">Data Structures</a> &#124;
+<a href="#define-members">Macros</a> &#124;
+<a href="#typedef-members">Typedefs</a> &#124;
+<a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">Miscellaneous Functions</div>  </div>
 </div><!--header-->
@@ -107,6 +110,33 @@ Data Structures</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structru_time_val.html">ruTimeVal</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Abstracted version of the Posix struct timeval.  <a href="structru_time_val.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
+Macros</h2></td></tr>
+<tr class="memitem:ga0282856ae8c37b20f28093d6cdfdd8b7"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__misc.html#ga0282856ae8c37b20f28093d6cdfdd8b7">RU_SIZE_AUTO</a>&#160;&#160;&#160;(~0LU)</td></tr>
+<tr class="memdesc:ga0282856ae8c37b20f28093d6cdfdd8b7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Says to determine the size parameter using strlen or an equivalent.  <a href="group__misc.html#ga0282856ae8c37b20f28093d6cdfdd8b7">More...</a><br /></td></tr>
+<tr class="separator:ga0282856ae8c37b20f28093d6cdfdd8b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga934df7587a942f224560208b555e8826"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__misc.html#ga934df7587a942f224560208b555e8826">RU_NON_BLOCK</a>&#160;&#160;&#160;(-1)</td></tr>
+<tr class="memdesc:ga934df7587a942f224560208b555e8826"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates that an operation is non blocking. Used by <a class="el" href="group__misc.html#gaa1ee1acfc9e71c9beba03b4b547f8abc">ruRunProg</a>.  <a href="group__misc.html#ga934df7587a942f224560208b555e8826">More...</a><br /></td></tr>
+<tr class="separator:ga934df7587a942f224560208b555e8826"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga3a6bd0d17663435e5e96679ffe03f900"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__misc.html#ga3a6bd0d17663435e5e96679ffe03f900">RU_NO_TIMEOUT</a>&#160;&#160;&#160;0</td></tr>
+<tr class="memdesc:ga3a6bd0d17663435e5e96679ffe03f900"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates that an operation that has no timeout. Used by <a class="el" href="group__misc.html#gaa1ee1acfc9e71c9beba03b4b547f8abc">ruRunProg</a>.  <a href="group__misc.html#ga3a6bd0d17663435e5e96679ffe03f900">More...</a><br /></td></tr>
+<tr class="separator:ga3a6bd0d17663435e5e96679ffe03f900"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gacd1b05c76a2e6c682e67f216c34c7241"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__misc.html#gacd1b05c76a2e6c682e67f216c34c7241">ruSleep</a>(secs)&#160;&#160;&#160;<a class="el" href="group__misc.html#gacb5828ac39a00aa84781c841afb64623">ruSleepMs</a>(((<a class="el" href="group__misc.html#gae416893e8160c5b7c6da3765e4707d5d">msec_t</a>)(secs))*1000)</td></tr>
+<tr class="memdesc:gacd1b05c76a2e6c682e67f216c34c7241"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sleeps for the given number of seconds.  <a href="group__misc.html#gacd1b05c76a2e6c682e67f216c34c7241">More...</a><br /></td></tr>
+<tr class="separator:gacd1b05c76a2e6c682e67f216c34c7241"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga0bd4973612c1de9454caa98b7792fb8e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__misc.html#ga0bd4973612c1de9454caa98b7792fb8e">ruRetWithCode</a>(<a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a>,  code,  res)</td></tr>
+<tr class="memdesc:ga0bd4973612c1de9454caa98b7792fb8e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convenience macro for setting a potentially passed in result pointer and returning a result.  <a href="group__misc.html#ga0bd4973612c1de9454caa98b7792fb8e">More...</a><br /></td></tr>
+<tr class="separator:ga0bd4973612c1de9454caa98b7792fb8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
+Typedefs</h2></td></tr>
+<tr class="memitem:gac23a4c7337daa8f22a561f49096b06b8"><td class="memItemLeft" align="right" valign="top">typedef signed long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__misc.html#gac23a4c7337daa8f22a561f49096b06b8">rusize_s</a></td></tr>
+<tr class="memdesc:gac23a4c7337daa8f22a561f49096b06b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Abstracted version of size_t but signed.  <a href="group__misc.html#gac23a4c7337daa8f22a561f49096b06b8">More...</a><br /></td></tr>
+<tr class="separator:gac23a4c7337daa8f22a561f49096b06b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga623467b9d56a745927eb36236c8ebdb2"><td class="memItemLeft" align="right" valign="top">typedef pid_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__misc.html#ga623467b9d56a745927eb36236c8ebdb2">ru_pid</a></td></tr>
+<tr class="memdesc:ga623467b9d56a745927eb36236c8ebdb2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Abstracted process id type.  <a href="group__misc.html#ga623467b9d56a745927eb36236c8ebdb2">More...</a><br /></td></tr>
+<tr class="separator:ga623467b9d56a745927eb36236c8ebdb2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga7dd744dc0ee350f7de2c38f51f5c0bbe"><td class="memItemLeft" align="right" valign="top">typedef const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__misc.html#ga7dd744dc0ee350f7de2c38f51f5c0bbe">perm_chars</a></td></tr>
 <tr class="memdesc:ga7dd744dc0ee350f7de2c38f51f5c0bbe"><td class="mdescLeft">&#160;</td><td class="mdescRight">A permanent NULL terminated string pointer.  <a href="group__misc.html#ga7dd744dc0ee350f7de2c38f51f5c0bbe">More...</a><br /></td></tr>
 <tr class="separator:ga7dd744dc0ee350f7de2c38f51f5c0bbe"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -176,19 +206,141 @@ Data Structures</h2></td></tr>
 <tr class="memitem:ga6f2df974d7fa3462ee789585fcd510ed"><td class="memItemLeft" align="right" valign="top">typedef int(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__misc.html#ga6f2df974d7fa3462ee789585fcd510ed">ruCompFunc</a>) (<a class="el" href="group__misc.html#ga147d80ce3325dd56fbfb0e07cedcf757">trans_ptr</a> a, <a class="el" href="group__misc.html#ga147d80ce3325dd56fbfb0e07cedcf757">trans_ptr</a> b)</td></tr>
 <tr class="memdesc:ga6f2df974d7fa3462ee789585fcd510ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Signature of a generic comparator function for sorting.  <a href="group__misc.html#ga6f2df974d7fa3462ee789585fcd510ed">More...</a><br /></td></tr>
 <tr class="separator:ga6f2df974d7fa3462ee789585fcd510ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga65f85814a8290f9797005d3b28e7e5fc"><td class="memItemLeft" align="right" valign="top">typedef unsigned char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__misc.html#ga65f85814a8290f9797005d3b28e7e5fc">uchar</a></td></tr>
+<tr class="separator:ga65f85814a8290f9797005d3b28e7e5fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+Functions</h2></td></tr>
 <tr class="memitem:ga71dec8ccc9b4947b4142514696e78795"><td class="memItemLeft" align="right" valign="top">RUAPI const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__misc.html#ga71dec8ccc9b4947b4142514696e78795">ruVersion</a> (void)</td></tr>
 <tr class="memdesc:ga71dec8ccc9b4947b4142514696e78795"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the build version of this package.  <a href="group__misc.html#ga71dec8ccc9b4947b4142514696e78795">More...</a><br /></td></tr>
 <tr class="separator:ga71dec8ccc9b4947b4142514696e78795"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga0bd4973612c1de9454caa98b7792fb8e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__misc.html#ga0bd4973612c1de9454caa98b7792fb8e">ruRetWithCode</a>(<a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a>,  code,  res)</td></tr>
-<tr class="memdesc:ga0bd4973612c1de9454caa98b7792fb8e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convenience macro for setting a potentially passed in result pointer and returning a result.  <a href="group__misc.html#ga0bd4973612c1de9454caa98b7792fb8e">More...</a><br /></td></tr>
-<tr class="separator:ga0bd4973612c1de9454caa98b7792fb8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaea3d529fecc1bbad25f943943b6e9ef2"><td class="memItemLeft" align="right" valign="top">RUAPI const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__misc.html#gaea3d529fecc1bbad25f943943b6e9ef2">ruLastError</a> (void)</td></tr>
+<tr class="memdesc:gaea3d529fecc1bbad25f943943b6e9ef2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns an English textual representation of the last error this thread generated.  <a href="group__misc.html#gaea3d529fecc1bbad25f943943b6e9ef2">More...</a><br /></td></tr>
+<tr class="separator:gaea3d529fecc1bbad25f943943b6e9ef2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga9514522bf5289236d07a8b714ab8e0b0"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__misc.html#ga7dd744dc0ee350f7de2c38f51f5c0bbe">perm_chars</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__misc.html#ga9514522bf5289236d07a8b714ab8e0b0">ruGetOs</a> (void)</td></tr>
 <tr class="memdesc:ga9514522bf5289236d07a8b714ab8e0b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a lowercase string representation of the current OS.  <a href="group__misc.html#ga9514522bf5289236d07a8b714ab8e0b0">More...</a><br /></td></tr>
 <tr class="separator:ga9514522bf5289236d07a8b714ab8e0b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gab28def77befe23dc2785aff9b1623105"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__misc.html#ga972d4f4f858964bb2381d186ea96d88d">alloc_chars</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__misc.html#gab28def77befe23dc2785aff9b1623105">ruGetHostname</a> (void)</td></tr>
+<tr class="memdesc:gab28def77befe23dc2785aff9b1623105"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the name of this host.  <a href="group__misc.html#gab28def77befe23dc2785aff9b1623105">More...</a><br /></td></tr>
+<tr class="separator:gab28def77befe23dc2785aff9b1623105"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga86dd88de865e954dc1d0ea82fd20f21c"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__misc.html#ga86dd88de865e954dc1d0ea82fd20f21c">ruGetenv</a> (const char *variable)</td></tr>
+<tr class="memdesc:ga86dd88de865e954dc1d0ea82fd20f21c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the value of the requested environment vartiable or NULL if it is not set.  <a href="group__misc.html#ga86dd88de865e954dc1d0ea82fd20f21c">More...</a><br /></td></tr>
+<tr class="separator:ga86dd88de865e954dc1d0ea82fd20f21c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga61f7ab20b2760c5cb849d3b442eb4402"><td class="memItemLeft" align="right" valign="top">RUAPI bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__misc.html#ga61f7ab20b2760c5cb849d3b442eb4402">ruIsInt64</a> (const char *numstr)</td></tr>
+<tr class="memdesc:ga61f7ab20b2760c5cb849d3b442eb4402"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if given string contains a valid 64 bit integer.  <a href="group__misc.html#ga61f7ab20b2760c5cb849d3b442eb4402">More...</a><br /></td></tr>
+<tr class="separator:ga61f7ab20b2760c5cb849d3b442eb4402"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gafb168a8376876c132f91f3568110a676"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__misc.html#ga623467b9d56a745927eb36236c8ebdb2">ru_pid</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__misc.html#gafb168a8376876c132f91f3568110a676">ruProcessId</a> (void)</td></tr>
+<tr class="memdesc:gafb168a8376876c132f91f3568110a676"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the current process id.  <a href="group__misc.html#gafb168a8376876c132f91f3568110a676">More...</a><br /></td></tr>
+<tr class="separator:gafb168a8376876c132f91f3568110a676"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaa1ee1acfc9e71c9beba03b4b547f8abc"><td class="memItemLeft" align="right" valign="top">RUAPI int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__misc.html#gaa1ee1acfc9e71c9beba03b4b547f8abc">ruRunProg</a> (const char **argv, <a class="el" href="group__misc.html#ga8573cc8637a470b127a19d54b0e94cb9">sec_t</a> timeout)</td></tr>
+<tr class="memdesc:gaa1ee1acfc9e71c9beba03b4b547f8abc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Runs given program.  <a href="group__misc.html#gaa1ee1acfc9e71c9beba03b4b547f8abc">More...</a><br /></td></tr>
+<tr class="separator:gaa1ee1acfc9e71c9beba03b4b547f8abc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga2c70eecb13cf89033737e26a9ff08817"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__misc.html#ga972d4f4f858964bb2381d186ea96d88d">alloc_chars</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__misc.html#ga2c70eecb13cf89033737e26a9ff08817">ruGetLanguage</a> (void)</td></tr>
+<tr class="memdesc:ga2c70eecb13cf89033737e26a9ff08817"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the ISO-639-1 2 letter country code pertaining to the running system,.  <a href="group__misc.html#ga2c70eecb13cf89033737e26a9ff08817">More...</a><br /></td></tr>
+<tr class="separator:ga2c70eecb13cf89033737e26a9ff08817"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaf71c9663b075c4dbe4f665b51cde059b"><td class="memItemLeft" align="right" valign="top">RUAPI unsigned long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__misc.html#gaf71c9663b075c4dbe4f665b51cde059b">ruSemiRandomNumber</a> (unsigned long max, long offset)</td></tr>
+<tr class="memdesc:gaf71c9663b075c4dbe4f665b51cde059b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a quasi ramdom number between 0 and max + offset.  <a href="group__misc.html#gaf71c9663b075c4dbe4f665b51cde059b">More...</a><br /></td></tr>
+<tr class="separator:gaf71c9663b075c4dbe4f665b51cde059b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gad5f20c00063066599020981359d2eba6"><td class="memItemLeft" align="right" valign="top">RUAPI int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__misc.html#gad5f20c00063066599020981359d2eba6">ruVersionComp</a> (<a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> ver1, <a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> ver2)</td></tr>
+<tr class="memdesc:gad5f20c00063066599020981359d2eba6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compares 2 version strings This function compares version number strings that are made up of real numbers. The advantage is that the delimiter does not matter. It will work with, for example, 141.01.03, 141:1:3, or even 141A1P3. It also handles mismatched tails so that 141.1.3 will come before 141.1.3.1. Finally NULLs are also properly compared.  <a href="group__misc.html#gad5f20c00063066599020981359d2eba6">More...</a><br /></td></tr>
+<tr class="separator:gad5f20c00063066599020981359d2eba6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga23dfc8d19e01fe0aba08aa87b2966989"><td class="memItemLeft" align="right" valign="top">RUAPI int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__misc.html#ga23dfc8d19e01fe0aba08aa87b2966989">ruGetTimeVal</a> (<a class="el" href="structru_time_val.html">ruTimeVal</a> *result)</td></tr>
+<tr class="memdesc:ga23dfc8d19e01fe0aba08aa87b2966989"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a <a class="el" href="structru_time_val.html">ruTimeVal</a> representing the current time.  <a href="group__misc.html#ga23dfc8d19e01fe0aba08aa87b2966989">More...</a><br /></td></tr>
+<tr class="separator:ga23dfc8d19e01fe0aba08aa87b2966989"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gae4c0911efb3cf5eeb0f67330f1c074de"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__misc.html#ga02db3ac43a5917535ca3cbc37ac72884">usec_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__misc.html#gae4c0911efb3cf5eeb0f67330f1c074de">ruTimeUs</a> (void)</td></tr>
+<tr class="memdesc:gae4c0911efb3cf5eeb0f67330f1c074de"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the current local time in microseconds since Jan. 1 1970.  <a href="group__misc.html#gae4c0911efb3cf5eeb0f67330f1c074de">More...</a><br /></td></tr>
+<tr class="separator:gae4c0911efb3cf5eeb0f67330f1c074de"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga035a3e39ed5699fc6eede1d3304d3e9c"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__misc.html#gae416893e8160c5b7c6da3765e4707d5d">msec_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__misc.html#ga035a3e39ed5699fc6eede1d3304d3e9c">ruTimeMs</a> (void)</td></tr>
+<tr class="memdesc:ga035a3e39ed5699fc6eede1d3304d3e9c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the current local time in milliseconds since Jan. 1 1970.  <a href="group__misc.html#ga035a3e39ed5699fc6eede1d3304d3e9c">More...</a><br /></td></tr>
+<tr class="separator:ga035a3e39ed5699fc6eede1d3304d3e9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga5a69dfb50754239f299d2267ed06151d"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__misc.html#ga8573cc8637a470b127a19d54b0e94cb9">sec_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__misc.html#ga5a69dfb50754239f299d2267ed06151d">ruTimeSec</a> (void)</td></tr>
+<tr class="memdesc:ga5a69dfb50754239f299d2267ed06151d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the current local time in seconds since Jan. 1 1970.  <a href="group__misc.html#ga5a69dfb50754239f299d2267ed06151d">More...</a><br /></td></tr>
+<tr class="separator:ga5a69dfb50754239f299d2267ed06151d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gac70a35ed3009974a77b3724429c294c4"><td class="memItemLeft" align="right" valign="top">RUAPI bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__misc.html#gac70a35ed3009974a77b3724429c294c4">ruTimeUsEllapsed</a> (<a class="el" href="group__misc.html#ga02db3ac43a5917535ca3cbc37ac72884">usec_t</a> stamp)</td></tr>
+<tr class="memdesc:gac70a35ed3009974a77b3724429c294c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if given stamp has elapsed.  <a href="group__misc.html#gac70a35ed3009974a77b3724429c294c4">More...</a><br /></td></tr>
+<tr class="separator:gac70a35ed3009974a77b3724429c294c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga7f318e6671a7da7811c9f15ef4de2bdd"><td class="memItemLeft" align="right" valign="top">RUAPI bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__misc.html#ga7f318e6671a7da7811c9f15ef4de2bdd">ruTimeMsEllapsed</a> (<a class="el" href="group__misc.html#gae416893e8160c5b7c6da3765e4707d5d">msec_t</a> stamp)</td></tr>
+<tr class="memdesc:ga7f318e6671a7da7811c9f15ef4de2bdd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if given stamp has elapsed.  <a href="group__misc.html#ga7f318e6671a7da7811c9f15ef4de2bdd">More...</a><br /></td></tr>
+<tr class="separator:ga7f318e6671a7da7811c9f15ef4de2bdd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gac6492a980d295e60e0f6946968176613"><td class="memItemLeft" align="right" valign="top">RUAPI bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__misc.html#gac6492a980d295e60e0f6946968176613">ruTimeEllapsed</a> (<a class="el" href="group__misc.html#ga8573cc8637a470b127a19d54b0e94cb9">sec_t</a> stamp)</td></tr>
+<tr class="memdesc:gac6492a980d295e60e0f6946968176613"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if given stamp has elapsed.  <a href="group__misc.html#gac6492a980d295e60e0f6946968176613">More...</a><br /></td></tr>
+<tr class="separator:gac6492a980d295e60e0f6946968176613"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga40a0d0aefa3051c7808feae2809b2741"><td class="memItemLeft" align="right" valign="top">RUAPI void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__misc.html#ga40a0d0aefa3051c7808feae2809b2741">ruSleepUs</a> (<a class="el" href="group__misc.html#ga02db3ac43a5917535ca3cbc37ac72884">usec_t</a> microseconds)</td></tr>
+<tr class="memdesc:ga40a0d0aefa3051c7808feae2809b2741"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sleeps for the given number of micro seconds.  <a href="group__misc.html#ga40a0d0aefa3051c7808feae2809b2741">More...</a><br /></td></tr>
+<tr class="separator:ga40a0d0aefa3051c7808feae2809b2741"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gacb5828ac39a00aa84781c841afb64623"><td class="memItemLeft" align="right" valign="top">RUAPI void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__misc.html#gacb5828ac39a00aa84781c841afb64623">ruSleepMs</a> (<a class="el" href="group__misc.html#gae416893e8160c5b7c6da3765e4707d5d">msec_t</a> milliseconds)</td></tr>
+<tr class="memdesc:gacb5828ac39a00aa84781c841afb64623"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sleeps for the given number of milli seconds.  <a href="group__misc.html#gacb5828ac39a00aa84781c841afb64623">More...</a><br /></td></tr>
+<tr class="separator:gacb5828ac39a00aa84781c841afb64623"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga5d78052ada3c62b7a77e773ae53158c1"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__misc.html#ga8573cc8637a470b127a19d54b0e94cb9">sec_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__misc.html#ga5d78052ada3c62b7a77e773ae53158c1">ruTimeParse</a> (<a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> dateformat, <a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> datestr)</td></tr>
+<tr class="memdesc:ga5d78052ada3c62b7a77e773ae53158c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert a string representation of time to a time stamp.  <a href="group__misc.html#ga5d78052ada3c62b7a77e773ae53158c1">More...</a><br /></td></tr>
+<tr class="separator:ga5d78052ada3c62b7a77e773ae53158c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gabad41e4d218b3038e4e6df69b4f85926"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__misc.html#ga8573cc8637a470b127a19d54b0e94cb9">sec_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__misc.html#gabad41e4d218b3038e4e6df69b4f85926">ruUtcParse</a> (<a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> dateformat, <a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> datestr)</td></tr>
+<tr class="memdesc:gabad41e4d218b3038e4e6df69b4f85926"><td class="mdescLeft">&#160;</td><td class="mdescRight">UTC version of <a class="el" href="group__misc.html#ga5d78052ada3c62b7a77e773ae53158c1">ruTimeParse</a>.  <a href="group__misc.html#gabad41e4d218b3038e4e6df69b4f85926">More...</a><br /></td></tr>
+<tr class="separator:gabad41e4d218b3038e4e6df69b4f85926"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga56f8f6fec10fa579342976d111813f62"><td class="memItemLeft" align="right" valign="top">RUAPI int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__misc.html#ga56f8f6fec10fa579342976d111813f62">ruTimeFormat</a> (<a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> format, <a class="el" href="group__misc.html#gaaa0102d444a5dd14474b7951caae0459">rusize</a> len, <a class="el" href="group__misc.html#ga972d4f4f858964bb2381d186ea96d88d">alloc_chars</a> timeStr, <a class="el" href="group__misc.html#ga8573cc8637a470b127a19d54b0e94cb9">sec_t</a> timesecs)</td></tr>
+<tr class="memdesc:ga56f8f6fec10fa579342976d111813f62"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the current local time formatted in given buffer.  <a href="group__misc.html#ga56f8f6fec10fa579342976d111813f62">More...</a><br /></td></tr>
+<tr class="separator:ga56f8f6fec10fa579342976d111813f62"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaecf4a0b06c4d0268fdd64c378d9facc1"><td class="memItemLeft" align="right" valign="top">RUAPI int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__misc.html#gaecf4a0b06c4d0268fdd64c378d9facc1">ruUtcFormat</a> (<a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> format, <a class="el" href="group__misc.html#gaaa0102d444a5dd14474b7951caae0459">rusize</a> len, <a class="el" href="group__misc.html#ga972d4f4f858964bb2381d186ea96d88d">alloc_chars</a> timeStr, <a class="el" href="group__misc.html#ga8573cc8637a470b127a19d54b0e94cb9">sec_t</a> timesecs)</td></tr>
+<tr class="memdesc:gaecf4a0b06c4d0268fdd64c378d9facc1"><td class="mdescLeft">&#160;</td><td class="mdescRight">UTC version of <a class="el" href="group__misc.html#ga56f8f6fec10fa579342976d111813f62">ruTimeFormat</a>.  <a href="group__misc.html#gaecf4a0b06c4d0268fdd64c378d9facc1">More...</a><br /></td></tr>
+<tr class="separator:gaecf4a0b06c4d0268fdd64c378d9facc1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga671f13d90510aaf61e87b680d999e491"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__misc.html#ga8573cc8637a470b127a19d54b0e94cb9">sec_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__misc.html#ga671f13d90510aaf61e87b680d999e491">ruTimeLocalToUtc</a> (<a class="el" href="group__misc.html#ga8573cc8637a470b127a19d54b0e94cb9">sec_t</a> stamp)</td></tr>
+<tr class="memdesc:ga671f13d90510aaf61e87b680d999e491"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts given local time stamp to UTC.  <a href="group__misc.html#ga671f13d90510aaf61e87b680d999e491">More...</a><br /></td></tr>
+<tr class="separator:ga671f13d90510aaf61e87b680d999e491"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga3e7596f5512ddf7baa26a049a8ada132"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__misc.html#ga8573cc8637a470b127a19d54b0e94cb9">sec_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__misc.html#ga3e7596f5512ddf7baa26a049a8ada132">ruTimeUtcToLocal</a> (<a class="el" href="group__misc.html#ga8573cc8637a470b127a19d54b0e94cb9">sec_t</a> stamp)</td></tr>
+<tr class="memdesc:ga3e7596f5512ddf7baa26a049a8ada132"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts given UTC time stamp to local time.  <a href="group__misc.html#ga3e7596f5512ddf7baa26a049a8ada132">More...</a><br /></td></tr>
+<tr class="separator:ga3e7596f5512ddf7baa26a049a8ada132"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Abstracted functions pertaining to other areas. </p>
 <h2 class="groupheader">Macro Definition Documentation</h2>
+<a id="ga3a6bd0d17663435e5e96679ffe03f900"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga3a6bd0d17663435e5e96679ffe03f900">&#9670;&nbsp;</a></span>RU_NO_TIMEOUT</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define RU_NO_TIMEOUT&#160;&#160;&#160;0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Indicates that an operation that has no timeout. Used by <a class="el" href="group__misc.html#gaa1ee1acfc9e71c9beba03b4b547f8abc">ruRunProg</a>. </p>
+
+</div>
+</div>
+<a id="ga934df7587a942f224560208b555e8826"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga934df7587a942f224560208b555e8826">&#9670;&nbsp;</a></span>RU_NON_BLOCK</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define RU_NON_BLOCK&#160;&#160;&#160;(-1)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Indicates that an operation is non blocking. Used by <a class="el" href="group__misc.html#gaa1ee1acfc9e71c9beba03b4b547f8abc">ruRunProg</a>. </p>
+
+</div>
+</div>
+<a id="ga0282856ae8c37b20f28093d6cdfdd8b7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga0282856ae8c37b20f28093d6cdfdd8b7">&#9670;&nbsp;</a></span>RU_SIZE_AUTO</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define RU_SIZE_AUTO&#160;&#160;&#160;(~0LU)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Says to determine the size parameter using strlen or an equivalent. </p>
+
+</div>
+</div>
 <a id="ga0bd4973612c1de9454caa98b7792fb8e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ga0bd4973612c1de9454caa98b7792fb8e">&#9670;&nbsp;</a></span>ruRetWithCode</h2>
 
@@ -223,9 +375,35 @@ Data Structures</h2></td></tr>
 <b>Value:</b><div class="fragment"><div class="line">    ruMacStart { \</div>
 <div class="line">    if (<a class="code" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a>) { *<a class="code" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a> = code; } <span class="keywordflow">return</span> res; \</div>
 <div class="line">    } ruMacEnd</div>
-<div class="ttc" id="agroup__misc_html_gab4cf5759c3753c2308f163953ee154f0"><div class="ttname"><a href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a></div><div class="ttdeci">void * ptr</div><div class="ttdoc">A generic pointer.</div><div class="ttdef"><b>Definition:</b> regify-util.h:293</div></div>
+<div class="ttc" id="agroup__misc_html_gab4cf5759c3753c2308f163953ee154f0"><div class="ttname"><a href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a></div><div class="ttdeci">void * ptr</div><div class="ttdoc">A generic pointer.</div><div class="ttdef"><b>Definition:</b> regify-util.h:292</div></div>
 </div><!-- fragment -->
 <p>Convenience macro for setting a potentially passed in result pointer and returning a result. </p>
+
+</div>
+</div>
+<a id="gacd1b05c76a2e6c682e67f216c34c7241"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gacd1b05c76a2e6c682e67f216c34c7241">&#9670;&nbsp;</a></span>ruSleep</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ruSleep</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">secs</td><td>)</td>
+          <td>&#160;&#160;&#160;<a class="el" href="group__misc.html#gacb5828ac39a00aa84781c841afb64623">ruSleepMs</a>(((<a class="el" href="group__misc.html#gae416893e8160c5b7c6da3765e4707d5d">msec_t</a>)(secs))*1000)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sleeps for the given number of seconds. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">secs</td><td>time to sleep </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -395,9 +573,6 @@ Data Structures</h2></td></tr>
 </div><div class="memdoc">
 
 <p>A generic pointer. </p>
-<ul>
-<li></li>
-</ul>
 
 </div>
 </div>
@@ -414,6 +589,22 @@ Data Structures</h2></td></tr>
 </div><div class="memdoc">
 
 <p>A pointer sized integer type for collections like <a class="el" href="group__map.html#gaad879dbca17e7740cbab5651cafe677d">ruMap</a> or <a class="el" href="group__list.html#gab25c1662a91a5e0d68a3f04efd1a0cc2">ruList</a>. </p>
+
+</div>
+</div>
+<a id="ga623467b9d56a745927eb36236c8ebdb2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga623467b9d56a745927eb36236c8ebdb2">&#9670;&nbsp;</a></span>ru_pid</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef pid_t <a class="el" href="group__misc.html#ga623467b9d56a745927eb36236c8ebdb2">ru_pid</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Abstracted process id type. </p>
 
 </div>
 </div>
@@ -513,6 +704,22 @@ Data Structures</h2></td></tr>
 
 </div>
 </div>
+<a id="gac23a4c7337daa8f22a561f49096b06b8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gac23a4c7337daa8f22a561f49096b06b8">&#9670;&nbsp;</a></span>rusize_s</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef signed long <a class="el" href="group__misc.html#gac23a4c7337daa8f22a561f49096b06b8">rusize_s</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Abstracted version of size_t but signed. </p>
+
+</div>
+</div>
 <a id="ga8573cc8637a470b127a19d54b0e94cb9"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ga8573cc8637a470b127a19d54b0e94cb9">&#9670;&nbsp;</a></span>sec_t</h2>
 
@@ -597,6 +804,20 @@ Data Structures</h2></td></tr>
 
 </div>
 </div>
+<a id="ga65f85814a8290f9797005d3b28e7e5fc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga65f85814a8290f9797005d3b28e7e5fc">&#9670;&nbsp;</a></span>uchar</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef unsigned char <a class="el" href="group__misc.html#ga65f85814a8290f9797005d3b28e7e5fc">uchar</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ga02db3ac43a5917535ca3cbc37ac72884"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ga02db3ac43a5917535ca3cbc37ac72884">&#9670;&nbsp;</a></span>usec_t</h2>
 
@@ -614,6 +835,75 @@ Data Structures</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
+<a id="ga86dd88de865e954dc1d0ea82fd20f21c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga86dd88de865e954dc1d0ea82fd20f21c">&#9670;&nbsp;</a></span>ruGetenv()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI <a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> ruGetenv </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>variable</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the value of the requested environment vartiable or NULL if it is not set. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">variable</td><td>Variable name to retrieve </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A copy of the value. May not be freed by the caller. </dd></dl>
+
+</div>
+</div>
+<a id="gab28def77befe23dc2785aff9b1623105"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gab28def77befe23dc2785aff9b1623105">&#9670;&nbsp;</a></span>ruGetHostname()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI <a class="el" href="group__misc.html#ga972d4f4f858964bb2381d186ea96d88d">alloc_chars</a> ruGetHostname </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the name of this host. </p>
+<dl class="section return"><dt>Returns</dt><dd>hostname. Caller should free this with <a class="el" href="group__memory.html#gafcc3628238450c77b4aa61e9d7001a56">ruFree</a>. </dd></dl>
+
+</div>
+</div>
+<a id="ga2c70eecb13cf89033737e26a9ff08817"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga2c70eecb13cf89033737e26a9ff08817">&#9670;&nbsp;</a></span>ruGetLanguage()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI <a class="el" href="group__misc.html#ga972d4f4f858964bb2381d186ea96d88d">alloc_chars</a> ruGetLanguage </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the ISO-639-1 2 letter country code pertaining to the running system,. </p>
+<dl class="section return"><dt>Returns</dt><dd>The country code. Caller must free with <a class="el" href="group__memory.html#gafcc3628238450c77b4aa61e9d7001a56">ruFree</a>. </dd></dl>
+
+</div>
+</div>
 <a id="ga9514522bf5289236d07a8b714ab8e0b0"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ga9514522bf5289236d07a8b714ab8e0b0">&#9670;&nbsp;</a></span>ruGetOs()</h2>
 
@@ -632,6 +922,613 @@ Data Structures</h2></td></tr>
 
 <p>Returns a lowercase string representation of the current OS. </p>
 <p>Currently knows about windows, android, linux, osx, ios and unix. </p><dl class="section return"><dt>Returns</dt><dd>os string. Caller should copy this for persistence. </dd></dl>
+
+</div>
+</div>
+<a id="ga23dfc8d19e01fe0aba08aa87b2966989"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga23dfc8d19e01fe0aba08aa87b2966989">&#9670;&nbsp;</a></span>ruGetTimeVal()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI int32_t ruGetTimeVal </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structru_time_val.html">ruTimeVal</a> *&#160;</td>
+          <td class="paramname"><em>result</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns a <a class="el" href="structru_time_val.html">ruTimeVal</a> representing the current time. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">result</td><td>Pointer to the <a class="el" href="structru_time_val.html">ruTimeVal</a> structure to populate. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Return code of the operation or <a class="el" href="group__ruerror.html#ga7e2f97cce8af8020834e685a2482556d">RUE_OK</a> on success. </dd></dl>
+
+</div>
+</div>
+<a id="ga61f7ab20b2760c5cb849d3b442eb4402"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga61f7ab20b2760c5cb849d3b442eb4402">&#9670;&nbsp;</a></span>ruIsInt64()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI bool ruIsInt64 </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>numstr</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns true if given string contains a valid 64 bit integer. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">numstr</td><td>String to parse </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>parse result overflow returns as false </dd></dl>
+
+</div>
+</div>
+<a id="gaea3d529fecc1bbad25f943943b6e9ef2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaea3d529fecc1bbad25f943943b6e9ef2">&#9670;&nbsp;</a></span>ruLastError()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI const char* ruLastError </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns an English textual representation of the last error this thread generated. </p>
+<p>Note, not all functions use this, so this function should only be called after a function that does use it is called, else misleading information will appear.</p>
+<dl class="section return"><dt>Returns</dt><dd>Ephemeral error message. Must be copied if it is to persist. </dd></dl>
+
+</div>
+</div>
+<a id="gafb168a8376876c132f91f3568110a676"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gafb168a8376876c132f91f3568110a676">&#9670;&nbsp;</a></span>ruProcessId()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI <a class="el" href="group__misc.html#ga623467b9d56a745927eb36236c8ebdb2">ru_pid</a> ruProcessId </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return the current process id. </p>
+<dl class="section return"><dt>Returns</dt><dd>the current process id </dd></dl>
+
+</div>
+</div>
+<a id="gaa1ee1acfc9e71c9beba03b4b547f8abc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaa1ee1acfc9e71c9beba03b4b547f8abc">&#9670;&nbsp;</a></span>ruRunProg()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI int32_t ruRunProg </td>
+          <td>(</td>
+          <td class="paramtype">const char **&#160;</td>
+          <td class="paramname"><em>argv</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga8573cc8637a470b127a19d54b0e94cb9">sec_t</a>&#160;</td>
+          <td class="paramname"><em>timeout</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Runs given program. </p>
+<p>Example: </p><div class="fragment"><div class="line"><span class="keyword">const</span> <span class="keywordtype">char</span>* command[] = {<span class="stringliteral">&quot;/bin/sleep&quot;</span>, <span class="stringliteral">&quot;3&quot;</span>, NULL};</div>
+<div class="line"><span class="keywordtype">int</span> ret = <a class="code" href="group__misc.html#gaa1ee1acfc9e71c9beba03b4b547f8abc">ruRunProg</a>(command, <a class="code" href="group__misc.html#ga3a6bd0d17663435e5e96679ffe03f900">RU_NO_TIMEOUT</a>);</div>
+<div class="ttc" id="agroup__misc_html_ga3a6bd0d17663435e5e96679ffe03f900"><div class="ttname"><a href="group__misc.html#ga3a6bd0d17663435e5e96679ffe03f900">RU_NO_TIMEOUT</a></div><div class="ttdeci">#define RU_NO_TIMEOUT</div><div class="ttdoc">Indicates that an operation that has no timeout. Used by ruRunProg.</div><div class="ttdef"><b>Definition:</b> regify-util.h:426</div></div>
+<div class="ttc" id="agroup__misc_html_gaa1ee1acfc9e71c9beba03b4b547f8abc"><div class="ttname"><a href="group__misc.html#gaa1ee1acfc9e71c9beba03b4b547f8abc">ruRunProg</a></div><div class="ttdeci">RUAPI int32_t ruRunProg(const char **argv, sec_t timeout)</div><div class="ttdoc">Runs given program.</div></div>
+</div><!-- fragment --><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">argv</td><td>program with params to run </td></tr>
+    <tr><td class="paramname">timeout</td><td>Use <a class="el" href="group__misc.html#ga934df7587a942f224560208b555e8826">RU_NON_BLOCK</a> for non blocking, <a class="el" href="group__misc.html#ga3a6bd0d17663435e5e96679ffe03f900">RU_NO_TIMEOUT</a> for blocking and &gt; 0 to a timeout in seconds. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="group__ruerror.html#ga5571b7590304c5b53813def045533696">RUE_FORK_FAILED</a> for a fork failure, <a class="el" href="group__ruerror.html#ga0e8db464671617e7b055e90cfb898f78">RUE_RUN_FAILED</a> for a launch failure, <a class="el" href="group__ruerror.html#gae7f248eb7648a198f04a2ee4ebfa023b">RUE_TIMEOUT</a> for a timeout, else the return code of the process or 0 if it was launched non blocking. </dd></dl>
+
+</div>
+</div>
+<a id="gaf71c9663b075c4dbe4f665b51cde059b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaf71c9663b075c4dbe4f665b51cde059b">&#9670;&nbsp;</a></span>ruSemiRandomNumber()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI unsigned long ruSemiRandomNumber </td>
+          <td>(</td>
+          <td class="paramtype">unsigned long&#160;</td>
+          <td class="paramname"><em>max</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">long&#160;</td>
+          <td class="paramname"><em>offset</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns a quasi ramdom number between 0 and max + offset. </p>
+<p>This function ORs timevals usec with sec, so it is not designed for cryptographic use. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">max</td><td>The maximum random value. </td></tr>
+    <tr><td class="paramname">offset</td><td>An off set to add to the result to move the range. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A number between offset and offset + max. </dd></dl>
+
+</div>
+</div>
+<a id="gacb5828ac39a00aa84781c841afb64623"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gacb5828ac39a00aa84781c841afb64623">&#9670;&nbsp;</a></span>ruSleepMs()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI void ruSleepMs </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__misc.html#gae416893e8160c5b7c6da3765e4707d5d">msec_t</a>&#160;</td>
+          <td class="paramname"><em>milliseconds</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sleeps for the given number of milli seconds. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">milliseconds</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ga40a0d0aefa3051c7808feae2809b2741"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga40a0d0aefa3051c7808feae2809b2741">&#9670;&nbsp;</a></span>ruSleepUs()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI void ruSleepUs </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga02db3ac43a5917535ca3cbc37ac72884">usec_t</a>&#160;</td>
+          <td class="paramname"><em>microseconds</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sleeps for the given number of micro seconds. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">microseconds</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="gac6492a980d295e60e0f6946968176613"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gac6492a980d295e60e0f6946968176613">&#9670;&nbsp;</a></span>ruTimeEllapsed()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI bool ruTimeEllapsed </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga8573cc8637a470b127a19d54b0e94cb9">sec_t</a>&#160;</td>
+          <td class="paramname"><em>stamp</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Checks if given stamp has elapsed. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">stamp</td><td>second stamp to compare to. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Return true if now is &gt;= stamp </dd></dl>
+
+</div>
+</div>
+<a id="ga56f8f6fec10fa579342976d111813f62"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga56f8f6fec10fa579342976d111813f62">&#9670;&nbsp;</a></span>ruTimeFormat()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI int ruTimeFormat </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a>&#160;</td>
+          <td class="paramname"><em>format</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__misc.html#gaaa0102d444a5dd14474b7951caae0459">rusize</a>&#160;</td>
+          <td class="paramname"><em>len</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga972d4f4f858964bb2381d186ea96d88d">alloc_chars</a>&#160;</td>
+          <td class="paramname"><em>timeStr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga8573cc8637a470b127a19d54b0e94cb9">sec_t</a>&#160;</td>
+          <td class="paramname"><em>timesecs</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return the current local time formatted in given buffer. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">format</td><td>format string for strftime </td></tr>
+    <tr><td class="paramname">len</td><td>length of the given buffer must include room for the null terminator </td></tr>
+    <tr><td class="paramname">timeStr</td><td>buffer where formatted null terminated string will be placed </td></tr>
+    <tr><td class="paramname">timesecs</td><td>datestamp in seconds since epoch or 0 to use current time </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>microsecond part of the current time or -1 on error; </dd></dl>
+
+</div>
+</div>
+<a id="ga671f13d90510aaf61e87b680d999e491"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga671f13d90510aaf61e87b680d999e491">&#9670;&nbsp;</a></span>ruTimeLocalToUtc()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI <a class="el" href="group__misc.html#ga8573cc8637a470b127a19d54b0e94cb9">sec_t</a> ruTimeLocalToUtc </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga8573cc8637a470b127a19d54b0e94cb9">sec_t</a>&#160;</td>
+          <td class="paramname"><em>stamp</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts given local time stamp to UTC. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">stamp</td><td>seconds since epoch in local time </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>UTC seconds since epoch </dd></dl>
+
+</div>
+</div>
+<a id="ga035a3e39ed5699fc6eede1d3304d3e9c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga035a3e39ed5699fc6eede1d3304d3e9c">&#9670;&nbsp;</a></span>ruTimeMs()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI <a class="el" href="group__misc.html#gae416893e8160c5b7c6da3765e4707d5d">msec_t</a> ruTimeMs </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return the current local time in milliseconds since Jan. 1 1970. </p>
+<dl class="section return"><dt>Returns</dt><dd>Milli seconds since epoch </dd></dl>
+
+</div>
+</div>
+<a id="ga7f318e6671a7da7811c9f15ef4de2bdd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga7f318e6671a7da7811c9f15ef4de2bdd">&#9670;&nbsp;</a></span>ruTimeMsEllapsed()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI bool ruTimeMsEllapsed </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__misc.html#gae416893e8160c5b7c6da3765e4707d5d">msec_t</a>&#160;</td>
+          <td class="paramname"><em>stamp</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Checks if given stamp has elapsed. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">stamp</td><td>millisecond stamp to compare to. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Return true if now is &gt;= stamp </dd></dl>
+
+</div>
+</div>
+<a id="ga5d78052ada3c62b7a77e773ae53158c1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga5d78052ada3c62b7a77e773ae53158c1">&#9670;&nbsp;</a></span>ruTimeParse()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI <a class="el" href="group__misc.html#ga8573cc8637a470b127a19d54b0e94cb9">sec_t</a> ruTimeParse </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a>&#160;</td>
+          <td class="paramname"><em>dateformat</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a>&#160;</td>
+          <td class="paramname"><em>datestr</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Convert a string representation of time to a time stamp. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">dateformat</td><td>a strptime type format string </td></tr>
+    <tr><td class="paramname">datestr</td><td>the string representation of the given date time </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>given date time in seconds since epoch </dd></dl>
+
+</div>
+</div>
+<a id="ga5a69dfb50754239f299d2267ed06151d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga5a69dfb50754239f299d2267ed06151d">&#9670;&nbsp;</a></span>ruTimeSec()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI <a class="el" href="group__misc.html#ga8573cc8637a470b127a19d54b0e94cb9">sec_t</a> ruTimeSec </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return the current local time in seconds since Jan. 1 1970. </p>
+<dl class="section return"><dt>Returns</dt><dd>Seconds since epoch </dd></dl>
+
+</div>
+</div>
+<a id="gae4c0911efb3cf5eeb0f67330f1c074de"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gae4c0911efb3cf5eeb0f67330f1c074de">&#9670;&nbsp;</a></span>ruTimeUs()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI <a class="el" href="group__misc.html#ga02db3ac43a5917535ca3cbc37ac72884">usec_t</a> ruTimeUs </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return the current local time in microseconds since Jan. 1 1970. </p>
+<dl class="section return"><dt>Returns</dt><dd>Micro seconds since epoch </dd></dl>
+
+</div>
+</div>
+<a id="gac70a35ed3009974a77b3724429c294c4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gac70a35ed3009974a77b3724429c294c4">&#9670;&nbsp;</a></span>ruTimeUsEllapsed()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI bool ruTimeUsEllapsed </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga02db3ac43a5917535ca3cbc37ac72884">usec_t</a>&#160;</td>
+          <td class="paramname"><em>stamp</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Checks if given stamp has elapsed. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">stamp</td><td>microsecond stamp to compare to. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Return true if now is &gt;= stamp </dd></dl>
+
+</div>
+</div>
+<a id="ga3e7596f5512ddf7baa26a049a8ada132"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga3e7596f5512ddf7baa26a049a8ada132">&#9670;&nbsp;</a></span>ruTimeUtcToLocal()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI <a class="el" href="group__misc.html#ga8573cc8637a470b127a19d54b0e94cb9">sec_t</a> ruTimeUtcToLocal </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga8573cc8637a470b127a19d54b0e94cb9">sec_t</a>&#160;</td>
+          <td class="paramname"><em>stamp</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Converts given UTC time stamp to local time. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">stamp</td><td>UTC seconds since epoch </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>seconds since epoch in local time </dd></dl>
+
+</div>
+</div>
+<a id="gaecf4a0b06c4d0268fdd64c378d9facc1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaecf4a0b06c4d0268fdd64c378d9facc1">&#9670;&nbsp;</a></span>ruUtcFormat()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI int ruUtcFormat </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a>&#160;</td>
+          <td class="paramname"><em>format</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__misc.html#gaaa0102d444a5dd14474b7951caae0459">rusize</a>&#160;</td>
+          <td class="paramname"><em>len</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga972d4f4f858964bb2381d186ea96d88d">alloc_chars</a>&#160;</td>
+          <td class="paramname"><em>timeStr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga8573cc8637a470b127a19d54b0e94cb9">sec_t</a>&#160;</td>
+          <td class="paramname"><em>timesecs</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>UTC version of <a class="el" href="group__misc.html#ga56f8f6fec10fa579342976d111813f62">ruTimeFormat</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">format</td><td>format string for strftime </td></tr>
+    <tr><td class="paramname">len</td><td>length of the given buffer must include room for the null terminator </td></tr>
+    <tr><td class="paramname">timeStr</td><td>buffer where formatted null terminated string will be placed </td></tr>
+    <tr><td class="paramname">timesecs</td><td>datestamp in seconds since epoch or 0 to use current time </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>microsecond part of the current time or -1 on error; </dd></dl>
+
+</div>
+</div>
+<a id="gabad41e4d218b3038e4e6df69b4f85926"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gabad41e4d218b3038e4e6df69b4f85926">&#9670;&nbsp;</a></span>ruUtcParse()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI <a class="el" href="group__misc.html#ga8573cc8637a470b127a19d54b0e94cb9">sec_t</a> ruUtcParse </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a>&#160;</td>
+          <td class="paramname"><em>dateformat</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a>&#160;</td>
+          <td class="paramname"><em>datestr</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>UTC version of <a class="el" href="group__misc.html#ga5d78052ada3c62b7a77e773ae53158c1">ruTimeParse</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">dateformat</td><td>a strptime type format string </td></tr>
+    <tr><td class="paramname">datestr</td><td>the string representation of the given date time </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>given date time in seconds since epoch </dd></dl>
 
 </div>
 </div>
@@ -656,12 +1553,50 @@ Data Structures</h2></td></tr>
 
 </div>
 </div>
+<a id="gad5f20c00063066599020981359d2eba6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gad5f20c00063066599020981359d2eba6">&#9670;&nbsp;</a></span>ruVersionComp()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI int ruVersionComp </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a>&#160;</td>
+          <td class="paramname"><em>ver1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a>&#160;</td>
+          <td class="paramname"><em>ver2</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Compares 2 version strings This function compares version number strings that are made up of real numbers. The advantage is that the delimiter does not matter. It will work with, for example, 141.01.03, 141:1:3, or even 141A1P3. It also handles mismatched tails so that 141.1.3 will come before 141.1.3.1. Finally NULLs are also properly compared. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ver1</td><td>First version to check </td></tr>
+    <tr><td class="paramname">ver2</td><td>Second version to check </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>-1, 0 or 1 depending on whether ver1 is less equal or greater ver2 </dd></dl>
+
+</div>
+</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Fri May 26 2023 07:54:40 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Fri May 26 2023 08:55:03 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

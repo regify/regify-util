@@ -645,7 +645,7 @@ Functions</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">filename</td><td>Path to the file to create. </td></tr>
     <tr><td class="paramname">contents</td><td>Contents to write into the file. This may be a NULL terminated encoding irrelevant string or binary data. If contents is NULL an empty file will be created. </td></tr>
-    <tr><td class="paramname">length</td><td>Length of the content. May be RU_SIZE_AUTO for a NULL terminated string. </td></tr>
+    <tr><td class="paramname">length</td><td>Length of the content. May be <a class="el" href="group__misc.html#ga0282856ae8c37b20f28093d6cdfdd8b7">RU_SIZE_AUTO</a> for a NULL terminated string. </td></tr>
   </table>
   </dd>
 </dl>
@@ -721,7 +721,7 @@ Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">filePath</td><td>File path to get size of </td></tr>
-    <tr><td class="paramname">code</td><td>Where the status of the operation will be stored. <a class="el" href="group__ruerror.html#ga7e2f97cce8af8020834e685a2482556d">RUE_OK</a> on success else <a class="el" href="group__ruerror.html#ga616dba9a5dafed8351aa98c68fab25e2">RUE_PARAMETER_NOT_SET</a> if filename was NULL or <a class="el" href="group__ruerror.html#gadb4058c56ea545e1d20d2efa9d6611fd">RUE_FILE_NOT_FOUND</a> if file didn't exists or <a class="el" href="group__ruerror.html#gae9ed1060b946292df9590533fea757f6">RUE_CANT_OPEN_FILE</a> if it was another error. Check errno or call ruLastError for details. </td></tr>
+    <tr><td class="paramname">code</td><td>Where the status of the operation will be stored. <a class="el" href="group__ruerror.html#ga7e2f97cce8af8020834e685a2482556d">RUE_OK</a> on success else <a class="el" href="group__ruerror.html#ga616dba9a5dafed8351aa98c68fab25e2">RUE_PARAMETER_NOT_SET</a> if filename was NULL or <a class="el" href="group__ruerror.html#gadb4058c56ea545e1d20d2efa9d6611fd">RUE_FILE_NOT_FOUND</a> if file didn't exists or <a class="el" href="group__ruerror.html#gae9ed1060b946292df9590533fea757f6">RUE_CANT_OPEN_FILE</a> if it was another error. Check errno or call <a class="el" href="group__misc.html#gaea3d529fecc1bbad25f943943b6e9ef2">ruLastError</a> for details. </td></tr>
   </table>
   </dd>
 </dl>
@@ -797,7 +797,7 @@ Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">filePath</td><td>File path to get date of </td></tr>
-    <tr><td class="paramname">code</td><td>Where the status of the operation will be stored. <a class="el" href="group__ruerror.html#ga7e2f97cce8af8020834e685a2482556d">RUE_OK</a> on success else <a class="el" href="group__ruerror.html#ga616dba9a5dafed8351aa98c68fab25e2">RUE_PARAMETER_NOT_SET</a> if filename was NULL or <a class="el" href="group__ruerror.html#gadb4058c56ea545e1d20d2efa9d6611fd">RUE_FILE_NOT_FOUND</a> if file didn't exists or <a class="el" href="group__ruerror.html#gae9ed1060b946292df9590533fea757f6">RUE_CANT_OPEN_FILE</a> if it was another error. Check errno or call ruLastError for details. </td></tr>
+    <tr><td class="paramname">code</td><td>Where the status of the operation will be stored. <a class="el" href="group__ruerror.html#ga7e2f97cce8af8020834e685a2482556d">RUE_OK</a> on success else <a class="el" href="group__ruerror.html#ga616dba9a5dafed8351aa98c68fab25e2">RUE_PARAMETER_NOT_SET</a> if filename was NULL or <a class="el" href="group__ruerror.html#gadb4058c56ea545e1d20d2efa9d6611fd">RUE_FILE_NOT_FOUND</a> if file didn't exists or <a class="el" href="group__ruerror.html#gae9ed1060b946292df9590533fea757f6">RUE_CANT_OPEN_FILE</a> if it was another error. Check errno or call <a class="el" href="group__misc.html#gaea3d529fecc1bbad25f943943b6e9ef2">ruLastError</a> for details. </td></tr>
   </table>
   </dd>
 </dl>
@@ -914,7 +914,7 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd><a class="el" href="group__ruerror.html#ga7e2f97cce8af8020834e685a2482556d">RUE_OK</a> on success else <a class="el" href="group__ruerror.html#ga2f7444b837379ce89b69a94db10781d2">RUE_GENERAL</a> and call ruLastError for details. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="group__ruerror.html#ga7e2f97cce8af8020834e685a2482556d">RUE_OK</a> on success else <a class="el" href="group__ruerror.html#ga2f7444b837379ce89b69a94db10781d2">RUE_GENERAL</a> and call <a class="el" href="group__misc.html#gaea3d529fecc1bbad25f943943b6e9ef2">ruLastError</a> for details. </dd></dl>
 
 </div>
 </div>
@@ -1392,7 +1392,7 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Returns <a class="el" href="group__ruerror.html#ga7e2f97cce8af8020834e685a2482556d">RUE_OK</a> on success else <a class="el" href="group__ruerror.html#ga616dba9a5dafed8351aa98c68fab25e2">RUE_PARAMETER_NOT_SET</a> if filename was NULL or <a class="el" href="group__ruerror.html#gadb4058c56ea545e1d20d2efa9d6611fd">RUE_FILE_NOT_FOUND</a> if file didn't exists or <a class="el" href="group__ruerror.html#gae9ed1060b946292df9590533fea757f6">RUE_CANT_OPEN_FILE</a> if it was another error. Check errno or call ruLastError for details. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Returns <a class="el" href="group__ruerror.html#ga7e2f97cce8af8020834e685a2482556d">RUE_OK</a> on success else <a class="el" href="group__ruerror.html#ga616dba9a5dafed8351aa98c68fab25e2">RUE_PARAMETER_NOT_SET</a> if filename was NULL or <a class="el" href="group__ruerror.html#gadb4058c56ea545e1d20d2efa9d6611fd">RUE_FILE_NOT_FOUND</a> if file didn't exists or <a class="el" href="group__ruerror.html#gae9ed1060b946292df9590533fea757f6">RUE_CANT_OPEN_FILE</a> if it was another error. Check errno or call <a class="el" href="group__misc.html#gaea3d529fecc1bbad25f943943b6e9ef2">ruLastError</a> for details. </dd></dl>
 
 </div>
 </div>
@@ -1401,7 +1401,7 @@ Functions</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Fri May 26 2023 07:54:40 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Fri May 26 2023 08:55:03 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

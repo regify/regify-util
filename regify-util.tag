@@ -55,6 +55,55 @@
     <title>Miscellaneous Functions</title>
     <filename>group__misc.html</filename>
     <class kind="struct">ruTimeVal</class>
+    <member kind="define">
+      <type>#define</type>
+      <name>RU_SIZE_AUTO</name>
+      <anchorfile>group__misc.html</anchorfile>
+      <anchor>ga0282856ae8c37b20f28093d6cdfdd8b7</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>RU_NON_BLOCK</name>
+      <anchorfile>group__misc.html</anchorfile>
+      <anchor>ga934df7587a942f224560208b555e8826</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>RU_NO_TIMEOUT</name>
+      <anchorfile>group__misc.html</anchorfile>
+      <anchor>ga3a6bd0d17663435e5e96679ffe03f900</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>ruSleep</name>
+      <anchorfile>group__misc.html</anchorfile>
+      <anchor>gacd1b05c76a2e6c682e67f216c34c7241</anchor>
+      <arglist>(secs)</arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>ruRetWithCode</name>
+      <anchorfile>group__misc.html</anchorfile>
+      <anchor>ga0bd4973612c1de9454caa98b7792fb8e</anchor>
+      <arglist>(ptr, code, res)</arglist>
+    </member>
+    <member kind="typedef">
+      <type>signed long</type>
+      <name>rusize_s</name>
+      <anchorfile>group__misc.html</anchorfile>
+      <anchor>gac23a4c7337daa8f22a561f49096b06b8</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>pid_t</type>
+      <name>ru_pid</name>
+      <anchorfile>group__misc.html</anchorfile>
+      <anchor>ga623467b9d56a745927eb36236c8ebdb2</anchor>
+      <arglist></arglist>
+    </member>
     <member kind="typedef">
       <type>const char *</type>
       <name>perm_chars</name>
@@ -216,6 +265,13 @@
       <anchor>ga6f2df974d7fa3462ee789585fcd510ed</anchor>
       <arglist>)(trans_ptr a, trans_ptr b)</arglist>
     </member>
+    <member kind="typedef">
+      <type>unsigned char</type>
+      <name>uchar</name>
+      <anchorfile>group__misc.html</anchorfile>
+      <anchor>ga65f85814a8290f9797005d3b28e7e5fc</anchor>
+      <arglist></arglist>
+    </member>
     <member kind="function">
       <type>RUAPI const char *</type>
       <name>ruVersion</name>
@@ -223,12 +279,12 @@
       <anchor>ga71dec8ccc9b4947b4142514696e78795</anchor>
       <arglist>(void)</arglist>
     </member>
-    <member kind="define">
-      <type>#define</type>
-      <name>ruRetWithCode</name>
+    <member kind="function">
+      <type>RUAPI const char *</type>
+      <name>ruLastError</name>
       <anchorfile>group__misc.html</anchorfile>
-      <anchor>ga0bd4973612c1de9454caa98b7792fb8e</anchor>
-      <arglist>(ptr, code, res)</arglist>
+      <anchor>gaea3d529fecc1bbad25f943943b6e9ef2</anchor>
+      <arglist>(void)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI perm_chars</type>
@@ -237,11 +293,186 @@
       <anchor>ga9514522bf5289236d07a8b714ab8e0b0</anchor>
       <arglist>(void)</arglist>
     </member>
+    <member kind="function">
+      <type>RUAPI alloc_chars</type>
+      <name>ruGetHostname</name>
+      <anchorfile>group__misc.html</anchorfile>
+      <anchor>gab28def77befe23dc2785aff9b1623105</anchor>
+      <arglist>(void)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI trans_chars</type>
+      <name>ruGetenv</name>
+      <anchorfile>group__misc.html</anchorfile>
+      <anchor>ga86dd88de865e954dc1d0ea82fd20f21c</anchor>
+      <arglist>(const char *variable)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI bool</type>
+      <name>ruIsInt64</name>
+      <anchorfile>group__misc.html</anchorfile>
+      <anchor>ga61f7ab20b2760c5cb849d3b442eb4402</anchor>
+      <arglist>(const char *numstr)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI ru_pid</type>
+      <name>ruProcessId</name>
+      <anchorfile>group__misc.html</anchorfile>
+      <anchor>gafb168a8376876c132f91f3568110a676</anchor>
+      <arglist>(void)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI int32_t</type>
+      <name>ruRunProg</name>
+      <anchorfile>group__misc.html</anchorfile>
+      <anchor>gaa1ee1acfc9e71c9beba03b4b547f8abc</anchor>
+      <arglist>(const char **argv, sec_t timeout)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI alloc_chars</type>
+      <name>ruGetLanguage</name>
+      <anchorfile>group__misc.html</anchorfile>
+      <anchor>ga2c70eecb13cf89033737e26a9ff08817</anchor>
+      <arglist>(void)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI unsigned long</type>
+      <name>ruSemiRandomNumber</name>
+      <anchorfile>group__misc.html</anchorfile>
+      <anchor>gaf71c9663b075c4dbe4f665b51cde059b</anchor>
+      <arglist>(unsigned long max, long offset)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI int</type>
+      <name>ruVersionComp</name>
+      <anchorfile>group__misc.html</anchorfile>
+      <anchor>gad5f20c00063066599020981359d2eba6</anchor>
+      <arglist>(trans_chars ver1, trans_chars ver2)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI int32_t</type>
+      <name>ruGetTimeVal</name>
+      <anchorfile>group__misc.html</anchorfile>
+      <anchor>ga23dfc8d19e01fe0aba08aa87b2966989</anchor>
+      <arglist>(ruTimeVal *result)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI usec_t</type>
+      <name>ruTimeUs</name>
+      <anchorfile>group__misc.html</anchorfile>
+      <anchor>gae4c0911efb3cf5eeb0f67330f1c074de</anchor>
+      <arglist>(void)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI msec_t</type>
+      <name>ruTimeMs</name>
+      <anchorfile>group__misc.html</anchorfile>
+      <anchor>ga035a3e39ed5699fc6eede1d3304d3e9c</anchor>
+      <arglist>(void)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI sec_t</type>
+      <name>ruTimeSec</name>
+      <anchorfile>group__misc.html</anchorfile>
+      <anchor>ga5a69dfb50754239f299d2267ed06151d</anchor>
+      <arglist>(void)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI bool</type>
+      <name>ruTimeUsEllapsed</name>
+      <anchorfile>group__misc.html</anchorfile>
+      <anchor>gac70a35ed3009974a77b3724429c294c4</anchor>
+      <arglist>(usec_t stamp)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI bool</type>
+      <name>ruTimeMsEllapsed</name>
+      <anchorfile>group__misc.html</anchorfile>
+      <anchor>ga7f318e6671a7da7811c9f15ef4de2bdd</anchor>
+      <arglist>(msec_t stamp)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI bool</type>
+      <name>ruTimeEllapsed</name>
+      <anchorfile>group__misc.html</anchorfile>
+      <anchor>gac6492a980d295e60e0f6946968176613</anchor>
+      <arglist>(sec_t stamp)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI void</type>
+      <name>ruSleepUs</name>
+      <anchorfile>group__misc.html</anchorfile>
+      <anchor>ga40a0d0aefa3051c7808feae2809b2741</anchor>
+      <arglist>(usec_t microseconds)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI void</type>
+      <name>ruSleepMs</name>
+      <anchorfile>group__misc.html</anchorfile>
+      <anchor>gacb5828ac39a00aa84781c841afb64623</anchor>
+      <arglist>(msec_t milliseconds)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI sec_t</type>
+      <name>ruTimeParse</name>
+      <anchorfile>group__misc.html</anchorfile>
+      <anchor>ga5d78052ada3c62b7a77e773ae53158c1</anchor>
+      <arglist>(trans_chars dateformat, trans_chars datestr)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI sec_t</type>
+      <name>ruUtcParse</name>
+      <anchorfile>group__misc.html</anchorfile>
+      <anchor>gabad41e4d218b3038e4e6df69b4f85926</anchor>
+      <arglist>(trans_chars dateformat, trans_chars datestr)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI int</type>
+      <name>ruTimeFormat</name>
+      <anchorfile>group__misc.html</anchorfile>
+      <anchor>ga56f8f6fec10fa579342976d111813f62</anchor>
+      <arglist>(trans_chars format, rusize len, alloc_chars timeStr, sec_t timesecs)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI int</type>
+      <name>ruUtcFormat</name>
+      <anchorfile>group__misc.html</anchorfile>
+      <anchor>gaecf4a0b06c4d0268fdd64c378d9facc1</anchor>
+      <arglist>(trans_chars format, rusize len, alloc_chars timeStr, sec_t timesecs)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI sec_t</type>
+      <name>ruTimeLocalToUtc</name>
+      <anchorfile>group__misc.html</anchorfile>
+      <anchor>ga671f13d90510aaf61e87b680d999e491</anchor>
+      <arglist>(sec_t stamp)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI sec_t</type>
+      <name>ruTimeUtcToLocal</name>
+      <anchorfile>group__misc.html</anchorfile>
+      <anchor>ga3e7596f5512ddf7baa26a049a8ada132</anchor>
+      <arglist>(sec_t stamp)</arglist>
+    </member>
   </compound>
   <compound kind="group">
     <name>memory</name>
     <title>Memory Management</title>
     <filename>group__memory.html</filename>
+    <member kind="define">
+      <type>#define</type>
+      <name>ruFree</name>
+      <anchorfile>group__memory.html</anchorfile>
+      <anchor>gafcc3628238450c77b4aa61e9d7001a56</anchor>
+      <arglist>(p)</arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>ruReplace</name>
+      <anchorfile>group__memory.html</anchorfile>
+      <anchor>gafdbf421329129ad39395ca1c48694f9f</anchor>
+      <arglist>(p, n)</arglist>
+    </member>
     <member kind="define">
       <type>#define</type>
       <name>ruMalloc0</name>
@@ -270,19 +501,12 @@
       <anchor>ga94f0a9650d1a2b773e4e85f2341eea02</anchor>
       <arglist>(alloc_ptr buf, rusize count, rusize ofsize)</arglist>
     </member>
-    <member kind="define">
-      <type>#define</type>
-      <name>ruFree</name>
+    <member kind="function">
+      <type>RUAPI alloc_ptr</type>
+      <name>ruMemDup</name>
       <anchorfile>group__memory.html</anchorfile>
-      <anchor>gafcc3628238450c77b4aa61e9d7001a56</anchor>
-      <arglist>(p)</arglist>
-    </member>
-    <member kind="define">
-      <type>#define</type>
-      <name>ruReplace</name>
-      <anchorfile>group__memory.html</anchorfile>
-      <anchor>gafdbf421329129ad39395ca1c48694f9f</anchor>
-      <arglist>(p, n)</arglist>
+      <anchor>ga5b6817501d84107573e6c7dc15c06fd6</anchor>
+      <arglist>(trans_ptr buf, rusize size)</arglist>
     </member>
   </compound>
   <compound kind="group">
@@ -378,6 +602,27 @@
     <name>ruerror</name>
     <title>regify-util Error Codes</title>
     <filename>group__ruerror.html</filename>
+    <member kind="define">
+      <type>#define</type>
+      <name>RUE_FORK_FAILED</name>
+      <anchorfile>group__ruerror.html</anchorfile>
+      <anchor>ga5571b7590304c5b53813def045533696</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>RUE_RUN_FAILED</name>
+      <anchorfile>group__ruerror.html</anchorfile>
+      <anchor>ga0e8db464671617e7b055e90cfb898f78</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>RUE_TIMEOUT</name>
+      <anchorfile>group__ruerror.html</anchorfile>
+      <anchor>gae7f248eb7648a198f04a2ee4ebfa023b</anchor>
+      <arglist></arglist>
+    </member>
     <member kind="define">
       <type>#define</type>
       <name>RUE_OK</name>
