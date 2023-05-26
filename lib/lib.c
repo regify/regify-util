@@ -89,7 +89,7 @@ RUAPI ru_pid ruProcessId(void) {
 }
 
 RUAPI int32_t ruRunProg(const char **argv, sec_t timeout) {
-    //ruDbgLogf("run: %s timeout: %d", argv[0], timeout);
+//    ruDbgLogf("-> run: %s timeout: %d", argv[0], timeout);
 #ifdef _WIN32
     if (timeout == RU_NO_TIMEOUT) {
         int ret = (int)_spawnve(_P_WAIT, argv[0], argv, NULL);
@@ -133,42 +133,60 @@ RUAPI int32_t ruRunProg(const char **argv, sec_t timeout) {
     return ret;
 #else
     ru_pid pid;
-    int32_t status = 0;
     uint8_t chldfail = 234;
+    int32_t status = 0;
     if (0 == (pid = fork())) {
         // the child
+        if (timeout == RU_NON_BLOCK) {
+            // close file handles
+            close(2);
+            close(1);
+            close(0);
+            // child becomes daemon
+            if (setsid() == -1) {
+                ruCritLog("Daemon failed to become session leader");
+            }
+        }
         if (-1 == execve(argv[0], (char **)argv , NULL)) {
             // we're here so thing went bad
             // we must exit to prevent the child process from wreaking havoc
+            ruCritLogf("%s execve failed ret: %d", argv[0], -1);
             exit(chldfail);
         }
+        ruCritLogf("%s never reached failed ret: %d", argv[0], 0);
         // never reached
     }
 
     // the parent
-    if (timeout >= 0) {
+//    ruVerbLogf("%s child pid: %d", argv[0], pid);
+    if (timeout == RU_NON_BLOCK) {
+        // hang a little trying to get the status
+        ruSleepMs(10);
+    }
+
+    int32_t timetaken = 0;
+    while (0 == waitpid(pid , &status , WNOHANG)) {
+        if (timeout < 0) break; // non blocking
         // blocking
-        int32_t timetaken = 0;
-        while (0 == waitpid(pid , &status , WNOHANG)) {
-            if (timeout) {
-                // there is a timeout
-                if (timetaken++ > timeout) {
-                    // it has been reached
-                    ruWarnLogf("%s child process timed out ret: %d", argv[0], -2);
-                    return -2;
-                }
+        if (timeout) {
+            // there is a timeout
+            if (timetaken++ > timeout) {
+                // it has been reached
+                ruWarnLogf("<- %s process [%d] timed out ret: %d", argv[0], pid, -2);
+                kill(pid, SIGKILL);
+                return -2;
             }
-            ruSleep(1);
         }
+        ruSleep(1);
     }
 
 //    ruDbgLogf("%s WEXITSTATUS %d WIFEXITED %d [status %d]",
 //              argv[0], WEXITSTATUS(status), WIFEXITED(status), status);
     if (WEXITSTATUS(status) == chldfail) {
-        ruCritLogf("%s child process execve failed ret: %d", argv[0], -1);
+        ruCritLogf("<- %s child process execve failed ret: %d", argv[0], -1);
         return -1;
     }
-//    ruVerbLogf("%s returned: %d", argv[0], WEXITSTATUS(status));
+//    ruVerbLogf("<- %s returned: %d", argv[0], WEXITSTATUS(status));
     return WEXITSTATUS(status);
 #endif
 }

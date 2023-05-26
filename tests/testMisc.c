@@ -364,19 +364,24 @@ START_TEST(process) {
     ret = ruRunProg(command, RU_NO_TIMEOUT);
     fail_unless(exp == ret, retText, test, exp, ret);
 
-    // not really specified
+    // not really specific
     //ret = ruRunProg(command, RU_NON_BLOCK);
     //fail_unless(exp == ret, retText, test, exp, ret);
 
     exp = -2;
     command[0] = "/bin/sleep";
-    command[1] = "3";
+    command[1] = "5";
     ret = ruRunProg(command, 1);
     fail_unless(exp == ret, retText, test, exp, ret);
 
     exp = 0;
     command[1] = "1";
     ret = ruRunProg(command, 3);
+    fail_unless(exp == ret, retText, test, exp, ret);
+
+    command[1] = "60";
+    // this guy should linger after these test have been completed
+    ret = ruRunProg(command, RU_NON_BLOCK);
     fail_unless(exp == ret, retText, test, exp, ret);
 }
 END_TEST

@@ -134,7 +134,7 @@ else()
             set(ICU_LIBRARIES sicuio sicuin sicuuc sicudt)
         endif()
     else()
-        set(ICU_LIBRARIES -licuio -licui18n -licuuc -licudata -lm)
+        set(ICU_LIBRARIES -licuio -licui18n -licuuc -licudata -lm -lstdc++)
     endif()
 endif()
 
