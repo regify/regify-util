@@ -1,6 +1,31 @@
 <?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
 <tagfile doxygen_version="1.9.1">
   <compound kind="struct">
+    <name>famEvent_</name>
+    <filename>structfam_event__.html</filename>
+    <member kind="variable">
+      <type>int</type>
+      <name>eventType</name>
+      <anchorfile>structfam_event__.html</anchorfile>
+      <anchor>aa73ed1819d01004c05b8b1908ef91ef4</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>perm_chars</type>
+      <name>srcPath</name>
+      <anchorfile>structfam_event__.html</anchorfile>
+      <anchor>abb1a6c225865ea8d47fda5952978c8f9</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>perm_chars</type>
+      <name>dstPath</name>
+      <anchorfile>structfam_event__.html</anchorfile>
+      <anchor>a99c8743dc4a60b79ab3c548496d20f09</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="struct">
     <name>KvStore_</name>
     <filename>struct_kv_store__.html</filename>
     <member kind="variable">
