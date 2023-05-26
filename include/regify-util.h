@@ -131,6 +131,16 @@ extern "C" {
             u_long* serialNo, u_long* maxCompLen, u_long* fsFlags,
             char** volumeName, char** fsName);
 #else
+
+#if defined(__APPLE__) && defined(__MACH__) // Apple OSX and iOS (Darwin)
+#include <TargetConditionals.h>
+    #if TARGET_OS_IPHONE == 1
+        #define ITS_IOS
+    #elif TARGET_OS_MAC == 1
+        #define ITS_OSX
+    #endif
+#endif
+
     /* for folderwalk */
     #include <dirent.h>
 
@@ -638,6 +648,9 @@ RUAPI sec_t ruTimeUtcToLocal(sec_t stamp);
 #include <regify-util/io.h>
 #include <regify-util/kvstore.h>
 #include <regify-util/regex.h>
+#if defined(__linux__) || defined(ITS_OSX) || defined(_WIN32)
+#include <regify-util/fam.h>
+#endif
 
 #ifdef __cplusplus
 extern "C" {

@@ -114,14 +114,27 @@ endif()
 
 # icu.cpp compiled as C++ so we can use thread_local on ios9+
 # And also to cope with C++ symbols stemming from ICU
-file(GLOB SRCS cleaner.c icu.cpp ini.c io.c kvstore.c lib.c list.c logging.c map.c
-        regex.c string.c thread.c regify-util.c)
+set(SRCS cleaner.c icu.cpp ini.c io.c kvstore.c lib.c list.c logging.c map.c
+         regex.c string.c thread.c regify-util.c)
 
 if (WIN)
     list(APPEND SRCS win.cpp)
 endif()
 
 if(NOT WASM)
+    if (LINUX OR WIN OR MAC)
+        # fam
+        list(APPEND SRCS fam/fam.c)
+        if (LINUX)
+            list(APPEND SRCS fam/lin.c)
+        endif()
+        if (WIN)
+            list(APPEND SRCS fam/win.c)
+        endif()
+        if (MAC)
+            list(APPEND SRCS fam/mac.c)
+        endif()
+    endif()
     # pwcleaner.a
     add_library(${CLEANER} STATIC cleaner.c)
     target_compile_definitions(${CLEANER} PRIVATE CLEANER_ONLY )
