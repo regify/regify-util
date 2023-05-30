@@ -4,7 +4,6 @@ var modules =
     [ "Memory Management", "group__memory.html", "group__memory" ],
     [ "Data Cleaning Utility", "group__cleaner.html", "group__cleaner" ],
     [ "regify-util Error Codes", "group__ruerror.html", "group__ruerror" ],
-    [ "File Access Monitoring", "group__fam.html", "group__fam" ],
     [ "Ini File Handling", "group__ini.html", "group__ini" ],
     [ "File I/O", "group__io.html", "group__io" ],
     [ "Key Value Storage", "group__kvstore__sec.html", "group__kvstore__sec" ],
@@ -15,5 +14,6 @@ var modules =
     [ "Regular Expressions", "group__regex.html", "group__regex" ],
     [ "String Functions", "group__string.html", "group__string" ],
     [ "Buffer Functions", "group__buffer.html", "group__buffer" ],
-    [ "Threading Related", "group__threading.html", "group__threading" ]
+    [ "Threading Related", "group__threading.html", "group__threading" ],
+    [ "File Access Monitoring", "group__fam.html", "group__fam" ]
 ];

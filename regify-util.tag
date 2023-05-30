@@ -741,159 +741,6 @@
     </member>
   </compound>
   <compound kind="group">
-    <name>fam</name>
-    <title>File Access Monitoring</title>
-    <filename>group__fam.html</filename>
-    <class kind="struct">ruFamEvent_</class>
-    <member kind="define">
-      <type>#define</type>
-      <name>RU_FAM_CREATED</name>
-      <anchorfile>group__fam.html</anchorfile>
-      <anchor>gaeb006bd51ec0b1b48dde9a1118326d34</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="define">
-      <type>#define</type>
-      <name>RU_FAM_DELETED</name>
-      <anchorfile>group__fam.html</anchorfile>
-      <anchor>gaa1b8655438f02fa07923b686ea9f771d</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="define">
-      <type>#define</type>
-      <name>RU_FAM_MODIFIED</name>
-      <anchorfile>group__fam.html</anchorfile>
-      <anchor>gabc64c4708760b9befa3223f8be0fac34</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="define">
-      <type>#define</type>
-      <name>RU_FAM_MOVED</name>
-      <anchorfile>group__fam.html</anchorfile>
-      <anchor>ga6364d697be2b0fe1ae48d370dd91f06c</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="define">
-      <type>#define</type>
-      <name>RU_FAM_ATTRIB</name>
-      <anchorfile>group__fam.html</anchorfile>
-      <anchor>gae775d59b18c99a740b8c9867dd922a20</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="define">
-      <type>#define</type>
-      <name>RU_FAM_KILL_TIMEOUT</name>
-      <anchorfile>group__fam.html</anchorfile>
-      <anchor>ga1a5b02165889ade1f056edbaae41140f</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="define">
-      <type>#define</type>
-      <name>RU_FAM_POLL_TIMEOUT</name>
-      <anchorfile>group__fam.html</anchorfile>
-      <anchor>gafef8e830bccb297b129c907c2b79ebb1</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="define">
-      <type>#define</type>
-      <name>RU_FAM_QUEUE_TIMEOUT</name>
-      <anchorfile>group__fam.html</anchorfile>
-      <anchor>gad684e723f3a7a9d8d359ea1fcf9c4005</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="define">
-      <type>#define</type>
-      <name>ruFamEventLog</name>
-      <anchorfile>group__fam.html</anchorfile>
-      <anchor>ga4a567d573035d0781f94089583c58c1f</anchor>
-      <arglist>(lvl, fe, prefix)</arglist>
-    </member>
-    <member kind="typedef">
-      <type>struct ruFamEvent_</type>
-      <name>ruFamEvent</name>
-      <anchorfile>group__fam.html</anchorfile>
-      <anchor>gaa411004c8a592a6d7fbc750e65c055ec</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="typedef">
-      <type>void(*</type>
-      <name>ruFamHandler</name>
-      <anchorfile>group__fam.html</anchorfile>
-      <anchor>ga93b95063a11aa259b3d687cd9a9a821e</anchor>
-      <arglist>)(ruFamEvent *fe, perm_ptr ctx)</arglist>
-    </member>
-    <member kind="typedef">
-      <type>void *</type>
-      <name>ruFamCtx</name>
-      <anchorfile>group__fam.html</anchorfile>
-      <anchor>ga41131e438be9a9c17155ef338a83d899</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="function">
-      <type>RUAPI ruFamCtx</type>
-      <name>ruFamMonitorFilePath</name>
-      <anchorfile>group__fam.html</anchorfile>
-      <anchor>gac2029a63025c44b72df8d44402b7c0ff</anchor>
-      <arglist>(trans_chars filePath, trans_chars threadName, ruFamHandler eventCallBack, perm_ptr ctx)</arglist>
-    </member>
-    <member kind="function">
-      <type>RUAPI ruFamCtx</type>
-      <name>ruFamKillMonitor</name>
-      <anchorfile>group__fam.html</anchorfile>
-      <anchor>ga97d5fefcb5f68d497a48a8b3b3a09f26</anchor>
-      <arglist>(ruFamCtx o)</arglist>
-    </member>
-    <member kind="function">
-      <type>RUAPI bool</type>
-      <name>ruFamQuit</name>
-      <anchorfile>group__fam.html</anchorfile>
-      <anchor>ga1b541b29be7c92345b151dca0623230e</anchor>
-      <arglist>(ruFamCtx o)</arglist>
-    </member>
-    <member kind="function">
-      <type>RUAPI const char *</type>
-      <name>ruFamEventTypeString</name>
-      <anchorfile>group__fam.html</anchorfile>
-      <anchor>gab3a4b072242d9faaeb8a8459b6392677</anchor>
-      <arglist>(int32_t action)</arglist>
-    </member>
-    <member kind="function">
-      <type>RUAPI void</type>
-      <name>ruFamLogEventFunc</name>
-      <anchorfile>group__fam.html</anchorfile>
-      <anchor>ga7608998aca3460e7f98b8014cb0eb162</anchor>
-      <arglist>(uint32_t loglevel, trans_chars file, trans_chars func, int32_t line, ruFamEvent *fe, trans_chars prefix)</arglist>
-    </member>
-    <member kind="function">
-      <type>RUAPI char *</type>
-      <name>ruFamEventString</name>
-      <anchorfile>group__fam.html</anchorfile>
-      <anchor>ga2a2c124ab9905147782051eb9d65c14d</anchor>
-      <arglist>(ruFamEvent *fe)</arglist>
-    </member>
-    <member kind="function">
-      <type>RUAPI ruFamEvent *</type>
-      <name>ruFamEventNew</name>
-      <anchorfile>group__fam.html</anchorfile>
-      <anchor>ga4f6feaed01cb324940b4956baafa8652</anchor>
-      <arglist>(int eventType, trans_chars filePath, trans_chars destPath)</arglist>
-    </member>
-    <member kind="function">
-      <type>RUAPI ruFamEvent *</type>
-      <name>ruFamEventFree</name>
-      <anchorfile>group__fam.html</anchorfile>
-      <anchor>gafb1cfbeed368d7e0968b73b6c2b57430</anchor>
-      <arglist>(ruFamEvent *fe)</arglist>
-    </member>
-    <member kind="function">
-      <type>RUAPI void</type>
-      <name>ruFamEventFreeV</name>
-      <anchorfile>group__fam.html</anchorfile>
-      <anchor>ga50ed123f5f20cdd662f5a4fddeaee32e</anchor>
-      <arglist>(void *fe)</arglist>
-    </member>
-  </compound>
-  <compound kind="group">
     <name>ini</name>
     <title>Ini File Handling</title>
     <filename>group__ini.html</filename>
@@ -2924,6 +2771,159 @@
       <anchorfile>group__threading.html</anchorfile>
       <anchor>ga1d4cb711bdf68899277b323cce866233</anchor>
       <arglist>(ruCount counter)</arglist>
+    </member>
+  </compound>
+  <compound kind="group">
+    <name>fam</name>
+    <title>File Access Monitoring</title>
+    <filename>group__fam.html</filename>
+    <class kind="struct">ruFamEvent_</class>
+    <member kind="define">
+      <type>#define</type>
+      <name>RU_FAM_CREATED</name>
+      <anchorfile>group__fam.html</anchorfile>
+      <anchor>gaeb006bd51ec0b1b48dde9a1118326d34</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>RU_FAM_DELETED</name>
+      <anchorfile>group__fam.html</anchorfile>
+      <anchor>gaa1b8655438f02fa07923b686ea9f771d</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>RU_FAM_MODIFIED</name>
+      <anchorfile>group__fam.html</anchorfile>
+      <anchor>gabc64c4708760b9befa3223f8be0fac34</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>RU_FAM_MOVED</name>
+      <anchorfile>group__fam.html</anchorfile>
+      <anchor>ga6364d697be2b0fe1ae48d370dd91f06c</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>RU_FAM_ATTRIB</name>
+      <anchorfile>group__fam.html</anchorfile>
+      <anchor>gae775d59b18c99a740b8c9867dd922a20</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>RU_FAM_KILL_TIMEOUT</name>
+      <anchorfile>group__fam.html</anchorfile>
+      <anchor>ga1a5b02165889ade1f056edbaae41140f</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>RU_FAM_POLL_TIMEOUT</name>
+      <anchorfile>group__fam.html</anchorfile>
+      <anchor>gafef8e830bccb297b129c907c2b79ebb1</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>RU_FAM_QUEUE_TIMEOUT</name>
+      <anchorfile>group__fam.html</anchorfile>
+      <anchor>gad684e723f3a7a9d8d359ea1fcf9c4005</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>ruFamEventLog</name>
+      <anchorfile>group__fam.html</anchorfile>
+      <anchor>ga4a567d573035d0781f94089583c58c1f</anchor>
+      <arglist>(lvl, fe, prefix)</arglist>
+    </member>
+    <member kind="typedef">
+      <type>struct ruFamEvent_</type>
+      <name>ruFamEvent</name>
+      <anchorfile>group__fam.html</anchorfile>
+      <anchor>gaa411004c8a592a6d7fbc750e65c055ec</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>void(*</type>
+      <name>ruFamHandler</name>
+      <anchorfile>group__fam.html</anchorfile>
+      <anchor>ga93b95063a11aa259b3d687cd9a9a821e</anchor>
+      <arglist>)(ruFamEvent *fe, perm_ptr ctx)</arglist>
+    </member>
+    <member kind="typedef">
+      <type>void *</type>
+      <name>ruFamCtx</name>
+      <anchorfile>group__fam.html</anchorfile>
+      <anchor>ga41131e438be9a9c17155ef338a83d899</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI ruFamCtx</type>
+      <name>ruFamMonitorFilePath</name>
+      <anchorfile>group__fam.html</anchorfile>
+      <anchor>gac2029a63025c44b72df8d44402b7c0ff</anchor>
+      <arglist>(trans_chars filePath, trans_chars threadName, ruFamHandler eventCallBack, perm_ptr ctx)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI ruFamCtx</type>
+      <name>ruFamKillMonitor</name>
+      <anchorfile>group__fam.html</anchorfile>
+      <anchor>ga97d5fefcb5f68d497a48a8b3b3a09f26</anchor>
+      <arglist>(ruFamCtx o)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI bool</type>
+      <name>ruFamQuit</name>
+      <anchorfile>group__fam.html</anchorfile>
+      <anchor>ga1b541b29be7c92345b151dca0623230e</anchor>
+      <arglist>(ruFamCtx o)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI const char *</type>
+      <name>ruFamEventTypeString</name>
+      <anchorfile>group__fam.html</anchorfile>
+      <anchor>gab3a4b072242d9faaeb8a8459b6392677</anchor>
+      <arglist>(int32_t action)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI void</type>
+      <name>ruFamLogEventFunc</name>
+      <anchorfile>group__fam.html</anchorfile>
+      <anchor>ga7608998aca3460e7f98b8014cb0eb162</anchor>
+      <arglist>(uint32_t loglevel, trans_chars file, trans_chars func, int32_t line, ruFamEvent *fe, trans_chars prefix)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI char *</type>
+      <name>ruFamEventString</name>
+      <anchorfile>group__fam.html</anchorfile>
+      <anchor>ga2a2c124ab9905147782051eb9d65c14d</anchor>
+      <arglist>(ruFamEvent *fe)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI ruFamEvent *</type>
+      <name>ruFamEventNew</name>
+      <anchorfile>group__fam.html</anchorfile>
+      <anchor>ga4f6feaed01cb324940b4956baafa8652</anchor>
+      <arglist>(int eventType, trans_chars filePath, trans_chars destPath)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI ruFamEvent *</type>
+      <name>ruFamEventFree</name>
+      <anchorfile>group__fam.html</anchorfile>
+      <anchor>gafb1cfbeed368d7e0968b73b6c2b57430</anchor>
+      <arglist>(ruFamEvent *fe)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI void</type>
+      <name>ruFamEventFreeV</name>
+      <anchorfile>group__fam.html</anchorfile>
+      <anchor>ga50ed123f5f20cdd662f5a4fddeaee32e</anchor>
+      <arglist>(void *fe)</arglist>
     </member>
   </compound>
   <compound kind="page">
