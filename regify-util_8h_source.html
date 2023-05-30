@@ -350,7 +350,7 @@ $(document).ready(function(){initNavTree('regify-util_8h_source.html',''); initR
 <div class="line"><a name="l00652"></a><span class="lineno">  652</span>&#160;<span class="preprocessor">#include &lt;regify-util/io.h&gt;</span></div>
 <div class="line"><a name="l00653"></a><span class="lineno">  653</span>&#160;<span class="preprocessor">#include &lt;regify-util/kvstore.h&gt;</span></div>
 <div class="line"><a name="l00654"></a><span class="lineno">  654</span>&#160;<span class="preprocessor">#include &lt;regify-util/regex.h&gt;</span></div>
-<div class="line"><a name="l00655"></a><span class="lineno">  655</span>&#160;<span class="preprocessor">#if defined(__linux__) || defined(ITS_OSX) || defined(_WIN32)</span></div>
+<div class="line"><a name="l00655"></a><span class="lineno">  655</span>&#160;<span class="preprocessor">#if !defined(__ANDROID__) &amp;&amp; defined(__linux__) || defined(ITS_OSX) || defined(_WIN32)</span></div>
 <div class="line"><a name="l00656"></a><span class="lineno">  656</span>&#160;<span class="preprocessor">#include &lt;regify-util/fam.h&gt;</span></div>
 <div class="line"><a name="l00657"></a><span class="lineno">  657</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="line"><a name="l00658"></a><span class="lineno">  658</span>&#160; </div>
@@ -461,7 +461,7 @@ $(document).ready(function(){initNavTree('regify-util_8h_source.html',''); initR
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><b>regify-util.h</b></li>
-    <li class="footer">Generated on Tue May 30 2023 13:18:47 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Tue May 30 2023 15:12:27 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>
