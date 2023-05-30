@@ -41,7 +41,9 @@ Suite* getSuite(void) {
     suite_add_tcase(suite, storeTests());
     suite_add_tcase(suite, cleanerTests());
     suite_add_tcase(suite, threadTests());
+#if defined(__linux__) || defined(ITS_OSX) || defined(_WIN32)
     suite_add_tcase(suite, famTests());
+#endif
     return suite;
 }
 

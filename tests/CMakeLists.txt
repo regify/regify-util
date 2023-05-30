@@ -42,9 +42,13 @@ if(IOS)
             "${PROJECT_SOURCE_DIR}/utilRunner/utilRunner.xcodeproj/project.pbxproj"
             @ONLY)
 else()
-
+    if (LINUX OR WIN OR MAC)
+        set(FAMSRC testFam.c)
+    else()
+        set(FAMSRC "")
+    endif()
     add_executable(runTests EXCLUDE_FROM_ALL
-            runTests.cpp testCleaner.c testFam.c testIni.c testIo.c testList.c
+            runTests.cpp testCleaner.c ${FAMSRC} testIni.c testIo.c testList.c
             testMap.c testMisc.c testRegex.c testSet.c testStore.c testString.c
             testThread.c)
     target_include_directories(runTests

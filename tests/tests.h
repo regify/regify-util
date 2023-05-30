@@ -60,7 +60,9 @@ TCase* iniTests(void);
 TCase* storeTests(void);
 TCase* cleanerTests(void);
 TCase* threadTests(void);
+#if defined(__linux__) || defined(ITS_OSX) || defined(_WIN32)
 TCase* famTests(void);
+#endif
 
 #ifdef __cplusplus
 }   /* extern "C" */
