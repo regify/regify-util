@@ -1,5 +1,25 @@
+/*
+ * Copyright regify
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 // Darwin file access monitoring functions
-// Copyright regify
 #include "../lib.h"
 #include <sys/event.h>
 #include <CoreServices/CoreServices.h>
@@ -33,7 +53,7 @@ typedef struct famCtx_ famCtx;
 struct famCtx_ {
     FSEventStreamRef stream;    // the FSEventStreamRef pointer
     FSEventStreamContext fsc;   //
-    famHandler eventCb;         // the given user event callback function
+    ruFamHandler eventCb;         // the given user event callback function
     perm_ptr ctx;               // the users void data pointer
     // set true when run thread has initialized all watchdirs finnished
     bool isInit;
@@ -151,7 +171,7 @@ static int32_t registerFile(famCtx *fctx, trans_chars path,
                     ruMapRemove(fctx->inodePath, mInode, NULL);
                 }
                 ruMapPut(fctx->inodePath, inode, ruStrDup(path));
-                ret = fam_modified;
+                ret = RU_FAM_MODIFIED;
 
             } else {
                 fam_dbg("path: '%s' is unchanged", path);
@@ -162,7 +182,7 @@ static int32_t registerFile(famCtx *fctx, trans_chars path,
             if (inode == mInode) { // 1 rename
                 // Since move part 1 cleans out the maps, we simply add the new
                 // mappings.
-                ret = fam_moved;
+                ret = RU_FAM_MOVED;
                 // returning source file signifies file move
                 if (srcFilePath) *srcFilePath = ruStrDup(mPath);
 
@@ -176,7 +196,7 @@ static int32_t registerFile(famCtx *fctx, trans_chars path,
                 if (mInode) {
                     ruMapRemove(fctx->inodePath, mInode, NULL);
                 }
-                ret = fam_created;
+                ret = RU_FAM_CREATED;
             }
 
             ruMapPut(fctx->pathInode, ruStrDup(path), inode);
@@ -329,15 +349,15 @@ static void fseCb(ConstFSEventStreamRef stream, void* ctx,
 
         if (status == fam_ignore) {
             fam_dbg("Ignoring transient path %s event", srcFile);
-        } else if (status == fam_moved && srcFile) {
-            famEvent* fe = famEventNew(fam_moved,
-                                       srcFile, filePath);
+        } else if (status == RU_FAM_MOVED && srcFile) {
+            ruFamEvent* fe = ruFamEventNew(RU_FAM_MOVED,
+                                           srcFile, filePath);
             fctx->eventCb(fe, fctx->ctx);
             fam_dbg("The path %s was moved to %s", srcFile, filePath);
             srcFile = NULL;
 
         } else if (flags & kFSEventStreamEventFlagItemCreated ||
-                   status == fam_created) {
+                   status == RU_FAM_CREATED) {
             if (flags & kFSEventStreamEventFlagItemIsDir) {
                 fam_dbg("The directory %s was created.", filePath);
                 // scan the new folder to get the inode mappings
@@ -346,32 +366,32 @@ static void fseCb(ConstFSEventStreamRef stream, void* ctx,
             } else {
                 fam_dbg("The path %s was created.", filePath);
             }
-            famEvent* fe = famEventNew(fam_created,
-                                       filePath, NULL);
+            ruFamEvent* fe = ruFamEventNew(RU_FAM_CREATED,
+                                           filePath, NULL);
             fctx->eventCb(fe, fctx->ctx);
             if (!(flags & kFSEventStreamEventFlagItemCreated) ||
                 flags & kFSEventStreamEventFlagItemModified) {
                 // add a modified event since it may not come from a move
-                famEvent* fe2 = famEventNew(fam_modified,
-                                           filePath, NULL);
+                ruFamEvent* fe2 = ruFamEventNew(RU_FAM_MODIFIED,
+                                                filePath, NULL);
                 fctx->eventCb(fe2, fctx->ctx);
                 fam_dbg("Adding the path %s was modified.", filePath);
             }
 
         } else if (flags & kFSEventStreamEventFlagItemRemoved) {
-            famEvent* fe = famEventNew(fam_deleted,
-                                       filePath, NULL);
+            ruFamEvent* fe = ruFamEventNew(RU_FAM_DELETED,
+                                           filePath, NULL);
             fctx->eventCb(fe, fctx->ctx);
             fam_dbg("The path %s was deleted.", filePath);
 
         } else if (flags & kFSEventStreamEventFlagItemModified ||
-                   status == fam_modified) {
+                   status == RU_FAM_MODIFIED) {
             if (flags & kFSEventStreamEventFlagItemIsDir) {
                 // we ignore modified dirs
                 fam_dbg("The directory %s was modified.", filePath);
             } else {
-                famEvent* fe = famEventNew(fam_modified,
-                                           filePath, NULL);
+                ruFamEvent* fe = ruFamEventNew(RU_FAM_MODIFIED,
+                                               filePath, NULL);
                 fctx->eventCb(fe, fctx->ctx);
                 fam_dbg("The file %s was modified.", filePath);
             }
@@ -418,8 +438,8 @@ static ptr cleanerThread(ptr o) {
         int64_t inode = 0;
         perm_chars path = NULL;
         while(RUE_OK == ruMapFirst(fctx->mvRing[bucket], &inode, &path)) {
-            ruZeroedStruct(famEvent, fe);
-            fe.eventType = fam_deleted;
+            ruZeroedStruct(ruFamEvent, fe);
+            fe.eventType = RU_FAM_DELETED;
             fe.srcPath = (char*)path;
             fctx->eventCb(&fe, fctx->ctx);
             fam_dbg("The path:%s from bucket: %d was deleted.", path, bucket);
@@ -455,8 +475,8 @@ static void stopStream(famCtx *fctx) {
 }
 
 // public functions
-famObj fam_monitorFilePath(trans_chars filePath, trans_chars threadName,
-                             famHandler eventCallBack, perm_ptr ctx) {
+ruFamCtx ruFamMonitorFilePath(trans_chars filePath, trans_chars threadName,
+                              ruFamHandler eventCallBack, perm_ptr ctx) {
     ruVerbLogf( "Getting ready to monitor: %s", filePath);
     famCtx* fctx = ruMalloc0(1, famCtx);
 
@@ -507,24 +527,24 @@ famObj fam_monitorFilePath(trans_chars filePath, trans_chars threadName,
         }
         ruVerbLogf("Launched cleaner thread: 0x%x",
                    ruThreadNativeId(fctx->ctid, NULL));
-        while (!fctx->isInit) ruSleepMs(FAM_QUEUE_TIMEOUT);
+        while (!fctx->isInit) ruSleepMs(RU_FAM_QUEUE_TIMEOUT);
 
         return fctx;
 
     } while (false);
 
     // clean up a call gone bad
-    fam_killMonitor(fctx);
+    ruFamKillMonitor(fctx);
     return NULL;
 }
 
-famObj fam_killMonitor(famObj ctx) {
-    famCtx* fctx = (famCtx*)ctx;
+ruFamCtx ruFamKillMonitor(ruFamCtx o) {
+    famCtx* fctx = (famCtx*)o;
     ruInfoLogf("Request to kill fam thread %x", fctx->tid);
     fctx->quit = true;
     stopStream(fctx);
     if (fctx->tid) {
-        bool res = ruThreadWait(fctx->tid, FAM_KILL_TIMEOUT, NULL);
+        bool res = ruThreadWait(fctx->tid, RU_FAM_KILL_TIMEOUT, NULL);
         if (res) {
             ruInfoLogf("Fam thread %s has been shut down", fctx->name);
         } else {
@@ -534,7 +554,7 @@ famObj fam_killMonitor(famObj ctx) {
         ruWarnLogf("Fam thread %s is invalid", fctx->name);
     }
     if (fctx->ctid) {
-        bool res = ruThreadWait(fctx->ctid, FAM_KILL_TIMEOUT, NULL);
+        bool res = ruThreadWait(fctx->ctid, RU_FAM_KILL_TIMEOUT, NULL);
         if (res) {
             ruInfoLogf("Fam cleaner thread %s has been shut down", fctx->name);
         } else {
@@ -556,8 +576,8 @@ famObj fam_killMonitor(famObj ctx) {
     return NULL;
 }
 
-bool fam_quit(famObj ctx) {
-    famCtx* fctx = (famCtx*)ctx;
+bool ruFamQuit(ruFamCtx o) {
+    famCtx* fctx = (famCtx*)o;
     if (!fctx) return true;
     return fctx->quit;
 }

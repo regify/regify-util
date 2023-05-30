@@ -1,20 +1,68 @@
+/*
+ * Copyright regify
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 // Linux file access monitoring functions
-// Copyright regify
 #include "../lib.h"
 #include <poll.h>
 #include <sys/inotify.h>
 
-//#define fam_dbg
+// internal debug logging
+#if 1
+// no debug
+#define fam_dbg(fmt, ...)
+#define fam_dbg_inotify_event(i, ev)
+
+#else
+// debug logging
 #define fam_dbg(fmt, ...) ruLog_(RU_LOG_DBUG, fmt, __VA_ARGS__)
+#define fam_dbg_inotify_event(i, ev) ruMacStart { \
+    if(ruDoesLog(RU_LOG_VERB)) { \
+        fam_log_inotify_event(__FILE__, __func__, __LINE__, i, ev); \
+    } \
+} ruMacEnd
+
+static void fam_log_inotify_event(const char *file, const char *func, int32_t line,
+                                  int i, struct inotify_event* ev) {
+    if (ev->len) {
+        ruDoLog(RU_LOG_DBUG, file, func, line,
+                "i[%03d] ev wd[%d] mask[%04x %04x] cookie[%d] len[%d] name[%s]",
+                i, ev->wd, ev->mask >> 16, ev->mask & 0xffff,
+                ev->cookie, ev->len, ev->name);
+    } else {
+        ruDoLog(RU_LOG_DBUG, file, func, line,
+                "i[%03d] ev wd[%d] mask[%04x %04x] cookie[%d]",
+                i, ev->wd, ev->mask>>16, ev->mask&0xffff, ev->cookie);
+    }
+}
+
+#endif
 
 // Linux
-#define IN_MY_EVENTS	IN_ACCESS | IN_MODIFY | IN_ATTRIB | IN_CLOSE_WRITE | \
+#define IN_MY_EVENTS	(IN_ACCESS | IN_MODIFY | IN_ATTRIB | IN_CLOSE_WRITE | \
                         IN_CLOSE_NOWRITE | IN_OPEN | IN_MOVED_FROM | \
                         IN_MOVED_TO | IN_DELETE | IN_CREATE | IN_DELETE_SELF | \
-                        IN_MOVE_SELF
+                        IN_MOVE_SELF)
 
 #define EVENT_SIZE   sizeof(struct inotify_event)
-#define BUF_LEN      4192 * (EVENT_SIZE + 16)
+#define BUF_LEN      (4192 * (EVENT_SIZE + 16))
 
 typedef struct ck_ ck;
 struct ck_ {
@@ -29,7 +77,7 @@ struct famCtx_ {
     char *name;         // the name of the thread
     char *topDir;       // path to the top level directory
     int id;             // the inotify file handle
-    famHandler eventCb; // the given user event callback function
+    ruFamHandler eventCb; // the given user event callback function
     perm_ptr ctx;       // the users void data pointer
     ruThread tid;       // thread id of fam thread
     // fam thread
@@ -164,29 +212,9 @@ static int32_t fam_renameDir(famCtx* fctx, char* srcPath, char* destPath) {
     return RUE_OK;
 }
 
-static void fam_log_inotify_event(const char *file, const char *func, int32_t line,
-                                  int i, struct inotify_event* ev) {
-    if (ev->len) {
-        ruDoLog(RU_LOG_DBUG, file, func, line,
-                "i[%03d] ev wd[%d] mask[%04x %04x] cookie[%d] len[%d] name[%s]",
-                i, ev->wd, ev->mask >> 16, ev->mask & 0xffff,
-                ev->cookie, ev->len, ev->name);
-    } else {
-        ruDoLog(RU_LOG_DBUG, file, func, line,
-                "i[%03d] ev wd[%d] mask[%04x %04x] cookie[%d]",
-                i, ev->wd, ev->mask>>16, ev->mask&0xffff, ev->cookie);
-    }
-}
-
-#define fam_dbg_inotify_event(i, ev) ruMacStart { \
-    if(ruDoesLog(RU_LOG_VERB)) { \
-        fam_log_inotify_event(__FILE__, __func__, __LINE__, i, ev); \
-    } \
-} ruMacEnd
-
 static void fam_handle_moveTo(famCtx* fctx, uint32_t cookie, char* fullPath,
                               struct inotify_event* ev) {
-    famEvent* fe = famEventNew(fam_moved, NULL, fullPath);
+    ruFamEvent* fe = ruFamEventNew(RU_FAM_MOVED, NULL, fullPath);
     // did this file come from somewhere we watch?
     if (!ruMapHas(fctx->cookie, (ru_int)cookie, NULL)) {
         fam_dbg("File move to is missing cookie [%d]", cookie);
@@ -207,11 +235,11 @@ static void fam_handle_moveTo(famCtx* fctx, uint32_t cookie, char* fullPath,
     ck* c = NULL;
     ruMapGet(fctx->cookie, (ru_int)cookie, &c);
     fe->srcPath = ruStrDup(c->sourcePath);
-    fam_dbg("File move from %s with cookie [%d] ended up at %s",
+    fam_dbg("File move from '%s' with cookie [%d] ended up at '%s'",
             c->sourcePath, cookie, fullPath);
     fctx->eventCb(fe, fctx->ctx);
     if (ruMapHas(fctx->pathWd, (void*)c->sourcePath, NULL)) {
-        if (ruStrCmp(fullPath, "") == 0) {
+        if (ruStrEquals(fullPath, "")) {
             // if this was a dir we watched remove all watch handles
             fam_unwatchDir(fctx, (char*)c->sourcePath);
         } else { ;
@@ -244,7 +272,7 @@ static void fam_processEv(famCtx* fctx, struct inotify_event* ev, int* pollTimeo
         if (ev->mask & IN_MOVED_FROM) {
             ck* c = newCookie(fullPath);
             ruMapPut(fctx->cookie, (ru_int)ev->cookie, c);
-            *pollTimeout = FAM_QUEUE_TIMEOUT;
+            *pollTimeout = RU_FAM_QUEUE_TIMEOUT;
             fam_dbg("Initiating file move from %s with cookie [%d] time [%ul]",
                     fullPath, ev->cookie, c->mtime);
             fullPath = NULL;
@@ -259,8 +287,8 @@ static void fam_processEv(famCtx* fctx, struct inotify_event* ev, int* pollTimeo
         }
 
         if (ev->mask & IN_CREATE) {
-            famEvent* fe = famEventNew(fam_created,
-                                       fullPath, NULL);
+            ruFamEvent* fe = ruFamEventNew(RU_FAM_CREATED,
+                                           fullPath, NULL);
             fctx->eventCb(fe, fctx->ctx);
             if (ev->mask & IN_ISDIR) {
                 fam_dbg("The directory %s was created.", name_);
@@ -275,8 +303,8 @@ static void fam_processEv(famCtx* fctx, struct inotify_event* ev, int* pollTimeo
         }
 
         if (ev->mask & IN_ATTRIB) {
-            famEvent* fe = famEventNew(fam_attrib,
-                                       fullPath, NULL);
+            ruFamEvent* fe = ruFamEventNew(RU_FAM_ATTRIB,
+                                           fullPath, NULL);
             fctx->eventCb(fe, fctx->ctx);
             if (ev->mask & IN_ISDIR) {
                 fam_dbg("The directory %s had a meta data change.", name_);
@@ -295,8 +323,8 @@ static void fam_processEv(famCtx* fctx, struct inotify_event* ev, int* pollTimeo
                 // we ignore modified dirs
                 fam_dbg("The directory %s was modified.", name_);
             } else { ;
-                famEvent* fe = famEventNew(fam_modified,
-                                           fullPath, NULL);
+                ruFamEvent* fe = ruFamEventNew(RU_FAM_MODIFIED,
+                                               fullPath, NULL);
                 fctx->eventCb(fe, fctx->ctx);
                 fam_dbg("The file %s was modified.", name_);
             }
@@ -304,8 +332,8 @@ static void fam_processEv(famCtx* fctx, struct inotify_event* ev, int* pollTimeo
         }
 
         if (ev->mask & IN_DELETE) {
-            famEvent* fe = famEventNew(fam_deleted,
-                                       fullPath, NULL);
+            ruFamEvent* fe = ruFamEventNew(RU_FAM_DELETED,
+                                           fullPath, NULL);
             fctx->eventCb(fe, fctx->ctx);
             if (ev->mask & IN_ISDIR) {
                 fam_dbg("The directory %s was deleted.", name_);
@@ -320,7 +348,7 @@ static void fam_processEv(famCtx* fctx, struct inotify_event* ev, int* pollTimeo
 }
 
 static int32_t fam_runLoop(famCtx* fctx) {
-    int pollTimeout = FAM_POLL_TIMEOUT;
+    int pollTimeout = RU_FAM_POLL_TIMEOUT;
 
     while (!fctx->quit) {
         msec_t pollEnd = ruTimeMs() + pollTimeout;
@@ -340,7 +368,7 @@ static int32_t fam_runLoop(famCtx* fctx) {
         // clear cookies older than 1 second
         ruList dels = ruListNew(NULL);
         int32_t ret;
-        uint64_t mtime = ruTimeMs() - FAM_QUEUE_TIMEOUT;
+        uint64_t mtime = ruTimeMs() - RU_FAM_QUEUE_TIMEOUT;
         void* key = NULL, * val = NULL;
         for (ret = ruMapFirst(fctx->cookie, &key, &val); ret == RUE_OK;
              ret = ruMapNext(fctx->cookie, &key, &val)) {
@@ -354,16 +382,16 @@ static int32_t fam_runLoop(famCtx* fctx) {
             }
         }
         ruIterator li = ruListIter(dels);
-        for(void* key = ruIterNext(li, char*); li;
+        for(key = ruIterNext(li, char*); li;
                 key = ruIterNext(li, char*)) {
             ruMapRemove(fctx->cookie, key, NULL);
         }
         dels = ruListFree(dels);
 
         if (ruMapSize(fctx->cookie, NULL) == 0) {
-            pollTimeout = FAM_POLL_TIMEOUT;
+            pollTimeout = RU_FAM_POLL_TIMEOUT;
         } else {
-            pollTimeout = FAM_QUEUE_TIMEOUT;
+            pollTimeout = RU_FAM_QUEUE_TIMEOUT;
         }
         if (numReady != 1) continue;
 
@@ -434,11 +462,11 @@ static famCtx* fam_freeCtx(famCtx* fctx) {
 }
 
 // public functions
-famObj fam_monitorFilePath(trans_chars filePath, trans_chars name,
-                            famHandler eventCallBack, perm_ptr ctx) {
+ruFamCtx ruFamMonitorFilePath(trans_chars filePath, trans_chars threadName,
+                              ruFamHandler eventCallBack, perm_ptr ctx) {
     ruVerbLogf("Getting ready to monitor: %s", filePath);
     famCtx* fctx = ruMalloc0(1, famCtx);
-    fctx->name = ruStrDup(name);
+    fctx->name = ruStrDup(threadName);
     fctx->topDir = ruStrDup(filePath);
     fctx->id = inotify_init();
     fctx->eventCb = eventCallBack;
@@ -450,21 +478,21 @@ famObj fam_monitorFilePath(trans_chars filePath, trans_chars name,
     }
     // wait for thread to initialize
     while (!fctx->isInit && !fctx->quit) {
-        ruSleepMs(FAM_QUEUE_TIMEOUT);
+        ruSleepMs(RU_FAM_QUEUE_TIMEOUT);
     }
     if (fctx->quit) {
-        fam_killMonitor(fctx);
+        ruFamKillMonitor(fctx);
         return NULL;
     }
-    return (famObj)fctx;
+    return (ruFamCtx)fctx;
 }
 
-famObj fam_killMonitor(famObj ctx) {
-    famCtx* fctx = (famCtx*)ctx;
+ruFamCtx ruFamKillMonitor(ruFamCtx o) {
+    famCtx* fctx = (famCtx*)o;
     ruInfoLogf("Request to kill fam thread %x", fctx->tid);
     if (fctx->tid) {
         fctx->quit = true;
-        bool res = ruThreadWait(fctx->tid, FAM_KILL_TIMEOUT, NULL);
+        bool res = ruThreadWait(fctx->tid, RU_FAM_KILL_TIMEOUT, NULL);
         if (res) {
             ruInfoLogf("Fam thread %s has been shut down", fctx->name);
         } else {
@@ -477,8 +505,8 @@ famObj fam_killMonitor(famObj ctx) {
     return NULL;
 }
 
-bool fam_quit(famObj ctx) {
-    famCtx* fctx = (famCtx*)ctx;
+bool ruFamQuit(ruFamCtx o) {
+    famCtx* fctx = (famCtx*)o;
     if (!fctx) return true;
     return fctx->quit;
 }

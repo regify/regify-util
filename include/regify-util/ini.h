@@ -136,8 +136,8 @@ RUAPI int32_t ruIniGet(ruIni iniOb, trans_chars section, trans_chars key, perm_c
  */
 RUAPI int32_t ruIniSet(ruIni iniOb, trans_chars section, trans_chars key, trans_chars value);
 
+#endif //REGIFY_UTIL_INI_H
+
 /**
  * @}
  */
-
-#endif //REGIFY_UTIL_INI_H

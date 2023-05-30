@@ -60,6 +60,7 @@ TCase* iniTests(void);
 TCase* storeTests(void);
 TCase* cleanerTests(void);
 TCase* threadTests(void);
+TCase* famTests(void);
 
 #ifdef __cplusplus
 }   /* extern "C" */

@@ -1,6 +1,25 @@
+/*
+ * Copyright regify
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 // Windows file access monitoring functions
-// Copyright 2014 regify S.A.
-// works with EnableExplicit
 #include "../lib.h"
 
 //#define fam_dbg
@@ -33,7 +52,7 @@ struct famCtx_ {
 
     // user data
     perm_ptr ctx;           // the users void data pointer
-    famHandler eventCb;     // the given user event callback function
+    ruFamHandler eventCb;     // the given user event callback function
 };
 
 struct worker_ {
@@ -77,20 +96,20 @@ static ptr cbRun(ptr ctx) {
     famCtx *mon = (famCtx*) ctx;
     setThreadNameRef(ruDupPrintf("%sCb", mon->name));
     ruInfoLog("Starting");
-    msec_t pollTimeout = FAM_POLL_TIMEOUT;
+    msec_t pollTimeout = RU_FAM_POLL_TIMEOUT;
     mon->cbInit = true;
 
     do {
-        famEvent *fe = ruListTryPop(mon->events, pollTimeout, NULL);
+        ruFamEvent *fe = ruListTryPop(mon->events, pollTimeout, NULL);
         if (!fe) {
-            pollTimeout = FAM_POLL_TIMEOUT;
+            pollTimeout = RU_FAM_POLL_TIMEOUT;
         } else {
-            pollTimeout = FAM_QUEUE_TIMEOUT;
-            famEventLog(RU_LOG_DBUG, fe, "got event: ");
+            pollTimeout = RU_FAM_QUEUE_TIMEOUT;
+            ruFamEventLog(RU_LOG_DBUG, fe, "got event: ");
             if (mon->eventCb) {
                 mon->eventCb(fe, mon->ctx);
             }
-            fe = famEventFree(fe);
+            fe = ruFamEventFree(fe);
         }
     } while (!mon->quit);
 
@@ -212,34 +231,34 @@ static void monProcNotify(fileMon *fm) {
         int famev = 0;
         switch (fni->Action) {
             case FILE_ACTION_ADDED:
-            famev = fam_created;
+            famev = RU_FAM_CREATED;
             break;
             case FILE_ACTION_MODIFIED:
-            famev = fam_modified;
+            famev = RU_FAM_MODIFIED;
             break;
             case FILE_ACTION_REMOVED:
-            famev = fam_deleted;
+            famev = RU_FAM_DELETED;
             break;
             case FILE_ACTION_RENAMED_OLD_NAME:
             fm->lastName = fullPath;
             break;
             case FILE_ACTION_RENAMED_NEW_NAME:
-            famev = fam_moved;
+            famev = RU_FAM_MOVED;
         }
         if (fni->Action == FILE_ACTION_MODIFIED && ruIsDir(fullPath)) {
-            famev = fam_attrib;
+            famev = RU_FAM_ATTRIB;
         }
 
         if (fni->Action != FILE_ACTION_RENAMED_OLD_NAME) {
-            famEvent *ev = ruMalloc0(1, famEvent);
+            ruFamEvent *ev = ruMalloc0(1, ruFamEvent);
             ev->eventType = famev;
-            if (famev == fam_moved) {
+            if (famev == RU_FAM_MOVED) {
                 ev->srcPath = fm->lastName;
                 ev->dstPath = fullPath;
             } else {;
                 ev->srcPath = fullPath;
             }
-            famEventLog(RU_LOG_DBUG, ev, "added event: ");
+            ruFamEventLog(RU_LOG_DBUG, ev, "added event: ");
             ruListPush(fm->worker->mon->events, ev);
         }
 
@@ -357,7 +376,7 @@ static void CALLBACK wrkReqTermination(ULONG_PTR o) {
 static famCtx* famNew(void) {
     fam_dbg("%s", "start");
     famCtx* fctx = ruMalloc0(1, famCtx);
-    fctx->events = ruListNew(famEventFreeV);
+    fctx->events = ruListNew(ruFamEventFreeV);
     fctx->wctx = wrkNew(fctx);
     fam_dbg("returning 0x%x", fctx);
     return fctx;
@@ -389,7 +408,7 @@ static void famInit(famCtx* fctx) {
     if (fctx->eventCb) {
         fctx->cbThread = ruThreadCreate(cbRun, fctx);
         while (!fctx->cbInit) {
-            ruSleepMs(FAM_QUEUE_TIMEOUT);
+            ruSleepMs(RU_FAM_QUEUE_TIMEOUT);
         }
     }
 }
@@ -406,24 +425,24 @@ static void famAddDir(famCtx* fctx, trans_chars directory) {
 //</editor-fold>
 
 //<editor-fold desc="public">
-famObj fam_monitorFilePath(trans_chars filePath, trans_chars name,
-                           famHandler eventCallBack, perm_ptr ctx) {
+ruFamCtx ruFamMonitorFilePath(trans_chars filePath, trans_chars threadName,
+                              ruFamHandler eventCallBack, perm_ptr ctx) {
     ruVerbLogf("Getting ready to monitor: %s", filePath);
     famCtx *fctx = famNew();
-    fctx->name = ruStrDup(name);
+    fctx->name = ruStrDup(threadName);
     fctx->eventCb = eventCallBack;
     fctx->ctx = ctx;
     famAddDir(fctx, filePath);
     return fctx;
 }
 
-famObj fam_killMonitor(famObj o) {
+ruFamCtx ruFamKillMonitor(ruFamCtx o) {
     if (!o) return NULL;
     famCtx* mon = (famCtx*)o;
     return famFree(mon);
 }
 
-bool fam_quit(famObj o) {
+bool ruFamQuit(ruFamCtx o) {
     famCtx* fctx = (famCtx*)o;
     if (!fctx) return true;
     return fctx->quit;
