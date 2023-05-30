@@ -167,7 +167,30 @@ write_basic_package_version_file(
         VERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}"
         COMPATIBILITY AnyNewerVersion
 )
-install(DIRECTORY include/ DESTINATION include)
+
+set(INCLUDES
+        include/regify-util/cleaner.h
+        include/regify-util/errors.h
+        include/regify-util/ini.h
+        include/regify-util/io.h
+        include/regify-util/kvstore.h
+        include/regify-util/list.h
+        include/regify-util/logging.h
+        include/regify-util/map.h
+        include/regify-util/regex.h
+        include/regify-util/string.h
+        include/regify-util/thread.h
+        )
+if (LINUX OR WIN OR MAC)
+    list(APPEND INCLUDES include/regify-util/fam.h)
+endif()
+
+foreach(hdr IN LISTS INCLUDES)
+    set(DOXY_SOURCES "${DOXY_SOURCES} ${CMAKE_CURRENT_SOURCE_DIR}/${hdr}")
+endforeach()
+
+install(FILES include/regify-util.h DESTINATION include)
+install(FILES ${INCLUDES} DESTINATION include/regify-util)
 install(FILES
         ${CMAKE_CURRENT_BINARY_DIR}/${NAME}Config.cmake
         ${CMAKE_CURRENT_BINARY_DIR}/${NAME}ConfigVersion.cmake
