@@ -21,7 +21,6 @@
  */
 // Darwin file access monitoring functions
 #include "../lib.h"
-#include <sys/event.h>
 #include <CoreServices/CoreServices.h>
 
 //#define fam_dbg
@@ -402,7 +401,7 @@ static void fseCb(ConstFSEventStreamRef stream, void* ctx,
 
 static ptr runThread(ptr o) {
     famCtx *fctx = (famCtx*)o;
-    setThreadName(fctx->name);
+    ruThreadSetName(fctx->name);
     ruInfoLog("starting");
     fctx->runLoop = CFRunLoopGetCurrent();
     FSEventStreamScheduleWithRunLoop(fctx->stream,
@@ -421,13 +420,15 @@ static ptr runThread(ptr o) {
     ruVerbLog("entering CFRunLoop");
     CFRunLoopRun();
     ruInfoLog("stopping");
-    freeThreadCtx(NULL);
+    ruThreadSetName(NULL);
     return NULL;
 }
 
 static ptr cleanerThread(ptr o) {
     famCtx *fctx = (famCtx*)o;
-    setThreadNameRef(ruDupPrintf("%sCleaner", fctx->name));
+    alloc_chars tname = ruDupPrintf("%sCleaner", fctx->name);
+    ruThreadSetName(tname);
+    ruFree(tname);
     ruInfoLog("starting");
 
     do {
@@ -460,7 +461,7 @@ static ptr cleanerThread(ptr o) {
     } while (!fctx->quit);
 
     ruInfoLog("stopping");
-    freeThreadCtx(NULL);
+    ruThreadSetName(NULL);
     return NULL;
 }
 

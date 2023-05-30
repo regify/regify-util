@@ -94,7 +94,9 @@ static void CALLBACK monCompNotify(DWORD evCode, DWORD transferLen,
 //<editor-fold desc="callback thread">
 static ptr cbRun(ptr ctx) {
     famCtx *mon = (famCtx*) ctx;
-    setThreadNameRef(ruDupPrintf("%sCb", mon->name));
+    alloc_chars tname = ruDupPrintf("%sCb", mon->name);
+    ruThreadSetName(tname);
+    ruFree(tname);
     ruInfoLog("Starting");
     msec_t pollTimeout = RU_FAM_POLL_TIMEOUT;
     mon->cbInit = true;
@@ -114,6 +116,7 @@ static ptr cbRun(ptr ctx) {
     } while (!mon->quit);
 
     ruInfoLog("Stopping");
+    ruThreadSetName(NULL);
     return NULL;
 }
 
@@ -331,12 +334,15 @@ static worker* wrkFree(worker* wt) {
 
 static ptr wrkRun(ptr o) {
     worker *wt = (worker*)o;
-    setThreadNameRef(ruDupPrintf("%sWrk", wt->mon->name));
+    alloc_chars tname = ruDupPrintf("%sWrk", wt->mon->name);
+    ruThreadSetName(tname);
+    ruFree(tname);
     ruInfoLog("starting");
     while (wt->reqCount || !wt->quit) {
         SleepEx(INFINITE, true);
     }
     ruInfoLog("ending");
+    ruThreadSetName(NULL);
     return NULL;
 }
 

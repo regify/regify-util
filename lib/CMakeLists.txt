@@ -80,6 +80,10 @@ function (doLink lib shared)
         endif()
     endif()
 
+    if(MAC)
+        target_link_libraries(${lib} PRIVATE ${CORESVC})
+    endif()
+
     if(shared)
         if (NOT INCLUDE_ICU)
             target_link_directories(${lib} PRIVATE ${ICU_LIBRARY_DIRS})

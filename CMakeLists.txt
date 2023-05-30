@@ -111,6 +111,10 @@ if (MAC OR LINUX)
     endif()
 endif()
 
+if(MAC)
+    find_library(CORESVC CoreServices)
+endif()
+
 if(NOT NAME_ARCH)
     message(FATAL_ERROR "NAME_ARCH not set")
 endif()
