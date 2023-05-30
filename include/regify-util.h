@@ -652,7 +652,7 @@ RUAPI sec_t ruTimeUtcToLocal(sec_t stamp);
 #include <regify-util/io.h>
 #include <regify-util/kvstore.h>
 #include <regify-util/regex.h>
-#if defined(__linux__) || defined(ITS_OSX) || defined(_WIN32)
+#if !defined(__ANDROID__) && defined(__linux__) || defined(ITS_OSX) || defined(_WIN32)
 #include <regify-util/fam.h>
 #endif
 
