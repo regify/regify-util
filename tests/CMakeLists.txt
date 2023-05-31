@@ -55,7 +55,8 @@ else()
             PRIVATE ${PROJECT_SOURCE_DIR}/include/ ${CHECK_INCLUDE_DIR})
     target_compile_definitions(runTests PRIVATE
             TEST_BASE=\"${CMAKE_CURRENT_SOURCE_DIR}/tree\"
-            TMPDIR="${CMAKE_CURRENT_BINARY_DIR}")
+            TMPDIR="${CMAKE_CURRENT_BINARY_DIR}"
+            logfile=\"${CMAKE_BINARY_DIR}/test.log\")
     if(MINGW)
         # we want this to remove dependencies to:
         #  /msys64/mingw64/bin/libgcc_s_seh-1.dll

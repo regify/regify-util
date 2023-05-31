@@ -22,12 +22,13 @@
 // Windows file access monitoring functions
 #include "../lib.h"
 
-//#define fam_dbg
-#define fam_dbg(fmt, ...) ruLog_(RU_LOG_DBUG, fmt, __VA_ARGS__)
+// internal debug logging
+//#define famdbg 1
 
 // eventbuffer
-#define _FAM_BUF_SIZE  16380 * sizeof(int)
+#define _FAM_BUF_SIZE  (16380 * sizeof(int))
 
+//<editor-fold desc="vars">
 perm_chars Added = "Added";
 perm_chars Deleted = "Deleted";
 perm_chars Modified = "Modified";
@@ -59,7 +60,6 @@ struct worker_ {
     ruList fileMons;
     bool quit;
     famCtx* mon;
-    long int reqCount;
 };
 
 struct fileMon_ {
@@ -88,38 +88,10 @@ struct fileMon_ {
     DWORD bufSize; // buffer size
 };
 
-static void CALLBACK monCompNotify(DWORD evCode, DWORD transferLen,
-                                   OVERLAPPED* overlapped);
-
-//<editor-fold desc="callback thread">
-static ptr cbRun(ptr ctx) {
-    famCtx *mon = (famCtx*) ctx;
-    alloc_chars tname = ruDupPrintf("%sCb", mon->name);
-    ruThreadSetName(tname);
-    ruFree(tname);
-    ruInfoLog("Starting");
-    msec_t pollTimeout = RU_FAM_POLL_TIMEOUT;
-    mon->cbInit = true;
-
-    do {
-        ruFamEvent *fe = ruListTryPop(mon->events, pollTimeout, NULL);
-        if (!fe) {
-            pollTimeout = RU_FAM_POLL_TIMEOUT;
-        } else {
-            pollTimeout = RU_FAM_QUEUE_TIMEOUT;
-            ruFamEventLog(RU_LOG_DBUG, fe, "got event: ");
-            if (mon->eventCb) {
-                mon->eventCb(fe, mon->ctx);
-            }
-            fe = ruFamEventFree(fe);
-        }
-    } while (!mon->quit);
-
-    ruInfoLog("Stopping");
-    ruThreadSetName(NULL);
-    return NULL;
-}
-
+#if famdbg
+// debug logging
+#define fam_dbg(fmt, ...) ruLog_(RU_LOG_DBUG, fmt, __VA_ARGS__)
+#define fam_info(fmt, ...) ruLog_(RU_LOG_INFO, fmt, __VA_ARGS__)
 static perm_chars actionToString(int32_t action) {
     switch (action) {
         case FILE_ACTION_ADDED:
@@ -136,6 +108,51 @@ static perm_chars actionToString(int32_t action) {
             return BAD_DATA;
     }
 }
+
+#else
+// no debug
+#define fam_dbg(fmt, ...)
+#define fam_info(fmt, ...)
+
+#endif
+
+
+void CALLBACK monCompNotify(DWORD evCode, DWORD transferLen,
+                                   OVERLAPPED* overlapped);
+//</editor-fold>
+
+//<editor-fold desc="callback thread">
+static ptr cbRun(ptr ctx) {
+    famCtx *mon = (famCtx*) ctx;
+    alloc_chars tname = ruDupPrintf("%sCb", mon->name);
+    ruThreadSetName(tname);
+    ruFree(tname);
+    msec_t pollTimeout = RU_FAM_POLL_TIMEOUT;
+    mon->cbInit = true;
+    ruInfoLog("Started");
+
+    do {
+        ruFamEvent *fe = ruListTryPop(mon->events, pollTimeout, NULL);
+        if (!fe) {
+            pollTimeout = RU_FAM_POLL_TIMEOUT;
+        } else {
+            pollTimeout = RU_FAM_QUEUE_TIMEOUT;
+#ifdef famdbg
+            ruFamEventLog(RU_LOG_INFO, fe, "got event: ");
+#endif
+            if (mon->eventCb) {
+                mon->eventCb(fe, mon->ctx);
+            } else {
+                ruFamEventFree(fe);
+            }
+        }
+    } while (!mon->quit);
+
+    ruInfoLog("Stopping");
+    ruThreadSetName(NULL);
+    return NULL;
+}
+
 //</editor-fold>
 
 //<editor-fold desc="fileMon">
@@ -146,7 +163,7 @@ static fileMon* monNew(worker* wt, trans_chars directory) {
                       FILE_NOTIFY_CHANGE_SIZE | FILE_NOTIFY_CHANGE_LAST_WRITE;
     fm->recursive = true;
     // make unix slashes and trim the trailing one
-    directory = ruStrTrim(directory, "/", ruTrimEnd, &fm->dirName);
+    directory = ruStrTrim(directory, "/\\", ruTrimEnd, &fm->dirName);
     ruReplace(fm->dirName, ruStrReplace(directory, "\\", "/"));
 
     fm->overlapped = ruMalloc0(1, OVERLAPPED);
@@ -173,7 +190,7 @@ static void monFree(fileMon* fm) {
 }
 
 static bool monOpenDir(fileMon* fm) {
-    fam_dbg("start dir:%d", fm->dirName);
+    fam_dbg("start dir: '%s'", fm->dirName);
     // Allow this routine To be called redundantly.
     if (fm->dirHandle) return true;
 
@@ -188,7 +205,11 @@ static bool monOpenDir(fileMon* fm) {
                                FILE_FLAG_OVERLAPPED,
                                NULL);
 
-    if (fm->dirHandle == INVALID_HANDLE_VALUE) return false;
+    if (fm->dirHandle == INVALID_HANDLE_VALUE) {
+        ruCritLogf("failed opening %s with error: %ld", fm->dirName, GetLastError());
+        return false;
+    }
+    fam_dbg("success opening %s", fm->dirName);
     return true;
 }
 
@@ -206,7 +227,7 @@ static void monProcNotify(fileMon *fm) {
         // flip the slashes in the direction of the base dir
         ruStrByteReplace(fileName, '\\', '/');
         // Handle a trailing backslash, such as for a root directory.
-        alloc_chars fullPath = ruPathJoin(fm->dirName, fileName);
+        alloc_chars fullPath = ruDupPrintf("%s/%s", fm->dirName, fileName);
 
         // If it could be a short filename, expand it.
         rusize flen = ruStrLen(fileName);
@@ -228,25 +249,25 @@ static void monProcNotify(fileMon *fm) {
             }
             ruFree(wpath);
         }
-        rusize fsz = ruFileSize(fullPath, NULL);
         fam_dbg("got event: %d %s on file '%s' size: %ld",
-                fni->Action, actionToString(fni->Action), fullPath, fsz);
+                fni->Action, actionToString(fni->Action), fullPath,
+                ruFileSize(fullPath, NULL));
         int famev = 0;
         switch (fni->Action) {
             case FILE_ACTION_ADDED:
-            famev = RU_FAM_CREATED;
-            break;
+                famev = RU_FAM_CREATED;
+                break;
             case FILE_ACTION_MODIFIED:
-            famev = RU_FAM_MODIFIED;
-            break;
+                famev = RU_FAM_MODIFIED;
+                break;
             case FILE_ACTION_REMOVED:
-            famev = RU_FAM_DELETED;
-            break;
+                famev = RU_FAM_DELETED;
+                break;
             case FILE_ACTION_RENAMED_OLD_NAME:
-            fm->lastName = fullPath;
-            break;
+                fm->lastName = fullPath;
+                break;
             case FILE_ACTION_RENAMED_NEW_NAME:
-            famev = RU_FAM_MOVED;
+                famev = RU_FAM_MOVED;
         }
         if (fni->Action == FILE_ACTION_MODIFIED && ruIsDir(fullPath)) {
             famev = RU_FAM_ATTRIB;
@@ -261,7 +282,9 @@ static void monProcNotify(fileMon *fm) {
             } else {;
                 ev->srcPath = fullPath;
             }
-            ruFamEventLog(RU_LOG_DBUG, ev, "added event: ");
+#ifdef famdbg
+            ruFamEventLog(RU_LOG_VERB, ev, "added event: ");
+#endif
             ruListPush(fm->worker->mon->events, ev);
         }
 
@@ -271,6 +294,7 @@ static void monProcNotify(fileMon *fm) {
 }
 
 static void monBeginRead(fileMon* fm) {
+    fam_dbg("starting at '%s'", fm->dirName);
     // This call needs To be reissued after every APC.
     ReadDirectoryChangesW(fm->dirHandle,
                           fm->buf,
@@ -280,14 +304,15 @@ static void monBeginRead(fileMon* fm) {
                           NULL,
                           fm->overlapped,
                           monCompNotify);
+    fam_dbg("ending '%s'", fm->dirName);
 }
 
-static void CALLBACK monCompNotify(DWORD evCode, DWORD transferLen,
+void CALLBACK monCompNotify(DWORD evCode, DWORD transferLen,
                                    OVERLAPPED* overlapped) {
     fileMon *fm = overlapped->hEvent;
+    fam_dbg("got %ld for '%s'", evCode, fm->dirName);
     if (evCode == ERROR_OPERATION_ABORTED) {
         fam_dbg("Shutting down monitor for [%d]", fm->dirName);
-        fm->worker->reqCount--;
         monFree(fm);
         return;
     }
@@ -309,9 +334,11 @@ static void CALLBACK monCompNotify(DWORD evCode, DWORD transferLen,
 }
 
 static void monReqTerm(fileMon *fm) {
+    fam_dbg("%s", "starting");
     CancelIo(fm->dirHandle);
     CloseHandle(fm->dirHandle);
     fm->dirHandle = 0;
+    fam_dbg("%s", "ending");
 }
 //</editor-fold>
 
@@ -338,8 +365,8 @@ static ptr wrkRun(ptr o) {
     ruThreadSetName(tname);
     ruFree(tname);
     ruInfoLog("starting");
-    while (wt->reqCount || !wt->quit) {
-        SleepEx(INFINITE, true);
+    while (!wt->quit) {
+        SleepEx(100, true);
     }
     ruInfoLog("ending");
     ruThreadSetName(NULL);
@@ -347,16 +374,15 @@ static ptr wrkRun(ptr o) {
 }
 
 // Called by QueueUserAPC
-static void CALLBACK wrkAddDir(ULONG_PTR o) {
+void CALLBACK wrkAddDir(ULONG_PTR o) {
     fileMon* fm = (fileMon*)o;
     if (fm) {
-        fam_dbg("start dir:%d", fm->dirName);
-    } else {;
+        fam_dbg("start dir: %s", fm->dirName);
+    } else {
         fam_dbg("%s", "start null");
     }
 
     if (monOpenDir(fm)) {
-        fm->worker->reqCount++;
         ruListAppend(fm->worker->fileMons, fm);
         monBeginRead(fm);
     } else {
@@ -365,16 +391,19 @@ static void CALLBACK wrkAddDir(ULONG_PTR o) {
 }
 
 // Called by QueueUserAPC
-static void CALLBACK wrkReqTermination(ULONG_PTR o) {
+void CALLBACK wrkReqTermination(ULONG_PTR o) {
     worker* wt = (worker*)o;
+    fam_dbg("starting with %d mons", ruListSize(wt->fileMons, NULL));
     wt->quit = true;
     ruIterator li = ruListIter(wt->fileMons);
     for (fileMon* mon = ruIterNext(li, fileMon*);
          li; mon = ruIterNext(li, fileMon*)) {
         // Each Request object will delete itself.
+        fam_dbg("Terminating mon %x", mon);
         monReqTerm(mon);
     }
     ruListClear(wt->fileMons);
+    fam_dbg("%s", "ending");
 }
 //</editor-fold>
 
@@ -389,9 +418,12 @@ static famCtx* famNew(void) {
 }
 
 static void famTerm(famCtx* fctx) {
-    if (fctx->wrkThread) {
-        QueueUserAPC(wrkReqTermination,
+    if (fctx->wrkTid) {
+        DWORD ret = QueueUserAPC(wrkReqTermination,
                      fctx->wrkTid, (ULONG_PTR) fctx->wctx);
+        if (!ret) {
+            ruCritLogf("Failed to run QueueUserAPC error: %ld", GetLastError());
+        }
         ruThreadJoin(fctx->wrkThread, NULL);
         fctx->wrkThread = NULL;
     }
@@ -421,17 +453,20 @@ static void famInit(famCtx* fctx) {
 
 static void famAddDir(famCtx* fctx, trans_chars directory) {
     fam_dbg("start dir: %s", directory);
-    if (!fctx->wrkThread) famInit(fctx);
+    if (!fctx->wrkTid) famInit(fctx);
 
     fileMon* fm = monNew(fctx->wctx, directory);
-    QueueUserAPC(wrkAddDir, fctx->wrkThread,
+    DWORD ret = QueueUserAPC(wrkAddDir, fctx->wrkTid,
                  (ULONG_PTR) fm);
-    fam_dbg("%s", "end");
+    if (!ret) {
+        ruCritLogf("Failed to run QueueUserAPC error: %ld", GetLastError());
+    }
+    fam_info("added %s", directory);
 }
 //</editor-fold>
 
 //<editor-fold desc="public">
-ruFamCtx ruFamMonitorFilePath(trans_chars filePath, trans_chars threadName,
+RUAPI ruFamCtx ruFamMonitorFilePath(trans_chars filePath, trans_chars threadName,
                               ruFamHandler eventCallBack, perm_ptr ctx) {
     ruVerbLogf("Getting ready to monitor: %s", filePath);
     famCtx *fctx = famNew();
@@ -442,13 +477,13 @@ ruFamCtx ruFamMonitorFilePath(trans_chars filePath, trans_chars threadName,
     return fctx;
 }
 
-ruFamCtx ruFamKillMonitor(ruFamCtx o) {
+RUAPI ruFamCtx ruFamKillMonitor(ruFamCtx o) {
     if (!o) return NULL;
     famCtx* mon = (famCtx*)o;
     return famFree(mon);
 }
 
-bool ruFamQuit(ruFamCtx o) {
+RUAPI bool ruFamQuit(ruFamCtx o) {
     famCtx* fctx = (famCtx*)o;
     if (!fctx) return true;
     return fctx->quit;

@@ -65,7 +65,7 @@ typedef struct ruFamEvent_ ruFamEvent;
 struct ruFamEvent_ {
     int eventType;          // type of event #fam_*
     perm_chars srcPath;     // object file path
-    perm_chars dstPath;     // destination path for #fam_moved
+    perm_chars dstPath;     // destination path for #RU_FAM_MOVED
 };
 
 /**

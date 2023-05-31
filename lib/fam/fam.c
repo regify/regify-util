@@ -29,7 +29,7 @@ perm_chars moved = "moved";
 perm_chars attrib = "attrib";
 perm_chars unknown = "unknown";
 
-perm_chars ruFamEventTypeString(int32_t action) {
+RUAPI perm_chars ruFamEventTypeString(int32_t action) {
     switch (action) {
         case RU_FAM_CREATED:
             return created;
@@ -46,7 +46,7 @@ perm_chars ruFamEventTypeString(int32_t action) {
     }
 }
 
-void ruFamLogEventFunc(uint32_t loglevel, trans_chars file, trans_chars func,
+RUAPI void ruFamLogEventFunc(uint32_t loglevel, trans_chars file, trans_chars func,
                        int32_t line, ruFamEvent *fe, trans_chars prefix) {
     if (!fe) {
         ruDoLog(loglevel, file, func, line,
@@ -66,7 +66,7 @@ void ruFamLogEventFunc(uint32_t loglevel, trans_chars file, trans_chars func,
     }
 }
 
-alloc_chars ruFamEventString(ruFamEvent *fe) {
+RUAPI alloc_chars ruFamEventString(ruFamEvent *fe) {
     if (fe->dstPath) {
         return ruDupPrintf("famEvent type: %s file: [%s] dest: [%s]",
                            ruFamEventTypeString(fe->eventType),
@@ -78,7 +78,7 @@ alloc_chars ruFamEventString(ruFamEvent *fe) {
     }
 }
 
-ruFamEvent* ruFamEventNew(int eventType, trans_chars filePath, trans_chars destPath) {
+RUAPI ruFamEvent* ruFamEventNew(int eventType, trans_chars filePath, trans_chars destPath) {
     ruFamEvent* fe = ruMalloc0(1, ruFamEvent);
     fe->eventType = eventType;
     fe->srcPath = ruStrDup(filePath);
@@ -87,7 +87,7 @@ ruFamEvent* ruFamEventNew(int eventType, trans_chars filePath, trans_chars destP
     return fe;
 }
 
-ruFamEvent* ruFamEventFree(ruFamEvent* fe) {
+RUAPI ruFamEvent* ruFamEventFree(ruFamEvent* fe) {
     if (!fe) return NULL;
     ruFree(fe->srcPath);
     ruFree(fe->dstPath);
@@ -95,7 +95,7 @@ ruFamEvent* ruFamEventFree(ruFamEvent* fe) {
     return NULL;
 }
 
-void ruFamEventFreeV(void* fe) {
+RUAPI void ruFamEventFreeV(void* fe) {
     ruFamEventFree((ruFamEvent*) fe);
 }
 

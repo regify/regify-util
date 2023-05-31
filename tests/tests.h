@@ -22,6 +22,11 @@
 #ifndef _TESTS_H
 # define _TESTS_H 1
 
+// optional logging sink
+#ifndef logfile
+#define logfile NULL
+#endif
+
 #include <stdio.h>
 #ifdef __clang__
 #pragma clang diagnostic push

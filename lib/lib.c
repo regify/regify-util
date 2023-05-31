@@ -285,6 +285,7 @@ RUAPI void ruSleepMs(msec_t milliseconds) {
 RUAPI void ruSleepUs(usec_t microseconds) {
 #ifdef RUMS
     DWORD msecs = (DWORD)(microseconds / 1000);
+    if ((microseconds % 1000) != 0) msecs++; // round up
     Sleep (msecs);
 #else
     ruZeroedStruct(struct timespec, request);

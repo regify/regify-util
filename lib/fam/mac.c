@@ -34,9 +34,9 @@
 // The main fam runloop populates (k:inode v:old filename) the current (now) out
 // of 4 maps with the moveout event (kFSEv..Renamed no stat). It also removes
 // entries from the current and the last map when it receives the movein event
-// (kFSEv..Renamed and stat) and fires fam_moved events.
+// (kFSEv..Renamed and stat) and fires RU_FAM_MOVED events.
 // The reaper thread periodically iterates over the current+2 map and cleans
-// it out firing fam_deleted events for all the entries still left.
+// it out firing RU_FAM_DELETED events for all the entries still left.
 // We need 4 buckets because events may be in 2 of them if we added 1 just before
 // the end of the last bucket and the next in this bucket. We also want a
 // bucketMillies delay before renames become deletes.
@@ -89,7 +89,7 @@ static int32_t getRingBucketNum(int32_t offset) {
 static int32_t registerFile(famCtx *fctx, trans_chars path,
                           FSEventStreamEventFlags op, alloc_chars* srcFilePath) {
     // Sets the source file name if file was moved
-    // Returns fam_moved, fam_modified, fam_created or ignore
+    // Returns RU_FAM_MOVED, RU_FAM_MODIFIED, RU_FAM_CREATED or ignore
     // We need to track file renames using inodes. We maintain pathInode and
     // inodePath, so we can look one up via the other.
     // Truth table 0 means path != mPath or inode != mInode

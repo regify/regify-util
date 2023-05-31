@@ -76,6 +76,19 @@ perm_chars makePath(const char *filepath) {
     return &pathBuffer[0];
 }
 
+void myLogFunc (perm_ptr ud, trans_chars message) {
+    FILE* wh = (FILE*)ud;
+    rusize len, left = strlen(message);
+    perm_chars cur = message;
+    do {
+        len = fwrite(cur, sizeof(char), left, wh);
+        left -= len;
+        cur += len;
+    } while(left && !feof(wh) && !ferror(wh));
+
+    fprintf(stdout, "%s", message);
+}
+
 #ifdef DO_IOS
 int32_t mainTest (const char *tmpDir, const char *treepath) {
 #else
@@ -83,7 +96,11 @@ int32_t main ( int32_t argc, char *argv[] ) {
 #endif
     int32_t number_failed;
     // for failure debugging
-    //ruSetLogger(ruStdErrorLogger, RU_LOG_DBUG, NULL);
+    FILE* wh = NULL;
+    if (!ruStrEmpty(logfile)) {
+        wh = ruFOpen((const char*) logfile, "w", NULL);
+    }
+    ruSetLogger(myLogFunc, RU_LOG_WARN, wh);
     Suite *suite = getSuite();
     SRunner *runner = srunner_create ( suite );
     srunner_set_fork_status (runner, CK_NOFORK);
@@ -94,5 +111,6 @@ int32_t main ( int32_t argc, char *argv[] ) {
     srunner_run_all ( runner, CK_NORMAL );
     number_failed = srunner_ntests_failed ( runner );
     srunner_free ( runner );
+    if (wh) fclose(wh);
     return number_failed;
 }
