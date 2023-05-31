@@ -176,7 +176,7 @@ static void moveFile(char* oldPath, char* newPath) {
     }
 }
 
-static boolean checkQueue(famTest* ft, char* test) {
+static bool checkQueue(famTest* ft, char* test) {
     if (isWatching) {
         ruVerbLogf("Just did [%s]", test);
         return true;
@@ -209,7 +209,7 @@ static void addEvent(famTest* ft, int eventType, char* filePath, char* destPath)
     ruListAppend(ft->events, fe);
 }
 
-static boolean testit(famTest* ctx) {
+static bool testit(famTest* ctx) {
 
     // create folder
     ruInfoLog( "create folder d2");
@@ -369,7 +369,7 @@ START_TEST (run) {
     ruSleepMs(500);
 
     ruVerbLog( "Starting test");
-    boolean pass = testit(&ctx);
+    bool pass = testit(&ctx);
 
     if (isWatching) {
         // wait for events to come in
