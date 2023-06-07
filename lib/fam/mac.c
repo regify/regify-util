@@ -28,14 +28,14 @@
 
 // File renames and deletes due to moves out of our watched area must be handled
 // by the CFRunloop and a cleaner thread. We use an array of maps to store file
-// moves in. These are accessed in a ring fashion to mitigate concurrent access.
+// moves in. These are accessed in a ring fashion to facilitate event timeouts.
 // The cleaner thread always works on now+2 while the CFRunloop operates on now
 // and now-1.
 // The main fam runloop populates (k:inode v:old filename) the current (now) out
 // of 4 maps with the moveout event (kFSEv..Renamed no stat). It also removes
 // entries from the current and the last map when it receives the movein event
 // (kFSEv..Renamed and stat) and fires RU_FAM_MOVED events.
-// The reaper thread periodically iterates over the current+2 map and cleans
+// The cleaner thread periodically iterates over the current+2 map and cleans
 // it out firing RU_FAM_DELETED events for all the entries still left.
 // We need 4 buckets because events may be in 2 of them if we added 1 just before
 // the end of the last bucket and the next in this bucket. We also want a
@@ -44,37 +44,40 @@
 #define moveRingBuckets  4
 #define bucketMillies  1000
 #define FSEventLatencySecs  1.0
-
+// only used internally
 #define fam_ignore  0x100
 
-
-typedef struct famCtx_ famCtx;
-struct famCtx_ {
-    FSEventStreamRef stream;    // the FSEventStreamRef pointer
-    FSEventStreamContext fsc;   //
-    ruFamHandler eventCb;         // the given user event callback function
-    perm_ptr ctx;               // the users void data pointer
-    // set true when run thread has initialized all watchdirs finnished
-    bool isInit;
-    // set when it's time to quit cleaner
-    bool quit;
-
+typedef struct {
     alloc_chars name;       // the name of the thread
-    alloc_chars lastSrc;    // source path of a create|rename event that we didn't get the
     alloc_chars topDir;     // path to the top level directory
-
     ruThread tid;           // thread id of fam thread
     ruThread ctid;          // thread id of cleaner thread
 
-    CFRunLoopRef runLoop;   // pointer to the CFRunLoop instance
+    ruFamHandler eventCb;   // the given user event callback function
+    perm_ptr ctx;           // the users void data pointer
+
+    // source path of a create|rename event that we didn't get the inode of
+    alloc_chars lastSrc;
+    ruMap inodePath;        // map k: inode to v: path for renames and such
+    ruMap pathInode;        // map k: path to v: inode for deletes and such
+    // ring of moved files k: inode v: filePath
+    // the ring nature is not for thread safety, but for events timing out
+    ruMap mrMap[moveRingBuckets];
+    // keys of each map so we can retain order
+    ruList mrLst[moveRingBuckets];
+
+    // set true when run thread has initialized folder have been scanned
+    bool hasInit;
+    // set when it's time to quit cleaner
+    bool quit;
+
+    // FSEventStream and collateral pointers
+    FSEventStreamRef stream;
+    FSEventStreamContext fsc;
+    CFRunLoopRef runLoop;
     CFStringRef watchPath;
     CFArrayRef pathsToWatch;
-
-    ruMap inodePath;        // maps k: inode to v: path for renames and such
-    ruMap pathInode;        // maps k: path to v: inode for deletes and such
-    // ring of moved files k: inode v: filePath
-    ruMap mvRing[moveRingBuckets];
-};
+} famCtx;
 
 #define ap(str) if (!out) { \
         out = ruStringNew(str); \
@@ -82,19 +85,86 @@ struct famCtx_ {
         ruStringAppendf("|%s", str); \
     }
 
-static int32_t getRingBucketNum(int32_t offset) {
+static alloc_chars flagsToString(int32_t flags) {
+    ruString out = NULL;
+    if (flags & kFSEventStreamEventFlagMustScanSubDirs) {
+        ap("must scan subdirs");
+    }
+    if (flags & kFSEventStreamEventFlagUserDropped) {
+        ap("user dropped events")
+    }
+    if (flags & kFSEventStreamEventFlagKernelDropped) {
+        ap("kernel dropped events")
+    }
+    if (flags & kFSEventStreamEventFlagEventIdsWrapped) {
+        ap("event ids wrapped")
+    }
+    if (flags & kFSEventStreamEventFlagHistoryDone) {
+        ap("history playback done")
+    }
+    if (flags & kFSEventStreamEventFlagRootChanged) {
+        ap("root changed")
+    }
+    if (flags & kFSEventStreamEventFlagMount) {
+        ap("mounted")
+    }
+    if (flags & kFSEventStreamEventFlagUnmount) {
+        ap("unmounted")
+    }
+    if (flags & kFSEventStreamEventFlagItemCreated) {
+        ap("created")
+    }
+    if (flags & kFSEventStreamEventFlagItemRemoved) {
+        ap("removed")
+    }
+    if (flags & kFSEventStreamEventFlagItemInodeMetaMod) {
+        ap("inodeMetaMod")
+    }
+    if (flags & kFSEventStreamEventFlagItemRenamed) {
+        ap("renamed")
+    }
+    if (flags & kFSEventStreamEventFlagItemModified) {
+        ap("modified")
+    }
+    if (flags & kFSEventStreamEventFlagItemFinderInfoMod) {
+        ap("finderInfoMod")
+    }
+    if (flags & kFSEventStreamEventFlagItemChangeOwner) {
+        ap("ownerChange")
+    }
+    if (flags & kFSEventStreamEventFlagItemXattrMod) {
+        ap("attrMod")
+    }
+    if (flags & kFSEventStreamEventFlagItemIsFile) {
+        ap("isFile")
+    }
+    if (flags & kFSEventStreamEventFlagItemIsDir) {
+        ap("isDir")
+    }
+    if (flags & kFSEventStreamEventFlagItemIsSymlink) {
+        ap("isSymlink")
+    }
+    if (flags & kFSEventStreamEventFlagOwnEvent) {
+        ap("ownEvent")
+    }
+    alloc_chars res = ruStringGetCString(out);
+    ruStringFree(out, true);
+    return res;
+}
+
+static int32_t getBucketNum(int32_t offset) {
     return (int32_t)((ruTimeMs() / bucketMillies + offset) % moveRingBuckets);
 }
 
-static int32_t registerFile(famCtx *fctx, trans_chars path,
+static int32_t handleFile(famCtx *fctx, trans_chars path,
                           FSEventStreamEventFlags op, alloc_chars* srcFilePath) {
     // Sets the source file name if file was moved
-    // Returns RU_FAM_MOVED, RU_FAM_MODIFIED, RU_FAM_CREATED or ignore
+    // Returns RU_FAM_MOVED, RU_FAM_MODIFIED, RU_FAM_CREATED or fam_ignore
     // We need to track file renames using inodes. We maintain pathInode and
     // inodePath, so we can look one up via the other.
     // Truth table 0 means path != mPath or inode != mInode
     // 1 means they're equal 0 also includes missing entries and defaults to ""
-    // Also see git:sdks/ctk/box/doc/flowcharts/fam/famMacInodeMgmt.graphml
+    // Also see git:includes/C/util/doc/fam/mac.drn
     // # | mPath mInode
     // 0 |   0      0
     // 1 |   0      1
@@ -102,8 +172,14 @@ static int32_t registerFile(famCtx *fctx, trans_chars path,
     // 3 |   1      1
     ruZeroedStruct(struct stat, fst);
     uint64_t inode = 0;
-    alloc_chars tpath = NULL;
-    path = ruStrTrim(path, "/", ruTrimEnd, &tpath);
+    alloc_chars trimedPath = NULL;
+    // Keep this reference because ruMapRemove frees the value we hold in mPath,
+    // but we still need it.
+    // By storing it here it'll not be freed, but then we need to free it.
+    alloc_chars mapPath = NULL;
+    // reference to used up ->lastSrc  string si it is freed after use
+    alloc_chars lastSrcRef = NULL;
+    path = ruStrTrim(path, "/", ruTrimEnd, &trimedPath);
 
     if (stat(path, &fst)) {
         fam_dbg("file: '%s' is gone", path);
@@ -112,7 +188,7 @@ static int32_t registerFile(famCtx *fctx, trans_chars path,
         inode = fst.st_ino;
     }
 
-    int32_t ret = 0;
+    int32_t ret = fam_ignore;
     uint64_t mInode = 0;
     ruMapGet(fctx->pathInode, path, &mInode);
 
@@ -123,25 +199,29 @@ static int32_t registerFile(famCtx *fctx, trans_chars path,
             // be in the moveRing. We need to retrieve it and remove the inode
             // from the current or last moveRing to prevent a deleted
             // event form being triggered by the cleanup thread
-            int32_t bucket = getRingBucketNum(0);
+            int32_t bucket = getBucketNum(0);
             fam_dbg("looking for inode: %ld in bucket: %d", inode, bucket);
-            ruMapGet(fctx->mvRing[bucket], inode, &mPath);
+            ruMapGet(fctx->mrMap[bucket], inode, &mPath);
             if (mPath) {
-                ruMapRemove(fctx->mvRing[bucket], inode, NULL);
-                fam_dbg("%s", "found");
+                fam_dbg("removing inode: %ld from bucket: %d", inode, bucket);
+                ruMapRemove(fctx->mrMap[bucket], inode, &mapPath);
+                mPath = mapPath;
+                fam_dbg("found %s", mPath);
             } else {
                 // bucket - 1
                 bucket = (bucket+(moveRingBuckets - 1)) % moveRingBuckets;
                 fam_dbg("looking for inode: %ld in bucket: %d", inode, bucket);
-                ruMapGet(fctx->mvRing[bucket], inode, &mPath);
+                ruMapGet(fctx->mrMap[bucket], inode, &mPath);
                 if (mPath) {
-                    ruMapRemove(fctx->mvRing[bucket], inode, NULL);
-                    fam_dbg("%s", "found");
+                    fam_dbg("removing inode: %ld from bucket: %d", inode, bucket);
+                    ruMapRemove(fctx->mrMap[bucket], inode, &mapPath);
+                    mPath = mapPath;
+                    fam_dbg("found %s", mPath);
                 } else {
                     // see if there is a last event
                     if (fctx->lastSrc) {
-                        fam_dbg("%s", "found in lastSrc");
-                        mPath = fctx->lastSrc;
+                        fam_dbg("found '%s' in lastSrc", fctx->lastSrc);
+                        mPath = lastSrcRef = fctx->lastSrc;
                         fctx->lastSrc = NULL;
                     }
                 }
@@ -162,8 +242,8 @@ static int32_t registerFile(famCtx *fctx, trans_chars path,
         if (ruStrEquals(path, mPath)) { // 2,3;
             // nothing changed for us unless inodes changed
             if (inode != mInode) { // 2 modify;
-                // modify because editors save to temp files and move to initial file
-                // that changes the inode, so we need to update it
+                // Modify because editors save to temp files and move to the
+                // initial file. That changes the inode, so we need to update it
                 fam_dbg("path: '%s' has a new inode: %ld", path, inode);
                 ruMapPut(fctx->pathInode, ruStrDup(path), inode);
                 if (mInode) {
@@ -179,8 +259,8 @@ static int32_t registerFile(famCtx *fctx, trans_chars path,
         } else { // 0, 1
             // the paths are different
             if (inode == mInode) { // 1 rename
-                // Since move part 1 cleans out the maps, we simply add the new
-                // mappings.
+                // Since move part 1 cleans out the maps,
+                // we simply add the new mappings.
                 ret = RU_FAM_MOVED;
                 // returning source file signifies file move
                 if (srcFilePath) *srcFilePath = ruStrDup(mPath);
@@ -198,6 +278,7 @@ static int32_t registerFile(famCtx *fctx, trans_chars path,
                 ret = RU_FAM_CREATED;
             }
 
+            fam_dbg("add mappings: '%s' inode: %ld", path, inode);
             ruMapPut(fctx->pathInode, ruStrDup(path), inode);
             ruMapPut(fctx->inodePath, inode, ruStrDup(path));
         }
@@ -205,18 +286,14 @@ static int32_t registerFile(famCtx *fctx, trans_chars path,
     } else { // file gone
         // if we don't know this file, we don't care
         if (mInode) {
-            if (op & kFSEventStreamEventFlagItemRenamed) {
-                // if it was moved we add it to the current \moveRing so a future
-                // event can finish the rename operation or the cleanup thread
-                // reaps it in a while and triggers a deleted event
-                perm_chars mPath = NULL;
-                ruMapGet(fctx->inodePath, mInode, &mPath);
-                int32_t b = getRingBucketNum(0);
-                fam_dbg("moved path: '%s' inode: %ld into bucket: %d", path, mInode, b);
-                ruMapPut(fctx->mvRing[b], mInode, ruStrDup(path));
-            } else {
-                fam_dbg("deleted inode: %ld path: '%s'", mInode, path);
-            }
+            // we add it to the current moveRing so a future
+            // event can finish the rename operation or the cleanup thread
+            // reaps it in a while and triggers a deleted event
+            int32_t b = getBucketNum(0);
+            alloc_chars newPath = ruStrDup(path);
+            fam_dbg("putting path: '%s' inode: %ld into bucket: %d", newPath, mInode, b);
+            ruListAppend(fctx->mrLst[b], mInode);
+            ruMapPut(fctx->mrMap[b], mInode, newPath);
             // The file is removed from our maps regardless of delete or move
             ruMapRemove(fctx->pathInode, path, NULL);
             ruMapRemove(fctx->inodePath, mInode, NULL);
@@ -224,92 +301,26 @@ static int32_t registerFile(famCtx *fctx, trans_chars path,
             // unknown events that are gone could have been created and renamed before
             // we got a hold of the inode. Here we remember this event
             FSEventStreamEventFlags mask =
-                    kFSEventStreamEventFlagItemRenamed |
-                    kFSEventStreamEventFlagItemCreated;
-            if ((op & mask) == mask) {
-                fam_dbg("remembering path: '%s' for potential rename later", path);
+                    kFSEventStreamEventFlagItemRenamed;// |
+                    //kFSEventStreamEventFlagItemCreated;
+            if (op & mask) {
+                fam_dbg("remembering path: '%s' in lastSrc for potential rename later", path);
                 ruReplace(fctx->lastSrc, ruStrDup(path));
             } else {
                 fam_dbg("unknown path: '%s' is gone", path);
             }
-            ret = fam_ignore;
         }
     }
-    ruFree(tpath);
+    ruFree(trimedPath);
+    ruFree(mapPath);
+    ruFree(lastSrcRef);
     return ret;
 }
 
 static int32_t scanLst(trans_chars fullPath, bool isFolder, ptr o) {
     famCtx *fctx = (famCtx*)o;
-    registerFile(fctx, fullPath, kFSEventStreamEventFlagNone, NULL);
+    handleFile(fctx, fullPath, kFSEventStreamEventFlagNone, NULL);
     return RUE_OK;
-}
-
-static alloc_chars flagsToString(int32_t flags) {
-    ruString out = NULL;
-    if (flags & kFSEventStreamEventFlagMustScanSubDirs) {
-        ap("must scan subdirs");
-    }
-    if (flags & kFSEventStreamEventFlagUserDropped) {
-        ap("user dropped events")
-    }
-    if ( flags & kFSEventStreamEventFlagKernelDropped) {
-        ap("kernel dropped events")
-    }
-    if ( flags & kFSEventStreamEventFlagEventIdsWrapped) {
-        ap("event ids wrapped")
-    }
-    if ( flags & kFSEventStreamEventFlagHistoryDone) {
-        ap("history playback done")
-    }
-    if ( flags & kFSEventStreamEventFlagRootChanged) {
-        ap("root changed")
-    }
-    if ( flags & kFSEventStreamEventFlagMount) {
-        ap("mounted")
-    }
-    if ( flags & kFSEventStreamEventFlagUnmount) {
-        ap("unmounted")
-    }
-    if ( flags & kFSEventStreamEventFlagItemCreated) {
-        ap("created")
-    }
-    if ( flags & kFSEventStreamEventFlagItemRemoved) {
-        ap("removed")
-    }
-    if ( flags & kFSEventStreamEventFlagItemInodeMetaMod) {
-        ap("inodeMetaMod")
-    }
-    if ( flags & kFSEventStreamEventFlagItemRenamed) {
-        ap("renamed")
-    }
-    if ( flags & kFSEventStreamEventFlagItemModified) {
-        ap("modified")
-    }
-    if ( flags & kFSEventStreamEventFlagItemFinderInfoMod) {
-        ap("finderInfoMod")
-    }
-    if ( flags & kFSEventStreamEventFlagItemChangeOwner) {
-        ap("ownerChange")
-    }
-    if ( flags & kFSEventStreamEventFlagItemXattrMod) {
-        ap("attrMod")
-    }
-    if ( flags & kFSEventStreamEventFlagItemIsFile) {
-        ap("isFile")
-    }
-    if ( flags & kFSEventStreamEventFlagItemIsDir) {
-        ap("isDir")
-    }
-    if ( flags & kFSEventStreamEventFlagItemIsSymlink) {
-        ap("isSymlink")
-    }
-    if ( flags & kFSEventStreamEventFlagOwnEvent) {
-        ap("ownEvent")
-    }
-    alloc_chars res = ruStringGetCString(out);
-    ruStringFree(out, true);
-    return res;
 }
 
 static void fseCb(ConstFSEventStreamRef stream, void* ctx,
@@ -344,16 +355,15 @@ static void fseCb(ConstFSEventStreamRef stream, void* ctx,
         }
 
         alloc_chars srcFile = NULL;
-        int32_t status = registerFile(fctx, filePath, flags, &srcFile);
+        int32_t status = handleFile(fctx, filePath, flags, &srcFile);
 
         if (status == fam_ignore) {
             fam_dbg("Ignoring transient path %s event", srcFile);
         } else if (status == RU_FAM_MOVED && srcFile) {
             ruFamEvent* fe = ruFamEventNew(RU_FAM_MOVED,
                                            srcFile, filePath);
-            fctx->eventCb(fe, fctx->ctx);
             fam_dbg("The path %s was moved to %s", srcFile, filePath);
-            srcFile = NULL;
+            fctx->eventCb(fe, fctx->ctx);
 
         } else if (flags & kFSEventStreamEventFlagItemCreated ||
                    status == RU_FAM_CREATED) {
@@ -368,20 +378,22 @@ static void fseCb(ConstFSEventStreamRef stream, void* ctx,
             ruFamEvent* fe = ruFamEventNew(RU_FAM_CREATED,
                                            filePath, NULL);
             fctx->eventCb(fe, fctx->ctx);
-            if (!(flags & kFSEventStreamEventFlagItemCreated) ||
-                flags & kFSEventStreamEventFlagItemModified) {
-                // add a modified event since it may not come from a move
-                ruFamEvent* fe2 = ruFamEventNew(RU_FAM_MODIFIED,
-                                                filePath, NULL);
-                fctx->eventCb(fe2, fctx->ctx);
-                fam_dbg("Adding the path %s was modified.", filePath);
+            if (!(flags & kFSEventStreamEventFlagItemIsDir)) {
+                if (!(flags & kFSEventStreamEventFlagItemCreated) ||
+                    flags & kFSEventStreamEventFlagItemModified) {
+                    // add a modified event since it may not come from a move
+                    fe = ruFamEventNew(RU_FAM_MODIFIED,
+                                       filePath, NULL);
+                    fam_dbg("Adding the path %s was modified.", filePath);
+                    fctx->eventCb(fe, fctx->ctx);
+                }
             }
 
         } else if (flags & kFSEventStreamEventFlagItemRemoved) {
             ruFamEvent* fe = ruFamEventNew(RU_FAM_DELETED,
                                            filePath, NULL);
-            fctx->eventCb(fe, fctx->ctx);
             fam_dbg("The path %s was deleted.", filePath);
+            fctx->eventCb(fe, fctx->ctx);
 
         } else if (flags & kFSEventStreamEventFlagItemModified ||
                    status == RU_FAM_MODIFIED) {
@@ -391,11 +403,12 @@ static void fseCb(ConstFSEventStreamRef stream, void* ctx,
             } else {
                 ruFamEvent* fe = ruFamEventNew(RU_FAM_MODIFIED,
                                                filePath, NULL);
-                fctx->eventCb(fe, fctx->ctx);
                 fam_dbg("The file %s was modified.", filePath);
+                fctx->eventCb(fe, fctx->ctx);
             }
         }
         ruFree(srcFile);
+        ruFree(filePath);
     }
 }
 
@@ -416,8 +429,8 @@ static ptr runThread(ptr o) {
     ruFolderWalk(fctx->topDir, RU_WALK_FOLDER_FIRST,
                  scanLst, fctx);
     fam_dbg("Loaded existing directory structure '%s'.", fctx->topDir);
-    fctx->isInit = true;
-    ruVerbLog("entering CFRunLoop");
+    fctx->hasInit = true;
+    fam_dbg("%s", "entering CFRunLoop");
     CFRunLoopRun();
     ruInfoLog("stopping");
     ruThreadSetName(NULL);
@@ -432,20 +445,25 @@ static ptr cleanerThread(ptr o) {
     ruInfoLog("starting");
 
     do {
-        int32_t epoch = (int32_t)(ruTimeMs() / bucketMillies);
+        sec_t epoch = (sec_t)(ruTimeMs()/bucketMillies);
         // get the current bucket
-        int32_t bucket = getRingBucketNum(2);
+        int32_t bucket = getBucketNum(2);
+        fam_dbg("Running on bucket: %d at: %ld", bucket, epoch);
         // clean it out
-        int64_t inode = 0;
-        perm_chars path = NULL;
-        while(RUE_OK == ruMapFirst(fctx->mvRing[bucket], &inode, &path)) {
-            ruZeroedStruct(ruFamEvent, fe);
-            fe.eventType = RU_FAM_DELETED;
-            fe.srcPath = (char*)path;
-            fctx->eventCb(&fe, fctx->ctx);
-            fam_dbg("The path:%s from bucket: %d was deleted.", path, bucket);
-            ruMapRemove(fctx->mvRing[bucket], inode, NULL);
+        ruIterator li = ruListIter(fctx->mrLst[bucket]);
+        for(int64_t inode = ruIterNext(li, int64_t);
+               li; inode = ruIterNext(li, int64_t)) {
+            alloc_chars path = NULL;
+            int32_t ret = ruMapRemove(fctx->mrMap[bucket], inode, &path);
+            if (ret == RUE_OK) {
+                ruFamEvent* fe = ruFamEventNew(RU_FAM_DELETED,
+                                               path,NULL);
+                fam_dbg("The path:%s from bucket: %d was deleted.", path, bucket);
+                fctx->eventCb(fe, fctx->ctx);
+            }
+            ruFree(path);
         }
+        ruListClear(fctx->mrLst[bucket]);
 
         do {
             // quittable delay til next epoch. Example calculation:
@@ -454,6 +472,7 @@ static ptr cleanerThread(ptr o) {
             msec_t delay = (epoch+1) * bucketMillies - ruTimeMs();
             if (delay > 100) delay = 100;
             if (fctx->quit) break;
+            //fam_dbg("sleeping for: %ldms", delay);
             if (delay <= 0) break;
             ruSleepMs(delay);
         } while (true);
@@ -470,13 +489,12 @@ static void stopStream(famCtx *fctx) {
     ruVerbLogf("Stopping stream 0x%x", fctx->stream);
     FSEventStreamStop(fctx->stream);
     FSEventStreamInvalidate(fctx->stream);
-
     CFRunLoopStop(fctx->runLoop);
     ruVerbLog("RunLoop stopped");
 }
 
 // public functions
-ruFamCtx ruFamMonitorFilePath(trans_chars filePath, trans_chars threadName,
+RUAPI ruFamCtx ruFamMonitorFilePath(trans_chars filePath, trans_chars threadName,
                               ruFamHandler eventCallBack, perm_ptr ctx) {
     ruVerbLogf( "Getting ready to monitor: %s", filePath);
     famCtx* fctx = ruMalloc0(1, famCtx);
@@ -487,7 +505,8 @@ ruFamCtx ruFamMonitorFilePath(trans_chars filePath, trans_chars threadName,
         fctx->inodePath = ruMapNew(ruIntHash, ruIntMatch,
                                    NULL, free, 0);
         for (int32_t i = 0; i < moveRingBuckets; i++) {
-            fctx->mvRing[i] = ruMapNew(ruIntHash, ruIntMatch,
+            fctx->mrLst[i] = ruListNew(NULL);
+            fctx->mrMap[i] = ruMapNew(ruIntHash, ruIntMatch,
                                        NULL, free, 0);
         }
         fctx->pathInode = ruMapNewString(free, NULL);
@@ -528,7 +547,7 @@ ruFamCtx ruFamMonitorFilePath(trans_chars filePath, trans_chars threadName,
         }
         ruVerbLogf("Launched cleaner thread: 0x%x",
                    ruThreadNativeId(fctx->ctid, NULL));
-        while (!fctx->isInit) ruSleepMs(RU_FAM_QUEUE_TIMEOUT);
+        while (!fctx->hasInit) ruSleepMs(RU_FAM_QUEUE_TIMEOUT);
 
         return fctx;
 
@@ -539,7 +558,7 @@ ruFamCtx ruFamMonitorFilePath(trans_chars filePath, trans_chars threadName,
     return NULL;
 }
 
-ruFamCtx ruFamKillMonitor(ruFamCtx o) {
+RUAPI ruFamCtx ruFamKillMonitor(ruFamCtx o) {
     famCtx* fctx = (famCtx*)o;
     ruInfoLogf("Request to kill fam thread %x", fctx->tid);
     fctx->quit = true;
@@ -569,7 +588,10 @@ ruFamCtx ruFamKillMonitor(ruFamCtx o) {
     CFRelease(fctx->watchPath);
     ruMapFree(fctx->inodePath);
     ruMapFree(fctx->pathInode);
-    for (int i = 0; i < moveRingBuckets; i++) ruMapFree(fctx->mvRing[i]);
+    for (int i = 0; i < moveRingBuckets; i++) {
+        ruMapFree(fctx->mrMap[i]);
+        ruListFree(fctx->mrLst[i]);
+    }
     ruFree(fctx->lastSrc);
     ruFree(fctx->topDir);
     ruFree(fctx->name);
@@ -577,7 +599,7 @@ ruFamCtx ruFamKillMonitor(ruFamCtx o) {
     return NULL;
 }
 
-bool ruFamQuit(ruFamCtx o) {
+RUAPI bool ruFamQuit(ruFamCtx o) {
     famCtx* fctx = (famCtx*)o;
     if (!fctx) return true;
     return fctx->quit;

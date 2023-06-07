@@ -106,8 +106,8 @@ static void myfamHandler(ruFamEvent* fe, perm_ptr ctx) {
     if (!isWatching) {
         req = ruListPop(ft->events, NULL);
         if (req == 0) {
-#ifdef _WIN32
             ruFamEventLog(RU_LOG_CRIT, fe, "got unexpected event");
+#ifdef _WIN32
             failed = true;
             return;
 #endif
@@ -142,13 +142,13 @@ static void writeFile(char* filePath, char* content) {
     int ret;
     if (ruFileExists(filePath)) {
         fh = ruFOpen(filePath, "a", &ret);
-    } else { ;
+    } else {
         fh = ruFOpen(filePath, "w", &ret);
     }
     rusize len = strlen(content);
     rusize wlen = fwrite(content, 1,len,fh);
     if (len != wlen) {
-        ck_abort_msg("Only wrote %d of %d bytes to: %s", wlen, len, filePath);
+        ck_abort_msg("Only wrote %lu of %lu bytes to: %s", wlen, len, filePath);
     }
     fclose(fh);
 }
@@ -161,7 +161,7 @@ static void killFile(char* filePath) {
         if ((ret = ruFolderRemove(filePath))) {
             ck_abort_msg("Failed to remove folder: %s %d", filePath, ret);
         }
-    } else { ;
+    } else {
         if ((ret = ruFileRemove(filePath))) {
             ck_abort_msg("Failed to remove file: %s %d", filePath, ret);
         }
@@ -181,8 +181,11 @@ static bool checkQueue(famTest* ft, char* test) {
         ruVerbLogf("Just did [%s]", test);
         return true;
     }
-
+#ifdef ITS_OSX
+    int i = 60; // OSX takes more time
+#else
     int i = 10; // max 500ms wait
+#endif
     do {
         if (failed) return false;
         if (!ruListSize(ft->events, NULL)) return true;
@@ -197,7 +200,7 @@ static bool checkQueue(famTest* ft, char* test) {
 #endif
             ck_abort_msg("Leftover event");
         }
-        ruDbgLogf("waiting some more %d", i);
+        //ruDbgLogf("waiting some more %d", i);
         ruSleepMs(50);
     } while (true);
 }
@@ -217,8 +220,75 @@ static bool testit(famTest* ctx) {
     insureDir(d2, true);
     if (!checkQueue(ctx, "create folder " d2)) return false;
 
-//<editor-fold desc="*nix">
-#ifndef _WIN32
+//<editor-fold desc="darwin">
+#ifdef ITS_OSX
+    msec_t delay = 1;
+    if (isWatching) delay = 3000;
+
+    ruSleepMs(delay);
+    // create file
+    addEvent(ctx, RU_FAM_CREATED, d1foo, NULL);
+    addEvent(ctx, RU_FAM_MODIFIED, d1foo, NULL);
+    writeFile(d1foo, "foo was here ");
+    checkQueue(ctx, "write " d1foo);
+
+    ruSleepMs(delay);
+    addEvent(ctx, RU_FAM_MOVED, d1foo, d2foo);
+    moveFile(d1foo, d2foo);
+    checkQueue(ctx, "move file within " d1foo " " d2foo);
+
+    ruSleepMs(delay);
+    addEvent(ctx, RU_FAM_MOVED, d2, d1d2);
+    moveFile(d2, d1d2);
+    checkQueue(ctx, "move folder within " d2 " " d1d2);
+
+    // OSX inode tracking does not reach into sub folders, so it'll be a new file
+    ruSleepMs(delay);
+    addEvent(ctx, RU_FAM_MOVED, d1d2foo, d1foo);
+    moveFile(d1d2foo, d1foo);
+    checkQueue(ctx, "move file within again " d1d2foo " " d1foo);
+
+    // OSX inode tracking does not reach into sub folders, so it'll be a new file
+    ruSleepMs(delay);
+    addEvent(ctx, RU_FAM_DELETED, d1foo, NULL);
+    moveFile(d1foo, topfoo);
+    checkQueue(ctx, "move file out " d1foo " " topfoo);
+
+    ruSleepMs(delay);
+    addEvent(ctx, RU_FAM_DELETED, d1d2, NULL);
+    moveFile(d1d2, topD2);
+    checkQueue(ctx, "move folder out " d1d2 " " topD2);
+
+    ruSleepMs(delay);
+    addEvent(ctx, RU_FAM_CREATED, d1d2, NULL);
+    moveFile(topD2, d1d2);
+    checkQueue(ctx, "move folder in " topD2 " " d1d2);
+
+    ruSleepMs(delay);
+    addEvent(ctx, RU_FAM_CREATED, d1foo, NULL);
+    addEvent(ctx, RU_FAM_MODIFIED, d1foo, NULL);
+    moveFile(topfoo, d1foo);
+    checkQueue(ctx, "move file in " topfoo " " d1foo);
+
+    ruVerbLog("rm d1foo");
+    ruSleepMs(delay);
+    addEvent(ctx, RU_FAM_DELETED, d1foo, NULL);
+    killFile(d1foo);
+    checkQueue(ctx, "delete file " d1foo);
+
+    ruVerbLog("rm d1");
+    ruSleepMs(delay);
+    addEvent(ctx, RU_FAM_DELETED, d1d2, NULL);
+    addEvent(ctx, RU_FAM_DELETED, d1, NULL);
+    killFile(d1);
+    checkQueue(ctx, "delete folder " d1);
+
+
+#endif
+//</editor-fold>
+
+//<editor-fold desc="linux">
+#ifdef __linux__
     // create file
     addEvent(ctx, RU_FAM_CREATED, d1foo, NULL);
     addEvent(ctx, RU_FAM_MODIFIED, d1foo, NULL);
@@ -360,7 +430,6 @@ START_TEST (run) {
     insureDir(topDir, false);
     insureDir(watchDir, true);
     insureDir(d1, true);
-
     //isWatching = true;
 
     ruVerbLog("Launching monitor");
@@ -373,7 +442,7 @@ START_TEST (run) {
 
     if (isWatching) {
         // wait for events to come in
-        ruSleepMs(1000);
+        ruSleepMs(3000);
     }
     ruFamKillMonitor(famCtx);
     ctx.events = ruListFree(ctx.events);

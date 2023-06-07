@@ -72,11 +72,22 @@ else()
             COMMAND echo "* * *   Success   * * *"
             DEPENDS runTests)
 
+    # memcheck on darwin
+    find_program(LEAKS leaks)
+    if(LEAKS)
+        add_custom_target(leaks
+                COMMAND CK_FORK=no MallocStackLogging=1 ${LEAKS}
+                --list --atExit --
+                ${CMAKE_CURRENT_BINARY_DIR}/runTests > run.log 2>&1
+                USES_TERMINAL
+                DEPENDS runTests)
+    endif()
+    # memcheck on linux
     find_program(VALGRIND valgrind)
     if(VALGRIND)
         add_custom_target(grind
                 COMMAND rm -f grind.log
-                COMMAND CK_FORK=no valgrind --num-callers=50
+                COMMAND CK_FORK=no ${VALGRIND} --num-callers=50
                     --read-var-info=yes --show-reachable=yes
                     --leak-check=full --log-file=grind.log
                     ${CMAKE_CURRENT_BINARY_DIR}/runTests > run.log 2>&1

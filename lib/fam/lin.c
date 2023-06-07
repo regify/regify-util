@@ -87,7 +87,7 @@ struct famCtx_ {
     ruMap cookie;       // map of k: int cookie v: ck objects for moves
     struct pollfd pfd;  // poll descriptor for inotify_events
     // common
-    bool isInit;        // set #True when run thread has initialized all watchdirs finnished
+    bool hasInit;        // set #True when run thread has initialized all watchdirs finnished
     bool quit;          // set #True to break loop
 };
 
@@ -434,7 +434,7 @@ static void* fam_runThread(void* ctx) {
         fam_dbg("Loaded existing directory structure %d.", fctx->id);
         fctx->pfd.fd = fctx->id;
         fctx->pfd.events = POLLIN | POLLPRI;
-        fctx->isInit = true;
+        fctx->hasInit = true;
         // main loop
         ret = fam_runLoop(fctx);
         // done
@@ -477,7 +477,7 @@ ruFamCtx ruFamMonitorFilePath(trans_chars filePath, trans_chars threadName,
         return fam_freeCtx(fctx);
     }
     // wait for thread to initialize
-    while (!fctx->isInit && !fctx->quit) {
+    while (!fctx->hasInit && !fctx->quit) {
         ruSleepMs(RU_FAM_QUEUE_TIMEOUT);
     }
     if (fctx->quit) {

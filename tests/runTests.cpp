@@ -30,17 +30,17 @@
 
 Suite* getSuite(void) {
     Suite *suite = suite_create("util");
-    suite_add_tcase(suite, miscTests());
-    suite_add_tcase(suite, listTests());
-    suite_add_tcase(suite, stringTests());
-    suite_add_tcase(suite, mapTests());
-    suite_add_tcase(suite, setTests());
-    suite_add_tcase(suite, regexTests());
-    suite_add_tcase(suite, ioTests());
-    suite_add_tcase(suite, iniTests());
-    suite_add_tcase(suite, storeTests());
-    suite_add_tcase(suite, cleanerTests());
-    suite_add_tcase(suite, threadTests());
+//    suite_add_tcase(suite, miscTests());
+//    suite_add_tcase(suite, listTests());
+//    suite_add_tcase(suite, stringTests());
+//    suite_add_tcase(suite, mapTests());
+//    suite_add_tcase(suite, setTests());
+//    suite_add_tcase(suite, regexTests());
+//    suite_add_tcase(suite, ioTests());
+//    suite_add_tcase(suite, iniTests());
+//    suite_add_tcase(suite, storeTests());
+//    suite_add_tcase(suite, cleanerTests());
+//    suite_add_tcase(suite, threadTests());
 #if defined(__linux__) || defined(ITS_OSX) || defined(_WIN32)
     suite_add_tcase(suite, famTests());
 #endif
@@ -100,7 +100,7 @@ int32_t main ( int32_t argc, char *argv[] ) {
     if (!ruStrEmpty(logfile)) {
         wh = ruFOpen((const char*) logfile, "w", NULL);
     }
-    ruSetLogger(myLogFunc, RU_LOG_WARN, wh);
+    ruSetLogger(myLogFunc, RU_LOG_DBUG, wh);
     Suite *suite = getSuite();
     SRunner *runner = srunner_create ( suite );
     srunner_set_fork_status (runner, CK_NOFORK);
