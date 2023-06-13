@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['list_20collection_756',['List Collection',['../group__list.html',1,'']]],
-  ['logging_20facility_757',['Logging Facility',['../group__logging.html',1,'']]]
+  ['key_20value_20storage_826',['Key Value Storage',['../group__kvstore__sec.html',1,'']]]
 ];

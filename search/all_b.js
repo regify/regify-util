@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['memory_20management_27',['Memory Management',['../group__memory.html',1,'']]],
-  ['miscellaneous_20functions_28',['Miscellaneous Functions',['../group__misc.html',1,'']]],
-  ['msec_5ft_29',['msec_t',['../group__misc.html#gae416893e8160c5b7c6da3765e4707d5d',1,'regify-util.h']]]
+  ['list_25',['list',['../struct_kv_store__.html#a52a333e638a82b71314503253a6c5252',1,'KvStore_']]],
+  ['list_20collection_26',['List Collection',['../group__list.html',1,'']]],
+  ['logging_20facility_27',['Logging Facility',['../group__logging.html',1,'']]]
 ];

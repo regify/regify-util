@@ -1,6 +1,8 @@
 var searchData=
 [
-  ['uchar_422',['uchar',['../group__misc.html#ga65f85814a8290f9797005d3b28e7e5fc',1,'regify-util.h']]],
-  ['usec_423',['usec',['../structru_time_val.html#aebdd1a6e510874064a7f3a3a6ff935bd',1,'ruTimeVal']]],
-  ['usec_5ft_424',['usec_t',['../group__misc.html#ga02db3ac43a5917535ca3cbc37ac72884',1,'regify-util.h']]]
+  ['threading_20related_453',['Threading Related',['../group__threading.html',1,'']]],
+  ['trans_5fbytes_454',['trans_bytes',['../group__misc.html#gab5445910fbc90fb0a6db407f8f608422',1,'regify-util.h']]],
+  ['trans_5fchars_455',['trans_chars',['../group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc',1,'regify-util.h']]],
+  ['trans_5fptr_456',['trans_ptr',['../group__misc.html#ga147d80ce3325dd56fbfb0e07cedcf757',1,'regify-util.h']]],
+  ['trans_5funi_457',['trans_uni',['../group__misc.html#ga583a16c595210574018e6bd10fe925b7',1,'regify-util.h']]]
 ];

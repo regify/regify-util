@@ -6,6 +6,7 @@ var modules =
     [ "regify-util Error Codes", "group__ruerror.html", "group__ruerror" ],
     [ "Ini File Handling", "group__ini.html", "group__ini" ],
     [ "File I/O", "group__io.html", "group__io" ],
+    [ "JSON", "group__json.html", "group__json" ],
     [ "Key Value Storage", "group__kvstore__sec.html", "group__kvstore__sec" ],
     [ "List Collection", "group__list.html", "group__list" ],
     [ "Logging Facility", "group__logging.html", "group__logging" ],

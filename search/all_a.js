@@ -1,6 +1,9 @@
 var searchData=
 [
-  ['list_24',['list',['../struct_kv_store__.html#a52a333e638a82b71314503253a6c5252',1,'KvStore_']]],
-  ['list_20collection_25',['List Collection',['../group__list.html',1,'']]],
-  ['logging_20facility_26',['Logging Facility',['../group__logging.html',1,'']]]
+  ['key_20value_20storage_19',['Key Value Storage',['../group__kvstore__sec.html',1,'']]],
+  ['kvget_20',['kvget',['../group__kvstore__sec.html#ga446330a04500577d5331d33472f19d32',1,'kvstore.h']]],
+  ['kvlist_21',['kvlist',['../group__kvstore__sec.html#ga6ca4b7cac97b25236e64580ed0adfe7d',1,'kvstore.h']]],
+  ['kvset_22',['kvset',['../group__kvstore__sec.html#ga9048fec5cec2283bac868aa9a4a42c74',1,'kvstore.h']]],
+  ['kvstore_23',['KvStore',['../group__kvstore__sec.html#ga9abc942c577335834b99c80262ed4c84',1,'kvstore.h']]],
+  ['kvstore_5f_24',['KvStore_',['../struct_kv_store__.html',1,'']]]
 ];

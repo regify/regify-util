@@ -692,6 +692,13 @@
     </member>
     <member kind="define">
       <type>#define</type>
+      <name>RUE_WRONG_PARAMETER_LENGTH</name>
+      <anchorfile>group__ruerror.html</anchorfile>
+      <anchor>ga9324f5403864d2f4d1fd30f7e93bca1c</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
       <name>RUE_INVALID_PARAMETER</name>
       <anchorfile>group__ruerror.html</anchorfile>
       <anchor>ga0860dfd6b6c4771bbdeb5c070c35d7d1</anchor>
@@ -1070,6 +1077,249 @@
       <anchorfile>group__io.html</anchorfile>
       <anchor>gaa0bd3e2ab8ca42cf6c26dda0f0bf5836</anchor>
       <arglist>(int parts,...)</arglist>
+    </member>
+  </compound>
+  <compound kind="group">
+    <name>json</name>
+    <title>JSON</title>
+    <filename>group__json.html</filename>
+    <member kind="typedef">
+      <type>void *</type>
+      <name>ruJson</name>
+      <anchorfile>group__json.html</anchorfile>
+      <anchor>gac1a01d0cd3ab047d989a7cdd1b5bfc52</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI ruJson</type>
+      <name>ruJsonFree</name>
+      <anchorfile>group__json.html</anchorfile>
+      <anchor>gae98c908d9a64476c198628ceb5f649bb</anchor>
+      <arglist>(ruJson rj)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI ruJson</type>
+      <name>ruJsonNew</name>
+      <anchorfile>group__json.html</anchorfile>
+      <anchor>ga4d888c7b5a23662c072028ab61e7704b</anchor>
+      <arglist>(void)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI ruJson</type>
+      <name>ruJsonStart</name>
+      <anchorfile>group__json.html</anchorfile>
+      <anchor>ga8cc76037ed953cf0816798440215d52e</anchor>
+      <arglist>(bool map)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI int32_t</type>
+      <name>ruJsonStartMap</name>
+      <anchorfile>group__json.html</anchorfile>
+      <anchor>ga334b669b54e7954680c02c2723739eca</anchor>
+      <arglist>(ruJson rj)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI int32_t</type>
+      <name>ruJsonEndMap</name>
+      <anchorfile>group__json.html</anchorfile>
+      <anchor>ga4c82bd0da9e29049d24f54ef87cf0abf</anchor>
+      <arglist>(ruJson rj)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI int32_t</type>
+      <name>ruJsonStartArray</name>
+      <anchorfile>group__json.html</anchorfile>
+      <anchor>gafacba58ef05e5657fb2dca591954a45a</anchor>
+      <arglist>(ruJson rj)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI int32_t</type>
+      <name>ruJsonEndArray</name>
+      <anchorfile>group__json.html</anchorfile>
+      <anchor>ga80a52bc96675b8a16b3ffae993e1405b</anchor>
+      <arglist>(ruJson rj)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI int32_t</type>
+      <name>ruJsonSetInt</name>
+      <anchorfile>group__json.html</anchorfile>
+      <anchor>ga97f3df8d970c456fff7df6e7ac9c3a7d</anchor>
+      <arglist>(ruJson rj, int64_t val)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI int32_t</type>
+      <name>ruJsonSetStr</name>
+      <anchorfile>group__json.html</anchorfile>
+      <anchor>ga802ea2b248dea91cf7b0a6958bd46799</anchor>
+      <arglist>(ruJson rj, trans_chars val)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI int32_t</type>
+      <name>ruJsonSetKeyStr</name>
+      <anchorfile>group__json.html</anchorfile>
+      <anchor>gac0fb5a657a0c63308add367b0b57bc9c</anchor>
+      <arglist>(ruJson rj, trans_chars key, trans_chars val)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI int32_t</type>
+      <name>ruJsonSetKeyInt</name>
+      <anchorfile>group__json.html</anchorfile>
+      <anchor>ga202cdae6749fc07f70ea100c53f6cb9d</anchor>
+      <arglist>(ruJson rj, trans_chars key, int64_t val)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI int32_t</type>
+      <name>ruJsonStartKeyMap</name>
+      <anchorfile>group__json.html</anchorfile>
+      <anchor>gaf41e3d5dc45a80de26fb71bec8bbbd57</anchor>
+      <arglist>(ruJson rj, trans_chars key)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI int32_t</type>
+      <name>ruJsonStartKeyArray</name>
+      <anchorfile>group__json.html</anchorfile>
+      <anchor>ga2a7c507f28baf71e6532b38c65e69b9a</anchor>
+      <arglist>(ruJson rj, trans_chars key)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI int32_t</type>
+      <name>ruJsonWrite</name>
+      <anchorfile>group__json.html</anchorfile>
+      <anchor>ga02a88f571ebc25f56e681f402bac58d4</anchor>
+      <arglist>(ruJson rj, perm_chars *output)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI ruJson</type>
+      <name>ruJsonParse</name>
+      <anchorfile>group__json.html</anchorfile>
+      <anchor>ga48a0c89eb1e989cf019f7dbaccaeed4e</anchor>
+      <arglist>(trans_chars jsonStr, int32_t *status)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI rusize</type>
+      <name>ruJsonArrayLen</name>
+      <anchorfile>group__json.html</anchorfile>
+      <anchor>ga01cc97db942001d9cd5071b7bfcd57f9</anchor>
+      <arglist>(ruJson rj, int32_t *status)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI perm_chars</type>
+      <name>ruJsonString</name>
+      <anchorfile>group__json.html</anchorfile>
+      <anchor>ga7c6260d0e87681d8b6bcfcbf25843b52</anchor>
+      <arglist>(ruJson rj, int32_t *status)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI int64_t</type>
+      <name>ruJsonParseInt</name>
+      <anchorfile>group__json.html</anchorfile>
+      <anchor>gae1dedaac276f5f2b55209ee5132d783e</anchor>
+      <arglist>(ruJson rj, int32_t *status)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI int64_t</type>
+      <name>ruJsonInt</name>
+      <anchorfile>group__json.html</anchorfile>
+      <anchor>ga650fafd26e44ffc6a7089eebeabcb4e4</anchor>
+      <arglist>(ruJson rj, int32_t *status)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI perm_chars</type>
+      <name>ruJsonKeyString</name>
+      <anchorfile>group__json.html</anchorfile>
+      <anchor>ga222f223713fd39b4c81d0560c82e83b2</anchor>
+      <arglist>(ruJson rj, trans_chars key, int32_t *status)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI alloc_chars</type>
+      <name>ruJsonKeyStringDup</name>
+      <anchorfile>group__json.html</anchorfile>
+      <anchor>ga8ddb90f69665da866465b8e51c77ddfc</anchor>
+      <arglist>(ruJson rj, trans_chars key, int32_t *status)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI int64_t</type>
+      <name>ruJsonKeyParseInt</name>
+      <anchorfile>group__json.html</anchorfile>
+      <anchor>ga0be93c383a59eaf4368b0461770be95c</anchor>
+      <arglist>(ruJson rj, trans_chars key, int32_t *status)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI int64_t</type>
+      <name>ruJsonKeyInt</name>
+      <anchorfile>group__json.html</anchorfile>
+      <anchor>ga47bb57305cd3bc5e19b3daec7c2315b2</anchor>
+      <arglist>(ruJson rj, trans_chars key, int32_t *status)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI double</type>
+      <name>ruJsonKeyDouble</name>
+      <anchorfile>group__json.html</anchorfile>
+      <anchor>ga611dbce7fd4035f372dd43e82f6b93ab</anchor>
+      <arglist>(ruJson rj, trans_chars key, int32_t *status)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI ruJson</type>
+      <name>ruJsonKeyMap</name>
+      <anchorfile>group__json.html</anchorfile>
+      <anchor>ga831be2acfa0d92bf8d0ec292b96fd6b8</anchor>
+      <arglist>(ruJson rj, trans_chars key, int32_t *status)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI ruJson</type>
+      <name>ruJsonKeyArray</name>
+      <anchorfile>group__json.html</anchorfile>
+      <anchor>ga2ed0f5478d2d160f9dac9d87ddeb5883</anchor>
+      <arglist>(ruJson rj, trans_chars key, int32_t *status)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI perm_chars</type>
+      <name>ruJsonIdxString</name>
+      <anchorfile>group__json.html</anchorfile>
+      <anchor>ga3c1b9e94eb6ec017694a8b9473019658</anchor>
+      <arglist>(ruJson rj, rusize index, int32_t *status)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI alloc_chars</type>
+      <name>ruJsonIdxStringDup</name>
+      <anchorfile>group__json.html</anchorfile>
+      <anchor>ga170ae2484818b91fbf2cd625610f3e00</anchor>
+      <arglist>(ruJson rj, rusize index, int32_t *status)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI int64_t</type>
+      <name>ruJsonIdxParseInt</name>
+      <anchorfile>group__json.html</anchorfile>
+      <anchor>ga39ab19187e2a2226d64040be81216526</anchor>
+      <arglist>(ruJson rj, rusize index, int32_t *status)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI int64_t</type>
+      <name>ruJsonIdxInt</name>
+      <anchorfile>group__json.html</anchorfile>
+      <anchor>gae9b13256bc3e79edafc85b5cfdfd8388</anchor>
+      <arglist>(ruJson rj, rusize index, int32_t *status)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI double</type>
+      <name>ruJsonIdxDouble</name>
+      <anchorfile>group__json.html</anchorfile>
+      <anchor>ga1c36d320e4d28f6759108497ab5233da</anchor>
+      <arglist>(ruJson rj, rusize index, int32_t *status)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI ruJson</type>
+      <name>ruJsonIdxMap</name>
+      <anchorfile>group__json.html</anchorfile>
+      <anchor>gada0297131dee6ef086a500a65ebe4c25</anchor>
+      <arglist>(ruJson rj, rusize index, int32_t *status)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI ruJson</type>
+      <name>ruJsonIdxArray</name>
+      <anchorfile>group__json.html</anchorfile>
+      <anchor>gad46f242fbbd590e979cb48b0f10e2c9c</anchor>
+      <arglist>(ruJson rj, rusize index, int32_t *status)</arglist>
     </member>
   </compound>
   <compound kind="group">

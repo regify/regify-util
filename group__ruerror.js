@@ -15,5 +15,6 @@ var group__ruerror =
     [ "RUE_PARAMETER_NOT_SET", "group__ruerror.html#ga616dba9a5dafed8351aa98c68fab25e2", null ],
     [ "RUE_RUN_FAILED", "group__ruerror.html#ga0e8db464671617e7b055e90cfb898f78", null ],
     [ "RUE_TIMEOUT", "group__ruerror.html#gae7f248eb7648a198f04a2ee4ebfa023b", null ],
-    [ "RUE_USER_ABORT", "group__ruerror.html#gae20a9bc093af1bbbb5e42ef8ed05deec", null ]
+    [ "RUE_USER_ABORT", "group__ruerror.html#gae20a9bc093af1bbbb5e42ef8ed05deec", null ],
+    [ "RUE_WRONG_PARAMETER_LENGTH", "group__ruerror.html#ga9324f5403864d2f4d1fd30f7e93bca1c", null ]
 ];

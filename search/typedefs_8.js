@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['uchar_731',['uchar',['../group__misc.html#ga65f85814a8290f9797005d3b28e7e5fc',1,'regify-util.h']]],
-  ['usec_5ft_732',['usec_t',['../group__misc.html#ga02db3ac43a5917535ca3cbc37ac72884',1,'regify-util.h']]]
+  ['uchar_801',['uchar',['../group__misc.html#ga65f85814a8290f9797005d3b28e7e5fc',1,'regify-util.h']]],
+  ['usec_5ft_802',['usec_t',['../group__misc.html#ga02db3ac43a5917535ca3cbc37ac72884',1,'regify-util.h']]]
 ];
