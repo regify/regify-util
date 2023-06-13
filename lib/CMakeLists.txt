@@ -28,7 +28,16 @@ function (doLink lib shared)
         set(icu_libs ${ICU_LIBRARIES})
     endif()
 
+    if (INCLUDE_YAJL AND shared)
+        set(yajl_scope PRIVATE)
+        set(yajl_libs ${YAJL_ARCHIVES})
+    else()
+        set(yajl_scope PUBLIC)
+        set(yajl_libs ${YAJL_LIBRARIES})
+    endif()
+
     target_link_libraries(${lib} ${icu_scope} ${icu_libs})
+    target_link_libraries(${lib} ${yajl_scope} ${yajl_libs})
     if(NAME_ARCH MATCHES "^mingw64")
         target_link_libraries(${lib} ${icu_scope} atomic)
     endif()
@@ -116,10 +125,19 @@ if(INCLUDE_ICU)
     endforeach()
 endif()
 
+if(INCLUDE_YAJL)
+    foreach(lib IN LISTS YAJL_LIBRARIES)
+        if("${lib}" MATCHES "^-lyajl")
+            string(SUBSTRING ${lib} 2 -1 base)
+            list(APPEND YAJL_ARCHIVES ${YAJL_LIBRARY_DIRS}/${CMAKE_STATIC_LIBRARY_PREFIX}${base}${CMAKE_STATIC_LIBRARY_SUFFIX})
+        endif()
+    endforeach()
+endif()
+
 # icu.cpp compiled as C++ so we can use thread_local on ios9+
 # And also to cope with C++ symbols stemming from ICU
-set(SRCS cleaner.c icu.cpp ini.c io.c kvstore.c lib.c list.c logging.c map.c
-         regex.c string.c thread.c regify-util.c)
+set(SRCS cleaner.c icu.cpp ini.c io.c json.c kvstore.c lib.c list.c logging.c
+        map.c regex.c string.c thread.c regify-util.c)
 
 if (WIN)
     list(APPEND SRCS win.cpp)
@@ -168,7 +186,7 @@ if(MSVC)
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/${staticlib}.dir/${staticlib}.pdb
             DESTINATION lib OPTIONAL)
 endif()
-if(INSTALL_ICU AND INCLUDE_ICU)
+if(INSTALL_DEPS AND INCLUDE_ICU)
     install(FILES ${ICU_ARCHIVES} DESTINATION ${LIB_FOLDER})
 endif()
 

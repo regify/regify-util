@@ -28,7 +28,7 @@ An example of this can be found in the rpm spec.
 
 In the build instructions below `cmake` is assumed to be on the PATH.
 In most cases it is also expected to set `CMAKE_INSTALL_PREFIX` to something sensible.
-When `ICU_PREFIX` is not set it defaults to `CMAKE_INSTALL_PREFIX`.
+When `DEPS_PREFIX` is not set it defaults to `CMAKE_INSTALL_PREFIX`.
 
 === Linux
 On Linux we currently only build x86_64 and assume that ICU dev package are installed on the system
@@ -52,7 +52,7 @@ Here cmake is the version that comes with Visual Studio.
  cd build
  cmake -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_SYSTEM_NAME=Windows -DNAME_ARCH=x86 \
-    -DICU_PREFIX=../../x86 \
+    -DDEPS_PREFIX=../../x86 \
     -DCMAKE_VERBOSE_MAKEFILE=ON  \
     -DDOCS=ON -DINCLUDE_ICU=ON -DBUILD_SHARED_LIBS=ON ..
  nmake package
@@ -63,7 +63,7 @@ Here cmake is the version that comes with Visual Studio.
  cd build
  cmake -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_SYSTEM_NAME=Windows -DNAME_ARCH=x64 \
-    -DICU_PREFIX=../../x64 \
+    -DDEPS_PREFIX=../../x64 \
     -DCMAKE_VERBOSE_MAKEFILE=ON \
     -DDOCS=ON -DINCLUDE_ICU=ON -DBUILD_SHARED_LIBS=ON ..
  nmake package
@@ -78,7 +78,7 @@ We also have mingw installed via msys2 under `C:/msys64/mingw{32,64}/bin`.
  cd build
  cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_SYSTEM_NAME=Windows -DNAME_ARCH=mingw32 \
-    -DICU_PREFIX=../../mingw32 \
+    -DDEPS_PREFIX=../../mingw32 \
     -DCMAKE_VERBOSE_MAKEFILE=ON \
     -DDOCS=ON -DINCLUDE_ICU=ON -DBUILD_SHARED_LIBS=ON ..
  make package
@@ -89,7 +89,7 @@ We also have mingw installed via msys2 under `C:/msys64/mingw{32,64}/bin`.
  cd build
  cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_SYSTEM_NAME=Windows -DNAME_ARCH=mingw64 \
-    -DICU_PREFIX=../../mingw64 \
+    -DDEPS_PREFIX=../../mingw64 \
     -DCMAKE_VERBOSE_MAKEFILE=ON \
     -DDOCS=ON -DINCLUDE_ICU=ON -DBUILD_SHARED_LIBS=ON ..
  make package

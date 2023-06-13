@@ -22,12 +22,12 @@
 // file access monitoring functions
 #include "../lib.h"
 
-perm_chars created = "created";
-perm_chars deleted = "deleted";
-perm_chars modified = "modified";
-perm_chars moved = "moved";
-perm_chars attrib = "attrib";
-perm_chars unknown = "unknown";
+static perm_chars created = "created";
+static perm_chars deleted = "deleted";
+static perm_chars modified = "modified";
+static perm_chars moved = "moved";
+static perm_chars attrib = "attrib";
+static perm_chars unknown = "unknown";
 
 RUAPI perm_chars ruFamEventTypeString(int32_t action) {
     switch (action) {

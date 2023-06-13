@@ -88,6 +88,10 @@ extern "C" {
  */
 #define RUE_PARAMETER_NOT_SET	64
 /**
+ * Wrong parameter length.
+ */
+#define RUE_WRONG_PARAMETER_LENGTH	71
+/**
  * The given parameter is invalid.
  */
 #define RUE_INVALID_PARAMETER	77

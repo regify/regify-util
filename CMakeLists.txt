@@ -21,11 +21,14 @@
 # options
 set(VERSION 2.0.0 CACHE STRING "The package version")
 set(REVISION 0 CACHE STRING "The build revision")
-set(ICU_PREFIX "" CACHE STRING "Prefix path under which to find ICU")
+set(DEPS_PREFIX ${CMAKE_INSTALL_PREFIX} CACHE STRING "General dependency installation prefix")
+set(ICU_PREFIX ${DEPS_PREFIX} CACHE STRING "Prefix path under which to find ICU")
+set(YAJL_PREFIX ${DEPS_PREFIX} CACHE STRING "yajl installation prefix")
 set(LIB_FOLDER "lib" CACHE STRING "Folder under prefix where the libs are stored")
 option(BUILD_SHARED_LIBS "Whether to build dynamic libraries" OFF)
 option(INCLUDE_ICU "Whether to include ICU statically" ON)
-option(INSTALL_ICU "Whether this configuration installs its included ICU dependency. Used for packaging" OFF)
+option(INCLUDE_YAJL "Whether to include YAJL statically" ON)
+option(INSTALL_DEPS "Whether this configuration installs its included dependencies. Used for packaging" OFF)
 option(DOCS "Whether to generate the documentation" OFF)
 option(TESTING "Whether to build the tests" OFF)
 option(TGZSOURCE "Whether to generate a source tar file instead of zip" OFF)
@@ -127,27 +130,42 @@ endif()
 if ("${ICU_PREFIX}" MATCHES "^$")
     find_package(PkgConfig REQUIRED)
     pkg_check_modules(ICU REQUIRED icu-io)
+    pkg_check_modules(YAJL REQUIRED yajl)
 else()
     # where static dependencies are found
     set(ICU_INCLUDE_DIRS ${ICU_PREFIX}/include)
     set(ICU_LIBRARY_DIRS ${ICU_PREFIX}/${LIB_FOLDER})
+    set(YAJL_INCLUDE_DIRS ${YAJL_PREFIX}/include)
+    set(YAJL_LIBRARY_DIRS ${YAJL_PREFIX}/${LIB_FOLDER})
     if(WIN AND NOT MINGW)
+        set(YAJL_LIBRARIES yajl)
         if(BUILD_SHARED_LIBS AND NOT INCLUDE_ICU)
             set(ICU_LIBRARIES icuio icuin icuuc icudt)
         else()
             set(ICU_LIBRARIES sicuio sicuin sicuuc sicudt)
         endif()
     else()
+        set(YAJL_LIBRARIES -lyajl)
         set(ICU_LIBRARIES -licuio -licui18n -licuuc -licudata -lm -lstdc++)
     endif()
 endif()
 
-if(INCLUDE_ICU AND DOCS)
-    file(GLOB DEF_ICU_LICENSE_PATH ${ICU_PREFIX}/share/icu/LICENSE)
-    set(ICU_LICENSE_PATH ${DEF_ICU_LICENSE_PATH} CACHE STRING
-            "Where the ICU License file for packaging can be found")
-    if(ICU_LICENSE_PATH MATCHES "^$")
-        message(FATAL_ERROR "We need the ICU License file for packaging set ICU_LICENSE_PATH to its location")
+if(DOCS)
+    if(INCLUDE_ICU)
+        file(GLOB DEF_ICU_LICENSE_PATH ${ICU_PREFIX}/share/icu/LICENSE)
+        set(ICU_LICENSE_PATH ${DEF_ICU_LICENSE_PATH} CACHE STRING
+                "Where the ICU License file for packaging can be found")
+        if(ICU_LICENSE_PATH MATCHES "^$")
+            message(FATAL_ERROR "We need the ICU License file for packaging set ICU_LICENSE_PATH to its location")
+        endif()
+    endif()
+    if(INCLUDE_YAJL)
+        file(GLOB DEF_YAJL_LICENSE_PATH ${YAJL_PREFIX}/share/yajl/LICENSE)
+        set(YAJL_LICENSE_PATH ${DEF_YAJL_LICENSE_PATH} CACHE STRING
+                "Where the YAJL License file for packaging can be found")
+        if(YAJL_LICENSE_PATH MATCHES "^$")
+            message(FATAL_ERROR "We need the YAJL License file for packaging set YAJL_LICENSE_PATH to its location")
+        endif()
     endif()
 endif()
 
@@ -173,6 +191,7 @@ set(INCLUDES
         include/regify-util/errors.h
         include/regify-util/ini.h
         include/regify-util/io.h
+        include/regify-util/json.h
         include/regify-util/kvstore.h
         include/regify-util/list.h
         include/regify-util/logging.h

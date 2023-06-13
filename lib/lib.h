@@ -75,6 +75,10 @@
 #include "unicode/uregex.h"
 #include "unicode/uiter.h"
 #include "unicode/unorm2.h"
+#include <yajl/yajl_parse.h>
+#include <yajl/yajl_tree.h>
+#include <yajl/yajl_gen.h>
+#include <inttypes.h>
 
 #ifndef NDEBUG
 #include "unicode/utrace.h"
@@ -137,6 +141,7 @@ void ruClearError(void);
 #define MagicIni            2308
 #define KvStoreMagic        2309
 #define MagicTsc            2310
+#define MagicJson           2311
 // cleaner.c #define MagicCleaner 2410
 
 /*
@@ -175,6 +180,18 @@ typedef struct tsc_ {
     ruMutex mutex;  // counter mutex
     int64_t count;  // counter
 } tsc;
+
+/*
+ * JSON
+ */
+
+typedef struct json_ json;
+struct json_ {
+    ru_uint type;
+    yajl_val node;
+    yajl_gen g;
+    yajl_type open;
+};
 
 /*
  *  Strings
@@ -239,7 +256,6 @@ typedef struct Map_ {
     ListElmt *iterElmt;
 } Map;
 
-
 /*
  * Ini Files
  */
@@ -271,7 +287,7 @@ typedef bool (*ruIniCallback)(void* user, const char* section,
 typedef int (*writer)(void* stream, const char* format, ...);
 
 /**
- * \brief Parse given zero-terminated IONI file data string.
+ * \brief Parse given zero-terminated INI file data string.
  * May have [section]s, name=value pairs (whitespace stripped), and comments
  * starting with ';' (semicolon). Section is "" if name=value pair parsed before
  * any section heading. name:value pairs are also supported as a concession to

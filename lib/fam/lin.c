@@ -104,7 +104,7 @@ static ck* newCookie(const char* path) {
     return c;
 }
 
-void trimEnd(char* str, const char* end) {
+static void trimEnd(char* str, const char* end) {
     if (ruStrEndsWith(str, "/", NULL)) {
         *(str+ strlen(str-strlen(end))) = '\0';
     }
