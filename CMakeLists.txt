@@ -127,7 +127,7 @@ if(LINUX OR MAC OR MINGW)
     find_package(Threads REQUIRED)
 endif()
 
-if ("${ICU_PREFIX}" MATCHES "^$")
+if ("${DEPS_PREFIX}" MATCHES "^$")
     find_package(PkgConfig REQUIRED)
     pkg_check_modules(ICU REQUIRED icu-io)
     pkg_check_modules(YAJL REQUIRED yajl)
