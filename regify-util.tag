@@ -1204,9 +1204,9 @@
     </member>
     <member kind="function">
       <type>RUAPI perm_chars</type>
-      <name>ruJsonString</name>
+      <name>ruJsonStr</name>
       <anchorfile>group__json.html</anchorfile>
-      <anchor>ga7c6260d0e87681d8b6bcfcbf25843b52</anchor>
+      <anchor>gad55c4ad40f0cb3caa23ba65003867397</anchor>
       <arglist>(ruJson rj, int32_t *status)</arglist>
     </member>
     <member kind="function">
@@ -1225,16 +1225,16 @@
     </member>
     <member kind="function">
       <type>RUAPI perm_chars</type>
-      <name>ruJsonKeyString</name>
+      <name>ruJsonKeyStr</name>
       <anchorfile>group__json.html</anchorfile>
-      <anchor>ga222f223713fd39b4c81d0560c82e83b2</anchor>
+      <anchor>gad251ebb6d90852bdb4065c540b245301</anchor>
       <arglist>(ruJson rj, trans_chars key, int32_t *status)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI alloc_chars</type>
-      <name>ruJsonKeyStringDup</name>
+      <name>ruJsonKeyStrDup</name>
       <anchorfile>group__json.html</anchorfile>
-      <anchor>ga8ddb90f69665da866465b8e51c77ddfc</anchor>
+      <anchor>gae920c3294bafdc141e314079a54d4234</anchor>
       <arglist>(ruJson rj, trans_chars key, int32_t *status)</arglist>
     </member>
     <member kind="function">
@@ -1274,16 +1274,16 @@
     </member>
     <member kind="function">
       <type>RUAPI perm_chars</type>
-      <name>ruJsonIdxString</name>
+      <name>ruJsonIdxStr</name>
       <anchorfile>group__json.html</anchorfile>
-      <anchor>ga3c1b9e94eb6ec017694a8b9473019658</anchor>
+      <anchor>ga299bca1cc1c0d175ab51b0a52af0de47</anchor>
       <arglist>(ruJson rj, rusize index, int32_t *status)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI alloc_chars</type>
-      <name>ruJsonIdxStringDup</name>
+      <name>ruJsonIdxStrDup</name>
       <anchorfile>group__json.html</anchorfile>
-      <anchor>ga170ae2484818b91fbf2cd625610f3e00</anchor>
+      <anchor>gaabe3a37fa52b7b0d76bf6a60b4cabb21</anchor>
       <arglist>(ruJson rj, rusize index, int32_t *status)</arglist>
     </member>
     <member kind="function">
