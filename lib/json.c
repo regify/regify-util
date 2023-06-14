@@ -416,7 +416,7 @@ RUAPI rusize ruJsonArrayLen(ruJson rj, int32_t* status) {
 }
 
 
-RUAPI perm_chars ruJsonString(ruJson rj, int32_t* status) {
+RUAPI perm_chars ruJsonStr(ruJson rj, int32_t* status) {
     yajl_val node = getYajlVal(rj, status);
     if (!node) return NULL;
     if (!YAJL_IS_STRING(node)) {
@@ -447,7 +447,7 @@ RUAPI int64_t ruJsonInt(ruJson rj, int32_t* status) {
 }
 
 
-RUAPI perm_chars ruJsonKeyString(ruJson rj, trans_chars key, int32_t* status) {
+RUAPI perm_chars ruJsonKeyStr(ruJson rj, trans_chars key, int32_t* status) {
     yajl_val v = jsonKey(rj, key, yajl_t_string, status);
     if (!v) return NULL;
     perm_chars out = YAJL_GET_STRING(v);
@@ -455,8 +455,8 @@ RUAPI perm_chars ruJsonKeyString(ruJson rj, trans_chars key, int32_t* status) {
     ruRetWithCode(status, RUE_OK, out);
 }
 
-RUAPI alloc_chars ruJsonKeyStringDup(ruJson rj, trans_chars key, int32_t* status) {
-    return ruStrDup(ruJsonKeyString(rj, key, status));
+RUAPI alloc_chars ruJsonKeyStrDup(ruJson rj, trans_chars key, int32_t* status) {
+    return ruStrDup(ruJsonKeyStr(rj, key, status));
 }
 
 RUAPI int64_t ruJsonKeyParseInt(ruJson rj, trans_chars key, int32_t* status) {
@@ -499,7 +499,7 @@ RUAPI ruJson ruJsonKeyArray(ruJson rj, trans_chars key, int32_t* status) {
 }
 
 
-RUAPI perm_chars ruJsonIdxString(ruJson rj, rusize index, int32_t* status) {
+RUAPI perm_chars ruJsonIdxStr(ruJson rj, rusize index, int32_t* status) {
     yajl_val node = jsonIdx(rj, index, yajl_t_string, status);
     if (!node) return NULL;
     perm_chars out = YAJL_GET_STRING(node);
@@ -507,8 +507,8 @@ RUAPI perm_chars ruJsonIdxString(ruJson rj, rusize index, int32_t* status) {
     ruRetWithCode(status, RUE_OK, out);
 }
 
-RUAPI alloc_chars ruJsonIdxStringDup(ruJson rj, rusize index, int32_t* status) {
-    return ruStrDup(ruJsonIdxString(rj, index, status));
+RUAPI alloc_chars ruJsonIdxStrDup(ruJson rj, rusize index, int32_t* status) {
+    return ruStrDup(ruJsonIdxStr(rj, index, status));
 }
 
 RUAPI int64_t ruJsonIdxParseInt(ruJson rj, rusize index, int32_t* status) {

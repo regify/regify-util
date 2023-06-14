@@ -64,7 +64,7 @@ static void runApi(ruJson rj, perm_chars test, int32_t exp) {
     double d, ed = 0.0;
     ruJson jsn, ejsn = NULL;
 
-    str = ruJsonString(rj, &ret);
+    str = ruJsonStr(rj, &ret);
     fail_unless(ret == exp, retText, test, exp, ret);
     fail_unless(estr == str, retText, test, estr, str);
 
@@ -76,11 +76,11 @@ static void runApi(ruJson rj, perm_chars test, int32_t exp) {
     fail_unless(exp == ret, retText, test, exp, ret);
     fail_unless(e64 == i64, retText, test, e64, i64);
 
-    str = ruJsonKeyString(rj, NULL, &ret);
+    str = ruJsonKeyStr(rj, NULL, &ret);
     fail_unless(RUE_PARAMETER_NOT_SET == ret, retText, test, RUE_PARAMETER_NOT_SET, ret);
     fail_unless(estr == str, retText, test, estr, str);
 
-    str = ruJsonKeyStringDup(rj, NULL, &ret);
+    str = ruJsonKeyStrDup(rj, NULL, &ret);
     fail_unless(RUE_PARAMETER_NOT_SET == ret, retText, test, RUE_PARAMETER_NOT_SET, ret);
     fail_unless(estr == str, retText, test, estr, str);
 
@@ -109,11 +109,11 @@ static void runApi(ruJson rj, perm_chars test, int32_t exp) {
     fail_unless(exp == ret, retText, test, exp, ret);
     fail_unless(esz == sz, retText, test, esz, sz);
 
-    str = ruJsonIdxString(rj, 99, &ret);
+    str = ruJsonIdxStr(rj, 99, &ret);
     fail_unless(ret == exp, retText, test, exp, ret);
     fail_unless(estr == str, retText, test, estr, str);
 
-    str = ruJsonIdxStringDup(rj, 99, &ret);
+    str = ruJsonIdxStrDup(rj, 99, &ret);
     fail_unless(ret == exp, retText, test, exp, ret);
     fail_unless(estr == str, retText, test, estr, str);
 
@@ -176,7 +176,7 @@ START_TEST(get) {
     fail_unless(ret == exp, retText, exp, ret);
 
     estr = "2342";
-    str = ruJsonKeyString(jsn, "key", &ret);
+    str = ruJsonKeyStr(jsn, "key", &ret);
     fail_unless(ret == exp, retText, exp, ret);
     ck_assert_str_eq(str, estr);
     fail_if(NULL == jsn, retText, NULL, jsn);
@@ -196,7 +196,7 @@ START_TEST(get) {
 
     ruJson jo = NULL;
     exp = RUE_WRONG_PARAMETER_LENGTH;
-    str = ruJsonIdxString(jsn, 9, &ret);
+    str = ruJsonIdxStr(jsn, 9, &ret);
     fail_unless(ret == exp, retText, exp, ret);
     fail_unless(NULL == str, retText, NULL, str);
 
@@ -210,7 +210,7 @@ START_TEST(get) {
     fail_unless(ret == exp, retText, exp, ret);
     fail_unless(e64 == i64, retText, e64, i64);
 
-    str = ruJsonIdxString(jsn, 1, &ret);
+    str = ruJsonIdxStr(jsn, 1, &ret);
     fail_unless(ret == exp, retText, exp, ret);
     ck_assert_str_eq(str, estr);
 
@@ -231,7 +231,7 @@ START_TEST(get) {
     fail_unless(ret == exp, retText, exp, ret);
     fail_if(NULL == jm, retText, NULL, jm);
 
-    str = ruJsonKeyString(jm, "key", &ret);
+    str = ruJsonKeyStr(jm, "key", &ret);
     fail_unless(ret == exp, retText, exp, ret);
     ck_assert_str_eq(str, estr);
     fail_if(NULL == jsn, retText, NULL, jsn);
@@ -253,7 +253,7 @@ START_TEST(get) {
     fail_unless(ret == exp, retText, exp, ret);
     fail_unless(e64 == i64, retText, e64, i64);
 
-    str = ruJsonIdxString(ja, 1, &ret);
+    str = ruJsonIdxStr(ja, 1, &ret);
     fail_unless(ret == exp, retText, exp, ret);
     ck_assert_str_eq(str, estr);
 
@@ -270,7 +270,7 @@ START_TEST(get) {
     fail_unless(ret == exp, retText, exp, ret);
     fail_if(NULL == jm, retText, NULL, jm);
 
-    str = ruJsonKeyString(jm, "key", &ret);
+    str = ruJsonKeyStr(jm, "key", &ret);
     fail_unless(ret == exp, retText, exp, ret);
     ck_assert_str_eq(str, estr);
     fail_if(NULL == jsn, retText, NULL, jsn);
@@ -292,7 +292,7 @@ START_TEST(get) {
     fail_unless(ret == exp, retText, exp, ret);
     fail_unless(e64 == i64, retText, e64, i64);
 
-    str = ruJsonIdxString(ja, 1, &ret);
+    str = ruJsonIdxStr(ja, 1, &ret);
     fail_unless(ret == exp, retText, exp, ret);
     ck_assert_str_eq(str, estr);
 
@@ -313,7 +313,7 @@ START_TEST(get) {
     fail_if(NULL == jsn, retText, NULL, jsn);
     fail_unless(ret == exp, retText, exp, ret);
 
-    str = ruJsonString(jsn, &ret);
+    str = ruJsonStr(jsn, &ret);
     fail_unless(ret == exp, retText, exp, ret);
     ck_assert_str_eq(str, estr);
 
@@ -467,7 +467,7 @@ void sample() {
         ruJson jm = ruJsonKeyMap(jsn, "map", &ret);
         if (ret != RUE_OK) break;
 
-        perm_chars str = ruJsonKeyString(jm, "key", &ret);
+        perm_chars str = ruJsonKeyStr(jm, "key", &ret);
         if (ret != RUE_OK) break;
         printf("str: '%s'", str);
 
@@ -487,7 +487,7 @@ void sample() {
         if (ret != RUE_OK) break;
         printf("int: %ld", i64);
 
-        str = ruJsonIdxString(ja, 1, &ret);
+        str = ruJsonIdxStr(ja, 1, &ret);
         if (ret != RUE_OK) break;
         printf("str: '%s'", str);
 

@@ -220,7 +220,7 @@ RUAPI int32_t ruJsonWrite(ruJson rj, perm_chars* output);
         ruJson jm = ruJsonKeyMap(jsn, "map", &ret);
         if (ret != RUE_OK) break;
 
-        perm_chars str = ruJsonKeyString(jm, "key", &ret);
+        perm_chars str = ruJsonKeyStr(jm, "key", &ret);
         if (ret != RUE_OK) break;
         printf("str: '%s'", str);
 
@@ -240,7 +240,7 @@ RUAPI int32_t ruJsonWrite(ruJson rj, perm_chars* output);
         if (ret != RUE_OK) break;
         printf("int: %ld", i64);
 
-        str = ruJsonIdxString(ja, 1, &ret);
+        str = ruJsonIdxStr(ja, 1, &ret);
         if (ret != RUE_OK) break;
         printf("str: '%s'", str);
 
@@ -277,7 +277,7 @@ RUAPI rusize ruJsonArrayLen(ruJson rj, int32_t* status);
  * @param status where the \ref RUE_OK on success or an error code will be stored.
  * @return string in question. Belongs to the \ref ruJson object.
  */
-RUAPI perm_chars ruJsonString(ruJson rj, int32_t* status);
+RUAPI perm_chars ruJsonStr(ruJson rj, int32_t* status);
 
 /**
  * Return parsed integer of underlying \ref ruJson reference.
@@ -304,7 +304,7 @@ RUAPI int64_t ruJsonInt(ruJson rj, int32_t* status);
  * @param status where the \ref RUE_OK on success or an error code will be stored.
  * @return string in question. Belongs to the \ref ruJson object.
  */
-RUAPI perm_chars ruJsonKeyString(ruJson rj, trans_chars key, int32_t* status);
+RUAPI perm_chars ruJsonKeyStr(ruJson rj, trans_chars key, int32_t* status);
 
 /**
  * Return string copy of the key element from underlying \ref ruJson map reference.
@@ -313,7 +313,7 @@ RUAPI perm_chars ruJsonKeyString(ruJson rj, trans_chars key, int32_t* status);
  * @param status where the \ref RUE_OK on success or an error code will be stored.
  * @return string in question. Must be freed by the caller.
  */
-RUAPI alloc_chars ruJsonKeyStringDup(ruJson rj, trans_chars key, int32_t* status);
+RUAPI alloc_chars ruJsonKeyStrDup(ruJson rj, trans_chars key, int32_t* status);
 
 /**
  * Return parsed integer of the key element from underlying \ref ruJson map reference.
@@ -368,7 +368,7 @@ RUAPI ruJson ruJsonKeyArray(ruJson rj, trans_chars key, int32_t* status);
  * @param status where the \ref RUE_OK on success or an error code will be stored.
  * @return string in question. Belongs to the \ref ruJson object.
  */
-RUAPI perm_chars ruJsonIdxString(ruJson rj, rusize index, int32_t* status);
+RUAPI perm_chars ruJsonIdxStr(ruJson rj, rusize index, int32_t* status);
 
 /**
  * Return string copy of the indexed element from underlying \ref ruJson array reference.
@@ -377,7 +377,7 @@ RUAPI perm_chars ruJsonIdxString(ruJson rj, rusize index, int32_t* status);
  * @param status where the \ref RUE_OK on success or an error code will be stored.
  * @return string in question. Must be freed by the caller.
  */
-RUAPI alloc_chars ruJsonIdxStringDup(ruJson rj, rusize index, int32_t* status);
+RUAPI alloc_chars ruJsonIdxStrDup(ruJson rj, rusize index, int32_t* status);
 
 /**
  * Return parsed integer of the indexed element from underlying \ref ruJson array reference.
