@@ -239,6 +239,12 @@ if(DOCS)
                 DESTINATION share/${NAME}
                 RENAME ICU-LICENSE)
     endif()
+    if(INCLUDE_YAJL)
+        message("Bundling ICU License ${YAJL_LICENSE_PATH}")
+        install(FILES ${YAJL_LICENSE_PATH}
+                DESTINATION share/${NAME}
+                RENAME YAJL-LICENSE)
+    endif()
 
     # add a target to generate API documentation with Doxygen
     # add these to your PATH id they're not found even though they are installed
