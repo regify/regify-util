@@ -37,7 +37,7 @@ mkdir build
     -DREVISION=%{buildrev} -DVERSION=%{ver} \
     -DCMAKE_INSTALL_PREFIX=%{_prefix} -DLIB_FOLDER=%{_lib} \
     -DCPACK_PACKAGE_FILE_NAME=%{name} \
-    -DDOCS=ON -DINCLUDE_ICU=OFF -DBUILD_SHARED_LIBS=ON .. && \
+    -DDOCS=ON -DINCLUDE_ICU=OFF -DINCLUDE_YAJL=OFF -DBUILD_SHARED_LIBS=ON .. && \
     make package)
 
 %install
