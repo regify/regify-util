@@ -1,5 +1,7 @@
 var NAVTREEINDEX1 =
 {
+"group__misc.html#ga3e7596f5512ddf7baa26a049a8ada132":[0,0,53],
+"group__misc.html#ga40a0d0aefa3051c7808feae2809b2741":[0,0,43],
 "group__misc.html#ga517aac830d9ce5c6ab7deec46adf54d5":[0,0,13],
 "group__misc.html#ga56f8f6fec10fa579342976d111813f62":[0,0,45],
 "group__misc.html#ga583a16c595210574018e6bd10fe925b7":[0,0,29],

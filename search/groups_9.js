@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['regify_2dutil_20error_20codes_831',['regify-util Error Codes',['../group__ruerror.html',1,'']]],
-  ['regular_20expressions_832',['Regular Expressions',['../group__regex.html',1,'']]]
+  ['regify_2dutil_20error_20codes_835',['regify-util Error Codes',['../group__ruerror.html',1,'']]],
+  ['regular_20expressions_836',['Regular Expressions',['../group__regex.html',1,'']]]
 ];

@@ -1148,6 +1148,13 @@
     </member>
     <member kind="function">
       <type>RUAPI int32_t</type>
+      <name>ruJsonSetDouble</name>
+      <anchorfile>group__json.html</anchorfile>
+      <anchor>gabe0b61613acd5d016a2dd4e862bc8950</anchor>
+      <arglist>(ruJson rj, double val)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI int32_t</type>
       <name>ruJsonSetStr</name>
       <anchorfile>group__json.html</anchorfile>
       <anchor>ga802ea2b248dea91cf7b0a6958bd46799</anchor>
@@ -1166,6 +1173,13 @@
       <anchorfile>group__json.html</anchorfile>
       <anchor>ga202cdae6749fc07f70ea100c53f6cb9d</anchor>
       <arglist>(ruJson rj, trans_chars key, int64_t val)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI int32_t</type>
+      <name>ruJsonSetKeyDouble</name>
+      <anchorfile>group__json.html</anchorfile>
+      <anchor>ga3b4713d6d00af7fd99858c966fc61a0e</anchor>
+      <arglist>(ruJson rj, trans_chars key, double val)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI int32_t</type>
