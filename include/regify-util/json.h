@@ -144,6 +144,14 @@ RUAPI int32_t ruJsonEndArray(ruJson rj);
 RUAPI int32_t ruJsonSetInt(ruJson rj, int64_t val);
 
 /**
+ * Create an double entry in the current context
+ * @param rj JSON ctx to work on
+ * @param val double to set
+ * @return \ref RUE_OK on success else an error code
+ */
+RUAPI int32_t ruJsonSetDouble(ruJson rj, double val);
+
+/**
  * Create a string entry in the current context
  * @param rj JSON ctx to work on
  * @param val string to set
@@ -168,6 +176,15 @@ RUAPI int32_t ruJsonSetKeyStr(ruJson rj, trans_chars key, trans_chars val);
  * @return \ref RUE_OK on success else an error code
  */
 RUAPI int32_t ruJsonSetKeyInt(ruJson rj, trans_chars key, int64_t val);
+
+/**
+ * Create a double key value entry in the current context
+ * @param rj JSON ctx to work on
+ * @param key key string
+ * @param val double to set
+ * @return \ref RUE_OK on success else an error code
+ */
+RUAPI int32_t ruJsonSetKeyDouble(ruJson rj, trans_chars key, double val);
 
 /**
  * Start a new map under given key in the current context

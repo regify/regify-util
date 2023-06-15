@@ -40,6 +40,9 @@ static void runApi(ruJson rj, perm_chars test, int32_t exp) {
     ret = ruJsonSetInt(rj, 0);
     fail_unless(ret == exp, retText, test, exp, ret);
 
+    ret = ruJsonSetDouble(rj, 0);
+    fail_unless(ret == exp, retText, test, exp, ret);
+
     ret = ruJsonSetStr(rj, NULL);
     fail_unless(ret == exp, retText, test, exp, ret);
 
@@ -47,6 +50,9 @@ static void runApi(ruJson rj, perm_chars test, int32_t exp) {
     fail_unless(ret == exp, retText, test, exp, ret);
 
     ret = ruJsonSetKeyInt(rj, NULL, 0);
+    fail_unless(ret == exp, retText, test, exp, ret);
+
+    ret = ruJsonSetKeyDouble(rj, NULL, 0);
     fail_unless(ret == exp, retText, test, exp, ret);
 
     ret = ruJsonStartKeyMap(rj, NULL);
@@ -346,6 +352,8 @@ START_TEST(set) {
     perm_chars val = "2342";
     perm_chars num = "num";
     int64_t n = 2342;
+    perm_chars dbl = "dbl";
+    double d = 23.0;
 
     // simple
     ruJson jsn = ruJsonStart(true);
@@ -356,7 +364,10 @@ START_TEST(set) {
     ret = ruJsonSetKeyInt(jsn, num, n);
     fail_unless(ret == exp, retText, exp, ret);
 
-    perm_chars estr = "{\"key\":\"2342\",\"num\":2342}";
+    ret = ruJsonSetKeyDouble(jsn, dbl, d);
+    fail_unless(ret == exp, retText, exp, ret);
+
+    perm_chars estr = "{\"key\":\"2342\",\"num\":2342,\"dbl\":23.0}";
     perm_chars str =  NULL;
     ret = ruJsonWrite(jsn, &str);
     fail_unless(ret == exp, retText, exp, ret);
@@ -379,6 +390,9 @@ START_TEST(set) {
     ret = ruJsonSetInt(jsn, n);
     fail_unless(ret == exp, retText, exp, ret);
 
+    ret = ruJsonSetDouble(jsn, d);
+    fail_unless(ret == exp, retText, exp, ret);
+
     ret = ruJsonStartMap(jsn);
     fail_unless(ret == exp, retText, exp, ret);
 
@@ -395,7 +409,7 @@ START_TEST(set) {
     ret = ruJsonEndArray(jsn);
     fail_unless(ret == exp, retText, exp, ret);
 
-    estr = "[\"2342\",2342,{\"key\":\"2342\",\"num\":2342}]";
+    estr = "[\"2342\",2342,23.0,{\"key\":\"2342\",\"num\":2342}]";
     str = NULL;
     ret = ruJsonWrite(jsn, &str);
     fail_unless(ret == exp, retText, exp, ret);
