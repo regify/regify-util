@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['sec_741',['sec',['../structru_time_val.html#ab79c03c47db0065ef4c2a2d00f33c94f',1,'ruTimeVal']]],
-  ['set_742',['set',['../struct_kv_store__.html#ac3a3b7caea49b0e917e6db9a26476357',1,'KvStore_']]],
-  ['srcpath_743',['srcPath',['../structru_fam_event__.html#abb1a6c225865ea8d47fda5952978c8f9',1,'ruFamEvent_']]]
+  ['ruclearfunc_833',['ruClearFunc',['../unionru_free_if.html#aab674dcdb9025689cd572231258870d3',1,'ruFreeIf']]],
+  ['rufreefunc_834',['ruFreeFunc',['../unionru_free_if.html#aecd7a6ea69d382e0f169438b62fc2ee5',1,'ruFreeIf']]]
 ];

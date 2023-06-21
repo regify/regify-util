@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['ini_20file_20handling_828',['Ini File Handling',['../group__ini.html',1,'']]]
+  ['hash_20map_925',['Hash Map',['../group__hashmap.html',1,'']]],
+  ['hash_20set_926',['Hash Set',['../group__hashset.html',1,'']]],
+  ['hash_20support_927',['Hash Support',['../group__hashsupport.html',1,'']]]
 ];

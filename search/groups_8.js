@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['memory_20management_833',['Memory Management',['../group__memory.html',1,'']]],
-  ['miscellaneous_20functions_834',['Miscellaneous Functions',['../group__misc.html',1,'']]]
+  ['list_20collection_931',['List Collection',['../group__list.html',1,'']]],
+  ['logging_20facility_932',['Logging Facility',['../group__logging.html',1,'']]]
 ];
