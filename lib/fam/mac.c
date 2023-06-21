@@ -201,20 +201,20 @@ static int32_t handleFile(famCtx *fctx, trans_chars path,
             // event form being triggered by the cleanup thread
             int32_t bucket = getBucketNum(0);
             fam_dbg("looking for inode: %ld in bucket: %d", inode, bucket);
-            ruMapGet(fctx->mrMap[bucket], inode, &mPath);
+            ruMapGet(fctx->mrMap[bucket], &inode, &mPath);
             if (mPath) {
                 fam_dbg("removing inode: %ld from bucket: %d", inode, bucket);
-                ruMapRemove(fctx->mrMap[bucket], inode, &mapPath);
+                ruMapRemove(fctx->mrMap[bucket], &inode, &mapPath);
                 mPath = mapPath;
                 fam_dbg("found %s", mPath);
             } else {
                 // bucket - 1
                 bucket = (bucket+(moveRingBuckets - 1)) % moveRingBuckets;
                 fam_dbg("looking for inode: %ld in bucket: %d", inode, bucket);
-                ruMapGet(fctx->mrMap[bucket], inode, &mPath);
+                ruMapGet(fctx->mrMap[bucket], &inode, &mPath);
                 if (mPath) {
                     fam_dbg("removing inode: %ld from bucket: %d", inode, bucket);
-                    ruMapRemove(fctx->mrMap[bucket], inode, &mapPath);
+                    ruMapRemove(fctx->mrMap[bucket], &inode, &mapPath);
                     mPath = mapPath;
                     fam_dbg("found %s", mPath);
                 } else {
@@ -233,7 +233,7 @@ static int32_t handleFile(famCtx *fctx, trans_chars path,
 
         if (!mPath) {
             // all others check our maps
-            ruMapGet(fctx->inodePath, inode, &mPath);
+            ruMapGet(fctx->inodePath, &inode, &mPath);
             if (!mPath && mInode) {
                 mPath = path ; // so modified swapped out works
             }
@@ -245,11 +245,11 @@ static int32_t handleFile(famCtx *fctx, trans_chars path,
                 // Modify because editors save to temp files and move to the
                 // initial file. That changes the inode, so we need to update it
                 fam_dbg("path: '%s' has a new inode: %ld", path, inode);
-                ruMapPut(fctx->pathInode, ruStrDup(path), inode);
+                ruMapPut(fctx->pathInode, path, inode);
                 if (mInode) {
-                    ruMapRemove(fctx->inodePath, mInode, NULL);
+                    ruMapRemove(fctx->inodePath, &mInode, NULL);
                 }
-                ruMapPut(fctx->inodePath, inode, ruStrDup(path));
+                ruMapPut(fctx->inodePath, &inode, path);
                 ret = RU_FAM_MODIFIED;
 
             } else {
@@ -273,14 +273,14 @@ static int32_t handleFile(famCtx *fctx, trans_chars path,
                     ruMapRemove(fctx->pathInode, mPath, NULL);
                 }
                 if (mInode) {
-                    ruMapRemove(fctx->inodePath, mInode, NULL);
+                    ruMapRemove(fctx->inodePath, &mInode, NULL);
                 }
                 ret = RU_FAM_CREATED;
             }
 
             fam_dbg("add mappings: '%s' inode: %ld", path, inode);
-            ruMapPut(fctx->pathInode, ruStrDup(path), inode);
-            ruMapPut(fctx->inodePath, inode, ruStrDup(path));
+            ruMapPut(fctx->pathInode, path, inode);
+            ruMapPut(fctx->inodePath, &inode, path);
         }
 
     } else { // file gone
@@ -293,10 +293,10 @@ static int32_t handleFile(famCtx *fctx, trans_chars path,
             alloc_chars newPath = ruStrDup(path);
             fam_dbg("putting path: '%s' inode: %ld into bucket: %d", newPath, mInode, b);
             ruListAppend(fctx->mrLst[b], mInode);
-            ruMapPut(fctx->mrMap[b], mInode, newPath);
+            ruMapPut(fctx->mrMap[b], &mInode, newPath);
             // The file is removed from our maps regardless of delete or move
             ruMapRemove(fctx->pathInode, path, NULL);
-            ruMapRemove(fctx->inodePath, mInode, NULL);
+            ruMapRemove(fctx->inodePath, &mInode, NULL);
         } else {
             // unknown events that are gone could have been created and renamed before
             // we got a hold of the inode. Here we remember this event
@@ -454,7 +454,7 @@ static ptr cleanerThread(ptr o) {
         for(int64_t inode = ruIterNext(li, int64_t);
                li; inode = ruIterNext(li, int64_t)) {
             alloc_chars path = NULL;
-            int32_t ret = ruMapRemove(fctx->mrMap[bucket], inode, &path);
+            int32_t ret = ruMapRemove(fctx->mrMap[bucket], &inode, &path);
             if (ret == RUE_OK) {
                 ruFamEvent* fe = ruFamEventNew(RU_FAM_DELETED,
                                                path,NULL);
@@ -502,14 +502,12 @@ RUAPI ruFamCtx ruFamMonitorFilePath(trans_chars filePath, trans_chars threadName
     do {
         fctx->name = ruStrDup(threadName);
         fctx->topDir = ruStrDup(filePath);
-        fctx->inodePath = ruMapNew(ruIntHash, ruIntMatch,
-                                   NULL, free, 0);
+        fctx->inodePath = ruMapNewSpec(ruKeySpecInt64(), ruValSpecStrDup());
         for (int32_t i = 0; i < moveRingBuckets; i++) {
             fctx->mrLst[i] = ruListNew(NULL);
-            fctx->mrMap[i] = ruMapNew(ruIntHash, ruIntMatch,
-                                       NULL, free, 0);
+            fctx->mrMap[i] = ruMapNewSpec(ruKeySpecInt64(), ruValSpecStrDup());
         }
-        fctx->pathInode = ruMapNewString(free, NULL);
+        fctx->pathInode = ruMapNewSpec(ruKeySpecStrDup(), ruValSpecInt64());
         fctx->watchPath = CFStringCreateWithCString(
                 NULL, fctx->topDir, kCFStringEncodingUTF8);
         fctx->pathsToWatch = CFArrayCreate(

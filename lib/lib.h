@@ -142,6 +142,8 @@ void ruClearError(void);
 #define KvStoreMagic        2309
 #define MagicTsc            2310
 #define MagicJson           2311
+#define MagicKeySpec        2312
+#define MagicValSpec        2313
 // cleaner.c #define MagicCleaner 2410
 
 /*
@@ -209,6 +211,30 @@ typedef struct String_ {
  */
 alloc_chars fixPath(const char *inPath);
 
+typedef struct keySpec_ {
+    ru_uint type;
+    ruHashFunc hash;
+    ruMatchFunc match;
+    ruFreeFunc keyFree;
+    ruCloneFunc in;
+    ruPtr2TypeFunc out;
+} keySpec;
+
+typedef struct valSpec_ {
+    ru_uint type;
+    ruFreeFunc valFree;
+    ruCloneFunc in;
+    ruPtr2TypeFunc out;
+} valSpec;
+
+extern valSpec int64ValSpec;
+extern valSpec longValSpec;
+extern valSpec int32ValSpec;
+extern valSpec int16ValSpec;
+extern valSpec int8ValSpec;
+extern valSpec strRefValSpec;
+extern valSpec strDupValSpec;
+
 /*
  *  Lists
  */
@@ -244,7 +270,11 @@ typedef struct Map_ {
     ruHashFunc hash;
     ruMatchFunc match;
     ruFreeFunc keyFree;
+    ruCloneFunc keyIn;
+    ruPtr2TypeFunc keyOut;
     ruFreeFunc valFree;
+    ruCloneFunc valIn;
+    ruPtr2TypeFunc valOut;
     uint32_t   size;
     List   **table;
     // optional thread safety

@@ -25,9 +25,12 @@
 #include "lib.h"
 
 ruMakeTypeGetter(Map, MagicMap)
+ruMakeTypeGetter(keySpec, MagicKeySpec)
+ruMakeTypeGetter(valSpec, MagicValSpec)
 
 typedef struct {
     char *key;
+    ru_uint hash;
     void *value;
     Map *mp;
 } kv;
@@ -42,16 +45,48 @@ static void kvFree(void *o) {
     ruFree(item);
 }
 
-RUAPI ru_uint ruIntHash(trans_ptr key) {
-    return (ru_uint)(intptr_t)key;
+RUAPI ru_uint ruInt64Hash(trans_ptr key) {
+    return (ru_uint)*(int64_t*)key;
 }
 
-RUAPI bool ruIntMatch(trans_ptr s1, trans_ptr s2) {
-    return s1 == s2;
+RUAPI bool ruInt64Match(trans_ptr testKey, trans_ptr existingKey) {
+    return *(int64_t*)testKey == *(int64_t*)existingKey;
+}
+
+RUAPI ru_uint ruLongHash(trans_ptr key) {
+    return (ru_uint)*(long*)key;
+}
+
+RUAPI bool ruLongMatch(trans_ptr testKey, trans_ptr existingKey) {
+    return *(long*)testKey == (long)(intptr_t)existingKey;
+}
+
+RUAPI ru_uint ruInt32Hash(trans_ptr key) {
+    return (ru_uint)*(int32_t*)key;
+}
+
+RUAPI bool ruInt32Match(trans_ptr testKey, trans_ptr existingKey) {
+    return *(int32_t*)testKey == (int32_t)(intptr_t)existingKey;
+}
+
+RUAPI ru_uint ruInt16Hash(trans_ptr key) {
+    return (ru_uint)*(int16_t*)key;
+}
+
+RUAPI bool ruInt16Match(trans_ptr testKey, trans_ptr existingKey) {
+    return *(int16_t*)testKey == (int16_t)(intptr_t)existingKey;
+}
+
+RUAPI ru_uint ruInt8Hash(trans_ptr key) {
+    return (ru_uint)*(int8_t*)key;
+}
+
+RUAPI bool ruInt8Match(trans_ptr testKey, trans_ptr existingKey) {
+    return *(int8_t*)testKey == (int8_t)(intptr_t)existingKey;
 }
 
 RUAPI ru_uint ruStrHash(trans_ptr key) {
-    trans_chars ptr = key;
+    trans_bytes ptr = key;
     uint32_t val = 0;
     /* Hash the key by performing a number of bit operations on it. */
     while (*ptr != '\0') {
@@ -66,25 +101,152 @@ RUAPI ru_uint ruStrHash(trans_ptr key) {
     return (ru_uint)val;
 }
 
-RUAPI bool ruStrMatch(trans_ptr s1, trans_ptr s2) {
-    return ruStrEquals((trans_chars)s1, (trans_chars)s2);
+RUAPI bool ruStrMatch(trans_ptr testKey, trans_ptr existingKey) {
+    return ruStrEquals((trans_chars)testKey, (trans_chars)existingKey);
 }
 
-RUAPI ruMap ruMapNewString(ruFreeFunc keyFree, ruFreeFunc valFree) {
-    return ruMapNew(ruStrHash, ruStrMatch, keyFree, valFree, 0);
+keySpec int64KeySpec = {MagicKeySpec, ruInt64Hash, ruInt64Match,free,
+                        (ruCloneFunc)ruInt64, ruRefPtrInt64};
+keySpec longKeySpec = {MagicKeySpec, ruLongHash, ruLongMatch,NULL,
+                       (ruCloneFunc)ruLongRefPtr, ruRefPtrLong};
+keySpec int32KeySpec = {MagicKeySpec, ruInt32Hash, ruInt32Match,NULL,
+                        (ruCloneFunc)ruInt32RefPtr, ruRefPtrInt32};
+keySpec int16KeySpec = {MagicKeySpec, ruInt16Hash, ruInt16Match,NULL,
+                        (ruCloneFunc)ruInt16RefPtr, ruRefPtrInt16};
+keySpec int8KeySpec = {MagicKeySpec, ruInt8Hash, ruInt8Match,NULL,
+                       (ruCloneFunc)ruInt8RefPtr, ruRefPtrInt8};
+keySpec strRefKeySpec = {MagicKeySpec, ruStrHash, ruStrMatch,NULL,
+                         NULL, NULL};
+keySpec strDupKeySpec = {MagicKeySpec, ruStrHash, ruStrMatch,free,
+                         (ruCloneFunc)ruStrDup, NULL};
+keySpec strFreeKeySpec = {MagicKeySpec, ruStrHash, ruStrMatch,free,
+                         NULL, NULL};
+
+valSpec int64ValSpec = {MagicValSpec, free, (ruCloneFunc)ruInt64,
+                        ruRefPtrInt64};
+valSpec longValSpec = {MagicValSpec, NULL, (ruCloneFunc)ruLongRefPtr,
+                       ruRefPtrLong};
+valSpec int32ValSpec = {MagicValSpec, NULL, (ruCloneFunc)ruInt32RefPtr,
+                        ruRefPtrInt32};
+valSpec int16ValSpec = {MagicValSpec, NULL, (ruCloneFunc)ruInt16RefPtr,
+                        ruRefPtrInt16};
+valSpec int8ValSpec = {MagicValSpec, NULL, (ruCloneFunc)ruInt8RefPtr,
+                       ruRefPtrInt8};
+valSpec boolValSpec = {MagicValSpec, NULL, (ruCloneFunc)ruBoolRefPtr,
+                       ruRefPtrBool};
+valSpec strRefValSpec = {MagicValSpec, NULL, NULL, NULL};
+valSpec strDupValSpec = {MagicValSpec, free, (ruCloneFunc)ruStrDup, NULL};
+valSpec strFreeValSpec = {MagicValSpec, free, NULL, NULL};
+
+RUAPI ruKeySpec ruKeySpecInt64(void) {
+    return &int64KeySpec;
 }
 
-RUAPI ruMap ruMapNew(ruHashFunc hash, ruMatchFunc match,
-                     ruFreeFunc keyFree, ruFreeFunc valFree,
-                     uint32_t expectedSize) {
-    ruClearError();
+RUAPI ruKeySpec ruKeySpecLong(void) {
+    return &longKeySpec;
+}
+
+RUAPI ruKeySpec ruKeySpecInt32(void) {
+    return &int32KeySpec;
+}
+
+RUAPI ruKeySpec ruKeySpecInt16(void) {
+    return &int16KeySpec;
+}
+
+RUAPI ruKeySpec ruKeySpecInt8(void) {
+    return &int8KeySpec;
+}
+
+RUAPI ruKeySpec ruKeySpecStrRef(void) {
+    return &strRefKeySpec;
+}
+
+RUAPI ruKeySpec ruKeySpecStrDup(void) {
+    return &strDupKeySpec;
+}
+
+RUAPI ruKeySpec ruKeySpecStrFree(void) {
+    return &strFreeKeySpec;
+}
+
+RUAPI ruValSpec ruValSpecInt64(void) {
+    return &int64ValSpec;
+}
+
+RUAPI ruValSpec ruValSpecLong(void) {
+    return &longValSpec;
+}
+
+RUAPI ruValSpec ruValSpecInt32(void) {
+    return &int32ValSpec;
+}
+
+RUAPI ruValSpec ruValSpecInt16(void) {
+    return &int16ValSpec;
+}
+
+RUAPI ruValSpec ruValSpecInt8(void) {
+    return &int8ValSpec;
+}
+
+RUAPI ruValSpec ruValSpecBool(void) {
+    return &boolValSpec;
+}
+
+RUAPI ruValSpec ruValSpecStrRef(void) {
+    return &strRefValSpec;
+}
+
+RUAPI ruValSpec ruValSpecStrDup(void) {
+    return &strDupValSpec;
+}
+
+RUAPI ruValSpec ruValSpecStrFree(void) {
+    return &strFreeValSpec;
+}
+
+RUAPI ruKeySpec ruKeySpecNew(ruHashFunc hash, ruMatchFunc match, ruFreeFunc keyFree,
+                             ruCloneFunc in, ruPtr2TypeFunc out) {
     if (!hash || !match) return NULL;
+    keySpec* s = ruMalloc0(1, keySpec);
+    s->type = MagicKeySpec;
+    s->hash = hash;
+    s->match = match;
+    s->keyFree = keyFree;
+    s->in = in;
+    s->out = out;
+    return s;
+}
+
+RUAPI ruValSpec ruValSpecNew(ruFreeFunc valFree,
+                             ruCloneFunc clone, ruPtr2TypeFunc out) {
+    valSpec* s = ruMalloc0(1, valSpec);
+    s->type = MagicValSpec;
+    s->valFree = valFree;
+    s->in = clone;
+    s->out = out;
+    return s;
+}
+
+RUAPI ruMap ruMapNewSpec(ruKeySpec KS, ruValSpec VS) {
+    ruClearError();
+    keySpec* ks = keySpecGet(KS, NULL);
+    valSpec* vs = valSpecGet(VS, NULL);
+    if (!ks || !ks->hash || !ks->match) {
+        ruCritLog("Failed map creation due an invalid keySpec parameter");
+        return NULL;
+    }
+    if (VS && !vs) {
+        ruCritLog("Failed map creation due an invalid valSpec parameter");
+        ruAbort();
+    }
 
     Map *mp = ruMalloc0(1, Map);
     mp->type = MagicMap;
 
     // default start value?
-    if (!expectedSize) expectedSize = 10;
+    uint32_t expectedSize = 16;
 
     /* Allocate space for the hash table. */
     mp->table = ruMalloc0(expectedSize, List*);
@@ -96,14 +258,33 @@ RUAPI ruMap ruMapNew(ruHashFunc hash, ruMatchFunc match,
     }
 
     /* Encapsulate the functions. */
-    mp->hash = hash;
-    mp->match = match;
-    mp->keyFree = keyFree;
-    mp->valFree = valFree;
+    mp->hash = ks->hash;
+    mp->match = ks->match;
+    mp->keyFree = ks->keyFree;
+    mp->keyIn = ks->in;
+    mp->keyOut = ks->out;
+    if (vs) {
+        mp->valFree = vs->valFree;
+        mp->valIn = vs->in;
+        mp->valOut = vs->out;
+    }
     /* Initialize the number of elements in the table. */
     mp->size = 0;
     mp->mux = ruMutexInit();
     return (ruMap)mp;
+}
+
+RUAPI ruMap ruMapNewString(ruFreeFunc keyFree, ruFreeFunc valFree) {
+    keySpec ks = {MagicKeySpec, ruStrHash, ruStrMatch, keyFree, NULL};
+    valSpec vs = {MagicValSpec, valFree, NULL};
+    return ruMapNewSpec(&ks, &vs);
+}
+
+RUAPI ruMap ruMapNew(ruHashFunc hash, ruMatchFunc match,
+                     ruFreeFunc keyFree, ruFreeFunc valFree, uint32_t expectedSize) {
+    keySpec ks = {MagicKeySpec, hash, match, keyFree, NULL};
+    valSpec vs = {MagicValSpec, valFree, NULL};
+    return ruMapNewSpec(&ks, &vs);
 }
 
 RUAPI ruMap ruMapFree(ruMap rm) {
@@ -130,10 +311,77 @@ RUAPI ruMap ruMapFree(ruMap rm) {
     return NULL;
 }
 
+static void remap(Map *mp) {
+    uint32_t oldSize = mp->buckets;
+    List** oldTable = mp->table;
+
+    // new buckets
+    uint32_t newSize = mp->buckets * 2;
+    mp->table = ruMalloc0(newSize, List*);
+    for (uint32_t i = 0; i < newSize; i++) {
+        mp->table[i] = ListNew(kvFree);
+    }
+
+    // migrate old entries to new buckets
+    for (uint32_t i = 0; i < oldSize; i++) {
+        List *list = oldTable[i];
+        while (list->size > 0) {
+            kv* item = ListRemove(list, list->head->next, NULL);
+            ru_uint bucket = item->hash % newSize;
+            ListInsertAfter(mp->table[bucket], NULL, item);
+        }
+    }
+    mp->buckets = newSize;
+
+    // clean up old buckets
+    for (uint32_t i = 0; i < oldSize; i++) {
+        ListFree(oldTable[i]);
+    }
+    ruFree(oldTable);
+}
+
+static inline void runKeyIn(Map* mp, kv* item, ptr key, ru_uint hash) {
+    if (mp->keyIn) {
+        item->key = mp->keyIn(key);
+    } else {
+        item->key = key;
+    }
+    item->hash = hash;
+}
+
+static inline void runValIn(Map* mp, kv* item, ptr val) {
+    if (mp->valIn) {
+        item->value = mp->valIn(val);
+    } else {
+        item->value = val;
+    }
+}
+
+static int32_t runValOut(Map *mp, ptr data, ptr* target) {
+    if (mp->valOut) {
+        return mp->valOut(data, target);
+    } else {
+        *target = data;
+    }
+    return RUE_OK;
+
+}
+
+static int32_t runKeyOut(Map *mp, ptr data, ptr* target) {
+    if (mp->keyOut) {
+        return mp->keyOut(data, target);
+    } else {
+        *target = data;
+    }
+    return RUE_OK;
+
+}
+
 static int32_t MapPut(Map* mp, ptr key, ptr val, ptr* existingVal) {
     /* Hash the key. */
     mp->iterActive = false;
-    int32_t bucket = mp->hash(key) % mp->buckets;
+    ru_uint hash = mp->hash(key);
+    ru_uint bucket = hash % mp->buckets;
     for (ListElmt *le = mp->table[bucket]->head->next; le != NULL; le = le->next) {
         kv* item = le->data;
         if (mp->match(key, item->key)) {
@@ -144,20 +392,21 @@ static int32_t MapPut(Map* mp, ptr key, ptr val, ptr* existingVal) {
             // update the exisiting item
             if (mp->keyFree) mp->keyFree(item->key);
             if (mp->valFree) mp->valFree(item->value);
-            item->key = key;
-            item->value = val;
+            runKeyIn(mp, item, key, hash);
+            runValIn(mp, item, val);
             return RUE_OK;
         }
     }
-    // TODO: check whether to remap
-    kv *item = ruMalloc0(1, kv);
-    item->key = key;
-    item->value = val;
+    kv* item = ruMalloc0(1, kv);
+    runKeyIn(mp, item, key, hash);
+    runValIn(mp, item, val);
     item->mp = mp;
     /* Insert the data into the bucket. */
     int32_t ret = ListInsertAfter(mp->table[bucket], NULL, item);
     if (ret == RUE_OK) {
         mp->size++;
+        uint32_t loadFactor = mp->size / mp->buckets;
+        if (loadFactor > 4) remap(mp);
     } else {
         kvFree(item);
     }
@@ -183,7 +432,7 @@ RUAPI int32_t ruMapPutData(ruMap rm, ptr key, ptr val, ptr* exisitingVal) {
     return ret;
 }
 
-static int32_t MapRemove(Map *mp, void *key, void **val) {
+static int32_t MapRemove(Map *mp, ptr key, void **val) {
     /* Hash the key. */
     int32_t bucket = mp->hash(key) % mp->buckets;
     mp->iterActive = false;
@@ -192,11 +441,11 @@ static int32_t MapRemove(Map *mp, void *key, void **val) {
         kv* item = le->data;
         if (mp->match(key, item->key)) {
             /* Remove the data from the bucket.*/
+            int32_t ret;
             if (val) {
-                *val = item->value;
+                ret = runValOut(mp, item->value, val);
                 item->value = NULL;
             }
-            int32_t ret;
             ListRemove(mp->table[bucket], le, &ret);
             if (ret == RUE_OK) {
                 mp->size--;
@@ -209,7 +458,7 @@ static int32_t MapRemove(Map *mp, void *key, void **val) {
     return RUE_GENERAL;
 }
 
-RUAPI int32_t ruMapRemoveData(ruMap rm, void *key, void **val) {
+RUAPI int32_t ruMapRemoveData(ruMap rm, ptr key, void **val) {
     ruClearError();
     int32_t ret;
     Map *mp = MapGet(rm, &ret);
@@ -230,7 +479,7 @@ RUAPI int32_t ruMapRemoveData(ruMap rm, void *key, void **val) {
     return ret;
 }
 
-static int32_t MapGetData(Map *mp, void *key, void **value) {
+static int32_t MapGetData(Map *mp, ptr key, void **value) {
     /* Hash the key. */
     int32_t bucket = mp->hash(key) % mp->buckets;
     /* Search for the data in the bucket. */
@@ -238,15 +487,14 @@ static int32_t MapGetData(Map *mp, void *key, void **value) {
         kv* item = le->data;
         if (mp->match(key, item->key)) {
             /* Pass back the data from the table. */
-            *value = item->value;
-            return RUE_OK;
+            return runValOut(mp, item->value, value);
         }
     }
     /* Return that the data was not found. */
     return RUE_GENERAL;
 }
 
-RUAPI bool ruMapHasKey(ruMap rm, void *key, int32_t *code) {
+RUAPI bool ruMapHasKey(ruMap rm, ptr key, int32_t *code) {
     ruClearError();
     int32_t ret;
     Map *mp = MapGet(rm, &ret);
@@ -269,7 +517,7 @@ RUAPI bool ruMapHasKey(ruMap rm, void *key, int32_t *code) {
     ruRetWithCode(code, RUE_OK, false);
 }
 
-RUAPI int32_t ruMapGetValue(ruMap rm, void* key, void** value) {
+RUAPI int32_t ruMapGetValue(ruMap rm, ptr key, ptr* value) {
     ruClearError();
     int32_t ret;
     Map *mp = MapGet(rm, &ret);
@@ -299,19 +547,19 @@ static int32_t MapNextSet(Map* mp, void** key, void** value) {
     }
     if (!mp->iterElmt) {
         if (key) {
-            *key = NULL;
+            runKeyOut(mp, NULL, key);
         }
         if (value) {
-            *value = NULL;
+            runValOut(mp, NULL, value);
         }
         return RUE_FILE_NOT_FOUND;
     }
     kv* item = mp->iterElmt->data;
     if (key) {
-        *key = item->key;
+        runKeyOut(mp, item->key, key);
     }
     if (value) {
-        *value = item->value;
+        runValOut(mp, item->value, value);
     }
     mp->iterElmt = mp->iterElmt->next;
     return RUE_OK;
@@ -449,13 +697,19 @@ RUAPI uint32_t ruMapSize(ruMap rm, int32_t *code) {
 }
 
 // Set API
+RUAPI ruMap ruSetNewSpec(ruKeySpec ks) {
+    return ruMapNewSpec(ks, NULL);
+}
+
 RUAPI ruSet ruSetNewString(ruFreeFunc itemFree) {
-    return ruMapNew(ruStrHash, ruStrMatch, itemFree, NULL, 0);
+    keySpec ks = {MagicKeySpec, ruStrHash, ruStrMatch, itemFree, NULL};
+    return ruSetNewSpec(&ks);
 }
 
 RUAPI ruSet ruSetNew(ruHashFunc hash, ruMatchFunc match,
                      ruFreeFunc itemFree, uint32_t expectedSize) {
-    return ruMapNew(hash, match, itemFree, NULL, expectedSize);
+    keySpec ks = {MagicKeySpec, hash, match, itemFree, NULL};
+    return ruSetNewSpec(&ks);
 }
 
 RUAPI ruSet ruSetFree(ruSet rs) {

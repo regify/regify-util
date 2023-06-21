@@ -239,31 +239,25 @@ END_TEST
 
 START_TEST ( iter ) {
     int32_t ret, exp = RUE_OK;
-    const char *test = "ruMapNew";
-    const char *retText = "%s failed wanted ret '%x' but got '%x'";
+    const char *retText = "failed wanted ret '%x' but got '%x'";
+    perm_chars k1 = "23";
 
-    ruSet rs = ruSetNew(ruIntHash, ruIntMatch,
-                        NULL, 3);
-    fail_if(NULL == rs, retText, test, rs, NULL);
+    ruSet rs = ruSetNewSpec(ruKeySpecStrRef());
+    fail_if(NULL == rs, retText, rs, NULL);
 
-    test = "ruSetPut";
-    ret = ruSetPut(rs, rs);
-    fail_unless(exp == ret, retText, test, exp, ret);
+    ret = ruSetPut(rs, k1);
+    fail_unless(exp == ret, retText, exp, ret);
 
     uint32_t esz  = 1;
-    test = "ruSetSize";
     uint32_t sz = ruSetSize(rs, &ret);
-    fail_unless(exp == ret, retText, test, exp, ret);
-    fail_unless(esz == sz, retText, test, esz, sz);
+    fail_unless(exp == ret, retText, exp, ret);
+    fail_unless(esz == sz, retText, esz, sz);
 
-    ptr key = NULL;
-    test = "ruMapNew";
-    bool exb = true;
+    perm_chars key = NULL;
     for (ret = ruSetFirst(rs, &key); ret == RUE_OK;
          ret = ruSetNext(rs, &key)) {
-        fail_unless(rs == key, retText, test, rs, key);
+        fail_unless(k1 == key, retText, rs, key);
     }
-
     ruSetFree(rs);
 }
 END_TEST

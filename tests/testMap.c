@@ -270,40 +270,379 @@ START_TEST ( run ) {
 }
 END_TEST
 
-START_TEST ( iter ) {
+START_TEST(dups) {
     int32_t ret, exp = RUE_OK;
-    const char *test = "ruMapNew";
-    const char *retText = "%s failed wanted ret '%x' but got '%x'";
+    const char *retText = "failed wanted '%x' but got '%x'";
+    perm_chars v1 = "42";
+    perm_chars v2 = "23";
+    perm_chars k1 = "23";
+    perm_chars k2 = "42";
+    perm_chars r;
+    perm_chars e;
 
-    ruMap rm = ruMapNew(ruIntHash, ruIntMatch,
-                        NULL, NULL, 3);
-    fail_if(NULL == rm, retText, test, rm, NULL);
+    ruMap rm = ruMapNewSpec(ruKeySpecStrDup(),
+                            ruValSpecStrDup());
+    fail_if(NULL == rm, retText, rm, NULL);
 
-    ret = ruMapPut(rm, rm, true);
-    fail_unless(exp == ret, retText, test, exp, ret);
+    ret = ruMapPut(rm, k1, v1);
+    fail_unless(exp == ret, retText, exp, ret);
 
-    uint32_t esz  = 1;
-    uint32_t sz = ruMapSize(rm, &ret);
-    fail_unless(exp == ret, retText, test, exp, ret);
-    fail_unless(esz == sz, retText, test, esz, sz);
+    ret = ruMapPut(rm, k2, v2);
+    fail_unless(exp == ret, retText, exp, ret);
 
-    ptr key = NULL;
-    rusize val;
-    bool exb = true;
-    for (ret = ruMapFirst(rm, &key, &val); ret == RUE_OK;
-         ret = ruMapNext(rm, &key, &val)) {
-        fail_unless(rm == key, retText, test, rm, key);
-        fail_unless(exb == val, retText, test, exb, val);
-    }
+    r = NULL;
+    e = v1;
+    ret = ruMapGet(rm, k1, &r);
+    fail_unless(exp == ret, retText, exp, ret);
+    ck_assert_str_eq(e, r);
 
     ruMapFree(rm);
 }
 END_TEST
 
+START_TEST(perms) {
+    int32_t ret, exp = RUE_OK;
+    const char *retText = "failed wanted '%x' but got '%x'";
+    perm_chars v1 = "42";
+    perm_chars k1 = "23";
+    perm_chars r;
+    perm_chars e;
+
+    ruMap rm = ruMapNewSpec(ruKeySpecStrRef(),
+                            ruValSpecStrRef());
+    fail_if(NULL == rm, retText, rm, NULL);
+
+    ret = ruMapPut(rm, k1, v1);
+    fail_unless(exp == ret, retText, exp, ret);
+
+    r = NULL;
+    e = v1;
+    ret = ruMapGet(rm, k1, &r);
+    fail_unless(exp == ret, retText, exp, ret);
+    fail_unless(e == r, retText, e, r);
+
+    ruMapFree(rm);
+}
+END_TEST
+
+START_TEST(bools) {
+    int32_t ret, exp = RUE_OK;
+    const char *retText = "failed wanted '%x' but got '%x'";
+    long k1 = 23, k2 = 42;
+    bool r, e;
+    bool v1 = false;
+    bool v2 = true;
+
+    ruMap rm = ruMapNewSpec(ruKeySpecLong(),
+                            ruValSpecBool());
+    fail_if(NULL == rm, retText, rm, NULL);
+
+    ret = ruMapPut(rm, &k1, &v1);
+    fail_unless(exp == ret, retText, exp, ret);
+
+    ret = ruMapPut(rm, &k2, &v2);
+    fail_unless(exp == ret, retText, exp, ret);
+
+    r = false;
+    e = v1;
+    ret = ruMapGet(rm, &k1, &r);
+    fail_unless(exp == ret, retText, exp, ret);
+    fail_unless(e == r, retText, e, r);
+
+    r = false;
+    e = v2;
+    ret = ruMapGet(rm, &k2, &r);
+    fail_unless(exp == ret, retText, exp, ret);
+    fail_unless(e == r, retText, e, r);
+
+    int i = 0;
+    long keys[] = {k1, k2};
+    bool vals[] = {v1, v2};
+    long key;
+    bool val;
+    for (ret = ruMapFirst(rm, &key, &val); ret == RUE_OK;
+         ret = ruMapNext(rm, &key, &val)) {
+        fail_unless(keys[i] == key, retText, keys[i], key);
+        fail_unless(vals[i] == val, retText, vals[i], val);
+        i++;
+    }
+    ruMapFree(rm);
+}
+END_TEST
+
+START_TEST(int8s) {
+    int32_t ret, exp = RUE_OK;
+    const char *retText = "failed wanted '%x' but got '%x'";
+    int8_t v1 = 42;
+    int8_t k1 = 23;
+    int8_t r, e;
+
+    ruMap rm = ruMapNewSpec(ruKeySpecInt8(),
+                            ruValSpecInt8());
+    fail_if(NULL == rm, retText, rm, NULL);
+
+    ret = ruMapPut(rm, &k1, &v1);
+    fail_unless(exp == ret, retText, exp, ret);
+
+    r = 0;
+    e = v1;
+    ret = ruMapGet(rm, &k1, &r);
+    fail_unless(exp == ret, retText, exp, ret);
+    fail_unless(e == r, retText, e, r);
+
+    int i = 0;
+    int8_t keys[] = {k1};
+    int8_t vals[] = {v1};
+    int8_t key;
+    int8_t val;
+    for (ret = ruMapFirst(rm, &key, &val); ret == RUE_OK;
+         ret = ruMapNext(rm, &key, &val)) {
+        fail_unless(keys[i] == key, retText, keys[i], key);
+        fail_unless(vals[i] == val, retText, vals[i], val);
+        i++;
+    }
+    ruMapFree(rm);
+}
+END_TEST
+
+START_TEST(int16s) {
+    int32_t ret, exp = RUE_OK;
+    const char *retText = "failed wanted '%x' but got '%x'";
+    int16_t v1 = 42;
+    int16_t k1 = 23;
+    int16_t r, e;
+
+    ruMap rm = ruMapNewSpec(ruKeySpecInt16(),
+                            ruValSpecInt16());
+    fail_if(NULL == rm, retText, rm, NULL);
+
+    ret = ruMapPut(rm, &k1, &v1);
+    fail_unless(exp == ret, retText, exp, ret);
+
+    r = 0;
+    e = v1;
+    ret = ruMapGet(rm, &k1, &r);
+    fail_unless(exp == ret, retText, exp, ret);
+    fail_unless(e == r, retText, e, r);
+
+    int i = 0;
+    int16_t keys[] = {k1};
+    int16_t vals[] = {v1};
+    int16_t key;
+    int16_t val;
+    for (ret = ruMapFirst(rm, &key, &val); ret == RUE_OK;
+         ret = ruMapNext(rm, &key, &val)) {
+        fail_unless(keys[i] == key, retText, keys[i], key);
+        fail_unless(vals[i] == val, retText, vals[i], val);
+        i++;
+    }
+    ruMapFree(rm);
+}
+END_TEST
+
+START_TEST(int32s) {
+    int32_t ret, exp = RUE_OK;
+    const char *retText = "failed wanted '%x' but got '%x'";
+    int32_t v1 = 42;
+    int32_t k1 = 23;
+    int32_t r, e;
+
+    ruMap rm = ruMapNewSpec(ruKeySpecInt32(),
+                            ruValSpecInt32());
+    fail_if(NULL == rm, retText, rm, NULL);
+
+    ret = ruMapPut(rm, &k1, &v1);
+    fail_unless(exp == ret, retText, exp, ret);
+
+    r = 0;
+    e = v1;
+    ret = ruMapGet(rm, &k1, &r);
+    fail_unless(exp == ret, retText, exp, ret);
+    fail_unless(e == r, retText, e, r);
+
+    int i = 0;
+    int32_t keys[] = {k1};
+    int32_t vals[] = {v1};
+    int32_t key;
+    int32_t val;
+    for (ret = ruMapFirst(rm, &key, &val); ret == RUE_OK;
+         ret = ruMapNext(rm, &key, &val)) {
+        fail_unless(keys[i] == key, retText, keys[i], key);
+        fail_unless(vals[i] == val, retText, vals[i], val);
+        i++;
+    }
+    ruMapFree(rm);
+}
+END_TEST
+
+START_TEST(longs) {
+    int32_t ret, exp = RUE_OK;
+    const char *retText = "failed wanted '%x' but got '%x'";
+    long v1 = 42;
+    long k1 = 23;
+    long r, e;
+
+    ruMap rm = ruMapNewSpec(ruKeySpecLong(),
+                            ruValSpecLong());
+    fail_if(NULL == rm, retText, rm, NULL);
+
+    ret = ruMapPut(rm, &k1, &v1);
+    fail_unless(exp == ret, retText, exp, ret);
+
+    r = 0;
+    e = v1;
+    ret = ruMapGet(rm, &k1, &r);
+    fail_unless(exp == ret, retText, exp, ret);
+    fail_unless(e == r, retText, e, r);
+
+    int i = 0;
+    long keys[] = {k1};
+    long vals[] = {v1};
+    long key;
+    long val;
+    for (ret = ruMapFirst(rm, &key, &val); ret == RUE_OK;
+         ret = ruMapNext(rm, &key, &val)) {
+        fail_unless(keys[i] == key, retText, keys[i], key);
+        fail_unless(vals[i] == val, retText, vals[i], val);
+        i++;
+    }
+    ruMapFree(rm);
+}
+END_TEST
+
+START_TEST(int64s) {
+    int32_t ret, exp = RUE_OK;
+    const char *retText = "failed wanted '%x' but got '%x'";
+    int64_t v1 = 42, v2 = 23;
+    int64_t k1 = 23, k2 = 42;
+    int64_t r, e;
+
+    ruMap rm = ruMapNewSpec(ruKeySpecInt64(),
+                            ruValSpecInt64());
+    fail_if(NULL == rm, retText, rm, NULL);
+
+    ret = ruMapPut(rm, &k1, &v1);
+    fail_unless(exp == ret, retText, exp, ret);
+
+    ret = ruMapPut(rm, &k2, &v2);
+    fail_unless(exp == ret, retText, exp, ret);
+
+    r = 0;
+    e = v1;
+    ret = ruMapGet(rm, &k1, &r);
+    fail_unless(exp == ret, retText, exp, ret);
+    fail_unless(e == r, retText, e, r);
+
+    r = 0;
+    e = v2;
+    ret = ruMapGet(rm, &k2, &r);
+    fail_unless(exp == ret, retText, exp, ret);
+    fail_unless(e == r, retText, e, r);
+
+    int i = 0;
+    int64_t keys[] = {k1, k2};
+    int64_t vals[] = {v1, v2};
+    int64_t key;
+    int64_t val;
+    for (ret = ruMapFirst(rm, &key, &val); ret == RUE_OK;
+         ret = ruMapNext(rm, &key, &val)) {
+        fail_unless(keys[i] == key, retText, keys[i], key);
+        fail_unless(vals[i] == val, retText, vals[i], val);
+        i++;
+    }
+    ruMapFree(rm);
+}
+END_TEST
+
+START_TEST(custom) {
+    int32_t ret, exp = RUE_OK;
+    const char *retText = "failed wanted '%x' but got '%x'";
+    int64_t v1 = 42;
+    int64_t v2 = 23;
+    perm_chars k1 = "23";
+    perm_chars k2 = "42";
+    int64_t r;
+    int64_t e;
+
+    ruKeySpec ks = ruKeySpecNew(ruStrHash, ruStrMatch,
+                                NULL, NULL, NULL);
+    ruValSpec vs = ruValSpecNew(free, (ruCloneFunc) ruInt64,
+                                ruRefPtrInt64);
+    ruMap rm = ruMapNewSpec(ks, vs);
+    fail_if(NULL == rm, retText, rm, NULL);
+    ruFree(ks);
+    ruFree(vs);
+
+    ret = ruMapPut(rm, k1, &v1);
+    fail_unless(exp == ret, retText, exp, ret);
+
+    ret = ruMapPut(rm, k2, &v2);
+    fail_unless(exp == ret, retText, exp, ret);
+
+    r = 0;
+    e = v1;
+    ret = ruMapGet(rm, k1, &r);
+    fail_unless(exp == ret, retText, exp, ret);
+    fail_unless(e == r, retText, e, r);
+
+    r = 0;
+    e = v2;
+    ret = ruMapGet(rm, k2, &r);
+    fail_unless(exp == ret, retText, exp, ret);
+    fail_unless(e == r, retText, e, r);
+
+    int i = 0;
+    // map order is not guaranteed but deterministic based on key value
+    perm_chars keys[] = {k2, k1};
+    int64_t vals[] = {v2, v1};
+    perm_chars key;
+    int64_t val;
+    for (ret = ruMapFirst(rm, &key, &val); ret == RUE_OK;
+         ret = ruMapNext(rm, &key, &val)) {
+        fail_unless(keys[i] == key, retText, keys[i], key);
+        fail_unless(vals[i] == val, retText, vals[i], val);
+        i++;
+    }
+    ruMapFree(rm);
+}
+END_TEST
+
+void foo() {
+    // error checking left out for brevity
+    ruMap rm = ruMapNewSpec(ruKeySpecStrFree(), ruValSpecStrFree());
+    alloc_chars k = ruStrDup("23");
+    alloc_chars v = ruStrDup("42");
+    ruMapPut(rm, k, v);
+
+    perm_chars r = NULL;
+    ruMapGet(rm, "23", &r);
+    printf("k: '23' v: '%s'\n", r);
+    ruMapFree(rm);
+}
+void bar() {
+    // error checking left out for brevity
+    long k1 = 23, v1 = 42, r = 0;
+    ruMap rm = ruMapNewSpec(ruKeySpecLong(), ruValSpecLong());
+    ruMapPut(rm, &k1, &v1);
+
+    ruMapGet(rm, &k1, &r);
+    printf("k: %ld v: %ld\n", k1, r);
+    ruMapFree(rm);
+}
+
 TCase* mapTests(void) {
     TCase *tcase = tcase_create ( "map" );
     tcase_add_test(tcase, api);
     tcase_add_test(tcase, run);
-    tcase_add_test(tcase, iter);
+    tcase_add_test(tcase, dups);
+    tcase_add_test(tcase, perms);
+    tcase_add_test(tcase, bools);
+    tcase_add_test(tcase, int8s);
+    tcase_add_test(tcase, int16s);
+    tcase_add_test(tcase, int32s);
+    tcase_add_test(tcase, longs);
+    tcase_add_test(tcase, int64s);
+    tcase_add_test(tcase, custom);
+    foo();
     return tcase;
 }

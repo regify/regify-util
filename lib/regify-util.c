@@ -124,6 +124,91 @@ RUAPI alloc_ptr ruMemDup(trans_ptr buf, rusize size) {
     return dest;
 }
 
+RUAPI ru_Int64 ruInt64(int64_t* val) {
+    int64_t* i = ruMalloc0(1, int64_t);
+    *i = *(int64_t*)val;
+    return i;
+}
+
+RUAPI ptr ruLongRefPtr(long* in) {
+    intptr_t i = (intptr_t)*in;
+    return (ptr)i;
+}
+
+RUAPI ptr ruInt32RefPtr(int32_t* in) {
+    intptr_t i = (intptr_t)*in;
+    return (ptr)i;
+}
+
+RUAPI ptr ruInt16RefPtr(int16_t* in) {
+    intptr_t i = (intptr_t)*in;
+    return (ptr)i;
+}
+
+RUAPI ptr ruInt8RefPtr(int8_t* in) {
+    intptr_t i = (intptr_t)*in;
+    return (ptr)i;
+}
+
+RUAPI ptr ruBoolRefPtr(bool* in) {
+    intptr_t i = (intptr_t)*in;
+    return (ptr)i;
+}
+
+RUAPI int32_t ruRefPtrInt64(ptr src, ptr* dst) {
+    if (!dst) return RUE_PARAMETER_NOT_SET;
+    int64_t num = 0;
+    if (src) num = *(int64_t*)(intptr_t*)src;
+    int64_t* var = (int64_t*)(intptr_t*)dst;
+    *var = num;
+    return RUE_OK;
+}
+
+RUAPI int32_t ruRefPtrLong(ptr src, ptr* dst) {
+    if (!dst) return RUE_PARAMETER_NOT_SET;
+    long num = 0;
+    if (src) num = (long)(intptr_t)src;
+    long* var = (long*)(intptr_t*)dst;
+    *var = num;
+    return RUE_OK;
+}
+
+RUAPI int32_t ruRefPtrInt32(ptr src, ptr* dst) {
+    if (!dst) return RUE_PARAMETER_NOT_SET;
+    int32_t num = 0;
+    if (src) num = (int32_t)(intptr_t)src;
+    int32_t* var = (int32_t*)(intptr_t*)dst;
+    *var = num;
+    return RUE_OK;
+}
+
+RUAPI int32_t ruRefPtrInt16(ptr src, ptr* dst) {
+    if (!dst) return RUE_PARAMETER_NOT_SET;
+    int16_t num = 0;
+    if (src) num = (int16_t)(intptr_t)src;
+    int16_t* var = (int16_t*)(intptr_t*)dst;
+    *var = num;
+    return RUE_OK;
+}
+
+RUAPI int32_t ruRefPtrInt8(ptr src, ptr* dst) {
+    if (!dst) return RUE_PARAMETER_NOT_SET;
+    int8_t num = 0;
+    if (src) num = (int8_t)(intptr_t)src;
+    int8_t* var = (int8_t*)(intptr_t*)dst;
+    *var = num;
+    return RUE_OK;
+}
+
+RUAPI int32_t ruRefPtrBool(ptr src, ptr* dst) {
+    if (!dst) return RUE_PARAMETER_NOT_SET;
+    bool num = false;
+    if (src) num = (bool)(intptr_t)src;
+    bool* var = (bool*)(intptr_t*)dst;
+    *var = num;
+    return RUE_OK;
+}
+
 RUAPI trans_chars ruGetenv(const char *variable) {
     ruClearError();
     if (!variable) return NULL;

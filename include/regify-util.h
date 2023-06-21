@@ -340,6 +340,11 @@ typedef unsigned long ru_uint;
 typedef size_t rusize;
 
 /**
+ * \brief A pointer to an allocated 64 bit int. Free with \ref ruFree.
+ */
+typedef void* ru_Int64;
+
+/**
  * \brief Says to determine the size parameter using strlen or an equivalent.
  */
 #define RU_SIZE_AUTO (~0LU)
@@ -350,6 +355,12 @@ typedef size_t rusize;
 typedef void* (*ruCloneFunc)(void*);
 
 /**
+ * \brief Signature of a function that stores the value of the first pointer
+ * in a certain type by dereferencing the second pointer.
+ */
+typedef int32_t (*ruPtr2TypeFunc)(void*,void**);
+
+/**
  * \brief Signature of a generic free function returning NULL.
  */
 typedef void* (*ruClearFunc)(void*);
@@ -358,6 +369,11 @@ typedef void* (*ruClearFunc)(void*);
  * \brief Signature of a generic free function.
  */
 typedef void (*ruFreeFunc)(void*);
+
+typedef union {
+    void* (*ruClearFunc)(void*);
+    void (*ruFreeFunc)(void*);
+} ruFreeIf;
 
 /**
  * \brief Signature of a generic comparator function for sorting.
@@ -603,6 +619,63 @@ RUAPI sec_t ruTimeLocalToUtc(sec_t stamp);
  * @return seconds since epoch in local time
  */
 RUAPI sec_t ruTimeUtcToLocal(sec_t stamp);
+
+/**
+ * \brief Copies the given string and returns the pointer
+ * @param in String to duplicate
+ * @return Pointer to copied string. Caller must free.
+ */
+RUAPI ptr ruCharPtrDup(char* in);
+
+/**
+ * \brief Allocates given 64 bit integer on the heap and returns the pointer.
+ * @param val address where int to allocate is stored
+ * @return Pointer to allocated integer. Caller must free with \ref ruFree
+ */
+RUAPI ru_Int64 ruInt64(int64_t* val);
+
+/**
+ * \brief Returns the content of the given long integer address as pointer
+ * @param in address to long integer
+ * @return content of given address in pointer sized field
+ */
+RUAPI ptr ruLongRefPtr(long* in);
+
+/**
+ * \brief Returns the content of the given 32 bit integer address as pointer
+ * @param in address to 32 bit integer
+ * @return content of given address in pointer sized field
+ */
+RUAPI ptr ruInt32RefPtr(int32_t* in);
+
+/**
+ * \brief Returns the content of the given 16 bit integer address as pointer
+ * @param in address to 16 bit integer
+ * @return content of given address in pointer sized field
+ */
+RUAPI ptr ruInt16RefPtr(int16_t* in);
+
+/**
+ * \brief Returns the content of the given 8 bit integer address as pointer
+ * @param in address to 8 bit integer
+ * @return content of given address in pointer sized field
+ */
+RUAPI ptr ruInt8RefPtr(int8_t* in);
+
+/**
+ * \brief Returns the content of the given boolean address as pointer
+ * @param in address to a boolean
+ * @return content of given address in pointer sized field
+ */
+RUAPI ptr ruBoolRefPtr(bool* in);
+
+RUAPI int32_t ruRefPtrInt64(ptr src, ptr* dst);
+RUAPI int32_t ruRefPtrLong(ptr src, ptr* dst);
+RUAPI int32_t ruRefPtrInt32(ptr src, ptr* dst);
+RUAPI int32_t ruRefPtrInt16(ptr src, ptr* dst);
+RUAPI int32_t ruRefPtrInt8(ptr src, ptr* dst);
+RUAPI int32_t ruRefPtrBool(ptr src, ptr* dst);
+
 
 /** \cond noworry */
 #define ruMacStart do

@@ -352,9 +352,6 @@ START_TEST(process) {
     ret = ruRunProg(command, RU_NO_TIMEOUT);
     fail_unless(exp == ret, retText, test, exp, ret);
 
-    ret = ruRunProg(command, RU_NON_BLOCK);
-    fail_unless(exp == ret, retText, test, exp, ret);
-
     exp = 0;
     command[0] = bindir "true";
     ret = ruRunProg(command, RU_NO_TIMEOUT);

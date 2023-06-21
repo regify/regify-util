@@ -43,12 +43,12 @@ static void fam_log_inotify_event(const char *file, const char *func, int32_t li
                                   int i, struct inotify_event* ev) {
     if (ev->len) {
         ruDoLog(RU_LOG_DBUG, file, func, line,
-                "i[%03d] ev wd[%d] mask[%04x %04x] cookie[%d] len[%d] name[%s]",
+                "i[%03d] ev wd[%d] mask[0x%04x %04x] cookie[%d] len[%d] name[%s]",
                 i, ev->wd, ev->mask >> 16, ev->mask & 0xffff,
                 ev->cookie, ev->len, ev->name);
     } else {
         ruDoLog(RU_LOG_DBUG, file, func, line,
-                "i[%03d] ev wd[%d] mask[%04x %04x] cookie[%d]",
+                "i[%03d] ev wd[%d] mask[0x%04x %04x] cookie[%d]",
                 i, ev->wd, ev->mask>>16, ev->mask&0xffff, ev->cookie);
     }
 }
@@ -123,17 +123,17 @@ static alloc_chars copyNoSlash(trans_chars base) {
 static int watcher(trans_chars fullPath, bool isDir, void *ctx) {
     famCtx* fctx = (famCtx*)ctx;
     if (!isDir) return RUE_OK;
-    ru_int wd = inotify_add_watch(fctx->id, fullPath, IN_MY_EVENTS);
+    int32_t wd = inotify_add_watch(fctx->id, fullPath, IN_MY_EVENTS);
     if ( wd < 0) {
         ruCritLogf("Failed adding watch on '%s' errno: %d - %s",
                    fullPath, errno, strerror(errno));
         return RUE_CANT_OPEN_FILE;
     }
     alloc_chars pathCopy = copyNoSlash(fullPath);
-    ruMapPut(fctx->wdPath, (ptr)wd, pathCopy);
-    // TODO: memleak on failure?
-    ruMapPut(fctx->pathWd, ruStrDup(pathCopy), wd);
+    ruMapPut(fctx->wdPath, &wd, pathCopy);
+    ruMapPut(fctx->pathWd, pathCopy, &wd);
     fam_dbg("Added %s with handle %d", pathCopy, wd);
+    ruFree(pathCopy);
     return RUE_OK;
 }
 
@@ -146,24 +146,25 @@ static int32_t fam_unwatchDir(famCtx* fctx, char* filePath) {
     // yank list to avoid concurrent modifications
     ruList yankies = ruListNew(NULL);
     int32_t ret;
-    void* key, * val;
-    for (ret = ruMapFirst(fctx->wdPath, &key, &val); ret == RUE_OK;
-         ret = ruMapNext(fctx->wdPath, &key, &val)) {
-        ru_int wd = (ru_int) key;
-        char* path = (char*) val;
+    int32_t wd;
+    perm_chars path = NULL;
+    for (ret = ruMapFirst(fctx->wdPath, &wd, &path); ret == RUE_OK;
+         ret = ruMapNext(fctx->wdPath, &wd, &path)) {
 
         if (ruStrStartsWith(path, filePath, NULL)) {
             fam_dbg("Removing %s with handle %d", path, wd);
-            inotify_rm_watch(fctx->id, (int)wd);
-            ruListAppend(yankies, wd);
+            inotify_rm_watch(fctx->id, wd);
+            ruListAppend(yankies, (intptr_t)wd);
             ruMapRemove(fctx->pathWd, path, NULL);
         }
     }
 
+
     ruIterator li = ruListIter(yankies);
-    for (ru_int wd = ruIterNext(li, ru_int);
-         li; wd = ruIterNext(li, ru_int)) {
-        ruMapRemove(fctx->wdPath, (void*)wd, NULL);
+    for (ru_int wd2 = ruIterNext(li, ru_int);
+         li; wd2 = ruIterNext(li, ru_int)) {
+        wd = (int32_t)wd2;
+        ruMapRemove(fctx->wdPath, &wd2, NULL);
     }
     yankies = ruListFree(yankies);
     return RUE_OK;
@@ -179,36 +180,33 @@ static int32_t fam_renameDir(famCtx* fctx, char* srcPath, char* destPath) {
     // put path map wd:newPath
 
     // values are transferred to fctx->wdPath, so we do not free it in this map
-    ruMap newWdPaths = ruMapNew(ruIntHash, ruIntMatch,
-                                NULL, NULL, 64);
+    ruMap newWdPaths = ruMapNewSpec(ruKeySpecInt32(), ruValSpecStrFree());
     rusize len = strlen(srcPath);
 
-    void* key = NULL, * val = NULL;
+    int32_t wd;
+    perm_chars path = NULL;
     int32_t ret;
-    for (ret = ruMapFirst(fctx->wdPath, &key, &val); ret == RUE_OK;
-         ret = ruMapNext(fctx->wdPath, &key, &val)) {
-        ru_int wd = (ru_int) key;
-        char* path = (char*) val;
+    for (ret = ruMapFirst(fctx->wdPath, &wd, &path); ret == RUE_OK;
+         ret = ruMapNext(fctx->wdPath, &wd, &path)) {
 
         if (ruStrStartsWith(path, srcPath, NULL)) {
-            char* newPath = ruDupPrintf("%s%s", destPath, (srcPath + len));
+            alloc_chars newPath = ruDupPrintf("%s%s", destPath, (srcPath + len));
             trimEnd(newPath, "/");
             fam_dbg("Renaming pathWd handle %ld from '%s' to '%s'", wd, path, newPath);
             // store for updating later
-            // TODO: mem leak on failure?
-            ruMapPut(newWdPaths, (void*) wd, (void*) ruStrDup(newPath));
+            ruMapPut(newWdPaths, &wd, newPath);
             // change the value in the other map now
             ruMapRemove(fctx->pathWd, path, NULL);
-            ruMapPut(fctx->pathWd, newPath, (void*)wd);
+            ruMapPut(fctx->pathWd, newPath, &wd);
         }
     }
 
-    for (ret = ruMapFirst(newWdPaths, &key, &val); ret == RUE_OK;
-         ret = ruMapNext(newWdPaths, &key, &val)) {
-        fam_dbg("Updating wdPath map '%ld' with '%s'", (ru_int)key, (char*)val);
-        ruMapPut(fctx->wdPath, key, val);
+    for (ret = ruMapFirst(newWdPaths, &wd, &path); ret == RUE_OK;
+         ret = ruMapNext(newWdPaths, &wd, &path)) {
+        fam_dbg("Updating wdPath map '%ld' with '%s'", wd, path);
+        ruMapPut(fctx->wdPath, &wd, path);
     }
-    newWdPaths = ruMapFree(newWdPaths);
+    ruMapFree(newWdPaths);
     return RUE_OK;
 }
 
@@ -216,7 +214,7 @@ static void fam_handle_moveTo(famCtx* fctx, uint32_t cookie, char* fullPath,
                               struct inotify_event* ev) {
     ruFamEvent* fe = ruFamEventNew(RU_FAM_MOVED, NULL, fullPath);
     // did this file come from somewhere we watch?
-    if (!ruMapHas(fctx->cookie, (ru_int)cookie, NULL)) {
+    if (!ruMapHas(fctx->cookie, &cookie, NULL)) {
         fam_dbg("File move to is missing cookie [%d]", cookie);
         fctx->eventCb(fe, fctx->ctx);
         if (ev != 0 && ev->mask & IN_ISDIR) {
@@ -233,12 +231,12 @@ static void fam_handle_moveTo(famCtx* fctx, uint32_t cookie, char* fullPath,
 
     // is this a directory we watch
     ck* c = NULL;
-    ruMapGet(fctx->cookie, (ru_int)cookie, &c);
+    ruMapGet(fctx->cookie, &cookie, &c);
     fe->srcPath = ruStrDup(c->sourcePath);
     fam_dbg("File move from '%s' with cookie [%d] ended up at '%s'",
             c->sourcePath, cookie, fullPath);
     fctx->eventCb(fe, fctx->ctx);
-    if (ruMapHas(fctx->pathWd, (void*)c->sourcePath, NULL)) {
+    if (ruMapHas(fctx->pathWd, c->sourcePath, NULL)) {
         if (ruStrEquals(fullPath, "")) {
             // if this was a dir we watched remove all watch handles
             fam_unwatchDir(fctx, (char*)c->sourcePath);
@@ -253,17 +251,18 @@ static void fam_processEv(famCtx* fctx, struct inotify_event* ev, int* pollTimeo
     // get the start address of the name and interprete it as UTF8
     perm_chars name_ = ev->name;
     perm_chars path_ = NULL;
-    int32_t ret = ruMapGet(fctx->wdPath, (ru_int)ev->wd, &path_);
+    int32_t ret = ruMapGet(fctx->wdPath, &ev->wd, &path_);
     if (ret != RUE_OK || !path_) {
-        ruVerbLogf("no wdPath entry for handle %d ignoring event", ev->wd);
+        ruVerbLogf("no wdPath entry for handle %d ignoring event path: '%s' ret: %d",
+                   ev->wd, path_, ret);
         return;
     }
     char* fullPath = ruPathJoin(path_, name_);
     do {
         if (ev->mask & IN_DELETE_SELF) {
-            ret = ruMapGet(fctx->wdPath, (ru_int)ev->wd, &path_);
+            ret = ruMapGet(fctx->wdPath, &ev->wd, &path_);
             fam_dbg("Removing watch from [%s]", path_);
-            ruMapRemove(fctx->wdPath, (ru_int)ev->wd, NULL);
+            ruMapRemove(fctx->wdPath, &ev->wd, NULL);
             ruMapRemove(fctx->pathWd, path_, NULL);
             inotify_rm_watch(fctx->id, ev->wd);
             break;
@@ -271,7 +270,7 @@ static void fam_processEv(famCtx* fctx, struct inotify_event* ev, int* pollTimeo
 
         if (ev->mask & IN_MOVED_FROM) {
             ck* c = newCookie(fullPath);
-            ruMapPut(fctx->cookie, (ru_int)ev->cookie, c);
+            ruMapPut(fctx->cookie, &ev->cookie, c);
             *pollTimeout = RU_FAM_QUEUE_TIMEOUT;
             fam_dbg("Initiating file move from %s with cookie [%d] time [%ul]",
                     fullPath, ev->cookie, c->mtime);
@@ -282,7 +281,7 @@ static void fam_processEv(famCtx* fctx, struct inotify_event* ev, int* pollTimeo
         if (ev->mask & IN_MOVED_TO) {
             fam_handle_moveTo(fctx, ev->cookie, fullPath, ev);
             // yank cookie
-            ruMapRemove(fctx->cookie, (ru_int)ev->cookie, NULL);
+            ruMapRemove(fctx->cookie, &ev->cookie, NULL);
             break;
         }
 
@@ -369,22 +368,22 @@ static int32_t fam_runLoop(famCtx* fctx) {
         ruList dels = ruListNew(NULL);
         int32_t ret;
         uint64_t mtime = ruTimeMs() - RU_FAM_QUEUE_TIMEOUT;
-        void* key = NULL, * val = NULL;
-        for (ret = ruMapFirst(fctx->cookie, &key, &val); ret == RUE_OK;
-             ret = ruMapNext(fctx->cookie, &key, &val)) {
+        uint32_t cookie;
+        ck* c;
+        for (ret = ruMapFirst(fctx->cookie, &cookie, &c); ret == RUE_OK;
+             ret = ruMapNext(fctx->cookie, &cookie, &c)) {
             // work with key and/or val
-            ck* c = (ck*) val;
             if (c->mtime < mtime) {
-                ru_int cookie = (ru_int) key;
                 fam_dbg("Removing event %ld path:%s", cookie, c->sourcePath);
                 fam_handle_moveTo(fctx, cookie, "", 0);
-                ruListAppendPtr(dels, key);
+                ruListAppend(dels, (intptr_t)cookie);
             }
         }
         ruIterator li = ruListIter(dels);
-        for(key = ruIterNext(li, char*); li;
+        for(void* key = ruIterNext(li, char*); li;
                 key = ruIterNext(li, char*)) {
-            ruMapRemove(fctx->cookie, key, NULL);
+            cookie = (uint32_t)(intptr_t)key;
+            ruMapRemove(fctx->cookie, &cookie, NULL);
         }
         dels = ruListFree(dels);
 
@@ -422,11 +421,11 @@ static void* fam_runThread(void* ctx) {
     famCtx* fctx = (famCtx*) ctx;
     ruThreadSetName(fctx->name);
     fctx->buf = ruMallocSize(BUF_LEN, 1);
-    fctx->wdPath = ruMapNew(ruIntHash, ruIntMatch,
-                            NULL, free, 64);
-    fctx->pathWd = ruMapNewString(free, NULL);
-    fctx->cookie = ruMapNew(ruIntHash, ruIntMatch,
-                            NULL, freeCookie, 64);
+    fctx->wdPath = ruMapNewSpec(ruKeySpecInt32(), ruValSpecStrDup());
+    fctx->pathWd = ruMapNewSpec(ruKeySpecStrDup(), ruValSpecInt32());
+    ruValSpec vs = ruValSpecNew(freeCookie, NULL, NULL);
+    fctx->cookie = ruMapNewSpec(ruKeySpecInt32(), vs);
+    ruFree(vs);
 
     ruInfoLogf("Opened inotify handle in %s", fctx->topDir);
     int32_t ret = fam_watchDir(fctx, fctx->topDir);
