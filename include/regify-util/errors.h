@@ -31,6 +31,7 @@
 
 #ifndef REGIFY_UTIL_ERRORS_H
 #define REGIFY_UTIL_ERRORS_H
+
 /* Only need to export C interface if used by C++ source code */
 #ifdef __cplusplus
 extern "C" {

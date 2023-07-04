@@ -43,6 +43,13 @@
 
 #ifndef REGIFY_UTIL_FAM_H
 #define REGIFY_UTIL_FAM_H
+
+/* Only need to export C interface if used by C++ source code */
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
+
 /** File was created */
 #define RU_FAM_CREATED     0x001
 /** File was deleted */
@@ -164,13 +171,9 @@ RUAPI ruFamEvent* ruFamEventNew(int eventType, trans_chars filePath, trans_chars
  */
 RUAPI ptr ruFamEventFree(ptr o);
 
-/**
- * Generic famEvent destructor for collections
- *
- * @param fe famEvent to free
- */
-RUAPI void ruFamEventFreeV(void* fe);
-
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
 #endif //REGIFY_UTIL_FAM_H
 
 /**

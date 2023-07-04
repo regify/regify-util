@@ -28,10 +28,10 @@
 
 #ifndef REGIFY_UTIL_IO_H
 #define REGIFY_UTIL_IO_H
-/* Only need to export C interface if used by C++ source code */
 #include <sys/types.h>
 #include <sys/stat.h>
 
+/* Only need to export C interface if used by C++ source code */
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
