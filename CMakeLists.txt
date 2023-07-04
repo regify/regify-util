@@ -199,6 +199,7 @@ set(INCLUDES
         include/regify-util/regex.h
         include/regify-util/string.h
         include/regify-util/thread.h
+        include/regify-util/types.h
         )
 if (LINUX OR WIN OR MAC)
     list(APPEND INCLUDES include/regify-util/fam.h)

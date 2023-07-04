@@ -87,15 +87,10 @@ RUAPI ruFamEvent* ruFamEventNew(int eventType, trans_chars filePath, trans_chars
     return fe;
 }
 
-RUAPI ruFamEvent* ruFamEventFree(ruFamEvent* fe) {
-    if (!fe) return NULL;
+RUAPI ptr ruFamEventFree(ptr o) {
+    if (!o) return NULL;
+    ruFamEvent* fe = (ruFamEvent*)o;
     ruFree(fe->srcPath);
     ruFree(fe->dstPath);
-    ruFree(fe);
-    return NULL;
+    return ruClear(fe);
 }
-
-RUAPI void ruFamEventFreeV(void* fe) {
-    ruFamEventFree((ruFamEvent*) fe);
-}
-

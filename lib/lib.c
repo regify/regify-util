@@ -78,6 +78,11 @@ RUAPI bool ruIsInt64(const char* numstr) {
     return true;
 }
 
+RUAPI ptr ruClear(ptr o) {
+    if (o) free(o);
+    return NULL;
+}
+
 RUAPI ru_pid ruProcessId(void) {
 #ifdef RUMS
     return GetCurrentProcessId();

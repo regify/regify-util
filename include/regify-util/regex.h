@@ -50,7 +50,7 @@ extern "C" {
  *   char *orig = "text with a ^tag^ in it.";
  *   matches = ruRegexFindGroups(rr, orig, &ret);
  *   if (ret != RUE_OK) break;
- *   char *entry = ruListIdxData(matches, 1, char*, &ret);
+ *   char *entry = ruListIdx(matches, 1, char*, &ret);
  *   if (ret != RUE_OK) break;
  *   printf("group 1: %s", entry);
  * } while(0);

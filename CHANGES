@@ -7,6 +7,9 @@ Non backward compatible API changes between 1.3 and 2.0
 + for (char *vd = ruIterNext(li, char*); li; vd = ruIterNext(li, char*))
 - ruListSize return switched from int -> uint
 - ruListRemoveAfter has been removed in favor of ruListRemove
+- ruListElmtIsHead no longer needs ruList
+- ruListIdxData - ruListIdx
+- ruListIdxElmtData - ruListIdxData
 
 * The switch to rusize and the use of RU_SIZE_AUTO for NULL terminated strings instead of negative rusize_s parameters in the following functions:
 - kvset
@@ -25,6 +28,11 @@ Non backward compatible API changes between 1.3 and 2.0
 - ruStrEndsCaseWith - ruStrCaseEndsWith
 - ruStrToll - ruStrParseLong (different API)
 - ruMapKeySet - ruMapKeyList (also changed parameter order to be more natural)
+
+* Removed the following
+- ruMapNew -> ruMapNewType
+- ruMapNewString -> ruMapNewType
+- ruListNew -> ruListNewType
 
 * ruListSize result is int32_t -> uint32_t and return on error is -1 -> 0
 

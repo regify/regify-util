@@ -158,7 +158,7 @@ START_TEST ( run ) {
     fail_unless(esz == sz, retText, test, esz, sz);
 
     char* item = NULL;
-    item = ruListIdxData(lst, 0, char*, &ret);
+    item = ruListIdx(lst, 0, char*, &ret);
     ck_assert_str_eq(key, item);
 
     const char* res = NULL;
@@ -183,7 +183,7 @@ START_TEST ( run ) {
     fail_unless(esz == sz, retText, test, esz, sz);
 
     item = NULL;
-    item = ruListIdxData(lst, 0, char*, &ret);
+    item = ruListIdx(lst, 0, char*, &ret);
     ck_assert_str_eq(sec, item);
     lst = ruListFree(lst);
 
@@ -196,7 +196,7 @@ START_TEST ( run ) {
     fail_unless(esz == sz, retText, test, esz, sz);
 
     item = NULL;
-    item = ruListIdxData(lst, 0, char*, &ret);
+    item = ruListIdx(lst, 0, char*, &ret);
     ck_assert_str_eq(key, item);
     lst = ruListFree(lst);
 

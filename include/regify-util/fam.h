@@ -162,7 +162,7 @@ RUAPI ruFamEvent* ruFamEventNew(int eventType, trans_chars filePath, trans_chars
  * @param fe famEvent to free
  * @return NULL
  */
-RUAPI ruFamEvent* ruFamEventFree(ruFamEvent* fe);
+RUAPI ptr ruFamEventFree(ptr o);
 
 /**
  * Generic famEvent destructor for collections

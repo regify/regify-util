@@ -91,10 +91,10 @@ struct famCtx_ {
     bool quit;          // set #True to break loop
 };
 
-static void freeCookie(void* o) {
+static ptr freeCookie(ptr o) {
     ck* c = (ck*)o;
     ruFree(c->sourcePath);
-    ruFree(c);
+    return ruClear(c);
 }
 
 static ck* newCookie(const char* path) {
@@ -144,7 +144,7 @@ static int32_t fam_watchDir(famCtx *fctx, char* filePath) {
 static int32_t fam_unwatchDir(famCtx* fctx, char* filePath) {
     fam_dbg("Unwatch: %s", filePath);
     // yank list to avoid concurrent modifications
-    ruList yankies = ruListNew(NULL);
+    ruList yankies = ruListNewType(NULL);
     int32_t ret;
     int32_t wd;
     perm_chars path = NULL;
@@ -180,7 +180,7 @@ static int32_t fam_renameDir(famCtx* fctx, char* srcPath, char* destPath) {
     // put path map wd:newPath
 
     // values are transferred to fctx->wdPath, so we do not free it in this map
-    ruMap newWdPaths = ruMapNewSpec(ruKeySpecInt32(), ruValSpecStrFree());
+    ruMap newWdPaths = ruMapNewType(ruTypeInt32(), ruTypeStrFree());
     rusize len = strlen(srcPath);
 
     int32_t wd;
@@ -365,7 +365,7 @@ static int32_t fam_runLoop(famCtx* fctx) {
         } while (!ruTimeMsEllapsed(pollEnd));
 
         // clear cookies older than 1 second
-        ruList dels = ruListNew(NULL);
+        ruList dels = ruListNewType(NULL);
         int32_t ret;
         uint64_t mtime = ruTimeMs() - RU_FAM_QUEUE_TIMEOUT;
         uint32_t cookie;
@@ -421,11 +421,9 @@ static void* fam_runThread(void* ctx) {
     famCtx* fctx = (famCtx*) ctx;
     ruThreadSetName(fctx->name);
     fctx->buf = ruMallocSize(BUF_LEN, 1);
-    fctx->wdPath = ruMapNewSpec(ruKeySpecInt32(), ruValSpecStrDup());
-    fctx->pathWd = ruMapNewSpec(ruKeySpecStrDup(), ruValSpecInt32());
-    ruValSpec vs = ruValSpecNew(freeCookie, NULL, NULL);
-    fctx->cookie = ruMapNewSpec(ruKeySpecInt32(), vs);
-    ruFree(vs);
+    fctx->wdPath = ruMapNewType(ruTypeInt32(), ruTypeStrDup());
+    fctx->pathWd = ruMapNewType(ruTypeStrDup(), ruTypeInt32());
+    fctx->cookie = ruMapNewType(ruTypeInt32(), ruTypePtr(freeCookie));
 
     ruInfoLogf("Opened inotify handle in %s", fctx->topDir);
     int32_t ret = fam_watchDir(fctx, fctx->topDir);

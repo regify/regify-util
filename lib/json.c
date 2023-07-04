@@ -258,7 +258,7 @@ RUAPI int32_t ruJsonSetStr(ruJson rj, trans_chars val) {
     do {
         yajl_gen_status stat;
         if (val) {
-            stat = yajl_gen_string(j->g, (const uchar*) val,
+            stat = yajl_gen_string(j->g, (trans_bytes) val,
                                    ruStrLen((char*) val));
         } else {
             stat = yajl_gen_null(j->g);
@@ -279,14 +279,14 @@ RUAPI int32_t ruJsonSetKeyStr(ruJson rj, trans_chars key, trans_chars val) {
     if (!key) return RUE_PARAMETER_NOT_SET;
     do {
         yajl_gen_status stat = yajl_gen_string(j->g,
-                                               (const uchar*)key,
+                                               (trans_bytes)key,
                                                ruStrLen((char*)key));
         if (stat != yajl_gen_status_ok) {
             ruCritLogf("Failed to generate key [%s] ec: %d", key, stat);
             break;
         }
         if (val) {
-            stat = yajl_gen_string(j->g, (const uchar*) val,
+            stat = yajl_gen_string(j->g, (trans_bytes) val,
                                    ruStrLen((char*) val));
         } else {
             stat = yajl_gen_null(j->g);
@@ -354,7 +354,7 @@ RUAPI int32_t ruJsonStartKeyMap(ruJson rj, trans_chars key) {
     if (!key) return RUE_PARAMETER_NOT_SET;
     do {
         yajl_gen_status stat = yajl_gen_string(j->g,
-                                               (const uchar*)key,
+                                               (trans_bytes)key,
                                                ruStrLen((char*)key));
         if (stat != yajl_gen_status_ok) {
             ruCritLogf("Failed to generate key [%s] ec: %d", key, stat);
@@ -377,7 +377,7 @@ RUAPI int32_t ruJsonStartKeyArray(ruJson rj, trans_chars key) {
     if (!key) return RUE_PARAMETER_NOT_SET;
     do {
         yajl_gen_status stat = yajl_gen_string(j->g,
-                                               (const uchar*)key,
+                                               (trans_bytes)key,
                                                ruStrLen((char*)key));
         if (stat != yajl_gen_status_ok) {
             ruCritLogf("Failed to generate key [%s] ec: %d", key, stat);
@@ -409,7 +409,7 @@ RUAPI int32_t ruJsonWrite(ruJson rj, perm_chars* output) {
             ruCritLogf("Failed to close yail container ec: %d", stat);
             break;
         }
-        const uchar* buf = NULL;
+        trans_bytes buf = NULL;
         rusize len;
         stat = yajl_gen_get_buf(j->g, &buf, &len);
         if (stat != yajl_gen_status_ok) {

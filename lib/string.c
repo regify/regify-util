@@ -208,7 +208,7 @@ RUAPI int32_t ruBufferAppendUriEncoded(ruString rs, const char* instr, rusize le
     }
     for (i = 0; i < ilen; i++) {
         char out[4];
-        uchar c = instr[i];
+        uint8_t c = instr[i];
         if (ruIsunreserved(c)) {
             olen = 1;
             out[0] = c;
@@ -764,7 +764,7 @@ RUAPI ruList ruStrNSplit(trans_chars instr, rusize inlen, trans_chars delim, int
     if (inlen == RU_SIZE_AUTO) inlen = strlen(instr);
     trans_chars inPast = instr + inlen;
 
-    ruList strList = ruListNew(free);
+    ruList strList = ruListNewType(ruTypePtrFree());
     const char *remainder = instr;
     char *ptr = strstr(remainder, delim);
     if (ptr && ptr < inPast) {
@@ -874,7 +874,7 @@ int32_t parseInteger(trans_chars start, perm_chars* endptr,
 
         bool overflow = false;
         int64_t parsedNum = 0;
-        uchar c = *cur;
+        uint8_t c = *cur;
         for (; c; c = *++cur) {
             if (c >= '0' && c <= '9') {
                 c -= '0'; // add number

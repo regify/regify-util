@@ -142,8 +142,7 @@ void ruClearError(void);
 #define KvStoreMagic        2309
 #define MagicTsc            2310
 #define MagicJson           2311
-#define MagicKeySpec        2312
-#define MagicValSpec        2313
+#define MagicTypeSpec       2312
 // cleaner.c #define MagicCleaner 2410
 
 /*
@@ -211,54 +210,61 @@ typedef struct String_ {
  */
 alloc_chars fixPath(const char *inPath);
 
-typedef struct keySpec_ {
+/*
+ * Type support for collections
+ */
+typedef struct typeSpec_ {
     ru_uint type;
+    bool heaped;
     ruHashFunc hash;
     ruMatchFunc match;
-    ruFreeFunc keyFree;
+    ruCompFunc comp;
+    ruClearFunc free;
     ruCloneFunc in;
     ruPtr2TypeFunc out;
-} keySpec;
+} typeSpec;
 
-typedef struct valSpec_ {
-    ru_uint type;
-    ruFreeFunc valFree;
-    ruCloneFunc in;
-    ruPtr2TypeFunc out;
-} valSpec;
+extern typeSpec int64Spec;
+extern typeSpec longSpec;
+extern typeSpec int32Spec;
+extern typeSpec int16Spec;
+extern typeSpec int8Spec;
+extern typeSpec boolSpec;
+extern typeSpec strRefSpec;
+extern typeSpec strDupSpec;
 
-extern valSpec int64ValSpec;
-extern valSpec longValSpec;
-extern valSpec int32ValSpec;
-extern valSpec int16ValSpec;
-extern valSpec int8ValSpec;
-extern valSpec strRefValSpec;
-extern valSpec strDupValSpec;
+ruMakeTypeGetHeader(typeSpec);
 
 /*
  *  Lists
  */
+typedef struct List_ List;
+
 typedef struct ListElmt_ {
     ru_uint type;
+    List* list;
     struct ListElmt_* prev;
     ptr data;
     struct ListElmt_* next;
 } ListElmt;
 
-typedef struct List_ {
+struct List_ {
     ru_uint type;
     uint32_t size;
-    void (*destroy)(void *data);
+    ruClearFunc destroy;
+    ruCloneFunc valIn;
+    ruPtr2TypeFunc valOut;
+    ruCompFunc valSort;
     ListElmt* head;
     ListElmt* tail;
     // optional thread safety
     ruMutex mux;
     bool doQuit;    // flag to initiate map shutdown
-} List;
+};
 
-List* ListNew(void (*destructor)(void *data));
+List* ListNewType(ruType vt);
 void ListFree(List *list);
-ptr ListRemove(List* list, ListElmt* old_element, int32_t* code);
+int32_t ListRemoveTo(List* list, ListElmt* old_element, ptr* dest);
 int32_t ListInsertAfter(List *list, ruListElmt rle, ptr data);
 
 /*
@@ -267,12 +273,12 @@ int32_t ListInsertAfter(List *list, ruListElmt rle, ptr data);
 typedef struct Map_ {
     ru_uint type;
     uint32_t   buckets;
-    ruHashFunc hash;
-    ruMatchFunc match;
-    ruFreeFunc keyFree;
+    typeSpec* keySpec;
+    ruClearFunc keyFree;
     ruCloneFunc keyIn;
     ruPtr2TypeFunc keyOut;
-    ruFreeFunc valFree;
+    typeSpec* valSpec;
+    ruClearFunc valFree;
     ruCloneFunc valIn;
     ruPtr2TypeFunc valOut;
     uint32_t   size;
@@ -356,6 +362,7 @@ alloc_chars utf8SwitchCase(trans_chars instr, bool isUpper);
 // io stuff
 int32_t errno2rfec(int err);
 rusize_s ruWrite(int oh, const void* contents, rusize length);
+
 
 #ifdef __cplusplus
 }

@@ -140,7 +140,7 @@ endif()
 # icu.cpp compiled as C++ so we can use thread_local on ios9+
 # And also to cope with C++ symbols stemming from ICU
 set(SRCS cleaner.c icu.cpp ini.c io.c json.c kvstore.c lib.c list.c logging.c
-        map.c regex.c string.c thread.c regify-util.c)
+        map.c regex.c string.c thread.c types.c regify-util.c)
 
 if (WIN)
     list(APPEND SRCS win.cpp)

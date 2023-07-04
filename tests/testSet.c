@@ -23,11 +23,11 @@
 
 START_TEST ( api ) {
     int32_t ret, exp;
-    const char *test = "ruSetNew";
+    const char *test = "ruSetNewType";
     const char *retText = "%s failed wanted ret '%d' but got '%d'";
     ruList keys = NULL;
 
-    ruSet rs = ruSetNew(NULL, NULL, NULL, 0);
+    ruSet rs = ruSetNewType(NULL);
     fail_unless(NULL == rs, retText, test, NULL, rs);
 
     ruSetFree(rs);
@@ -43,7 +43,7 @@ START_TEST ( api ) {
     ret = ruSetRemoveAll(rs);
     fail_unless(exp == ret, retText, test, exp, ret);
 
-    rs = ruSetNewString(NULL);
+    rs = ruSetNewType(ruTypeStrRef());
     fail_if(NULL == rs, retText, test, rs, NULL);
 
     ret = ruSetPut(rs, NULL);
@@ -56,10 +56,10 @@ START_TEST ( api ) {
     fail_unless(exp == ret, retText, test, exp, ret);
 
     char *store = "23";
-    ret = ruSetItemList(rs, NULL, NULL, NULL);
+    ret = ruSetItemList(rs, NULL);
     fail_unless(exp == ret, retText, test, exp, ret);
 
-    ret = ruSetItemList(NULL, &keys, NULL, NULL);
+    ret = ruSetItemList(NULL, &keys);
     fail_unless(exp == ret, retText, test, exp, ret);
 
     exp = RUE_INVALID_STATE;
@@ -101,7 +101,7 @@ START_TEST ( run ) {
     perm_chars retText = "%s failed wanted ret '%d' but got '%d'";
     perm_chars foo = "foo";
 
-    ruSet rs = ruSetNewString(NULL);
+    ruSet rs = ruSetNewType(ruTypeStrRef());
     fail_if(NULL == rs, retText, test, rs, NULL);
 
     exp = RUE_OK;
@@ -161,7 +161,7 @@ START_TEST ( run ) {
     // test a copied item set
     test = "ruSetItemList";
     ruList keys = NULL;
-    ret = ruSetItemList(rs, &keys, (ruCloneFunc) ruStrDup, free);
+    ret = ruSetItemList(rs, &keys);
     fail_unless(exp == ret, retText, test, exp, ret);
     fail_if(NULL == keys, retText, test, NULL, keys);
 
@@ -169,14 +169,13 @@ START_TEST ( run ) {
     sz = ruListSize(keys, &ret);
     fail_unless(exp == ret, retText, test, exp, ret);
     fail_unless(esz == sz, retText, test, esz, sz);
-    alloc_chars store = ruListPop(keys, &ret);
+    perm_chars store = ruListPop(keys, &ret);
     ck_assert_str_eq(foo, store);
     keys = ruListFree(keys);
-    ruFree(store);
 
     // test a scalar keyset
     test = "ruSetItemList";
-    ret = ruSetItemList(rs, &keys, NULL, NULL);
+    ret = ruSetItemList(rs, &keys);
     fail_unless(exp == ret, retText, test, exp, ret);
     fail_if(NULL == keys, retText, test, NULL, keys);
 
@@ -242,7 +241,7 @@ START_TEST ( iter ) {
     const char *retText = "failed wanted ret '%x' but got '%x'";
     perm_chars k1 = "23";
 
-    ruSet rs = ruSetNewSpec(ruKeySpecStrRef());
+    ruSet rs = ruSetNewType(ruTypeStrRef());
     fail_if(NULL == rs, retText, rs, NULL);
 
     ret = ruSetPut(rs, k1);

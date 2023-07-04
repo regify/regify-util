@@ -43,7 +43,6 @@ extern "C" {
  * \brief An opaque data type representing a regify-util string object.
  */
 typedef void* ruString;
-
 /**
  * \brief Creates a new String object from a string.
  * @param instr String to start object with.

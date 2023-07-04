@@ -201,11 +201,11 @@ START_TEST ( groups ) {
     fail_unless(exp == ret, retText, test, exp, ret);
     fail_unless(expSz == sz, retText, test, expSz, sz);
 
-    char* entry = ruListIdxData(matches, 0, char*, &ret);
+    char* entry = ruListIdx(matches, 0, char*, &ret);
     fail_unless(exp == ret, retText, test, exp, ret);
     ck_assert_str_eq(entry, orig);
 
-    entry = ruListIdxData(matches, 1, char*, &ret);
+    entry = ruListIdx(matches, 1, char*, &ret);
     fail_unless(exp == ret, retText, test, exp, ret);
     ck_assert_str_eq(entry, foo);
 
@@ -220,11 +220,11 @@ START_TEST ( groups ) {
     fail_unless(exp == ret, retText, test, exp, ret);
     fail_unless(expSz == sz, retText, test, expSz, sz);
 
-    entry = ruListIdxData(matches, 0, char*, &ret);
+    entry = ruListIdx(matches, 0, char*, &ret);
     fail_unless(exp == ret, retText, test, exp, ret);
     ck_assert_str_eq(entry, orig);
 
-    entry = ruListIdxData(matches, 1, char*, &ret);
+    entry = ruListIdx(matches, 1, char*, &ret);
     fail_unless(exp == ret, retText, test, exp, ret);
     ck_assert_str_eq(entry, foo);
 

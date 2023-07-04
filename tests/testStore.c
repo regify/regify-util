@@ -119,8 +119,8 @@ START_TEST ( run ) {
     fail_unless(exp == ret, retText, test, exp, ret);
     fail_if(NULL == lst, retText, test, NULL, lst);
 
-    test = "ruListIdxData";
-    char *rkey = ruListIdxData(lst, 0, char*, &ret);
+    test = "ruListIdx";
+    char *rkey = ruListIdx(lst, 0, char*, &ret);
     fail_unless(exp == ret, retText, test, exp, ret);
     ck_assert_str_eq(rkey, key);
 

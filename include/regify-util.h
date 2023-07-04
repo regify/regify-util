@@ -24,7 +24,7 @@
  * \copyright regify. This project is released under the MIT License.
  *
  * The regify utility package is a collection of general utilities ranging from
- * \ref string, over collections like \ref list or \ref map to \ref logging,
+ * \ref string, over collections like \ref list or \ref hashmap to \ref logging,
  * \ref regex and abstracted storage such as \ref kvstore_sec. There are also \ref
  * io utilities.
  * It is designed to run on Unix derivatives (Linux, Mac OSX tested), Windows,
@@ -340,9 +340,10 @@ typedef unsigned long ru_uint;
 typedef size_t rusize;
 
 /**
- * \brief A pointer to an allocated 64 bit int. Free with \ref ruFree.
+ * \ingroup specs
+ * \brief An opaque type representing a type specification.
  */
-typedef void* ru_Int64;
+typedef void* ruType;
 
 /**
  * \brief Says to determine the size parameter using strlen or an equivalent.
@@ -350,35 +351,18 @@ typedef void* ru_Int64;
 #define RU_SIZE_AUTO (~0LU)
 
 /**
- * \brief Signature of a generic clone function.
- */
-typedef void* (*ruCloneFunc)(void*);
-
-/**
- * \brief Signature of a function that stores the value of the first pointer
- * in a certain type by dereferencing the second pointer.
- */
-typedef int32_t (*ruPtr2TypeFunc)(void*,void**);
-
-/**
+ * \ingroup memory
  * \brief Signature of a generic free function returning NULL.
+ * \param o object to free. Function should insure it's not NULL before freeing
  */
-typedef void* (*ruClearFunc)(void*);
+typedef ptr (*ruClearFunc)(ptr o);
 
 /**
+ * \ingroup memory
  * \brief Signature of a generic free function.
+ * \param o object to free. Function should insure it's not NULL before freeing
  */
-typedef void (*ruFreeFunc)(void*);
-
-typedef union {
-    void* (*ruClearFunc)(void*);
-    void (*ruFreeFunc)(void*);
-} ruFreeIf;
-
-/**
- * \brief Signature of a generic comparator function for sorting.
- */
-typedef int (*ruCompFunc) (trans_ptr a, trans_ptr b);
+typedef void (*ruFreeFunc)(ptr o);
 
 /**
  * \brief Abstracted version of the Posix struct timeval.
@@ -387,9 +371,6 @@ typedef struct {
     sec_t sec;
     usec_t usec;
 } ruTimeVal;
-
-
-typedef unsigned char uchar;
 
 /**
  * \brief Returns the build version of this package
@@ -627,55 +608,6 @@ RUAPI sec_t ruTimeUtcToLocal(sec_t stamp);
  */
 RUAPI ptr ruCharPtrDup(char* in);
 
-/**
- * \brief Allocates given 64 bit integer on the heap and returns the pointer.
- * @param val address where int to allocate is stored
- * @return Pointer to allocated integer. Caller must free with \ref ruFree
- */
-RUAPI ru_Int64 ruInt64(int64_t* val);
-
-/**
- * \brief Returns the content of the given long integer address as pointer
- * @param in address to long integer
- * @return content of given address in pointer sized field
- */
-RUAPI ptr ruLongRefPtr(long* in);
-
-/**
- * \brief Returns the content of the given 32 bit integer address as pointer
- * @param in address to 32 bit integer
- * @return content of given address in pointer sized field
- */
-RUAPI ptr ruInt32RefPtr(int32_t* in);
-
-/**
- * \brief Returns the content of the given 16 bit integer address as pointer
- * @param in address to 16 bit integer
- * @return content of given address in pointer sized field
- */
-RUAPI ptr ruInt16RefPtr(int16_t* in);
-
-/**
- * \brief Returns the content of the given 8 bit integer address as pointer
- * @param in address to 8 bit integer
- * @return content of given address in pointer sized field
- */
-RUAPI ptr ruInt8RefPtr(int8_t* in);
-
-/**
- * \brief Returns the content of the given boolean address as pointer
- * @param in address to a boolean
- * @return content of given address in pointer sized field
- */
-RUAPI ptr ruBoolRefPtr(bool* in);
-
-RUAPI int32_t ruRefPtrInt64(ptr src, ptr* dst);
-RUAPI int32_t ruRefPtrLong(ptr src, ptr* dst);
-RUAPI int32_t ruRefPtrInt32(ptr src, ptr* dst);
-RUAPI int32_t ruRefPtrInt16(ptr src, ptr* dst);
-RUAPI int32_t ruRefPtrInt8(ptr src, ptr* dst);
-RUAPI int32_t ruRefPtrBool(ptr src, ptr* dst);
-
 
 /** \cond noworry */
 #define ruMacStart do
@@ -683,7 +615,15 @@ RUAPI int32_t ruRefPtrBool(ptr src, ptr* dst);
 /** \endcond */
 
 /**
- * \brief Frees given resource and set paramater to NULL
+ * \brief Frees given resource if set and returns NULL
+ * \ingroup memory
+ * @param o resource to be freed and if not NULL already
+ * @return NULL
+ */
+RUAPI ptr ruClear(ptr o);
+
+/**
+ * \brief Frees given resource and sets paramater to NULL
  * \ingroup memory
  * @param p resource to be freed and NULLed if not NULL already
  */
@@ -716,8 +656,9 @@ RUAPI int32_t ruRefPtrBool(ptr src, ptr* dst);
 
 #include <regify-util/errors.h>
 #include <regify-util/thread.h>
-#include <regify-util/list.h>
 #include <regify-util/logging.h>
+#include <regify-util/types.h>
+#include <regify-util/list.h>
 #include <regify-util/string.h>
 #include <regify-util/map.h>
 #include <regify-util/cleaner.h>

@@ -502,12 +502,12 @@ RUAPI ruFamCtx ruFamMonitorFilePath(trans_chars filePath, trans_chars threadName
     do {
         fctx->name = ruStrDup(threadName);
         fctx->topDir = ruStrDup(filePath);
-        fctx->inodePath = ruMapNewSpec(ruKeySpecInt64(), ruValSpecStrDup());
+        fctx->inodePath = ruMapNewType(ruTypeInt64(), ruTypeStrDup());
         for (int32_t i = 0; i < moveRingBuckets; i++) {
-            fctx->mrLst[i] = ruListNew(NULL);
-            fctx->mrMap[i] = ruMapNewSpec(ruKeySpecInt64(), ruValSpecStrDup());
+            fctx->mrLst[i] = ruListNewType(NULL);
+            fctx->mrMap[i] = ruMapNewType(ruTypeInt64(), ruTypeStrDup());
         }
-        fctx->pathInode = ruMapNewSpec(ruKeySpecStrDup(), ruValSpecInt64());
+        fctx->pathInode = ruMapNewType(ruTypeStrDup(), ruTypeInt64());
         fctx->watchPath = CFStringCreateWithCString(
                 NULL, fctx->topDir, kCFStringEncodingUTF8);
         fctx->pathsToWatch = CFArrayCreate(

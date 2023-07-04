@@ -241,8 +241,8 @@ static ruMap getIniMap(Ini* ini, trans_chars section) {
         if (ruMapHas(ini->sections, section, NULL)) {
             ruMapGet(ini->sections, section, &map);
         } else {
-            map = ruMapNewString(free, free);
-            ruMapPut(ini->sections, ruStrDup(section), map);
+            map = ruMapNewType(ruTypeStrDup(), ruTypeStrDup());
+            ruMapPut(ini->sections, section, map);
         }
     }
     return map;
@@ -261,10 +261,11 @@ static bool iniParseCb(void* user, trans_chars section, trans_chars name,
             if (val || value) {
                 // append new value
                 char *newval = ruDupPrintf("%s%s", val?val:"", value?value:"");
-                ruMapPut(map, ruStrDup(name), newval);
+                ruMapPut(map, name, newval);
+                ruFree(newval);
             }
         } else {
-            ruMapPut(map, ruStrDup(name), ruStrDup(value));
+            ruMapPut(map, name, value);
         }
     }
     return true;
@@ -273,8 +274,9 @@ static bool iniParseCb(void* user, trans_chars section, trans_chars name,
 Ini* iniNew(void) {
     Ini* i = ruMalloc0(1, Ini);
     i->type = MagicIni;
-    i->keys = ruMapNewString(free, free);
-    i->sections = ruMapNewString(free, (ruFreeFunc)ruMapFree);
+    i->keys = ruMapNewType(ruTypeStrDup(), ruTypeStrDup());
+    i->sections = ruMapNewType(ruTypeStrDup(),
+                               ruTypePtr(ruMapFree));
     return i;
 }
 
@@ -358,7 +360,7 @@ RUAPI int32_t ruIniKeys(ruIni iniOb, trans_chars section, ruList* keys) {
     if (!keys) return RUE_PARAMETER_NOT_SET;
 
     ruMap map = getIniMap(ini, section);
-    return ruMapKeyList(map, keys, (ruCloneFunc) ruStrDup, free);
+    return ruMapKeyList(map, keys);
 }
 
 RUAPI int32_t ruIniSections(ruIni iniOb, ruList* sections) {
@@ -368,7 +370,7 @@ RUAPI int32_t ruIniSections(ruIni iniOb, ruList* sections) {
     if (!sections) return RUE_PARAMETER_NOT_SET;
 
     ruMap map = ini->sections;
-    return ruMapKeyList(map, sections, (ruCloneFunc) ruStrDup, free);
+    return ruMapKeyList(map, sections);
 }
 
 RUAPI perm_chars ruIniGetDef(ruIni iniOb, trans_chars section, trans_chars key,
@@ -411,7 +413,7 @@ RUAPI int32_t ruIniSet(ruIni iniOb, trans_chars section, trans_chars key, trans_
     ruMap map = getIniMap(ini, section);
     if (key) {
         if (value) {
-            ret = ruMapPut(map, ruStrDup(key), ruStrDup(value));
+            ret = ruMapPut(map, key, value);
         } else {
             ret = ruMapRemove(map, key, NULL);
         }

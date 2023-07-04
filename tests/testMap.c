@@ -23,17 +23,14 @@
 
 START_TEST ( api ) {
     int32_t ret, exp;
-    const char *test = "ruMapNew";
+    const char *test = "ruMapNewType";
     const char *retText = "%s failed wanted ret '%d' but got '%d'";
     ruList keys = NULL;
 
-    ruMap rm = ruMapNew(NULL, NULL, NULL, NULL, 0);
+    ruMap rm = NULL;
     fail_unless(NULL == rm, retText, test, NULL, rm);
 
-    rm = ruMapNew(ruStrHash, NULL, NULL, NULL, 0);
-    fail_unless(NULL == rm, retText, test, NULL, rm);
-
-    rm = ruMapNew(NULL, ruStrMatch, NULL, NULL, 0);
+    rm = ruMapNewType(NULL, NULL);
     fail_unless(NULL == rm, retText, test, NULL, rm);
 
     ruMapFree(rm);
@@ -53,7 +50,7 @@ START_TEST ( api ) {
     ret = ruMapRemoveAll(rm);
     fail_unless(exp == ret, retText, test, exp, ret);
 
-    rm = ruMapNewString(NULL, NULL);
+    rm = ruMapNewType(ruTypeStrRef(), ruTypeStrRef());
     fail_if(NULL == rm, retText, test, rm, NULL);
 
     ret = ruMapPut(rm, NULL, "foo");
@@ -69,10 +66,10 @@ START_TEST ( api ) {
     ret = ruMapRemove(rm, NULL, (void**)&store);
     fail_unless(exp == ret, retText, test, exp, ret);
 
-    ret = ruMapKeyList(rm, NULL, NULL, NULL);
+    ret = ruMapKeyList(rm, NULL);
     fail_unless(exp == ret, retText, test, exp, ret);
 
-    ret = ruMapKeyList(NULL, &keys, NULL, NULL);
+    ret = ruMapKeyList(NULL, &keys);
     fail_unless(exp == ret, retText, test, exp, ret);
 
     exp = RUE_INVALID_STATE;
@@ -119,12 +116,12 @@ END_TEST
 
 START_TEST ( run ) {
     int32_t ret, exp;
-    perm_chars test = "ruMapNew";
+    perm_chars test = "ruMapNewType";
     perm_chars retText = "%s failed wanted ret '%d' but got '%d'";
     perm_chars foo = "foo";
     perm_chars bar = "bar";
 
-    ruMap rm = ruMapNewString(NULL, NULL);
+    ruMap rm = ruMapNewType(ruTypeStrRef(), ruTypeStrRef());
     fail_if(NULL == rm, retText, test, rm, NULL);
 
     exp = RUE_OK;
@@ -204,7 +201,7 @@ START_TEST ( run ) {
 
     // test a copied keyset
     ruList keys = NULL;
-    ret = ruMapKeyList(rm, &keys, (ruCloneFunc) ruStrDup, free);
+    ret = ruMapKeyList(rm, &keys);
     fail_unless(exp == ret, retText, test, exp, ret);
     fail_if(NULL == keys, retText, test, NULL, keys);
 
@@ -214,10 +211,9 @@ START_TEST ( run ) {
     store = ruListPop(keys, &ret);
     ck_assert_str_eq(foo, store);
     keys = ruListFree(keys);
-    ruFree(store);
 
     // test a scalar keyset
-    ret = ruMapKeyList(rm, &keys, NULL, NULL);
+    ret = ruMapKeyList(rm, &keys);
     fail_unless(exp == ret, retText, test, exp, ret);
     fail_if(NULL == keys, retText, test, NULL, keys);
 
@@ -280,8 +276,8 @@ START_TEST(dups) {
     perm_chars r;
     perm_chars e;
 
-    ruMap rm = ruMapNewSpec(ruKeySpecStrDup(),
-                            ruValSpecStrDup());
+    ruMap rm = ruMapNewType(ruTypeStrDup(),
+                            ruTypeStrDup());
     fail_if(NULL == rm, retText, rm, NULL);
 
     ret = ruMapPut(rm, k1, v1);
@@ -296,6 +292,11 @@ START_TEST(dups) {
     fail_unless(exp == ret, retText, exp, ret);
     ck_assert_str_eq(e, r);
 
+    // checking for leaks
+    ret = ruMapRemove(rm, k1, &r);
+    fail_unless(exp == ret, retText, exp, ret);
+    ck_assert_str_eq(v1, r);
+    ruFree(r);
     ruMapFree(rm);
 }
 END_TEST
@@ -308,8 +309,8 @@ START_TEST(perms) {
     perm_chars r;
     perm_chars e;
 
-    ruMap rm = ruMapNewSpec(ruKeySpecStrRef(),
-                            ruValSpecStrRef());
+    ruMap rm = ruMapNewType(ruTypeStrRef(),
+                            ruTypeStrRef());
     fail_if(NULL == rm, retText, rm, NULL);
 
     ret = ruMapPut(rm, k1, v1);
@@ -319,7 +320,7 @@ START_TEST(perms) {
     e = v1;
     ret = ruMapGet(rm, k1, &r);
     fail_unless(exp == ret, retText, exp, ret);
-    fail_unless(e == r, retText, e, r);
+    ck_assert_str_eq(e, r);
 
     ruMapFree(rm);
 }
@@ -333,8 +334,8 @@ START_TEST(bools) {
     bool v1 = false;
     bool v2 = true;
 
-    ruMap rm = ruMapNewSpec(ruKeySpecLong(),
-                            ruValSpecBool());
+    ruMap rm = ruMapNewType(ruTypeLong(),
+                            ruTypeBool());
     fail_if(NULL == rm, retText, rm, NULL);
 
     ret = ruMapPut(rm, &k1, &v1);
@@ -366,6 +367,10 @@ START_TEST(bools) {
         fail_unless(vals[i] == val, retText, vals[i], val);
         i++;
     }
+    // checking for leaks
+    ret = ruMapRemove(rm, &k1, &val);
+    fail_unless(exp == ret, retText, exp, ret);
+    fail_unless(v1 == val, retText, v1, val);
     ruMapFree(rm);
 }
 END_TEST
@@ -377,8 +382,8 @@ START_TEST(int8s) {
     int8_t k1 = 23;
     int8_t r, e;
 
-    ruMap rm = ruMapNewSpec(ruKeySpecInt8(),
-                            ruValSpecInt8());
+    ruMap rm = ruMapNewType(ruTypeInt8(),
+                            ruTypeInt8());
     fail_if(NULL == rm, retText, rm, NULL);
 
     ret = ruMapPut(rm, &k1, &v1);
@@ -401,6 +406,10 @@ START_TEST(int8s) {
         fail_unless(vals[i] == val, retText, vals[i], val);
         i++;
     }
+    // checking for leaks
+    ret = ruMapRemove(rm, &k1, &val);
+    fail_unless(exp == ret, retText, exp, ret);
+    fail_unless(v1 == val, retText, v1, val);
     ruMapFree(rm);
 }
 END_TEST
@@ -412,8 +421,8 @@ START_TEST(int16s) {
     int16_t k1 = 23;
     int16_t r, e;
 
-    ruMap rm = ruMapNewSpec(ruKeySpecInt16(),
-                            ruValSpecInt16());
+    ruMap rm = ruMapNewType(ruTypeInt16(),
+                            ruTypeInt16());
     fail_if(NULL == rm, retText, rm, NULL);
 
     ret = ruMapPut(rm, &k1, &v1);
@@ -436,6 +445,10 @@ START_TEST(int16s) {
         fail_unless(vals[i] == val, retText, vals[i], val);
         i++;
     }
+    // checking for leaks
+    ret = ruMapRemove(rm, &k1, &val);
+    fail_unless(exp == ret, retText, exp, ret);
+    fail_unless(v1 == val, retText, v1, val);
     ruMapFree(rm);
 }
 END_TEST
@@ -447,8 +460,8 @@ START_TEST(int32s) {
     int32_t k1 = 23;
     int32_t r, e;
 
-    ruMap rm = ruMapNewSpec(ruKeySpecInt32(),
-                            ruValSpecInt32());
+    ruMap rm = ruMapNewType(ruTypeInt32(),
+                            ruTypeInt32());
     fail_if(NULL == rm, retText, rm, NULL);
 
     ret = ruMapPut(rm, &k1, &v1);
@@ -471,6 +484,10 @@ START_TEST(int32s) {
         fail_unless(vals[i] == val, retText, vals[i], val);
         i++;
     }
+    // checking for leaks
+    ret = ruMapRemove(rm, &k1, &val);
+    fail_unless(exp == ret, retText, exp, ret);
+    fail_unless(v1 == val, retText, v1, val);
     ruMapFree(rm);
 }
 END_TEST
@@ -482,8 +499,8 @@ START_TEST(longs) {
     long k1 = 23;
     long r, e;
 
-    ruMap rm = ruMapNewSpec(ruKeySpecLong(),
-                            ruValSpecLong());
+    ruMap rm = ruMapNewType(ruTypeLong(),
+                            ruTypeLong());
     fail_if(NULL == rm, retText, rm, NULL);
 
     ret = ruMapPut(rm, &k1, &v1);
@@ -506,6 +523,10 @@ START_TEST(longs) {
         fail_unless(vals[i] == val, retText, vals[i], val);
         i++;
     }
+    // checking for leaks
+    ret = ruMapRemove(rm, &k1, &val);
+    fail_unless(exp == ret, retText, exp, ret);
+    fail_unless(v1 == val, retText, v1, val);
     ruMapFree(rm);
 }
 END_TEST
@@ -517,8 +538,8 @@ START_TEST(int64s) {
     int64_t k1 = 23, k2 = 42;
     int64_t r, e;
 
-    ruMap rm = ruMapNewSpec(ruKeySpecInt64(),
-                            ruValSpecInt64());
+    ruMap rm = ruMapNewType(ruTypeInt64(),
+                            ruTypeInt64());
     fail_if(NULL == rm, retText, rm, NULL);
 
     ret = ruMapPut(rm, &k1, &v1);
@@ -550,6 +571,10 @@ START_TEST(int64s) {
         fail_unless(vals[i] == val, retText, vals[i], val);
         i++;
     }
+    // checking for leaks
+    ret = ruMapRemove(rm, &k1, &val);
+    fail_unless(exp == ret, retText, exp, ret);
+    fail_unless(v1 == val, retText, v1, val);
     ruMapFree(rm);
 }
 END_TEST
@@ -564,14 +589,10 @@ START_TEST(custom) {
     int64_t r;
     int64_t e;
 
-    ruKeySpec ks = ruKeySpecNew(ruStrHash, ruStrMatch,
-                                NULL, NULL, NULL);
-    ruValSpec vs = ruValSpecNew(free, (ruCloneFunc) ruInt64,
-                                ruRefPtrInt64);
-    ruMap rm = ruMapNewSpec(ks, vs);
+    ruType ks = ruTypeNew(ruStrHash, ruStrMatch, NULL,
+                          NULL, NULL, NULL);
+    ruMap rm = ruMapNewType(ks, ruTypeInt64());
     fail_if(NULL == rm, retText, rm, NULL);
-    ruFree(ks);
-    ruFree(vs);
 
     ret = ruMapPut(rm, k1, &v1);
     fail_unless(exp == ret, retText, exp, ret);
@@ -603,32 +624,13 @@ START_TEST(custom) {
         fail_unless(vals[i] == val, retText, vals[i], val);
         i++;
     }
+    // checking for leaks
+    ret = ruMapRemove(rm, k1, &val);
+    fail_unless(exp == ret, retText, exp, ret);
+    fail_unless(v1 == val, retText, v1, val);
     ruMapFree(rm);
 }
 END_TEST
-
-void foo() {
-    // error checking left out for brevity
-    ruMap rm = ruMapNewSpec(ruKeySpecStrFree(), ruValSpecStrFree());
-    alloc_chars k = ruStrDup("23");
-    alloc_chars v = ruStrDup("42");
-    ruMapPut(rm, k, v);
-
-    perm_chars r = NULL;
-    ruMapGet(rm, "23", &r);
-    printf("k: '23' v: '%s'\n", r);
-    ruMapFree(rm);
-}
-void bar() {
-    // error checking left out for brevity
-    long k1 = 23, v1 = 42, r = 0;
-    ruMap rm = ruMapNewSpec(ruKeySpecLong(), ruValSpecLong());
-    ruMapPut(rm, &k1, &v1);
-
-    ruMapGet(rm, &k1, &r);
-    printf("k: %ld v: %ld\n", k1, r);
-    ruMapFree(rm);
-}
 
 TCase* mapTests(void) {
     TCase *tcase = tcase_create ( "map" );
@@ -643,6 +645,5 @@ TCase* mapTests(void) {
     tcase_add_test(tcase, longs);
     tcase_add_test(tcase, int64s);
     tcase_add_test(tcase, custom);
-    foo();
     return tcase;
 }
