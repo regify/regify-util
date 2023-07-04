@@ -10,13 +10,12 @@ var modules =
     [ "Key Value Storage", "group__kvstore__sec.html", "group__kvstore__sec" ],
     [ "List Collection", "group__list.html", "group__list" ],
     [ "Logging Facility", "group__logging.html", "group__logging" ],
-    [ "Container Type Specifications", "group__specs.html", "group__specs" ],
-    [ "Hash Support", "group__hashsupport.html", "group__hashsupport" ],
     [ "Hash Map", "group__hashmap.html", "group__hashmap" ],
     [ "Hash Set", "group__hashset.html", "group__hashset" ],
     [ "Regular Expressions", "group__regex.html", "group__regex" ],
     [ "String Functions", "group__string.html", "group__string" ],
     [ "Buffer Functions", "group__buffer.html", "group__buffer" ],
     [ "Threading Related", "group__threading.html", "group__threading" ],
+    [ "Container Type Specifications", "group__specs.html", "group__specs" ],
     [ "File Access Monitoring", "group__fam.html", "group__fam" ]
 ];

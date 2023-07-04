@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['data_20cleaning_20utility_8',['Data Cleaning Utility',['../group__cleaner.html',1,'']]],
-  ['dstpath_9',['dstPath',['../structru_fam_event__.html#a99c8743dc4a60b79ab3c548496d20f09',1,'ruFamEvent_']]]
+  ['8_20bit_20integer_3',['8 Bit Integer',['../group__typeint8.html',1,'']]]
 ];

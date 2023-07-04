@@ -1,8 +1,6 @@
 var searchData=
 [
-  ['threading_20related_504',['Threading Related',['../group__threading.html',1,'']]],
-  ['trans_5fbytes_505',['trans_bytes',['../group__misc.html#gab5445910fbc90fb0a6db407f8f608422',1,'regify-util.h']]],
-  ['trans_5fchars_506',['trans_chars',['../group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc',1,'regify-util.h']]],
-  ['trans_5fptr_507',['trans_ptr',['../group__misc.html#ga147d80ce3325dd56fbfb0e07cedcf757',1,'regify-util.h']]],
-  ['trans_5funi_508',['trans_uni',['../group__misc.html#ga583a16c595210574018e6bd10fe925b7',1,'regify-util.h']]]
+  ['memory_20management_35',['Memory Management',['../group__memory.html',1,'']]],
+  ['miscellaneous_20functions_36',['Miscellaneous Functions',['../group__misc.html',1,'']]],
+  ['msec_5ft_37',['msec_t',['../group__misc.html#gae416893e8160c5b7c6da3765e4707d5d',1,'regify-util.h']]]
 ];

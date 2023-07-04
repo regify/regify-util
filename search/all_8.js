@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['ini_20file_20handling_19',['Ini File Handling',['../group__ini.html',1,'']]]
+  ['entryfilter_15',['entryFilter',['../group__io.html#ga96b2df183649f58bd746edc4a0c6161c',1,'io.h']]],
+  ['entrymgr_16',['entryMgr',['../group__io.html#gae838891e096d47726baeec65b792fd51',1,'io.h']]],
+  ['eventtype_17',['eventType',['../structru_fam_event__.html#aa73ed1819d01004c05b8b1908ef91ef4',1,'ruFamEvent_']]]
 ];

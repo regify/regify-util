@@ -57,24 +57,6 @@
       <arglist></arglist>
     </member>
   </compound>
-  <compound kind="union">
-    <name>ruFreeIf</name>
-    <filename>unionru_free_if.html</filename>
-    <member kind="variable">
-      <type>void *(*</type>
-      <name>ruClearFunc</name>
-      <anchorfile>unionru_free_if.html</anchorfile>
-      <anchor>aab674dcdb9025689cd572231258870d3</anchor>
-      <arglist>)(void *)</arglist>
-    </member>
-    <member kind="variable">
-      <type>void(*</type>
-      <name>ruFreeFunc</name>
-      <anchorfile>unionru_free_if.html</anchorfile>
-      <anchor>aecd7a6ea69d382e0f169438b62fc2ee5</anchor>
-      <arglist>)(void *)</arglist>
-    </member>
-  </compound>
   <compound kind="struct">
     <name>ruTimeVal</name>
     <filename>structru_time_val.html</filename>
@@ -97,7 +79,6 @@
     <name>misc</name>
     <title>Miscellaneous Functions</title>
     <filename>group__misc.html</filename>
-    <class kind="union">ruFreeIf</class>
     <class kind="struct">ruTimeVal</class>
     <member kind="define">
       <type>#define</type>
@@ -279,55 +260,6 @@
       <name>rusize</name>
       <anchorfile>group__misc.html</anchorfile>
       <anchor>gaaa0102d444a5dd14474b7951caae0459</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="typedef">
-      <type>void *</type>
-      <name>ru_Int64</name>
-      <anchorfile>group__misc.html</anchorfile>
-      <anchor>gada9bd40ceec7745a9614aead9555f616</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="typedef">
-      <type>void *(*</type>
-      <name>ruCloneFunc</name>
-      <anchorfile>group__misc.html</anchorfile>
-      <anchor>ga1b23e084ffff15cf965a438497c9f8e2</anchor>
-      <arglist>)(void *)</arglist>
-    </member>
-    <member kind="typedef">
-      <type>int32_t(*</type>
-      <name>ruPtr2TypeFunc</name>
-      <anchorfile>group__misc.html</anchorfile>
-      <anchor>ga227caa0d21650401d64874e26a9371ad</anchor>
-      <arglist>)(void *, void **)</arglist>
-    </member>
-    <member kind="typedef">
-      <type>void *(*</type>
-      <name>ruClearFunc</name>
-      <anchorfile>group__misc.html</anchorfile>
-      <anchor>ga91dce9b2f482277a0d5ec778e54c5d14</anchor>
-      <arglist>)(void *)</arglist>
-    </member>
-    <member kind="typedef">
-      <type>void(*</type>
-      <name>ruFreeFunc</name>
-      <anchorfile>group__misc.html</anchorfile>
-      <anchor>ga8eb4179750e158d78b0b3bc1e4b1bdce</anchor>
-      <arglist>)(void *)</arglist>
-    </member>
-    <member kind="typedef">
-      <type>int(*</type>
-      <name>ruCompFunc</name>
-      <anchorfile>group__misc.html</anchorfile>
-      <anchor>ga6f2df974d7fa3462ee789585fcd510ed</anchor>
-      <arglist>)(trans_ptr a, trans_ptr b)</arglist>
-    </member>
-    <member kind="typedef">
-      <type>unsigned char</type>
-      <name>uchar</name>
-      <anchorfile>group__misc.html</anchorfile>
-      <anchor>ga65f85814a8290f9797005d3b28e7e5fc</anchor>
       <arglist></arglist>
     </member>
     <member kind="function">
@@ -519,90 +451,6 @@
       <anchor>gabb9ece7b53e9e95a196adc53be69b099</anchor>
       <arglist>(char *in)</arglist>
     </member>
-    <member kind="function">
-      <type>RUAPI ru_Int64</type>
-      <name>ruInt64</name>
-      <anchorfile>group__misc.html</anchorfile>
-      <anchor>ga711c0d4d3a2ce54cb8f2c743a9e20898</anchor>
-      <arglist>(int64_t *val)</arglist>
-    </member>
-    <member kind="function">
-      <type>RUAPI ptr</type>
-      <name>ruLongRefPtr</name>
-      <anchorfile>group__misc.html</anchorfile>
-      <anchor>ga155f9bd0584b9e1391ddd2e8c4a3f7cc</anchor>
-      <arglist>(long *in)</arglist>
-    </member>
-    <member kind="function">
-      <type>RUAPI ptr</type>
-      <name>ruInt32RefPtr</name>
-      <anchorfile>group__misc.html</anchorfile>
-      <anchor>ga999d2676bc8ee3d5ebb7ebdfef051f90</anchor>
-      <arglist>(int32_t *in)</arglist>
-    </member>
-    <member kind="function">
-      <type>RUAPI ptr</type>
-      <name>ruInt16RefPtr</name>
-      <anchorfile>group__misc.html</anchorfile>
-      <anchor>gae5ce49e9cb059da3827b56ba879281db</anchor>
-      <arglist>(int16_t *in)</arglist>
-    </member>
-    <member kind="function">
-      <type>RUAPI ptr</type>
-      <name>ruInt8RefPtr</name>
-      <anchorfile>group__misc.html</anchorfile>
-      <anchor>gaf7d3ddbd3eeb6ba329e11a383063b0e6</anchor>
-      <arglist>(int8_t *in)</arglist>
-    </member>
-    <member kind="function">
-      <type>RUAPI ptr</type>
-      <name>ruBoolRefPtr</name>
-      <anchorfile>group__misc.html</anchorfile>
-      <anchor>ga18ed617e08000ba14cabde7fd64c1f02</anchor>
-      <arglist>(bool *in)</arglist>
-    </member>
-    <member kind="function">
-      <type>RUAPI int32_t</type>
-      <name>ruRefPtrInt64</name>
-      <anchorfile>group__misc.html</anchorfile>
-      <anchor>ga59437124dbcf6691359e7dd0b7f02f57</anchor>
-      <arglist>(ptr src, ptr *dst)</arglist>
-    </member>
-    <member kind="function">
-      <type>RUAPI int32_t</type>
-      <name>ruRefPtrLong</name>
-      <anchorfile>group__misc.html</anchorfile>
-      <anchor>ga30336a83643ccc719115ed93f9052402</anchor>
-      <arglist>(ptr src, ptr *dst)</arglist>
-    </member>
-    <member kind="function">
-      <type>RUAPI int32_t</type>
-      <name>ruRefPtrInt32</name>
-      <anchorfile>group__misc.html</anchorfile>
-      <anchor>ga3576491ac9c3b0f2b064e89e1a997845</anchor>
-      <arglist>(ptr src, ptr *dst)</arglist>
-    </member>
-    <member kind="function">
-      <type>RUAPI int32_t</type>
-      <name>ruRefPtrInt16</name>
-      <anchorfile>group__misc.html</anchorfile>
-      <anchor>gaade4a393edd5c523d8aba14379cbff30</anchor>
-      <arglist>(ptr src, ptr *dst)</arglist>
-    </member>
-    <member kind="function">
-      <type>RUAPI int32_t</type>
-      <name>ruRefPtrInt8</name>
-      <anchorfile>group__misc.html</anchorfile>
-      <anchor>ga81200576aadbddcfdb9f46a0936c2483</anchor>
-      <arglist>(ptr src, ptr *dst)</arglist>
-    </member>
-    <member kind="function">
-      <type>RUAPI int32_t</type>
-      <name>ruRefPtrBool</name>
-      <anchorfile>group__misc.html</anchorfile>
-      <anchor>gab25c983548406f533e1939755adb746c</anchor>
-      <arglist>(ptr src, ptr *dst)</arglist>
-    </member>
   </compound>
   <compound kind="group">
     <name>memory</name>
@@ -635,6 +483,27 @@
       <anchorfile>group__memory.html</anchorfile>
       <anchor>ga2b0db047653765afa9f51710f491b734</anchor>
       <arglist>(buf, count, ctype)</arglist>
+    </member>
+    <member kind="typedef">
+      <type>ptr(*</type>
+      <name>ruClearFunc</name>
+      <anchorfile>group__memory.html</anchorfile>
+      <anchor>ga37adb48aac1ef8401ce1e5b910170b7b</anchor>
+      <arglist>)(ptr o)</arglist>
+    </member>
+    <member kind="typedef">
+      <type>void(*</type>
+      <name>ruFreeFunc</name>
+      <anchorfile>group__memory.html</anchorfile>
+      <anchor>gaa75466cb9b6c992ae41aeebe94535ff4</anchor>
+      <arglist>)(ptr o)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI ptr</type>
+      <name>ruClear</name>
+      <anchorfile>group__memory.html</anchorfile>
+      <anchor>ga4ccb3b96ae0e822dee1ecc528f262c79</anchor>
+      <arglist>(ptr o)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI alloc_ptr</type>
@@ -1592,6 +1461,8 @@
     <name>list</name>
     <title>List Collection</title>
     <filename>group__list.html</filename>
+    <subgroup>listobj</subgroup>
+    <subgroup>listtype</subgroup>
     <member kind="define">
       <type>#define</type>
       <name>ruListAppend</name>
@@ -1612,20 +1483,6 @@
       <anchorfile>group__list.html</anchorfile>
       <anchor>gacc2bc91f4f76b9863603a004dae43194</anchor>
       <arglist>(rl)</arglist>
-    </member>
-    <member kind="define">
-      <type>#define</type>
-      <name>ruIterNext</name>
-      <anchorfile>group__list.html</anchorfile>
-      <anchor>gacb34c9de3d00243458bc91f9a76e2344</anchor>
-      <arglist>(re, type)</arglist>
-    </member>
-    <member kind="define">
-      <type>#define</type>
-      <name>ruListIdxData</name>
-      <anchorfile>group__list.html</anchorfile>
-      <anchor>ga019dbdda890922f4b19e68750b845bed</anchor>
-      <arglist>(rl, index, type, code)</arglist>
     </member>
     <member kind="typedef">
       <type>void *</type>
@@ -1650,10 +1507,10 @@
     </member>
     <member kind="function">
       <type>RUAPI ruList</type>
-      <name>ruListNew</name>
+      <name>ruListNewType</name>
       <anchorfile>group__list.html</anchorfile>
-      <anchor>gaaa06a57ba6d6104137eb2092933deac6</anchor>
-      <arglist>(ruFreeFunc destructor)</arglist>
+      <anchor>ga67700afc458c82357f28b796b1f85da2</anchor>
+      <arglist>(ruType valueType)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI ruList</type>
@@ -1678,10 +1535,17 @@
     </member>
     <member kind="function">
       <type>RUAPI int32_t</type>
-      <name>ruListInsertAt</name>
+      <name>ruListInsertIdx</name>
       <anchorfile>group__list.html</anchorfile>
-      <anchor>gad362bd738fbd5fdf7e8571ec183249ef</anchor>
+      <anchor>ga2dc64fa432c78f2df6ec859487ee1788</anchor>
       <arglist>(ruList rl, int32_t index, perm_ptr data)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI int32_t</type>
+      <name>ruListInsertBefore</name>
+      <anchorfile>group__list.html</anchorfile>
+      <anchor>ga4e46b6472e396b8f3e4c644d2f61e62d</anchor>
+      <arglist>(ruList rl, ruListElmt rle, perm_ptr data)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI int32_t</type>
@@ -1691,32 +1555,25 @@
       <arglist>(ruList rl, ruListElmt rle, perm_ptr data)</arglist>
     </member>
     <member kind="function">
-      <type>RUAPI ptr</type>
-      <name>ruListRemove</name>
-      <anchorfile>group__list.html</anchorfile>
-      <anchor>ga00f37a668ae4e6d7b92af8034179c951</anchor>
-      <arglist>(ruList rl, ruListElmt *rle, int32_t *code)</arglist>
-    </member>
-    <member kind="function">
-      <type>RUAPI ptr</type>
-      <name>ruListPop</name>
-      <anchorfile>group__list.html</anchorfile>
-      <anchor>gac38106311ed611ce8706246e5ebba17a</anchor>
-      <arglist>(ruList rl, int32_t *code)</arglist>
-    </member>
-    <member kind="function">
-      <type>RUAPI ptr</type>
-      <name>ruListTryPop</name>
-      <anchorfile>group__list.html</anchorfile>
-      <anchor>ga2bbfbf34ff189ebf934273395a11f224</anchor>
-      <arglist>(ruList rl, msec_t timeoutMs, int32_t *code)</arglist>
-    </member>
-    <member kind="function">
       <type>RUAPI uint32_t</type>
       <name>ruListSize</name>
       <anchorfile>group__list.html</anchorfile>
       <anchor>gaf068a6ca647d47215c5a805d35ca5ec4</anchor>
       <arglist>(ruList rl, int32_t *code)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI alloc_chars</type>
+      <name>ruListJoin</name>
+      <anchorfile>group__list.html</anchorfile>
+      <anchor>ga3f5916035e33df40b498642137ea769f</anchor>
+      <arglist>(ruList rl, trans_chars delim, int32_t *code)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI int32_t</type>
+      <name>ruListSort</name>
+      <anchorfile>group__list.html</anchorfile>
+      <anchor>ga4ce49f0d1e82a450616d472f9df42eec</anchor>
+      <arglist>(ruList rl)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI ruListElmt</type>
@@ -1736,8 +1593,8 @@
       <type>RUAPI bool</type>
       <name>ruListElmtIsHead</name>
       <anchorfile>group__list.html</anchorfile>
-      <anchor>ga92dbcac157bd0ffd1a696d9b46ad42d1</anchor>
-      <arglist>(ruList rl, ruListElmt re, int32_t *code)</arglist>
+      <anchor>ga429c52c8d9224a7cdfdc462daf30aed7</anchor>
+      <arglist>(ruListElmt re, int32_t *code)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI bool</type>
@@ -1753,40 +1610,134 @@
       <anchor>ga662f949b26672d0793e8b78dc44b568b</anchor>
       <arglist>(ruListElmt re, int32_t *code)</arglist>
     </member>
+  </compound>
+  <compound kind="group">
+    <name>listobj</name>
+    <title>Object List API</title>
+    <filename>group__listobj.html</filename>
+    <member kind="define">
+      <type>#define</type>
+      <name>ruIterNext</name>
+      <anchorfile>group__listobj.html</anchorfile>
+      <anchor>gacb34c9de3d00243458bc91f9a76e2344</anchor>
+      <arglist>(re, type)</arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>ruListIdx</name>
+      <anchorfile>group__listobj.html</anchorfile>
+      <anchor>ga12cf37a23b88afbdc64a3a584ed4b7cc</anchor>
+      <arglist>(rl, index, type, code)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI ptr</type>
+      <name>ruListRemove</name>
+      <anchorfile>group__listobj.html</anchorfile>
+      <anchor>ga00f37a668ae4e6d7b92af8034179c951</anchor>
+      <arglist>(ruList rl, ruListElmt *rle, int32_t *code)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI ptr</type>
+      <name>ruListPop</name>
+      <anchorfile>group__listobj.html</anchorfile>
+      <anchor>gac38106311ed611ce8706246e5ebba17a</anchor>
+      <arglist>(ruList rl, int32_t *code)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI ptr</type>
+      <name>ruListTryPop</name>
+      <anchorfile>group__listobj.html</anchorfile>
+      <anchor>ga2bbfbf34ff189ebf934273395a11f224</anchor>
+      <arglist>(ruList rl, msec_t timeoutMs, int32_t *code)</arglist>
+    </member>
     <member kind="function">
       <type>RUAPI ptr</type>
       <name>ruListNextData</name>
-      <anchorfile>group__list.html</anchorfile>
+      <anchorfile>group__listobj.html</anchorfile>
       <anchor>ga8a5796acc55b08010cb2bd7160255477</anchor>
       <arglist>(ruListElmt *re, int32_t *code)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI ptr</type>
-      <name>ruListElmtData</name>
-      <anchorfile>group__list.html</anchorfile>
-      <anchor>ga5d70dcfd4646dea79cfe1ae1ae482cc0</anchor>
-      <arglist>(ruListElmt re, int32_t *code)</arglist>
-    </member>
-    <member kind="function">
-      <type>RUAPI ptr</type>
-      <name>ruListIdxElmtData</name>
-      <anchorfile>group__list.html</anchorfile>
-      <anchor>gae2fedd16002646e35cc328b88e941cce</anchor>
+      <name>ruListIdxData</name>
+      <anchorfile>group__listobj.html</anchorfile>
+      <anchor>ga67cab757f5190aeebdabfd6d2c923747</anchor>
       <arglist>(ruList rl, int32_t index, int32_t *code)</arglist>
     </member>
-    <member kind="function">
-      <type>RUAPI alloc_chars</type>
-      <name>ruListJoin</name>
-      <anchorfile>group__list.html</anchorfile>
-      <anchor>ga3f5916035e33df40b498642137ea769f</anchor>
-      <arglist>(ruList rl, trans_chars delim, int32_t *code)</arglist>
+  </compound>
+  <compound kind="group">
+    <name>listtype</name>
+    <title>Typed List API</title>
+    <filename>group__listtype.html</filename>
+    <member kind="define">
+      <type>#define</type>
+      <name>ruListRemoveTo</name>
+      <anchorfile>group__listtype.html</anchorfile>
+      <anchor>gaad4caee78361adbc01004aa115413747</anchor>
+      <arglist>(rl, rle, dest)</arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>ruListPopTo</name>
+      <anchorfile>group__listtype.html</anchorfile>
+      <anchor>ga18939c6b7e5f2aaac374fa04cef6d4a3</anchor>
+      <arglist>(rl, dest)</arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>ruListTryPopTo</name>
+      <anchorfile>group__listtype.html</anchorfile>
+      <anchor>ga3dc4a31aa106f2c26cec97b675da5981</anchor>
+      <arglist>(rl, timeoutMs, dest)</arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>ruIterTo</name>
+      <anchorfile>group__listtype.html</anchorfile>
+      <anchor>ga64c272f6e5f86b201b9eedc104dea96f</anchor>
+      <arglist>(re, dest)</arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>ruListIdxTo</name>
+      <anchorfile>group__listtype.html</anchorfile>
+      <anchor>ga3ddfb9e44cb758db72adc3f68d5adfe5</anchor>
+      <arglist>(rl, index, dest)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI int32_t</type>
-      <name>ruListSort</name>
-      <anchorfile>group__list.html</anchorfile>
-      <anchor>gace02c8adb52bae50e49aac8123e7e21a</anchor>
-      <arglist>(ruList rl, ruCompFunc sort)</arglist>
+      <name>ruListRemoveDataTo</name>
+      <anchorfile>group__listtype.html</anchorfile>
+      <anchor>ga0ddd2adef71a602c194bc19d26d485a9</anchor>
+      <arglist>(ruList rl, ruListElmt *rle, ptr *dest)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI int32_t</type>
+      <name>ruListPopDataTo</name>
+      <anchorfile>group__listtype.html</anchorfile>
+      <anchor>ga30511243f95bd091fcfb92cfc39e266d</anchor>
+      <arglist>(ruList rl, ptr *dest)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI int32_t</type>
+      <name>ruListTryPopDataTo</name>
+      <anchorfile>group__listtype.html</anchorfile>
+      <anchor>gaa1190dec03f6b4f81f761f24bbf328e7</anchor>
+      <arglist>(ruList rl, msec_t timeoutMs, ptr *dest)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI int32_t</type>
+      <name>ruListNextDataTo</name>
+      <anchorfile>group__listtype.html</anchorfile>
+      <anchor>ga7482bdf5bf0f901f94e15192e2782f54</anchor>
+      <arglist>(ruListElmt *re, ptr *dest)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI int32_t</type>
+      <name>ruListIdxDataTo</name>
+      <anchorfile>group__listtype.html</anchorfile>
+      <anchor>ga5c00040d8b99ecb557f97e1e5ebc169d</anchor>
+      <arglist>(ruList rl, int32_t index, ptr *dest)</arglist>
     </member>
   </compound>
   <compound kind="group">
@@ -1956,261 +1907,6 @@
     </member>
   </compound>
   <compound kind="group">
-    <name>specs</name>
-    <title>Container Type Specifications</title>
-    <filename>group__specs.html</filename>
-    <member kind="typedef">
-      <type>void *</type>
-      <name>ruKeySpec</name>
-      <anchorfile>group__specs.html</anchorfile>
-      <anchor>ga4cfbb1b06799e430e55cc8872da18a58</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="typedef">
-      <type>void *</type>
-      <name>ruValSpec</name>
-      <anchorfile>group__specs.html</anchorfile>
-      <anchor>gae33debc54e0e93f1dd6c17aac9800249</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="function">
-      <type>RUAPI ruKeySpec</type>
-      <name>ruKeySpecInt64</name>
-      <anchorfile>group__specs.html</anchorfile>
-      <anchor>gabdf5b4a730ca9982b526caa568180ede</anchor>
-      <arglist>(void)</arglist>
-    </member>
-    <member kind="function">
-      <type>RUAPI ruKeySpec</type>
-      <name>ruKeySpecLong</name>
-      <anchorfile>group__specs.html</anchorfile>
-      <anchor>gaf99cd6eb49fce12c790694426c2daa9b</anchor>
-      <arglist>(void)</arglist>
-    </member>
-    <member kind="function">
-      <type>RUAPI ruKeySpec</type>
-      <name>ruKeySpecInt32</name>
-      <anchorfile>group__specs.html</anchorfile>
-      <anchor>ga106ee9ace277c36ce1061af165114cb8</anchor>
-      <arglist>(void)</arglist>
-    </member>
-    <member kind="function">
-      <type>RUAPI ruKeySpec</type>
-      <name>ruKeySpecInt16</name>
-      <anchorfile>group__specs.html</anchorfile>
-      <anchor>ga623f95717987b3db51ae195283d3b1c5</anchor>
-      <arglist>(void)</arglist>
-    </member>
-    <member kind="function">
-      <type>RUAPI ruKeySpec</type>
-      <name>ruKeySpecInt8</name>
-      <anchorfile>group__specs.html</anchorfile>
-      <anchor>gadca04bf8087c96bf67242e04465c75ff</anchor>
-      <arglist>(void)</arglist>
-    </member>
-    <member kind="function">
-      <type>RUAPI ruKeySpec</type>
-      <name>ruKeySpecStrRef</name>
-      <anchorfile>group__specs.html</anchorfile>
-      <anchor>ga4a289e7fa93a077dbd57493858e47ce2</anchor>
-      <arglist>(void)</arglist>
-    </member>
-    <member kind="function">
-      <type>RUAPI ruKeySpec</type>
-      <name>ruKeySpecStrDup</name>
-      <anchorfile>group__specs.html</anchorfile>
-      <anchor>gafb0b3096fb21ca226f46aa1f21bbae57</anchor>
-      <arglist>(void)</arglist>
-    </member>
-    <member kind="function">
-      <type>RUAPI ruKeySpec</type>
-      <name>ruKeySpecStrFree</name>
-      <anchorfile>group__specs.html</anchorfile>
-      <anchor>ga785bd75635fdda0b21c25b4eb479d449</anchor>
-      <arglist>(void)</arglist>
-    </member>
-    <member kind="function">
-      <type>RUAPI ruValSpec</type>
-      <name>ruValSpecInt64</name>
-      <anchorfile>group__specs.html</anchorfile>
-      <anchor>ga1e22ef46be811d40b6edef9088c9b61e</anchor>
-      <arglist>(void)</arglist>
-    </member>
-    <member kind="function">
-      <type>RUAPI ruValSpec</type>
-      <name>ruValSpecLong</name>
-      <anchorfile>group__specs.html</anchorfile>
-      <anchor>ga0a20165b0259a5df623acce74314e585</anchor>
-      <arglist>(void)</arglist>
-    </member>
-    <member kind="function">
-      <type>RUAPI ruValSpec</type>
-      <name>ruValSpecInt32</name>
-      <anchorfile>group__specs.html</anchorfile>
-      <anchor>ga7b4c46eefcaefb63250d5cd470c259dd</anchor>
-      <arglist>(void)</arglist>
-    </member>
-    <member kind="function">
-      <type>RUAPI ruValSpec</type>
-      <name>ruValSpecInt16</name>
-      <anchorfile>group__specs.html</anchorfile>
-      <anchor>ga18e70854211b49e574a992269f907d8d</anchor>
-      <arglist>(void)</arglist>
-    </member>
-    <member kind="function">
-      <type>RUAPI ruValSpec</type>
-      <name>ruValSpecInt8</name>
-      <anchorfile>group__specs.html</anchorfile>
-      <anchor>ga28367ec7775b962746079130057908d2</anchor>
-      <arglist>(void)</arglist>
-    </member>
-    <member kind="function">
-      <type>RUAPI ruValSpec</type>
-      <name>ruValSpecBool</name>
-      <anchorfile>group__specs.html</anchorfile>
-      <anchor>gabdab38711b1e5d9d1d46b959c7d4c3f9</anchor>
-      <arglist>(void)</arglist>
-    </member>
-    <member kind="function">
-      <type>RUAPI ruValSpec</type>
-      <name>ruValSpecStrRef</name>
-      <anchorfile>group__specs.html</anchorfile>
-      <anchor>ga066c4be296e2a7fbf132f477a5c87da1</anchor>
-      <arglist>(void)</arglist>
-    </member>
-    <member kind="function">
-      <type>RUAPI ruValSpec</type>
-      <name>ruValSpecStrDup</name>
-      <anchorfile>group__specs.html</anchorfile>
-      <anchor>gade93bdd85bd22f99659b2d408b6e536b</anchor>
-      <arglist>(void)</arglist>
-    </member>
-    <member kind="function">
-      <type>RUAPI ruValSpec</type>
-      <name>ruValSpecStrFree</name>
-      <anchorfile>group__specs.html</anchorfile>
-      <anchor>ga0b9e30c18192fb1c7888d628e90777d7</anchor>
-      <arglist>(void)</arglist>
-    </member>
-    <member kind="function">
-      <type>RUAPI ruKeySpec</type>
-      <name>ruKeySpecNew</name>
-      <anchorfile>group__specs.html</anchorfile>
-      <anchor>ga648ed8ccae81240db94e9bffed675cf8</anchor>
-      <arglist>(ruHashFunc hash, ruMatchFunc match, ruFreeFunc keyFree, ruCloneFunc in, ruPtr2TypeFunc out)</arglist>
-    </member>
-    <member kind="function">
-      <type>RUAPI ruValSpec</type>
-      <name>ruValSpecNew</name>
-      <anchorfile>group__specs.html</anchorfile>
-      <anchor>ga20d26c236e226763b5525231ade7c117</anchor>
-      <arglist>(ruFreeFunc valFree, ruCloneFunc in, ruPtr2TypeFunc out)</arglist>
-    </member>
-  </compound>
-  <compound kind="group">
-    <name>hashsupport</name>
-    <title>Hash Support</title>
-    <filename>group__hashsupport.html</filename>
-    <member kind="typedef">
-      <type>ru_uint(*</type>
-      <name>ruHashFunc</name>
-      <anchorfile>group__hashsupport.html</anchorfile>
-      <anchor>ga71667e232bf6a6db737a5ac33535b39b</anchor>
-      <arglist>)(trans_ptr key)</arglist>
-    </member>
-    <member kind="typedef">
-      <type>bool(*</type>
-      <name>ruMatchFunc</name>
-      <anchorfile>group__hashsupport.html</anchorfile>
-      <anchor>ga60c90b03efaa80d47cc29e71ec93fb1d</anchor>
-      <arglist>)(trans_ptr testKey, trans_ptr existingKey)</arglist>
-    </member>
-    <member kind="function">
-      <type>RUAPI ru_uint</type>
-      <name>ruInt64Hash</name>
-      <anchorfile>group__hashsupport.html</anchorfile>
-      <anchor>gab2e593931d7fec1830347b39438f1ab9</anchor>
-      <arglist>(trans_ptr key)</arglist>
-    </member>
-    <member kind="function">
-      <type>RUAPI bool</type>
-      <name>ruInt64Match</name>
-      <anchorfile>group__hashsupport.html</anchorfile>
-      <anchor>ga4d8cc802c4a99b0f92bedfd26be907df</anchor>
-      <arglist>(trans_ptr s1, trans_ptr s2)</arglist>
-    </member>
-    <member kind="function">
-      <type>RUAPI ru_uint</type>
-      <name>ruLongHash</name>
-      <anchorfile>group__hashsupport.html</anchorfile>
-      <anchor>ga2d0116161ce107ecf9918d995596dfa9</anchor>
-      <arglist>(trans_ptr key)</arglist>
-    </member>
-    <member kind="function">
-      <type>RUAPI bool</type>
-      <name>ruLongMatch</name>
-      <anchorfile>group__hashsupport.html</anchorfile>
-      <anchor>ga1f857e6931a151d9496c450de3e5a7b0</anchor>
-      <arglist>(trans_ptr s1, trans_ptr s2)</arglist>
-    </member>
-    <member kind="function">
-      <type>RUAPI ru_uint</type>
-      <name>ruInt32Hash</name>
-      <anchorfile>group__hashsupport.html</anchorfile>
-      <anchor>ga567ab36474d09628bca78c30fe219216</anchor>
-      <arglist>(trans_ptr key)</arglist>
-    </member>
-    <member kind="function">
-      <type>RUAPI bool</type>
-      <name>ruInt32Match</name>
-      <anchorfile>group__hashsupport.html</anchorfile>
-      <anchor>gab8d05b6e978d558a6c7c0aea9ec2266f</anchor>
-      <arglist>(trans_ptr testKey, trans_ptr existingKey)</arglist>
-    </member>
-    <member kind="function">
-      <type>RUAPI ru_uint</type>
-      <name>ruInt16Hash</name>
-      <anchorfile>group__hashsupport.html</anchorfile>
-      <anchor>gaff7e3bc5cdb0071cfc1fa0cbdd92b02d</anchor>
-      <arglist>(trans_ptr key)</arglist>
-    </member>
-    <member kind="function">
-      <type>RUAPI bool</type>
-      <name>ruInt16Match</name>
-      <anchorfile>group__hashsupport.html</anchorfile>
-      <anchor>ga156507d6274976f8e3037d500e7c6357</anchor>
-      <arglist>(trans_ptr testKey, trans_ptr existingKey)</arglist>
-    </member>
-    <member kind="function">
-      <type>RUAPI ru_uint</type>
-      <name>ruInt8Hash</name>
-      <anchorfile>group__hashsupport.html</anchorfile>
-      <anchor>gaa8d8b1b947d98be9f1962566c5a7a951</anchor>
-      <arglist>(trans_ptr key)</arglist>
-    </member>
-    <member kind="function">
-      <type>RUAPI bool</type>
-      <name>ruInt8Match</name>
-      <anchorfile>group__hashsupport.html</anchorfile>
-      <anchor>ga12d84ace9fe97867e9d8b213b236bd52</anchor>
-      <arglist>(trans_ptr testKey, trans_ptr existingKey)</arglist>
-    </member>
-    <member kind="function">
-      <type>RUAPI ru_uint</type>
-      <name>ruStrHash</name>
-      <anchorfile>group__hashsupport.html</anchorfile>
-      <anchor>ga180c35fbcfa6b598af925bc5b35fa996</anchor>
-      <arglist>(trans_ptr key)</arglist>
-    </member>
-    <member kind="function">
-      <type>RUAPI bool</type>
-      <name>ruStrMatch</name>
-      <anchorfile>group__hashsupport.html</anchorfile>
-      <anchor>ga0b39d859aa373ea70eeb6feee16b0ba1</anchor>
-      <arglist>(trans_ptr s1, trans_ptr s2)</arglist>
-    </member>
-  </compound>
-  <compound kind="group">
     <name>hashmap</name>
     <title>Hash Map</title>
     <filename>group__hashmap.html</filename>
@@ -2272,24 +1968,10 @@
     </member>
     <member kind="function">
       <type>RUAPI ruMap</type>
-      <name>ruMapNewSpec</name>
+      <name>ruMapNewType</name>
       <anchorfile>group__hashmap.html</anchorfile>
-      <anchor>ga792a5f4e069f5b7bfe67ed2b960f94c8</anchor>
-      <arglist>(const ruKeySpec KS, const ruValSpec VS)</arglist>
-    </member>
-    <member kind="function">
-      <type>RUAPI ruMap</type>
-      <name>ruMapNew</name>
-      <anchorfile>group__hashmap.html</anchorfile>
-      <anchor>ga01203552d640f866d8aaa967beb2fa81</anchor>
-      <arglist>(ruHashFunc hash, ruMatchFunc match, ruFreeFunc keyFree, ruFreeFunc valFree, uint32_t expectedSize)</arglist>
-    </member>
-    <member kind="function">
-      <type>RUAPI ruMap</type>
-      <name>ruMapNewString</name>
-      <anchorfile>group__hashmap.html</anchorfile>
-      <anchor>ga9ebe0435352661033425c80b2f502fe6</anchor>
-      <arglist>(ruFreeFunc keyFree, ruFreeFunc valFree)</arglist>
+      <anchor>gacf7db64ef4e7f3c82eb49eb6f80f3794</anchor>
+      <arglist>(ruType keyType, ruType valueType)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI ruMap</type>
@@ -2309,8 +1991,8 @@
       <type>RUAPI int32_t</type>
       <name>ruMapRemoveData</name>
       <anchorfile>group__hashmap.html</anchorfile>
-      <anchor>ga495f361b43c3541008edc6686ff7e024</anchor>
-      <arglist>(ruMap rm, ptr key, ptr *val)</arglist>
+      <anchor>ga8ad1d693265098bb8110c7d866300d1d</anchor>
+      <arglist>(ruMap rm, trans_ptr key, ptr *val)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI int32_t</type>
@@ -2323,15 +2005,15 @@
       <type>RUAPI int32_t</type>
       <name>ruMapGetValue</name>
       <anchorfile>group__hashmap.html</anchorfile>
-      <anchor>gaac8dbb9a04d457b59a52a1dcb6799fab</anchor>
-      <arglist>(ruMap rm, ptr key, ptr *val)</arglist>
+      <anchor>gaa30a9f663f42641de433e202c0c54fdf</anchor>
+      <arglist>(ruMap rm, trans_ptr key, ptr *val)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI bool</type>
       <name>ruMapHasKey</name>
       <anchorfile>group__hashmap.html</anchorfile>
-      <anchor>ga1a2e5016f1688017a2db9ee16f6503dc</anchor>
-      <arglist>(ruMap rm, ptr key, int32_t *code)</arglist>
+      <anchor>gabcdeacf7e867d8d4fd7282b5fabe3dd3</anchor>
+      <arglist>(ruMap rm, trans_ptr key, int32_t *code)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI int32_t</type>
@@ -2351,8 +2033,8 @@
       <type>RUAPI int32_t</type>
       <name>ruMapKeyList</name>
       <anchorfile>group__hashmap.html</anchorfile>
-      <anchor>ga789ce12d5f474b500df9a63f065c0b1d</anchor>
-      <arglist>(ruMap rm, ruList *keys, ruCloneFunc copy, ruFreeFunc listFree)</arglist>
+      <anchor>ga8525a18e605779bba001fcf2321d73ad</anchor>
+      <arglist>(ruMap rm, ruList *keys)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI uint32_t</type>
@@ -2410,24 +2092,10 @@
     </member>
     <member kind="function">
       <type>RUAPI ruSet</type>
-      <name>ruSetNewSpec</name>
+      <name>ruSetNewType</name>
       <anchorfile>group__hashset.html</anchorfile>
-      <anchor>ga3dc6ca38f738e543ff88bf3c222e0c83</anchor>
-      <arglist>(ruKeySpec ks)</arglist>
-    </member>
-    <member kind="function">
-      <type>RUAPI ruSet</type>
-      <name>ruSetNew</name>
-      <anchorfile>group__hashset.html</anchorfile>
-      <anchor>ga5152c782ff1c0b189f2c081ff8c862af</anchor>
-      <arglist>(ruHashFunc hash, ruMatchFunc match, ruFreeFunc itemFree, uint32_t expectedSize)</arglist>
-    </member>
-    <member kind="function">
-      <type>RUAPI ruSet</type>
-      <name>ruSetNewString</name>
-      <anchorfile>group__hashset.html</anchorfile>
-      <anchor>ga92741e23f4a38993fb8457734af3b74f</anchor>
-      <arglist>(ruFreeFunc itemFree)</arglist>
+      <anchor>ga56b591ce6580756c863873ac9393e9fd</anchor>
+      <arglist>(ruType keyType)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI ruSet</type>
@@ -2447,36 +2115,36 @@
       <type>RUAPI int32_t</type>
       <name>ruSetRemoveItem</name>
       <anchorfile>group__hashset.html</anchorfile>
-      <anchor>ga51c3e995357b9df42e98d9ec388f16ec</anchor>
-      <arglist>(ruMap rs, void *item)</arglist>
+      <anchor>gafa352fbd278815dfaa9ca987ad8e4934</anchor>
+      <arglist>(ruMap rs, ptr item)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI bool</type>
       <name>ruSetHasItem</name>
       <anchorfile>group__hashset.html</anchorfile>
-      <anchor>gab6a2f03665c7e591d85e37e4ddb5f321</anchor>
-      <arglist>(ruSet rs, void *item, int32_t *code)</arglist>
+      <anchor>ga14cb0334a2f4fd396af3ed2a98d0e08a</anchor>
+      <arglist>(ruSet rs, trans_ptr item, int32_t *code)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI int32_t</type>
       <name>ruSetFirstSet</name>
       <anchorfile>group__hashset.html</anchorfile>
-      <anchor>ga3a03823a946407da763f03e96e6951ae</anchor>
-      <arglist>(ruSet rs, void **item)</arglist>
+      <anchor>gaf34e96d8c7ef3839654b4046c6addda6</anchor>
+      <arglist>(ruSet rs, ptr *item)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI int32_t</type>
       <name>ruSetNextSet</name>
       <anchorfile>group__hashset.html</anchorfile>
-      <anchor>ga15682f6ff5de251efe3016d51bb407d0</anchor>
-      <arglist>(ruSet rs, void **item)</arglist>
+      <anchor>ga2eff2a2b83e61f238b475c21a67e471b</anchor>
+      <arglist>(ruSet rs, ptr *item)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI int32_t</type>
       <name>ruSetItemList</name>
       <anchorfile>group__hashset.html</anchorfile>
-      <anchor>gaeab100699b313d914de89c0d82c299cc</anchor>
-      <arglist>(ruSet rs, ruList *items, ruCloneFunc copy, ruFreeFunc listFree)</arglist>
+      <anchor>ga5b93a6f24cca1cba2167cf04d8ebcdb8</anchor>
+      <arglist>(ruSet rs, ruList *items)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI int32_t</type>
@@ -3389,6 +3057,431 @@
     </member>
   </compound>
   <compound kind="group">
+    <name>specs</name>
+    <title>Container Type Specifications</title>
+    <filename>group__specs.html</filename>
+    <subgroup>typeint64</subgroup>
+    <subgroup>typelong</subgroup>
+    <subgroup>typeint32</subgroup>
+    <subgroup>typeint16</subgroup>
+    <subgroup>typeint8</subgroup>
+    <subgroup>typebool</subgroup>
+    <subgroup>typestring</subgroup>
+    <member kind="typedef">
+      <type>void *</type>
+      <name>ruType</name>
+      <anchorfile>group__specs.html</anchorfile>
+      <anchor>ga44e5e590e1e962d3ff605c847ebbf9c3</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>ru_uint(*</type>
+      <name>ruHashFunc</name>
+      <anchorfile>group__specs.html</anchorfile>
+      <anchor>ga71667e232bf6a6db737a5ac33535b39b</anchor>
+      <arglist>)(trans_ptr key)</arglist>
+    </member>
+    <member kind="typedef">
+      <type>bool(*</type>
+      <name>ruMatchFunc</name>
+      <anchorfile>group__specs.html</anchorfile>
+      <anchor>ga60c90b03efaa80d47cc29e71ec93fb1d</anchor>
+      <arglist>)(trans_ptr testKey, trans_ptr existingKey)</arglist>
+    </member>
+    <member kind="typedef">
+      <type>int32_t(*</type>
+      <name>ruCompFunc</name>
+      <anchorfile>group__specs.html</anchorfile>
+      <anchor>ga5b76db9aa7b4857b410ed3c7bcae3cc3</anchor>
+      <arglist>)(trans_ptr a, trans_ptr b)</arglist>
+    </member>
+    <member kind="typedef">
+      <type>ptr(*</type>
+      <name>ruCloneFunc</name>
+      <anchorfile>group__specs.html</anchorfile>
+      <anchor>ga9cd5256b4f669c7da4d83aaffcbdd668</anchor>
+      <arglist>)(ptr val)</arglist>
+    </member>
+    <member kind="typedef">
+      <type>int32_t(*</type>
+      <name>ruPtr2TypeFunc</name>
+      <anchorfile>group__specs.html</anchorfile>
+      <anchor>ga8b6db8d4555165e3a658adf8d8f5a71c</anchor>
+      <arglist>)(ptr src, ptr *dst)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI ruType</type>
+      <name>ruTypePtrFree</name>
+      <anchorfile>group__specs.html</anchorfile>
+      <anchor>ga8769a2e7b5853ab4596b57e14ad4bef0</anchor>
+      <arglist>(void)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI ruType</type>
+      <name>ruTypeNew</name>
+      <anchorfile>group__specs.html</anchorfile>
+      <anchor>gaffcd92fa7c57aaac4ef591cbd2fc82aa</anchor>
+      <arglist>(ruHashFunc hash, ruMatchFunc match, ruCompFunc comp, ruClearFunc free, ruCloneFunc in, ruPtr2TypeFunc out)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI ruType</type>
+      <name>ruTypePtr</name>
+      <anchorfile>group__specs.html</anchorfile>
+      <anchor>ga230108d3a17c6ec38df13fd65f06affc</anchor>
+      <arglist>(ruClearFunc free)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI ruType</type>
+      <name>ruTypeClone</name>
+      <anchorfile>group__specs.html</anchorfile>
+      <anchor>ga1e4c9aebffc79ddc6d162eebb3490723</anchor>
+      <arglist>(ruType tp)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI ruType</type>
+      <name>ruTypeFree</name>
+      <anchorfile>group__specs.html</anchorfile>
+      <anchor>ga3a18a611941672ff73bfc78020f5ffef</anchor>
+      <arglist>(ruType tp)</arglist>
+    </member>
+  </compound>
+  <compound kind="group">
+    <name>typeint64</name>
+    <title>64 Bit Integer</title>
+    <filename>group__typeint64.html</filename>
+    <member kind="typedef">
+      <type>void *</type>
+      <name>ru_Int64</name>
+      <anchorfile>group__typeint64.html</anchorfile>
+      <anchor>gada9bd40ceec7745a9614aead9555f616</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI ru_uint</type>
+      <name>ruInt64Hash</name>
+      <anchorfile>group__typeint64.html</anchorfile>
+      <anchor>gab2e593931d7fec1830347b39438f1ab9</anchor>
+      <arglist>(trans_ptr key)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI bool</type>
+      <name>ruInt64Match</name>
+      <anchorfile>group__typeint64.html</anchorfile>
+      <anchor>ga4d8cc802c4a99b0f92bedfd26be907df</anchor>
+      <arglist>(trans_ptr s1, trans_ptr s2)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI int32_t</type>
+      <name>ruInt64Comp</name>
+      <anchorfile>group__typeint64.html</anchorfile>
+      <anchor>ga081ba281f0717e9e6d127860cc743194</anchor>
+      <arglist>(trans_ptr testVal, trans_ptr existingVal)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI ru_Int64</type>
+      <name>ruInt64</name>
+      <anchorfile>group__typeint64.html</anchorfile>
+      <anchor>ga8d6bd327b9e7e40228be670cdf5f76a7</anchor>
+      <arglist>(ptr val)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI int32_t</type>
+      <name>ruRefPtrInt64</name>
+      <anchorfile>group__typeint64.html</anchorfile>
+      <anchor>ga59437124dbcf6691359e7dd0b7f02f57</anchor>
+      <arglist>(ptr src, ptr *dst)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI ruType</type>
+      <name>ruTypeInt64</name>
+      <anchorfile>group__typeint64.html</anchorfile>
+      <anchor>ga5fe4fc79f74027f6e6e41fe6be823c31</anchor>
+      <arglist>(void)</arglist>
+    </member>
+  </compound>
+  <compound kind="group">
+    <name>typelong</name>
+    <title>Long Integer</title>
+    <filename>group__typelong.html</filename>
+    <member kind="function">
+      <type>RUAPI ru_uint</type>
+      <name>ruLongHash</name>
+      <anchorfile>group__typelong.html</anchorfile>
+      <anchor>ga2d0116161ce107ecf9918d995596dfa9</anchor>
+      <arglist>(trans_ptr key)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI bool</type>
+      <name>ruLongMatch</name>
+      <anchorfile>group__typelong.html</anchorfile>
+      <anchor>ga1f857e6931a151d9496c450de3e5a7b0</anchor>
+      <arglist>(trans_ptr s1, trans_ptr s2)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI int32_t</type>
+      <name>ruLongComp</name>
+      <anchorfile>group__typelong.html</anchorfile>
+      <anchor>gabfb352cd520e662796a9a5b7e5294bdb</anchor>
+      <arglist>(trans_ptr testVal, trans_ptr existingVal)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI ptr</type>
+      <name>ruLongRefPtr</name>
+      <anchorfile>group__typelong.html</anchorfile>
+      <anchor>ga6116bb7271fc0dbf5e3d5325ea26e1f2</anchor>
+      <arglist>(ptr in)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI int32_t</type>
+      <name>ruRefPtrLong</name>
+      <anchorfile>group__typelong.html</anchorfile>
+      <anchor>ga30336a83643ccc719115ed93f9052402</anchor>
+      <arglist>(ptr src, ptr *dst)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI ruType</type>
+      <name>ruTypeLong</name>
+      <anchorfile>group__typelong.html</anchorfile>
+      <anchor>ga2fb6eed2afda8ca1e84e30c20c39c522</anchor>
+      <arglist>(void)</arglist>
+    </member>
+  </compound>
+  <compound kind="group">
+    <name>typeint32</name>
+    <title>32 Bit Integer</title>
+    <filename>group__typeint32.html</filename>
+    <member kind="function">
+      <type>RUAPI ru_uint</type>
+      <name>ruInt32Hash</name>
+      <anchorfile>group__typeint32.html</anchorfile>
+      <anchor>ga567ab36474d09628bca78c30fe219216</anchor>
+      <arglist>(trans_ptr key)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI bool</type>
+      <name>ruInt32Match</name>
+      <anchorfile>group__typeint32.html</anchorfile>
+      <anchor>gab8d05b6e978d558a6c7c0aea9ec2266f</anchor>
+      <arglist>(trans_ptr testKey, trans_ptr existingKey)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI int32_t</type>
+      <name>ruInt32Comp</name>
+      <anchorfile>group__typeint32.html</anchorfile>
+      <anchor>gafb5151f9b48bd45483289c2630298b2c</anchor>
+      <arglist>(trans_ptr testVal, trans_ptr existingVal)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI ptr</type>
+      <name>ruInt32RefPtr</name>
+      <anchorfile>group__typeint32.html</anchorfile>
+      <anchor>gaa87dacad563072f004f7e60dd76a1faf</anchor>
+      <arglist>(ptr in)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI int32_t</type>
+      <name>ruRefPtrInt32</name>
+      <anchorfile>group__typeint32.html</anchorfile>
+      <anchor>ga3576491ac9c3b0f2b064e89e1a997845</anchor>
+      <arglist>(ptr src, ptr *dst)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI ruType</type>
+      <name>ruTypeInt32</name>
+      <anchorfile>group__typeint32.html</anchorfile>
+      <anchor>ga771f2d2c8b7b56c86f0c6c4b9bb27f37</anchor>
+      <arglist>(void)</arglist>
+    </member>
+  </compound>
+  <compound kind="group">
+    <name>typeint16</name>
+    <title>16 Bit Integer</title>
+    <filename>group__typeint16.html</filename>
+    <member kind="function">
+      <type>RUAPI ru_uint</type>
+      <name>ruInt16Hash</name>
+      <anchorfile>group__typeint16.html</anchorfile>
+      <anchor>gaff7e3bc5cdb0071cfc1fa0cbdd92b02d</anchor>
+      <arglist>(trans_ptr key)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI bool</type>
+      <name>ruInt16Match</name>
+      <anchorfile>group__typeint16.html</anchorfile>
+      <anchor>ga156507d6274976f8e3037d500e7c6357</anchor>
+      <arglist>(trans_ptr testKey, trans_ptr existingKey)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI int32_t</type>
+      <name>ruInt16Comp</name>
+      <anchorfile>group__typeint16.html</anchorfile>
+      <anchor>ga583ca03a952bd5a9f715571938921788</anchor>
+      <arglist>(trans_ptr testVal, trans_ptr existingVal)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI ptr</type>
+      <name>ruInt16RefPtr</name>
+      <anchorfile>group__typeint16.html</anchorfile>
+      <anchor>gaa1e2b598ea0f4f87693a55c5191557e1</anchor>
+      <arglist>(ptr in)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI int32_t</type>
+      <name>ruRefPtrInt16</name>
+      <anchorfile>group__typeint16.html</anchorfile>
+      <anchor>gaade4a393edd5c523d8aba14379cbff30</anchor>
+      <arglist>(ptr src, ptr *dst)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI ruType</type>
+      <name>ruTypeInt16</name>
+      <anchorfile>group__typeint16.html</anchorfile>
+      <anchor>ga9d8f38de5eb216f2026285487a9cf05a</anchor>
+      <arglist>(void)</arglist>
+    </member>
+  </compound>
+  <compound kind="group">
+    <name>typeint8</name>
+    <title>8 Bit Integer</title>
+    <filename>group__typeint8.html</filename>
+    <member kind="function">
+      <type>RUAPI ru_uint</type>
+      <name>ruInt8Hash</name>
+      <anchorfile>group__typeint8.html</anchorfile>
+      <anchor>gaa8d8b1b947d98be9f1962566c5a7a951</anchor>
+      <arglist>(trans_ptr key)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI bool</type>
+      <name>ruInt8Match</name>
+      <anchorfile>group__typeint8.html</anchorfile>
+      <anchor>ga12d84ace9fe97867e9d8b213b236bd52</anchor>
+      <arglist>(trans_ptr testKey, trans_ptr existingKey)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI int32_t</type>
+      <name>ruInt8Comp</name>
+      <anchorfile>group__typeint8.html</anchorfile>
+      <anchor>ga861f607f1a59729f6f80aff0eb1830f3</anchor>
+      <arglist>(trans_ptr testVal, trans_ptr existingVal)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI ptr</type>
+      <name>ruInt8RefPtr</name>
+      <anchorfile>group__typeint8.html</anchorfile>
+      <anchor>ga09cb6e09c03038db11b5d60532f93d4e</anchor>
+      <arglist>(ptr in)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI int32_t</type>
+      <name>ruRefPtrInt8</name>
+      <anchorfile>group__typeint8.html</anchorfile>
+      <anchor>ga81200576aadbddcfdb9f46a0936c2483</anchor>
+      <arglist>(ptr src, ptr *dst)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI ruType</type>
+      <name>ruTypeInt8</name>
+      <anchorfile>group__typeint8.html</anchorfile>
+      <anchor>gaff6b451ec39463a9d3419d5e24feacb1</anchor>
+      <arglist>(void)</arglist>
+    </member>
+  </compound>
+  <compound kind="group">
+    <name>typebool</name>
+    <title>Boolean</title>
+    <filename>group__typebool.html</filename>
+    <member kind="function">
+      <type>RUAPI ru_uint</type>
+      <name>ruBoolHash</name>
+      <anchorfile>group__typebool.html</anchorfile>
+      <anchor>gad6d7586d30eac5b57737e29d555536be</anchor>
+      <arglist>(trans_ptr key)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI bool</type>
+      <name>ruBoolMatch</name>
+      <anchorfile>group__typebool.html</anchorfile>
+      <anchor>gad2b2a8b38b79ac5db457b9bf4fdf5ca2</anchor>
+      <arglist>(trans_ptr testKey, trans_ptr existingKey)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI int32_t</type>
+      <name>ruBoolComp</name>
+      <anchorfile>group__typebool.html</anchorfile>
+      <anchor>gac41c88e5c2423f43a49f625431a75e66</anchor>
+      <arglist>(trans_ptr testVal, trans_ptr existingVal)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI ptr</type>
+      <name>ruBoolRefPtr</name>
+      <anchorfile>group__typebool.html</anchorfile>
+      <anchor>ga92e91baf1893821ad63f56d7b42f4401</anchor>
+      <arglist>(ptr in)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI int32_t</type>
+      <name>ruRefPtrBool</name>
+      <anchorfile>group__typebool.html</anchorfile>
+      <anchor>gab25c983548406f533e1939755adb746c</anchor>
+      <arglist>(ptr src, ptr *dst)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI ruType</type>
+      <name>ruTypeBool</name>
+      <anchorfile>group__typebool.html</anchorfile>
+      <anchor>gac8b5b99b1b9a9927a4503e6082a7339a</anchor>
+      <arglist>(void)</arglist>
+    </member>
+  </compound>
+  <compound kind="group">
+    <name>typestring</name>
+    <title>Strings</title>
+    <filename>group__typestring.html</filename>
+    <member kind="function">
+      <type>RUAPI ru_uint</type>
+      <name>ruStrHash</name>
+      <anchorfile>group__typestring.html</anchorfile>
+      <anchor>ga180c35fbcfa6b598af925bc5b35fa996</anchor>
+      <arglist>(trans_ptr key)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI bool</type>
+      <name>ruStrMatch</name>
+      <anchorfile>group__typestring.html</anchorfile>
+      <anchor>ga0b39d859aa373ea70eeb6feee16b0ba1</anchor>
+      <arglist>(trans_ptr s1, trans_ptr s2)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI int32_t</type>
+      <name>ruStrComp</name>
+      <anchorfile>group__typestring.html</anchorfile>
+      <anchor>ga480d93242a367a69472b6030be2aab42</anchor>
+      <arglist>(trans_ptr testVal, trans_ptr existingVal)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI ruType</type>
+      <name>ruTypeStrRef</name>
+      <anchorfile>group__typestring.html</anchorfile>
+      <anchor>ga055eb21bf93d6e80c01ae6fa0d656845</anchor>
+      <arglist>(void)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI ruType</type>
+      <name>ruTypeStrDup</name>
+      <anchorfile>group__typestring.html</anchorfile>
+      <anchor>ga5d216c496a260a04e5eb2dbc84a84660</anchor>
+      <arglist>(void)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI ruType</type>
+      <name>ruTypeStrFree</name>
+      <anchorfile>group__typestring.html</anchorfile>
+      <anchor>gab0e7e644240923d0227101b893609080</anchor>
+      <arglist>(void)</arglist>
+    </member>
+  </compound>
+  <compound kind="group">
     <name>fam</name>
     <title>File Access Monitoring</title>
     <filename>group__fam.html</filename>
@@ -3527,11 +3620,11 @@
       <arglist>(int eventType, trans_chars filePath, trans_chars destPath)</arglist>
     </member>
     <member kind="function">
-      <type>RUAPI ruFamEvent *</type>
+      <type>RUAPI ptr</type>
       <name>ruFamEventFree</name>
       <anchorfile>group__fam.html</anchorfile>
-      <anchor>gafb1cfbeed368d7e0968b73b6c2b57430</anchor>
-      <arglist>(ruFamEvent *fe)</arglist>
+      <anchor>ga6393369383b16f8884776bdcf36935c8</anchor>
+      <arglist>(ptr o)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI void</type>

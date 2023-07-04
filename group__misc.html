@@ -107,8 +107,6 @@ $(document).ready(function(){initNavTree('group__misc.html',''); initResizable()
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Data Structures</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">union &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="unionru_free_if.html">ruFreeIf</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structru_time_val.html">ruTimeVal</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Abstracted version of the Posix struct timeval.  <a href="structru_time_val.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -196,26 +194,6 @@ Typedefs</h2></td></tr>
 <tr class="memitem:gaaa0102d444a5dd14474b7951caae0459"><td class="memItemLeft" align="right" valign="top">typedef size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__misc.html#gaaa0102d444a5dd14474b7951caae0459">rusize</a></td></tr>
 <tr class="memdesc:gaaa0102d444a5dd14474b7951caae0459"><td class="mdescLeft">&#160;</td><td class="mdescRight">Abstracted version of size_t.  <a href="group__misc.html#gaaa0102d444a5dd14474b7951caae0459">More...</a><br /></td></tr>
 <tr class="separator:gaaa0102d444a5dd14474b7951caae0459"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gada9bd40ceec7745a9614aead9555f616"><td class="memItemLeft" align="right" valign="top">typedef void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__misc.html#gada9bd40ceec7745a9614aead9555f616">ru_Int64</a></td></tr>
-<tr class="memdesc:gada9bd40ceec7745a9614aead9555f616"><td class="mdescLeft">&#160;</td><td class="mdescRight">A pointer to an allocated 64 bit int. Free with <a class="el" href="group__memory.html#gafcc3628238450c77b4aa61e9d7001a56">ruFree</a>.  <a href="group__misc.html#gada9bd40ceec7745a9614aead9555f616">More...</a><br /></td></tr>
-<tr class="separator:gada9bd40ceec7745a9614aead9555f616"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga1b23e084ffff15cf965a438497c9f8e2"><td class="memItemLeft" align="right" valign="top">typedef void *(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__misc.html#ga1b23e084ffff15cf965a438497c9f8e2">ruCloneFunc</a>) (void *)</td></tr>
-<tr class="memdesc:ga1b23e084ffff15cf965a438497c9f8e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Signature of a generic clone function.  <a href="group__misc.html#ga1b23e084ffff15cf965a438497c9f8e2">More...</a><br /></td></tr>
-<tr class="separator:ga1b23e084ffff15cf965a438497c9f8e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga227caa0d21650401d64874e26a9371ad"><td class="memItemLeft" align="right" valign="top">typedef int32_t(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__misc.html#ga227caa0d21650401d64874e26a9371ad">ruPtr2TypeFunc</a>) (void *, void **)</td></tr>
-<tr class="memdesc:ga227caa0d21650401d64874e26a9371ad"><td class="mdescLeft">&#160;</td><td class="mdescRight">Signature of a function that stores the value of the first pointer in a certain type by dereferencing the second pointer.  <a href="group__misc.html#ga227caa0d21650401d64874e26a9371ad">More...</a><br /></td></tr>
-<tr class="separator:ga227caa0d21650401d64874e26a9371ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga91dce9b2f482277a0d5ec778e54c5d14"><td class="memItemLeft" align="right" valign="top">typedef void *(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__misc.html#ga91dce9b2f482277a0d5ec778e54c5d14">ruClearFunc</a>) (void *)</td></tr>
-<tr class="memdesc:ga91dce9b2f482277a0d5ec778e54c5d14"><td class="mdescLeft">&#160;</td><td class="mdescRight">Signature of a generic free function returning NULL.  <a href="group__misc.html#ga91dce9b2f482277a0d5ec778e54c5d14">More...</a><br /></td></tr>
-<tr class="separator:ga91dce9b2f482277a0d5ec778e54c5d14"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga8eb4179750e158d78b0b3bc1e4b1bdce"><td class="memItemLeft" align="right" valign="top">typedef void(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__misc.html#ga8eb4179750e158d78b0b3bc1e4b1bdce">ruFreeFunc</a>) (void *)</td></tr>
-<tr class="memdesc:ga8eb4179750e158d78b0b3bc1e4b1bdce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Signature of a generic free function.  <a href="group__misc.html#ga8eb4179750e158d78b0b3bc1e4b1bdce">More...</a><br /></td></tr>
-<tr class="separator:ga8eb4179750e158d78b0b3bc1e4b1bdce"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga6f2df974d7fa3462ee789585fcd510ed"><td class="memItemLeft" align="right" valign="top">typedef int(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__misc.html#ga6f2df974d7fa3462ee789585fcd510ed">ruCompFunc</a>) (<a class="el" href="group__misc.html#ga147d80ce3325dd56fbfb0e07cedcf757">trans_ptr</a> a, <a class="el" href="group__misc.html#ga147d80ce3325dd56fbfb0e07cedcf757">trans_ptr</a> b)</td></tr>
-<tr class="memdesc:ga6f2df974d7fa3462ee789585fcd510ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Signature of a generic comparator function for sorting.  <a href="group__misc.html#ga6f2df974d7fa3462ee789585fcd510ed">More...</a><br /></td></tr>
-<tr class="separator:ga6f2df974d7fa3462ee789585fcd510ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga65f85814a8290f9797005d3b28e7e5fc"><td class="memItemLeft" align="right" valign="top">typedef unsigned char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__misc.html#ga65f85814a8290f9797005d3b28e7e5fc">uchar</a></td></tr>
-<tr class="separator:ga65f85814a8290f9797005d3b28e7e5fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
@@ -300,36 +278,6 @@ Functions</h2></td></tr>
 <tr class="memitem:gabb9ece7b53e9e95a196adc53be69b099"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__misc.html#gabb9ece7b53e9e95a196adc53be69b099">ruCharPtrDup</a> (char *in)</td></tr>
 <tr class="memdesc:gabb9ece7b53e9e95a196adc53be69b099"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copies the given string and returns the pointer.  <a href="group__misc.html#gabb9ece7b53e9e95a196adc53be69b099">More...</a><br /></td></tr>
 <tr class="separator:gabb9ece7b53e9e95a196adc53be69b099"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga711c0d4d3a2ce54cb8f2c743a9e20898"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__misc.html#gada9bd40ceec7745a9614aead9555f616">ru_Int64</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__misc.html#ga711c0d4d3a2ce54cb8f2c743a9e20898">ruInt64</a> (int64_t *val)</td></tr>
-<tr class="memdesc:ga711c0d4d3a2ce54cb8f2c743a9e20898"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allocates given 64 bit integer on the heap and returns the pointer.  <a href="group__misc.html#ga711c0d4d3a2ce54cb8f2c743a9e20898">More...</a><br /></td></tr>
-<tr class="separator:ga711c0d4d3a2ce54cb8f2c743a9e20898"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga155f9bd0584b9e1391ddd2e8c4a3f7cc"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__misc.html#ga155f9bd0584b9e1391ddd2e8c4a3f7cc">ruLongRefPtr</a> (long *in)</td></tr>
-<tr class="memdesc:ga155f9bd0584b9e1391ddd2e8c4a3f7cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the content of the given long integer address as pointer.  <a href="group__misc.html#ga155f9bd0584b9e1391ddd2e8c4a3f7cc">More...</a><br /></td></tr>
-<tr class="separator:ga155f9bd0584b9e1391ddd2e8c4a3f7cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga999d2676bc8ee3d5ebb7ebdfef051f90"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__misc.html#ga999d2676bc8ee3d5ebb7ebdfef051f90">ruInt32RefPtr</a> (int32_t *in)</td></tr>
-<tr class="memdesc:ga999d2676bc8ee3d5ebb7ebdfef051f90"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the content of the given 32 bit integer address as pointer.  <a href="group__misc.html#ga999d2676bc8ee3d5ebb7ebdfef051f90">More...</a><br /></td></tr>
-<tr class="separator:ga999d2676bc8ee3d5ebb7ebdfef051f90"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gae5ce49e9cb059da3827b56ba879281db"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__misc.html#gae5ce49e9cb059da3827b56ba879281db">ruInt16RefPtr</a> (int16_t *in)</td></tr>
-<tr class="memdesc:gae5ce49e9cb059da3827b56ba879281db"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the content of the given 16 bit integer address as pointer.  <a href="group__misc.html#gae5ce49e9cb059da3827b56ba879281db">More...</a><br /></td></tr>
-<tr class="separator:gae5ce49e9cb059da3827b56ba879281db"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gaf7d3ddbd3eeb6ba329e11a383063b0e6"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__misc.html#gaf7d3ddbd3eeb6ba329e11a383063b0e6">ruInt8RefPtr</a> (int8_t *in)</td></tr>
-<tr class="memdesc:gaf7d3ddbd3eeb6ba329e11a383063b0e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the content of the given 8 bit integer address as pointer.  <a href="group__misc.html#gaf7d3ddbd3eeb6ba329e11a383063b0e6">More...</a><br /></td></tr>
-<tr class="separator:gaf7d3ddbd3eeb6ba329e11a383063b0e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga18ed617e08000ba14cabde7fd64c1f02"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__misc.html#ga18ed617e08000ba14cabde7fd64c1f02">ruBoolRefPtr</a> (bool *in)</td></tr>
-<tr class="memdesc:ga18ed617e08000ba14cabde7fd64c1f02"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the content of the given boolean address as pointer.  <a href="group__misc.html#ga18ed617e08000ba14cabde7fd64c1f02">More...</a><br /></td></tr>
-<tr class="separator:ga18ed617e08000ba14cabde7fd64c1f02"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga59437124dbcf6691359e7dd0b7f02f57"><td class="memItemLeft" align="right" valign="top">RUAPI int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__misc.html#ga59437124dbcf6691359e7dd0b7f02f57">ruRefPtrInt64</a> (<a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a> src, <a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a> *dst)</td></tr>
-<tr class="separator:ga59437124dbcf6691359e7dd0b7f02f57"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga30336a83643ccc719115ed93f9052402"><td class="memItemLeft" align="right" valign="top">RUAPI int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__misc.html#ga30336a83643ccc719115ed93f9052402">ruRefPtrLong</a> (<a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a> src, <a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a> *dst)</td></tr>
-<tr class="separator:ga30336a83643ccc719115ed93f9052402"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga3576491ac9c3b0f2b064e89e1a997845"><td class="memItemLeft" align="right" valign="top">RUAPI int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__misc.html#ga3576491ac9c3b0f2b064e89e1a997845">ruRefPtrInt32</a> (<a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a> src, <a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a> *dst)</td></tr>
-<tr class="separator:ga3576491ac9c3b0f2b064e89e1a997845"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gaade4a393edd5c523d8aba14379cbff30"><td class="memItemLeft" align="right" valign="top">RUAPI int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__misc.html#gaade4a393edd5c523d8aba14379cbff30">ruRefPtrInt16</a> (<a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a> src, <a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a> *dst)</td></tr>
-<tr class="separator:gaade4a393edd5c523d8aba14379cbff30"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga81200576aadbddcfdb9f46a0936c2483"><td class="memItemLeft" align="right" valign="top">RUAPI int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__misc.html#ga81200576aadbddcfdb9f46a0936c2483">ruRefPtrInt8</a> (<a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a> src, <a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a> *dst)</td></tr>
-<tr class="separator:ga81200576aadbddcfdb9f46a0936c2483"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gab25c983548406f533e1939755adb746c"><td class="memItemLeft" align="right" valign="top">RUAPI int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__misc.html#gab25c983548406f533e1939755adb746c">ruRefPtrBool</a> (<a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a> src, <a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a> *dst)</td></tr>
-<tr class="separator:gab25c983548406f533e1939755adb746c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Abstracted functions pertaining to other areas. </p>
@@ -633,22 +581,6 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="gada9bd40ceec7745a9614aead9555f616"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gada9bd40ceec7745a9614aead9555f616">&#9670;&nbsp;</a></span>ru_Int64</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">typedef void* <a class="el" href="group__misc.html#gada9bd40ceec7745a9614aead9555f616">ru_Int64</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>A pointer to an allocated 64 bit int. Free with <a class="el" href="group__memory.html#gafcc3628238450c77b4aa61e9d7001a56">ruFree</a>. </p>
-
-</div>
-</div>
 <a id="ga623467b9d56a745927eb36236c8ebdb2"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ga623467b9d56a745927eb36236c8ebdb2">&#9670;&nbsp;</a></span>ru_pid</h2>
 
@@ -678,86 +610,6 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>A pointer sized unsigned integer type for collections like <a class="el" href="group__hashmap.html#gaad879dbca17e7740cbab5651cafe677d">ruMap</a> or <a class="el" href="group__list.html#gab25c1662a91a5e0d68a3f04efd1a0cc2">ruList</a>. </p>
-
-</div>
-</div>
-<a id="ga91dce9b2f482277a0d5ec778e54c5d14"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga91dce9b2f482277a0d5ec778e54c5d14">&#9670;&nbsp;</a></span>ruClearFunc</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">typedef void*(* ruClearFunc) (void *)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Signature of a generic free function returning NULL. </p>
-
-</div>
-</div>
-<a id="ga1b23e084ffff15cf965a438497c9f8e2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga1b23e084ffff15cf965a438497c9f8e2">&#9670;&nbsp;</a></span>ruCloneFunc</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">typedef void*(* ruCloneFunc) (void *)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Signature of a generic clone function. </p>
-
-</div>
-</div>
-<a id="ga6f2df974d7fa3462ee789585fcd510ed"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga6f2df974d7fa3462ee789585fcd510ed">&#9670;&nbsp;</a></span>ruCompFunc</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">typedef int(* ruCompFunc) (<a class="el" href="group__misc.html#ga147d80ce3325dd56fbfb0e07cedcf757">trans_ptr</a> a, <a class="el" href="group__misc.html#ga147d80ce3325dd56fbfb0e07cedcf757">trans_ptr</a> b)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Signature of a generic comparator function for sorting. </p>
-
-</div>
-</div>
-<a id="ga8eb4179750e158d78b0b3bc1e4b1bdce"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga8eb4179750e158d78b0b3bc1e4b1bdce">&#9670;&nbsp;</a></span>ruFreeFunc</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">typedef void(* ruFreeFunc) (void *)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Signature of a generic free function. </p>
-
-</div>
-</div>
-<a id="ga227caa0d21650401d64874e26a9371ad"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga227caa0d21650401d64874e26a9371ad">&#9670;&nbsp;</a></span>ruPtr2TypeFunc</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">typedef int32_t(* ruPtr2TypeFunc) (void *, void **)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Signature of a function that stores the value of the first pointer in a certain type by dereferencing the second pointer. </p>
 
 </div>
 </div>
@@ -877,20 +729,6 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ga65f85814a8290f9797005d3b28e7e5fc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga65f85814a8290f9797005d3b28e7e5fc">&#9670;&nbsp;</a></span>uchar</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">typedef unsigned char <a class="el" href="group__misc.html#ga65f85814a8290f9797005d3b28e7e5fc">uchar</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="ga02db3ac43a5917535ca3cbc37ac72884"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ga02db3ac43a5917535ca3cbc37ac72884">&#9670;&nbsp;</a></span>usec_t</h2>
 
@@ -908,33 +746,6 @@ Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="ga18ed617e08000ba14cabde7fd64c1f02"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga18ed617e08000ba14cabde7fd64c1f02">&#9670;&nbsp;</a></span>ruBoolRefPtr()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">RUAPI <a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a> ruBoolRefPtr </td>
-          <td>(</td>
-          <td class="paramtype">bool *&#160;</td>
-          <td class="paramname"><em>in</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Returns the content of the given boolean address as pointer. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">in</td><td>address to a boolean </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>content of given address in pointer sized field </dd></dl>
-
-</div>
-</div>
 <a id="gabb9ece7b53e9e95a196adc53be69b099"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#gabb9ece7b53e9e95a196adc53be69b099">&#9670;&nbsp;</a></span>ruCharPtrDup()</h2>
 
@@ -1079,114 +890,6 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="gae5ce49e9cb059da3827b56ba879281db"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gae5ce49e9cb059da3827b56ba879281db">&#9670;&nbsp;</a></span>ruInt16RefPtr()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">RUAPI <a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a> ruInt16RefPtr </td>
-          <td>(</td>
-          <td class="paramtype">int16_t *&#160;</td>
-          <td class="paramname"><em>in</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Returns the content of the given 16 bit integer address as pointer. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">in</td><td>address to 16 bit integer </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>content of given address in pointer sized field </dd></dl>
-
-</div>
-</div>
-<a id="ga999d2676bc8ee3d5ebb7ebdfef051f90"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga999d2676bc8ee3d5ebb7ebdfef051f90">&#9670;&nbsp;</a></span>ruInt32RefPtr()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">RUAPI <a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a> ruInt32RefPtr </td>
-          <td>(</td>
-          <td class="paramtype">int32_t *&#160;</td>
-          <td class="paramname"><em>in</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Returns the content of the given 32 bit integer address as pointer. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">in</td><td>address to 32 bit integer </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>content of given address in pointer sized field </dd></dl>
-
-</div>
-</div>
-<a id="ga711c0d4d3a2ce54cb8f2c743a9e20898"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga711c0d4d3a2ce54cb8f2c743a9e20898">&#9670;&nbsp;</a></span>ruInt64()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">RUAPI <a class="el" href="group__misc.html#gada9bd40ceec7745a9614aead9555f616">ru_Int64</a> ruInt64 </td>
-          <td>(</td>
-          <td class="paramtype">int64_t *&#160;</td>
-          <td class="paramname"><em>val</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Allocates given 64 bit integer on the heap and returns the pointer. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">val</td><td>address where int to allocate is stored </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Pointer to allocated integer. Caller must free with <a class="el" href="group__memory.html#gafcc3628238450c77b4aa61e9d7001a56">ruFree</a> </dd></dl>
-
-</div>
-</div>
-<a id="gaf7d3ddbd3eeb6ba329e11a383063b0e6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gaf7d3ddbd3eeb6ba329e11a383063b0e6">&#9670;&nbsp;</a></span>ruInt8RefPtr()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">RUAPI <a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a> ruInt8RefPtr </td>
-          <td>(</td>
-          <td class="paramtype">int8_t *&#160;</td>
-          <td class="paramname"><em>in</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Returns the content of the given 8 bit integer address as pointer. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">in</td><td>address to 8 bit integer </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>content of given address in pointer sized field </dd></dl>
-
-</div>
-</div>
 <a id="ga61f7ab20b2760c5cb849d3b442eb4402"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ga61f7ab20b2760c5cb849d3b442eb4402">&#9670;&nbsp;</a></span>ruIsInt64()</h2>
 
@@ -1236,33 +939,6 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ga155f9bd0584b9e1391ddd2e8c4a3f7cc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga155f9bd0584b9e1391ddd2e8c4a3f7cc">&#9670;&nbsp;</a></span>ruLongRefPtr()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">RUAPI <a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a> ruLongRefPtr </td>
-          <td>(</td>
-          <td class="paramtype">long *&#160;</td>
-          <td class="paramname"><em>in</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Returns the content of the given long integer address as pointer. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">in</td><td>address to long integer </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>content of given address in pointer sized field </dd></dl>
-
-</div>
-</div>
 <a id="gafb168a8376876c132f91f3568110a676"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#gafb168a8376876c132f91f3568110a676">&#9670;&nbsp;</a></span>ruProcessId()</h2>
 
@@ -1281,174 +957,6 @@ Functions</h2></td></tr>
 
 <p>Return the current process id. </p>
 <dl class="section return"><dt>Returns</dt><dd>the current process id </dd></dl>
-
-</div>
-</div>
-<a id="gab25c983548406f533e1939755adb746c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gab25c983548406f533e1939755adb746c">&#9670;&nbsp;</a></span>ruRefPtrBool()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">RUAPI int32_t ruRefPtrBool </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a>&#160;</td>
-          <td class="paramname"><em>src</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a> *&#160;</td>
-          <td class="paramname"><em>dst</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="gaade4a393edd5c523d8aba14379cbff30"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gaade4a393edd5c523d8aba14379cbff30">&#9670;&nbsp;</a></span>ruRefPtrInt16()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">RUAPI int32_t ruRefPtrInt16 </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a>&#160;</td>
-          <td class="paramname"><em>src</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a> *&#160;</td>
-          <td class="paramname"><em>dst</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ga3576491ac9c3b0f2b064e89e1a997845"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga3576491ac9c3b0f2b064e89e1a997845">&#9670;&nbsp;</a></span>ruRefPtrInt32()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">RUAPI int32_t ruRefPtrInt32 </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a>&#160;</td>
-          <td class="paramname"><em>src</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a> *&#160;</td>
-          <td class="paramname"><em>dst</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ga59437124dbcf6691359e7dd0b7f02f57"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga59437124dbcf6691359e7dd0b7f02f57">&#9670;&nbsp;</a></span>ruRefPtrInt64()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">RUAPI int32_t ruRefPtrInt64 </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a>&#160;</td>
-          <td class="paramname"><em>src</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a> *&#160;</td>
-          <td class="paramname"><em>dst</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ga81200576aadbddcfdb9f46a0936c2483"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga81200576aadbddcfdb9f46a0936c2483">&#9670;&nbsp;</a></span>ruRefPtrInt8()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">RUAPI int32_t ruRefPtrInt8 </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a>&#160;</td>
-          <td class="paramname"><em>src</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a> *&#160;</td>
-          <td class="paramname"><em>dst</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ga30336a83643ccc719115ed93f9052402"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga30336a83643ccc719115ed93f9052402">&#9670;&nbsp;</a></span>ruRefPtrLong()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">RUAPI int32_t ruRefPtrLong </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a>&#160;</td>
-          <td class="paramname"><em>src</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a> *&#160;</td>
-          <td class="paramname"><em>dst</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
 
 </div>
 </div>
@@ -1481,7 +989,7 @@ Functions</h2></td></tr>
 <p>Runs given program. </p>
 <p>Example: </p><div class="fragment"><div class="line"><span class="keyword">const</span> <span class="keywordtype">char</span>* command[] = {<span class="stringliteral">&quot;/bin/sleep&quot;</span>, <span class="stringliteral">&quot;3&quot;</span>, NULL};</div>
 <div class="line"><span class="keywordtype">int</span> ret = <a class="code" href="group__misc.html#gaa1ee1acfc9e71c9beba03b4b547f8abc">ruRunProg</a>(command, <a class="code" href="group__misc.html#ga3a6bd0d17663435e5e96679ffe03f900">RU_NO_TIMEOUT</a>);</div>
-<div class="ttc" id="agroup__misc_html_ga3a6bd0d17663435e5e96679ffe03f900"><div class="ttname"><a href="group__misc.html#ga3a6bd0d17663435e5e96679ffe03f900">RU_NO_TIMEOUT</a></div><div class="ttdeci">#define RU_NO_TIMEOUT</div><div class="ttdoc">Indicates that an operation that has no timeout. Used by ruRunProg.</div><div class="ttdef"><b>Definition:</b> regify-util.h:456</div></div>
+<div class="ttc" id="agroup__misc_html_ga3a6bd0d17663435e5e96679ffe03f900"><div class="ttname"><a href="group__misc.html#ga3a6bd0d17663435e5e96679ffe03f900">RU_NO_TIMEOUT</a></div><div class="ttdeci">#define RU_NO_TIMEOUT</div><div class="ttdoc">Indicates that an operation that has no timeout. Used by ruRunProg.</div><div class="ttdef"><b>Definition:</b> regify-util.h:437</div></div>
 <div class="ttc" id="agroup__misc_html_gaa1ee1acfc9e71c9beba03b4b547f8abc"><div class="ttname"><a href="group__misc.html#gaa1ee1acfc9e71c9beba03b4b547f8abc">ruRunProg</a></div><div class="ttdeci">RUAPI int32_t ruRunProg(const char **argv, sec_t timeout)</div><div class="ttdoc">Runs given program.</div></div>
 </div><!-- fragment --><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -2026,7 +1534,7 @@ Functions</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Wed Jun 21 2023 09:36:41 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Tue Jul 4 2023 13:19:31 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

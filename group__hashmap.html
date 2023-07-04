@@ -112,14 +112,14 @@ Macros</h2></td></tr>
 <tr class="memitem:ga5ca65fc49ff448367a2f1a799f7fe123"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__hashmap.html#ga5ca65fc49ff448367a2f1a799f7fe123">ruMapTryPut</a>(map,  key,  val,  existing)&#160;&#160;&#160;<a class="el" href="group__hashmap.html#ga1e118478f0538bf381369dffd6bd300d">ruMapPutData</a>(map, (<a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a>)(key), (<a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a>)(val), (<a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a>*)(existing))</td></tr>
 <tr class="memdesc:ga5ca65fc49ff448367a2f1a799f7fe123"><td class="mdescLeft">&#160;</td><td class="mdescRight">Runs <a class="el" href="group__hashmap.html#ga1e118478f0538bf381369dffd6bd300d">ruMapPutData</a> with ptr casts.  <a href="group__hashmap.html#ga5ca65fc49ff448367a2f1a799f7fe123">More...</a><br /></td></tr>
 <tr class="separator:ga5ca65fc49ff448367a2f1a799f7fe123"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gae7b22005687e27d6dffe3aecc834cb65"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__hashmap.html#gae7b22005687e27d6dffe3aecc834cb65">ruMapRemove</a>(rm,  key,  val)&#160;&#160;&#160;<a class="el" href="group__hashmap.html#ga495f361b43c3541008edc6686ff7e024">ruMapRemoveData</a>(rm, (<a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a>)(key), (<a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a>*)(val))</td></tr>
-<tr class="memdesc:gae7b22005687e27d6dffe3aecc834cb65"><td class="mdescLeft">&#160;</td><td class="mdescRight">Runs <a class="el" href="group__hashmap.html#ga495f361b43c3541008edc6686ff7e024">ruMapRemoveData</a> with ptr casts.  <a href="group__hashmap.html#gae7b22005687e27d6dffe3aecc834cb65">More...</a><br /></td></tr>
+<tr class="memitem:gae7b22005687e27d6dffe3aecc834cb65"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__hashmap.html#gae7b22005687e27d6dffe3aecc834cb65">ruMapRemove</a>(rm,  key,  val)&#160;&#160;&#160;<a class="el" href="group__hashmap.html#ga8ad1d693265098bb8110c7d866300d1d">ruMapRemoveData</a>(rm, (<a class="el" href="group__misc.html#ga147d80ce3325dd56fbfb0e07cedcf757">trans_ptr</a>)(key), (<a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a>*)(val))</td></tr>
+<tr class="memdesc:gae7b22005687e27d6dffe3aecc834cb65"><td class="mdescLeft">&#160;</td><td class="mdescRight">Runs <a class="el" href="group__hashmap.html#ga8ad1d693265098bb8110c7d866300d1d">ruMapRemoveData</a> with ptr casts.  <a href="group__hashmap.html#gae7b22005687e27d6dffe3aecc834cb65">More...</a><br /></td></tr>
 <tr class="separator:gae7b22005687e27d6dffe3aecc834cb65"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga864d402bda9961fc1b07a0b99e44197c"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__hashmap.html#ga864d402bda9961fc1b07a0b99e44197c">ruMapGet</a>(rm,  key,  val)&#160;&#160;&#160;<a class="el" href="group__hashmap.html#gaac8dbb9a04d457b59a52a1dcb6799fab">ruMapGetValue</a>(rm, (<a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a>)(key), (<a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a>*)(val))</td></tr>
-<tr class="memdesc:ga864d402bda9961fc1b07a0b99e44197c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Runs <a class="el" href="group__hashmap.html#gaac8dbb9a04d457b59a52a1dcb6799fab">ruMapGetValue</a> with a ptr cast.  <a href="group__hashmap.html#ga864d402bda9961fc1b07a0b99e44197c">More...</a><br /></td></tr>
+<tr class="memitem:ga864d402bda9961fc1b07a0b99e44197c"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__hashmap.html#ga864d402bda9961fc1b07a0b99e44197c">ruMapGet</a>(rm,  key,  val)&#160;&#160;&#160;<a class="el" href="group__hashmap.html#gaa30a9f663f42641de433e202c0c54fdf">ruMapGetValue</a>(rm, (<a class="el" href="group__misc.html#ga147d80ce3325dd56fbfb0e07cedcf757">trans_ptr</a>)(key), (<a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a>*)(val))</td></tr>
+<tr class="memdesc:ga864d402bda9961fc1b07a0b99e44197c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Runs <a class="el" href="group__hashmap.html#gaa30a9f663f42641de433e202c0c54fdf">ruMapGetValue</a> with a ptr cast.  <a href="group__hashmap.html#ga864d402bda9961fc1b07a0b99e44197c">More...</a><br /></td></tr>
 <tr class="separator:ga864d402bda9961fc1b07a0b99e44197c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gadcb291d67d6d0b58e6f2e8c85c1e574a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__hashmap.html#gadcb291d67d6d0b58e6f2e8c85c1e574a">ruMapHas</a>(rm,  key,  code)&#160;&#160;&#160;<a class="el" href="group__hashmap.html#ga1a2e5016f1688017a2db9ee16f6503dc">ruMapHasKey</a>(rm, (<a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a>)(key), code)</td></tr>
-<tr class="memdesc:gadcb291d67d6d0b58e6f2e8c85c1e574a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Runs <a class="el" href="group__hashmap.html#ga1a2e5016f1688017a2db9ee16f6503dc">ruMapHasKey</a> with a ptr casted key.  <a href="group__hashmap.html#gadcb291d67d6d0b58e6f2e8c85c1e574a">More...</a><br /></td></tr>
+<tr class="memitem:gadcb291d67d6d0b58e6f2e8c85c1e574a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__hashmap.html#gadcb291d67d6d0b58e6f2e8c85c1e574a">ruMapHas</a>(rm,  key,  code)&#160;&#160;&#160;<a class="el" href="group__hashmap.html#gabcdeacf7e867d8d4fd7282b5fabe3dd3">ruMapHasKey</a>(rm, (<a class="el" href="group__misc.html#ga147d80ce3325dd56fbfb0e07cedcf757">trans_ptr</a>)(key), code)</td></tr>
+<tr class="memdesc:gadcb291d67d6d0b58e6f2e8c85c1e574a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Runs <a class="el" href="group__hashmap.html#gabcdeacf7e867d8d4fd7282b5fabe3dd3">ruMapHasKey</a> with a ptr casted key.  <a href="group__hashmap.html#gadcb291d67d6d0b58e6f2e8c85c1e574a">More...</a><br /></td></tr>
 <tr class="separator:gadcb291d67d6d0b58e6f2e8c85c1e574a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gaddd443e421d563bfd40135306d5d2b1a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__hashmap.html#gaddd443e421d563bfd40135306d5d2b1a">ruMapFirst</a>(rm,  key,  value)&#160;&#160;&#160;<a class="el" href="group__hashmap.html#ga2c053928fd47426e9a22ac6bb4f4217e">ruMapFirstSet</a>(rm, (<a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a>*)(key), (<a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a>*)(value))</td></tr>
 <tr class="memdesc:gaddd443e421d563bfd40135306d5d2b1a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Runs <a class="el" href="group__hashmap.html#ga2c053928fd47426e9a22ac6bb4f4217e">ruMapFirstSet</a> with ptr casts.  <a href="group__hashmap.html#gaddd443e421d563bfd40135306d5d2b1a">More...</a><br /></td></tr>
@@ -136,42 +136,36 @@ Typedefs</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ga792a5f4e069f5b7bfe67ed2b960f94c8"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__hashmap.html#gaad879dbca17e7740cbab5651cafe677d">ruMap</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__hashmap.html#ga792a5f4e069f5b7bfe67ed2b960f94c8">ruMapNewSpec</a> (const <a class="el" href="group__specs.html#ga4cfbb1b06799e430e55cc8872da18a58">ruKeySpec</a> KS, const <a class="el" href="group__specs.html#gae33debc54e0e93f1dd6c17aac9800249">ruValSpec</a> VS)</td></tr>
-<tr class="memdesc:ga792a5f4e069f5b7bfe67ed2b960f94c8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a new <a class="el" href="group__hashmap.html#gaad879dbca17e7740cbab5651cafe677d">ruMap</a> based on the given specifications.  <a href="group__hashmap.html#ga792a5f4e069f5b7bfe67ed2b960f94c8">More...</a><br /></td></tr>
-<tr class="separator:ga792a5f4e069f5b7bfe67ed2b960f94c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga01203552d640f866d8aaa967beb2fa81"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__hashmap.html#gaad879dbca17e7740cbab5651cafe677d">ruMap</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__hashmap.html#ga01203552d640f866d8aaa967beb2fa81">ruMapNew</a> (<a class="el" href="group__hashsupport.html#ga71667e232bf6a6db737a5ac33535b39b">ruHashFunc</a> hash, <a class="el" href="group__hashsupport.html#ga60c90b03efaa80d47cc29e71ec93fb1d">ruMatchFunc</a> match, <a class="el" href="group__misc.html#ga8eb4179750e158d78b0b3bc1e4b1bdce">ruFreeFunc</a> keyFree, <a class="el" href="group__misc.html#ga8eb4179750e158d78b0b3bc1e4b1bdce">ruFreeFunc</a> valFree, uint32_t expectedSize)</td></tr>
-<tr class="memdesc:ga01203552d640f866d8aaa967beb2fa81"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a new thread safe map object. This is the long but flexible version to create a hash map.  <a href="group__hashmap.html#ga01203552d640f866d8aaa967beb2fa81">More...</a><br /></td></tr>
-<tr class="separator:ga01203552d640f866d8aaa967beb2fa81"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga9ebe0435352661033425c80b2f502fe6"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__hashmap.html#gaad879dbca17e7740cbab5651cafe677d">ruMap</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__hashmap.html#ga9ebe0435352661033425c80b2f502fe6">ruMapNewString</a> (<a class="el" href="group__misc.html#ga8eb4179750e158d78b0b3bc1e4b1bdce">ruFreeFunc</a> keyFree, <a class="el" href="group__misc.html#ga8eb4179750e158d78b0b3bc1e4b1bdce">ruFreeFunc</a> valFree)</td></tr>
-<tr class="memdesc:ga9ebe0435352661033425c80b2f502fe6"><td class="mdescLeft">&#160;</td><td class="mdescRight">A convenience constructor for maps with string keys.  <a href="group__hashmap.html#ga9ebe0435352661033425c80b2f502fe6">More...</a><br /></td></tr>
-<tr class="separator:ga9ebe0435352661033425c80b2f502fe6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gacf7db64ef4e7f3c82eb49eb6f80f3794"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__hashmap.html#gaad879dbca17e7740cbab5651cafe677d">ruMap</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__hashmap.html#gacf7db64ef4e7f3c82eb49eb6f80f3794">ruMapNewType</a> (<a class="el" href="group__specs.html#ga44e5e590e1e962d3ff605c847ebbf9c3">ruType</a> keyType, <a class="el" href="group__specs.html#ga44e5e590e1e962d3ff605c847ebbf9c3">ruType</a> valueType)</td></tr>
+<tr class="memdesc:gacf7db64ef4e7f3c82eb49eb6f80f3794"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a new <a class="el" href="group__hashmap.html#gaad879dbca17e7740cbab5651cafe677d">ruMap</a> based on the given specifications.  <a href="group__hashmap.html#gacf7db64ef4e7f3c82eb49eb6f80f3794">More...</a><br /></td></tr>
+<tr class="separator:gacf7db64ef4e7f3c82eb49eb6f80f3794"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga533dee52a4d05df820c614bfc9ea426e"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__hashmap.html#gaad879dbca17e7740cbab5651cafe677d">ruMap</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__hashmap.html#ga533dee52a4d05df820c614bfc9ea426e">ruMapFree</a> (<a class="el" href="group__hashmap.html#gaad879dbca17e7740cbab5651cafe677d">ruMap</a> rm)</td></tr>
 <tr class="memdesc:ga533dee52a4d05df820c614bfc9ea426e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Frees the given map and its members.  <a href="group__hashmap.html#ga533dee52a4d05df820c614bfc9ea426e">More...</a><br /></td></tr>
 <tr class="separator:ga533dee52a4d05df820c614bfc9ea426e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga1e118478f0538bf381369dffd6bd300d"><td class="memItemLeft" align="right" valign="top">RUAPI int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__hashmap.html#ga1e118478f0538bf381369dffd6bd300d">ruMapPutData</a> (<a class="el" href="group__hashmap.html#gaad879dbca17e7740cbab5651cafe677d">ruMap</a> rm, <a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a> key, <a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a> val, <a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a> *exisitingVal)</td></tr>
 <tr class="memdesc:ga1e118478f0538bf381369dffd6bd300d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Insert a key/val pair into the map.  <a href="group__hashmap.html#ga1e118478f0538bf381369dffd6bd300d">More...</a><br /></td></tr>
 <tr class="separator:ga1e118478f0538bf381369dffd6bd300d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga495f361b43c3541008edc6686ff7e024"><td class="memItemLeft" align="right" valign="top">RUAPI int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__hashmap.html#ga495f361b43c3541008edc6686ff7e024">ruMapRemoveData</a> (<a class="el" href="group__hashmap.html#gaad879dbca17e7740cbab5651cafe677d">ruMap</a> rm, <a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a> key, <a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a> *val)</td></tr>
-<tr class="memdesc:ga495f361b43c3541008edc6686ff7e024"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes an entry from the map.  <a href="group__hashmap.html#ga495f361b43c3541008edc6686ff7e024">More...</a><br /></td></tr>
-<tr class="separator:ga495f361b43c3541008edc6686ff7e024"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga8ad1d693265098bb8110c7d866300d1d"><td class="memItemLeft" align="right" valign="top">RUAPI int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__hashmap.html#ga8ad1d693265098bb8110c7d866300d1d">ruMapRemoveData</a> (<a class="el" href="group__hashmap.html#gaad879dbca17e7740cbab5651cafe677d">ruMap</a> rm, <a class="el" href="group__misc.html#ga147d80ce3325dd56fbfb0e07cedcf757">trans_ptr</a> key, <a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a> *val)</td></tr>
+<tr class="memdesc:ga8ad1d693265098bb8110c7d866300d1d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes an entry from the map.  <a href="group__hashmap.html#ga8ad1d693265098bb8110c7d866300d1d">More...</a><br /></td></tr>
+<tr class="separator:ga8ad1d693265098bb8110c7d866300d1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gaab1b6e1eeca5ef6eaa37ca3d846522b9"><td class="memItemLeft" align="right" valign="top">RUAPI int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__hashmap.html#gaab1b6e1eeca5ef6eaa37ca3d846522b9">ruMapRemoveAll</a> (<a class="el" href="group__hashmap.html#gaad879dbca17e7740cbab5651cafe677d">ruMap</a> rm)</td></tr>
 <tr class="memdesc:gaab1b6e1eeca5ef6eaa37ca3d846522b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes all entries from the map.  <a href="group__hashmap.html#gaab1b6e1eeca5ef6eaa37ca3d846522b9">More...</a><br /></td></tr>
 <tr class="separator:gaab1b6e1eeca5ef6eaa37ca3d846522b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gaac8dbb9a04d457b59a52a1dcb6799fab"><td class="memItemLeft" align="right" valign="top">RUAPI int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__hashmap.html#gaac8dbb9a04d457b59a52a1dcb6799fab">ruMapGetValue</a> (<a class="el" href="group__hashmap.html#gaad879dbca17e7740cbab5651cafe677d">ruMap</a> rm, <a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a> key, <a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a> *val)</td></tr>
-<tr class="memdesc:gaac8dbb9a04d457b59a52a1dcb6799fab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves an pointer entry from the map.  <a href="group__hashmap.html#gaac8dbb9a04d457b59a52a1dcb6799fab">More...</a><br /></td></tr>
-<tr class="separator:gaac8dbb9a04d457b59a52a1dcb6799fab"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga1a2e5016f1688017a2db9ee16f6503dc"><td class="memItemLeft" align="right" valign="top">RUAPI bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__hashmap.html#ga1a2e5016f1688017a2db9ee16f6503dc">ruMapHasKey</a> (<a class="el" href="group__hashmap.html#gaad879dbca17e7740cbab5651cafe677d">ruMap</a> rm, <a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a> key, int32_t *code)</td></tr>
-<tr class="memdesc:ga1a2e5016f1688017a2db9ee16f6503dc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tests whether map has an entry for given key.  <a href="group__hashmap.html#ga1a2e5016f1688017a2db9ee16f6503dc">More...</a><br /></td></tr>
-<tr class="separator:ga1a2e5016f1688017a2db9ee16f6503dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaa30a9f663f42641de433e202c0c54fdf"><td class="memItemLeft" align="right" valign="top">RUAPI int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__hashmap.html#gaa30a9f663f42641de433e202c0c54fdf">ruMapGetValue</a> (<a class="el" href="group__hashmap.html#gaad879dbca17e7740cbab5651cafe677d">ruMap</a> rm, <a class="el" href="group__misc.html#ga147d80ce3325dd56fbfb0e07cedcf757">trans_ptr</a> key, <a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a> *val)</td></tr>
+<tr class="memdesc:gaa30a9f663f42641de433e202c0c54fdf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves an pointer entry from the map.  <a href="group__hashmap.html#gaa30a9f663f42641de433e202c0c54fdf">More...</a><br /></td></tr>
+<tr class="separator:gaa30a9f663f42641de433e202c0c54fdf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gabcdeacf7e867d8d4fd7282b5fabe3dd3"><td class="memItemLeft" align="right" valign="top">RUAPI bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__hashmap.html#gabcdeacf7e867d8d4fd7282b5fabe3dd3">ruMapHasKey</a> (<a class="el" href="group__hashmap.html#gaad879dbca17e7740cbab5651cafe677d">ruMap</a> rm, <a class="el" href="group__misc.html#ga147d80ce3325dd56fbfb0e07cedcf757">trans_ptr</a> key, int32_t *code)</td></tr>
+<tr class="memdesc:gabcdeacf7e867d8d4fd7282b5fabe3dd3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tests whether map has an entry for given key.  <a href="group__hashmap.html#gabcdeacf7e867d8d4fd7282b5fabe3dd3">More...</a><br /></td></tr>
+<tr class="separator:gabcdeacf7e867d8d4fd7282b5fabe3dd3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga2c053928fd47426e9a22ac6bb4f4217e"><td class="memItemLeft" align="right" valign="top">RUAPI int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__hashmap.html#ga2c053928fd47426e9a22ac6bb4f4217e">ruMapFirstSet</a> (<a class="el" href="group__hashmap.html#gaad879dbca17e7740cbab5651cafe677d">ruMap</a> rm, <a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a> *key, <a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a> *value)</td></tr>
 <tr class="memdesc:ga2c053928fd47426e9a22ac6bb4f4217e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes a map iterator and populates given parameters with the first key pair to serve as a for loop initializer.  <a href="group__hashmap.html#ga2c053928fd47426e9a22ac6bb4f4217e">More...</a><br /></td></tr>
 <tr class="separator:ga2c053928fd47426e9a22ac6bb4f4217e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga288c4775f09b24ad7220f60e96c8bc36"><td class="memItemLeft" align="right" valign="top">RUAPI int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__hashmap.html#ga288c4775f09b24ad7220f60e96c8bc36">ruMapNextSet</a> (<a class="el" href="group__hashmap.html#gaad879dbca17e7740cbab5651cafe677d">ruMap</a> rm, <a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a> *key, <a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a> *value)</td></tr>
 <tr class="memdesc:ga288c4775f09b24ad7220f60e96c8bc36"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the next key/value pair from the map.  <a href="group__hashmap.html#ga288c4775f09b24ad7220f60e96c8bc36">More...</a><br /></td></tr>
 <tr class="separator:ga288c4775f09b24ad7220f60e96c8bc36"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga789ce12d5f474b500df9a63f065c0b1d"><td class="memItemLeft" align="right" valign="top">RUAPI int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__hashmap.html#ga789ce12d5f474b500df9a63f065c0b1d">ruMapKeyList</a> (<a class="el" href="group__hashmap.html#gaad879dbca17e7740cbab5651cafe677d">ruMap</a> rm, <a class="el" href="group__list.html#gab25c1662a91a5e0d68a3f04efd1a0cc2">ruList</a> *keys, <a class="el" href="group__misc.html#ga1b23e084ffff15cf965a438497c9f8e2">ruCloneFunc</a> copy, <a class="el" href="group__misc.html#ga8eb4179750e158d78b0b3bc1e4b1bdce">ruFreeFunc</a> listFree)</td></tr>
-<tr class="memdesc:ga789ce12d5f474b500df9a63f065c0b1d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return a keyset of the given map.  <a href="group__hashmap.html#ga789ce12d5f474b500df9a63f065c0b1d">More...</a><br /></td></tr>
-<tr class="separator:ga789ce12d5f474b500df9a63f065c0b1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga8525a18e605779bba001fcf2321d73ad"><td class="memItemLeft" align="right" valign="top">RUAPI int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__hashmap.html#ga8525a18e605779bba001fcf2321d73ad">ruMapKeyList</a> (<a class="el" href="group__hashmap.html#gaad879dbca17e7740cbab5651cafe677d">ruMap</a> rm, <a class="el" href="group__list.html#gab25c1662a91a5e0d68a3f04efd1a0cc2">ruList</a> *keys)</td></tr>
+<tr class="memdesc:ga8525a18e605779bba001fcf2321d73ad"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return a key list of the given map.  <a href="group__hashmap.html#ga8525a18e605779bba001fcf2321d73ad">More...</a><br /></td></tr>
+<tr class="separator:ga8525a18e605779bba001fcf2321d73ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga80853f0b20cccf61661b809304029cf5"><td class="memItemLeft" align="right" valign="top">RUAPI uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__hashmap.html#ga80853f0b20cccf61661b809304029cf5">ruMapSize</a> (<a class="el" href="group__hashmap.html#gaad879dbca17e7740cbab5651cafe677d">ruMap</a> rm, int32_t *code)</td></tr>
 <tr class="memdesc:ga80853f0b20cccf61661b809304029cf5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the size of the map.  <a href="group__hashmap.html#ga80853f0b20cccf61661b809304029cf5">More...</a><br /></td></tr>
 <tr class="separator:ga80853f0b20cccf61661b809304029cf5"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -218,8 +212,8 @@ Functions</h2></td></tr>
 <div class="line">    ret = <a class="code" href="group__hashmap.html#gae132393338c2bb004fe49b31e64570ff">ruMapNext</a>(map, &amp;key, &amp;val)) {</div>
 <div class="line">    <span class="comment">// work with key and/or val</span></div>
 <div class="line">}</div>
-<div class="ttc" id="agroup__hashmap_html_gaddd443e421d563bfd40135306d5d2b1a"><div class="ttname"><a href="group__hashmap.html#gaddd443e421d563bfd40135306d5d2b1a">ruMapFirst</a></div><div class="ttdeci">#define ruMapFirst(rm, key, value)</div><div class="ttdoc">Runs ruMapFirstSet with ptr casts.</div><div class="ttdef"><b>Definition:</b> map.h:538</div></div>
-<div class="ttc" id="agroup__hashmap_html_gae132393338c2bb004fe49b31e64570ff"><div class="ttname"><a href="group__hashmap.html#gae132393338c2bb004fe49b31e64570ff">ruMapNext</a></div><div class="ttdeci">#define ruMapNext(rm, key, value)</div><div class="ttdoc">Runs ruMapNextSet with ptr casts.</div><div class="ttdef"><b>Definition:</b> map.h:559</div></div>
+<div class="ttc" id="agroup__hashmap_html_gaddd443e421d563bfd40135306d5d2b1a"><div class="ttname"><a href="group__hashmap.html#gaddd443e421d563bfd40135306d5d2b1a">ruMapFirst</a></div><div class="ttdeci">#define ruMapFirst(rm, key, value)</div><div class="ttdoc">Runs ruMapFirstSet with ptr casts.</div><div class="ttdef"><b>Definition:</b> map.h:194</div></div>
+<div class="ttc" id="agroup__hashmap_html_gae132393338c2bb004fe49b31e64570ff"><div class="ttname"><a href="group__hashmap.html#gae132393338c2bb004fe49b31e64570ff">ruMapNext</a></div><div class="ttdeci">#define ruMapNext(rm, key, value)</div><div class="ttdoc">Runs ruMapNextSet with ptr casts.</div><div class="ttdef"><b>Definition:</b> map.h:215</div></div>
 <div class="ttc" id="agroup__ruerror_html_ga7e2f97cce8af8020834e685a2482556d"><div class="ttname"><a href="group__ruerror.html#ga7e2f97cce8af8020834e685a2482556d">RUE_OK</a></div><div class="ttdeci">#define RUE_OK</div><div class="ttdef"><b>Definition:</b> errors.h:65</div></div>
 </div><!-- fragment --><p> NOTE: Either key or value must be set. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -260,12 +254,12 @@ Functions</h2></td></tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td>&#160;&#160;&#160;<a class="el" href="group__hashmap.html#gaac8dbb9a04d457b59a52a1dcb6799fab">ruMapGetValue</a>(rm, (<a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a>)(key), (<a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a>*)(val))</td>
+          <td></td><td>&#160;&#160;&#160;<a class="el" href="group__hashmap.html#gaa30a9f663f42641de433e202c0c54fdf">ruMapGetValue</a>(rm, (<a class="el" href="group__misc.html#ga147d80ce3325dd56fbfb0e07cedcf757">trans_ptr</a>)(key), (<a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a>*)(val))</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Runs <a class="el" href="group__hashmap.html#gaac8dbb9a04d457b59a52a1dcb6799fab">ruMapGetValue</a> with a ptr cast. </p>
+<p>Runs <a class="el" href="group__hashmap.html#gaa30a9f663f42641de433e202c0c54fdf">ruMapGetValue</a> with a ptr cast. </p>
 
 </div>
 </div>
@@ -296,12 +290,12 @@ Functions</h2></td></tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td>&#160;&#160;&#160;<a class="el" href="group__hashmap.html#ga1a2e5016f1688017a2db9ee16f6503dc">ruMapHasKey</a>(rm, (<a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a>)(key), code)</td>
+          <td></td><td>&#160;&#160;&#160;<a class="el" href="group__hashmap.html#gabcdeacf7e867d8d4fd7282b5fabe3dd3">ruMapHasKey</a>(rm, (<a class="el" href="group__misc.html#ga147d80ce3325dd56fbfb0e07cedcf757">trans_ptr</a>)(key), code)</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Runs <a class="el" href="group__hashmap.html#ga1a2e5016f1688017a2db9ee16f6503dc">ruMapHasKey</a> with a ptr casted key. </p>
+<p>Runs <a class="el" href="group__hashmap.html#gabcdeacf7e867d8d4fd7282b5fabe3dd3">ruMapHasKey</a> with a ptr casted key. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">rm</td><td>The map to check. </td></tr>
@@ -422,12 +416,12 @@ Functions</h2></td></tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td>&#160;&#160;&#160;<a class="el" href="group__hashmap.html#ga495f361b43c3541008edc6686ff7e024">ruMapRemoveData</a>(rm, (<a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a>)(key), (<a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a>*)(val))</td>
+          <td></td><td>&#160;&#160;&#160;<a class="el" href="group__hashmap.html#ga8ad1d693265098bb8110c7d866300d1d">ruMapRemoveData</a>(rm, (<a class="el" href="group__misc.html#ga147d80ce3325dd56fbfb0e07cedcf757">trans_ptr</a>)(key), (<a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a>*)(val))</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Runs <a class="el" href="group__hashmap.html#ga495f361b43c3541008edc6686ff7e024">ruMapRemoveData</a> with ptr casts. </p>
+<p>Runs <a class="el" href="group__hashmap.html#ga8ad1d693265098bb8110c7d866300d1d">ruMapRemoveData</a> with ptr casts. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">rm</td><td>The map to remove the entry from. </td></tr>
@@ -582,8 +576,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="gaac8dbb9a04d457b59a52a1dcb6799fab"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gaac8dbb9a04d457b59a52a1dcb6799fab">&#9670;&nbsp;</a></span>ruMapGetValue()</h2>
+<a id="gaa30a9f663f42641de433e202c0c54fdf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaa30a9f663f42641de433e202c0c54fdf">&#9670;&nbsp;</a></span>ruMapGetValue()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -597,7 +591,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga147d80ce3325dd56fbfb0e07cedcf757">trans_ptr</a>&#160;</td>
           <td class="paramname"><em>key</em>, </td>
         </tr>
         <tr>
@@ -627,8 +621,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ga1a2e5016f1688017a2db9ee16f6503dc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga1a2e5016f1688017a2db9ee16f6503dc">&#9670;&nbsp;</a></span>ruMapHasKey()</h2>
+<a id="gabcdeacf7e867d8d4fd7282b5fabe3dd3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gabcdeacf7e867d8d4fd7282b5fabe3dd3">&#9670;&nbsp;</a></span>ruMapHasKey()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -642,7 +636,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga147d80ce3325dd56fbfb0e07cedcf757">trans_ptr</a>&#160;</td>
           <td class="paramname"><em>key</em>, </td>
         </tr>
         <tr>
@@ -672,8 +666,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ga789ce12d5f474b500df9a63f065c0b1d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga789ce12d5f474b500df9a63f065c0b1d">&#9670;&nbsp;</a></span>ruMapKeyList()</h2>
+<a id="ga8525a18e605779bba001fcf2321d73ad"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga8525a18e605779bba001fcf2321d73ad">&#9670;&nbsp;</a></span>ruMapKeyList()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -688,19 +682,7 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="group__list.html#gab25c1662a91a5e0d68a3f04efd1a0cc2">ruList</a> *&#160;</td>
-          <td class="paramname"><em>keys</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="group__misc.html#ga1b23e084ffff15cf965a438497c9f8e2">ruCloneFunc</a>&#160;</td>
-          <td class="paramname"><em>copy</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="group__misc.html#ga8eb4179750e158d78b0b3bc1e4b1bdce">ruFreeFunc</a>&#160;</td>
-          <td class="paramname"><em>listFree</em>&#160;</td>
+          <td class="paramname"><em>keys</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -710,13 +692,11 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Return a keyset of the given map. </p>
+<p>Return a key list of the given map. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">rm</td><td>The map to get the keyset from. </td></tr>
-    <tr><td class="paramname">copy</td><td>Optional copy function with which the keys are copied. </td></tr>
+    <tr><td class="paramname">rm</td><td>The map to get the key list from. </td></tr>
     <tr><td class="paramname">keys</td><td>Where to store the resulting list. </td></tr>
-    <tr><td class="paramname">listFree</td><td>Optional free function for the list or NULL to use the maps keyfree function. </td></tr>
   </table>
   </dd>
 </dl>
@@ -724,82 +704,23 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ga01203552d640f866d8aaa967beb2fa81"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga01203552d640f866d8aaa967beb2fa81">&#9670;&nbsp;</a></span>ruMapNew()</h2>
+<a id="gacf7db64ef4e7f3c82eb49eb6f80f3794"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gacf7db64ef4e7f3c82eb49eb6f80f3794">&#9670;&nbsp;</a></span>ruMapNewType()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">RUAPI <a class="el" href="group__hashmap.html#gaad879dbca17e7740cbab5651cafe677d">ruMap</a> ruMapNew </td>
+          <td class="memname">RUAPI <a class="el" href="group__hashmap.html#gaad879dbca17e7740cbab5651cafe677d">ruMap</a> ruMapNewType </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="group__hashsupport.html#ga71667e232bf6a6db737a5ac33535b39b">ruHashFunc</a>&#160;</td>
-          <td class="paramname"><em>hash</em>, </td>
+          <td class="paramtype"><a class="el" href="group__specs.html#ga44e5e590e1e962d3ff605c847ebbf9c3">ruType</a>&#160;</td>
+          <td class="paramname"><em>keyType</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="group__hashsupport.html#ga60c90b03efaa80d47cc29e71ec93fb1d">ruMatchFunc</a>&#160;</td>
-          <td class="paramname"><em>match</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="group__misc.html#ga8eb4179750e158d78b0b3bc1e4b1bdce">ruFreeFunc</a>&#160;</td>
-          <td class="paramname"><em>keyFree</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="group__misc.html#ga8eb4179750e158d78b0b3bc1e4b1bdce">ruFreeFunc</a>&#160;</td>
-          <td class="paramname"><em>valFree</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint32_t&#160;</td>
-          <td class="paramname"><em>expectedSize</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Creates a new thread safe map object. This is the long but flexible version to create a hash map. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">hash</td><td>A required function that returns a hash for the given key to be used internally to determine bucket assignments. </td></tr>
-    <tr><td class="paramname">match</td><td>A required function that determines whether the 2 given keys are equal. </td></tr>
-    <tr><td class="paramname">keyFree</td><td>An optional function to be called when a key is to be finalized (deleted). </td></tr>
-    <tr><td class="paramname">valFree</td><td>An optional function to be called when a value is to be finalized (deleted). </td></tr>
-    <tr><td class="paramname">expectedSize</td><td>Unused, initial estimate of how many members the map will have. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The newly created map object to be freed with <a class="el" href="group__hashmap.html#ga533dee52a4d05df820c614bfc9ea426e">ruMapFree</a> or NULL if required arguments weren't given. </dd></dl>
-
-</div>
-</div>
-<a id="ga792a5f4e069f5b7bfe67ed2b960f94c8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga792a5f4e069f5b7bfe67ed2b960f94c8">&#9670;&nbsp;</a></span>ruMapNewSpec()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">RUAPI <a class="el" href="group__hashmap.html#gaad879dbca17e7740cbab5651cafe677d">ruMap</a> ruMapNewSpec </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="group__specs.html#ga4cfbb1b06799e430e55cc8872da18a58">ruKeySpec</a>&#160;</td>
-          <td class="paramname"><em>KS</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="group__specs.html#gae33debc54e0e93f1dd6c17aac9800249">ruValSpec</a>&#160;</td>
-          <td class="paramname"><em>VS</em>&#160;</td>
+          <td class="paramtype"><a class="el" href="group__specs.html#ga44e5e590e1e962d3ff605c847ebbf9c3">ruType</a>&#160;</td>
+          <td class="paramname"><em>valueType</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -812,50 +733,12 @@ Functions</h2></td></tr>
 <p>Creates a new <a class="el" href="group__hashmap.html#gaad879dbca17e7740cbab5651cafe677d">ruMap</a> based on the given specifications. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">KS</td><td>A key specification. May be free after this call. </td></tr>
-    <tr><td class="paramname">VS</td><td>A value specification. May be free after this call. </td></tr>
+    <tr><td class="paramname">keyType</td><td>A key specification. Will be freed by this call. </td></tr>
+    <tr><td class="paramname">valueType</td><td>A value specification. Will be freed by this call. </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Newly create map. Caller m ust free with <a class="el" href="group__hashmap.html#ga533dee52a4d05df820c614bfc9ea426e">ruMapFree</a>. </dd></dl>
-
-</div>
-</div>
-<a id="ga9ebe0435352661033425c80b2f502fe6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga9ebe0435352661033425c80b2f502fe6">&#9670;&nbsp;</a></span>ruMapNewString()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">RUAPI <a class="el" href="group__hashmap.html#gaad879dbca17e7740cbab5651cafe677d">ruMap</a> ruMapNewString </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="group__misc.html#ga8eb4179750e158d78b0b3bc1e4b1bdce">ruFreeFunc</a>&#160;</td>
-          <td class="paramname"><em>keyFree</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="group__misc.html#ga8eb4179750e158d78b0b3bc1e4b1bdce">ruFreeFunc</a>&#160;</td>
-          <td class="paramname"><em>valFree</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>A convenience constructor for maps with string keys. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">keyFree</td><td>An optional function to be called when a key is to be finalized (deleted). </td></tr>
-    <tr><td class="paramname">valFree</td><td>An optional function to be called when a value is to be finalized (deleted). </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The newly created map object to be freed with <a class="el" href="group__hashmap.html#ga533dee52a4d05df820c614bfc9ea426e">ruMapFree</a>. </dd></dl>
 
 </div>
 </div>
@@ -983,8 +866,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ga495f361b43c3541008edc6686ff7e024"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga495f361b43c3541008edc6686ff7e024">&#9670;&nbsp;</a></span>ruMapRemoveData()</h2>
+<a id="ga8ad1d693265098bb8110c7d866300d1d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga8ad1d693265098bb8110c7d866300d1d">&#9670;&nbsp;</a></span>ruMapRemoveData()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -998,7 +881,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga147d80ce3325dd56fbfb0e07cedcf757">trans_ptr</a>&#160;</td>
           <td class="paramname"><em>key</em>, </td>
         </tr>
         <tr>
@@ -1071,7 +954,7 @@ Functions</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Wed Jun 21 2023 09:36:41 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Tue Jul 4 2023 13:19:31 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

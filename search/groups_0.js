@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['buffer_20functions_919',['Buffer Functions',['../group__buffer.html',1,'']]],
-  ['buffer_20object_920',['Buffer Object',['../group__ru_buffer.html',1,'']]]
+  ['16_20bit_20integer_936',['16 Bit Integer',['../group__typeint16.html',1,'']]]
 ];

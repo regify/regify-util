@@ -94,6 +94,7 @@ $(document).ready(function(){initNavTree('group__memory.html',''); initResizable
 <div class="header">
   <div class="summary">
 <a href="#define-members">Macros</a> &#124;
+<a href="#typedef-members">Typedefs</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">Memory Management</div>  </div>
@@ -106,7 +107,7 @@ $(document).ready(function(){initNavTree('group__memory.html',''); initResizable
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
 <tr class="memitem:gafcc3628238450c77b4aa61e9d7001a56"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__memory.html#gafcc3628238450c77b4aa61e9d7001a56">ruFree</a>(p)&#160;&#160;&#160;ruMacStart { if(p) { free((void*)p); p = NULL; } } ruMacEnd</td></tr>
-<tr class="memdesc:gafcc3628238450c77b4aa61e9d7001a56"><td class="mdescLeft">&#160;</td><td class="mdescRight">Frees given resource and set paramater to NULL.  <a href="group__memory.html#gafcc3628238450c77b4aa61e9d7001a56">More...</a><br /></td></tr>
+<tr class="memdesc:gafcc3628238450c77b4aa61e9d7001a56"><td class="mdescLeft">&#160;</td><td class="mdescRight">Frees given resource and sets paramater to NULL.  <a href="group__memory.html#gafcc3628238450c77b4aa61e9d7001a56">More...</a><br /></td></tr>
 <tr class="separator:gafcc3628238450c77b4aa61e9d7001a56"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gafdbf421329129ad39395ca1c48694f9f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__memory.html#gafdbf421329129ad39395ca1c48694f9f">ruReplace</a>(p,  n)&#160;&#160;&#160;ruMacStart { if(p) { free((void*)p); } p = n; } ruMacEnd</td></tr>
 <tr class="memdesc:gafdbf421329129ad39395ca1c48694f9f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Frees given resource and set paramater to new value.  <a href="group__memory.html#gafdbf421329129ad39395ca1c48694f9f">More...</a><br /></td></tr>
@@ -118,8 +119,20 @@ Macros</h2></td></tr>
 <tr class="memdesc:ga2b0db047653765afa9f51710f491b734"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reallocate requested memory without zeroing.  <a href="group__memory.html#ga2b0db047653765afa9f51710f491b734">More...</a><br /></td></tr>
 <tr class="separator:ga2b0db047653765afa9f51710f491b734"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
+Typedefs</h2></td></tr>
+<tr class="memitem:ga37adb48aac1ef8401ce1e5b910170b7b"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a>(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__memory.html#ga37adb48aac1ef8401ce1e5b910170b7b">ruClearFunc</a>) (<a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a> o)</td></tr>
+<tr class="memdesc:ga37adb48aac1ef8401ce1e5b910170b7b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Signature of a generic free function returning NULL.  <a href="group__memory.html#ga37adb48aac1ef8401ce1e5b910170b7b">More...</a><br /></td></tr>
+<tr class="separator:ga37adb48aac1ef8401ce1e5b910170b7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaa75466cb9b6c992ae41aeebe94535ff4"><td class="memItemLeft" align="right" valign="top">typedef void(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__memory.html#gaa75466cb9b6c992ae41aeebe94535ff4">ruFreeFunc</a>) (<a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a> o)</td></tr>
+<tr class="memdesc:gaa75466cb9b6c992ae41aeebe94535ff4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Signature of a generic free function.  <a href="group__memory.html#gaa75466cb9b6c992ae41aeebe94535ff4">More...</a><br /></td></tr>
+<tr class="separator:gaa75466cb9b6c992ae41aeebe94535ff4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:ga4ccb3b96ae0e822dee1ecc528f262c79"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__memory.html#ga4ccb3b96ae0e822dee1ecc528f262c79">ruClear</a> (<a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a> o)</td></tr>
+<tr class="memdesc:ga4ccb3b96ae0e822dee1ecc528f262c79"><td class="mdescLeft">&#160;</td><td class="mdescRight">Frees given resource if set and returns NULL.  <a href="group__memory.html#ga4ccb3b96ae0e822dee1ecc528f262c79">More...</a><br /></td></tr>
+<tr class="separator:ga4ccb3b96ae0e822dee1ecc528f262c79"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga9aa9dcd1bd646dfc857f63eba32e923c"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__misc.html#ga9f2753cc325fa665aaf7925682462ecb">alloc_ptr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__memory.html#ga9aa9dcd1bd646dfc857f63eba32e923c">ruMallocSize</a> (<a class="el" href="group__misc.html#gaaa0102d444a5dd14474b7951caae0459">rusize</a> count, <a class="el" href="group__misc.html#gaaa0102d444a5dd14474b7951caae0459">rusize</a> ofsize)</td></tr>
 <tr class="memdesc:ga9aa9dcd1bd646dfc857f63eba32e923c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allocate and zero requested memory.  <a href="group__memory.html#ga9aa9dcd1bd646dfc857f63eba32e923c">More...</a><br /></td></tr>
 <tr class="separator:ga9aa9dcd1bd646dfc857f63eba32e923c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -149,7 +162,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Frees given resource and set paramater to NULL. </p>
+<p>Frees given resource and sets paramater to NULL. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">p</td><td>resource to be freed and NULLed if not NULL already </td></tr>
@@ -279,7 +292,79 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<h2 class="groupheader">Typedef Documentation</h2>
+<a id="ga37adb48aac1ef8401ce1e5b910170b7b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga37adb48aac1ef8401ce1e5b910170b7b">&#9670;&nbsp;</a></span>ruClearFunc</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef <a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a>(* ruClearFunc) (<a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a> o)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Signature of a generic free function returning NULL. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">o</td><td>object to free. Function should insure it's not NULL before freeing </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="gaa75466cb9b6c992ae41aeebe94535ff4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaa75466cb9b6c992ae41aeebe94535ff4">&#9670;&nbsp;</a></span>ruFreeFunc</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef void(* ruFreeFunc) (<a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a> o)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Signature of a generic free function. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">o</td><td>object to free. Function should insure it's not NULL before freeing </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <h2 class="groupheader">Function Documentation</h2>
+<a id="ga4ccb3b96ae0e822dee1ecc528f262c79"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga4ccb3b96ae0e822dee1ecc528f262c79">&#9670;&nbsp;</a></span>ruClear()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI <a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a> ruClear </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a>&#160;</td>
+          <td class="paramname"><em>o</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Frees given resource if set and returns NULL. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">o</td><td>resource to be freed and if not NULL already </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>NULL </dd></dl>
+
+</div>
+</div>
 <a id="ga9aa9dcd1bd646dfc857f63eba32e923c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ga9aa9dcd1bd646dfc857f63eba32e923c">&#9670;&nbsp;</a></span>ruMallocSize()</h2>
 
@@ -406,7 +491,7 @@ Functions</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Wed Jun 21 2023 09:36:41 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Tue Jul 4 2023 13:19:31 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

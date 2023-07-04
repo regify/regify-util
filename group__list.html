@@ -93,6 +93,7 @@ $(document).ready(function(){initNavTree('group__list.html',''); initResizable()
 
 <div class="header">
   <div class="summary">
+<a href="#groups">Modules</a> &#124;
 <a href="#define-members">Macros</a> &#124;
 <a href="#typedef-members">Typedefs</a> &#124;
 <a href="#func-members">Functions</a>  </div>
@@ -101,134 +102,94 @@ $(document).ready(function(){initNavTree('group__list.html',''); initResizable()
 </div><!--header-->
 <div class="contents">
 
-<p>This section contains a singly linked list implementation.  
+<p>This section contains a list implementation.  
 <a href="#details">More...</a></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="groups"></a>
+Modules</h2></td></tr>
+<tr class="memitem:group__listobj"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__listobj.html">Object List API</a></td></tr>
+<tr class="memdesc:group__listobj"><td class="mdescLeft">&#160;</td><td class="mdescRight">This API is useful for object value types including strings. <br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:group__listtype"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__listtype.html">Typed List API</a></td></tr>
+<tr class="memdesc:group__listtype"><td class="mdescLeft">&#160;</td><td class="mdescRight">This API is useful for scalar types such as int, long or bool. <br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
 <tr class="memitem:ga67286d2c5522bdb4428436c561f122e5"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__list.html#ga67286d2c5522bdb4428436c561f122e5">ruListAppend</a>(rl,  data)&#160;&#160;&#160;<a class="el" href="group__list.html#gafe233eb17a583b06810e50372781207a">ruListAppendPtr</a>(rl, (<a class="el" href="group__misc.html#ga517aac830d9ce5c6ab7deec46adf54d5">perm_ptr</a>)(data))</td></tr>
+<tr class="memdesc:ga67286d2c5522bdb4428436c561f122e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calls <a class="el" href="group__list.html#gafe233eb17a583b06810e50372781207a">ruListAppendPtr</a> but handles the void* cast.  <a href="group__list.html#ga67286d2c5522bdb4428436c561f122e5">More...</a><br /></td></tr>
 <tr class="separator:ga67286d2c5522bdb4428436c561f122e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gacb4e82b923c400fc91cd8f40b4844b79"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__list.html#gacb4e82b923c400fc91cd8f40b4844b79">ruListPush</a>(rl,  data)&#160;&#160;&#160;<a class="el" href="group__list.html#gafe233eb17a583b06810e50372781207a">ruListAppendPtr</a>(rl, (<a class="el" href="group__misc.html#ga517aac830d9ce5c6ab7deec46adf54d5">perm_ptr</a>)(data))</td></tr>
+<tr class="memdesc:gacb4e82b923c400fc91cd8f40b4844b79"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stack usage synonym for <a class="el" href="group__list.html#ga67286d2c5522bdb4428436c561f122e5">ruListAppend</a>.  <a href="group__list.html#gacb4e82b923c400fc91cd8f40b4844b79">More...</a><br /></td></tr>
 <tr class="separator:gacb4e82b923c400fc91cd8f40b4844b79"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gacc2bc91f4f76b9863603a004dae43194"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__list.html#gacc2bc91f4f76b9863603a004dae43194">ruListIter</a>(rl)&#160;&#160;&#160;<a class="el" href="group__list.html#ga515d2cfd15a9d647800254d4c78f4dad">ruListHead</a>(rl, NULL)</td></tr>
+<tr class="memdesc:gacc2bc91f4f76b9863603a004dae43194"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the first element in the given list to iterate over.  <a href="group__list.html#gacc2bc91f4f76b9863603a004dae43194">More...</a><br /></td></tr>
 <tr class="separator:gacc2bc91f4f76b9863603a004dae43194"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gacb34c9de3d00243458bc91f9a76e2344"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__list.html#gacb34c9de3d00243458bc91f9a76e2344">ruIterNext</a>(re,  type)&#160;&#160;&#160;(type) <a class="el" href="group__list.html#ga8a5796acc55b08010cb2bd7160255477">ruListNextData</a>(&amp;(re), NULL)</td></tr>
-<tr class="separator:gacb34c9de3d00243458bc91f9a76e2344"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga019dbdda890922f4b19e68750b845bed"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__list.html#ga019dbdda890922f4b19e68750b845bed">ruListIdxData</a>(rl,  index,  type,  code)&#160;&#160;&#160;(type)<a class="el" href="group__list.html#gae2fedd16002646e35cc328b88e941cce">ruListIdxElmtData</a>(rl, index, code)</td></tr>
-<tr class="separator:ga019dbdda890922f4b19e68750b845bed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
 <tr class="memitem:gab25c1662a91a5e0d68a3f04efd1a0cc2"><td class="memItemLeft" align="right" valign="top">typedef void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__list.html#gab25c1662a91a5e0d68a3f04efd1a0cc2">ruList</a></td></tr>
+<tr class="memdesc:gab25c1662a91a5e0d68a3f04efd1a0cc2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Opaque pointer to list object. See <a class="el" href="group__list.html">List Collection</a>.  <a href="group__list.html#gab25c1662a91a5e0d68a3f04efd1a0cc2">More...</a><br /></td></tr>
 <tr class="separator:gab25c1662a91a5e0d68a3f04efd1a0cc2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga8a10b640cc881a4205684a5730c949a2"><td class="memItemLeft" align="right" valign="top">typedef void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__list.html#ga8a10b640cc881a4205684a5730c949a2">ruListElmt</a></td></tr>
+<tr class="memdesc:ga8a10b640cc881a4205684a5730c949a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Opaque pointer to list element object. See <a class="el" href="group__list.html">List Collection</a>.  <a href="group__list.html#ga8a10b640cc881a4205684a5730c949a2">More...</a><br /></td></tr>
 <tr class="separator:ga8a10b640cc881a4205684a5730c949a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga88f5af8c2f8986a0708a06c1d0bb2183"><td class="memItemLeft" align="right" valign="top">typedef void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__list.html#ga88f5af8c2f8986a0708a06c1d0bb2183">ruIterator</a></td></tr>
+<tr class="memdesc:ga88f5af8c2f8986a0708a06c1d0bb2183"><td class="mdescLeft">&#160;</td><td class="mdescRight">Opaque pointer to list iterator object. See <a class="el" href="group__list.html">List Collection</a>.  <a href="group__list.html#ga88f5af8c2f8986a0708a06c1d0bb2183">More...</a><br /></td></tr>
 <tr class="separator:ga88f5af8c2f8986a0708a06c1d0bb2183"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:gaaa06a57ba6d6104137eb2092933deac6"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__list.html#gab25c1662a91a5e0d68a3f04efd1a0cc2">ruList</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__list.html#gaaa06a57ba6d6104137eb2092933deac6">ruListNew</a> (<a class="el" href="group__misc.html#ga8eb4179750e158d78b0b3bc1e4b1bdce">ruFreeFunc</a> destructor)</td></tr>
-<tr class="separator:gaaa06a57ba6d6104137eb2092933deac6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga67700afc458c82357f28b796b1f85da2"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__list.html#gab25c1662a91a5e0d68a3f04efd1a0cc2">ruList</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__list.html#ga67700afc458c82357f28b796b1f85da2">ruListNewType</a> (<a class="el" href="group__specs.html#ga44e5e590e1e962d3ff605c847ebbf9c3">ruType</a> valueType)</td></tr>
+<tr class="memdesc:ga67700afc458c82357f28b796b1f85da2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a new list object. To be freed with <a class="el" href="group__list.html#ga8f7ce9a43ad50071bc1161ecb21a38d5">ruListFree</a>.  <a href="group__list.html#ga67700afc458c82357f28b796b1f85da2">More...</a><br /></td></tr>
+<tr class="separator:ga67700afc458c82357f28b796b1f85da2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga8f7ce9a43ad50071bc1161ecb21a38d5"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__list.html#gab25c1662a91a5e0d68a3f04efd1a0cc2">ruList</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__list.html#ga8f7ce9a43ad50071bc1161ecb21a38d5">ruListFree</a> (<a class="el" href="group__list.html#gab25c1662a91a5e0d68a3f04efd1a0cc2">ruList</a> rl)</td></tr>
+<tr class="memdesc:ga8f7ce9a43ad50071bc1161ecb21a38d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Frees the given list object.  <a href="group__list.html#ga8f7ce9a43ad50071bc1161ecb21a38d5">More...</a><br /></td></tr>
 <tr class="separator:ga8f7ce9a43ad50071bc1161ecb21a38d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gab3649ffbd2db481ba7ad5398d1ff5794"><td class="memItemLeft" align="right" valign="top">RUAPI int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__list.html#gab3649ffbd2db481ba7ad5398d1ff5794">ruListClear</a> (<a class="el" href="group__list.html#gab25c1662a91a5e0d68a3f04efd1a0cc2">ruList</a> rl)</td></tr>
+<tr class="memdesc:gab3649ffbd2db481ba7ad5398d1ff5794"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clears the given list.  <a href="group__list.html#gab3649ffbd2db481ba7ad5398d1ff5794">More...</a><br /></td></tr>
 <tr class="separator:gab3649ffbd2db481ba7ad5398d1ff5794"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gafe233eb17a583b06810e50372781207a"><td class="memItemLeft" align="right" valign="top">RUAPI int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__list.html#gafe233eb17a583b06810e50372781207a">ruListAppendPtr</a> (<a class="el" href="group__list.html#gab25c1662a91a5e0d68a3f04efd1a0cc2">ruList</a> rl, <a class="el" href="group__misc.html#ga517aac830d9ce5c6ab7deec46adf54d5">perm_ptr</a> data)</td></tr>
+<tr class="memdesc:gafe233eb17a583b06810e50372781207a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Appends the given object to the list.  <a href="group__list.html#gafe233eb17a583b06810e50372781207a">More...</a><br /></td></tr>
 <tr class="separator:gafe233eb17a583b06810e50372781207a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gad362bd738fbd5fdf7e8571ec183249ef"><td class="memItemLeft" align="right" valign="top">RUAPI int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__list.html#gad362bd738fbd5fdf7e8571ec183249ef">ruListInsertAt</a> (<a class="el" href="group__list.html#gab25c1662a91a5e0d68a3f04efd1a0cc2">ruList</a> rl, int32_t index, <a class="el" href="group__misc.html#ga517aac830d9ce5c6ab7deec46adf54d5">perm_ptr</a> data)</td></tr>
-<tr class="separator:gad362bd738fbd5fdf7e8571ec183249ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga2dc64fa432c78f2df6ec859487ee1788"><td class="memItemLeft" align="right" valign="top">RUAPI int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__list.html#ga2dc64fa432c78f2df6ec859487ee1788">ruListInsertIdx</a> (<a class="el" href="group__list.html#gab25c1662a91a5e0d68a3f04efd1a0cc2">ruList</a> rl, int32_t index, <a class="el" href="group__misc.html#ga517aac830d9ce5c6ab7deec46adf54d5">perm_ptr</a> data)</td></tr>
+<tr class="memdesc:ga2dc64fa432c78f2df6ec859487ee1788"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inserts given object at indexed position in list in given list element.  <a href="group__list.html#ga2dc64fa432c78f2df6ec859487ee1788">More...</a><br /></td></tr>
+<tr class="separator:ga2dc64fa432c78f2df6ec859487ee1788"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga4e46b6472e396b8f3e4c644d2f61e62d"><td class="memItemLeft" align="right" valign="top">RUAPI int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__list.html#ga4e46b6472e396b8f3e4c644d2f61e62d">ruListInsertBefore</a> (<a class="el" href="group__list.html#gab25c1662a91a5e0d68a3f04efd1a0cc2">ruList</a> rl, <a class="el" href="group__list.html#ga8a10b640cc881a4205684a5730c949a2">ruListElmt</a> rle, <a class="el" href="group__misc.html#ga517aac830d9ce5c6ab7deec46adf54d5">perm_ptr</a> data)</td></tr>
+<tr class="memdesc:ga4e46b6472e396b8f3e4c644d2f61e62d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inserts given object before given list element.  <a href="group__list.html#ga4e46b6472e396b8f3e4c644d2f61e62d">More...</a><br /></td></tr>
+<tr class="separator:ga4e46b6472e396b8f3e4c644d2f61e62d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gad87a85ba0ad40486b640c08f5030ee2f"><td class="memItemLeft" align="right" valign="top">RUAPI int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__list.html#gad87a85ba0ad40486b640c08f5030ee2f">ruListInsertAfter</a> (<a class="el" href="group__list.html#gab25c1662a91a5e0d68a3f04efd1a0cc2">ruList</a> rl, <a class="el" href="group__list.html#ga8a10b640cc881a4205684a5730c949a2">ruListElmt</a> rle, <a class="el" href="group__misc.html#ga517aac830d9ce5c6ab7deec46adf54d5">perm_ptr</a> data)</td></tr>
+<tr class="memdesc:gad87a85ba0ad40486b640c08f5030ee2f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inserts given object after given list element.  <a href="group__list.html#gad87a85ba0ad40486b640c08f5030ee2f">More...</a><br /></td></tr>
 <tr class="separator:gad87a85ba0ad40486b640c08f5030ee2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga00f37a668ae4e6d7b92af8034179c951"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__list.html#ga00f37a668ae4e6d7b92af8034179c951">ruListRemove</a> (<a class="el" href="group__list.html#gab25c1662a91a5e0d68a3f04efd1a0cc2">ruList</a> rl, <a class="el" href="group__list.html#ga8a10b640cc881a4205684a5730c949a2">ruListElmt</a> *rle, int32_t *code)</td></tr>
-<tr class="separator:ga00f37a668ae4e6d7b92af8034179c951"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gac38106311ed611ce8706246e5ebba17a"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__list.html#gac38106311ed611ce8706246e5ebba17a">ruListPop</a> (<a class="el" href="group__list.html#gab25c1662a91a5e0d68a3f04efd1a0cc2">ruList</a> rl, int32_t *code)</td></tr>
-<tr class="memdesc:gac38106311ed611ce8706246e5ebba17a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return first element of the list.  <a href="group__list.html#gac38106311ed611ce8706246e5ebba17a">More...</a><br /></td></tr>
-<tr class="separator:gac38106311ed611ce8706246e5ebba17a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga2bbfbf34ff189ebf934273395a11f224"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__list.html#ga2bbfbf34ff189ebf934273395a11f224">ruListTryPop</a> (<a class="el" href="group__list.html#gab25c1662a91a5e0d68a3f04efd1a0cc2">ruList</a> rl, <a class="el" href="group__misc.html#gae416893e8160c5b7c6da3765e4707d5d">msec_t</a> timeoutMs, int32_t *code)</td></tr>
-<tr class="memdesc:ga2bbfbf34ff189ebf934273395a11f224"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tries to return first element of the list.  <a href="group__list.html#ga2bbfbf34ff189ebf934273395a11f224">More...</a><br /></td></tr>
-<tr class="separator:ga2bbfbf34ff189ebf934273395a11f224"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gaf068a6ca647d47215c5a805d35ca5ec4"><td class="memItemLeft" align="right" valign="top">RUAPI uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__list.html#gaf068a6ca647d47215c5a805d35ca5ec4">ruListSize</a> (<a class="el" href="group__list.html#gab25c1662a91a5e0d68a3f04efd1a0cc2">ruList</a> rl, int32_t *code)</td></tr>
+<tr class="memdesc:gaf068a6ca647d47215c5a805d35ca5ec4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the number of elements in the list.  <a href="group__list.html#gaf068a6ca647d47215c5a805d35ca5ec4">More...</a><br /></td></tr>
 <tr class="separator:gaf068a6ca647d47215c5a805d35ca5ec4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga515d2cfd15a9d647800254d4c78f4dad"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__list.html#ga8a10b640cc881a4205684a5730c949a2">ruListElmt</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__list.html#ga515d2cfd15a9d647800254d4c78f4dad">ruListHead</a> (<a class="el" href="group__list.html#gab25c1662a91a5e0d68a3f04efd1a0cc2">ruList</a> rl, int32_t *code)</td></tr>
-<tr class="separator:ga515d2cfd15a9d647800254d4c78f4dad"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gaa97a983c396666bdb305c2047abd70a7"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__list.html#ga8a10b640cc881a4205684a5730c949a2">ruListElmt</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__list.html#gaa97a983c396666bdb305c2047abd70a7">ruListTail</a> (<a class="el" href="group__list.html#gab25c1662a91a5e0d68a3f04efd1a0cc2">ruList</a> rl, int32_t *code)</td></tr>
-<tr class="separator:gaa97a983c396666bdb305c2047abd70a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga92dbcac157bd0ffd1a696d9b46ad42d1"><td class="memItemLeft" align="right" valign="top">RUAPI bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__list.html#ga92dbcac157bd0ffd1a696d9b46ad42d1">ruListElmtIsHead</a> (<a class="el" href="group__list.html#gab25c1662a91a5e0d68a3f04efd1a0cc2">ruList</a> rl, <a class="el" href="group__list.html#ga8a10b640cc881a4205684a5730c949a2">ruListElmt</a> re, int32_t *code)</td></tr>
-<tr class="separator:ga92dbcac157bd0ffd1a696d9b46ad42d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga45b8b301a3af9ef2f51ece8df37b099f"><td class="memItemLeft" align="right" valign="top">RUAPI bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__list.html#ga45b8b301a3af9ef2f51ece8df37b099f">ruListElmtIsTail</a> (<a class="el" href="group__list.html#ga8a10b640cc881a4205684a5730c949a2">ruListElmt</a> re, int32_t *code)</td></tr>
-<tr class="separator:ga45b8b301a3af9ef2f51ece8df37b099f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga662f949b26672d0793e8b78dc44b568b"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__list.html#ga8a10b640cc881a4205684a5730c949a2">ruListElmt</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__list.html#ga662f949b26672d0793e8b78dc44b568b">ruListNextElmt</a> (<a class="el" href="group__list.html#ga8a10b640cc881a4205684a5730c949a2">ruListElmt</a> re, int32_t *code)</td></tr>
-<tr class="separator:ga662f949b26672d0793e8b78dc44b568b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga8a5796acc55b08010cb2bd7160255477"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__list.html#ga8a5796acc55b08010cb2bd7160255477">ruListNextData</a> (<a class="el" href="group__list.html#ga8a10b640cc881a4205684a5730c949a2">ruListElmt</a> *re, int32_t *code)</td></tr>
-<tr class="separator:ga8a5796acc55b08010cb2bd7160255477"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga5d70dcfd4646dea79cfe1ae1ae482cc0"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__list.html#ga5d70dcfd4646dea79cfe1ae1ae482cc0">ruListElmtData</a> (<a class="el" href="group__list.html#ga8a10b640cc881a4205684a5730c949a2">ruListElmt</a> re, int32_t *code)</td></tr>
-<tr class="separator:ga5d70dcfd4646dea79cfe1ae1ae482cc0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gae2fedd16002646e35cc328b88e941cce"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__list.html#gae2fedd16002646e35cc328b88e941cce">ruListIdxElmtData</a> (<a class="el" href="group__list.html#gab25c1662a91a5e0d68a3f04efd1a0cc2">ruList</a> rl, int32_t index, int32_t *code)</td></tr>
-<tr class="separator:gae2fedd16002646e35cc328b88e941cce"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga3f5916035e33df40b498642137ea769f"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__misc.html#ga972d4f4f858964bb2381d186ea96d88d">alloc_chars</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__list.html#ga3f5916035e33df40b498642137ea769f">ruListJoin</a> (<a class="el" href="group__list.html#gab25c1662a91a5e0d68a3f04efd1a0cc2">ruList</a> rl, <a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> delim, int32_t *code)</td></tr>
 <tr class="memdesc:ga3f5916035e33df40b498642137ea769f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Joins a list of char* item with given delim.  <a href="group__list.html#ga3f5916035e33df40b498642137ea769f">More...</a><br /></td></tr>
 <tr class="separator:ga3f5916035e33df40b498642137ea769f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gace02c8adb52bae50e49aac8123e7e21a"><td class="memItemLeft" align="right" valign="top">RUAPI int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__list.html#gace02c8adb52bae50e49aac8123e7e21a">ruListSort</a> (<a class="el" href="group__list.html#gab25c1662a91a5e0d68a3f04efd1a0cc2">ruList</a> rl, <a class="el" href="group__misc.html#ga6f2df974d7fa3462ee789585fcd510ed">ruCompFunc</a> sort)</td></tr>
-<tr class="memdesc:gace02c8adb52bae50e49aac8123e7e21a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sorts the given list using supplied comparator function.  <a href="group__list.html#gace02c8adb52bae50e49aac8123e7e21a">More...</a><br /></td></tr>
-<tr class="separator:gace02c8adb52bae50e49aac8123e7e21a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga4ce49f0d1e82a450616d472f9df42eec"><td class="memItemLeft" align="right" valign="top">RUAPI int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__list.html#ga4ce49f0d1e82a450616d472f9df42eec">ruListSort</a> (<a class="el" href="group__list.html#gab25c1662a91a5e0d68a3f04efd1a0cc2">ruList</a> rl)</td></tr>
+<tr class="memdesc:ga4ce49f0d1e82a450616d472f9df42eec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sorts the given list using the associated types comparator function.  <a href="group__list.html#ga4ce49f0d1e82a450616d472f9df42eec">More...</a><br /></td></tr>
+<tr class="separator:ga4ce49f0d1e82a450616d472f9df42eec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga515d2cfd15a9d647800254d4c78f4dad"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__list.html#ga8a10b640cc881a4205684a5730c949a2">ruListElmt</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__list.html#ga515d2cfd15a9d647800254d4c78f4dad">ruListHead</a> (<a class="el" href="group__list.html#gab25c1662a91a5e0d68a3f04efd1a0cc2">ruList</a> rl, int32_t *code)</td></tr>
+<tr class="memdesc:ga515d2cfd15a9d647800254d4c78f4dad"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the first element in the given list.  <a href="group__list.html#ga515d2cfd15a9d647800254d4c78f4dad">More...</a><br /></td></tr>
+<tr class="separator:ga515d2cfd15a9d647800254d4c78f4dad"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaa97a983c396666bdb305c2047abd70a7"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__list.html#ga8a10b640cc881a4205684a5730c949a2">ruListElmt</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__list.html#gaa97a983c396666bdb305c2047abd70a7">ruListTail</a> (<a class="el" href="group__list.html#gab25c1662a91a5e0d68a3f04efd1a0cc2">ruList</a> rl, int32_t *code)</td></tr>
+<tr class="memdesc:gaa97a983c396666bdb305c2047abd70a7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the last element in the given list.  <a href="group__list.html#gaa97a983c396666bdb305c2047abd70a7">More...</a><br /></td></tr>
+<tr class="separator:gaa97a983c396666bdb305c2047abd70a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga429c52c8d9224a7cdfdc462daf30aed7"><td class="memItemLeft" align="right" valign="top">RUAPI bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__list.html#ga429c52c8d9224a7cdfdc462daf30aed7">ruListElmtIsHead</a> (<a class="el" href="group__list.html#ga8a10b640cc881a4205684a5730c949a2">ruListElmt</a> re, int32_t *code)</td></tr>
+<tr class="memdesc:ga429c52c8d9224a7cdfdc462daf30aed7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates whether given element is the first in the given list.  <a href="group__list.html#ga429c52c8d9224a7cdfdc462daf30aed7">More...</a><br /></td></tr>
+<tr class="separator:ga429c52c8d9224a7cdfdc462daf30aed7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga45b8b301a3af9ef2f51ece8df37b099f"><td class="memItemLeft" align="right" valign="top">RUAPI bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__list.html#ga45b8b301a3af9ef2f51ece8df37b099f">ruListElmtIsTail</a> (<a class="el" href="group__list.html#ga8a10b640cc881a4205684a5730c949a2">ruListElmt</a> re, int32_t *code)</td></tr>
+<tr class="memdesc:ga45b8b301a3af9ef2f51ece8df37b099f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates whether given element is the last in the given list.  <a href="group__list.html#ga45b8b301a3af9ef2f51ece8df37b099f">More...</a><br /></td></tr>
+<tr class="separator:ga45b8b301a3af9ef2f51ece8df37b099f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga662f949b26672d0793e8b78dc44b568b"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__list.html#ga8a10b640cc881a4205684a5730c949a2">ruListElmt</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__list.html#ga662f949b26672d0793e8b78dc44b568b">ruListNextElmt</a> (<a class="el" href="group__list.html#ga8a10b640cc881a4205684a5730c949a2">ruListElmt</a> re, int32_t *code)</td></tr>
+<tr class="memdesc:ga662f949b26672d0793e8b78dc44b568b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the next element following the given element from list.  <a href="group__list.html#ga662f949b26672d0793e8b78dc44b568b">More...</a><br /></td></tr>
+<tr class="separator:ga662f949b26672d0793e8b78dc44b568b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<p>This section contains a singly linked list implementation. </p>
-<p>Example: </p><div class="fragment"><div class="line"><a class="code" href="group__list.html#gab25c1662a91a5e0d68a3f04efd1a0cc2">ruList</a> recipients = <a class="code" href="group__list.html#gaaa06a57ba6d6104137eb2092933deac6">ruListNew</a>(NULL);</div>
-<div class="line"><span class="comment">// We are going to ignore some return codes for brevity.</span></div>
-<div class="line">int32_t ret = <a class="code" href="group__list.html#ga67286d2c5522bdb4428436c561f122e5">ruListAppend</a>(recipients, <span class="stringliteral">&quot;bob&quot;</span>);</div>
-<div class="line">ret = <a class="code" href="group__list.html#ga67286d2c5522bdb4428436c561f122e5">ruListAppend</a>(recipients, <span class="stringliteral">&quot;alice&quot;</span>);</div>
-<div class="line"><a class="code" href="group__list.html#ga88f5af8c2f8986a0708a06c1d0bb2183">ruIterator</a> li = <a class="code" href="group__list.html#gacc2bc91f4f76b9863603a004dae43194">ruListIter</a>(recipients);</div>
-<div class="line"><span class="keywordflow">for</span>(<span class="keywordtype">char</span>* recip = <a class="code" href="group__list.html#gacb34c9de3d00243458bc91f9a76e2344">ruIterNext</a>(li, <span class="keywordtype">char</span>*);</div>
-<div class="line">        li; recip = <a class="code" href="group__list.html#gacb34c9de3d00243458bc91f9a76e2344">ruIterNext</a>(li, <span class="keywordtype">char</span>*)) {</div>
-<div class="line">    printf(<span class="stringliteral">&quot;Recipient: %s&quot;</span>, recip);</div>
-<div class="line">}</div>
-<div class="line"><a class="code" href="group__list.html#ga8f7ce9a43ad50071bc1161ecb21a38d5">ruListFree</a>(recipients);</div>
-<div class="ttc" id="agroup__list_html_ga67286d2c5522bdb4428436c561f122e5"><div class="ttname"><a href="group__list.html#ga67286d2c5522bdb4428436c561f122e5">ruListAppend</a></div><div class="ttdeci">#define ruListAppend(rl, data)</div><div class="ttdef"><b>Definition:</b> list.h:110</div></div>
-<div class="ttc" id="agroup__list_html_ga88f5af8c2f8986a0708a06c1d0bb2183"><div class="ttname"><a href="group__list.html#ga88f5af8c2f8986a0708a06c1d0bb2183">ruIterator</a></div><div class="ttdeci">void * ruIterator</div><div class="ttdef"><b>Definition:</b> list.h:67</div></div>
-<div class="ttc" id="agroup__list_html_ga8f7ce9a43ad50071bc1161ecb21a38d5"><div class="ttname"><a href="group__list.html#ga8f7ce9a43ad50071bc1161ecb21a38d5">ruListFree</a></div><div class="ttdeci">RUAPI ruList ruListFree(ruList rl)</div></div>
-<div class="ttc" id="agroup__list_html_gaaa06a57ba6d6104137eb2092933deac6"><div class="ttname"><a href="group__list.html#gaaa06a57ba6d6104137eb2092933deac6">ruListNew</a></div><div class="ttdeci">RUAPI ruList ruListNew(ruFreeFunc destructor)</div></div>
-<div class="ttc" id="agroup__list_html_gab25c1662a91a5e0d68a3f04efd1a0cc2"><div class="ttname"><a href="group__list.html#gab25c1662a91a5e0d68a3f04efd1a0cc2">ruList</a></div><div class="ttdeci">void * ruList</div><div class="ttdef"><b>Definition:</b> list.h:57</div></div>
-<div class="ttc" id="agroup__list_html_gacb34c9de3d00243458bc91f9a76e2344"><div class="ttname"><a href="group__list.html#gacb34c9de3d00243458bc91f9a76e2344">ruIterNext</a></div><div class="ttdeci">#define ruIterNext(re, type)</div><div class="ttdef"><b>Definition:</b> list.h:257</div></div>
-<div class="ttc" id="agroup__list_html_gacc2bc91f4f76b9863603a004dae43194"><div class="ttname"><a href="group__list.html#gacc2bc91f4f76b9863603a004dae43194">ruListIter</a></div><div class="ttdeci">#define ruListIter(rl)</div><div class="ttdef"><b>Definition:</b> list.h:207</div></div>
-</div><!-- fragment --> <h2 class="groupheader">Macro Definition Documentation</h2>
-<a id="gacb34c9de3d00243458bc91f9a76e2344"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gacb34c9de3d00243458bc91f9a76e2344">&#9670;&nbsp;</a></span>ruIterNext</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define ruIterNext</td>
-          <td>(</td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">re, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">type&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td>&#160;&#160;&#160;(type) <a class="el" href="group__list.html#ga8a5796acc55b08010cb2bd7160255477">ruListNextData</a>(&amp;(re), NULL)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Returns the data payload of the next list element casted to type. </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">re</td><td>Current list element to get the follower of. </td></tr>
-    <tr><td class="paramname">type</td><td>Data type to cast the returned data payload to. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>NULL if given element was the last or the data of the next element. </dd></dl>
-
-</div>
-</div>
+<p>This section contains a list implementation. </p>
+<p>The list has typed and non typed variants and can also be used as a queue. The list is made thread safe by a mutex that is locked during read and write operations. </p>
+<h2 class="groupheader">Macro Definition Documentation</h2>
 <a id="ga67286d2c5522bdb4428436c561f122e5"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ga67286d2c5522bdb4428436c561f122e5">&#9670;&nbsp;</a></span>ruListAppend</h2>
 
@@ -254,7 +215,9 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Calls <a class="el" href="group__list.html#gafe233eb17a583b06810e50372781207a">ruListAppendPtr</a> but handles the void* cast. </p><dl class="params"><dt>Parameters</dt><dd>
+
+<p>Calls <a class="el" href="group__list.html#gafe233eb17a583b06810e50372781207a">ruListAppendPtr</a> but handles the void* cast. </p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">rl</td><td>List to append object to. </td></tr>
     <tr><td class="paramname">data</td><td>Object to append. </td></tr>
@@ -262,56 +225,6 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><a class="el" href="group__ruerror.html#ga7e2f97cce8af8020834e685a2482556d">RUE_OK</a> on success <a class="el" href="group__ruerror.html#gae20a9bc093af1bbbb5e42ef8ed05deec">RUE_USER_ABORT</a> when a threaded list has quit else a regify error code. </dd></dl>
-
-</div>
-</div>
-<a id="ga019dbdda890922f4b19e68750b845bed"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga019dbdda890922f4b19e68750b845bed">&#9670;&nbsp;</a></span>ruListIdxData</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define ruListIdxData</td>
-          <td>(</td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">rl, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">index, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">type, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">code&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td>&#160;&#160;&#160;(type)<a class="el" href="group__list.html#gae2fedd16002646e35cc328b88e941cce">ruListIdxElmtData</a>(rl, index, code)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Returns the data payload of the element at given 0 based index casted to type. </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">rl</td><td>List from which to return the element data payload. </td></tr>
-    <tr><td class="paramname">index</td><td>Index of the element in question. 0 is the first element. </td></tr>
-    <tr><td class="paramname">type</td><td>Data type to cast the returned data payload to. </td></tr>
-    <tr><td class="paramname">code</td><td>(Optional) Stores regify error code of this operation. <a class="el" href="group__ruerror.html#ga7e2f97cce8af8020834e685a2482556d">RUE_OK</a> on success <a class="el" href="group__ruerror.html#gae20a9bc093af1bbbb5e42ef8ed05deec">RUE_USER_ABORT</a> when a threaded list has quit else a regify error code. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Data of the given element including NULL or NULL if there was an error. </dd></dl>
 
 </div>
 </div>
@@ -330,7 +243,9 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Returns the first element in the given list to iterate over. </p><dl class="params"><dt>Parameters</dt><dd>
+
+<p>Returns the first element in the given list to iterate over. </p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">rl</td><td>List to return element of. </td></tr>
   </table>
@@ -365,7 +280,9 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Stack usage synonym for <a class="el" href="group__list.html#ga67286d2c5522bdb4428436c561f122e5">ruListAppend</a>. </p><dl class="params"><dt>Parameters</dt><dd>
+
+<p>Stack usage synonym for <a class="el" href="group__list.html#ga67286d2c5522bdb4428436c561f122e5">ruListAppend</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">rl</td><td>List to append object to. </td></tr>
     <tr><td class="paramname">data</td><td>Object to append. </td></tr>
@@ -388,7 +305,8 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Opaque pointer to list iterator object. See <a class="el" href="group__list.html">List Collection</a> </p>
+
+<p>Opaque pointer to list iterator object. See <a class="el" href="group__list.html">List Collection</a>. </p>
 
 </div>
 </div>
@@ -403,7 +321,8 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Opaque pointer to list object. See <a class="el" href="group__list.html">List Collection</a> </p>
+
+<p>Opaque pointer to list object. See <a class="el" href="group__list.html">List Collection</a>. </p>
 
 </div>
 </div>
@@ -418,7 +337,8 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Opaque pointer to list element object. See <a class="el" href="group__list.html">List Collection</a> </p>
+
+<p>Opaque pointer to list element object. See <a class="el" href="group__list.html">List Collection</a>. </p>
 
 </div>
 </div>
@@ -448,7 +368,9 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Appends the given object to the list. </p><dl class="params"><dt>Parameters</dt><dd>
+
+<p>Appends the given object to the list. </p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">rl</td><td>List to append object to. </td></tr>
     <tr><td class="paramname">data</td><td>Object to append. </td></tr>
@@ -474,7 +396,9 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Clears the given list. </p><dl class="params"><dt>Parameters</dt><dd>
+
+<p>Clears the given list. </p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">rl</td><td>list to clear </td></tr>
   </table>
@@ -484,44 +408,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ga5d70dcfd4646dea79cfe1ae1ae482cc0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga5d70dcfd4646dea79cfe1ae1ae482cc0">&#9670;&nbsp;</a></span>ruListElmtData()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">RUAPI <a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a> ruListElmtData </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="group__list.html#ga8a10b640cc881a4205684a5730c949a2">ruListElmt</a>&#160;</td>
-          <td class="paramname"><em>re</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int32_t *&#160;</td>
-          <td class="paramname"><em>code</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Returns the data payload of the given list element. </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">re</td><td>List element to return data from. </td></tr>
-    <tr><td class="paramname">code</td><td>(Optional) Stores <a class="el" href="group__ruerror.html#ga7e2f97cce8af8020834e685a2482556d">RUE_OK</a> on success or regify error code. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Data of the given element including NULL or NULL if there was an error. </dd></dl>
-
-</div>
-</div>
-<a id="ga92dbcac157bd0ffd1a696d9b46ad42d1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga92dbcac157bd0ffd1a696d9b46ad42d1">&#9670;&nbsp;</a></span>ruListElmtIsHead()</h2>
+<a id="ga429c52c8d9224a7cdfdc462daf30aed7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga429c52c8d9224a7cdfdc462daf30aed7">&#9670;&nbsp;</a></span>ruListElmtIsHead()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -529,12 +417,6 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">RUAPI bool ruListElmtIsHead </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="group__list.html#gab25c1662a91a5e0d68a3f04efd1a0cc2">ruList</a>&#160;</td>
-          <td class="paramname"><em>rl</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
           <td class="paramtype"><a class="el" href="group__list.html#ga8a10b640cc881a4205684a5730c949a2">ruListElmt</a>&#160;</td>
           <td class="paramname"><em>re</em>, </td>
         </tr>
@@ -551,9 +433,10 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Indicates whether given element is the first in the given list. </p><dl class="params"><dt>Parameters</dt><dd>
+
+<p>Indicates whether given element is the first in the given list. </p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">rl</td><td>List in question. </td></tr>
     <tr><td class="paramname">re</td><td>List element in question </td></tr>
     <tr><td class="paramname">code</td><td>(Optional) Stores <a class="el" href="group__ruerror.html#ga7e2f97cce8af8020834e685a2482556d">RUE_OK</a> on success or regify error code. </td></tr>
   </table>
@@ -588,7 +471,9 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Indicates whether given element is the last in the given list. </p><dl class="params"><dt>Parameters</dt><dd>
+
+<p>Indicates whether given element is the last in the given list. </p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">re</td><td>List element in question </td></tr>
     <tr><td class="paramname">code</td><td>(Optional) Stores <a class="el" href="group__ruerror.html#ga7e2f97cce8af8020834e685a2482556d">RUE_OK</a> on success or regify error code. </td></tr>
@@ -614,7 +499,9 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Frees the given list object. </p><dl class="params"><dt>Parameters</dt><dd>
+
+<p>Frees the given list object. </p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">rl</td><td>list to free. </td></tr>
   </table>
@@ -649,7 +536,9 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Returns the first element in the given list. </p><dl class="params"><dt>Parameters</dt><dd>
+
+<p>Returns the first element in the given list. </p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">rl</td><td>List to return element of. </td></tr>
     <tr><td class="paramname">code</td><td>(Optional) Stores <a class="el" href="group__ruerror.html#ga7e2f97cce8af8020834e685a2482556d">RUE_OK</a> on success or regify error code. </td></tr>
@@ -657,49 +546,6 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The first element of the list or NULL on failure. </dd></dl>
-
-</div>
-</div>
-<a id="gae2fedd16002646e35cc328b88e941cce"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gae2fedd16002646e35cc328b88e941cce">&#9670;&nbsp;</a></span>ruListIdxElmtData()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">RUAPI <a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a> ruListIdxElmtData </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="group__list.html#gab25c1662a91a5e0d68a3f04efd1a0cc2">ruList</a>&#160;</td>
-          <td class="paramname"><em>rl</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int32_t&#160;</td>
-          <td class="paramname"><em>index</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int32_t *&#160;</td>
-          <td class="paramname"><em>code</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Returns the data payload of the element at given 0 based index. </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">rl</td><td>List from which to return the element data payload. </td></tr>
-    <tr><td class="paramname">index</td><td>Index of the element in question. 0 is the first element. -1 is the last element. </td></tr>
-    <tr><td class="paramname">code</td><td>(Optional) Stores regify error code of this operation. <a class="el" href="group__ruerror.html#ga7e2f97cce8af8020834e685a2482556d">RUE_OK</a> on success <a class="el" href="group__ruerror.html#gae20a9bc093af1bbbb5e42ef8ed05deec">RUE_USER_ABORT</a> when a threaded list has quit else a regify error code. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Data of the given element including NULL or NULL if there was an error. </dd></dl>
 
 </div>
 </div>
@@ -734,7 +580,9 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Inserts given object after given list element. </p><dl class="params"><dt>Parameters</dt><dd>
+
+<p>Inserts given object after given list element. </p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">rl</td><td>List in which to insert object. </td></tr>
     <tr><td class="paramname">rle</td><td>Element after which to insert object. NULL for first element. </td></tr>
@@ -746,14 +594,59 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="gad362bd738fbd5fdf7e8571ec183249ef"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gad362bd738fbd5fdf7e8571ec183249ef">&#9670;&nbsp;</a></span>ruListInsertAt()</h2>
+<a id="ga4e46b6472e396b8f3e4c644d2f61e62d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga4e46b6472e396b8f3e4c644d2f61e62d">&#9670;&nbsp;</a></span>ruListInsertBefore()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">RUAPI int32_t ruListInsertAt </td>
+          <td class="memname">RUAPI int32_t ruListInsertBefore </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__list.html#gab25c1662a91a5e0d68a3f04efd1a0cc2">ruList</a>&#160;</td>
+          <td class="paramname"><em>rl</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__list.html#ga8a10b640cc881a4205684a5730c949a2">ruListElmt</a>&#160;</td>
+          <td class="paramname"><em>rle</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga517aac830d9ce5c6ab7deec46adf54d5">perm_ptr</a>&#160;</td>
+          <td class="paramname"><em>data</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Inserts given object before given list element. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">rl</td><td>List in which to insert object. </td></tr>
+    <tr><td class="paramname">rle</td><td>Element before which to insert object. NULL for first element. </td></tr>
+    <tr><td class="paramname">data</td><td>Object to insert. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="group__ruerror.html#ga7e2f97cce8af8020834e685a2482556d">RUE_OK</a> on success <a class="el" href="group__ruerror.html#gae20a9bc093af1bbbb5e42ef8ed05deec">RUE_USER_ABORT</a> when a threaded list has quit else a regify error code. </dd></dl>
+
+</div>
+</div>
+<a id="ga2dc64fa432c78f2df6ec859487ee1788"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga2dc64fa432c78f2df6ec859487ee1788">&#9670;&nbsp;</a></span>ruListInsertIdx()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI int32_t ruListInsertIdx </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="group__list.html#gab25c1662a91a5e0d68a3f04efd1a0cc2">ruList</a>&#160;</td>
           <td class="paramname"><em>rl</em>, </td>
@@ -777,7 +670,9 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Inserts given object at indexed position in list in given list element. </p><dl class="params"><dt>Parameters</dt><dd>
+
+<p>Inserts given object at indexed position in list in given list element. </p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">rl</td><td>List in which to insert object. </td></tr>
     <tr><td class="paramname">index</td><td>Index at which to insert the object. 0 for first element. If index is &gt; list size the item will be appended. </td></tr>
@@ -835,64 +730,30 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="gaaa06a57ba6d6104137eb2092933deac6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gaaa06a57ba6d6104137eb2092933deac6">&#9670;&nbsp;</a></span>ruListNew()</h2>
+<a id="ga67700afc458c82357f28b796b1f85da2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga67700afc458c82357f28b796b1f85da2">&#9670;&nbsp;</a></span>ruListNewType()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">RUAPI <a class="el" href="group__list.html#gab25c1662a91a5e0d68a3f04efd1a0cc2">ruList</a> ruListNew </td>
+          <td class="memname">RUAPI <a class="el" href="group__list.html#gab25c1662a91a5e0d68a3f04efd1a0cc2">ruList</a> ruListNewType </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="group__misc.html#ga8eb4179750e158d78b0b3bc1e4b1bdce">ruFreeFunc</a>&#160;</td>
-          <td class="paramname"><em>destructor</em></td><td>)</td>
+          <td class="paramtype"><a class="el" href="group__specs.html#ga44e5e590e1e962d3ff605c847ebbf9c3">ruType</a>&#160;</td>
+          <td class="paramname"><em>valueType</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Creates a new list object. To be freed with <a class="el" href="group__list.html#ga8f7ce9a43ad50071bc1161ecb21a38d5">ruListFree</a>. </p><dl class="params"><dt>Parameters</dt><dd>
+
+<p>Creates a new list object. To be freed with <a class="el" href="group__list.html#ga8f7ce9a43ad50071bc1161ecb21a38d5">ruListFree</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">destructor</td><td>(Optional) destructor for list elements. </td></tr>
+    <tr><td class="paramname">valueType</td><td>A value specification. Will be freed by this call. </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Guaranteed to return new list object, or process abort. </dd></dl>
-
-</div>
-</div>
-<a id="ga8a5796acc55b08010cb2bd7160255477"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga8a5796acc55b08010cb2bd7160255477">&#9670;&nbsp;</a></span>ruListNextData()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">RUAPI <a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a> ruListNextData </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="group__list.html#ga8a10b640cc881a4205684a5730c949a2">ruListElmt</a> *&#160;</td>
-          <td class="paramname"><em>re</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int32_t *&#160;</td>
-          <td class="paramname"><em>code</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Returns the data payload of the next list element. </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">re</td><td>Address of current list element to be updated with the next one. </td></tr>
-    <tr><td class="paramname">code</td><td>(Optional) Stores <a class="el" href="group__ruerror.html#ga7e2f97cce8af8020834e685a2482556d">RUE_OK</a> on success or regify error code. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>NULL if error or given element was the last or the data of the next element. </dd></dl>
 
 </div>
 </div>
@@ -921,7 +782,9 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Return the next element following the given element from list. </p><dl class="params"><dt>Parameters</dt><dd>
+
+<p>Return the next element following the given element from list. </p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">re</td><td>List element to return follower of. </td></tr>
     <tr><td class="paramname">code</td><td>(Optional) Stores <a class="el" href="group__ruerror.html#ga7e2f97cce8af8020834e685a2482556d">RUE_OK</a> on success or regify error code. </td></tr>
@@ -929,87 +792,6 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Next element or NULL if given element was the last or an error occured. </dd></dl>
-
-</div>
-</div>
-<a id="gac38106311ed611ce8706246e5ebba17a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gac38106311ed611ce8706246e5ebba17a">&#9670;&nbsp;</a></span>ruListPop()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">RUAPI <a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a> ruListPop </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="group__list.html#gab25c1662a91a5e0d68a3f04efd1a0cc2">ruList</a>&#160;</td>
-          <td class="paramname"><em>rl</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int32_t *&#160;</td>
-          <td class="paramname"><em>code</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Return first element of the list. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">rl</td><td>List to pop object from. </td></tr>
-    <tr><td class="paramname">code</td><td>(Optional) Stores regify error code of this operation. <a class="el" href="group__ruerror.html#ga7e2f97cce8af8020834e685a2482556d">RUE_OK</a> on success <a class="el" href="group__ruerror.html#gadb4058c56ea545e1d20d2efa9d6611fd">RUE_FILE_NOT_FOUND</a> on empty list <a class="el" href="group__ruerror.html#gae20a9bc093af1bbbb5e42ef8ed05deec">RUE_USER_ABORT</a> when a threaded list has quit else a regify error code. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Object which was popped off of the list. </dd></dl>
-
-</div>
-</div>
-<a id="ga00f37a668ae4e6d7b92af8034179c951"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga00f37a668ae4e6d7b92af8034179c951">&#9670;&nbsp;</a></span>ruListRemove()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">RUAPI <a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a> ruListRemove </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="group__list.html#gab25c1662a91a5e0d68a3f04efd1a0cc2">ruList</a>&#160;</td>
-          <td class="paramname"><em>rl</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="group__list.html#ga8a10b640cc881a4205684a5730c949a2">ruListElmt</a> *&#160;</td>
-          <td class="paramname"><em>rle</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int32_t *&#160;</td>
-          <td class="paramname"><em>code</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Remove and return the current list element from list. </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">rl</td><td>List to remove object from. </td></tr>
-    <tr><td class="paramname">rle</td><td>Pointer to element to remove, will be set to the previous element to allow for deletion during iteration. </td></tr>
-    <tr><td class="paramname">code</td><td>(Optional) Stores regify error code of this operation. <a class="el" href="group__ruerror.html#ga7e2f97cce8af8020834e685a2482556d">RUE_OK</a> on success <a class="el" href="group__ruerror.html#gae20a9bc093af1bbbb5e42ef8ed05deec">RUE_USER_ABORT</a> when a threaded list has quit else a regify error code. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Object which was removed from list. </dd></dl>
 
 </div>
 </div>
@@ -1038,7 +820,9 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Returns the number of elements in the list. </p><dl class="params"><dt>Parameters</dt><dd>
+
+<p>Returns the number of elements in the list. </p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">rl</td><td>List to return size of. </td></tr>
     <tr><td class="paramname">code</td><td>(Optional) Stores <a class="el" href="group__ruerror.html#ga7e2f97cce8af8020834e685a2482556d">RUE_OK</a> on success or regify error code. </td></tr>
@@ -1049,8 +833,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="gace02c8adb52bae50e49aac8123e7e21a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gace02c8adb52bae50e49aac8123e7e21a">&#9670;&nbsp;</a></span>ruListSort()</h2>
+<a id="ga4ce49f0d1e82a450616d472f9df42eec"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga4ce49f0d1e82a450616d472f9df42eec">&#9670;&nbsp;</a></span>ruListSort()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1059,27 +843,16 @@ Functions</h2></td></tr>
           <td class="memname">RUAPI int32_t ruListSort </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="group__list.html#gab25c1662a91a5e0d68a3f04efd1a0cc2">ruList</a>&#160;</td>
-          <td class="paramname"><em>rl</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramname"><em>rl</em></td><td>)</td>
           <td></td>
-          <td class="paramtype"><a class="el" href="group__misc.html#ga6f2df974d7fa3462ee789585fcd510ed">ruCompFunc</a>&#160;</td>
-          <td class="paramname"><em>sort</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Sorts the given list using supplied comparator function. </p>
+<p>Sorts the given list using the associated types comparator function. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">rl</td><td>List to sort </td></tr>
-    <tr><td class="paramname">sort</td><td>comparator function to sort with </td></tr>
   </table>
   </dd>
 </dl>
@@ -1112,7 +885,9 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Returns the last element in the given list. </p><dl class="params"><dt>Parameters</dt><dd>
+
+<p>Returns the last element in the given list. </p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">rl</td><td>List to return element of. </td></tr>
     <tr><td class="paramname">code</td><td>(Optional) Stores <a class="el" href="group__ruerror.html#ga7e2f97cce8af8020834e685a2482556d">RUE_OK</a> on success or regify error code. </td></tr>
@@ -1123,57 +898,12 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ga2bbfbf34ff189ebf934273395a11f224"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga2bbfbf34ff189ebf934273395a11f224">&#9670;&nbsp;</a></span>ruListTryPop()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">RUAPI <a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a> ruListTryPop </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="group__list.html#gab25c1662a91a5e0d68a3f04efd1a0cc2">ruList</a>&#160;</td>
-          <td class="paramname"><em>rl</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="group__misc.html#gae416893e8160c5b7c6da3765e4707d5d">msec_t</a>&#160;</td>
-          <td class="paramname"><em>timeoutMs</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int32_t *&#160;</td>
-          <td class="paramname"><em>code</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Tries to return first element of the list. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">rl</td><td>List to pop object from. </td></tr>
-    <tr><td class="paramname">timeoutMs</td><td>The number of milliseconds to wait for an entry before returning. Setting this to 0 will return after the first check. </td></tr>
-    <tr><td class="paramname">code</td><td>(Optional) Stores regify error code of this operation. <a class="el" href="group__ruerror.html#ga7e2f97cce8af8020834e685a2482556d">RUE_OK</a> on success <a class="el" href="group__ruerror.html#gadb4058c56ea545e1d20d2efa9d6611fd">RUE_FILE_NOT_FOUND</a> call timed out <a class="el" href="group__ruerror.html#gae20a9bc093af1bbbb5e42ef8ed05deec">RUE_USER_ABORT</a> when a threaded list has quit else a regify error code. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Object which was popped off of the list. </dd></dl>
-
-</div>
-</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Wed Jun 21 2023 09:36:41 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Tue Jul 4 2023 13:19:31 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

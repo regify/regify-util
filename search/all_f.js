@@ -1,9 +1,7 @@
 var searchData=
 [
-  ['sec_498',['sec',['../structru_time_val.html#ab79c03c47db0065ef4c2a2d00f33c94f',1,'ruTimeVal']]],
-  ['sec_5ft_499',['sec_t',['../group__misc.html#ga8573cc8637a470b127a19d54b0e94cb9',1,'regify-util.h']]],
-  ['set_500',['set',['../struct_kv_store__.html#ac3a3b7caea49b0e917e6db9a26476357',1,'KvStore_']]],
-  ['srcpath_501',['srcPath',['../structru_fam_event__.html#abb1a6c225865ea8d47fda5952978c8f9',1,'ruFamEvent_']]],
-  ['string_20functions_502',['String Functions',['../group__string.html',1,'']]],
-  ['string_20object_503',['String Object',['../group__ru_string.html',1,'']]]
+  ['list_31',['list',['../struct_kv_store__.html#a52a333e638a82b71314503253a6c5252',1,'KvStore_']]],
+  ['list_20collection_32',['List Collection',['../group__list.html',1,'']]],
+  ['logging_20facility_33',['Logging Facility',['../group__logging.html',1,'']]],
+  ['long_20integer_34',['Long Integer',['../group__typelong.html',1,'']]]
 ];
