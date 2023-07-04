@@ -1,6 +1,5 @@
 var NAVTREEINDEX2 =
 {
-"group__typeint8.html#ga09cb6e09c03038db11b5d60532f93d4e":[0,16,4,3],
 "group__typeint8.html#ga12d84ace9fe97867e9d8b213b236bd52":[0,16,4,2],
 "group__typeint8.html#ga81200576aadbddcfdb9f46a0936c2483":[0,16,4,4],
 "group__typeint8.html#ga861f607f1a59729f6f80aff0eb1830f3":[0,16,4,0],

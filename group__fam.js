@@ -18,7 +18,6 @@ var group__fam =
     [ "ruFamEvent", "group__fam.html#gaa411004c8a592a6d7fbc750e65c055ec", null ],
     [ "ruFamHandler", "group__fam.html#ga93b95063a11aa259b3d687cd9a9a821e", null ],
     [ "ruFamEventFree", "group__fam.html#ga6393369383b16f8884776bdcf36935c8", null ],
-    [ "ruFamEventFreeV", "group__fam.html#ga50ed123f5f20cdd662f5a4fddeaee32e", null ],
     [ "ruFamEventNew", "group__fam.html#ga4f6feaed01cb324940b4956baafa8652", null ],
     [ "ruFamEventString", "group__fam.html#ga2a2c124ab9905147782051eb9d65c14d", null ],
     [ "ruFamEventTypeString", "group__fam.html#gab3a4b072242d9faaeb8a8459b6392677", null ],

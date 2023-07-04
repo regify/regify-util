@@ -3626,13 +3626,6 @@
       <anchor>ga6393369383b16f8884776bdcf36935c8</anchor>
       <arglist>(ptr o)</arglist>
     </member>
-    <member kind="function">
-      <type>RUAPI void</type>
-      <name>ruFamEventFreeV</name>
-      <anchorfile>group__fam.html</anchorfile>
-      <anchor>ga50ed123f5f20cdd662f5a4fddeaee32e</anchor>
-      <arglist>(void *fe)</arglist>
-    </member>
   </compound>
   <compound kind="page">
     <name>index</name>

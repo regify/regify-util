@@ -158,8 +158,6 @@ Functions</h2></td></tr>
 <tr class="separator:ga4f6feaed01cb324940b4956baafa8652"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga6393369383b16f8884776bdcf36935c8"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__fam.html#ga6393369383b16f8884776bdcf36935c8">ruFamEventFree</a> (<a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a> o)</td></tr>
 <tr class="separator:ga6393369383b16f8884776bdcf36935c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga50ed123f5f20cdd662f5a4fddeaee32e"><td class="memItemLeft" align="right" valign="top">RUAPI void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__fam.html#ga50ed123f5f20cdd662f5a4fddeaee32e">ruFamEventFreeV</a> (void *fe)</td></tr>
-<tr class="separator:ga50ed123f5f20cdd662f5a4fddeaee32e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>This section contains file access monitoring routines. </p>
@@ -174,14 +172,14 @@ Functions</h2></td></tr>
 <div class="line">        myfamHandler, NULL);</div>
 <div class="line"><span class="comment">// run your program...</span></div>
 <div class="line"><a class="code" href="group__fam.html#ga97d5fefcb5f68d497a48a8b3b3a09f26">ruFamKillMonitor</a>(famCtx);</div>
-<div class="ttc" id="agroup__fam_html_ga41131e438be9a9c17155ef338a83d899"><div class="ttname"><a href="group__fam.html#ga41131e438be9a9c17155ef338a83d899">ruFamCtx</a></div><div class="ttdeci">void * ruFamCtx</div><div class="ttdef"><b>Definition:</b> fam.h:81</div></div>
-<div class="ttc" id="agroup__fam_html_ga4a567d573035d0781f94089583c58c1f"><div class="ttname"><a href="group__fam.html#ga4a567d573035d0781f94089583c58c1f">ruFamEventLog</a></div><div class="ttdeci">#define ruFamEventLog(lvl, fe, prefix)</div><div class="ttdef"><b>Definition:</b> fam.h:138</div></div>
+<div class="ttc" id="agroup__fam_html_ga41131e438be9a9c17155ef338a83d899"><div class="ttname"><a href="group__fam.html#ga41131e438be9a9c17155ef338a83d899">ruFamCtx</a></div><div class="ttdeci">void * ruFamCtx</div><div class="ttdef"><b>Definition:</b> fam.h:88</div></div>
+<div class="ttc" id="agroup__fam_html_ga4a567d573035d0781f94089583c58c1f"><div class="ttname"><a href="group__fam.html#ga4a567d573035d0781f94089583c58c1f">ruFamEventLog</a></div><div class="ttdeci">#define ruFamEventLog(lvl, fe, prefix)</div><div class="ttdef"><b>Definition:</b> fam.h:145</div></div>
 <div class="ttc" id="agroup__fam_html_ga6393369383b16f8884776bdcf36935c8"><div class="ttname"><a href="group__fam.html#ga6393369383b16f8884776bdcf36935c8">ruFamEventFree</a></div><div class="ttdeci">RUAPI ptr ruFamEventFree(ptr o)</div></div>
 <div class="ttc" id="agroup__fam_html_ga97d5fefcb5f68d497a48a8b3b3a09f26"><div class="ttname"><a href="group__fam.html#ga97d5fefcb5f68d497a48a8b3b3a09f26">ruFamKillMonitor</a></div><div class="ttdeci">RUAPI ruFamCtx ruFamKillMonitor(ruFamCtx o)</div></div>
 <div class="ttc" id="agroup__fam_html_gac2029a63025c44b72df8d44402b7c0ff"><div class="ttname"><a href="group__fam.html#gac2029a63025c44b72df8d44402b7c0ff">ruFamMonitorFilePath</a></div><div class="ttdeci">RUAPI ruFamCtx ruFamMonitorFilePath(trans_chars filePath, trans_chars threadName, ruFamHandler eventCallBack, perm_ptr ctx)</div></div>
 <div class="ttc" id="agroup__logging_html_gaa48441dca350811c725a8096ccbd59f8"><div class="ttname"><a href="group__logging.html#gaa48441dca350811c725a8096ccbd59f8">RU_LOG_VERB</a></div><div class="ttdeci">#define RU_LOG_VERB</div><div class="ttdoc">This is the verbose logging level used for debugging and usually high quantity.</div><div class="ttdef"><b>Definition:</b> logging.h:61</div></div>
 <div class="ttc" id="agroup__misc_html_ga517aac830d9ce5c6ab7deec46adf54d5"><div class="ttname"><a href="group__misc.html#ga517aac830d9ce5c6ab7deec46adf54d5">perm_ptr</a></div><div class="ttdeci">const void * perm_ptr</div><div class="ttdoc">A permanent pointer.</div><div class="ttdef"><b>Definition:</b> regify-util.h:279</div></div>
-<div class="ttc" id="astructru_fam_event___html"><div class="ttname"><a href="structru_fam_event__.html">ruFamEvent_</a></div><div class="ttdef"><b>Definition:</b> fam.h:65</div></div>
+<div class="ttc" id="astructru_fam_event___html"><div class="ttname"><a href="structru_fam_event__.html">ruFamEvent_</a></div><div class="ttdef"><b>Definition:</b> fam.h:72</div></div>
 </div><!-- fragment --> <h2 class="groupheader">Macro Definition Documentation</h2>
 <a id="gae775d59b18c99a740b8c9867dd922a20"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#gae775d59b18c99a740b8c9867dd922a20">&#9670;&nbsp;</a></span>RU_FAM_ATTRIB</h2>
@@ -425,31 +423,6 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>NULL </dd></dl>
-
-</div>
-</div>
-<a id="ga50ed123f5f20cdd662f5a4fddeaee32e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga50ed123f5f20cdd662f5a4fddeaee32e">&#9670;&nbsp;</a></span>ruFamEventFreeV()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">RUAPI void ruFamEventFreeV </td>
-          <td>(</td>
-          <td class="paramtype">void *&#160;</td>
-          <td class="paramname"><em>fe</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Generic famEvent destructor for collections</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">fe</td><td>famEvent to free </td></tr>
-  </table>
-  </dd>
-</dl>
 
 </div>
 </div>
@@ -715,7 +688,7 @@ Functions</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Tue Jul 4 2023 13:19:31 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Tue Jul 4 2023 14:19:13 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>
