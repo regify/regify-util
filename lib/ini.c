@@ -241,7 +241,7 @@ static ruMap getIniMap(Ini* ini, trans_chars section) {
         if (ruMapHas(ini->sections, section, NULL)) {
             ruMapGet(ini->sections, section, &map);
         } else {
-            map = ruMapNewType(ruTypeStrDup(), ruTypeStrDup());
+            map = ruMapNew(ruTypeStrDup(), ruTypeStrDup());
             ruMapPut(ini->sections, section, map);
         }
     }
@@ -274,9 +274,9 @@ static bool iniParseCb(void* user, trans_chars section, trans_chars name,
 Ini* iniNew(void) {
     Ini* i = ruMalloc0(1, Ini);
     i->type = MagicIni;
-    i->keys = ruMapNewType(ruTypeStrDup(), ruTypeStrDup());
-    i->sections = ruMapNewType(ruTypeStrDup(),
-                               ruTypePtr(ruMapFree));
+    i->keys = ruMapNew(ruTypeStrDup(), ruTypeStrDup());
+    i->sections = ruMapNew(ruTypeStrDup(),
+                           ruTypePtr(ruMapFree));
     return i;
 }
 

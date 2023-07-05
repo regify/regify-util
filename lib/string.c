@@ -764,7 +764,7 @@ RUAPI ruList ruStrNSplit(trans_chars instr, rusize inlen, trans_chars delim, int
     if (inlen == RU_SIZE_AUTO) inlen = strlen(instr);
     trans_chars inPast = instr + inlen;
 
-    ruList strList = ruListNewType(ruTypePtrFree());
+    ruList strList = ruListNew(ruTypePtrFree());
     const char *remainder = instr;
     char *ptr = strstr(remainder, delim);
     if (ptr && ptr < inPast) {

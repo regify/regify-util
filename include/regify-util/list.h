@@ -35,7 +35,7 @@
  * @{
  * Example of non typed use:
  * ~~~~~{.c}
-   ruList recipients = ruListNewType(NULL);
+   ruList recipients = ruListNew(NULL);
    // We are going to ignore some return codes for brevity.
    int32_t ret = ruListAppend(recipients, "bob");
    ret = ruListAppend(recipients, "alice");
@@ -57,7 +57,7 @@
     // error checking left out for brevity
     bool b1 = false;
     bool b2 = true;
-    ruList rl = ruListNewType(ruTypeBool());
+    ruList rl = ruListNew(ruTypeBool());
     ruListAppend(rl, &b1);
     ruListAppend(rl, &b2);
 
@@ -68,7 +68,7 @@
     }
     rl = ruListFree(rl);
 
-    rl = ruListNewType(ruTypeStrDup());
+    rl = ruListNew(ruTypeStrDup());
     ruListAppend(rl, "foo");
     ruListAppend(rl, "bar");
 
@@ -120,7 +120,7 @@ typedef void* ruIterator;
  * @param valueType A value specification. Will be freed by this call.
  * @return Guaranteed to return new list object, or process abort.
  */
-RUAPI ruList ruListNewType(ruType valueType);
+RUAPI ruList ruListNew(ruType valueType);
 
 /**
  * \ingroup list

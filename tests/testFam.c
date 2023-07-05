@@ -425,7 +425,7 @@ static bool testit(famTest* ctx) {
 START_TEST (run) {
     ruFamCtx famCtx = NULL;
     ruZeroedStruct(famTest, ctx);
-    ctx.events = ruListNewType(ruTypePtr(ruFamEventFree));
+    ctx.events = ruListNew(ruTypePtr(ruFamEventFree));
 
     insureDir(topDir, false);
     insureDir(watchDir, true);

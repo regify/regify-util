@@ -124,7 +124,7 @@ RUAPI int32_t ruRefPtrInt64(ptr src, ptr* dst);
  * ~~~~~{.c}
     // error checking left out for brevity
     int64_t k1 = 23, v1 = 42, r = 0;
-    ruMap rm = ruMapNewType(ruTypeInt64(), ruTypeInt64());
+    ruMap rm = ruMapNew(ruTypeInt64(), ruTypeInt64());
     ruMapPut(rm, &k1, &v1);
 
     ruMapGet(rm, &k1, &r);
@@ -188,7 +188,7 @@ RUAPI int32_t ruRefPtrLong(ptr src, ptr* dst);
  * ~~~~~{.c}
     // error checking left out for brevity
     long k1 = 23, v1 = 42, r = 0;
-    ruMap rm = ruMapNewType(ruTypeLong(), ruTypeLong());
+    ruMap rm = ruMapNew(ruTypeLong(), ruTypeLong());
     ruMapPut(rm, &k1, &v1);
 
     ruMapGet(rm, &k1, &r);
@@ -459,7 +459,7 @@ RUAPI int32_t ruStrComp(trans_ptr testVal, trans_ptr existingVal);
     // error checking left out for brevity
     perm_chars k1 = "23";
     perm_chars v1 = "42";
-    ruMap rm = ruMapNewType(ruTypeStrRef(), ruTypeStrRef());
+    ruMap rm = ruMapNew(ruTypeStrRef(), ruTypeStrRef());
     ruMapPut(rm, k1, v1);
 
     perm_chars r = NULL;
@@ -479,7 +479,7 @@ RUAPI ruType ruTypeStrRef(void);
  * Example:
  * ~~~~~{.c}
     // error checking left out for brevity
-    ruMap rm = ruMapNewType(ruTypeStrDup(), ruTypeStrDup());
+    ruMap rm = ruMapNew(ruTypeStrDup(), ruTypeStrDup());
     ruMapPut(rm, "23", "42");
 
     perm_chars r = NULL;
@@ -498,7 +498,7 @@ RUAPI ruType ruTypeStrDup(void);
  * Example:
  * ~~~~~{.c}
     // error checking left out for brevity
-    ruMap rm = ruMapNewType(ruTypeStrFree(), ruTypeStrFree());
+    ruMap rm = ruMapNew(ruTypeStrFree(), ruTypeStrFree());
     alloc_chars k = ruStrDup("23");
     alloc_chars v = ruStrDup("42");
     ruMapPut(rm, k, v);
@@ -535,7 +535,7 @@ RUAPI ruType ruTypePtrFree(void);
     ruType ks = ruTypeNew(ruStrHash, ruStrMatch, ruStrComp, NULL, NULL, NULL);
     // this can also be accomplished by ruTypeInt64()
     ruType vs = ruTypeNew(NULL, NULL, NULL, NULL, ruInt64, ruRefPtrInt64);
-    ruMap rm = ruMapNewType(ks, vs);
+    ruMap rm = ruMapNew(ks, vs);
 
     ruMapPut(rm, k1, &v1);
     ruMapPut(rm, k2, &v2);

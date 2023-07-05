@@ -144,7 +144,7 @@ static int32_t fam_watchDir(famCtx *fctx, char* filePath) {
 static int32_t fam_unwatchDir(famCtx* fctx, char* filePath) {
     fam_dbg("Unwatch: %s", filePath);
     // yank list to avoid concurrent modifications
-    ruList yankies = ruListNewType(NULL);
+    ruList yankies = ruListNew(NULL);
     int32_t ret;
     int32_t wd;
     perm_chars path = NULL;
@@ -180,7 +180,7 @@ static int32_t fam_renameDir(famCtx* fctx, char* srcPath, char* destPath) {
     // put path map wd:newPath
 
     // values are transferred to fctx->wdPath, so we do not free it in this map
-    ruMap newWdPaths = ruMapNewType(ruTypeInt32(), ruTypeStrFree());
+    ruMap newWdPaths = ruMapNew(ruTypeInt32(), ruTypeStrFree());
     rusize len = strlen(srcPath);
 
     int32_t wd;
@@ -365,7 +365,7 @@ static int32_t fam_runLoop(famCtx* fctx) {
         } while (!ruTimeMsEllapsed(pollEnd));
 
         // clear cookies older than 1 second
-        ruList dels = ruListNewType(NULL);
+        ruList dels = ruListNew(NULL);
         int32_t ret;
         uint64_t mtime = ruTimeMs() - RU_FAM_QUEUE_TIMEOUT;
         uint32_t cookie;
@@ -421,9 +421,9 @@ static void* fam_runThread(void* ctx) {
     famCtx* fctx = (famCtx*) ctx;
     ruThreadSetName(fctx->name);
     fctx->buf = ruMallocSize(BUF_LEN, 1);
-    fctx->wdPath = ruMapNewType(ruTypeInt32(), ruTypeStrDup());
-    fctx->pathWd = ruMapNewType(ruTypeStrDup(), ruTypeInt32());
-    fctx->cookie = ruMapNewType(ruTypeInt32(), ruTypePtr(freeCookie));
+    fctx->wdPath = ruMapNew(ruTypeInt32(), ruTypeStrDup());
+    fctx->pathWd = ruMapNew(ruTypeStrDup(), ruTypeInt32());
+    fctx->cookie = ruMapNew(ruTypeInt32(), ruTypePtr(freeCookie));
 
     ruInfoLogf("Opened inotify handle in %s", fctx->topDir);
     int32_t ret = fam_watchDir(fctx, fctx->topDir);

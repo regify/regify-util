@@ -264,7 +264,7 @@ RUAPI int32_t ruFileStoreList (KvStore *kvs, const char* key, ruList* result) {
     } else {
         path = filepath;
     }
-    ruList lst = ruListNewType(ruTypePtrFree());
+    ruList lst = ruListNew(ruTypePtrFree());
     struct _storeList sl;
     sl.fks = fks;
     sl.lst = lst;

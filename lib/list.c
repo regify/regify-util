@@ -157,7 +157,7 @@ int32_t ListRemoveTo(List* list, ListElmt* old_element, ptr* dest) {
     return ret;
 }
 
-RUAPI ruList ruListNewType(ruType valueType) {
+RUAPI ruList ruListNew(ruType valueType) {
     ruClearError();
     return (ruList) ListNewType(valueType);
 }

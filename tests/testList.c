@@ -37,8 +37,8 @@ START_TEST ( api ) {
     ret = ruListAppendPtr((ruList) test, NULL);
     fail_unless(ret == exp, retText, test, exp, ret);
 
-    test = "ruListNewType";
-    rl = ruListNewType(NULL);
+    test = "ruListNew";
+    rl = ruListNew(NULL);
     fail_unless(rl != NULL, retText, test, 0, RUE_OUT_OF_MEMORY);
 
     test = "ruListClear";
@@ -258,7 +258,7 @@ START_TEST ( usage ) {
     const char *f[] = {"field0", "field1", "field2"};
 
     exp = RUE_OK;
-    rl = ruListNewType(NULL);
+    rl = ruListNew(NULL);
     // add first element
     ret = ruListAppend(rl, f[0]);
     fail_unless(ret == exp, retText, test, exp, ret);
@@ -417,7 +417,7 @@ START_TEST ( usage ) {
     ruListFree(rl);
 
     exp = RUE_OK;
-    rl = ruListNewType(NULL);
+    rl = ruListNew(NULL);
     esz = sizeof(f)/sizeof(f[0]);
     test = "ruListAppend";
     for (uint32_t j = 0; j < esz; j++) {
@@ -453,7 +453,7 @@ START_TEST ( memalloc ) {
     ruListElmt rle = NULL;
     char buf[20]; // bigger to prevent -Werror=format-truncation
 
-    rl = ruListNewType(ruTypePtrFree());
+    rl = ruListNew(ruTypePtrFree());
     for (i = 1; i < 10; i++) {
         ruListAppend(rl, ruDupPrintf(fieldText, i));
     }
@@ -484,7 +484,7 @@ START_TEST(types) {
         bool vals[] = {false, true, true};
         bool val;
         esz = sizeof(vals) / sizeof(vals[0]);
-        rl = ruListNewType(ruTypeBool());
+        rl = ruListNew(ruTypeBool());
         fail_if(NULL == rl, retText, NULL, rl);
 
         // load the list
@@ -518,7 +518,7 @@ START_TEST(types) {
         int64_t vals[] = {0, 23, 0x100000000};
         int64_t val;
         esz = sizeof(vals) / sizeof(vals[0]);
-        rl = ruListNewType(ruTypeInt64());
+        rl = ruListNew(ruTypeInt64());
         fail_if(NULL == rl, retText, NULL, rl);
 
         // load the list
@@ -552,7 +552,7 @@ START_TEST(types) {
         perm_chars vals[] = {"0", "23", "foo"};
         perm_chars val;
         esz = sizeof(vals) / sizeof(vals[0]);
-        rl = ruListNewType(ruTypeStrRef());
+        rl = ruListNew(ruTypeStrRef());
         fail_if(NULL == rl, retText, NULL, rl);
 
         // load the list
@@ -587,7 +587,7 @@ START_TEST(types) {
         perm_chars vals[] = {"0", "23", "foo"};
         alloc_chars val;
         esz = sizeof(vals) / sizeof(vals[0]);
-        rl = ruListNewType(ruTypeStrDup());
+        rl = ruListNew(ruTypeStrDup());
         fail_if(NULL == rl, retText, NULL, rl);
 
         // load the list
@@ -625,7 +625,7 @@ void foo() {
     // error checking left out for brevity
     bool b1 = false;
     bool b2 = true;
-    ruList rl = ruListNewType(ruTypeBool());
+    ruList rl = ruListNew(ruTypeBool());
     ruListAppend(rl, &b1);
     ruListAppend(rl, &b2);
 
@@ -636,7 +636,7 @@ void foo() {
     }
     rl = ruListFree(rl);
 
-    rl = ruListNewType(ruTypeStrDup());
+    rl = ruListNew(ruTypeStrDup());
     ruListAppend(rl, "foo");
     ruListAppend(rl, "bar");
 
@@ -656,7 +656,7 @@ void foo() {
 void bar() {
     // error checking left out for brevity
     long k1 = 23, v1 = 42, r = 0;
-    ruMap rm = ruMapNewType(ruTypeLong(), ruTypeLong());
+    ruMap rm = ruMapNew(ruTypeLong(), ruTypeLong());
     ruMapPut(rm, &k1, &v1);
 
     ruMapGet(rm, &k1, &r);
@@ -672,7 +672,7 @@ START_TEST (sort) {
 
     int32_t nums[] = {99, 23, 1, 42, 53};
     int32_t exps[] = { 1, 23,42, 53, 99};
-    ruList rl = ruListNewType(ruTypeInt32());
+    ruList rl = ruListNew(ruTypeInt32());
     for (int i = 0; i < sizeof(nums)/sizeof(nums[0]); i++) {
         ret = ruListAppend(rl, &nums[i]);
         fail_unless(ret == exp, retText, test, exp, ret);

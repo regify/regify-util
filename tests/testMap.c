@@ -23,14 +23,14 @@
 
 START_TEST ( api ) {
     int32_t ret, exp;
-    const char *test = "ruMapNewType";
+    const char *test = "ruMapNew";
     const char *retText = "%s failed wanted ret '%d' but got '%d'";
     ruList keys = NULL;
 
     ruMap rm = NULL;
     fail_unless(NULL == rm, retText, test, NULL, rm);
 
-    rm = ruMapNewType(NULL, NULL);
+    rm = ruMapNew(NULL, NULL);
     fail_unless(NULL == rm, retText, test, NULL, rm);
 
     ruMapFree(rm);
@@ -50,7 +50,7 @@ START_TEST ( api ) {
     ret = ruMapRemoveAll(rm);
     fail_unless(exp == ret, retText, test, exp, ret);
 
-    rm = ruMapNewType(ruTypeStrRef(), ruTypeStrRef());
+    rm = ruMapNew(ruTypeStrRef(), ruTypeStrRef());
     fail_if(NULL == rm, retText, test, rm, NULL);
 
     ret = ruMapPut(rm, NULL, "foo");
@@ -116,12 +116,12 @@ END_TEST
 
 START_TEST ( run ) {
     int32_t ret, exp;
-    perm_chars test = "ruMapNewType";
+    perm_chars test = "ruMapNew";
     perm_chars retText = "%s failed wanted ret '%d' but got '%d'";
     perm_chars foo = "foo";
     perm_chars bar = "bar";
 
-    ruMap rm = ruMapNewType(ruTypeStrRef(), ruTypeStrRef());
+    ruMap rm = ruMapNew(ruTypeStrRef(), ruTypeStrRef());
     fail_if(NULL == rm, retText, test, rm, NULL);
 
     exp = RUE_OK;
@@ -276,8 +276,8 @@ START_TEST(dups) {
     perm_chars r;
     perm_chars e;
 
-    ruMap rm = ruMapNewType(ruTypeStrDup(),
-                            ruTypeStrDup());
+    ruMap rm = ruMapNew(ruTypeStrDup(),
+                        ruTypeStrDup());
     fail_if(NULL == rm, retText, rm, NULL);
 
     ret = ruMapPut(rm, k1, v1);
@@ -309,8 +309,8 @@ START_TEST(perms) {
     perm_chars r;
     perm_chars e;
 
-    ruMap rm = ruMapNewType(ruTypeStrRef(),
-                            ruTypeStrRef());
+    ruMap rm = ruMapNew(ruTypeStrRef(),
+                        ruTypeStrRef());
     fail_if(NULL == rm, retText, rm, NULL);
 
     ret = ruMapPut(rm, k1, v1);
@@ -334,8 +334,8 @@ START_TEST(bools) {
     bool v1 = false;
     bool v2 = true;
 
-    ruMap rm = ruMapNewType(ruTypeLong(),
-                            ruTypeBool());
+    ruMap rm = ruMapNew(ruTypeLong(),
+                        ruTypeBool());
     fail_if(NULL == rm, retText, rm, NULL);
 
     ret = ruMapPut(rm, &k1, &v1);
@@ -382,8 +382,8 @@ START_TEST(int8s) {
     int8_t k1 = 23;
     int8_t r, e;
 
-    ruMap rm = ruMapNewType(ruTypeInt8(),
-                            ruTypeInt8());
+    ruMap rm = ruMapNew(ruTypeInt8(),
+                        ruTypeInt8());
     fail_if(NULL == rm, retText, rm, NULL);
 
     ret = ruMapPut(rm, &k1, &v1);
@@ -421,8 +421,8 @@ START_TEST(int16s) {
     int16_t k1 = 23;
     int16_t r, e;
 
-    ruMap rm = ruMapNewType(ruTypeInt16(),
-                            ruTypeInt16());
+    ruMap rm = ruMapNew(ruTypeInt16(),
+                        ruTypeInt16());
     fail_if(NULL == rm, retText, rm, NULL);
 
     ret = ruMapPut(rm, &k1, &v1);
@@ -460,8 +460,8 @@ START_TEST(int32s) {
     int32_t k1 = 23;
     int32_t r, e;
 
-    ruMap rm = ruMapNewType(ruTypeInt32(),
-                            ruTypeInt32());
+    ruMap rm = ruMapNew(ruTypeInt32(),
+                        ruTypeInt32());
     fail_if(NULL == rm, retText, rm, NULL);
 
     ret = ruMapPut(rm, &k1, &v1);
@@ -499,8 +499,8 @@ START_TEST(longs) {
     long k1 = 23;
     long r, e;
 
-    ruMap rm = ruMapNewType(ruTypeLong(),
-                            ruTypeLong());
+    ruMap rm = ruMapNew(ruTypeLong(),
+                        ruTypeLong());
     fail_if(NULL == rm, retText, rm, NULL);
 
     ret = ruMapPut(rm, &k1, &v1);
@@ -538,8 +538,8 @@ START_TEST(int64s) {
     int64_t k1 = 23, k2 = 42;
     int64_t r, e;
 
-    ruMap rm = ruMapNewType(ruTypeInt64(),
-                            ruTypeInt64());
+    ruMap rm = ruMapNew(ruTypeInt64(),
+                        ruTypeInt64());
     fail_if(NULL == rm, retText, rm, NULL);
 
     ret = ruMapPut(rm, &k1, &v1);
@@ -591,7 +591,7 @@ START_TEST(custom) {
 
     ruType ks = ruTypeNew(ruStrHash, ruStrMatch, NULL,
                           NULL, NULL, NULL);
-    ruMap rm = ruMapNewType(ks, ruTypeInt64());
+    ruMap rm = ruMapNew(ks, ruTypeInt64());
     fail_if(NULL == rm, retText, rm, NULL);
 
     ret = ruMapPut(rm, k1, &v1);

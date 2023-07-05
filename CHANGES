@@ -5,6 +5,8 @@ Non backward compatible API changes between 1.3 and 2.0
 * List iterator interface changed from
 - for (char *vd = ruIterCurrent(li, char*); li; vd = ruIterNext(li, char*))
 + for (char *vd = ruIterNext(li, char*); li; vd = ruIterNext(li, char*))
+* Other ruList API changes
+- ruListNew(ruFreeFunc) -> ruListNew(ruType)
 - ruListSize return switched from int -> uint
 - ruListRemoveAfter has been removed in favor of ruListRemove
 - ruListElmtIsHead no longer needs ruList
@@ -30,9 +32,8 @@ Non backward compatible API changes between 1.3 and 2.0
 - ruMapKeySet - ruMapKeyList (also changed parameter order to be more natural)
 
 * Removed the following
-- ruMapNew -> ruMapNewType
-- ruMapNewString -> ruMapNewType
-- ruListNew -> ruListNewType
+- ruMapNew(*hash, *match,...) -> ruMapNew(ruType keyType, ruType valType)
+- removed ruMapNewString
 
 * ruListSize result is int32_t -> uint32_t and return on error is -1 -> 0
 

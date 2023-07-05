@@ -38,7 +38,7 @@ typedef void* ruMap;
  * @param valueType A value specification. Will be freed by this call.
  * @return Newly create map. Caller m ust free with \ref ruMapFree.
  */
-RUAPI ruMap ruMapNewType(ruType keyType, ruType valueType);
+RUAPI ruMap ruMapNew(ruType keyType, ruType valueType);
 
 /**
  * \brief Frees the given map and its members
@@ -251,7 +251,7 @@ typedef void* ruSet;
  * @param keyType A key specification. May be free after this call.
  * @return Newly create map. Caller m ust free with \ref ruSetFree.
  */
-RUAPI ruSet ruSetNewType(ruType keyType);
+RUAPI ruSet ruSetNew(ruType keyType);
 
 /**
  * \brief Frees the given set and its members

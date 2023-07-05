@@ -23,11 +23,11 @@
 
 START_TEST ( api ) {
     int32_t ret, exp;
-    const char *test = "ruSetNewType";
+    const char *test = "ruSetNew";
     const char *retText = "%s failed wanted ret '%d' but got '%d'";
     ruList keys = NULL;
 
-    ruSet rs = ruSetNewType(NULL);
+    ruSet rs = ruSetNew(NULL);
     fail_unless(NULL == rs, retText, test, NULL, rs);
 
     ruSetFree(rs);
@@ -43,7 +43,7 @@ START_TEST ( api ) {
     ret = ruSetRemoveAll(rs);
     fail_unless(exp == ret, retText, test, exp, ret);
 
-    rs = ruSetNewType(ruTypeStrRef());
+    rs = ruSetNew(ruTypeStrRef());
     fail_if(NULL == rs, retText, test, rs, NULL);
 
     ret = ruSetPut(rs, NULL);
@@ -101,7 +101,7 @@ START_TEST ( run ) {
     perm_chars retText = "%s failed wanted ret '%d' but got '%d'";
     perm_chars foo = "foo";
 
-    ruSet rs = ruSetNewType(ruTypeStrRef());
+    ruSet rs = ruSetNew(ruTypeStrRef());
     fail_if(NULL == rs, retText, test, rs, NULL);
 
     exp = RUE_OK;
@@ -241,7 +241,7 @@ START_TEST ( iter ) {
     const char *retText = "failed wanted ret '%x' but got '%x'";
     perm_chars k1 = "23";
 
-    ruSet rs = ruSetNewType(ruTypeStrRef());
+    ruSet rs = ruSetNew(ruTypeStrRef());
     fail_if(NULL == rs, retText, rs, NULL);
 
     ret = ruSetPut(rs, k1);

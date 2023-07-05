@@ -43,7 +43,7 @@ static ptr kvFree(ptr o) {
     return ruClear(item);
 }
 
-RUAPI ruMap ruMapNewType(ruType keyType, ruType valueType) {
+RUAPI ruMap ruMapNew(ruType keyType, ruType valueType) {
     ruClearError();
     typeSpec* ks = typeSpecGet(keyType, NULL);
     typeSpec* vs = typeSpecGet(valueType, NULL);
@@ -425,7 +425,7 @@ RUAPI int32_t ruMapKeyList(ruMap rm, ruList* keys) {
     ruMutexLock(mp->mux);
     if (!mp->doQuit) {
 
-        set = ruListNewType(ruTypeClone(mp->keySpec));
+        set = ruListNew(ruTypeClone(mp->keySpec));
         mp->iterBucket = 0;
         mp->iterElmt = NULL;
         mp->iterActive = true;
@@ -495,8 +495,8 @@ RUAPI uint32_t ruMapSize(ruMap rm, int32_t *code) {
 }
 
 // Set API
-RUAPI ruMap ruSetNewType(ruType keyType) {
-    return ruMapNewType(keyType, NULL);
+RUAPI ruMap ruSetNew(ruType keyType) {
+    return ruMapNew(keyType, NULL);
 }
 
 RUAPI ruSet ruSetFree(ruSet rs) {

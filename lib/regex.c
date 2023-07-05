@@ -191,7 +191,7 @@ RUAPI bool ruRegexFind(ruRegex rr, const char* original, int32_t* code) {
 
 RUAPI ruList ruRegexMatchGroups(ruRegex rr, const char* original, int32_t* code) {
     ruClearError();
-    ruList out = ruListNewType(ruTypePtrFree());
+    ruList out = ruListNew(ruTypePtrFree());
     if (!ruRegexSearch(rr, original, true, out, code)) {
         return ruListFree(out);
     }
@@ -203,7 +203,7 @@ RUAPI ruList ruRegexMatchGroups(ruRegex rr, const char* original, int32_t* code)
 
 RUAPI ruList ruRegexFindGroups(ruRegex rr, const char* original, int32_t* code) {
     ruClearError();
-    ruList out = ruListNewType(ruTypePtrFree());
+    ruList out = ruListNew(ruTypePtrFree());
     if (!ruRegexSearch(rr, original, false, out, code)) {
         return ruListFree(out);
     }
