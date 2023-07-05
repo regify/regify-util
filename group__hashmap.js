@@ -13,7 +13,7 @@ var group__hashmap =
     [ "ruMapGetValue", "group__hashmap.html#gaa30a9f663f42641de433e202c0c54fdf", null ],
     [ "ruMapHasKey", "group__hashmap.html#gabcdeacf7e867d8d4fd7282b5fabe3dd3", null ],
     [ "ruMapKeyList", "group__hashmap.html#ga8525a18e605779bba001fcf2321d73ad", null ],
-    [ "ruMapNewType", "group__hashmap.html#gacf7db64ef4e7f3c82eb49eb6f80f3794", null ],
+    [ "ruMapNew", "group__hashmap.html#ga3a95c4f5bf955c20e7ab81d456d8a6f1", null ],
     [ "ruMapNextSet", "group__hashmap.html#ga288c4775f09b24ad7220f60e96c8bc36", null ],
     [ "ruMapPutData", "group__hashmap.html#ga1e118478f0538bf381369dffd6bd300d", null ],
     [ "ruMapRemoveAll", "group__hashmap.html#gaab1b6e1eeca5ef6eaa37ca3d846522b9", null ],

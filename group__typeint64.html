@@ -337,17 +337,17 @@ Functions</h2></td></tr>
 <p>Returns an <a class="el" href="group__specs.html#ga44e5e590e1e962d3ff605c847ebbf9c3">ruType</a> used for 64 bit integers. </p>
 <p>Example: </p><div class="fragment"><div class="line"><span class="comment">// error checking left out for brevity</span></div>
 <div class="line">int64_t k1 = 23, v1 = 42, r = 0;</div>
-<div class="line"><a class="code" href="group__hashmap.html#gaad879dbca17e7740cbab5651cafe677d">ruMap</a> rm = <a class="code" href="group__hashmap.html#gacf7db64ef4e7f3c82eb49eb6f80f3794">ruMapNewType</a>(<a class="code" href="group__typeint64.html#ga5fe4fc79f74027f6e6e41fe6be823c31">ruTypeInt64</a>(), <a class="code" href="group__typeint64.html#ga5fe4fc79f74027f6e6e41fe6be823c31">ruTypeInt64</a>());</div>
+<div class="line"><a class="code" href="group__hashmap.html#gaad879dbca17e7740cbab5651cafe677d">ruMap</a> rm = <a class="code" href="group__hashmap.html#ga3a95c4f5bf955c20e7ab81d456d8a6f1">ruMapNew</a>(<a class="code" href="group__typeint64.html#ga5fe4fc79f74027f6e6e41fe6be823c31">ruTypeInt64</a>(), <a class="code" href="group__typeint64.html#ga5fe4fc79f74027f6e6e41fe6be823c31">ruTypeInt64</a>());</div>
 <div class="line"><a class="code" href="group__hashmap.html#ga91b1a3cae7702eb9ebb82ba77d896571">ruMapPut</a>(rm, &amp;k1, &amp;v1);</div>
 <div class="line"> </div>
 <div class="line"><a class="code" href="group__hashmap.html#ga864d402bda9961fc1b07a0b99e44197c">ruMapGet</a>(rm, &amp;k1, &amp;r);</div>
 <div class="line">printf(<span class="stringliteral">&quot;k: %ld v: %ld\n&quot;</span>, k1, r);</div>
 <div class="line"><a class="code" href="group__hashmap.html#ga533dee52a4d05df820c614bfc9ea426e">ruMapFree</a>(rm);</div>
+<div class="ttc" id="agroup__hashmap_html_ga3a95c4f5bf955c20e7ab81d456d8a6f1"><div class="ttname"><a href="group__hashmap.html#ga3a95c4f5bf955c20e7ab81d456d8a6f1">ruMapNew</a></div><div class="ttdeci">RUAPI ruMap ruMapNew(ruType keyType, ruType valueType)</div><div class="ttdoc">Creates a new ruMap based on the given specifications.</div></div>
 <div class="ttc" id="agroup__hashmap_html_ga533dee52a4d05df820c614bfc9ea426e"><div class="ttname"><a href="group__hashmap.html#ga533dee52a4d05df820c614bfc9ea426e">ruMapFree</a></div><div class="ttdeci">RUAPI ruMap ruMapFree(ruMap rm)</div><div class="ttdoc">Frees the given map and its members.</div></div>
 <div class="ttc" id="agroup__hashmap_html_ga864d402bda9961fc1b07a0b99e44197c"><div class="ttname"><a href="group__hashmap.html#ga864d402bda9961fc1b07a0b99e44197c">ruMapGet</a></div><div class="ttdeci">#define ruMapGet(rm, key, val)</div><div class="ttdoc">Runs ruMapGetValue with a ptr cast.</div><div class="ttdef"><b>Definition:</b> map.h:134</div></div>
 <div class="ttc" id="agroup__hashmap_html_ga91b1a3cae7702eb9ebb82ba77d896571"><div class="ttname"><a href="group__hashmap.html#ga91b1a3cae7702eb9ebb82ba77d896571">ruMapPut</a></div><div class="ttdeci">#define ruMapPut(map, key, val)</div><div class="ttdoc">Runs ruMapPutData with ptr casts.</div><div class="ttdef"><b>Definition:</b> map.h:75</div></div>
 <div class="ttc" id="agroup__hashmap_html_gaad879dbca17e7740cbab5651cafe677d"><div class="ttname"><a href="group__hashmap.html#gaad879dbca17e7740cbab5651cafe677d">ruMap</a></div><div class="ttdeci">void * ruMap</div><div class="ttdoc">An opaque type representing a map object.</div><div class="ttdef"><b>Definition:</b> map.h:33</div></div>
-<div class="ttc" id="agroup__hashmap_html_gacf7db64ef4e7f3c82eb49eb6f80f3794"><div class="ttname"><a href="group__hashmap.html#gacf7db64ef4e7f3c82eb49eb6f80f3794">ruMapNewType</a></div><div class="ttdeci">RUAPI ruMap ruMapNewType(ruType keyType, ruType valueType)</div><div class="ttdoc">Creates a new ruMap based on the given specifications.</div></div>
 <div class="ttc" id="agroup__typeint64_html_ga5fe4fc79f74027f6e6e41fe6be823c31"><div class="ttname"><a href="group__typeint64.html#ga5fe4fc79f74027f6e6e41fe6be823c31">ruTypeInt64</a></div><div class="ttdeci">RUAPI ruType ruTypeInt64(void)</div><div class="ttdoc">Returns an ruType used for 64 bit integers.</div></div>
 </div><!-- fragment --> <dl class="section return"><dt>Returns</dt><dd>64 bit integer type specification. Caller need not free. </dd></dl>
 
@@ -358,7 +358,7 @@ Functions</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Tue Jul 4 2023 14:19:13 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Wed Jul 5 2023 11:54:38 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

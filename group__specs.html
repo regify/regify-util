@@ -395,7 +395,7 @@ Functions</h2></td></tr>
 <div class="line"><a class="code" href="group__specs.html#ga44e5e590e1e962d3ff605c847ebbf9c3">ruType</a> ks = <a class="code" href="group__specs.html#gaffcd92fa7c57aaac4ef591cbd2fc82aa">ruTypeNew</a>(<a class="code" href="group__typestring.html#ga180c35fbcfa6b598af925bc5b35fa996">ruStrHash</a>, <a class="code" href="group__typestring.html#ga0b39d859aa373ea70eeb6feee16b0ba1">ruStrMatch</a>, <a class="code" href="group__typestring.html#ga480d93242a367a69472b6030be2aab42">ruStrComp</a>, NULL, NULL, NULL);</div>
 <div class="line"><span class="comment">// this can also be accomplished by ruTypeInt64()</span></div>
 <div class="line"><a class="code" href="group__specs.html#ga44e5e590e1e962d3ff605c847ebbf9c3">ruType</a> vs = <a class="code" href="group__specs.html#gaffcd92fa7c57aaac4ef591cbd2fc82aa">ruTypeNew</a>(NULL, NULL, NULL, NULL, <a class="code" href="group__typeint64.html#ga8d6bd327b9e7e40228be670cdf5f76a7">ruInt64</a>, <a class="code" href="group__typeint64.html#ga59437124dbcf6691359e7dd0b7f02f57">ruRefPtrInt64</a>);</div>
-<div class="line"><a class="code" href="group__hashmap.html#gaad879dbca17e7740cbab5651cafe677d">ruMap</a> rm = <a class="code" href="group__hashmap.html#gacf7db64ef4e7f3c82eb49eb6f80f3794">ruMapNewType</a>(ks, vs);</div>
+<div class="line"><a class="code" href="group__hashmap.html#gaad879dbca17e7740cbab5651cafe677d">ruMap</a> rm = <a class="code" href="group__hashmap.html#ga3a95c4f5bf955c20e7ab81d456d8a6f1">ruMapNew</a>(ks, vs);</div>
 <div class="line"> </div>
 <div class="line"><a class="code" href="group__hashmap.html#ga91b1a3cae7702eb9ebb82ba77d896571">ruMapPut</a>(rm, k1, &amp;v1);</div>
 <div class="line"><a class="code" href="group__hashmap.html#ga91b1a3cae7702eb9ebb82ba77d896571">ruMapPut</a>(rm, k2, &amp;v2);</div>
@@ -406,11 +406,11 @@ Functions</h2></td></tr>
 <div class="line">printf(<span class="stringliteral">&quot;k: &#39;%s&#39; v: %ld\n&quot;</span>, k2, r);</div>
 <div class="line"> </div>
 <div class="line"><a class="code" href="group__hashmap.html#ga533dee52a4d05df820c614bfc9ea426e">ruMapFree</a>(rm);</div>
+<div class="ttc" id="agroup__hashmap_html_ga3a95c4f5bf955c20e7ab81d456d8a6f1"><div class="ttname"><a href="group__hashmap.html#ga3a95c4f5bf955c20e7ab81d456d8a6f1">ruMapNew</a></div><div class="ttdeci">RUAPI ruMap ruMapNew(ruType keyType, ruType valueType)</div><div class="ttdoc">Creates a new ruMap based on the given specifications.</div></div>
 <div class="ttc" id="agroup__hashmap_html_ga533dee52a4d05df820c614bfc9ea426e"><div class="ttname"><a href="group__hashmap.html#ga533dee52a4d05df820c614bfc9ea426e">ruMapFree</a></div><div class="ttdeci">RUAPI ruMap ruMapFree(ruMap rm)</div><div class="ttdoc">Frees the given map and its members.</div></div>
 <div class="ttc" id="agroup__hashmap_html_ga864d402bda9961fc1b07a0b99e44197c"><div class="ttname"><a href="group__hashmap.html#ga864d402bda9961fc1b07a0b99e44197c">ruMapGet</a></div><div class="ttdeci">#define ruMapGet(rm, key, val)</div><div class="ttdoc">Runs ruMapGetValue with a ptr cast.</div><div class="ttdef"><b>Definition:</b> map.h:134</div></div>
 <div class="ttc" id="agroup__hashmap_html_ga91b1a3cae7702eb9ebb82ba77d896571"><div class="ttname"><a href="group__hashmap.html#ga91b1a3cae7702eb9ebb82ba77d896571">ruMapPut</a></div><div class="ttdeci">#define ruMapPut(map, key, val)</div><div class="ttdoc">Runs ruMapPutData with ptr casts.</div><div class="ttdef"><b>Definition:</b> map.h:75</div></div>
 <div class="ttc" id="agroup__hashmap_html_gaad879dbca17e7740cbab5651cafe677d"><div class="ttname"><a href="group__hashmap.html#gaad879dbca17e7740cbab5651cafe677d">ruMap</a></div><div class="ttdeci">void * ruMap</div><div class="ttdoc">An opaque type representing a map object.</div><div class="ttdef"><b>Definition:</b> map.h:33</div></div>
-<div class="ttc" id="agroup__hashmap_html_gacf7db64ef4e7f3c82eb49eb6f80f3794"><div class="ttname"><a href="group__hashmap.html#gacf7db64ef4e7f3c82eb49eb6f80f3794">ruMapNewType</a></div><div class="ttdeci">RUAPI ruMap ruMapNewType(ruType keyType, ruType valueType)</div><div class="ttdoc">Creates a new ruMap based on the given specifications.</div></div>
 <div class="ttc" id="agroup__misc_html_ga7dd744dc0ee350f7de2c38f51f5c0bbe"><div class="ttname"><a href="group__misc.html#ga7dd744dc0ee350f7de2c38f51f5c0bbe">perm_chars</a></div><div class="ttdeci">const char * perm_chars</div><div class="ttdoc">A permanent NULL terminated string pointer.</div><div class="ttdef"><b>Definition:</b> regify-util.h:178</div></div>
 <div class="ttc" id="agroup__specs_html_ga44e5e590e1e962d3ff605c847ebbf9c3"><div class="ttname"><a href="group__specs.html#ga44e5e590e1e962d3ff605c847ebbf9c3">ruType</a></div><div class="ttdeci">void * ruType</div><div class="ttdoc">An opaque type representing a type specification.</div><div class="ttdef"><b>Definition:</b> regify-util.h:346</div></div>
 <div class="ttc" id="agroup__specs_html_gaffcd92fa7c57aaac4ef591cbd2fc82aa"><div class="ttname"><a href="group__specs.html#gaffcd92fa7c57aaac4ef591cbd2fc82aa">ruTypeNew</a></div><div class="ttdeci">RUAPI ruType ruTypeNew(ruHashFunc hash, ruMatchFunc match, ruCompFunc comp, ruClearFunc free, ruCloneFunc in, ruPtr2TypeFunc out)</div><div class="ttdoc">Creates a custom type specification usable as a map key.</div></div>
@@ -487,7 +487,7 @@ Functions</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Tue Jul 4 2023 14:19:13 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Wed Jul 5 2023 11:54:38 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

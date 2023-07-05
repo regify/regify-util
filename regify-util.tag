@@ -1507,9 +1507,9 @@
     </member>
     <member kind="function">
       <type>RUAPI ruList</type>
-      <name>ruListNewType</name>
+      <name>ruListNew</name>
       <anchorfile>group__list.html</anchorfile>
-      <anchor>ga67700afc458c82357f28b796b1f85da2</anchor>
+      <anchor>ga9bc498f9b3cd2e848a387ff9fc215220</anchor>
       <arglist>(ruType valueType)</arglist>
     </member>
     <member kind="function">
@@ -1968,9 +1968,9 @@
     </member>
     <member kind="function">
       <type>RUAPI ruMap</type>
-      <name>ruMapNewType</name>
+      <name>ruMapNew</name>
       <anchorfile>group__hashmap.html</anchorfile>
-      <anchor>gacf7db64ef4e7f3c82eb49eb6f80f3794</anchor>
+      <anchor>ga3a95c4f5bf955c20e7ab81d456d8a6f1</anchor>
       <arglist>(ruType keyType, ruType valueType)</arglist>
     </member>
     <member kind="function">
@@ -2092,9 +2092,9 @@
     </member>
     <member kind="function">
       <type>RUAPI ruSet</type>
-      <name>ruSetNewType</name>
+      <name>ruSetNew</name>
       <anchorfile>group__hashset.html</anchorfile>
-      <anchor>ga56b591ce6580756c863873ac9393e9fd</anchor>
+      <anchor>gae1a9de840b3d7d20a8fa48dbf417403d</anchor>
       <arglist>(ruType keyType)</arglist>
     </member>
     <member kind="function">

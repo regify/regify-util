@@ -18,7 +18,7 @@ var group__list =
     [ "ruListInsertBefore", "group__list.html#ga4e46b6472e396b8f3e4c644d2f61e62d", null ],
     [ "ruListInsertIdx", "group__list.html#ga2dc64fa432c78f2df6ec859487ee1788", null ],
     [ "ruListJoin", "group__list.html#ga3f5916035e33df40b498642137ea769f", null ],
-    [ "ruListNewType", "group__list.html#ga67700afc458c82357f28b796b1f85da2", null ],
+    [ "ruListNew", "group__list.html#ga9bc498f9b3cd2e848a387ff9fc215220", null ],
     [ "ruListNextElmt", "group__list.html#ga662f949b26672d0793e8b78dc44b568b", null ],
     [ "ruListSize", "group__list.html#gaf068a6ca647d47215c5a805d35ca5ec4", null ],
     [ "ruListSort", "group__list.html#ga4ce49f0d1e82a450616d472f9df42eec", null ],

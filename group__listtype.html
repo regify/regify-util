@@ -144,7 +144,7 @@ Functions</h2></td></tr>
 <p>Example of typed use: </p><div class="fragment"><div class="line"><span class="comment">// error checking left out for brevity</span></div>
 <div class="line"><span class="keywordtype">bool</span> b1 = <span class="keyword">false</span>;</div>
 <div class="line"><span class="keywordtype">bool</span> b2 = <span class="keyword">true</span>;</div>
-<div class="line"><a class="code" href="group__list.html#gab25c1662a91a5e0d68a3f04efd1a0cc2">ruList</a> rl = <a class="code" href="group__list.html#ga67700afc458c82357f28b796b1f85da2">ruListNewType</a>(<a class="code" href="group__typebool.html#gac8b5b99b1b9a9927a4503e6082a7339a">ruTypeBool</a>());</div>
+<div class="line"><a class="code" href="group__list.html#gab25c1662a91a5e0d68a3f04efd1a0cc2">ruList</a> rl = <a class="code" href="group__list.html#ga9bc498f9b3cd2e848a387ff9fc215220">ruListNew</a>(<a class="code" href="group__typebool.html#gac8b5b99b1b9a9927a4503e6082a7339a">ruTypeBool</a>());</div>
 <div class="line"><a class="code" href="group__list.html#ga67286d2c5522bdb4428436c561f122e5">ruListAppend</a>(rl, &amp;b1);</div>
 <div class="line"><a class="code" href="group__list.html#ga67286d2c5522bdb4428436c561f122e5">ruListAppend</a>(rl, &amp;b2);</div>
 <div class="line"> </div>
@@ -155,7 +155,7 @@ Functions</h2></td></tr>
 <div class="line">}</div>
 <div class="line">rl = <a class="code" href="group__list.html#ga8f7ce9a43ad50071bc1161ecb21a38d5">ruListFree</a>(rl);</div>
 <div class="line"> </div>
-<div class="line">rl = <a class="code" href="group__list.html#ga67700afc458c82357f28b796b1f85da2">ruListNewType</a>(<a class="code" href="group__typestring.html#ga5d216c496a260a04e5eb2dbc84a84660">ruTypeStrDup</a>());</div>
+<div class="line">rl = <a class="code" href="group__list.html#ga9bc498f9b3cd2e848a387ff9fc215220">ruListNew</a>(<a class="code" href="group__typestring.html#ga5d216c496a260a04e5eb2dbc84a84660">ruTypeStrDup</a>());</div>
 <div class="line"><a class="code" href="group__list.html#ga67286d2c5522bdb4428436c561f122e5">ruListAppend</a>(rl, <span class="stringliteral">&quot;foo&quot;</span>);</div>
 <div class="line"><a class="code" href="group__list.html#ga67286d2c5522bdb4428436c561f122e5">ruListAppend</a>(rl, <span class="stringliteral">&quot;bar&quot;</span>);</div>
 <div class="line"> </div>
@@ -166,9 +166,9 @@ Functions</h2></td></tr>
 <div class="line">}</div>
 <div class="line">rl = <a class="code" href="group__list.html#ga8f7ce9a43ad50071bc1161ecb21a38d5">ruListFree</a>(rl);</div>
 <div class="ttc" id="agroup__list_html_ga67286d2c5522bdb4428436c561f122e5"><div class="ttname"><a href="group__list.html#ga67286d2c5522bdb4428436c561f122e5">ruListAppend</a></div><div class="ttdeci">#define ruListAppend(rl, data)</div><div class="ttdoc">Calls ruListAppendPtr but handles the void* cast.</div><div class="ttdef"><b>Definition:</b> list.h:163</div></div>
-<div class="ttc" id="agroup__list_html_ga67700afc458c82357f28b796b1f85da2"><div class="ttname"><a href="group__list.html#ga67700afc458c82357f28b796b1f85da2">ruListNewType</a></div><div class="ttdeci">RUAPI ruList ruListNewType(ruType valueType)</div><div class="ttdoc">Creates a new list object. To be freed with ruListFree.</div></div>
 <div class="ttc" id="agroup__list_html_ga88f5af8c2f8986a0708a06c1d0bb2183"><div class="ttname"><a href="group__list.html#ga88f5af8c2f8986a0708a06c1d0bb2183">ruIterator</a></div><div class="ttdeci">void * ruIterator</div><div class="ttdoc">Opaque pointer to list iterator object. See List Collection.</div><div class="ttdef"><b>Definition:</b> list.h:115</div></div>
 <div class="ttc" id="agroup__list_html_ga8f7ce9a43ad50071bc1161ecb21a38d5"><div class="ttname"><a href="group__list.html#ga8f7ce9a43ad50071bc1161ecb21a38d5">ruListFree</a></div><div class="ttdeci">RUAPI ruList ruListFree(ruList rl)</div><div class="ttdoc">Frees the given list object.</div></div>
+<div class="ttc" id="agroup__list_html_ga9bc498f9b3cd2e848a387ff9fc215220"><div class="ttname"><a href="group__list.html#ga9bc498f9b3cd2e848a387ff9fc215220">ruListNew</a></div><div class="ttdeci">RUAPI ruList ruListNew(ruType valueType)</div><div class="ttdoc">Creates a new list object. To be freed with ruListFree.</div></div>
 <div class="ttc" id="agroup__list_html_gab25c1662a91a5e0d68a3f04efd1a0cc2"><div class="ttname"><a href="group__list.html#gab25c1662a91a5e0d68a3f04efd1a0cc2">ruList</a></div><div class="ttdeci">void * ruList</div><div class="ttdoc">Opaque pointer to list object. See List Collection.</div><div class="ttdef"><b>Definition:</b> list.h:103</div></div>
 <div class="ttc" id="agroup__list_html_gacc2bc91f4f76b9863603a004dae43194"><div class="ttname"><a href="group__list.html#gacc2bc91f4f76b9863603a004dae43194">ruListIter</a></div><div class="ttdeci">#define ruListIter(rl)</div><div class="ttdoc">Returns the first element in the given list to iterate over.</div><div class="ttdef"><b>Definition:</b> list.h:304</div></div>
 <div class="ttc" id="agroup__listtype_html_ga64c272f6e5f86b201b9eedc104dea96f"><div class="ttname"><a href="group__listtype.html#ga64c272f6e5f86b201b9eedc104dea96f">ruIterTo</a></div><div class="ttdeci">#define ruIterTo(re, dest)</div><div class="ttdoc">Returns the next element data in the given list to iterate over.</div><div class="ttdef"><b>Definition:</b> list.h:509</div></div>
@@ -604,7 +604,7 @@ Functions</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Tue Jul 4 2023 14:19:13 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Wed Jul 5 2023 11:54:38 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

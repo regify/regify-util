@@ -10,7 +10,7 @@ var group__hashset =
     [ "ruSetFree", "group__hashset.html#ga9959e3bb0312f3c6cc7724d2395ae21a", null ],
     [ "ruSetHasItem", "group__hashset.html#ga14cb0334a2f4fd396af3ed2a98d0e08a", null ],
     [ "ruSetItemList", "group__hashset.html#ga5b93a6f24cca1cba2167cf04d8ebcdb8", null ],
-    [ "ruSetNewType", "group__hashset.html#ga56b591ce6580756c863873ac9393e9fd", null ],
+    [ "ruSetNew", "group__hashset.html#gae1a9de840b3d7d20a8fa48dbf417403d", null ],
     [ "ruSetNextSet", "group__hashset.html#ga2eff2a2b83e61f238b475c21a67e471b", null ],
     [ "ruSetPutItem", "group__hashset.html#gacfe5e07efc9ccb09baebd6f1e6bc58da", null ],
     [ "ruSetRemoveAll", "group__hashset.html#ga17efcfbea5d931d75b25a195174a4ecc", null ],
