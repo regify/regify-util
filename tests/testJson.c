@@ -152,7 +152,6 @@ START_TEST(api) {
     perm_chars test = "ruJsonParse";
     const char *retText = "%s failed wanted ret '%d' but got '%d'";
     ruJson jsn, ejsn = NULL;
-    perm_chars str;
     perm_chars estr = NULL;
 
     jsn = ruJsonParse(NULL, &ret);

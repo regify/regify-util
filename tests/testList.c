@@ -474,11 +474,11 @@ START_TEST ( memalloc ) {
 END_TEST
 
 START_TEST(types) {
-    int32_t i, ret, exp = RUE_OK;
+    int32_t ret, exp = RUE_OK;
     const char *retText = "failed wanted ret '%d' but got '%d'";
     ruList rl = NULL;
     ruIterator li = NULL;
-    rusize sz, esz;
+    rusize i, sz, esz;
 
     do {
         bool vals[] = {false, true, true};

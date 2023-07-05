@@ -44,6 +44,12 @@
 #ifndef REGIFY_UTIL_INI_H
 #define REGIFY_UTIL_INI_H
 
+/* Only need to export C interface if used by C++ source code */
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
+
 /**
  * \brief An opaque type representing an ini object.
  */
@@ -136,6 +142,9 @@ RUAPI int32_t ruIniGet(ruIni iniOb, trans_chars section, trans_chars key, perm_c
  */
 RUAPI int32_t ruIniSet(ruIni iniOb, trans_chars section, trans_chars key, trans_chars value);
 
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
 #endif //REGIFY_UTIL_INI_H
 
 /**
