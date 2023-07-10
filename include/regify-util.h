@@ -667,6 +667,7 @@ RUAPI ptr ruClear(ptr o);
 #include <regify-util/json.h>
 #include <regify-util/kvstore.h>
 #include <regify-util/regex.h>
+#include <regify-util/html.h>
 #if !defined(__ANDROID__) && defined(__linux__) || defined(ITS_OSX) || defined(_WIN32)
 #include <regify-util/fam.h>
 #endif

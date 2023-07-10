@@ -265,15 +265,38 @@ START_TEST(get) {
     jsn = ruJsonFree(jsn);
     fail_unless(NULL == jsn, retText, NULL, jsn);
 
+    ruList keys = NULL;
+    uint32_t ecnt, cnt;
+
     // {"map": {"key": "2342", "num": 2342, "dbl": 23.42}, "arr": [2342, "2342", 23.42]}
     jsonStr = "{\"map\": {\"key\": \"2342\", \"num\": 2342, \"dbl\": 23.42}, \"arr\": [2342, \"2342\", 23.42]}";
     jsn = ruJsonParse(jsonStr, &ret);
     fail_if(NULL == jsn, retText, NULL, jsn);
     fail_unless(ret == exp, retText, exp, ret);
 
+    keys = ruJsonKeys(jsn, &ret);
+    fail_unless(ret == exp, retText, exp, ret);
+    fail_if(NULL == keys, retText, NULL, keys);
+
+    ecnt = 2;
+    cnt = ruListSize(keys, &ret);
+    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(cnt == ecnt, retText, cnt, ecnt);
+    keys = ruListFree(keys);
+
     jm = ruJsonKeyMap(jsn, "map", &ret);
     fail_unless(ret == exp, retText, exp, ret);
     fail_if(NULL == jm, retText, NULL, jm);
+
+    keys = ruJsonKeys(jm, &ret);
+    fail_unless(ret == exp, retText, exp, ret);
+    fail_if(NULL == keys, retText, NULL, keys);
+
+    ecnt = 3;
+    cnt = ruListSize(keys, &ret);
+    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(cnt == ecnt, retText, cnt, ecnt);
+    keys = ruListFree(keys);
 
     str = ruJsonKeyStr(jm, "key", &ret);
     fail_unless(ret == exp, retText, exp, ret);
@@ -458,6 +481,7 @@ START_TEST(set) {
     fail_unless(NULL == jsn, retText, NULL, jsn);
 }
 END_TEST
+
 void sample() {
     ruJson jsn = NULL;
     int32_t ret;
@@ -514,8 +538,8 @@ void sample() {
 
     } while(0);
     ruJsonFree(jsn);
-
 }
+
 TCase* jsonTests(void) {
     TCase *tcase = tcase_create("json");
     tcase_add_test(tcase, api);

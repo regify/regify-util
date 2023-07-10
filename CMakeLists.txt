@@ -23,10 +23,12 @@ set(VERSION 2.0.0 CACHE STRING "The package version")
 set(REVISION 0 CACHE STRING "The build revision")
 set(DEPS_PREFIX ${CMAKE_INSTALL_PREFIX} CACHE STRING "General dependency installation prefix")
 set(ICU_PREFIX ${DEPS_PREFIX} CACHE STRING "Prefix path under which to find ICU")
+set(TIDY_PREFIX ${DEPS_PREFIX} CACHE STRING "libtidy installation prefix")
 set(YAJL_PREFIX ${DEPS_PREFIX} CACHE STRING "yajl installation prefix")
 set(LIB_FOLDER "lib" CACHE STRING "Folder under prefix where the libs are stored")
 option(BUILD_SHARED_LIBS "Whether to build dynamic libraries" OFF)
 option(INCLUDE_ICU "Whether to include ICU statically" ON)
+option(INCLUDE_TIDY "Whether to include libtidy statically" ON)
 option(INCLUDE_YAJL "Whether to include YAJL statically" ON)
 option(INSTALL_DEPS "Whether this configuration installs its included dependencies. Used for packaging" OFF)
 option(DOCS "Whether to generate the documentation" OFF)
@@ -131,13 +133,17 @@ if ("${DEPS_PREFIX}" MATCHES "^$")
     find_package(PkgConfig REQUIRED)
     pkg_check_modules(ICU REQUIRED icu-io)
     pkg_check_modules(YAJL REQUIRED yajl)
+    pkg_check_modules(TIDY REQUIRED tidy)
 else()
     # where static dependencies are found
     set(ICU_INCLUDE_DIRS ${ICU_PREFIX}/include)
     set(ICU_LIBRARY_DIRS ${ICU_PREFIX}/${LIB_FOLDER})
     set(YAJL_INCLUDE_DIRS ${YAJL_PREFIX}/include)
     set(YAJL_LIBRARY_DIRS ${YAJL_PREFIX}/${LIB_FOLDER})
+    set(TIDY_INCLUDE_DIRS ${TIDY_PREFIX}/include)
+    set(TIDY_LIBRARY_DIRS ${TIDY_PREFIX}/${LIB_FOLDER})
     if(WIN AND NOT MINGW)
+        set(TIDY_LIBRARIES tidy)
         set(YAJL_LIBRARIES yajl)
         if(BUILD_SHARED_LIBS AND NOT INCLUDE_ICU)
             set(ICU_LIBRARIES icuio icuin icuuc icudt)
@@ -145,27 +151,27 @@ else()
             set(ICU_LIBRARIES sicuio sicuin sicuuc sicudt)
         endif()
     else()
+        set(TIDY_LIBRARIES -ltidy)
         set(YAJL_LIBRARIES -lyajl)
         set(ICU_LIBRARIES -licuio -licui18n -licuuc -licudata -lm -lstdc++)
     endif()
 endif()
 
+add_custom_target(entities
+        COMMAND ${CMAKE_SOURCE_DIR}/resources/mkmap.py > ${CMAKE_SOURCE_DIR}/lib/htmlEntities.c)
+
 if(DOCS)
     if(INCLUDE_ICU)
-        file(GLOB DEF_ICU_LICENSE_PATH ${ICU_PREFIX}/share/icu/LICENSE)
-        set(ICU_LICENSE_PATH ${DEF_ICU_LICENSE_PATH} CACHE STRING
-                "Where the ICU License file for packaging can be found")
-        if(ICU_LICENSE_PATH MATCHES "^$")
-            message(FATAL_ERROR "We need the ICU License file for packaging set ICU_LICENSE_PATH to its location")
-        endif()
+        installLicensePath(ICU ICU ICU-license.txt
+                ${ICU_PREFIX}/share/icu/LICENSE)
     endif()
     if(INCLUDE_YAJL)
-        file(GLOB DEF_YAJL_LICENSE_PATH ${YAJL_PREFIX}/share/yajl/LICENSE)
-        set(YAJL_LICENSE_PATH ${DEF_YAJL_LICENSE_PATH} CACHE STRING
-                "Where the YAJL License file for packaging can be found")
-        if(YAJL_LICENSE_PATH MATCHES "^$")
-            message(FATAL_ERROR "We need the YAJL License file for packaging set YAJL_LICENSE_PATH to its location")
-        endif()
+        installLicensePath(YAJL YAJL YAJL-license.txt
+                ${YAJL_PREFIX}/share/yajl/LICENSE)
+    endif()
+    if(INCLUDE_TIDY)
+        installLicensePath(TIDY tidy tidy-license.txt
+                ${TIDY_PREFIX}/share/tidy/LICENSE)
     endif()
 endif()
 
@@ -189,6 +195,7 @@ write_basic_package_version_file(
 set(INCLUDES
         include/regify-util/cleaner.h
         include/regify-util/errors.h
+        include/regify-util/html.h
         include/regify-util/ini.h
         include/regify-util/io.h
         include/regify-util/json.h
@@ -234,18 +241,6 @@ endif()
 # documentation & packaging
 if(DOCS)
     install(FILES LICENSE DESTINATION share/${NAME})
-    if(INCLUDE_ICU)
-        message("Bundling ICU License ${ICU_LICENSE_PATH}")
-        install(FILES ${ICU_LICENSE_PATH}
-                DESTINATION share/${NAME}
-                RENAME ICU-LICENSE)
-    endif()
-    if(INCLUDE_YAJL)
-        message("Bundling ICU License ${YAJL_LICENSE_PATH}")
-        install(FILES ${YAJL_LICENSE_PATH}
-                DESTINATION share/${NAME}
-                RENAME YAJL-LICENSE)
-    endif()
 
     # add a target to generate API documentation with Doxygen
     # add these to your PATH id they're not found even though they are installed

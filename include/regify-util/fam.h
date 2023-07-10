@@ -166,7 +166,7 @@ RUAPI ruFamEvent* ruFamEventNew(int eventType, trans_chars filePath, trans_chars
 
 /**
  * famEvent destructor
- * @param fe famEvent to free
+ * @param o famEvent to free
  * @return NULL
  */
 RUAPI ptr ruFamEventFree(ptr o);

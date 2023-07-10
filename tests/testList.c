@@ -250,8 +250,8 @@ END_TEST
 START_TEST ( usage ) {
     int32_t ret, exp;
     uint32_t sz, esz;
-    const char *test = "ruListAppendPtr";
-    const char *retText = "%s failed wanted ret '%d' but got '%d'";
+    perm_chars test = "ruListAppendPtr";
+    perm_chars retText = "%s failed wanted ret '%d' but got '%d'";
     ruList rl = NULL;
     ruListElmt rle = NULL, head = NULL;
     char *res = NULL;
@@ -357,6 +357,42 @@ START_TEST ( usage ) {
     ck_assert_str_eq(str, "field2");
 
     ret = ruListInsertIdx(rl, 1, f[1]);
+    fail_unless(ret == exp, retText, test, exp, ret);
+
+    str = ruListJoin(rl, NULL, &ret);
+    fail_unless(ret == exp, retText, test, exp, ret);
+    ck_assert_str_eq(str, "field0field1field1field2");
+    ruFree(str);
+
+    res = NULL;
+    ret = ruListRemoveIdxTo(rl, 1, res);
+    fail_unless(ret == exp, retText, test, exp, ret);
+    ck_assert_str_eq(res, "field1");
+
+    str = ruListJoin(rl, NULL, &ret);
+    fail_unless(ret == exp, retText, test, exp, ret);
+    ck_assert_str_eq(str, "field0field1field2");
+    ruFree(str);
+
+    res = NULL;
+    ret = ruListRemoveIdxTo(rl, 0, res);
+    fail_unless(ret == exp, retText, test, exp, ret);
+    ck_assert_str_eq(res, "field0");
+
+    str = ruListJoin(rl, NULL, &ret);
+    fail_unless(ret == exp, retText, test, exp, ret);
+    ck_assert_str_eq(str, "field1field2");
+    ruFree(str);
+
+    ret = ruListInsertIdx(rl, 0, f[1]);
+    fail_unless(ret == exp, retText, test, exp, ret);
+
+    str = ruListJoin(rl, NULL, &ret);
+    fail_unless(ret == exp, retText, test, exp, ret);
+    ck_assert_str_eq(str, "field1field1field2");
+    ruFree(str);
+
+    ret = ruListInsertIdx(rl, 0, f[0]);
     fail_unless(ret == exp, retText, test, exp, ret);
 
     str = ruListJoin(rl, NULL, &ret);

@@ -48,9 +48,9 @@ else()
         set(FAMSRC "")
     endif()
     add_executable(runTests EXCLUDE_FROM_ALL
-            runTests.cpp testCleaner.c ${FAMSRC} testIni.c testIo.c testJson.c
-            testList.c testMap.c testMisc.c testRegex.c testSet.c testStore.c
-            testString.c testThread.c)
+            runTests.cpp testCleaner.c ${FAMSRC} testHtml.c testIni.c testIo.c
+            testJson.c testList.c testMap.c testMisc.c testRegex.c testSet.c
+            testStore.c testString.c testThread.c)
     target_include_directories(runTests
             PRIVATE ${PROJECT_SOURCE_DIR}/include/ ${CHECK_INCLUDE_DIR})
     target_compile_definitions(runTests PRIVATE

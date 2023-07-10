@@ -91,6 +91,12 @@ RUAPI void ruStdErrorLogger(perm_ptr udata, trans_chars msg);
 RUAPI void ruSetLogger(ruLogFunc logger, uint32_t logLevel, perm_ptr userData);
 
 /**
+ * \brief Adjusts the current log level.
+ * @param logLevel New log level to log at.
+ */
+RUAPI void ruSetLogLevel(uint32_t logLevel);
+
+/**
  * \brief Returns the currently set log level.
  * @return The currently set log level.
  */

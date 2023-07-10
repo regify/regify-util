@@ -258,6 +258,19 @@ RUAPI ptr ruListRemove(ruList rl, ruListElmt* rle, int32_t* code);
 
 /**
  * \ingroup listobj
+ * \brief Remove and return the list element at index position from list.
+ * @param rl List to remove object from.
+ * @param index 0 based postion of the element to remove in the list.
+ * @param code (Optional) Stores regify error code of this operation.
+ *         \ref RUE_OK on success
+ *         \ref RUE_USER_ABORT when a threaded list has quit
+ *         else a regify error code.
+ * @return Object which was removed from list.
+ */
+RUAPI ptr ruListRemoveIdx(ruList rl, int32_t index, int32_t* code);
+
+/**
+ * \ingroup listobj
  * \brief Return first element of the list.
  *
  * @param rl List to pop object from.
@@ -415,6 +428,34 @@ RUAPI int32_t ruListRemoveDataTo(ruList rl, ruListElmt* rle, ptr* dest);
  *         else a regify error code.
  */
 #define ruListRemoveTo(rl, rle, dest) ruListRemoveDataTo(rl, &(rle), (ptr*)&(dest))
+
+/**
+ * \ingroup listtype
+ * \brief Remove and return the list element at index position from list.
+ * @param rl List to remove object from.
+ * @param index 0 based postion of the element to remove in the list.
+ * @param dest Optional. Where the returned object will be stored as its given
+ *             type.
+ * @return regify error code of this operation.
+ *         \ref RUE_OK on success
+ *         \ref RUE_USER_ABORT when a threaded list has quit
+ *         else a regify error code.
+ */
+RUAPI int32_t ruListRemoveIdxDataTo(ruList rl, int32_t index, ptr* dest);
+
+/**
+ * \ingroup listtype
+ * \brief Remove and return the list element at index position from list.
+ * @param rl List to remove object from.
+ * @param index 0 based postion of the element to remove in the list.
+ * @param dest Optional. Where the returned object will be stored as its given
+ *             type. (casts added)
+ * @return regify error code of this operation.
+ *         \ref RUE_OK on success
+ *         \ref RUE_USER_ABORT when a threaded list has quit
+ *         else a regify error code.
+ */
+#define ruListRemoveIdxTo(rl, index, dest) ruListRemoveIdxDataTo(rl, index, (ptr*)&(dest))
 
 /**
  * \ingroup listtype

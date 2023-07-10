@@ -18,9 +18,9 @@ A current Linux version of the API Documentation can be found https://regify.git
 
 == Building
 The project is built using https://cmake.org[Cmake].
-The main dependencies are https://icu.unicode.org[ICU] and https://lloyd.github.io/yajl/[jajl].
+The main dependencies are https://icu.unicode.org[ICU], https://github.com/htacg/tidy-html5[tidy-html5] and https://lloyd.github.io/yajl/[jajl].
 The List module also uses https://github.com/swenson/sort[sort.h] from Christopher Swenson via git submodules.
-Aside from the usual cmake variables there is `DEPS_PREFIX` which points to the prefix where ICU and yajl can be found.
+Aside from the usual cmake variables there is `DEPS_PREFIX` which points to the prefix where ICU, tidy-html5 and yajl can be found.
 Below are examples on how to build regify-util.
 These builds produce static libraries.
 For Linux a shared so can be built by setting `BUILD_SHARED_LIBS`.

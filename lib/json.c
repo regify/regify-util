@@ -110,6 +110,57 @@ static yajl_val jsonIdx(ruJson rj, rusize index, yajl_type type, int32_t* status
     ruRetWithCode(status, RUE_FILE_NOT_FOUND, NULL);
 }
 
+static perm_chars nodeStr(yajl_val node, int32_t* status) {
+    perm_chars out = NULL;
+    if (!node) ruRetWithCode(status, RUE_FILE_NOT_FOUND, out);
+    if (!YAJL_IS_STRING(node)) {
+        ruRetWithCode(status, RUE_INVALID_PARAMETER, out);
+    }
+    out = YAJL_GET_STRING(node);
+    ruVerbLogf("returning %s" , out);
+    ruRetWithCode(status, RUE_OK, out);
+}
+
+int64_t nodeInt(yajl_val node, int32_t* status) {
+    int64_t out = 0;
+    if (!node) ruRetWithCode(status, RUE_FILE_NOT_FOUND, out);
+    if (!YAJL_IS_INTEGER(node)) {
+        ruRetWithCode(status, RUE_INVALID_PARAMETER, out);
+    }
+    out = YAJL_GET_INTEGER(node);
+    ruVerbLogf("returning %" PRId64, out);
+    ruRetWithCode(status, RUE_OK, out);
+}
+
+double nodeDouble(yajl_val v, int32_t* status) {
+    double out = 0;
+    if (!v) ruRetWithCode(status, RUE_FILE_NOT_FOUND, out);
+    if (!YAJL_IS_DOUBLE(v)) {
+        ruRetWithCode(status, RUE_INVALID_PARAMETER, out);
+    }
+    out = YAJL_GET_DOUBLE(v);
+    ruVerbLogf("returning %0.6f", out);
+    ruRetWithCode(status, RUE_OK, out);
+}
+
+ruJson nodeMap(yajl_val v, int32_t* status) {
+    ruJson out = NULL;
+    if (!v) ruRetWithCode(status, RUE_FILE_NOT_FOUND, out);
+    if (!YAJL_IS_OBJECT(v)) {
+        ruRetWithCode(status, RUE_INVALID_PARAMETER, out);
+    }
+    ruRetWithCode(status, RUE_OK, v);
+}
+
+ruJson nodeArray(yajl_val v, int32_t* status) {
+    ruJson out = NULL;
+    if (!v) ruRetWithCode(status, RUE_FILE_NOT_FOUND, out);
+    if (!YAJL_IS_ARRAY(v)) {
+        ruRetWithCode(status, RUE_INVALID_PARAMETER, out);
+    }
+    ruRetWithCode(status, RUE_OK, v);
+}
+
 //</editor-fold>
 
 //<editor-fold desc="common">
@@ -446,52 +497,50 @@ RUAPI ruJson ruJsonParse(trans_chars jsonStr, int32_t* status) {
 }
 
 RUAPI rusize ruJsonArrayLen(ruJson rj, int32_t* status) {
-    yajl_val node = getYajlVal(rj, status);
-    if (!node) return 0;
-    if (!YAJL_IS_ARRAY(node)) {
+    yajl_val v = getYajlVal(rj, status);
+    if (!v) return 0;
+    if (!YAJL_IS_ARRAY(v)) {
         ruRetWithCode(status, RUE_INVALID_PARAMETER, 0);
     }
-    ruRetWithCode(status, RUE_OK, node->u.array.len);
+    ruRetWithCode(status, RUE_OK, v->u.array.len);
 }
 
 
 RUAPI perm_chars ruJsonStr(ruJson rj, int32_t* status) {
-    yajl_val node = getYajlVal(rj, status);
-    if (!node) return NULL;
-    if (!YAJL_IS_STRING(node)) {
-        ruRetWithCode(status, RUE_INVALID_PARAMETER, NULL);
-    }
-    perm_chars out = YAJL_GET_STRING(node);
-    ruVerbLogf("returning %s" , out);
-    ruRetWithCode(status, RUE_OK, out);
+    yajl_val v = getYajlVal(rj, status);
+    if (!v) return NULL;
+    return nodeStr(v, status);
 }
 
 RUAPI int64_t ruJsonParseInt(ruJson rj, int32_t* status) {
-    int64_t out = 0;
-    yajl_val node = getYajlVal(rj, status);
-    if (!node) return out;
-    return parseNum(node, status);
+    yajl_val v = getYajlVal(rj, status);
+    if (!v) return 0;
+    return parseNum(v, status);
 }
 
 RUAPI int64_t ruJsonInt(ruJson rj, int32_t* status) {
-    int64_t out = 0;
-    yajl_val node = getYajlVal(rj, status);
-    if (!node) return out;
-    if (!YAJL_IS_INTEGER(node)) {
-        ruRetWithCode(status, RUE_INVALID_PARAMETER, out);
-    }
-    out = YAJL_GET_INTEGER(node);
-    ruVerbLogf("returning %" PRId64, out);
-    ruRetWithCode(status, RUE_OK, out);
+    yajl_val v = getYajlVal(rj, status);
+    if (!v) return 0;
+    return nodeInt(v, status);
 }
 
+RUAPI ruList ruJsonKeys(ruJson rj, int32_t* status) {
+    yajl_val v = getYajlVal(rj, status);
+    if (!v) return NULL;
+    if (!YAJL_IS_OBJECT(v)) {
+        ruRetWithCode(status, RUE_INVALID_PARAMETER, NULL);
+    }
+    ruList out = ruListNew(ruTypeStrRef());
+    for (size_t i = 0; i < v->u.object.len; i++) {
+        ruListAppend(out, v->u.object.keys[i]);
+    }
+    ruRetWithCode(status, RUE_OK, out);
+}
 
 RUAPI perm_chars ruJsonKeyStr(ruJson rj, trans_chars key, int32_t* status) {
     yajl_val v = jsonKey(rj, key, yajl_t_string, status);
     if (!v) return NULL;
-    perm_chars out = YAJL_GET_STRING(v);
-    ruVerbLogf("%s is %s" , key, out);
-    ruRetWithCode(status, RUE_OK, out);
+    return nodeStr(v, status);
 }
 
 RUAPI alloc_chars ruJsonKeyStrDup(ruJson rj, trans_chars key, int32_t* status) {
@@ -499,51 +548,39 @@ RUAPI alloc_chars ruJsonKeyStrDup(ruJson rj, trans_chars key, int32_t* status) {
 }
 
 RUAPI int64_t ruJsonKeyParseInt(ruJson rj, trans_chars key, int32_t* status) {
-    int64_t out = 0;
     yajl_val v = jsonKey(rj, key, yajl_t_any, status);
-    if (!v) return out;
+    if (!v) return 0;
     return parseNum(v, status);
 }
 
 RUAPI int64_t ruJsonKeyInt(ruJson rj, trans_chars key, int32_t* status) {
-    int64_t out = 0;
     yajl_val v = jsonKey(rj, key, yajl_t_number, status);
-    if (!v) return out;
-    out = YAJL_GET_INTEGER(v);
-    ruVerbLogf("%s is %" PRId64 , key, out);
-    ruRetWithCode(status, RUE_OK, out);
+    if (!v) return 0;
+    return nodeInt(v, status);
 }
 
 RUAPI double ruJsonKeyDouble(ruJson rj, trans_chars key, int32_t* status) {
-    double out = 0;
     yajl_val v = jsonKey(rj, key, yajl_t_number, status);
-    if (!v) return out;
-    out = YAJL_GET_DOUBLE(v);
-    ruVerbLogf("%s is %0.6f" , key, out);
-    ruRetWithCode(status, RUE_OK, out);
+    if (!v) return 0;
+    return nodeDouble(v, status);
 }
 
 RUAPI ruJson ruJsonKeyMap(ruJson rj, trans_chars key, int32_t* status) {
-    ruJson out = NULL;
     yajl_val v = jsonKey(rj, key, yajl_t_object, status);
-    if (!v) return out;
-    ruRetWithCode(status, RUE_OK, (ruJson)v);
+    if (!v) return NULL;
+    return nodeMap(v, status);
 }
 
 RUAPI ruJson ruJsonKeyArray(ruJson rj, trans_chars key, int32_t* status) {
-    ruJson out = NULL;
     yajl_val v = jsonKey(rj, key, yajl_t_array, status);
-    if (!v) return out;
-    ruRetWithCode(status, RUE_OK, (ruJson)v);
+    if (!v) return NULL;
+    return nodeArray(v, status);
 }
 
-
 RUAPI perm_chars ruJsonIdxStr(ruJson rj, rusize index, int32_t* status) {
-    yajl_val node = jsonIdx(rj, index, yajl_t_string, status);
-    if (!node) return NULL;
-    perm_chars out = YAJL_GET_STRING(node);
-    ruVerbLogf("returning %s" , out);
-    ruRetWithCode(status, RUE_OK, out);
+    yajl_val v = jsonIdx(rj, index, yajl_t_string, status);
+    if (!v) return NULL;
+    return nodeStr(v, status);
 }
 
 RUAPI alloc_chars ruJsonIdxStrDup(ruJson rj, rusize index, int32_t* status) {
@@ -551,40 +588,33 @@ RUAPI alloc_chars ruJsonIdxStrDup(ruJson rj, rusize index, int32_t* status) {
 }
 
 RUAPI int64_t ruJsonIdxParseInt(ruJson rj, rusize index, int32_t* status) {
-    int64_t out = 0;
     yajl_val v = jsonIdx(rj, index, yajl_t_any, status);
-    if (!v) return out;
+    if (!v) return 0;
     return parseNum(v, status);
 }
 
 RUAPI int64_t ruJsonIdxInt(ruJson rj, rusize index, int32_t* status) {
-    int64_t out = 0;
-    yajl_val node = jsonIdx(rj, index, yajl_t_number, status);
-    if (!node) return out;
-    out = YAJL_GET_INTEGER(node);
-    ruVerbLogf("returning %" PRId64, out);
-    ruRetWithCode(status, RUE_OK, out);
+    yajl_val v = jsonIdx(rj, index, yajl_t_number, status);
+    if (!v) return 0;
+    return nodeInt(v, status);
 }
 
 RUAPI double ruJsonIdxDouble(ruJson rj, rusize index, int32_t* status) {
-    double out = 0;
-    yajl_val node = jsonIdx(rj, index, yajl_t_number, status);
-    if (!node) return out;
-    out = YAJL_GET_DOUBLE(node);
-    ruVerbLogf("returning %0.6f", out);
-    ruRetWithCode(status, RUE_OK, out);
+    yajl_val v = jsonIdx(rj, index, yajl_t_number, status);
+    if (!v) return 0;
+    return nodeDouble(v, status);
 }
 
 RUAPI ruJson ruJsonIdxMap(ruJson rj, rusize index, int32_t* status) {
-    yajl_val node = jsonIdx(rj, index, yajl_t_object, status);
-    if (!node) return NULL;
-    ruRetWithCode(status, RUE_OK, (ruJson)node);
+    yajl_val v = jsonIdx(rj, index, yajl_t_object, status);
+    if (!v) return NULL;
+    return nodeMap(v, status);
 }
 
 RUAPI ruJson ruJsonIdxArray(ruJson rj, rusize index, int32_t* status) {
-    yajl_val node = jsonIdx(rj, index, yajl_t_array, status);
-    if (!node) return NULL;
-    ruRetWithCode(status, RUE_OK, (ruJson)node);
+    yajl_val v = jsonIdx(rj, index, yajl_t_array, status);
+    if (!v) return NULL;
+    return nodeArray(v, status);
 }
 
 //</editor-fold>

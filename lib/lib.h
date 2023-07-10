@@ -79,6 +79,8 @@
 #include <yajl/yajl_tree.h>
 #include <yajl/yajl_gen.h>
 #include <inttypes.h>
+#include <tidy.h>
+#include <tidybuffio.h>
 
 #ifndef NDEBUG
 #include "unicode/utrace.h"

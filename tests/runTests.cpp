@@ -35,6 +35,7 @@ Suite* getSuite(void) {
     suite_add_tcase(suite, stringTests());
     suite_add_tcase(suite, mapTests());
     suite_add_tcase(suite, setTests());
+    suite_add_tcase(suite, htmlTests());
     suite_add_tcase(suite, regexTests());
     suite_add_tcase(suite, ioTests());
     suite_add_tcase(suite, iniTests());

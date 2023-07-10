@@ -27,6 +27,10 @@ function (doLink lib shared)
         set(icu_scope PUBLIC)
         set(icu_libs ${ICU_LIBRARIES})
     endif()
+    target_link_libraries(${lib} ${icu_scope} ${icu_libs})
+    if(NAME_ARCH MATCHES "^mingw64")
+        target_link_libraries(${lib} ${icu_scope} atomic)
+    endif()
 
     if (INCLUDE_YAJL AND shared)
         set(yajl_scope PRIVATE)
@@ -35,11 +39,19 @@ function (doLink lib shared)
         set(yajl_scope PUBLIC)
         set(yajl_libs ${YAJL_LIBRARIES})
     endif()
-
-    target_link_libraries(${lib} ${icu_scope} ${icu_libs})
     target_link_libraries(${lib} ${yajl_scope} ${yajl_libs})
-    if(NAME_ARCH MATCHES "^mingw64")
-        target_link_libraries(${lib} ${icu_scope} atomic)
+
+    if (INCLUDE_TIDY AND shared)
+        set(tidy_scope PRIVATE)
+        set(tidy_libs ${TIDY_ARCHIVES})
+    else()
+        set(tidy_scope PUBLIC)
+        set(tidy_libs ${TIDY_LIBRARIES})
+    endif()
+    target_link_libraries(${lib} ${tidy_scope} ${tidy_libs})
+
+    if(WASM)
+        target_compile_definitions(${lib} PRIVATE HAS_FUTIME=0)
     endif()
 
     if(WIN AND NOT MINGW)
@@ -108,7 +120,7 @@ function (doLink lib shared)
             # make sure we're using the right version
             PRIVATE $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
             $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-            ${ICU_INCLUDE_DIRS}
+            ${ICU_INCLUDE_DIRS} ${TIDY_INCLUDE_DIRS}
             )
 
 endfunction()
@@ -137,10 +149,22 @@ if(INCLUDE_YAJL)
     endforeach()
 endif()
 
+if(INCLUDE_TIDY)
+    foreach(lib IN LISTS TIDY_LIBRARIES)
+        if("${lib}" MATCHES "^-ltidy")
+            string(SUBSTRING ${lib} 2 -1 base)
+            list(APPEND TIDY_ARCHIVES ${TIDY_LIBRARY_DIRS}/${CMAKE_STATIC_LIBRARY_PREFIX}${base}${CMAKE_STATIC_LIBRARY_SUFFIX})
+        endif()
+        if("${lib}" MATCHES "^tidy")
+            list(APPEND TIDY_ARCHIVES ${TIDY_LIBRARY_DIRS}/${CMAKE_STATIC_LIBRARY_PREFIX}${lib}${CMAKE_STATIC_LIBRARY_SUFFIX})
+        endif()
+    endforeach()
+endif()
+
 # icu.cpp compiled as C++ so we can use thread_local on ios9+
 # And also to cope with C++ symbols stemming from ICU
-set(SRCS cleaner.c icu.cpp ini.c io.c json.c kvstore.c lib.c list.c logging.c
-        map.c regex.c string.c thread.c types.c regify-util.c)
+set(SRCS cleaner.c html.c icu.cpp ini.c io.c json.c kvstore.c lib.c list.c
+        logging.c map.c regex.c string.c thread.c types.c regify-util.c)
 
 if (WIN)
     list(APPEND SRCS win.cpp)

@@ -1187,7 +1187,7 @@ RUAPI alloc_chars ruFullPath(trans_chars filePath) {
         // path is already absolute
         return ruStrDup(filePath);
     }
-    char fullPath[MAXPATHLEN];
+    char fullPath[MAXPATHLEN+1];
     fullPath[0] = '\0';
     if (getcwd(fullPath, MAXPATHLEN) && fullPath[0] == '/') {
         if (filePath) {

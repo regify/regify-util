@@ -436,7 +436,7 @@ int32_t ruCleanAdd(ruCleaner rc, trans_chars instr, trans_chars substitute) {
     int32_t code;
     Cleaner *c = CleanerGet(rc, &code);
     if (!c) return code;
-    if (ruStrEmpty(instr) || !substitute) return RUE_PARAMETER_NOT_SET;
+    if (!instr || !strlen(instr) || !substitute) return RUE_PARAMETER_NOT_SET;
 
 #ifndef CLEANER_ONLY
     ruMutexLock(c->mux);

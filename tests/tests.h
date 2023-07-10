@@ -62,6 +62,7 @@ TCase* mapTests(void);
 TCase* setTests(void);
 TCase* ioTests(void);
 TCase* iniTests(void);
+TCase* htmlTests(void);
 TCase* jsonTests(void);
 TCase* storeTests(void);
 TCase* cleanerTests(void);

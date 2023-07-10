@@ -315,6 +315,15 @@ RUAPI int64_t ruJsonParseInt(ruJson rj, int32_t* status);
 RUAPI int64_t ruJsonInt(ruJson rj, int32_t* status);
 
 /**
+ * \brief Returns an \ref ruList of keys in the current map.
+ * @param rj \ref ruJson in question.
+ * @param status where the \ref RUE_OK on success or an error code will be stored.
+ * @return The list of map keys. Caller to free with \ref ruListFree. List is
+ *         only valid while given \ref ruJson object is there.
+ */
+RUAPI ruList ruJsonKeys(ruJson rj, int32_t* status);
+
+/**
  * Return string of the key element from underlying \ref ruJson map reference.
  * @param rj \ref ruJson in question.
  * @param key key under which string resides

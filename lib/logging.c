@@ -27,7 +27,7 @@
 
 /* log context */
 static ruLogFunc logger_ = NULL;
-static uint32_t logLevel_ = 0;
+static uint32_t logLevel_ = RU_LOG_NONE;
 static perm_ptr userLogData_ = NULL;
 
 void ruSetLogger(ruLogFunc logger, uint32_t logLevel, perm_ptr userData) {
@@ -40,8 +40,11 @@ void ruStdErrorLogger(perm_ptr udata, trans_chars msg) {
     fputs(msg, stderr);
 }
 
-uint32_t ruGetLogLevel(void) {
-    if (!logger_) return RU_LOG_NONE;
+RUAPI void ruSetLogLevel(uint32_t logLevel) {
+    logLevel_ = logLevel;
+}
+
+RUAPI uint32_t ruGetLogLevel(void) {
     return logLevel_;
 }
 
