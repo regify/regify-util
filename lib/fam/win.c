@@ -411,7 +411,7 @@ void CALLBACK wrkReqTermination(ULONG_PTR o) {
 static famCtx* famNew(void) {
     fam_dbg("%s", "start");
     famCtx* fctx = ruMalloc0(1, famCtx);
-    fctx->events = ruListNew(ruTypePtr(ruFamEventFreeV));
+    fctx->events = ruListNew(ruTypePtr(ruFamEventFree));
     fctx->wctx = wrkNew(fctx);
     fam_dbg("returning 0x%x", fctx);
     return fctx;
