@@ -14,12 +14,12 @@ jobs:
     - name: Install doxygen
       run: |
         sudo apt-get update
-        sudo apt-get install -y doxygen libyajl-dev
+        sudo apt-get install -y doxygen libyajl-dev libtidy-dev
 
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory.
       # Not using `CMAKE_BUILD_TYPE` since we only generate docs
-      run: cmake -B ${{github.workspace}}/build -DDOCS=ON -DINCLUDE_ICU=OFF -DINCLUDE_YAJL=OFF
+      run: cmake -B ${{github.workspace}}/build -DDOCS=ON -DINCLUDE_ICU=OFF -DINCLUDE_YAJL=OFF -DINCLUDE_TIDY=OFF
 
     - name: Build Docs
       # Actually build the docs
