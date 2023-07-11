@@ -510,7 +510,7 @@ void sample() {
 
         int64_t i64 = ruJsonKeyInt(jm, "num", &ret);
         if (ret != RUE_OK) break;
-        printf("int: %ld", i64);
+        printf("int: %" PRId64, i64);
 
         double db = ruJsonKeyDouble(jm, "dbl", &ret);
         if (ret != RUE_OK) break;
@@ -522,7 +522,7 @@ void sample() {
 
         i64 = ruJsonIdxInt(ja, 0, &ret);
         if (ret != RUE_OK) break;
-        printf("int: %ld", i64);
+        printf("int: %" PRId64, i64);
 
         str = ruJsonIdxStr(ja, 1, &ret);
         if (ret != RUE_OK) break;
@@ -530,7 +530,7 @@ void sample() {
 
         i64 = ruJsonIdxParseInt(ja, 1, &ret);
         if (ret != RUE_OK) break;
-        printf("int: %ld", i64);
+        printf("int: %" PRId64, i64);
 
         db = ruJsonIdxDouble(ja, 2, &ret);
         if (ret != RUE_OK) break;

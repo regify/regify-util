@@ -55,18 +55,7 @@
     #include <sys/vfs.h>
 #endif
 #endif
-#include <locale.h>
-#include <ctype.h>
-#include <stdio.h>
-#include <limits.h>
-#include <string.h>
-#include <stdlib.h>
-#include <stdarg.h>
-#include <sys/stat.h>
-#include <errno.h>
-#include <fcntl.h>
-#include <time.h>
-#include <math.h>
+
 #include "unicode/uchar.h"
 #include "unicode/ustring.h"
 #include "unicode/utypes.h"
@@ -75,20 +64,38 @@
 #include "unicode/uregex.h"
 #include "unicode/uiter.h"
 #include "unicode/unorm2.h"
-#include <yajl/yajl_parse.h>
-#include <yajl/yajl_tree.h>
-#include <yajl/yajl_gen.h>
-#include <inttypes.h>
-#include <tidy.h>
-#include <tidybuffio.h>
-
-#ifndef NDEBUG
-#include "unicode/utrace.h"
-#endif
 
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
+
+#include <locale.h>
+#include <ctype.h>
+#include <stdio.h>
+#include <limits.h>
+#include <string.h>
+#include <stdlib.h>
+#include <stdarg.h>
+#include <errno.h>
+#include <time.h>
+#include <math.h>
+#include <inttypes.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <yajl/yajl_parse.h>
+#include <yajl/yajl_tree.h>
+#include <yajl/yajl_gen.h>
+#include <tidy.h>
+#include <tidybuffio.h>
+#ifdef _WIN32
+// undo nasty tidy side effects
+#undef stat
+#undef fstat
+#endif
+
+#ifndef NDEBUG
+#include "unicode/utrace.h"
+#endif
 
 #ifdef TARGET_OS_IOS
 #if TARGET_OS_IOS != 0

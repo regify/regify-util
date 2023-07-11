@@ -195,16 +195,16 @@ RUAPI ruJson ruJsonNew(void) {
 RUAPI ruJson ruJsonStart(bool map) {
     json* j = ruJsonNew();
     if (!j) return NULL;
-    yajl_gen_status stat;
+    yajl_gen_status yst;
     if (map) {
-        stat = yajl_gen_map_open(j->g);
+        yst = yajl_gen_map_open(j->g);
         j->open = yajl_t_object;
     } else {
-        stat = yajl_gen_array_open(j->g);
+        yst = yajl_gen_array_open(j->g);
         j->open = yajl_t_array;
     }
-    if (stat != yajl_gen_status_ok) {
-        ruCritLogf("Failed to open yail container ec: %d", stat);
+    if (yst != yajl_gen_status_ok) {
+        ruCritLogf("Failed to open yail container ec: %d", yst);
         return ruJsonFree(j);
     }
     return (ruJson)j;
@@ -215,9 +215,9 @@ RUAPI int32_t ruJsonStartMap(ruJson rj) {
     json* j = jsonGetSet(rj, &ret);
     if (!j) return ret;
     do {
-        yajl_gen_status stat = yajl_gen_map_open(j->g);
-        if (stat != yajl_gen_status_ok) {
-            ruCritLogf("Failed to generate array ec: %d", stat);
+        yajl_gen_status yst = yajl_gen_map_open(j->g);
+        if (yst != yajl_gen_status_ok) {
+            ruCritLogf("Failed to generate array ec: %d", yst);
             break;
         }
         ret = RUE_OK;
@@ -230,9 +230,9 @@ RUAPI int32_t ruJsonEndMap(ruJson rj) {
     json* j = jsonGetSet(rj, &ret);
     if (!j) return ret;
     do {
-        yajl_gen_status stat = yajl_gen_map_close(j->g);
-        if (stat != yajl_gen_status_ok) {
-            ruCritLogf("Failed to generate array ec: %d", stat);
+        yajl_gen_status yst = yajl_gen_map_close(j->g);
+        if (yst != yajl_gen_status_ok) {
+            ruCritLogf("Failed to generate array ec: %d", yst);
             break;
         }
         ret = RUE_OK;
@@ -245,9 +245,9 @@ RUAPI int32_t ruJsonStartArray(ruJson rj) {
     json* j = jsonGetSet(rj, &ret);
     if (!j) return ret;
     do {
-        yajl_gen_status stat = yajl_gen_array_open(j->g);
-        if (stat != yajl_gen_status_ok) {
-            ruCritLogf("Failed to generate array ec: %d", stat);
+        yajl_gen_status yst = yajl_gen_array_open(j->g);
+        if (yst != yajl_gen_status_ok) {
+            ruCritLogf("Failed to generate array ec: %d", yst);
             break;
         }
         ret = RUE_OK;
@@ -260,9 +260,9 @@ RUAPI int32_t ruJsonEndArray(ruJson rj) {
     json* j = jsonGetSet(rj, &ret);
     if (!j) return ret;
     do {
-        yajl_gen_status stat = yajl_gen_array_close(j->g);
-        if (stat != yajl_gen_status_ok) {
-            ruCritLogf("Failed to generate array ec: %d", stat);
+        yajl_gen_status yst = yajl_gen_array_close(j->g);
+        if (yst != yajl_gen_status_ok) {
+            ruCritLogf("Failed to generate array ec: %d", yst);
             break;
         }
         ret = RUE_OK;
@@ -275,10 +275,10 @@ RUAPI int32_t ruJsonSetInt(ruJson rj, int64_t val) {
     json* j = jsonGetSet(rj, &ret);
     if (!j) return ret;
     do {
-        yajl_gen_status stat = yajl_gen_integer(j->g, val);
-        if (stat != yajl_gen_status_ok) {
+        yajl_gen_status yst = yajl_gen_integer(j->g, val);
+        if (yst != yajl_gen_status_ok) {
             ruCritLogf("Failed to generate value [%" PRId64 "] ec: %d",
-                       val, stat);
+                       val, yst);
             break;
         }
         ret = RUE_OK;
@@ -291,10 +291,10 @@ RUAPI int32_t ruJsonSetDouble(ruJson rj, double val) {
     json* j = jsonGetSet(rj, &ret);
     if (!j) return ret;
     do {
-        yajl_gen_status stat = yajl_gen_double(j->g, val);
-        if (stat != yajl_gen_status_ok) {
+        yajl_gen_status yst = yajl_gen_double(j->g, val);
+        if (yst != yajl_gen_status_ok) {
             ruCritLogf("Failed to generate value [%" PRId64 "] ec: %d",
-                       val, stat);
+                       val, yst);
             break;
         }
         ret = RUE_OK;
@@ -307,15 +307,15 @@ RUAPI int32_t ruJsonSetStr(ruJson rj, trans_chars val) {
     json* j = jsonGetSet(rj, &ret);
     if (!j) return ret;
     do {
-        yajl_gen_status stat;
+        yajl_gen_status yst;
         if (val) {
-            stat = yajl_gen_string(j->g, (trans_bytes) val,
+            yst = yajl_gen_string(j->g, (trans_bytes) val,
                                    ruStrLen((char*) val));
         } else {
-            stat = yajl_gen_null(j->g);
+            yst = yajl_gen_null(j->g);
         }
-        if (stat != yajl_gen_status_ok) {
-            ruCritLogf("Failed to generate value [%s] ec: %d", val, stat);
+        if (yst != yajl_gen_status_ok) {
+            ruCritLogf("Failed to generate value [%s] ec: %d", val, yst);
             break;
         }
         ret = RUE_OK;
@@ -329,21 +329,21 @@ RUAPI int32_t ruJsonSetKeyStr(ruJson rj, trans_chars key, trans_chars val) {
     if (!j) return ret;
     if (!key) return RUE_PARAMETER_NOT_SET;
     do {
-        yajl_gen_status stat = yajl_gen_string(j->g,
+        yajl_gen_status yst = yajl_gen_string(j->g,
                                                (trans_bytes)key,
                                                ruStrLen((char*)key));
-        if (stat != yajl_gen_status_ok) {
-            ruCritLogf("Failed to generate key [%s] ec: %d", key, stat);
+        if (yst != yajl_gen_status_ok) {
+            ruCritLogf("Failed to generate key [%s] ec: %d", key, yst);
             break;
         }
         if (val) {
-            stat = yajl_gen_string(j->g, (trans_bytes) val,
+            yst = yajl_gen_string(j->g, (trans_bytes) val,
                                    ruStrLen((char*) val));
         } else {
-            stat = yajl_gen_null(j->g);
+            yst = yajl_gen_null(j->g);
         }
-        if (stat != yajl_gen_status_ok) {
-            ruCritLogf("Failed to generate value [%s] ec: %d", val, stat);
+        if (yst != yajl_gen_status_ok) {
+            ruCritLogf("Failed to generate value [%s] ec: %d", val, yst);
             break;
         }
         ret = RUE_OK;
@@ -357,17 +357,17 @@ RUAPI int32_t ruJsonSetKeyInt(ruJson rj, trans_chars key, int64_t val) {
     if (!j) return ret;
     if (!key) return RUE_PARAMETER_NOT_SET;
     do {
-        yajl_gen_status stat = yajl_gen_string(j->g,
+        yajl_gen_status yst = yajl_gen_string(j->g,
                                                (trans_bytes)key,
                                                ruStrLen(key));
-        if (stat != yajl_gen_status_ok) {
-            ruCritLogf("Failed to generate key [%s] ec: %d", key, stat);
+        if (yst != yajl_gen_status_ok) {
+            ruCritLogf("Failed to generate key [%s] ec: %d", key, yst);
             break;
         }
-        stat = yajl_gen_integer(j->g, val);
-        if (stat != yajl_gen_status_ok) {
+        yst = yajl_gen_integer(j->g, val);
+        if (yst != yajl_gen_status_ok) {
             ruCritLogf("Failed to generate value [%" PRId64 "] ec: %d",
-                       val, stat);
+                       val, yst);
             break;
         }
         ret = RUE_OK;
@@ -381,16 +381,16 @@ RUAPI int32_t ruJsonSetKeyDouble(ruJson rj, trans_chars key, double val) {
     if (!j) return ret;
     if (!key) return RUE_PARAMETER_NOT_SET;
     do {
-        yajl_gen_status stat = yajl_gen_string(j->g,
+        yajl_gen_status yst = yajl_gen_string(j->g,
                                                (trans_bytes)key,
                                                ruStrLen(key));
-        if (stat != yajl_gen_status_ok) {
-            ruCritLogf("Failed to generate key [%s] ec: %d", key, stat);
+        if (yst != yajl_gen_status_ok) {
+            ruCritLogf("Failed to generate key [%s] ec: %d", key, yst);
             break;
         }
-        stat = yajl_gen_double(j->g, val);
-        if (stat != yajl_gen_status_ok) {
-            ruCritLogf("Failed to generate value [%f] ec: %d", val, stat);
+        yst = yajl_gen_double(j->g, val);
+        if (yst != yajl_gen_status_ok) {
+            ruCritLogf("Failed to generate value [%f] ec: %d", val, yst);
             break;
         }
         ret = RUE_OK;
@@ -404,16 +404,16 @@ RUAPI int32_t ruJsonStartKeyMap(ruJson rj, trans_chars key) {
     if (!j) return ret;
     if (!key) return RUE_PARAMETER_NOT_SET;
     do {
-        yajl_gen_status stat = yajl_gen_string(j->g,
+        yajl_gen_status yst = yajl_gen_string(j->g,
                                                (trans_bytes)key,
                                                ruStrLen((char*)key));
-        if (stat != yajl_gen_status_ok) {
-            ruCritLogf("Failed to generate key [%s] ec: %d", key, stat);
+        if (yst != yajl_gen_status_ok) {
+            ruCritLogf("Failed to generate key [%s] ec: %d", key, yst);
             break;
         }
-        stat = yajl_gen_map_open(j->g);
-        if (stat != yajl_gen_status_ok) {
-            ruCritLogf("Failed to generate array ec: %d", stat);
+        yst = yajl_gen_map_open(j->g);
+        if (yst != yajl_gen_status_ok) {
+            ruCritLogf("Failed to generate array ec: %d", yst);
             break;
         }
         ret = RUE_OK;
@@ -427,16 +427,16 @@ RUAPI int32_t ruJsonStartKeyArray(ruJson rj, trans_chars key) {
     if (!j) return ret;
     if (!key) return RUE_PARAMETER_NOT_SET;
     do {
-        yajl_gen_status stat = yajl_gen_string(j->g,
+        yajl_gen_status yst = yajl_gen_string(j->g,
                                                (trans_bytes)key,
                                                ruStrLen((char*)key));
-        if (stat != yajl_gen_status_ok) {
-            ruCritLogf("Failed to generate key [%s] ec: %d", key, stat);
+        if (yst != yajl_gen_status_ok) {
+            ruCritLogf("Failed to generate key [%s] ec: %d", key, yst);
             break;
         }
-        stat = yajl_gen_array_open(j->g);
-        if (stat != yajl_gen_status_ok) {
-            ruCritLogf("Failed to generate array ec: %d", stat);
+        yst = yajl_gen_array_open(j->g);
+        if (yst != yajl_gen_status_ok) {
+            ruCritLogf("Failed to generate array ec: %d", yst);
             break;
         }
         ret = RUE_OK;
@@ -449,22 +449,22 @@ RUAPI int32_t ruJsonWrite(ruJson rj, perm_chars* output) {
     json* j = jsonGetSet(rj, &ret);
     if (!j) return ret;
     if (!output) return RUE_PARAMETER_NOT_SET;
-    yajl_gen_status stat = yajl_gen_status_ok;
+    yajl_gen_status yst = yajl_gen_status_ok;
     do {
         if (j->open == yajl_t_object) {
-            stat = yajl_gen_map_close(j->g);
+            yst = yajl_gen_map_close(j->g);
         } else if (j->open == yajl_t_array) {
-            stat = yajl_gen_array_close(j->g);
+            yst = yajl_gen_array_close(j->g);
         }
-        if (stat != yajl_gen_status_ok) {
-            ruCritLogf("Failed to close yail container ec: %d", stat);
+        if (yst != yajl_gen_status_ok) {
+            ruCritLogf("Failed to close yail container ec: %d", yst);
             break;
         }
         trans_bytes buf = NULL;
         rusize len;
-        stat = yajl_gen_get_buf(j->g, &buf, &len);
-        if (stat != yajl_gen_status_ok) {
-            ruCritLogf("Failed to get encoded string. EC: %d", stat);
+        yst = yajl_gen_get_buf(j->g, &buf, &len);
+        if (yst != yajl_gen_status_ok) {
+            ruCritLogf("Failed to get encoded string. EC: %d", yst);
             ret = RUE_GENERAL;
             break;
         }
