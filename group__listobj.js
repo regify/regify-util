@@ -6,5 +6,6 @@ var group__listobj =
     [ "ruListNextData", "group__listobj.html#ga8a5796acc55b08010cb2bd7160255477", null ],
     [ "ruListPop", "group__listobj.html#gac38106311ed611ce8706246e5ebba17a", null ],
     [ "ruListRemove", "group__listobj.html#ga00f37a668ae4e6d7b92af8034179c951", null ],
+    [ "ruListRemoveIdx", "group__listobj.html#gae79886095f40ec3adb7037a64e07f2fd", null ],
     [ "ruListTryPop", "group__listobj.html#ga2bbfbf34ff189ebf934273395a11f224", null ]
 ];

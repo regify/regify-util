@@ -18,6 +18,7 @@ var group__json =
     [ "ruJsonKeyInt", "group__json.html#ga47bb57305cd3bc5e19b3daec7c2315b2", null ],
     [ "ruJsonKeyMap", "group__json.html#ga831be2acfa0d92bf8d0ec292b96fd6b8", null ],
     [ "ruJsonKeyParseInt", "group__json.html#ga0be93c383a59eaf4368b0461770be95c", null ],
+    [ "ruJsonKeys", "group__json.html#gaaad182ea9f38a295451be37307445f8f", null ],
     [ "ruJsonKeyStr", "group__json.html#gad251ebb6d90852bdb4065c540b245301", null ],
     [ "ruJsonKeyStrDup", "group__json.html#gae920c3294bafdc141e314079a54d4234", null ],
     [ "ruJsonNew", "group__json.html#ga4d888c7b5a23662c072028ab61e7704b", null ],

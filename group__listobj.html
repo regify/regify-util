@@ -117,6 +117,9 @@ Functions</h2></td></tr>
 <tr class="memitem:ga00f37a668ae4e6d7b92af8034179c951"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__listobj.html#ga00f37a668ae4e6d7b92af8034179c951">ruListRemove</a> (<a class="el" href="group__list.html#gab25c1662a91a5e0d68a3f04efd1a0cc2">ruList</a> rl, <a class="el" href="group__list.html#ga8a10b640cc881a4205684a5730c949a2">ruListElmt</a> *rle, int32_t *code)</td></tr>
 <tr class="memdesc:ga00f37a668ae4e6d7b92af8034179c951"><td class="mdescLeft">&#160;</td><td class="mdescRight">Remove and return the current list element from list.  <a href="group__listobj.html#ga00f37a668ae4e6d7b92af8034179c951">More...</a><br /></td></tr>
 <tr class="separator:ga00f37a668ae4e6d7b92af8034179c951"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gae79886095f40ec3adb7037a64e07f2fd"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__listobj.html#gae79886095f40ec3adb7037a64e07f2fd">ruListRemoveIdx</a> (<a class="el" href="group__list.html#gab25c1662a91a5e0d68a3f04efd1a0cc2">ruList</a> rl, int32_t index, int32_t *code)</td></tr>
+<tr class="memdesc:gae79886095f40ec3adb7037a64e07f2fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Remove and return the list element at index position from list.  <a href="group__listobj.html#gae79886095f40ec3adb7037a64e07f2fd">More...</a><br /></td></tr>
+<tr class="separator:gae79886095f40ec3adb7037a64e07f2fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gac38106311ed611ce8706246e5ebba17a"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__listobj.html#gac38106311ed611ce8706246e5ebba17a">ruListPop</a> (<a class="el" href="group__list.html#gab25c1662a91a5e0d68a3f04efd1a0cc2">ruList</a> rl, int32_t *code)</td></tr>
 <tr class="memdesc:gac38106311ed611ce8706246e5ebba17a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return first element of the list.  <a href="group__listobj.html#gac38106311ed611ce8706246e5ebba17a">More...</a><br /></td></tr>
 <tr class="separator:gac38106311ed611ce8706246e5ebba17a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -147,8 +150,8 @@ Functions</h2></td></tr>
 <div class="ttc" id="agroup__list_html_ga8f7ce9a43ad50071bc1161ecb21a38d5"><div class="ttname"><a href="group__list.html#ga8f7ce9a43ad50071bc1161ecb21a38d5">ruListFree</a></div><div class="ttdeci">RUAPI ruList ruListFree(ruList rl)</div><div class="ttdoc">Frees the given list object.</div></div>
 <div class="ttc" id="agroup__list_html_ga9bc498f9b3cd2e848a387ff9fc215220"><div class="ttname"><a href="group__list.html#ga9bc498f9b3cd2e848a387ff9fc215220">ruListNew</a></div><div class="ttdeci">RUAPI ruList ruListNew(ruType valueType)</div><div class="ttdoc">Creates a new list object. To be freed with ruListFree.</div></div>
 <div class="ttc" id="agroup__list_html_gab25c1662a91a5e0d68a3f04efd1a0cc2"><div class="ttname"><a href="group__list.html#gab25c1662a91a5e0d68a3f04efd1a0cc2">ruList</a></div><div class="ttdeci">void * ruList</div><div class="ttdoc">Opaque pointer to list object. See List Collection.</div><div class="ttdef"><b>Definition:</b> list.h:103</div></div>
-<div class="ttc" id="agroup__list_html_gacc2bc91f4f76b9863603a004dae43194"><div class="ttname"><a href="group__list.html#gacc2bc91f4f76b9863603a004dae43194">ruListIter</a></div><div class="ttdeci">#define ruListIter(rl)</div><div class="ttdoc">Returns the first element in the given list to iterate over.</div><div class="ttdef"><b>Definition:</b> list.h:304</div></div>
-<div class="ttc" id="agroup__listobj_html_gacb34c9de3d00243458bc91f9a76e2344"><div class="ttname"><a href="group__listobj.html#gacb34c9de3d00243458bc91f9a76e2344">ruIterNext</a></div><div class="ttdeci">#define ruIterNext(re, type)</div><div class="ttdoc">Returns the data payload of the next list element casted to type.</div><div class="ttdef"><b>Definition:</b> list.h:359</div></div>
+<div class="ttc" id="agroup__list_html_gacc2bc91f4f76b9863603a004dae43194"><div class="ttname"><a href="group__list.html#gacc2bc91f4f76b9863603a004dae43194">ruListIter</a></div><div class="ttdeci">#define ruListIter(rl)</div><div class="ttdoc">Returns the first element in the given list to iterate over.</div><div class="ttdef"><b>Definition:</b> list.h:317</div></div>
+<div class="ttc" id="agroup__listobj_html_gacb34c9de3d00243458bc91f9a76e2344"><div class="ttname"><a href="group__listobj.html#gacb34c9de3d00243458bc91f9a76e2344">ruIterNext</a></div><div class="ttdeci">#define ruIterNext(re, type)</div><div class="ttdoc">Returns the data payload of the next list element casted to type.</div><div class="ttdef"><b>Definition:</b> list.h:372</div></div>
 </div><!-- fragment --> <h2 class="groupheader">Macro Definition Documentation</h2>
 <a id="gacb34c9de3d00243458bc91f9a76e2344"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#gacb34c9de3d00243458bc91f9a76e2344">&#9670;&nbsp;</a></span>ruIterNext</h2>
@@ -407,6 +410,51 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="gae79886095f40ec3adb7037a64e07f2fd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gae79886095f40ec3adb7037a64e07f2fd">&#9670;&nbsp;</a></span>ruListRemoveIdx()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI <a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a> ruListRemoveIdx </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__list.html#gab25c1662a91a5e0d68a3f04efd1a0cc2">ruList</a>&#160;</td>
+          <td class="paramname"><em>rl</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int32_t&#160;</td>
+          <td class="paramname"><em>index</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int32_t *&#160;</td>
+          <td class="paramname"><em>code</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Remove and return the list element at index position from list. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">rl</td><td>List to remove object from. </td></tr>
+    <tr><td class="paramname">index</td><td>0 based postion of the element to remove in the list. </td></tr>
+    <tr><td class="paramname">code</td><td>(Optional) Stores regify error code of this operation. <a class="el" href="group__ruerror.html#ga7e2f97cce8af8020834e685a2482556d">RUE_OK</a> on success <a class="el" href="group__ruerror.html#gae20a9bc093af1bbbb5e42ef8ed05deec">RUE_USER_ABORT</a> when a threaded list has quit else a regify error code. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Object which was removed from list. </dd></dl>
+
+</div>
+</div>
 <a id="ga2bbfbf34ff189ebf934273395a11f224"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ga2bbfbf34ff189ebf934273395a11f224">&#9670;&nbsp;</a></span>ruListTryPop()</h2>
 
@@ -457,7 +505,7 @@ Functions</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Wed Jul 5 2023 12:18:35 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Tue Jul 11 2023 06:42:04 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

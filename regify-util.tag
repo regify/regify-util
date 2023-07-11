@@ -741,6 +741,39 @@
     </member>
   </compound>
   <compound kind="group">
+    <name>html</name>
+    <title>HTML Utilities</title>
+    <filename>group__html.html</filename>
+    <member kind="function">
+      <type>RUAPI alloc_chars</type>
+      <name>ruHtmlEncodeText</name>
+      <anchorfile>group__html.html</anchorfile>
+      <anchor>gaf355da448786769671e001e717d5b781</anchor>
+      <arglist>(trans_chars text)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI perm_chars</type>
+      <name>ruHtmlSanitizeCustom</name>
+      <anchorfile>group__html.html</anchorfile>
+      <anchor>ga8318c1e08b703fdd1bf895c538281427</anchor>
+      <arglist>(perm_chars html, alloc_chars *htmlCopy, alloc_chars *plainTxt, ruSet excludeTags, ruSet excludeAttrs)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI perm_chars</type>
+      <name>ruHtmlSanitize</name>
+      <anchorfile>group__html.html</anchorfile>
+      <anchor>ga30b8fb021c187124ac220f6dad03927e</anchor>
+      <arglist>(perm_chars html, alloc_chars *htmlCopy, alloc_chars *plainTxt)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI bool</type>
+      <name>ruHtmlTestFor</name>
+      <anchorfile>group__html.html</anchorfile>
+      <anchor>gad875d85e230af210f602ac50eaf781a0</anchor>
+      <arglist>(trans_chars content)</arglist>
+    </member>
+  </compound>
+  <compound kind="group">
     <name>ini</name>
     <title>Ini File Handling</title>
     <filename>group__ini.html</filename>
@@ -1231,6 +1264,13 @@
       <arglist>(ruJson rj, int32_t *status)</arglist>
     </member>
     <member kind="function">
+      <type>RUAPI ruList</type>
+      <name>ruJsonKeys</name>
+      <anchorfile>group__json.html</anchorfile>
+      <anchor>gaaad182ea9f38a295451be37307445f8f</anchor>
+      <arglist>(ruJson rj, int32_t *status)</arglist>
+    </member>
+    <member kind="function">
       <type>RUAPI perm_chars</type>
       <name>ruJsonKeyStr</name>
       <anchorfile>group__json.html</anchorfile>
@@ -1638,6 +1678,13 @@
     </member>
     <member kind="function">
       <type>RUAPI ptr</type>
+      <name>ruListRemoveIdx</name>
+      <anchorfile>group__listobj.html</anchorfile>
+      <anchor>gae79886095f40ec3adb7037a64e07f2fd</anchor>
+      <arglist>(ruList rl, int32_t index, int32_t *code)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI ptr</type>
       <name>ruListPop</name>
       <anchorfile>group__listobj.html</anchorfile>
       <anchor>gac38106311ed611ce8706246e5ebba17a</anchor>
@@ -1678,6 +1725,13 @@
     </member>
     <member kind="define">
       <type>#define</type>
+      <name>ruListRemoveIdxTo</name>
+      <anchorfile>group__listtype.html</anchorfile>
+      <anchor>ga32412ff599c1bd3c948f449bb873f8c8</anchor>
+      <arglist>(rl, index, dest)</arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
       <name>ruListPopTo</name>
       <anchorfile>group__listtype.html</anchorfile>
       <anchor>ga18939c6b7e5f2aaac374fa04cef6d4a3</anchor>
@@ -1710,6 +1764,13 @@
       <anchorfile>group__listtype.html</anchorfile>
       <anchor>ga0ddd2adef71a602c194bc19d26d485a9</anchor>
       <arglist>(ruList rl, ruListElmt *rle, ptr *dest)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI int32_t</type>
+      <name>ruListRemoveIdxDataTo</name>
+      <anchorfile>group__listtype.html</anchorfile>
+      <anchor>ga700afff89848f0aba7fb182a1be26b39</anchor>
+      <arglist>(ruList rl, int32_t index, ptr *dest)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI int32_t</type>
@@ -1890,6 +1951,13 @@
       <anchorfile>group__logging.html</anchorfile>
       <anchor>ga45e42503b652bda7bc147f5c514f5172</anchor>
       <arglist>(ruLogFunc logger, uint32_t logLevel, perm_ptr userData)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI void</type>
+      <name>ruSetLogLevel</name>
+      <anchorfile>group__logging.html</anchorfile>
+      <anchor>ga8bad1bbc647fe91103771eb1583c697a</anchor>
+      <arglist>(uint32_t logLevel)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI uint32_t</type>

@@ -175,6 +175,9 @@ Functions</h2></td></tr>
 <tr class="memitem:ga45e42503b652bda7bc147f5c514f5172"><td class="memItemLeft" align="right" valign="top">RUAPI void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__logging.html#ga45e42503b652bda7bc147f5c514f5172">ruSetLogger</a> (<a class="el" href="group__logging.html#ga20be8e436d37b23248d98325f40a5d9e">ruLogFunc</a> logger, uint32_t logLevel, <a class="el" href="group__misc.html#ga517aac830d9ce5c6ab7deec46adf54d5">perm_ptr</a> userData)</td></tr>
 <tr class="memdesc:ga45e42503b652bda7bc147f5c514f5172"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the global logging function for this process.  <a href="group__logging.html#ga45e42503b652bda7bc147f5c514f5172">More...</a><br /></td></tr>
 <tr class="separator:ga45e42503b652bda7bc147f5c514f5172"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga8bad1bbc647fe91103771eb1583c697a"><td class="memItemLeft" align="right" valign="top">RUAPI void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__logging.html#ga8bad1bbc647fe91103771eb1583c697a">ruSetLogLevel</a> (uint32_t logLevel)</td></tr>
+<tr class="memdesc:ga8bad1bbc647fe91103771eb1583c697a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adjusts the current log level.  <a href="group__logging.html#ga8bad1bbc647fe91103771eb1583c697a">More...</a><br /></td></tr>
+<tr class="separator:ga8bad1bbc647fe91103771eb1583c697a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga55a8b3d268484f95bc91525110491606"><td class="memItemLeft" align="right" valign="top">RUAPI uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__logging.html#ga55a8b3d268484f95bc91525110491606">ruGetLogLevel</a> (void)</td></tr>
 <tr class="memdesc:ga55a8b3d268484f95bc91525110491606"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the currently set log level.  <a href="group__logging.html#ga55a8b3d268484f95bc91525110491606">More...</a><br /></td></tr>
 <tr class="separator:ga55a8b3d268484f95bc91525110491606"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -437,7 +440,7 @@ Functions</h2></td></tr>
 <div class="line">        (uint8_t)*((start)+4), (uint8_t)*((start)+5), (uint8_t)*((start)+6), (uint8_t)*((start)+7), \</div>
 <div class="line">        (uint8_t)*((start)+8), (uint8_t)*((start)+9), (uint8_t)*((start)+10), (uint8_t)*((start)+11), \</div>
 <div class="line">        (uint8_t)*((start)+12), (uint8_t)*((start)+13), (uint8_t)*((start)+14), (uint8_t)*((start)+15))</div>
-<div class="ttc" id="agroup__logging_html_ga3d3ffaf6bf4fa6d4c69329ad93f301b3"><div class="ttname"><a href="group__logging.html#ga3d3ffaf6bf4fa6d4c69329ad93f301b3">ruDbgLogf</a></div><div class="ttdeci">#define ruDbgLogf(fmt,...)</div><div class="ttdoc">Emits a DBUG level log message.</div><div class="ttdef"><b>Definition:</b> logging.h:213</div></div>
+<div class="ttc" id="agroup__logging_html_ga3d3ffaf6bf4fa6d4c69329ad93f301b3"><div class="ttname"><a href="group__logging.html#ga3d3ffaf6bf4fa6d4c69329ad93f301b3">ruDbgLogf</a></div><div class="ttdeci">#define ruDbgLogf(fmt,...)</div><div class="ttdoc">Emits a DBUG level log message.</div><div class="ttdef"><b>Definition:</b> logging.h:219</div></div>
 </div><!-- fragment -->
 <p>Debug logs the 16 bytes following start preceded by given message. </p>
 <dl class="params"><dt>Parameters</dt><dd>
@@ -789,6 +792,32 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="ga8bad1bbc647fe91103771eb1583c697a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga8bad1bbc647fe91103771eb1583c697a">&#9670;&nbsp;</a></span>ruSetLogLevel()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI void ruSetLogLevel </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>logLevel</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Adjusts the current log level. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">logLevel</td><td>New log level to log at. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="gafbb4cdd0ff940ab6a253c3b69dba1fa1"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#gafbb4cdd0ff940ab6a253c3b69dba1fa1">&#9670;&nbsp;</a></span>ruStdErrorLogger()</h2>
 
@@ -831,7 +860,7 @@ Functions</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Wed Jul 5 2023 12:18:35 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Tue Jul 11 2023 06:42:04 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

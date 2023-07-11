@@ -4,6 +4,7 @@ var modules =
     [ "Memory Management", "group__memory.html", "group__memory" ],
     [ "Data Cleaning Utility", "group__cleaner.html", "group__cleaner" ],
     [ "regify-util Error Codes", "group__ruerror.html", "group__ruerror" ],
+    [ "HTML Utilities", "group__html.html", "group__html" ],
     [ "Ini File Handling", "group__ini.html", "group__ini" ],
     [ "File I/O", "group__io.html", "group__io" ],
     [ "JSON", "group__json.html", "group__json" ],
