@@ -36,6 +36,14 @@ START_TEST (api) {
 }
 END_TEST
 
+#ifdef _WIN32
+#define LF "\r\n"
+#define TIDY "Windows version 5.8.0"
+#else
+#define LF "\n"
+#define TIDY "Linux version 5.8.0"
+#endif
+
 START_TEST (run) {
     perm_chars retText = "%s failed wanted ret 0x%x but got 0x%x";
     perm_chars test = "ruHtmlSanitizeCustom";
@@ -78,26 +86,26 @@ START_TEST (run) {
            "<li> &AMP item &AMP;2\n"
            "</body>\n"
            "</html>";
-    expstr = "<!DOCTYPE html>\n"
-             "<html xmlns=\"http://www.w3.org/1999/xhtml\">\n"
-             "<head>\n"
-             "  <meta charset=\"utf-8\" />\n"
-             "  <meta name=\"generator\" content=\"HTML Tidy for HTML5 for Linux version 5.8.0\" />\n"
-             "  <title>Da title is here</title>\n"
-             "</head>\n"
-             "<body>\n"
-             "  <p>foo \xf0\x9d\x92\x9c <b>is</b> the</p><br />\n"
-             "  <p>bar <i>man</i></p>\n"
-             "  <ol>\n"
-             "    <li>\n"
-             "      <i>the&nbsp;&nbsp; &nbsp;first #item</i>\n"
-             "      <ul>\n"
-             "        <li><i>&amp; item &amp;2</i></li>\n"
-             "      </ul>\n"
-             "    </li>\n"
-             "  </ol>\n"
-             "</body>\n"
-             "</html>\n";
+    expstr = "<!DOCTYPE html>" LF
+             "<html xmlns=\"http://www.w3.org/1999/xhtml\">" LF
+             "<head>" LF
+             "  <meta charset=\"utf-8\" />" LF
+             "  <meta name=\"generator\" content=\"HTML Tidy for HTML5 for " TIDY "\" />" LF
+             "  <title>Da title is here</title>" LF
+             "</head>" LF
+             "<body>" LF
+             "  <p>foo \xf0\x9d\x92\x9c <b>is</b> the</p><br />" LF
+             "  <p>bar <i>man</i></p>" LF
+             "  <ol>" LF
+             "    <li>" LF
+             "      <i>the&nbsp;&nbsp; &nbsp;first #item</i>" LF
+             "      <ul>" LF
+             "        <li><i>&amp; item &amp;2</i></li>" LF
+             "      </ul>" LF
+             "    </li>" LF
+             "  </ol>" LF
+             "</body>" LF
+             "</html>" LF;
     res = ruHtmlSanitize(body, &cleaned, NULL);
     fail_if(body == res, retText, test, body, res);
     ruDbgLogf("cleaned html: '%s'", cleaned);
@@ -129,21 +137,21 @@ START_TEST (run) {
     res = ruHtmlSanitize(body, &cleaned, &txt);
     fail_if(body == res, retText, test, body, res);
     ruDbgLogf("cleaned html: '%s'", cleaned);
-    expstr = "<!DOCTYPE html>\n"
-             "<html xmlns=\"http://www.w3.org/1999/xhtml\">\n"
-             "<head>\n"
-             "  <meta charset=\"utf-8\" />\n"
-             "  <meta name=\"generator\" content=\"HTML Tidy for HTML5 for Linux version 5.8.0\" />\n"
-             "  <title></title>\n"
-             "</head>\n"
-             "<body>\n"
-             "  <h1>Title 1</h1>\n"
-             "  <h2>Title 2</h2>\n"
-             "  <h6>Title 6</h6>Bogus Title\n"
-             "  <p>bar <b>man</b></p>\n"
-             "  <li>the first #item</li>\n"
-             "</body>\n"
-             "</html>\n";
+    expstr = "<!DOCTYPE html>" LF
+             "<html xmlns=\"http://www.w3.org/1999/xhtml\">" LF
+             "<head>" LF
+             "  <meta charset=\"utf-8\" />" LF
+             "  <meta name=\"generator\" content=\"HTML Tidy for HTML5 for " TIDY "\" />" LF
+             "  <title></title>" LF
+             "</head>" LF
+             "<body>" LF
+             "  <h1>Title 1</h1>" LF
+             "  <h2>Title 2</h2>" LF
+             "  <h6>Title 6</h6>Bogus Title" LF
+             "  <p>bar <b>man</b></p>" LF
+             "  <li>the first #item</li>" LF
+             "</body>" LF
+             "</html>" LF;
     ck_assert_str_eq(expstr, cleaned);
     ruDbgLogf("plain text: '%s'", txt);
     expstr = "Title 1\n"

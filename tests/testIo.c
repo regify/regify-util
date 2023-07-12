@@ -388,6 +388,20 @@ START_TEST ( filetest ) {
     fail_if(expres == res, retText, test, expres, res);
     ruFree(res);
 
+#ifdef _WIN32
+    expres = "C:\\con";
+#else
+    expres = "/con";
+#endif
+    res = ruFullPath("/con");
+    fail_if(expres == res, retText, test, expres, res);
+    ck_assert_str_eq(res, expres);
+    ruFree(res);
+
+    res = ruFullPath("\\con");
+    fail_if(expres == res, retText, test, expres, res);
+    ruFree(res);
+
     res = ruFullPath(NULL);
     fail_if(expres == res, retText, test, expres, res);
     ruFree(res);

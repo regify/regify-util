@@ -1158,30 +1158,36 @@ RUAPI alloc_chars ruFullPath(trans_chars filePath) {
     ruClearError();
     alloc_chars res = NULL;
 #ifdef _WIN32
-    char *fixedPath = NULL;
+    alloc_chars fixedPath = NULL;
     if (filePath) {
         fixedPath = fixPath(filePath);
-        if (*fixedPath == '/' || *fixedPath == '\\' ||
-            *(fixedPath + 1) == ':') {
+        if (*(fixedPath + 1) == ':') {
             // path is already absolute
             return fixedPath;
         }
+        if (*fixedPath == '/' || *fixedPath == '\\') {
+            // path is already absolute but lacks drive letter
+            uint8_t driveIdx = (uint8_t)_getdrive();
+            uint8_t drive = 'A' + driveIdx - 1;
+            res = ruDupPrintf("%c:%s", drive, fixedPath);
+            ruFree(fixedPath);
+            return res;
+        }
     }
-    char* dir = NULL;
     UChar fullPath[_MAX_PATH];
     if (_wgetcwd(fullPath, _MAX_PATH)) {
-        dir = getMbPath(fullPath);
+        alloc_chars dir = getMbPath(fullPath);
         if (fixedPath) {
             res = ruDupPrintf("%s%c%s", dir, RU_SLASH, fixedPath);
         } else {
             res = dir;
             dir = NULL;
         }
+        ruFree(dir);
     } else {
         ruSetError("no current directory");
     }
     ruFree(fixedPath);
-    ruFree(dir);
 #else
     if (filePath && *filePath == '/') {
         // path is already absolute
