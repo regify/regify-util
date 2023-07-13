@@ -130,6 +130,7 @@ extern "C" {
     RUAPI int32_t ruGetVolumeInfo(const char* mountPoint,
             u_long* serialNo, u_long* maxCompLen, u_long* fsFlags,
             char** volumeName, char** fsName);
+
 #else
 
 #if defined(__APPLE__) && defined(__MACH__) // Apple OSX and iOS (Darwin)
@@ -676,7 +677,45 @@ RUAPI ptr ruClear(ptr o);
 extern "C" {
 #endif /* __cplusplus */
 
+/**
+ * \brief Runs getopt short with given parameters.
+ * \ingroup misc
+ *
+ * It does not process non option arguments or permute argv to place these at
+ * the end.
+ * @param parms Where the string/string map with the parameters will be placed.
+ *              Caller must free with \ref ruMapFree
+ * @param opts getopt short definition string
+ * @param argc length of argv, as given in main
+ * @param argv array of string parameters with the first being the comman itself
+ *             as given in main
+ * @return \ref RUE_OK on success map will be set
+ *         \ref RUE_PARAMETER_NOT_SET when called wrong, no map
+ *         \ref RUE_FILE_NOT_FOUND if there were no options, no map
+ *         \ref RUE_INVALID_PARAMETER if there were invalid parameters, no map
+ */
+RUAPI int32_t ruGetOptMap(ruMap* parms, trans_chars opts, int argc, char** argv);
 
+#ifdef _WIN32
+/**
+ * \brief Runs getopt short with given parameters.
+ * \ingroup misc
+ *
+ * It does not process non option arguments or permute argv to place these at
+ * the end.
+ * @param parms Where the string/string map with the parameters will be placed.
+ *              Caller must free with \ref ruMapFree
+ * @param opts getopt short definition string
+ * @param wargc length of argv, as given in main
+ * @param wargv array of wide string parameters with the first being the comman
+ *              itself as given in main
+ * @return \ref RUE_OK on success map will be set
+ *         \ref RUE_PARAMETER_NOT_SET when called wrong, no map
+ *         \ref RUE_FILE_NOT_FOUND if there were no options, no map
+ *         \ref RUE_INVALID_PARAMETER if there were invalid parameters, no map
+ */
+RUAPI int32_t ruGetOptMapW(ruMap* parms, trans_chars opts, DWORD wargc, LPWSTR* wargv);
+#endif
 /**
  * \defgroup memory Memory Management
  * \brief Abstracted functions pertaining to memory managment.

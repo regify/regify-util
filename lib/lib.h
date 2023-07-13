@@ -38,6 +38,7 @@
 #else
     #include <io.h>
     #include <sys/utime.h>
+    #include "getopt.h"
 #endif
 #ifdef _WIN32
     #include <windows.h>

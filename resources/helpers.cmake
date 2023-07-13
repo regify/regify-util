@@ -89,7 +89,7 @@ macro (installLicensePath var name newname path)
     endif()
     message("Bundling ${name} License ${${var}_LICENSE_PATH}")
     install(FILES ${${var}_LICENSE_PATH}
-            DESTINATION share/${LIBNAME}
+            DESTINATION share/${NAME}
             RENAME ${newname})
 endmacro()
 
@@ -112,6 +112,8 @@ if(MSVC AND MSVC_STATIC_RUNTIME)
             )
         string(REGEX REPLACE "/MD" "/MT" ${flag_var} "${${flag_var}}")
         string(REGEX REPLACE "-MD" "-MT" ${flag_var} "${${flag_var}}")
+        string(REGEX REPLACE "/Zi" "/Z7" ${flag_var} "${${flag_var}}")
+        string(REGEX REPLACE "-Zi" "-Z7" ${flag_var} "${${flag_var}}")
     endforeach(flag_var)
     message("Using static runtime")
 endif()

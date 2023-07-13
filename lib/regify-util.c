@@ -170,7 +170,49 @@ RUAPI int ruVersionComp(trans_chars ver1, trans_chars ver2) {
     }
 }
 
+RUAPI int32_t ruGetOptMap(ruMap* parms, trans_chars opts, int argc, char** argv) {
+    if (!parms || !opts || !argc || !argv) return RUE_PARAMETER_NOT_SET;
+    int32_t ret = RUE_FILE_NOT_FOUND;
+    ruMap params = ruMapNew(ruTypeStrFree(), ruTypeStrDup());
+    optind = 0;
+    do {
+        int c = getopt(argc, argv, opts);
+        if (c == -1) {
+            break;
+        }
+        if (c == (int)'?' || c == (int)':') {
+            ret = RUE_INVALID_PARAMETER;
+            continue;
+        }
+        ruMapPut(params, ruDupPrintf("%c", (uint8_t) c), optarg);
+        if (ret == RUE_FILE_NOT_FOUND) ret = RUE_OK;
+    } while (1);
+
+    if (ret == RUE_OK) {
+        *parms = params;
+    } else {
+        ruMapFree(params);
+    }
+    return ret;
+}
+
 #if defined(_WIN32)
+RUAPI int32_t ruGetOptMapW(ruMap* parms, trans_chars opts, DWORD wargc, LPWSTR* wargv) {
+    if (!parms || !opts || !wargc || !wargv) return RUE_PARAMETER_NOT_SET;
+    int32_t ret = RUE_FILE_NOT_FOUND;
+    int argc = (int)wargc;
+    char** argv = ruMalloc0(argc, char*);
+    for (int i = 0; i < argc; i++) {
+        argv[i] = ruStrFromUtf16(wargv[i]);
+    }
+    ret = ruGetOptMap(parms, opts, argc, argv);
+    for (int i = 0; i < argc; i++) {
+        ruFree(argv[i]);
+    }
+    ruFree(argv);
+    return ret;
+}
+
 RUAPI int32_t ruGetVolumeInfo(const char* mountPoint,
         u_long* serialNo, u_long* maxCompLen, u_long* fsFlags,
         char** volumeName, char** fsName) {

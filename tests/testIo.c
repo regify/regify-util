@@ -388,8 +388,10 @@ START_TEST ( filetest ) {
     fail_if(expres == res, retText, test, expres, res);
     ruFree(res);
 
-#ifdef _WIN32
+#if defined(RUMS)
     expres = "C:\\con";
+#elif defined(_WIN32)
+    expres = "C:/con";
 #else
     expres = "/con";
 #endif
@@ -398,6 +400,9 @@ START_TEST ( filetest ) {
     ck_assert_str_eq(res, expres);
     ruFree(res);
 
+#ifdef _WIN32
+    expres = "C:\\con";
+#endif
     res = ruFullPath("\\con");
     fail_if(expres == res, retText, test, expres, res);
     ruFree(res);

@@ -12,7 +12,7 @@ endif::[]
 
 == Introduction
 The regify utility package is a collection of general utilities ranging from String Functions, over collections like List Collection or Hash Map to Logging Facility, Regular Expressions and abstracted storage such as Key Value Storage.
-There are also File I/O, file access monitoring and JSON utilities.
+There are also File I/O, file access monitoring, HTML and JSON utilities.
 It is designed to run on Windows and Unix derivatives of which Linux, Android, OS X and iOS is tested.
 A current Linux version of the API Documentation can be found https://regify.github.io/regify-util/[here].
 

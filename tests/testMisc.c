@@ -387,10 +387,87 @@ START_TEST(process) {
 }
 END_TEST
 
+typedef struct optest_ {
+    char* opts;
+    int argc;
+    char* argv[10];
+} optest;
+
+START_TEST (getoptmap) {
+    int32_t ret, exp, argc;
+    perm_chars retText = "failed wanted ret '%d' but got '%d'";
+    ruMap params = NULL;
+    optest t1 = {"a:", 3, {[1]="-a", "opta"}};
+    optest* ot = &t1;
+
+    argc = 0;
+    exp = RUE_PARAMETER_NOT_SET;
+    ret = ruGetOptMap(NULL, NULL, argc, NULL);
+    fail_unless(exp == ret, retText, exp, ret);
+
+    ret = ruGetOptMap(NULL, NULL, ot->argc, ot->argv);
+    fail_unless(exp == ret, retText, exp, ret);
+
+    ret = ruGetOptMap(NULL, ot->opts, ot->argc, ot->argv);
+    fail_unless(exp == ret, retText, exp, ret);
+
+    exp = RUE_OK;
+    ret = ruGetOptMap(&params, ot->opts, ot->argc, ot->argv);
+    ret = ruGetOptMap(&params, t1.opts, t1.argc, t1.argv);
+    fail_unless(exp == ret, retText, exp, ret);
+
+    perm_chars val = NULL;
+    ret = ruMapGet(params, "a", &val);
+    fail_unless(exp == ret, retText, exp, ret);
+    ck_assert_str_eq("opta", val);
+
+    params = ruMapFree(params);
+
+    optest t2 = {"ab:", 3, {[1]="-ab", "foo"}};
+    ot = &t2;
+    ret = ruGetOptMap(&params, ot->opts, ot->argc, ot->argv);
+    fail_unless(exp == ret, retText, exp, ret);
+
+    bool want = true;
+    bool is = ruMapHas(params, "a", &ret);
+    fail_unless(exp == ret, retText, exp, ret);
+    fail_unless(want == is, retText, want, is);
+
+    val = NULL;
+    ret = ruMapGet(params, "b", &val);
+    fail_unless(exp == ret, retText, exp, ret);
+    ck_assert_str_eq("foo", val);
+
+    params = ruMapFree(params);
+
+    optest t3 = {"a", 3, {[1]="arg", "-a"}};
+    ot = &t3;
+    exp = RUE_FILE_NOT_FOUND;
+    ret = ruGetOptMap(&params, ot->opts, ot->argc, ot->argv);
+    fail_unless(exp == ret, retText, exp, ret);
+    fail_unless(params == NULL, retText, params, NULL);
+
+    optest t4 = {"ab:", 4, {[1]="-c", "foo", "-a"}};
+    ot = &t4;
+    exp = RUE_INVALID_PARAMETER;
+    ret = ruGetOptMap(&params, ot->opts, ot->argc, ot->argv);
+    fail_unless(exp == ret, retText, exp, ret);
+    fail_unless(params == NULL, retText, params, NULL);
+
+    optest t5 = {"ab:", 4, {[1]="-a", "-c", "foo"}};
+    ot = &t5;
+    exp = RUE_INVALID_PARAMETER;
+    ret = ruGetOptMap(&params, ot->opts, ot->argc, ot->argv);
+    fail_unless(exp == ret, retText, exp, ret);
+    fail_unless(params == NULL, retText, params, NULL);
+}
+END_TEST
+
+
 #ifdef _WIN32
 START_TEST ( reg ) {
-    const char *test = "ruGetRegistryEntry";
-    const char *retText = "%s failed wanted ret '%d' but got '%d'";
+    perm_chars test = "ruGetRegistryEntry";
+    perm_chars retText = "%s failed wanted ret '%d' but got '%d'";
     char *want, *out;
     int ret, exp;
 
@@ -467,6 +544,84 @@ START_TEST ( vol ) {
 
 }
 END_TEST
+
+typedef struct optestw_ {
+    char* opts;
+    DWORD argc;
+    LPWSTR argv[10];
+} optestw;
+
+START_TEST (getoptmapw) {
+    int32_t ret, exp;
+    DWORD argc;
+    perm_chars retText = "failed wanted ret '%d' but got '%d'";
+    ruMap params = NULL;
+    optestw t1 = {"a:", 3, {[1]=L"-a", L"opta"}};
+    optestw* ot = &t1;
+
+    argc = 0;
+    exp = RUE_PARAMETER_NOT_SET;
+    ret = ruGetOptMapW(NULL, NULL, argc, NULL);
+    fail_unless(exp == ret, retText, exp, ret);
+
+    ret = ruGetOptMapW(NULL, NULL, ot->argc, ot->argv);
+    fail_unless(exp == ret, retText, exp, ret);
+
+    ret = ruGetOptMapW(NULL, ot->opts, ot->argc, ot->argv);
+    fail_unless(exp == ret, retText, exp, ret);
+
+    exp = RUE_OK;
+    ret = ruGetOptMapW(&params, ot->opts, ot->argc, ot->argv);
+    ret = ruGetOptMapW(&params, t1.opts, t1.argc, t1.argv);
+    fail_unless(exp == ret, retText, exp, ret);
+
+    perm_chars val = NULL;
+    ret = ruMapGet(params, "a", &val);
+    fail_unless(exp == ret, retText, exp, ret);
+    ck_assert_str_eq("opta", val);
+
+    params = ruMapFree(params);
+
+    optestw t2 = {"ab:", 3, {[1]=L"-ab", L"foo"}};
+    ot = &t2;
+    ret = ruGetOptMapW(&params, ot->opts, ot->argc, ot->argv);
+    fail_unless(exp == ret, retText, exp, ret);
+
+    bool want = true;
+    bool is = ruMapHas(params, "a", &ret);
+    fail_unless(exp == ret, retText, exp, ret);
+    fail_unless(want == is, retText, want, is);
+
+    val = NULL;
+    ret = ruMapGet(params, "b", &val);
+    fail_unless(exp == ret, retText, exp, ret);
+    ck_assert_str_eq("foo", val);
+
+    params = ruMapFree(params);
+
+    optestw t3 = {"a", 3, {[1]=L"arg", L"-a"}};
+    ot = &t3;
+    exp = RUE_FILE_NOT_FOUND;
+    ret = ruGetOptMapW(&params, ot->opts, ot->argc, ot->argv);
+    fail_unless(exp == ret, retText, exp, ret);
+    fail_unless(params == NULL, retText, params, NULL);
+
+    optestw t4 = {"ab:", 4, {[1]=L"-c", L"foo", L"-a"}};
+    ot = &t4;
+    exp = RUE_INVALID_PARAMETER;
+    ret = ruGetOptMapW(&params, ot->opts, ot->argc, ot->argv);
+    fail_unless(exp == ret, retText, exp, ret);
+    fail_unless(params == NULL, retText, params, NULL);
+
+    optestw t5 = {"ab:", 4, {[1]=L"-a", L"-c", L"foo"}};
+    ot = &t5;
+    exp = RUE_INVALID_PARAMETER;
+    ret = ruGetOptMapW(&params, ot->opts, ot->argc, ot->argv);
+    fail_unless(exp == ret, retText, exp, ret);
+    fail_unless(params == NULL, retText, params, NULL);
+}
+END_TEST
+
 #endif
 
 
@@ -477,9 +632,11 @@ TCase* miscTests(void) {
     tcase_add_test(tcase, mux);
     tcase_add_test(tcase, counter);
     tcase_add_test(tcase, process);
+    tcase_add_test(tcase, getoptmap);
 #ifdef _WIN32
     tcase_add_test ( tcase, reg );
     tcase_add_test ( tcase, vol );
+    tcase_add_test(tcase, getoptmapw);
 #endif
     return tcase;
 }

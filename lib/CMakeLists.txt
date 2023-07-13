@@ -166,6 +166,9 @@ endif()
 set(SRCS cleaner.c html.c icu.cpp ini.c io.c json.c kvstore.c lib.c list.c
         logging.c map.c regex.c string.c thread.c types.c regify-util.c)
 
+if (WIN AND NOT MINGW)
+    list(APPEND SRCS getopt.c)
+endif()
 if (WIN)
     list(APPEND SRCS win.cpp)
 endif()
@@ -191,11 +194,6 @@ if(NOT WASM)
             EXPORT ${NAME}Targets
             DESTINATION ${LIB_FOLDER}
             )
-    if(MSVC)
-        # ugly hack to install static pdb
-        install(FILES ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/${CLEANER}.dir/${CLEANER}.pdb
-                DESTINATION lib OPTIONAL)
-    endif()
 endif()
 
 # regify-util.a
@@ -208,11 +206,6 @@ install(TARGETS ${staticlib}
         EXPORT ${NAME}Targets
         DESTINATION ${LIB_FOLDER}
         )
-if(MSVC)
-    # ugly hack to install static pdb
-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/${staticlib}.dir/${staticlib}.pdb
-            DESTINATION lib OPTIONAL)
-endif()
 if(INSTALL_DEPS AND INCLUDE_ICU)
     install(FILES ${ICU_ARCHIVES} DESTINATION ${LIB_FOLDER})
 endif()
@@ -225,8 +218,4 @@ if(BUILD_SHARED_LIBS)
             EXPORT ${NAME}Targets
             DESTINATION ${LIB_FOLDER}
             )
-    if(MSVC)
-        install(FILES $<TARGET_PDB_FILE:${sharedlib}>
-                DESTINATION lib OPTIONAL)
-    endif()
 endif()
