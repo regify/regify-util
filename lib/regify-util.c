@@ -176,6 +176,8 @@ RUAPI int32_t ruGetOptMap(ruMap* parms, trans_chars opts, int argc, char** argv)
     ruMap params = ruMapNew(ruTypeStrFree(), ruTypeStrDup());
     optind = 0;
     do {
+        // needed for GNU implementations to be more strict and consistent
+        putenv("POSIXLY_CORRECT=1");
         int c = getopt(argc, argv, opts);
         if (c == -1) {
             break;
