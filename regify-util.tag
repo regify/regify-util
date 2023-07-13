@@ -451,6 +451,13 @@
       <anchor>gabb9ece7b53e9e95a196adc53be69b099</anchor>
       <arglist>(char *in)</arglist>
     </member>
+    <member kind="function">
+      <type>RUAPI int32_t</type>
+      <name>ruGetOptMap</name>
+      <anchorfile>group__misc.html</anchorfile>
+      <anchor>ga69bc1bcc96b1bb92b0735bee76c4dd32</anchor>
+      <arglist>(ruMap *parms, trans_chars opts, int argc, char **argv)</arglist>
+    </member>
   </compound>
   <compound kind="group">
     <name>memory</name>

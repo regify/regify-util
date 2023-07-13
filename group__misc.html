@@ -278,6 +278,9 @@ Functions</h2></td></tr>
 <tr class="memitem:gabb9ece7b53e9e95a196adc53be69b099"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__misc.html#gabb9ece7b53e9e95a196adc53be69b099">ruCharPtrDup</a> (char *in)</td></tr>
 <tr class="memdesc:gabb9ece7b53e9e95a196adc53be69b099"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copies the given string and returns the pointer.  <a href="group__misc.html#gabb9ece7b53e9e95a196adc53be69b099">More...</a><br /></td></tr>
 <tr class="separator:gabb9ece7b53e9e95a196adc53be69b099"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga69bc1bcc96b1bb92b0735bee76c4dd32"><td class="memItemLeft" align="right" valign="top">RUAPI int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__misc.html#ga69bc1bcc96b1bb92b0735bee76c4dd32">ruGetOptMap</a> (<a class="el" href="group__hashmap.html#gaad879dbca17e7740cbab5651cafe677d">ruMap</a> *parms, <a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> opts, int argc, char **argv)</td></tr>
+<tr class="memdesc:ga69bc1bcc96b1bb92b0735bee76c4dd32"><td class="mdescLeft">&#160;</td><td class="mdescRight">Runs getopt short with given parameters.  <a href="group__misc.html#ga69bc1bcc96b1bb92b0735bee76c4dd32">More...</a><br /></td></tr>
+<tr class="separator:ga69bc1bcc96b1bb92b0735bee76c4dd32"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Abstracted functions pertaining to other areas. </p>
@@ -364,7 +367,7 @@ Functions</h2></td></tr>
 <b>Value:</b><div class="fragment"><div class="line">    ruMacStart { \</div>
 <div class="line">    if (<a class="code" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a>) { *<a class="code" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a> = code; } <span class="keywordflow">return</span> res; \</div>
 <div class="line">    } ruMacEnd</div>
-<div class="ttc" id="agroup__misc_html_gab4cf5759c3753c2308f163953ee154f0"><div class="ttname"><a href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a></div><div class="ttdeci">void * ptr</div><div class="ttdoc">A generic pointer.</div><div class="ttdef"><b>Definition:</b> regify-util.h:306</div></div>
+<div class="ttc" id="agroup__misc_html_gab4cf5759c3753c2308f163953ee154f0"><div class="ttname"><a href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a></div><div class="ttdeci">void * ptr</div><div class="ttdoc">A generic pointer.</div><div class="ttdef"><b>Definition:</b> regify-util.h:307</div></div>
 </div><!-- fragment -->
 <p>Convenience macro for setting a potentially passed in result pointer and returning a result. </p>
 
@@ -842,6 +845,58 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="ga69bc1bcc96b1bb92b0735bee76c4dd32"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga69bc1bcc96b1bb92b0735bee76c4dd32">&#9670;&nbsp;</a></span>ruGetOptMap()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI int32_t ruGetOptMap </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__hashmap.html#gaad879dbca17e7740cbab5651cafe677d">ruMap</a> *&#160;</td>
+          <td class="paramname"><em>parms</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a>&#160;</td>
+          <td class="paramname"><em>opts</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>argc</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char **&#160;</td>
+          <td class="paramname"><em>argv</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Runs getopt short with given parameters. </p>
+<p>It does not process non option arguments or permute argv to place these at the end. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">parms</td><td>Where the string/string map with the parameters will be placed. Caller must free with <a class="el" href="group__hashmap.html#ga533dee52a4d05df820c614bfc9ea426e">ruMapFree</a> </td></tr>
+    <tr><td class="paramname">opts</td><td>getopt short definition string </td></tr>
+    <tr><td class="paramname">argc</td><td>length of argv, as given in main </td></tr>
+    <tr><td class="paramname">argv</td><td>array of string parameters with the first being the comman itself as given in main </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="group__ruerror.html#ga7e2f97cce8af8020834e685a2482556d">RUE_OK</a> on success map will be set <a class="el" href="group__ruerror.html#ga616dba9a5dafed8351aa98c68fab25e2">RUE_PARAMETER_NOT_SET</a> when called wrong, no map <a class="el" href="group__ruerror.html#gadb4058c56ea545e1d20d2efa9d6611fd">RUE_FILE_NOT_FOUND</a> if there were no options, no map <a class="el" href="group__ruerror.html#ga0860dfd6b6c4771bbdeb5c070c35d7d1">RUE_INVALID_PARAMETER</a> if there were invalid parameters, no map </dd></dl>
+
+</div>
+</div>
 <a id="ga9514522bf5289236d07a8b714ab8e0b0"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ga9514522bf5289236d07a8b714ab8e0b0">&#9670;&nbsp;</a></span>ruGetOs()</h2>
 
@@ -989,7 +1044,7 @@ Functions</h2></td></tr>
 <p>Runs given program. </p>
 <p>Example: </p><div class="fragment"><div class="line"><span class="keyword">const</span> <span class="keywordtype">char</span>* command[] = {<span class="stringliteral">&quot;/bin/sleep&quot;</span>, <span class="stringliteral">&quot;3&quot;</span>, NULL};</div>
 <div class="line"><span class="keywordtype">int</span> ret = <a class="code" href="group__misc.html#gaa1ee1acfc9e71c9beba03b4b547f8abc">ruRunProg</a>(command, <a class="code" href="group__misc.html#ga3a6bd0d17663435e5e96679ffe03f900">RU_NO_TIMEOUT</a>);</div>
-<div class="ttc" id="agroup__misc_html_ga3a6bd0d17663435e5e96679ffe03f900"><div class="ttname"><a href="group__misc.html#ga3a6bd0d17663435e5e96679ffe03f900">RU_NO_TIMEOUT</a></div><div class="ttdeci">#define RU_NO_TIMEOUT</div><div class="ttdoc">Indicates that an operation that has no timeout. Used by ruRunProg.</div><div class="ttdef"><b>Definition:</b> regify-util.h:437</div></div>
+<div class="ttc" id="agroup__misc_html_ga3a6bd0d17663435e5e96679ffe03f900"><div class="ttname"><a href="group__misc.html#ga3a6bd0d17663435e5e96679ffe03f900">RU_NO_TIMEOUT</a></div><div class="ttdeci">#define RU_NO_TIMEOUT</div><div class="ttdoc">Indicates that an operation that has no timeout. Used by ruRunProg.</div><div class="ttdef"><b>Definition:</b> regify-util.h:438</div></div>
 <div class="ttc" id="agroup__misc_html_gaa1ee1acfc9e71c9beba03b4b547f8abc"><div class="ttname"><a href="group__misc.html#gaa1ee1acfc9e71c9beba03b4b547f8abc">ruRunProg</a></div><div class="ttdeci">RUAPI int32_t ruRunProg(const char **argv, sec_t timeout)</div><div class="ttdoc">Runs given program.</div></div>
 </div><!-- fragment --><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -1534,7 +1589,7 @@ Functions</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Wed Jul 12 2023 09:02:25 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Thu Jul 13 2023 14:23:09 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

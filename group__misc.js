@@ -34,6 +34,7 @@ var group__misc =
     [ "ruGetenv", "group__misc.html#ga86dd88de865e954dc1d0ea82fd20f21c", null ],
     [ "ruGetHostname", "group__misc.html#gab28def77befe23dc2785aff9b1623105", null ],
     [ "ruGetLanguage", "group__misc.html#ga2c70eecb13cf89033737e26a9ff08817", null ],
+    [ "ruGetOptMap", "group__misc.html#ga69bc1bcc96b1bb92b0735bee76c4dd32", null ],
     [ "ruGetOs", "group__misc.html#ga9514522bf5289236d07a8b714ab8e0b0", null ],
     [ "ruGetTimeVal", "group__misc.html#ga23dfc8d19e01fe0aba08aa87b2966989", null ],
     [ "ruIsInt64", "group__misc.html#ga61f7ab20b2760c5cb849d3b442eb4402", null ],
