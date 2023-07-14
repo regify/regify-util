@@ -116,7 +116,7 @@ RUAPI bool ruDoesLog(uint32_t log_level);
  * \cond noworry Internal
  * \brief Logs the given parameters if logging is set.
  *
- * This function is really interal and used by the log macros.
+ * This function is really internal and used by the log macros.
  * @param log_level Log level of this message.
  * @param file The source file where this message originates from.
  * @param func The function that created this log entry.
@@ -126,6 +126,41 @@ RUAPI bool ruDoesLog(uint32_t log_level);
  */
 RUAPI void ruDoLog(uint32_t log_level, trans_chars filePath, trans_chars func,
                    int32_t line, trans_chars format, ...);
+
+/**
+ * \brief Logs the given parameters if logging is set.
+ *
+ * This function is advanced and designed to be used by custom log macros.
+ * @param log_level Log level of this message.
+ * @param file The source file where this message originates from.
+ * @param func The function that created this log entry.
+ * @param line The line where the log was created at.
+ * @param format The format specifier for the remaining arguments.
+ * @param args variable argument list
+ */
+RUAPI void ruDoLogV(uint32_t log_level, trans_chars filePath, trans_chars func,
+              int32_t line, trans_chars format, va_list args);
+
+/**
+ * Internal logging function used by the log macros.
+ * @param log_level Log level of this message.
+ * @param file The source file where this message originates from.
+ * @param func The function that created this log entry.
+ * @param line The line where the log was created at.
+ * @param format The format specifier for the remaining arguments.
+ * @param args variable argument list
+ * @return The allocated log message to be freed by the caller after usage.
+ */
+RUAPI alloc_chars ruMakeLogMsgV(uint32_t log_level, trans_chars filePath,
+                                trans_chars func, int32_t line,
+                                trans_chars format, va_list args);
+
+/**
+ * Sends the given message as is to the current log sink.
+ * @param log_level Log level of this message used solely for filtering.
+ * @param msg string to be logged without modification
+ */
+RUAPI void ruRawLog(uint32_t log_level, trans_chars msg);
 
 /**
  * Internal logging function used by the log macros.
