@@ -716,6 +716,7 @@ RUAPI int32_t ruGetOptMap(ruMap* parms, trans_chars opts, int argc, char** argv)
  */
 RUAPI int32_t ruGetOptMapW(ruMap* parms, trans_chars opts, DWORD wargc, LPWSTR* wargv);
 #endif
+
 /**
  * \defgroup memory Memory Management
  * \brief Abstracted functions pertaining to memory managment.

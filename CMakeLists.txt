@@ -256,7 +256,7 @@ if(DOCS)
     doLog(LOG_VERB "DOXYGEN_EXECUTABLE ${DOXYGEN_EXECUTABLE}")
     # add a target to generate API documentation with Doxygen
     if (WIN)
-        set(PREDEFS "WINDOWS")
+        set(PREDEFS "_WIN32")
     else()
         set(PREDEFS "")
     endif()
