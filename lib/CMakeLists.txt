@@ -167,7 +167,7 @@ set(SRCS cleaner.c html.c icu.cpp ini.c io.c json.c kvstore.c lib.c list.c
         logging.c map.c regex.c string.c thread.c types.c regify-util.c)
 
 if (WIN AND NOT MINGW)
-    list(APPEND SRCS getopt.c)
+    list(APPEND SRCS wingetopt.c)
 endif()
 if (WIN)
     list(APPEND SRCS win.cpp)
