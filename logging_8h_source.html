@@ -152,50 +152,59 @@ $(document).ready(function(){initNavTree('logging_8h_source.html',''); initResiz
 <div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;RUAPI <span class="keywordtype">void</span> ruDoLog(uint32_t log_level, <a class="code" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> filePath, <a class="code" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> func,</div>
 <div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;                   int32_t line, <a class="code" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> format, ...);</div>
 <div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160; </div>
-<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;RUAPI <span class="keywordtype">char</span>* ruMakeLogMsg(uint32_t log_level, <a class="code" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> file, <a class="code" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> func,</div>
-<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;                   int32_t line, <a class="code" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> format, ...);</div>
-<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160; </div>
-<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;<span class="preprocessor">#define ruLog_(lvl, format, ...) ruMacStart { \</span></div>
-<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;<span class="preprocessor">    if(ruDoesLog(lvl)) { \</span></div>
-<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;<span class="preprocessor">        ruDoLog(lvl, __FILE__, __func__, __LINE__, format, __VA_ARGS__); \</span></div>
-<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;<span class="preprocessor">    } \</span></div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;<span class="preprocessor">} ruMacEnd</span></div>
-<div class="line"><a name="l00160"></a><span class="lineno"><a class="line" href="group__logging.html#ga52e07e352dbd0c7be2b0d37bc48cc8ac">  160</a></span>&#160;<span class="preprocessor">#define ruCritLog(msg) ruLog_(RU_LOG_CRIT, &quot;%s&quot;</span>, msg)</div>
-<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160; </div>
-<div class="line"><a name="l00167"></a><span class="lineno"><a class="line" href="group__logging.html#ga6cee3b7459f97c8805d9e31ec46ca2c5">  167</a></span>&#160;<span class="preprocessor">#define ruCritLogf(fmt, ...) ruLog_(RU_LOG_CRIT, fmt, __VA_ARGS__)</span></div>
-<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160; </div>
-<div class="line"><a name="l00173"></a><span class="lineno"><a class="line" href="group__logging.html#ga21164d698d4775724fd710a6bf6cfa15">  173</a></span>&#160;<span class="preprocessor">#define ruWarnLog(msg) ruLog_(RU_LOG_WARN, &quot;%s&quot;</span>, msg)</div>
-<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160; </div>
-<div class="line"><a name="l00180"></a><span class="lineno"><a class="line" href="group__logging.html#gaebf1e2035fa3c2d930c925c93e2e6706">  180</a></span>&#160;<span class="preprocessor">#define ruWarnLogf(fmt, ...) ruLog_(RU_LOG_WARN, fmt, __VA_ARGS__)</span></div>
-<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160; </div>
-<div class="line"><a name="l00186"></a><span class="lineno"><a class="line" href="group__logging.html#gaf9ca44fd51225d8a837745dda302341f">  186</a></span>&#160;<span class="preprocessor">#define ruInfoLog(msg) ruLog_(RU_LOG_INFO, &quot;%s&quot;</span>, msg)</div>
-<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160; </div>
-<div class="line"><a name="l00193"></a><span class="lineno"><a class="line" href="group__logging.html#ga4bf3472aaaf37ec918433cb983102338">  193</a></span>&#160;<span class="preprocessor">#define ruInfoLogf(fmt, ...) ruLog_(RU_LOG_INFO, fmt, __VA_ARGS__)</span></div>
-<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160; </div>
-<div class="line"><a name="l00199"></a><span class="lineno"><a class="line" href="group__logging.html#ga497ce15cdccb100b54759a94220e6d7f">  199</a></span>&#160;<span class="preprocessor">#define ruVerbLog(msg) ruLog_(RU_LOG_VERB, &quot;%s&quot;</span>, msg)</div>
-<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160; </div>
-<div class="line"><a name="l00206"></a><span class="lineno"><a class="line" href="group__logging.html#ga75167ec8202e6e2a632afdb0a60fabb0">  206</a></span>&#160;<span class="preprocessor">#define ruVerbLogf(fmt, ...) ruLog_(RU_LOG_VERB, fmt, __VA_ARGS__)</span></div>
-<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160; </div>
-<div class="line"><a name="l00212"></a><span class="lineno"><a class="line" href="group__logging.html#ga6d7b666987402eb3af7d97e448f021ba">  212</a></span>&#160;<span class="preprocessor">#define ruDbgLog(msg) ruLog_(RU_LOG_DBUG, &quot;%s&quot;</span>, msg)</div>
-<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160; </div>
-<div class="line"><a name="l00219"></a><span class="lineno"><a class="line" href="group__logging.html#ga3d3ffaf6bf4fa6d4c69329ad93f301b3">  219</a></span>&#160;<span class="preprocessor">#define ruDbgLogf(fmt, ...) ruLog_(RU_LOG_DBUG, fmt, __VA_ARGS__)</span></div>
-<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160; </div>
-<div class="line"><a name="l00226"></a><span class="lineno"><a class="line" href="group__logging.html#ga350ca5f040ec24dc02dd77155fbb61d0">  226</a></span>&#160;<span class="preprocessor">#define ruDump8(msg, start) \</span></div>
-<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;<span class="preprocessor">    ruDbgLogf(&quot;%s @0x%x %02x %02x %02x %02x  %02x %02x %02x %02x&quot;</span>, msg, (start), \</div>
-<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;        (uint8_t)*(start), (uint8_t)*((start)+1), (uint8_t)*((start)+2), (uint8_t)*((start)+3), \</div>
-<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;        (uint8_t)*((start)+4), (uint8_t)*((start)+5), (uint8_t)*((start)+6), (uint8_t)*((start)+7))</div>
-<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160; </div>
-<div class="line"><a name="l00236"></a><span class="lineno"><a class="line" href="group__logging.html#ga28a12b3d8bfbc6022ad920435b2cef72">  236</a></span>&#160;<span class="preprocessor">#define ruDump16(msg, start) \</span></div>
-<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;<span class="preprocessor">    ruDbgLogf(&quot;%s @0x%x %02x %02x %02x %02x  %02x %02x %02x %02x  %02x %02x %02x %02x  %02x %02x %02x %02x&quot;</span>, msg, (start), \</div>
-<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;        (uint8_t)*(start), (uint8_t)*((start)+1), (uint8_t)*((start)+2), (uint8_t)*((start)+3), \</div>
-<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;        (uint8_t)*((start)+4), (uint8_t)*((start)+5), (uint8_t)*((start)+6), (uint8_t)*((start)+7), \</div>
-<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;        (uint8_t)*((start)+8), (uint8_t)*((start)+9), (uint8_t)*((start)+10), (uint8_t)*((start)+11), \</div>
-<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;        (uint8_t)*((start)+12), (uint8_t)*((start)+13), (uint8_t)*((start)+14), (uint8_t)*((start)+15))</div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;RUAPI <span class="keywordtype">void</span> ruDoLogV(uint32_t log_level, <a class="code" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> filePath, <a class="code" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> func,</div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;              int32_t line, <a class="code" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> format, va_list args);</div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160; </div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;RUAPI <a class="code" href="group__misc.html#ga972d4f4f858964bb2381d186ea96d88d">alloc_chars</a> ruMakeLogMsgV(uint32_t log_level, <a class="code" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> filePath,</div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;                                <a class="code" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> func, int32_t line,</div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;                                <a class="code" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> format, va_list args);</div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160; </div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;RUAPI <span class="keywordtype">void</span> ruRawLog(uint32_t log_level, <a class="code" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> msg);</div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160; </div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;RUAPI <span class="keywordtype">char</span>* ruMakeLogMsg(uint32_t log_level, <a class="code" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> file, <a class="code" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> func,</div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;                   int32_t line, <a class="code" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> format, ...);</div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160; </div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;<span class="preprocessor">#define ruLog_(lvl, format, ...) ruMacStart { \</span></div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;<span class="preprocessor">    if(ruDoesLog(lvl)) { \</span></div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;<span class="preprocessor">        ruDoLog(lvl, __FILE__, __func__, __LINE__, format, __VA_ARGS__); \</span></div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;<span class="preprocessor">    } \</span></div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;<span class="preprocessor">} ruMacEnd</span></div>
+<div class="line"><a name="l00195"></a><span class="lineno"><a class="line" href="group__logging.html#ga52e07e352dbd0c7be2b0d37bc48cc8ac">  195</a></span>&#160;<span class="preprocessor">#define ruCritLog(msg) ruLog_(RU_LOG_CRIT, &quot;%s&quot;</span>, msg)</div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160; </div>
+<div class="line"><a name="l00202"></a><span class="lineno"><a class="line" href="group__logging.html#ga6cee3b7459f97c8805d9e31ec46ca2c5">  202</a></span>&#160;<span class="preprocessor">#define ruCritLogf(fmt, ...) ruLog_(RU_LOG_CRIT, fmt, __VA_ARGS__)</span></div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160; </div>
+<div class="line"><a name="l00208"></a><span class="lineno"><a class="line" href="group__logging.html#ga21164d698d4775724fd710a6bf6cfa15">  208</a></span>&#160;<span class="preprocessor">#define ruWarnLog(msg) ruLog_(RU_LOG_WARN, &quot;%s&quot;</span>, msg)</div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160; </div>
+<div class="line"><a name="l00215"></a><span class="lineno"><a class="line" href="group__logging.html#gaebf1e2035fa3c2d930c925c93e2e6706">  215</a></span>&#160;<span class="preprocessor">#define ruWarnLogf(fmt, ...) ruLog_(RU_LOG_WARN, fmt, __VA_ARGS__)</span></div>
+<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160; </div>
+<div class="line"><a name="l00221"></a><span class="lineno"><a class="line" href="group__logging.html#gaf9ca44fd51225d8a837745dda302341f">  221</a></span>&#160;<span class="preprocessor">#define ruInfoLog(msg) ruLog_(RU_LOG_INFO, &quot;%s&quot;</span>, msg)</div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160; </div>
+<div class="line"><a name="l00228"></a><span class="lineno"><a class="line" href="group__logging.html#ga4bf3472aaaf37ec918433cb983102338">  228</a></span>&#160;<span class="preprocessor">#define ruInfoLogf(fmt, ...) ruLog_(RU_LOG_INFO, fmt, __VA_ARGS__)</span></div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160; </div>
+<div class="line"><a name="l00234"></a><span class="lineno"><a class="line" href="group__logging.html#ga497ce15cdccb100b54759a94220e6d7f">  234</a></span>&#160;<span class="preprocessor">#define ruVerbLog(msg) ruLog_(RU_LOG_VERB, &quot;%s&quot;</span>, msg)</div>
+<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160; </div>
+<div class="line"><a name="l00241"></a><span class="lineno"><a class="line" href="group__logging.html#ga75167ec8202e6e2a632afdb0a60fabb0">  241</a></span>&#160;<span class="preprocessor">#define ruVerbLogf(fmt, ...) ruLog_(RU_LOG_VERB, fmt, __VA_ARGS__)</span></div>
 <div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160; </div>
-<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;<span class="preprocessor">#ifdef __cplusplus</span></div>
-<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;}</div>
-<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* __cplusplus */</span><span class="preprocessor"></span></div>
-<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;<span class="preprocessor">#endif </span><span class="comment">//REGIFY_UTIL_LOGGING_H</span></div>
+<div class="line"><a name="l00247"></a><span class="lineno"><a class="line" href="group__logging.html#ga6d7b666987402eb3af7d97e448f021ba">  247</a></span>&#160;<span class="preprocessor">#define ruDbgLog(msg) ruLog_(RU_LOG_DBUG, &quot;%s&quot;</span>, msg)</div>
+<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160; </div>
+<div class="line"><a name="l00254"></a><span class="lineno"><a class="line" href="group__logging.html#ga3d3ffaf6bf4fa6d4c69329ad93f301b3">  254</a></span>&#160;<span class="preprocessor">#define ruDbgLogf(fmt, ...) ruLog_(RU_LOG_DBUG, fmt, __VA_ARGS__)</span></div>
+<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160; </div>
+<div class="line"><a name="l00261"></a><span class="lineno"><a class="line" href="group__logging.html#ga350ca5f040ec24dc02dd77155fbb61d0">  261</a></span>&#160;<span class="preprocessor">#define ruDump8(msg, start) \</span></div>
+<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;<span class="preprocessor">    ruDbgLogf(&quot;%s @0x%x %02x %02x %02x %02x  %02x %02x %02x %02x&quot;</span>, msg, (start), \</div>
+<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;        (uint8_t)*(start), (uint8_t)*((start)+1), (uint8_t)*((start)+2), (uint8_t)*((start)+3), \</div>
+<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;        (uint8_t)*((start)+4), (uint8_t)*((start)+5), (uint8_t)*((start)+6), (uint8_t)*((start)+7))</div>
+<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160; </div>
+<div class="line"><a name="l00271"></a><span class="lineno"><a class="line" href="group__logging.html#ga28a12b3d8bfbc6022ad920435b2cef72">  271</a></span>&#160;<span class="preprocessor">#define ruDump16(msg, start) \</span></div>
+<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;<span class="preprocessor">    ruDbgLogf(&quot;%s @0x%x %02x %02x %02x %02x  %02x %02x %02x %02x  %02x %02x %02x %02x  %02x %02x %02x %02x&quot;</span>, msg, (start), \</div>
+<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;        (uint8_t)*(start), (uint8_t)*((start)+1), (uint8_t)*((start)+2), (uint8_t)*((start)+3), \</div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;        (uint8_t)*((start)+4), (uint8_t)*((start)+5), (uint8_t)*((start)+6), (uint8_t)*((start)+7), \</div>
+<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;        (uint8_t)*((start)+8), (uint8_t)*((start)+9), (uint8_t)*((start)+10), (uint8_t)*((start)+11), \</div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;        (uint8_t)*((start)+12), (uint8_t)*((start)+13), (uint8_t)*((start)+14), (uint8_t)*((start)+15))</div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160; </div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;<span class="preprocessor">#ifdef __cplusplus</span></div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;}</div>
+<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* __cplusplus */</span><span class="preprocessor"></span></div>
+<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;<span class="preprocessor">#endif </span><span class="comment">//REGIFY_UTIL_LOGGING_H</span></div>
 <div class="ttc" id="agroup__logging_html_ga20be8e436d37b23248d98325f40a5d9e"><div class="ttname"><a href="group__logging.html#ga20be8e436d37b23248d98325f40a5d9e">ruLogFunc</a></div><div class="ttdeci">void(* ruLogFunc)(perm_ptr user_data, trans_chars message)</div><div class="ttdoc">The type of function to pass to ruSetLogger in order to hook up logging.</div><div class="ttdef"><b>Definition:</b> logging.h:74</div></div>
 <div class="ttc" id="agroup__logging_html_ga45e42503b652bda7bc147f5c514f5172"><div class="ttname"><a href="group__logging.html#ga45e42503b652bda7bc147f5c514f5172">ruSetLogger</a></div><div class="ttdeci">RUAPI void ruSetLogger(ruLogFunc logger, uint32_t logLevel, perm_ptr userData)</div><div class="ttdoc">Sets the global logging function for this process.</div></div>
 <div class="ttc" id="agroup__logging_html_ga55a8b3d268484f95bc91525110491606"><div class="ttname"><a href="group__logging.html#ga55a8b3d268484f95bc91525110491606">ruGetLogLevel</a></div><div class="ttdeci">RUAPI uint32_t ruGetLogLevel(void)</div><div class="ttdoc">Returns the currently set log level.</div></div>
@@ -204,13 +213,14 @@ $(document).ready(function(){initNavTree('logging_8h_source.html',''); initResiz
 <div class="ttc" id="agroup__logging_html_gafbb4cdd0ff940ab6a253c3b69dba1fa1"><div class="ttname"><a href="group__logging.html#gafbb4cdd0ff940ab6a253c3b69dba1fa1">ruStdErrorLogger</a></div><div class="ttdeci">RUAPI void ruStdErrorLogger(perm_ptr udata, trans_chars msg)</div><div class="ttdoc">A convenience logging implementation that logs to stderr.</div></div>
 <div class="ttc" id="agroup__misc_html_ga517aac830d9ce5c6ab7deec46adf54d5"><div class="ttname"><a href="group__misc.html#ga517aac830d9ce5c6ab7deec46adf54d5">perm_ptr</a></div><div class="ttdeci">const void * perm_ptr</div><div class="ttdoc">A permanent pointer.</div><div class="ttdef"><b>Definition:</b> regify-util.h:280</div></div>
 <div class="ttc" id="agroup__misc_html_ga5a4bcdee6a3cc6c7ed75da5bb77d49bc"><div class="ttname"><a href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a></div><div class="ttdeci">const char * trans_chars</div><div class="ttdoc">A transient NULL terminated string pointer.</div><div class="ttdef"><b>Definition:</b> regify-util.h:189</div></div>
+<div class="ttc" id="agroup__misc_html_ga972d4f4f858964bb2381d186ea96d88d"><div class="ttname"><a href="group__misc.html#ga972d4f4f858964bb2381d186ea96d88d">alloc_chars</a></div><div class="ttdeci">char * alloc_chars</div><div class="ttdoc">An allocated NULL terminated string pointer.</div><div class="ttdef"><b>Definition:</b> regify-util.h:202</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_02ca080d44dff245433198a8d6f82776.html">regify-util</a></li><li class="navelem"><b>logging.h</b></li>
-    <li class="footer">Generated on Fri Jul 14 2023 08:39:44 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Fri Jul 14 2023 14:50:04 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>
