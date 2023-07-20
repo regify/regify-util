@@ -413,7 +413,6 @@ START_TEST (getoptmap) {
 
     exp = RUE_OK;
     ret = ruGetOptMap(&params, ot->opts, ot->argc, ot->argv);
-    ret = ruGetOptMap(&params, t1.opts, t1.argc, t1.argv);
     fail_unless(exp == ret, retText, exp, ret);
 
     perm_chars val = NULL;

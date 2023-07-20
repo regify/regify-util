@@ -164,7 +164,7 @@ int32_t ListRemoveTo(List* list, ListElmt* old_element, ptr* dest) {
         ret = runValOut(old_element, dest, true);
     }
     if (list->destroy && old_element->data) {
-        list->destroy(old_element->data);
+        old_element->data = list->destroy(old_element->data);
     }
 
     // Remove the element from the list

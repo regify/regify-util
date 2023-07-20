@@ -33,7 +33,7 @@ RUAPI void ruSetLogger(ruLogFunc logger, uint32_t logLevel, perm_ptr userData) {
 }
 
 RUAPI void ruStdErrorLogger(perm_ptr udata, trans_chars msg) {
-    fputs(msg, stderr);
+    if (msg) fputs(msg, stderr);
 }
 
 RUAPI void ruSetLogLevel(uint32_t logLevel) {

@@ -25,7 +25,7 @@
 #include <sys/inotify.h>
 
 // internal debug logging
-#if 1
+#if 01
 // no debug
 #define fam_dbg(fmt, ...)
 #define fam_dbg_inotify_event(i, ev)
@@ -132,12 +132,13 @@ static int watcher(trans_chars fullPath, bool isDir, void *ctx) {
     alloc_chars pathCopy = copyNoSlash(fullPath);
     ruMapPut(fctx->wdPath, &wd, pathCopy);
     ruMapPut(fctx->pathWd, pathCopy, &wd);
-    fam_dbg("Added %s with handle %d", pathCopy, wd);
+    ruDbgLogf("Added %s with handle %d", pathCopy, wd);
     ruFree(pathCopy);
     return RUE_OK;
 }
 
 static int32_t fam_watchDir(famCtx *fctx, char* filePath) {
+    fam_dbg("Watch: %s", filePath);
     return ruFolderWalk(filePath, RU_WALK_FOLDER_FIRST, watcher, fctx);
 }
 
@@ -152,7 +153,7 @@ static int32_t fam_unwatchDir(famCtx* fctx, char* filePath) {
          ret = ruMapNext(fctx->wdPath, &wd, &path)) {
 
         if (ruStrStartsWith(path, filePath, NULL)) {
-            fam_dbg("Removing %s with handle %d", path, wd);
+            ruDbgLogf("Removing %s with handle %d", path, wd);
             inotify_rm_watch(fctx->id, wd);
             ruListAppend(yankies, (intptr_t)wd);
             ruMapRemove(fctx->pathWd, path, NULL);
@@ -248,7 +249,7 @@ static void fam_handle_moveTo(famCtx* fctx, uint32_t cookie, char* fullPath,
 }
 
 static void fam_processEv(famCtx* fctx, struct inotify_event* ev, int* pollTimeout) {
-    // get the start address of the name and interprete it as UTF8
+    // get the start address of the name and interpret it as UTF8
     perm_chars name_ = ev->name;
     perm_chars path_ = NULL;
     int32_t ret = ruMapGet(fctx->wdPath, &ev->wd, &path_);
@@ -295,7 +296,7 @@ static void fam_processEv(famCtx* fctx, struct inotify_event* ev, int* pollTimeo
                     ruCritLog("aborting fam thread.");
                     fctx->quit = true;
                 }
-            } else { ;
+            } else {
                 fam_dbg("The file %s was created.", name_);
             }
             break;
@@ -311,7 +312,7 @@ static void fam_processEv(famCtx* fctx, struct inotify_event* ev, int* pollTimeo
                     ruCritLog("aborting fam thread.");
                     fctx->quit = true;
                 }
-            } else { ;
+            } else {
                 fam_dbg("The file %s had a meta data change.", name_);
             }
             break;
@@ -321,7 +322,7 @@ static void fam_processEv(famCtx* fctx, struct inotify_event* ev, int* pollTimeo
             if (ev->mask & IN_ISDIR) {
                 // we ignore modified dirs
                 fam_dbg("The directory %s was modified.", name_);
-            } else { ;
+            } else {
                 ruFamEvent* fe = ruFamEventNew(RU_FAM_MODIFIED,
                                                fullPath, NULL);
                 fctx->eventCb(fe, fctx->ctx);
@@ -336,7 +337,7 @@ static void fam_processEv(famCtx* fctx, struct inotify_event* ev, int* pollTimeo
             fctx->eventCb(fe, fctx->ctx);
             if (ev->mask & IN_ISDIR) {
                 fam_dbg("The directory %s was deleted.", name_);
-            } else { ;
+            } else {
                 fam_dbg("The file %s was deleted.", name_);
             }
             break;
@@ -406,7 +407,7 @@ static int32_t fam_runLoop(famCtx* fctx) {
             struct inotify_event* ev = (struct inotify_event*)((long)fctx->buf + i);
             //fam_dbg("Mem[" + Hex(*ev) + "] [" + MemoryToHex(*ev, #BUF_LEN - i + 1, " ") + "]")
             fam_dbg_inotify_event(i, ev);
-            if (ev->mask != 0) {
+            if (ev->mask) {
                 fam_processEv(fctx, ev, &pollTimeout);
             }
             i += EVENT_SIZE + ev->len;
