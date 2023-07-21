@@ -80,6 +80,25 @@ if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.14)
     cmake_policy(SET CMP0082 NEW)
 endif()
 
+function(extractdebug target)
+    add_custom_target(${target}.dbg ALL
+            COMMAND ${CMAKE_OBJCOPY} --only-keep-debug
+            $<TARGET_FILE:${target}>
+            $<TARGET_FILE:${target}>.debug
+            COMMAND ${CMAKE_STRIP} --strip-debug
+            $<TARGET_FILE:${target}>
+            COMMAND ${CMAKE_OBJCOPY} --add-gnu-debuglink
+            $<TARGET_FILE:${target}>.debug
+            $<TARGET_FILE:${target}>
+            DEPENDS ${target}
+            COMMENT "Extracting debug symbols"
+            VERBATIM
+            )
+    install(FILES $<TARGET_FILE:${target}>.debug
+            DESTINATION ${LIB_FOLDER}/debug
+            RENAME $<TARGET_FILE_NAME:${target}>)
+endfunction()
+
 macro (installLicensePath var name newname path)
     file(GLOB DEF_LICENSE_PATH ${path})
     set(${var}_LICENSE_PATH ${DEF_LICENSE_PATH} CACHE STRING
