@@ -218,5 +218,7 @@ if(BUILD_SHARED_LIBS)
             EXPORT ${NAME}Targets
             DESTINATION ${LIB_FOLDER}
             )
-    extractdebug(${sharedlib})
+    if(LINUX OR ANDROID)
+        extractdebug(${sharedlib})
+    endif()
 endif()
