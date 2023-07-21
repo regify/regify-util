@@ -139,4 +139,5 @@ if(BUILD_SHARED_LIBS)
             EXPORT ${NAME}Targets
             DESTINATION ${LIB_FOLDER}
             )
+    extractdebug(${sharedlib})
 endif()
