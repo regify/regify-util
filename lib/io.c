@@ -830,7 +830,9 @@ static int32_t folderWalk(trans_chars folder, uint32_t flags,
             if ((flags & RU_WALK_NO_RECURSE) ||
                 !(ffd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
                 if (actor) {
-                    ret = actor(path, false, ctx);
+                    ret = actor(path,
+                                (ffd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0,
+                                ctx);
                     if (ret != RUE_OK) break;
                 }
                 continue;
