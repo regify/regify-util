@@ -106,7 +106,7 @@ function (doLink lib shared)
     endif()
 
     if(shared)
-        if (NOT INCLUDE_ICU)
+        if (INCLUDE_ICU)
             target_link_directories(${lib} PRIVATE ${ICU_LIBRARY_DIRS})
         endif()
     else()
