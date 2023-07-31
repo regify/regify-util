@@ -882,7 +882,7 @@ static int32_t folderWalk(trans_chars folder, uint32_t flags,
             }
             if ((flags & RU_WALK_NO_RECURSE) || dir->d_type != DT_DIR) {
                 if (actor) {
-                    ret = actor(path, false, ctx);
+                    ret = actor(path, dir->d_type == DT_DIR, ctx);
                     if (ret != RUE_OK) break;
                 }
                 continue;
