@@ -134,7 +134,7 @@ bool ruRegexSearch(ruRegex rr, const char* original, bool fully, ruList matches,
         ruRetWithCode(code, RUE_PARAMETER_NOT_SET, does);
     }
     regex* re = regexGet(rr, code);
-    if (!re) return NULL;
+    if (!re) return does;
 
     int32_t ret = RUE_OK;
     UErrorCode errorCode = U_ZERO_ERROR;
