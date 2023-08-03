@@ -880,6 +880,13 @@
       <anchor>ga7f8970ea7304cf95817cac910c9070dc</anchor>
       <arglist></arglist>
     </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>RU_WALK_NO_SELF</name>
+      <anchorfile>group__io.html</anchorfile>
+      <anchor>ga4683be3cd4a5ec2a466217a599d370c9</anchor>
+      <arglist></arglist>
+    </member>
     <member kind="typedef">
       <type>struct stat</type>
       <name>ruStat_t</name>

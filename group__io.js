@@ -3,6 +3,7 @@ var group__io =
     [ "RU_WALK_FOLDER_FIRST", "group__io.html#ga9d311d1dbbf9b207dd8e6832178aa5ad", null ],
     [ "RU_WALK_FOLDER_LAST", "group__io.html#ga055a96a5883241e585332496a09cf671", null ],
     [ "RU_WALK_NO_RECURSE", "group__io.html#ga7f8970ea7304cf95817cac910c9070dc", null ],
+    [ "RU_WALK_NO_SELF", "group__io.html#ga4683be3cd4a5ec2a466217a599d370c9", null ],
     [ "entryFilter", "group__io.html#ga96b2df183649f58bd746edc4a0c6161c", null ],
     [ "entryMgr", "group__io.html#gae838891e096d47726baeec65b792fd51", null ],
     [ "ruStat_t", "group__io.html#gae389f0b8ef30d38c2c5ee1be60330ede", null ],
