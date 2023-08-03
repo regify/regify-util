@@ -249,6 +249,10 @@ RUAPI int ruFileRemove(const char* filename);
  * Used by \ref ruFolderWalk to specify whether to not recurse into subfolders.
  */
 #define RU_WALK_NO_RECURSE 0x4
+/**
+ * Used by \ref ruFolderWalk to specify not to process the top level folder.
+ */
+#define RU_WALK_NO_SELF 0x8
 
 
 /**

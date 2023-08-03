@@ -24,7 +24,7 @@
 #define close _close
 #endif
 
-START_TEST ( api ) {
+START_TEST(api) {
     bool ret, exp;
     const char *test = "ruFileExists";
     const char *retText = "%s failed wanted ret '%d' but got '%d'";
@@ -143,7 +143,7 @@ START_TEST ( api ) {
 }
 END_TEST
 
-START_TEST ( filetest ) {
+START_TEST(filetest) {
 
     perm_chars file = makePath("foess");
     bool ret, exp;
@@ -462,7 +462,7 @@ START_TEST ( filetest ) {
 END_TEST
 
 
-START_TEST ( fileopen ) {
+START_TEST(fileopen) {
     int ret, exp, fd;
     FILE *fl;
     const char *test = "ruOpenTmp";
@@ -728,11 +728,88 @@ START_TEST ( fileopen ) {
 }
 END_TEST
 
+static int32_t lister(trans_chars path, bool isFolder, ptr o) {
+    ruList fileLst =  (ruString)o;
+    trans_chars mypath = path + ruStrLen(testBase);
+    alloc_chars str = NULL;
+    if (isFolder) {
+        str = ruDupPrintf(" %s:d", mypath);
+    } else {
+        str = ruDupPrintf(" %s:f", mypath);
+    }
+    ruListAppend(fileLst, str);
+    return RUE_OK;
+}
+
+static void walk(trans_chars run, trans_chars file, int flags, int exp, trans_chars fileExp) {
+    perm_chars retText = "%s failed wanted ret '%d' but got '%d'";
+    perm_chars test = file + ruStrLen(testBase);
+
+    ruList fileLst = ruListNew(ruTypeStrFree());
+    int ret = ruFolderWalk(file, flags, lister, fileLst);
+    fail_unless(exp == ret, retText, test, exp, ret);
+
+    //ruListSort(fileLst);
+    alloc_chars lstr = ruListJoin(fileLst, " ", NULL);
+    alloc_chars fileStr = ruDupPrintf("%s %s", run, lstr);
+    ck_assert_str_eq(fileExp, fileStr);
+    ruFree(lstr);
+    ruFree(fileStr);
+    ruListFree(fileLst);
+}
+
+START_TEST(folderwalk) {
+    int ret, exp;
+    perm_chars test = "ruFolderWalk";
+    perm_chars retText = "%s failed wanted ret '%d' but got '%d'";
+    perm_chars file = NULL;
+    perm_chars fileExp = NULL;
+    ruString fileStr = NULL;
+
+    exp = RUE_PARAMETER_NOT_SET;
+    ret = ruFolderWalk(NULL, 0, NULL, NULL);
+    fail_unless(exp == ret, retText, test, exp, ret);
+
+    ret = ruFilteredFolderWalk(NULL, 0, NULL, NULL, NULL);
+    fail_unless(exp == ret, retText, test, exp, ret);
+
+    file = makePath("walker/");
+    exp = RUE_OK;
+    ret = ruFolderWalk(file, 0, NULL, NULL);
+    fail_unless(exp == ret, retText, test, exp, ret);
+
+    ret = ruFilteredFolderWalk(file, 0, NULL, NULL, NULL);
+    fail_unless(exp == ret, retText, test, exp, ret);
+
+    // sorted
+    fileExp = "NR  /walker/su1/:d  /walker/su2:f";
+    walk("NR", file, RU_WALK_NO_RECURSE, exp, fileExp);
+    fileExp = "NRFF  /walker/:d  /walker/su1/:d  /walker/su2:f";
+    walk("NRFF", file, RU_WALK_NO_RECURSE | RU_WALK_FOLDER_FIRST, exp, fileExp);
+    fileExp = "FF  /walker/:d  /walker/su1/:d  /walker/su1/file1:f  /walker/su2:f";
+    walk("FF", file, RU_WALK_FOLDER_FIRST, exp, fileExp);
+    fileExp = "FFFL  /walker/:d  /walker/su1/:d  /walker/su1/file1:f  /walker/su1/:d  /walker/su2:f  /walker/:d";
+    walk("FFFL", file, RU_WALK_FOLDER_FIRST | RU_WALK_FOLDER_LAST, exp, fileExp);
+    fileExp = "NSFFFL  /walker/su1/:d  /walker/su1/file1:f  /walker/su1/:d  /walker/su2:f";
+    walk("NSFFFL", file, RU_WALK_NO_SELF | RU_WALK_FOLDER_FIRST | RU_WALK_FOLDER_LAST, exp, fileExp);
+    fileExp = "NSFF  /walker/su1/:d  /walker/su1/file1:f  /walker/su2:f";
+    walk("NSFF", file, RU_WALK_NO_SELF | RU_WALK_FOLDER_FIRST, exp, fileExp);
+    fileExp = "NRFL  /walker/su1/:d  /walker/su2:f  /walker/:d";
+    walk("NRFL", file, RU_WALK_NO_RECURSE | RU_WALK_FOLDER_LAST, exp, fileExp);
+    fileExp =  "FL  /walker/su1/file1:f  /walker/su1/:d  /walker/su2:f  /walker/:d";
+    walk("FL", file, RU_WALK_FOLDER_LAST, exp, fileExp);
+    fileExp =  "NSFL  /walker/su1/file1:f  /walker/su1/:d  /walker/su2:f";
+    walk("NSFL", file, RU_WALK_NO_SELF | RU_WALK_FOLDER_LAST, exp, fileExp);
+    fileExp = "0  /walker/su1/file1:f  /walker/su2:f";
+    walk("0", file, 0, exp, fileExp);
+}
+END_TEST
 
 TCase* ioTests ( void ) {
     TCase *tcase = tcase_create ( "io" );
-    tcase_add_test ( tcase, api );
-    tcase_add_test ( tcase, filetest );
-    tcase_add_test ( tcase, fileopen );
+    tcase_add_test(tcase, api);
+    tcase_add_test(tcase, filetest);
+    tcase_add_test(tcase, fileopen);
+    tcase_add_test(tcase, folderwalk);
     return tcase;
 }

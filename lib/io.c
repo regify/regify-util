@@ -775,7 +775,7 @@ static int32_t folderWalk(trans_chars folder, uint32_t flags,
     }
 
     if (isFolder) {
-        if (flags & RU_WALK_FOLDER_FIRST) {
+        if ((flags & (RU_WALK_FOLDER_FIRST|RU_WALK_NO_SELF)) == RU_WALK_FOLDER_FIRST) {
             if (!filter || !filter(dirname, basename, isFolder, ctx)) {
                 if (actor) {
                     ret = actor(folder, isFolder, ctx);
@@ -887,7 +887,7 @@ static int32_t folderWalk(trans_chars folder, uint32_t flags,
                 }
                 continue;
             }
-            ret = folderWalk(path, flags, filter, actor, ctx);
+            ret = folderWalk(path, flags &~RU_WALK_NO_SELF, filter, actor, ctx);
             if (ret != RUE_OK) break;
         }
 #ifdef ITS_OSX
@@ -897,7 +897,8 @@ static int32_t folderWalk(trans_chars folder, uint32_t flags,
         closedir(d);
 #endif
     }
-    if ((flags & RU_WALK_FOLDER_LAST) || !isFolder) {
+    if (!isFolder ||
+        (flags & (RU_WALK_FOLDER_LAST|RU_WALK_NO_SELF)) == RU_WALK_FOLDER_LAST) {
         if (ret == RUE_OK) {
             if (!filter || !filter(dirname, basename, isFolder, ctx)) {
                 if (actor) ret = actor(folder, isFolder, ctx);
@@ -947,6 +948,7 @@ alloc_chars fixSlashes(perm_chars* filePath) {
 
 RUAPI int32_t ruFilteredFolderWalk(trans_chars folder, uint32_t flags,
                                    entryFilter filter, entryMgr actor, ptr ctx) {
+    if (!folder) return RUE_PARAMETER_NOT_SET;
     alloc_chars path = fixSlashes(&folder);
     int32_t ret = folderWalk(folder, flags, filter, actor, ctx);
     ruFree(path);
@@ -954,6 +956,7 @@ RUAPI int32_t ruFilteredFolderWalk(trans_chars folder, uint32_t flags,
 }
 
 RUAPI int32_t ruFolderWalk(trans_chars folder, uint32_t flags, entryMgr actor, ptr ctx) {
+    if (!folder) return RUE_PARAMETER_NOT_SET;
     alloc_chars path = fixSlashes(&folder);
     int32_t ret = folderWalk(folder, flags, NULL, actor, ctx);
     ruFree(path);
