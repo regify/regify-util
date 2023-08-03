@@ -837,7 +837,7 @@ static int32_t folderWalk(trans_chars folder, uint32_t flags,
                 }
                 continue;
             }
-            ret = folderWalk(path, flags, filter, actor, ctx);
+            ret = folderWalk(path, flags &~RU_WALK_NO_SELF, filter, actor, ctx);
             if (ret != RUE_OK) break;
 
         } while (FindNextFileW(hFind, &ffd) != 0);

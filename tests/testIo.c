@@ -737,6 +737,7 @@ static int32_t lister(trans_chars path, bool isFolder, ptr o) {
     } else {
         str = ruDupPrintf(" %s:f", mypath);
     }
+    ruStrByteReplace(str, '\\', '/');
     ruListAppend(fileLst, str);
     return RUE_OK;
 }
