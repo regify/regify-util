@@ -153,6 +153,7 @@ void ruClearError(void);
 #define MagicTsc            2310
 #define MagicJson           2311
 #define MagicTypeSpec       2312
+#define MagicRegex          2313
 // cleaner.c #define MagicCleaner 2410
 
 /*
@@ -192,6 +193,11 @@ typedef struct tsc_ {
     int64_t count;  // counter
 } tsc;
 
+typedef struct regex_ {
+    ru_uint type;
+    ruMutex mux;
+    URegularExpression* ex;
+} regex;
 /*
  * JSON
  */

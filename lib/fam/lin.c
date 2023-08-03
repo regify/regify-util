@@ -124,7 +124,7 @@ static int watcher(trans_chars fullPath, bool isDir, void *ctx) {
     famCtx* fctx = (famCtx*)ctx;
     if (!isDir) return RUE_OK;
     int32_t wd = inotify_add_watch(fctx->id, fullPath, IN_MY_EVENTS);
-    if ( wd < 0) {
+    if (wd < 0) {
         ruCritLogf("Failed adding watch on '%s' errno: %d - %s",
                    fullPath, errno, strerror(errno));
         return RUE_CANT_OPEN_FILE;
@@ -262,7 +262,7 @@ static void fam_processEv(famCtx* fctx, struct inotify_event* ev, int* pollTimeo
     do {
         if (ev->mask & IN_DELETE_SELF) {
             ret = ruMapGet(fctx->wdPath, &ev->wd, &path_);
-            fam_dbg("Removing watch from [%s]", path_);
+            ruDbgLogf("Removing watch from [%s]", path_);
             ruMapRemove(fctx->wdPath, &ev->wd, NULL);
             ruMapRemove(fctx->pathWd, path_, NULL);
             inotify_rm_watch(fctx->id, ev->wd);
@@ -429,7 +429,7 @@ static void* fam_runThread(void* ctx) {
     ruInfoLogf("Opened inotify handle in %s", fctx->topDir);
     int32_t ret = fam_watchDir(fctx, fctx->topDir);
     if (ret == RUE_OK) {
-        fam_dbg("Loaded existing directory structure %d.", fctx->id);
+        fam_dbg("Loaded existing directory structure under id: %d.", fctx->id);
         fctx->pfd.fd = fctx->id;
         fctx->pfd.events = POLLIN | POLLPRI;
         fctx->hasInit = true;

@@ -21,6 +21,8 @@
  */
 #include "lib.h"
 
+ruMakeTypeGetter(regex, MagicRegex)
+
 RUAPI ruRegex ruRegexNew(const char* pattern, ruRegexFlag flags, int32_t* code) {
     ruClearError();
 
@@ -38,21 +40,28 @@ RUAPI ruRegex ruRegexNew(const char* pattern, ruRegexFlag flags, int32_t* code) 
         ruRetWithCode(code, RUE_INVALID_PARAMETER, NULL);
     }
 
-    URegularExpression* regex  = uregex_open(upat, -1, flags, &upe, &errorcode);
+    URegularExpression* ure  = uregex_open(upat, -1, flags, &upe, &errorcode);
     ruFree(upat);
     if (U_FAILURE(errorcode)) {
         // Handle any syntax errors in the regular expression here
         ruSetError("Syntax error in regex? error=%s", u_errorName(errorcode));
-        uregex_close(regex);
+        uregex_close(ure);
         ruRetWithCode(code, RUE_INVALID_PARAMETER, NULL);
     }
-    ruRetWithCode(code, RUE_OK, (ruRegex)regex);
+    regex* re = ruMalloc0(1, regex);
+    re->type = MagicRegex;
+    re->mux = ruMutexInit();
+    re->ex = ure;
+    ruRetWithCode(code, RUE_OK, (ruRegex)re);
 }
 
 RUAPI ruRegex ruRegexFree(ruRegex rr) {
     ruClearError();
-    if (!rr) return NULL;
-    uregex_close((URegularExpression*)rr);
+    regex* re = regexGet(rr, NULL);
+    if (!re) return NULL;
+    ruMutexFree(re->mux);
+    uregex_close((URegularExpression*)re->ex);
+    ruFree(re);
     return NULL;
 }
 
@@ -68,31 +77,37 @@ RUAPI char* ruRegexReplace(ruRegex rr, const char* original, const char* replace
         char *res = ruMalloc0(1, char);
         ruRetWithCode(code, RUE_OK, res);
     }
+    regex* re = regexGet(rr, code);
+    if (!re) return NULL;
+
     int32_t ret = RUE_OK, dlen = 0;
     UErrorCode errorCode = U_ZERO_ERROR;
-    URegularExpression *regex = (URegularExpression*)rr;
     UChar *urep = NULL, *usrc = NULL, *udst = NULL;
 
     do {
+        ruMutexLock(re->mux);
         usrc = charToUni(original);
         if (!usrc) {
             ret = RUE_INVALID_PARAMETER;
             break;
         }
-        uregex_setText(regex, usrc, -1, &errorCode);
+        uregex_setText(re->ex, usrc, -1, &errorCode);
 
         urep = charToUni(replacement);
         if (!urep) {
             ret = RUE_INVALID_PARAMETER;
             break;
         }
-        int32_t needed = uregex_replaceAll(regex, urep, -1, udst, dlen,
-                                           &errorCode);
+        int32_t needed = uregex_replaceAll(re->ex, urep,
+                                           -1, udst,
+                                           dlen,&errorCode);
         dlen = needed + 1; // terminator
         if (errorCode == U_BUFFER_OVERFLOW_ERROR) {
             udst = ruMalloc0(dlen, UChar);
             errorCode = U_ZERO_ERROR;
-            uregex_replaceAll(regex, urep, -1, udst, dlen, &errorCode);
+            uregex_replaceAll(re->ex, urep,
+                              -1, udst,
+                              dlen, &errorCode);
         }
         if (U_FAILURE(errorCode) || udst[needed] != 0) {
             ruSetError("error in uregex_replaceAll error=%s",
@@ -108,6 +123,7 @@ RUAPI char* ruRegexReplace(ruRegex rr, const char* original, const char* replace
     if (ret == RUE_OK) {
         out = uniToChar(udst);
     }
+    ruMutexUnlock(re->mux);
     ruFree(udst);
     ruRetWithCode(code, ret, out);
 }
@@ -117,23 +133,26 @@ bool ruRegexSearch(ruRegex rr, const char* original, bool fully, ruList matches,
     if (!rr || !original) {
         ruRetWithCode(code, RUE_PARAMETER_NOT_SET, does);
     }
+    regex* re = regexGet(rr, code);
+    if (!re) return NULL;
+
     int32_t ret = RUE_OK;
     UErrorCode errorCode = U_ZERO_ERROR;
-    URegularExpression *regex = (URegularExpression*)rr;
     UChar *usrc = NULL, *ubuf = NULL;
 
     do {
+        ruMutexLock(re->mux);
         usrc = charToUni(original);
         if (!usrc) {
             ret = RUE_INVALID_PARAMETER;
             break;
         }
-        uregex_setText(regex, usrc, -1, &errorCode);
+        uregex_setText(re->ex, usrc, -1, &errorCode);
 
         if (fully) {
-            does = uregex_matches64(regex, 0, &errorCode);
+            does = uregex_matches64(re->ex, 0, &errorCode);
         } else {
-            does = uregex_find64(regex, 0, &errorCode);
+            does = uregex_find64(re->ex, 0, &errorCode);
         }
         if (U_FAILURE(errorCode)) {
             ruSetError("error in uregex_matches64 error=%s",
@@ -142,7 +161,7 @@ bool ruRegexSearch(ruRegex rr, const char* original, bool fully, ruList matches,
             break;
         }
         if (!does || !matches) break;
-        int32_t cnt = uregex_groupCount(regex, &errorCode);
+        int32_t cnt = uregex_groupCount(re->ex, &errorCode);
         if (U_FAILURE(errorCode)) {
             ruSetError("error in uregex_groupCount error=%s",
                        u_errorName(errorCode));
@@ -150,7 +169,9 @@ bool ruRegexSearch(ruRegex rr, const char* original, bool fully, ruList matches,
             break;
         }
         for (int i = 0; i <= cnt; i++) {
-            int32_t needLen = uregex_group(regex, i, NULL, 0, &errorCode);
+            int32_t needLen = uregex_group(re->ex, i,
+                                           NULL, 0,
+                                           &errorCode);
             if (U_BUFFER_OVERFLOW_ERROR != errorCode) {
                 ruSetError("error in uregex_group error=%s",
                            u_errorName(errorCode));
@@ -160,7 +181,9 @@ bool ruRegexSearch(ruRegex rr, const char* original, bool fully, ruList matches,
             needLen++; // terminator
             ubuf = ruMalloc0(needLen, UChar);
             errorCode = U_ZERO_ERROR;
-            uregex_group(regex, i, ubuf, needLen*(int32_t)sizeof(UChar), &errorCode);
+            uregex_group(re->ex, i, ubuf,
+                         needLen*(int32_t)sizeof(UChar),
+                         &errorCode);
             if (U_FAILURE(errorCode)) {
                 ruSetError("error in uregex_group error=%s",
                            u_errorName(errorCode));
@@ -174,6 +197,7 @@ bool ruRegexSearch(ruRegex rr, const char* original, bool fully, ruList matches,
     } while(0);
     if (ret != RUE_OK) does = false;
 
+    ruMutexUnlock(re->mux);
     ruFree(ubuf);
     ruFree(usrc);
     ruRetWithCode(code, ret, does);
