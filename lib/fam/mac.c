@@ -21,6 +21,7 @@
  */
 // Darwin file access monitoring functions
 #include "../lib.h"
+#include <dispatch/dispatch.h>
 #include <CoreServices/CoreServices.h>
 
 //#define fam_dbg
@@ -74,7 +75,7 @@ typedef struct {
     // FSEventStream and collateral pointers
     FSEventStreamRef stream;
     FSEventStreamContext fsc;
-    CFRunLoopRef runLoop;
+    dispatch_queue_t dq;
     CFStringRef watchPath;
     CFArrayRef pathsToWatch;
 } famCtx;
@@ -245,7 +246,7 @@ static int32_t handleFile(famCtx *fctx, trans_chars path,
                 // Modify because editors save to temp files and move to the
                 // initial file. That changes the inode, so we need to update it
                 fam_dbg("path: '%s' has a new inode: %ld", path, inode);
-                ruMapPut(fctx->pathInode, path, inode);
+                ruMapPut(fctx->pathInode, path, &inode);
                 if (mInode) {
                     ruMapRemove(fctx->inodePath, &mInode, NULL);
                 }
@@ -279,7 +280,7 @@ static int32_t handleFile(famCtx *fctx, trans_chars path,
             }
 
             fam_dbg("add mappings: '%s' inode: %ld", path, inode);
-            ruMapPut(fctx->pathInode, path, inode);
+            ruMapPut(fctx->pathInode, path, &inode);
             ruMapPut(fctx->inodePath, &inode, path);
         }
 
@@ -416,10 +417,8 @@ static ptr runThread(ptr o) {
     famCtx *fctx = (famCtx*)o;
     ruThreadSetName(fctx->name);
     ruInfoLog("starting");
-    fctx->runLoop = CFRunLoopGetCurrent();
-    FSEventStreamScheduleWithRunLoop(fctx->stream,
-                                     fctx->runLoop,
-                                     kCFRunLoopDefaultMode);
+    fctx->dq = dispatch_queue_create("FSMonitor", NULL);
+    FSEventStreamSetDispatchQueue(fctx->stream, fctx->dq);
     if (!FSEventStreamStart(fctx->stream)) {
         ruCritLog("could not start FSEvent stream");
         return NULL;
@@ -489,7 +488,7 @@ static void stopStream(famCtx *fctx) {
     ruVerbLogf("Stopping stream 0x%x", fctx->stream);
     FSEventStreamStop(fctx->stream);
     FSEventStreamInvalidate(fctx->stream);
-    CFRunLoopStop(fctx->runLoop);
+    if (fctx->dq) dispatch_release(fctx->dq);
     ruVerbLog("RunLoop stopped");
 }
 

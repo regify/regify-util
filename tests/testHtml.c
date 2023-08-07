@@ -41,7 +41,11 @@ END_TEST
 #define TIDY "Windows version 5.8.0"
 #else
 #define LF "\n"
+#ifdef MAC_OS_X
+#define TIDY "Apple macOS version 5.8.0"
+#else
 #define TIDY "Linux version 5.8.0"
+#endif
 #endif
 
 START_TEST (run) {

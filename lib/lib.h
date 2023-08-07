@@ -88,6 +88,11 @@ extern "C" {
 #include <yajl/yajl_gen.h>
 #include <tidy.h>
 #include <tidybuffio.h>
+#if defined(MAC_OS_X)
+/* Undo tidy side effects */
+#undef strcasecmp
+#endif
+
 #ifdef _WIN32
 // undo nasty tidy side effects
 #undef stat
