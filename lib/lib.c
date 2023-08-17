@@ -92,7 +92,15 @@ RUAPI ru_pid ruProcessId(void) {
 }
 
 RUAPI int32_t ruRunProg(const char **argv, sec_t timeout) {
-//    ruDbgLogf("-> run: %s timeout: %d", argv[0], timeout);
+    bool runDbg = 0;
+    if (runDbg) {
+        ruString com = ruStringNewf("-> run: ");
+        for (int i = 0; argv[i]; i++) {
+            ruStringAppendf(com, " '%s'", argv[i]);
+        }
+        ruDbgLogf("%s timeout: %d", ruStringGetCString(com), timeout);
+        ruStringFree(com, false);
+    }
 #ifdef _WIN32
     if (timeout == RU_NO_TIMEOUT) {
         int ret = (int)_spawnve(_P_WAIT, argv[0], argv, NULL);
@@ -174,7 +182,7 @@ RUAPI int32_t ruRunProg(const char **argv, sec_t timeout) {
     }
 
     // the parent
-//    ruVerbLogf("%s child pid: %d", argv[0], pid);
+    if (runDbg) ruVerbLogf("%s child pid: %d", argv[0], pid);
     if (timeout == RU_NON_BLOCK) {
         // hang a little trying to get the status
         ruSleepMs(10);
@@ -196,13 +204,15 @@ RUAPI int32_t ruRunProg(const char **argv, sec_t timeout) {
         ruSleep(1);
     }
 
-//    ruDbgLogf("%s WEXITSTATUS %d WIFEXITED %d [status %d]",
-//              argv[0], WEXITSTATUS(status), WIFEXITED(status), status);
+    if (runDbg) {
+        ruDbgLogf("%s WEXITSTATUS %d WIFEXITED %d [status %d]",
+                  argv[0], WEXITSTATUS(status), WIFEXITED(status), status);
+    }
     if (WEXITSTATUS(status) == chldfail) {
         ruCritLogf("<- child execve failed ret: %d", RUE_RUN_FAILED);
         return RUE_RUN_FAILED;
     }
-//    ruVerbLogf("<- %s returned: %d", argv[0], WEXITSTATUS(status));
+    if (runDbg) ruVerbLogf("<- %s returned: %d", argv[0], WEXITSTATUS(status));
     return WEXITSTATUS(status);
 #endif
 }

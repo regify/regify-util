@@ -132,7 +132,7 @@ static int watcher(trans_chars fullPath, bool isDir, void *ctx) {
     alloc_chars pathCopy = copyNoSlash(fullPath);
     ruMapPut(fctx->wdPath, &wd, pathCopy);
     ruMapPut(fctx->pathWd, pathCopy, &wd);
-    ruDbgLogf("Added %s with handle %d", pathCopy, wd);
+    ruDbgLogf("Added %s with handle %d", fullPath, wd);
     ruFree(pathCopy);
     return RUE_OK;
 }

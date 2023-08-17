@@ -1130,7 +1130,8 @@ RUAPI perm_chars ruFileExtension(perm_chars filePath) {
     ruClearError();
     if (!filePath) return NULL;
     perm_chars pfile = filePath + strlen(filePath)-1;
-    for (; pfile >= filePath; pfile--) {
+    if (pfile < filePath) return NULL;
+    for (; pfile > filePath; pfile--) {
 #ifdef _WIN32
         if (*pfile == '/' || *pfile == '\\' ) {
 #else

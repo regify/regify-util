@@ -27,6 +27,8 @@
 #define watchDir topDir "/watch"
 #define d1 watchDir "/d1"
 #define d2 watchDir "/d2"
+#define doe watchDir "/dö"
+#define doefoe1 doe "/foö¹"
 #define d1foo d1 "/foo"
 #define d1bar d1 "/bar"
 #define d1d2 d1 "/d2"
@@ -215,7 +217,7 @@ static void addEvent(famTest* ft, int eventType, char* filePath, char* destPath)
 static bool testit(famTest* ctx) {
 
     // create folder
-    ruInfoLog( "create folder d2");
+    ruInfoLog("create folder d2");
     addEvent(ctx, RU_FAM_CREATED, d2, NULL);
     insureDir(d2, true);
     if (!checkQueue(ctx, "create folder " d2)) return false;
@@ -289,6 +291,17 @@ static bool testit(famTest* ctx) {
 
 //<editor-fold desc="linux">
 #ifdef __linux__
+    ruInfoLog("create folder dö");
+    addEvent(ctx, RU_FAM_CREATED, doe, NULL);
+    insureDir(doe, true);
+    if (!checkQueue(ctx, "create folder " doe)) return false;
+
+    // create file
+    addEvent(ctx, RU_FAM_CREATED, doefoe1, NULL);
+    addEvent(ctx, RU_FAM_MODIFIED, doefoe1, NULL);
+    writeFile(doefoe1, "foo was here ");
+    checkQueue(ctx, "write " doefoe1);
+
     // create file
     addEvent(ctx, RU_FAM_CREATED, d1foo, NULL);
     addEvent(ctx, RU_FAM_MODIFIED, d1foo, NULL);
@@ -338,6 +351,15 @@ static bool testit(famTest* ctx) {
     killFile(d1);
     checkQueue(ctx, "delete folder " d1);
 
+    ruVerbLog("rm dö/foö¹");
+    addEvent(ctx, RU_FAM_DELETED, doefoe1, NULL);
+    killFile(doefoe1);
+    checkQueue(ctx, "delete file " doefoe1);
+
+    ruVerbLog("rm dö");
+    addEvent(ctx, RU_FAM_DELETED, doe, NULL);
+    killFile(doe);
+    checkQueue(ctx, "delete folder " doe);
 
 #endif
 //</editor-fold>
@@ -422,7 +444,7 @@ static bool testit(famTest* ctx) {
     return true;
 }
 
-START_TEST (run) {
+START_TEST(run) {
     ruFamCtx famCtx = NULL;
     ruZeroedStruct(famTest, ctx);
     ctx.events = ruListNew(ruTypePtr(ruFamEventFree));
