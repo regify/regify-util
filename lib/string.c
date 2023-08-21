@@ -113,7 +113,7 @@ RUAPI alloc_chars ruStrReplace(trans_chars instr, trans_chars search,
 }
 
 RUAPI ruString ruStringNew(const char* instr) {
-    return ruStringNewn(instr, 0);
+    return ruStringNewn(instr, ruStrLen(instr));
 }
 
 RUAPI ruString ruStringNewn(const char* instr, rusize size) {

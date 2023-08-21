@@ -149,6 +149,19 @@ START_TEST ( run ) {
     ret = ruStringReset(rs);
     fail_unless(ret == exp, retText, test, exp, ret);
 
+    want = "foo";
+    test = "ruStringNew";
+    rs = ruStringNew("foo");
+    fail_if(rs == NULL, retText, test, NULL, rs);
+    ck_assert_str_eq(ruStringGetCString(rs), want);
+
+    explen = 3;
+    len = ruStringLen(rs, &ret);
+    fail_unless(explen == len, retText, test, explen, len);
+
+    ret = ruStringReset(rs);
+    fail_unless(ret == exp, retText, test, exp, ret);
+
     explen = 0;
     len = ruStringLen(rs, &ret);
     fail_unless(ret == exp, retText, test, exp, ret);
