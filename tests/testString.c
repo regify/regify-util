@@ -136,13 +136,13 @@ START_TEST ( run ) {
     ck_assert_str_eq(ruStringGetCString(rs), want);
     ruStringFree(rs, false);
 
-    want = "foo";
+    want = "fo";
     test = "ruStringNewn";
     rs = ruStringNewn("foo", 2);
     fail_if(rs == NULL, retText, test, NULL, rs);
     ck_assert_str_eq(ruStringGetCString(rs), want);
 
-    rusize explen = 3;
+    rusize explen = 2;
     rusize len = ruStringLen(rs, &ret);
     fail_unless(explen == len, retText, test, explen, len);
 

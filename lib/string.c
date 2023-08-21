@@ -122,17 +122,28 @@ RUAPI ruString ruStringNewn(const char* instr, rusize size) {
         ruSetError("Ignoring bogus invocation with NULL instr and 0 size");
         return NULL;
     }
-    rusize len = size, slen = 0;
+    // mem and string length
+    rusize mlen = size, slen = 0;
     if (instr) {
-        len = slen = strlen(instr) + 1;
+        // length of given string
+        slen = strlen(instr);
     }
-    if (size > len) len = size;
+    // copy length starts with string length
+    rusize clen = slen;
+    if (size < clen) {
+        // size used for trimming
+        clen = size;
+    }
+    // we need at least clen + terminator
+    if (mlen <= clen) mlen = clen + 1;
+    //if (size > memsz) memsz = size;
     String *str = ruMalloc0(1, String);
     str->type = MagicString;
-    str->start = ruMalloc0(len, char);
+    str->len = mlen;
+    str->start = ruMalloc0(str->len, char);
     if (instr) {
-        strncpy(str->start, instr, slen);
-        str->idx = slen - 1; // - \0
+        strncpy(str->start, instr, clen);
+        str->idx = clen;
     }
     return (ruString)str;
 }

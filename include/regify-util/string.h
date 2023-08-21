@@ -54,7 +54,8 @@ RUAPI ruString ruStringNew(const char* instr);
 /**
  * \brief Creates a new String object of initial size from a string.
  * @param instr String to start object with.
- * @param size Initial buffer to allocate.
+ * @param size Initial buffer to allocate. When size is less than the length of
+ *             instr, only size bytes of instr will be copied.
  * @return The newly created \ref ruString object to be freed with \ref
  *         ruStringFree or NULL on error. Check \ref ruLastError in case of NULL;
  */
