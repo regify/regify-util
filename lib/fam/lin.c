@@ -143,7 +143,7 @@ static int32_t fam_watchDir(famCtx *fctx, char* filePath) {
 }
 
 static int32_t fam_unwatchDir(famCtx* fctx, char* filePath) {
-    fam_dbg("Unwatch: %s", filePath);
+    ruDbgLogf("Unwatch: %s", filePath);
     // yank list to avoid concurrent modifications
     ruList yankies = ruListNew(NULL);
     int32_t ret;
@@ -171,8 +171,8 @@ static int32_t fam_unwatchDir(famCtx* fctx, char* filePath) {
     return RUE_OK;
 }
 
-static int32_t fam_renameDir(famCtx* fctx, char* srcPath, char* destPath) {
-    fam_dbg("Rename:%s to:%s", srcPath, destPath);
+static int32_t fam_renameDir(famCtx* fctx, char* oldPath, char* newPath) {
+    fam_dbg("Rename:%s to:%s", oldPath, newPath);
     // iterate over wdPath map
     // put wd:newPath entries in newWdPaths
     // rename pathWd path:wd -> newPath:wd
@@ -182,7 +182,7 @@ static int32_t fam_renameDir(famCtx* fctx, char* srcPath, char* destPath) {
 
     // values are transferred to fctx->wdPath, so we do not free it in this map
     ruMap newWdPaths = ruMapNew(ruTypeInt32(), ruTypeStrFree());
-    rusize len = strlen(srcPath);
+    rusize oldLen = strlen(oldPath);
 
     int32_t wd;
     perm_chars path = NULL;
@@ -190,15 +190,15 @@ static int32_t fam_renameDir(famCtx* fctx, char* srcPath, char* destPath) {
     for (ret = ruMapFirst(fctx->wdPath, &wd, &path); ret == RUE_OK;
          ret = ruMapNext(fctx->wdPath, &wd, &path)) {
 
-        if (ruStrStartsWith(path, srcPath, NULL)) {
-            alloc_chars newPath = ruDupPrintf("%s%s", destPath, (srcPath + len));
-            trimEnd(newPath, "/");
-            fam_dbg("Renaming pathWd handle %ld from '%s' to '%s'", wd, path, newPath);
+        if (ruStrStartsWith(path, oldPath, NULL)) {
+            alloc_chars dstPath = ruDupPrintf("%s%s", newPath, (path + oldLen));
+            trimEnd(dstPath, "/");
+            ruDbgLogf("Renaming pathWd handle %ld from '%s' to '%s'", wd, path, dstPath);
             // store for updating later
-            ruMapPut(newWdPaths, &wd, newPath);
+            ruMapPut(newWdPaths, &wd, dstPath);
             // change the value in the other map now
             ruMapRemove(fctx->pathWd, path, NULL);
-            ruMapPut(fctx->pathWd, newPath, &wd);
+            ruMapPut(fctx->pathWd, dstPath, &wd);
         }
     }
 

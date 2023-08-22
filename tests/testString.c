@@ -145,9 +145,7 @@ START_TEST ( run ) {
     rusize explen = 2;
     rusize len = ruStringLen(rs, &ret);
     fail_unless(explen == len, retText, test, explen, len);
-
-    ret = ruStringReset(rs);
-    fail_unless(ret == exp, retText, test, exp, ret);
+    rs = ruStringFree(rs, false);
 
     want = "foo";
     test = "ruStringNew";

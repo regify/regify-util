@@ -333,6 +333,15 @@ RUAPI ruList ruJsonKeys(ruJson rj, int32_t* status);
 RUAPI perm_chars ruJsonKeyStr(ruJson rj, trans_chars key, int32_t* status);
 
 /**
+ * Return string version of the key element from underlying \ref ruJson map.
+ * @param rj \ref ruJson in question.
+ * @param key key under which value resides
+ * @param status where the \ref RUE_OK on success or an error code will be stored.
+ * @return string version of value in question. Caller must free.
+ */
+RUAPI alloc_chars ruJsonKeyToStr(ruJson rj, trans_chars key, int32_t* status);
+
+/**
  * Return string copy of the key element from underlying \ref ruJson map reference.
  * @param rj \ref ruJson in question.
  * @param key key under which string resides

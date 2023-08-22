@@ -332,10 +332,20 @@ START_TEST(get) {
     fail_unless(ret == exp, retText, exp, ret);
     fail_unless(edb == db, retText, edb, db);
 
+    exp = RUE_INVALID_PARAMETER;
+    str = ruJsonKeyToStr(jsn, "map", &ret);
+    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(NULL == str, retText, NULL, str);
+
+    str = ruJsonKeyToStr(jsn, "arr", &ret);
+    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(NULL == str, retText, NULL, str);
+
     jsn = ruJsonFree(jsn);
     fail_unless(NULL == jsn, retText, NULL, jsn);
 
     // "2342"
+    exp = RUE_OK;
     jsonStr = "\"2342\"";
     jsn = ruJsonParse(jsonStr, &ret);
     fail_if(NULL == jsn, retText, NULL, jsn);
@@ -361,6 +371,38 @@ START_TEST(get) {
     i64 = ruJsonInt(jsn, &ret);
     fail_unless(ret == exp, retText, exp, ret);
     fail_unless(e64 == i64, retText, e64, i64);
+
+    jsn = ruJsonFree(jsn);
+    fail_unless(NULL == jsn, retText, NULL, jsn);
+
+    jsonStr = "{\"bool1\":true,\"bool0\":false,\"num\":1,\"decimal\":1.0,\"nada\":null}";
+    jsn = ruJsonParse(jsonStr, &ret);
+    fail_if(NULL == jsn, retText, NULL, jsn);
+    fail_unless(ret == exp, retText, exp, ret);
+
+    alloc_chars val = ruJsonKeyToStr(jsn, "bool1", &ret);
+    fail_unless(ret == exp, retText, exp, ret);
+    ck_assert_str_eq("true", val);
+    ruFree(val);
+
+    val = ruJsonKeyToStr(jsn, "bool0", &ret);
+    fail_unless(ret == exp, retText, exp, ret);
+    ck_assert_str_eq("false", val);
+    ruFree(val);
+
+    val = ruJsonKeyToStr(jsn, "num", &ret);
+    fail_unless(ret == exp, retText, exp, ret);
+    ck_assert_str_eq("1", val);
+    ruFree(val);
+
+    val = ruJsonKeyToStr(jsn, "decimal", &ret);
+    fail_unless(ret == exp, retText, exp, ret);
+    ck_assert_str_eq("1.000000", val);
+    ruFree(val);
+
+    val = ruJsonKeyToStr(jsn, "nada", &ret);
+    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(NULL == val, retText, NULL, val);
 
     jsn = ruJsonFree(jsn);
     fail_unless(NULL == jsn, retText, NULL, jsn);

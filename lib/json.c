@@ -81,15 +81,44 @@ static int64_t parseNum(yajl_val v, int32_t* status) {
     }
 }
 
+static alloc_chars toString(yajl_val v, int32_t* status) {
+    alloc_chars out = NULL;
+    if(YAJL_IS_INTEGER(v)) {
+        out = ruDupPrintf("%ld", YAJL_GET_INTEGER(v));
+        ruVerbLogf("returning integer '%s'", out);
+    } else if (YAJL_IS_DOUBLE(v)) {
+        out = ruDupPrintf("%f", YAJL_GET_DOUBLE(v));
+        ruVerbLogf("returning float '%s'", out);
+    } else if (YAJL_IS_TRUE(v)) {
+        out = ruStrDup("true");
+        ruVerbLogf("returning boolean '%s'", out);
+    } else if (YAJL_IS_FALSE(v)) {
+        out = ruStrDup("false");
+        ruVerbLogf("returning boolean '%s'", out);
+    } else if(YAJL_IS_STRING(v)) {
+        out = ruStrDup(YAJL_GET_STRING(v));
+        ruVerbLogf("returning string '%s'", out);
+    } else if (YAJL_IS_NULL(v)) {
+        ruVerbLog("returning NULL");
+    } else {
+        ruVerbLog("returning nothing for complex types");
+        ruRetWithCode(status, RUE_INVALID_PARAMETER, out);
+    }
+    ruRetWithCode(status, RUE_OK, out);
+}
+
 static yajl_val jsonKey(ruJson rj, trans_chars key, yajl_type type, int32_t* status) {
     yajl_val node = getYajlVal(rj, status);
     if (!node) return NULL;
     if (!key) ruRetWithCode(status, RUE_PARAMETER_NOT_SET, NULL);
     const char * path[] = { key, (const char *) 0 };
     yajl_val v = yajl_tree_get(node, path, type);
-    if (v) ruRetWithCode(status, RUE_OK, v);
+    if (v) {
+        ruVerbLogf("returning key '%s'", key);
+        ruRetWithCode(status, RUE_OK, v);
+    }
 
-    ruVerbLogf("no %s specified", key);
+    ruVerbLogf("key '%s' not specified or wrong type", key);
     ruRetWithCode(status, RUE_FILE_NOT_FOUND, NULL);
 }
 
@@ -117,7 +146,7 @@ static perm_chars nodeStr(yajl_val node, int32_t* status) {
         ruRetWithCode(status, RUE_INVALID_PARAMETER, out);
     }
     out = YAJL_GET_STRING(node);
-    ruVerbLogf("returning %s" , out);
+    ruVerbLogf("returning '%s'" , out);
     ruRetWithCode(status, RUE_OK, out);
 }
 
@@ -541,6 +570,12 @@ RUAPI perm_chars ruJsonKeyStr(ruJson rj, trans_chars key, int32_t* status) {
     yajl_val v = jsonKey(rj, key, yajl_t_string, status);
     if (!v) return NULL;
     return nodeStr(v, status);
+}
+
+RUAPI alloc_chars ruJsonKeyToStr(ruJson rj, trans_chars key, int32_t* status) {
+    yajl_val v = jsonKey(rj, key, yajl_t_any, status);
+    if (!v) return NULL;
+    return toString(v, status);
 }
 
 RUAPI alloc_chars ruJsonKeyStrDup(ruJson rj, trans_chars key, int32_t* status) {
