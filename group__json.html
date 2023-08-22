@@ -158,6 +158,8 @@ Functions</h2></td></tr>
 <tr class="separator:gaaad182ea9f38a295451be37307445f8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gad251ebb6d90852bdb4065c540b245301"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__misc.html#ga7dd744dc0ee350f7de2c38f51f5c0bbe">perm_chars</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__json.html#gad251ebb6d90852bdb4065c540b245301">ruJsonKeyStr</a> (<a class="el" href="group__json.html#gac1a01d0cd3ab047d989a7cdd1b5bfc52">ruJson</a> rj, <a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> key, int32_t *status)</td></tr>
 <tr class="separator:gad251ebb6d90852bdb4065c540b245301"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga510b7bae2b3a7de50a03cea6594ef5db"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__misc.html#ga972d4f4f858964bb2381d186ea96d88d">alloc_chars</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__json.html#ga510b7bae2b3a7de50a03cea6594ef5db">ruJsonKeyToStr</a> (<a class="el" href="group__json.html#gac1a01d0cd3ab047d989a7cdd1b5bfc52">ruJson</a> rj, <a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> key, int32_t *status)</td></tr>
+<tr class="separator:ga510b7bae2b3a7de50a03cea6594ef5db"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gae920c3294bafdc141e314079a54d4234"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__misc.html#ga972d4f4f858964bb2381d186ea96d88d">alloc_chars</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__json.html#gae920c3294bafdc141e314079a54d4234">ruJsonKeyStrDup</a> (<a class="el" href="group__json.html#gac1a01d0cd3ab047d989a7cdd1b5bfc52">ruJson</a> rj, <a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> key, int32_t *status)</td></tr>
 <tr class="separator:gae920c3294bafdc141e314079a54d4234"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga0be93c383a59eaf4368b0461770be95c"><td class="memItemLeft" align="right" valign="top">RUAPI int64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__json.html#ga0be93c383a59eaf4368b0461770be95c">ruJsonKeyParseInt</a> (<a class="el" href="group__json.html#gac1a01d0cd3ab047d989a7cdd1b5bfc52">ruJson</a> rj, <a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> key, int32_t *status)</td></tr>
@@ -993,6 +995,49 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="ga510b7bae2b3a7de50a03cea6594ef5db"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga510b7bae2b3a7de50a03cea6594ef5db">&#9670;&nbsp;</a></span>ruJsonKeyToStr()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI <a class="el" href="group__misc.html#ga972d4f4f858964bb2381d186ea96d88d">alloc_chars</a> ruJsonKeyToStr </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__json.html#gac1a01d0cd3ab047d989a7cdd1b5bfc52">ruJson</a>&#160;</td>
+          <td class="paramname"><em>rj</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a>&#160;</td>
+          <td class="paramname"><em>key</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int32_t *&#160;</td>
+          <td class="paramname"><em>status</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Return string version of the key element from underlying <a class="el" href="group__json.html#gac1a01d0cd3ab047d989a7cdd1b5bfc52">ruJson</a> map. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">rj</td><td><a class="el" href="group__json.html#gac1a01d0cd3ab047d989a7cdd1b5bfc52">ruJson</a> in question. </td></tr>
+    <tr><td class="paramname">key</td><td>key under which value resides </td></tr>
+    <tr><td class="paramname">status</td><td>where the <a class="el" href="group__ruerror.html#ga7e2f97cce8af8020834e685a2482556d">RUE_OK</a> on success or an error code will be stored. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>string version of value in question. Caller must free. </dd></dl>
+
+</div>
+</div>
 <a id="ga4d888c7b5a23662c072028ab61e7704b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ga4d888c7b5a23662c072028ab61e7704b">&#9670;&nbsp;</a></span>ruJsonNew()</h2>
 
@@ -1662,7 +1707,7 @@ Functions</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Mon Aug 21 2023 14:19:32 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Tue Aug 22 2023 14:16:42 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

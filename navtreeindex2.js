@@ -1,5 +1,6 @@
 var NAVTREEINDEX2 =
 {
+"group__typeint32.html#gaa87dacad563072f004f7e60dd76a1faf":[0,17,2,3],
 "group__typeint32.html#gab8d05b6e978d558a6c7c0aea9ec2266f":[0,17,2,2],
 "group__typeint32.html#gafb5151f9b48bd45483289c2630298b2c":[0,17,2,0],
 "group__typeint64.html":[0,17,0],

@@ -1293,6 +1293,13 @@
     </member>
     <member kind="function">
       <type>RUAPI alloc_chars</type>
+      <name>ruJsonKeyToStr</name>
+      <anchorfile>group__json.html</anchorfile>
+      <anchor>ga510b7bae2b3a7de50a03cea6594ef5db</anchor>
+      <arglist>(ruJson rj, trans_chars key, int32_t *status)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI alloc_chars</type>
       <name>ruJsonKeyStrDup</name>
       <anchorfile>group__json.html</anchorfile>
       <anchor>gae920c3294bafdc141e314079a54d4234</anchor>
