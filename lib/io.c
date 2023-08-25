@@ -980,6 +980,7 @@ RUAPI ru_int ruFolderEntries(trans_chars folder) {
 
 RUAPI int ruFolderRemove(trans_chars folder) {
     ruClearError();
+    ruDbgLogf("delete '%s'", folder);
     if (!folder) return RUE_PARAMETER_NOT_SET;
     if (strlen(folder) == 0) return RUE_INVALID_PARAMETER;
     if (strcmp("/", folder) == 0) return RUE_INVALID_PARAMETER;
@@ -991,6 +992,7 @@ RUAPI int ruFolderRemove(trans_chars folder) {
 
 RUAPI int ruFileRemove(const char* filename) {
     ruClearError();
+    ruDbgLogf("delete '%s'", filename);
 #ifdef _WIN32
     wchar_t *wpath = getWPath(filename);
     int ret = 0, waDir = 0;

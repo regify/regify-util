@@ -1262,6 +1262,41 @@ START_TEST ( intParser ) {
 }
 END_TEST
 
+static alloc_chars myprintf(trans_chars format, ...) {
+    alloc_chars str = NULL;
+    if (format) {
+        va_list args;
+        va_start(args, format);
+        str = ruDupvPrintf(format, args);
+        va_end(args);
+    }
+    return str;
+}
+
+START_TEST (ruvprintf) {
+    int32_t want, got;
+    perm_chars test = "ruDupvPrintf";
+    alloc_chars str = NULL;
+    perm_chars exp = "foo";
+
+    str = myprintf(NULL);
+    fail_unless(NULL == str, failText, NULL, str);
+
+    str = myprintf("foo");
+    ck_assert_str_eq(exp, str);
+    ruFree(str);
+
+    str = myprintf("%s", "foo");
+    ck_assert_str_eq(exp, str);
+    ruFree(str);
+
+    int64_t id = 23;
+    exp = "id: 23";
+    str = myprintf("id: %ld", id);
+    ck_assert_str_eq(exp, str);
+    ruFree(str);
+}
+END_TEST
 
 TCase* stringTests ( void ) {
     TCase *tcase = tcase_create ( "string" );
@@ -1273,5 +1308,6 @@ TCase* stringTests ( void ) {
     tcase_add_test(tcase, StrFindKeyVal);
     tcase_add_test(tcase, buffer);
     tcase_add_test(tcase, intParser);
+    tcase_add_test(tcase, ruvprintf);
     return tcase;
 }
