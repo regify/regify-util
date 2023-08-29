@@ -630,6 +630,15 @@ START_TEST(fileopen) {
     ruFileRemove(writeFile);
     bool exists = ruFileExists(writeFile);
     fail_unless(false == exists, retText, test, false, exists);
+
+    expLen = 11;
+    ret = ruFileSetContents(writeFile, writtenText, expLen);
+    fail_unless(exp == ret, retText, test, exp, ret);
+
+    test = "ruFolderRemove";
+    ruFolderRemove(writeFile);
+    exists = ruFileExists(writeFile);
+    fail_unless(false == exists, retText, test, false, exists);
     ruFree(writeFile);
 
     const char *base = ruDupPrintf("%s/töst", tmpDir);

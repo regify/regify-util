@@ -984,6 +984,9 @@ RUAPI int ruFolderRemove(trans_chars folder) {
     if (!folder) return RUE_PARAMETER_NOT_SET;
     if (strlen(folder) == 0) return RUE_INVALID_PARAMETER;
     if (strcmp("/", folder) == 0) return RUE_INVALID_PARAMETER;
+    if (ruFileExists(folder) && !ruIsDir(folder)) {
+        return ruFileRemove(folder);
+    }
 #ifdef _WIN32
     if (strcmp("\\", folder) == 0) return RUE_INVALID_PARAMETER;
 #endif

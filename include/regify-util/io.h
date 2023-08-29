@@ -318,6 +318,7 @@ RUAPI ru_int ruFolderEntries(trans_chars folder);
 
 /**
  * \brief Recursively delete given folder and all it's sub contents.
+ * If given path is a file or symlink, it will also be removed.
  * @param folder Name of folder to delete. May not be "", "/" or "\\"
  * @return \ref RUE_OK on success else \ref RUE_GENERAL and call \ref
  *         ruLastError for details.
