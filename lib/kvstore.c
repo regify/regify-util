@@ -34,7 +34,9 @@ RUAPI KvStore* ruNewStore(void) {
 RUAPI void ruFreeStore(void* obj) {
     ruClearError();
     KvStore *kvs = KvStoreGet(obj, NULL);
-    if (kvs && kvs->ctxFree) kvs->ctxFree(kvs->ctx);
+    if (!kvs) return;
+    if (kvs->ctxFree) kvs->ctxFree(kvs->ctx);
+    memset(kvs, 0, sizeof(KvStore));
     ruFree(kvs);
 }
 
