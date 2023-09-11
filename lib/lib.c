@@ -21,8 +21,24 @@
  */
 #include "lib.h"
 
-void ruAbort(void) {
-    exit(1);
+static void ruAbort(void) {
+    // crash here
+    *(int*)0 = 0;
+}
+
+void ruAbortf(trans_chars format, ...) {
+    va_list args;
+    va_start(args, format);
+    vfprintf(stderr, format, args);
+    va_end(args);
+    fprintf(stderr, EOL);
+    ruAbort();
+}
+
+void ruAbortm(trans_chars msg) {
+    fprintf(stderr, "%s", msg);
+    fprintf(stderr, EOL);
+    ruAbort();
 }
 
 #ifdef TRACING
@@ -224,7 +240,6 @@ RUAPI alloc_chars ruGetLanguage(void) {
 }
 
 RUAPI int32_t ruGetTimeVal(ruTimeVal *result) {
-    ruClearError();
     if (!result) return RUE_PARAMETER_NOT_SET;
 #ifndef RUMS
     ruZeroedStruct(struct timeval, r);
@@ -233,41 +248,40 @@ RUAPI int32_t ruGetTimeVal(ruTimeVal *result) {
     result->sec = r.tv_sec;
     result->usec = r.tv_usec;
 #else
-    FILETIME ft;
-    uint64_t time64;
+    const int64_t delta = 116444736000000000;
+    const int64_t m1 =   1000000;
+    const int64_t m10 = 10000000;
+    union {
+        int64_t ns;
+        FILETIME ft;
+    } now;
 
-    GetSystemTimeAsFileTime (&ft);
-    memmove (&time64, &ft, sizeof (uint64_t));
-
-    time64 -= 116444736000000000;
-    time64 /= 10;
-
-    result->sec = (sec_t)(time64 / 1000000);
-    result->usec = (usec_t)(time64 % 1000000);
+    GetSystemTimeAsFileTime (&now.ft);
+    result->sec = (sec_t)((now.ns - delta) / m10);
+    result->usec = (usec_t)((now.ns / 10) % m1);
 #endif
     return RUE_OK;
 }
 
 RUAPI usec_t ruTimeUs(void) {
-    ruClearError();
     ruZeroedStruct(ruTimeVal, tv);
     ruGetTimeVal(&tv);
-    usec_t micros = tv.sec * 1000000;
+    usec_t micros = 1000000;
+    micros *= tv.sec;
     return micros + tv.usec;
 }
 
 RUAPI msec_t ruTimeMs(void) {
-    ruClearError();
     ruZeroedStruct(ruTimeVal, tv);
     ruGetTimeVal(&tv);
     // Round to nearest millis
-    msec_t millis = tv.sec * 1000;
-    millis += tv.usec / 1000;
+    msec_t millis = 1000;
+    millis *= tv.sec;
+    millis += (tv.usec / 1000);
     return millis;
 }
 
 RUAPI sec_t ruTimeSec(void) {
-    ruClearError();
     ruZeroedStruct(ruTimeVal, tv);
     ruGetTimeVal(&tv);
     return tv.sec;

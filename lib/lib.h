@@ -88,15 +88,17 @@ extern "C" {
 #include <yajl/yajl_gen.h>
 #include <tidy.h>
 #include <tidybuffio.h>
+// undo nasty tidy side effects
 #if defined(MAC_OS_X)
-/* Undo tidy side effects */
 #undef strcasecmp
 #endif
-
 #ifdef _WIN32
-// undo nasty tidy side effects
+#undef futime
+#undef utimbuf
+#undef utime
 #undef stat
 #undef fstat
+#undef vsnprintf
 #endif
 
 #ifndef NDEBUG
@@ -110,7 +112,7 @@ extern "C" {
 #endif
 
 #ifdef RUMS
-    // running non posix
+// running non posix
 #define strcasecmp _stricmp
 #define strncasecmp _strnicmp
 #define timegm _mkgmtime
@@ -118,6 +120,7 @@ extern "C" {
 #define localtime_r localtime_s
 #define utimbuf _utimbuf
 #define utime _utime
+#define vsnprintf _vsnprintf
 #endif
 
 // Error reporting
@@ -132,6 +135,12 @@ extern "C" {
 #define RU_SLASH '/'
 #define RU_SLASH_S "/"
 
+#endif
+
+#ifdef _WIN32
+#define EOL "\r\n"
+#else
+#define EOL "\n"
 #endif
 
 extern unsigned int ruIntChunk;
@@ -166,7 +175,7 @@ void ruClearError(void);
  */
 #ifdef _WIN32
 #include <windows.h>
-typedef HANDLE ruMutex_t;
+typedef SRWLOCK ruMutex_t;
 #else
 #include <pthread.h>
 #include <sched.h>
@@ -176,6 +185,10 @@ typedef pthread_mutex_t ruMutex_t;
 typedef struct mux_ {
     ru_uint type;
     ruMutex_t mux;
+    alloc_chars lastCall;
+    int lCnt;
+    int tlCnt;
+    int ulCnt;
 } Mux;
 
 typedef struct thr_ {
@@ -186,10 +199,6 @@ typedef struct thr_ {
     void* exitRes;
     bool finished;
 } Thr;
-
-Mux* ruMuxInit(void);
-void ruMuxLock(Mux *mux);
-void ruMuxUnlock(Mux *mux);
 
 // thread safe counter
 typedef struct tsc_ {
@@ -278,7 +287,7 @@ struct List_ {
     ruCompFunc valSort;
     ListElmt* head;
     ListElmt* tail;
-    // optional thread safety
+    // thread safety
     ruMutex mux;
     bool doQuit;    // flag to initiate map shutdown
 };
@@ -365,7 +374,8 @@ int32_t iniParseString(const char* string, ruIniCallback handler, void* user);
 /*
  *  Misc - Lib
  */
-void ruAbort(void);
+void ruAbortf(trans_chars format, ...);
+void ruAbortm(trans_chars msg);
 void U_CALLCONV traceData( const void *context, int32_t fnNumber, int32_t level,
                            const char *fmt, va_list args);
 bool ruIsunreserved(unsigned char in);

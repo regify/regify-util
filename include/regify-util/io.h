@@ -118,7 +118,7 @@ RUAPI int32_t ruStat(trans_chars filepath, ruStat_t *dest);
  *        \ref RUE_PARAMETER_NOT_SET if filename was NULL or
  *        \ref RUE_FILE_NOT_FOUND if file didn't exists or
  *        \ref RUE_CANT_OPEN_FILE if it was another error.
- *        Check errno or call \ref ruLastError for details.
+ *        Check errno for details.
  * @return file size or 0 on error
  */
 RUAPI rusize ruFileSize(trans_chars filePath, int32_t* code);
@@ -131,7 +131,7 @@ RUAPI rusize ruFileSize(trans_chars filePath, int32_t* code);
  *        \ref RUE_PARAMETER_NOT_SET if filename was NULL or
  *        \ref RUE_FILE_NOT_FOUND if file didn't exists or
  *        \ref RUE_CANT_OPEN_FILE if it was another error.
- *        Check errno or call \ref ruLastError for details.
+ *        Check errno for details.
  * @return UTC modification date or 0 on error
  */
 RUAPI sec_t ruFileUtcTime(trans_chars filePath, int32_t* code);
@@ -253,6 +253,11 @@ RUAPI int ruFileRemove(const char* filename);
  * Used by \ref ruFolderWalk to specify not to process the top level folder.
  */
 #define RU_WALK_NO_SELF 0x8
+/**
+ * Used by \ref ruFolderWalk to specify passing paths with unix style directory
+ * slashes to the callbacks. Ignored on Unix platforms.
+ */
+#define RU_WALK_UNIX_SLASHES 0x10
 
 
 /**
@@ -377,10 +382,19 @@ RUAPI alloc_chars ruFullPath(trans_chars filePath);
  * @param file file anme to append
  * @return Returns a new filepath to be freed by the caller after use.
  */
+RUAPI alloc_chars ruPathJoinNative(trans_chars base, trans_chars file);
+
+/**
+ * \brief Returns base and file joined with the a unix filesystem slash in a new string
+ * @param base folder with or without trailing slash
+ * @param file file anme to append
+ * @return Returns a new filepath to be freed by the caller after use.
+ */
 RUAPI alloc_chars ruPathJoin(trans_chars base, trans_chars file);
 
 /**
- * \brief Return a path by concatenating the given parts number of parameters.
+ * \brief Return a path by concatenating the given parts number of parameters
+ * using a unix style directory slash.
  *
  * The returned path will have the leading slash supplied with the first folder
  * argument. There will be no trailing slash returned.
@@ -391,6 +405,20 @@ RUAPI alloc_chars ruPathJoin(trans_chars base, trans_chars file);
  * @return Allocated path to be freed by the caller. Or NULL if parts was < 1.
  */
 RUAPI alloc_chars ruPathMultiJoin(int parts, ...);
+
+/**
+ * \brief Return a path by concatenating the given parts number of parameters
+ * using the platform native directory slash.
+ *
+ * The returned path will have the leading slash supplied with the first folder
+ * argument. There will be no trailing slash returned.
+ *
+ * @param parts Number of folder name that follow
+ * @param ... parts number of folder names to concatenate. Trailing slashes
+ *            and leading slashes after the second folder are accounted for.
+ * @return Allocated path to be freed by the caller. Or NULL if parts was < 1.
+ */
+RUAPI alloc_chars ruPathMultiJoinNative(int parts, ...);
 
 /**
  * @}

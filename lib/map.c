@@ -44,7 +44,6 @@ static ptr kvFree(ptr o) {
 }
 
 RUAPI ruMap ruMapNew(ruType keyType, ruType valueType) {
-    ruClearError();
     typeSpec* ks = typeSpecGet(keyType, NULL);
     typeSpec* vs = typeSpecGet(valueType, NULL);
     if (!ks || !ks->hash || !ks->match) {
@@ -54,8 +53,7 @@ RUAPI ruMap ruMapNew(ruType keyType, ruType valueType) {
         return NULL;
     }
     if (valueType && !vs) {
-        ruCritLog("Failed map creation due an invalid valSpec parameter");
-        ruAbort();
+        ruAbortm("Failed map creation due an invalid valSpec parameter");
     }
 
     Map *mp = ruMalloc0(1, Map);
@@ -91,7 +89,6 @@ RUAPI ruMap ruMapNew(ruType keyType, ruType valueType) {
 }
 
 RUAPI ruMap ruMapFree(ruMap rm) {
-    ruClearError();
     uint32_t i;
     Map *mp = MapGet(rm, NULL);
     if(!mp) {
@@ -221,7 +218,6 @@ static int32_t MapPut(Map* mp, ptr key, ptr val, ptr* existingVal) {
 }
 
 RUAPI int32_t ruMapPutData(ruMap rm, ptr key, ptr val, ptr* exisitingVal) {
-    ruClearError();
     int32_t ret;
     Map *mp = MapGet(rm, &ret);
     if (!mp) {
@@ -263,7 +259,6 @@ static int32_t MapRemove(Map *mp, trans_ptr key, ptr* val) {
 }
 
 RUAPI int32_t ruMapRemoveData(ruMap rm, trans_ptr key, ptr* val) {
-    ruClearError();
     int32_t ret;
     Map *mp = MapGet(rm, &ret);
     if (!mp) {
@@ -299,7 +294,6 @@ static int32_t MapGetData(Map *mp, trans_ptr key, ptr* value) {
 }
 
 RUAPI bool ruMapHasKey(ruMap rm, trans_ptr key, int32_t *code) {
-    ruClearError();
     int32_t ret;
     Map *mp = MapGet(rm, &ret);
     if (!mp) ruRetWithCode(code, ret, false);
@@ -322,7 +316,6 @@ RUAPI bool ruMapHasKey(ruMap rm, trans_ptr key, int32_t *code) {
 }
 
 RUAPI int32_t ruMapGetValue(ruMap rm, trans_ptr key, ptr* value) {
-    ruClearError();
     int32_t ret;
     Map *mp = MapGet(rm, &ret);
     if (!mp) {
@@ -370,7 +363,6 @@ static int32_t MapNextSet(Map* mp, ptr* key, ptr* value) {
 }
 
 RUAPI int32_t ruMapFirstSet(ruMap rm, ptr* key, ptr* value) {
-    ruClearError();
     int32_t ret;
     Map *mp = MapGet(rm, &ret);
     if (!mp) {
@@ -393,7 +385,6 @@ RUAPI int32_t ruMapFirstSet(ruMap rm, ptr* key, ptr* value) {
 }
 
 RUAPI int32_t ruMapNextSet(ruMap rm, ptr* key, ptr* value) {
-    ruClearError();
     int32_t ret;
     Map *mp = MapGet(rm, &ret);
     if (!mp) {
@@ -411,7 +402,6 @@ RUAPI int32_t ruMapNextSet(ruMap rm, ptr* key, ptr* value) {
 }
 
 RUAPI int32_t ruMapKeyList(ruMap rm, ruList* keys) {
-    ruClearError();
     int32_t ret;
     Map *mp = MapGet(rm, &ret);
     if (!mp) {
@@ -448,7 +438,6 @@ RUAPI int32_t ruMapKeyList(ruMap rm, ruList* keys) {
 }
 
 RUAPI int32_t ruMapRemoveAll(ruMap rm) {
-    ruClearError();
     int32_t ret;
     Map *mp = MapGet(rm, &ret);
     if (!mp) return ret;
@@ -474,7 +463,6 @@ RUAPI int32_t ruMapRemoveAll(ruMap rm) {
 }
 
 RUAPI uint32_t ruMapSize(ruMap rm, int32_t *code) {
-    ruClearError();
     int32_t ret;
     Map *mp = MapGet(rm, &ret);
     if (!mp) {

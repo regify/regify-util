@@ -30,8 +30,7 @@ ruMakeTypeGetter(List, MagicList)
 List* ListNewType(ruType vt) {
     typeSpec* vs = typeSpecGet(vt, NULL);
     if (vt && !vs) {
-        ruCritLog("Failed map creation due an invalid valSpec parameter");
-        ruAbort();
+        ruAbortm("Failed map creation due an invalid valSpec parameter");
     }
     List *list = ruMalloc0(1, List);
     if (vs) {
@@ -185,12 +184,10 @@ int32_t ListRemoveTo(List* list, ListElmt* old_element, ptr* dest) {
 }
 
 RUAPI ruList ruListNew(ruType valueType) {
-    ruClearError();
     return (ruList) ListNewType(valueType);
 }
 
 RUAPI ruList ruListFree(ruList rl) {
-    ruClearError();
     List *list = ListGet(rl, NULL);
     if (!list) return NULL;
     list->doQuit = true;
@@ -201,7 +198,6 @@ RUAPI ruList ruListFree(ruList rl) {
 }
 
 RUAPI int32_t ruListClear(ruList rl) {
-    ruClearError();
     int32_t ret;
     List *list = ListGet(rl, &ret);
     if (ret != RUE_OK) return ret;
@@ -217,7 +213,6 @@ RUAPI int32_t ruListClear(ruList rl) {
 }
 
 RUAPI int32_t ruListAppendPtr(ruList rl, perm_ptr data) {
-    ruClearError();
     int32_t ret;
     List *list = ListGet(rl, &ret);
     if (!list) return ret;
@@ -233,7 +228,6 @@ RUAPI int32_t ruListAppendPtr(ruList rl, perm_ptr data) {
 }
 
 RUAPI int32_t ruListInsertIdx(ruList rl, int32_t index, perm_ptr data) {
-    ruClearError();
     int32_t code;
     List *list = ListGet(rl, &code);
     if (!list) return code;
@@ -255,7 +249,6 @@ RUAPI int32_t ruListInsertIdx(ruList rl, int32_t index, perm_ptr data) {
 }
 
 RUAPI int32_t ruListInsertBefore(ruList rl, ruListElmt rle, perm_ptr data) {
-    ruClearError();
     int32_t code;
     List *list = ListGet(rl, &code);
     if (!list) return code;
@@ -282,7 +275,6 @@ RUAPI int32_t ruListInsertBefore(ruList rl, ruListElmt rle, perm_ptr data) {
 }
 
 RUAPI int32_t ruListInsertAfter(ruList rl, ruListElmt rle, perm_ptr data) {
-    ruClearError();
     int32_t code;
     List *list = ListGet(rl, &code);
     if (!list) return code;
@@ -323,7 +315,6 @@ RUAPI ptr ruListRemove(ruList rl, ruListElmt* rle, int32_t* code) {
 
 RUAPI int32_t ruListRemoveIdxDataTo(ruList rl, int32_t index, ptr* dest) {
     int32_t ret;
-    ruClearError();
     List *list = ListGet(rl, &ret);
     if (!list) return ret;
     if (!dest) return RUE_PARAMETER_NOT_SET;
@@ -378,28 +369,24 @@ RUAPI ptr ruListPop(ruList rl, int32_t *code) {
 }
 
 RUAPI uint32_t ruListSize(ruList rl, int32_t *code) {
-    ruClearError();
     List *list = ListGet(rl, code);
     if (!list) return 0;
     return list->size;
 }
 
 RUAPI ruListElmt ruListHead(ruList rl, int32_t* code) {
-    ruClearError();
     List *list = ListGet(rl, code);
     if (!list) return NULL;
     return list->head;
 }
 
 RUAPI ruListElmt ruListTail(ruList rl, int32_t* code) {
-    ruClearError();
     List *list = ListGet(rl, code);
     if (!list) return NULL;
     return list->tail;
 }
 
 RUAPI bool ruListElmtIsHead(ruListElmt re, int32_t* code) {
-    ruClearError();
     ListElmt *el = ListElmtGet(re, code);
     if (!el) return false;
     List *list = el->list;
@@ -416,7 +403,6 @@ RUAPI bool ruListElmtIsHead(ruListElmt re, int32_t* code) {
 }
 
 RUAPI bool ruListElmtIsTail(ruListElmt re, int32_t* code) {
-    ruClearError();
     ListElmt *el = ListElmtGet(re, code);
     if (!el) return false;
     if (el->next == NULL) return true;
@@ -424,7 +410,6 @@ RUAPI bool ruListElmtIsTail(ruListElmt re, int32_t* code) {
 }
 
 RUAPI ruListElmt ruListNextElmt(ruListElmt re, int32_t* code) {
-    ruClearError();
     ListElmt *el = ListElmtGet(re, code);
     if (!el) return NULL;
     return (ruListElmt)el->next;
@@ -432,7 +417,6 @@ RUAPI ruListElmt ruListNextElmt(ruListElmt re, int32_t* code) {
 
 RUAPI int32_t ruListNextDataTo(ruListElmt *re, ptr* dest) {
     int32_t ret;
-    ruClearError();
     if (!re) return RUE_PARAMETER_NOT_SET;
     ListElmt *el = ListElmtGet(*re, &ret);
     if (!el) return ret;
@@ -451,7 +435,6 @@ RUAPI ptr ruListNextData(ruListElmt *re, int32_t* code) {
 
 RUAPI int32_t ruListIdxDataTo(ruList rl, int32_t index, ptr* dest) {
     int32_t ret;
-    ruClearError();
     List *list = ListGet(rl, &ret);
     if (!list) return ret;
     if (!dest) return RUE_PARAMETER_NOT_SET;

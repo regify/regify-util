@@ -328,12 +328,12 @@ typedef int64_t usec_t;
 /**
  * \brief A pointer sized integer type for collections like \ref ruMap or \ref ruList.
  */
-typedef long ru_int;
+typedef intptr_t ru_int;
 
 /**
  * \brief A pointer sized unsigned integer type for collections like \ref ruMap or \ref ruList.
  */
-typedef unsigned long ru_uint;
+typedef uintptr_t ru_uint;
 
 /**
  * \brief Abstracted version of size_t.

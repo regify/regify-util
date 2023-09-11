@@ -420,6 +420,59 @@ RUAPI ruType ruTypeBool(void);
 
 
 /**
+ * \defgroup typeintptr Pointer size Integer
+ * \brief This section contains collection support for Pointer size Integers
+ * such as intptr_t or ru_int.
+ * @{
+ */
+/**
+ * \brief Returns a hash for given pointer size integer number.
+ *
+ * @param key Number to hash
+ * @return The hash of the given number.
+ */
+RUAPI ru_uint ruPtrHash(trans_ptr key);
+
+/**
+ * \brief Convenience pointer size integer match function for Maps.
+ * @param s1 First comparison int.
+ * @param s2 Second comparison int.
+ * @return true if they are equal
+ */
+RUAPI bool ruPtrMatch(trans_ptr s1, trans_ptr s2);
+
+/**
+ * \brief Pointer size integer comparator function for the \ref ruType system
+ * @param testVal Value to compare against existing value.
+ * @param existingVal The existing value to compare testVal to.
+ * @return -1 if testVal is less existingVal,
+ *          1 if testVal is greater existingVal or
+ *          0 in case both of them are equal.
+ */
+RUAPI int32_t ruPtrComp(trans_ptr testVal, trans_ptr existingVal);
+
+/**
+ * \brief Returns an \ref ruType used for pointer size integers.
+ * Example:
+ * ~~~~~{.c}
+    // error checking left out for brevity
+    const char* k1 = "my key";
+    ruSet rs = ruSetNew(ruTypeIntPtr());
+    ruSetPut(rs, k1);
+
+    if (ruSetHas(rs, k1, NULL)) {
+        printf("address: 0x%p is in the set\n", k1);
+    }
+    ruSetFree(rs);
+ * ~~~~~
+ * @return Pointer size integer type specification. Caller need not free.
+ */
+RUAPI ruType ruTypeIntPtr(void);
+/** @} */
+
+
+
+/**
  * \defgroup typestring Strings
  * \brief This section contains collection support for single byte strings such as char*.
  * @{
@@ -563,7 +616,7 @@ RUAPI ruType ruTypeNew(ruHashFunc hash, ruMatchFunc match, ruCompFunc comp,
                        ruClearFunc free, ruCloneFunc in, ruPtr2TypeFunc out);
 
 /**
- * \brief Creates a custom pointer type specification
+ * \brief Creates a custom \ref ruTypeIntPtr specification
  *
  * @param free The free function to be called when the type is removed from a collection.
  * @return New type specification for collections. This is usually freed by the

@@ -8,7 +8,7 @@
 #include "tests.h"
 
 START_TEST (api) {
-    perm_chars retText = "%s failed wanted ret 0x%x but got 0x%x";
+    perm_chars retText = "%s failed wanted ret 0x%p but got 0x%p";
     perm_chars test = "ruHtmlSanitizeCustom";
     perm_chars body = "foo";
     perm_chars res;
@@ -49,7 +49,7 @@ END_TEST
 #endif
 
 START_TEST (run) {
-    perm_chars retText = "%s failed wanted ret 0x%x but got 0x%x";
+    perm_chars retText = "%s failed wanted ret 0x%p but got 0x%p";
     perm_chars test = "ruHtmlSanitizeCustom";
     perm_chars body = "<p>foo<p>bar";
     perm_chars expstr = NULL;

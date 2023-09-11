@@ -205,6 +205,22 @@ RUAPI int32_t ruRefPtrBool(ptr src, ptr* dst) {
 }
 
 
+RUAPI ru_uint ruPtrHash(trans_ptr key) {
+    return (ru_uint)(intptr_t)key;
+}
+
+RUAPI bool ruPtrMatch(trans_ptr testKey, trans_ptr existingKey) {
+    return testKey == existingKey;
+}
+
+RUAPI int32_t ruPtrComp(trans_ptr testVal, trans_ptr existingVal) {
+    intptr_t testInt = (intptr_t)testVal;
+    intptr_t existingInt = (intptr_t)existingVal;
+    if (testInt == existingInt) return 0;
+    return testInt > existingInt? 1 : -1;
+}
+
+
 RUAPI ru_uint ruStrHash(trans_ptr key) {
     trans_bytes ptr = key;
     uint32_t val = 0;
@@ -249,6 +265,9 @@ typeSpec boolSpec = {MagicTypeSpec, false,
                      ruBoolHash, ruBoolMatch,ruBoolComp,
                      NULL, ruBoolRefPtr,ruRefPtrBool};
 
+typeSpec ptrSpec = {MagicTypeSpec, false,
+                    ruPtrHash, ruPtrMatch,ruPtrComp,
+                    NULL, NULL,NULL};
 typeSpec strRefSpec = {MagicTypeSpec, false,
                        ruStrHash, ruStrMatch,ruStrComp,
                        NULL, NULL,NULL};
@@ -288,6 +307,10 @@ RUAPI ruType ruTypeBool(void) {
     return &boolSpec;
 }
 
+RUAPI ruType ruTypeIntPtr(void) {
+    return &ptrSpec;
+}
+
 RUAPI ruType ruTypeStrRef(void) {
     return &strRefSpec;
 }
@@ -319,7 +342,7 @@ RUAPI ruType ruTypeNew(ruHashFunc hash, ruMatchFunc match, ruCompFunc comp,
 }
 
 RUAPI ruType ruTypePtr(ruClearFunc free) {
-    return ruTypeNew(NULL, NULL, NULL,
+    return ruTypeNew(ruPtrHash, ruPtrMatch,ruPtrComp,
                      free, NULL, NULL);
 }
 

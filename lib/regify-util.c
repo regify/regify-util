@@ -51,14 +51,10 @@ void ruSetError(const char *format, ...) {
         ruClearError();
         return;
     }
-    static Mux* mux = NULL;
-    if (!mux) mux = ruMuxInit();
-    ruMuxLock(mux);
     va_list args;
     va_start (args, format);
     int32_t msgsize  = vsnprintf(ruError, RU_ERRBUF_SIZE, format, args);
     va_end (args);
-    ruMuxUnlock(mux);
     if (msgsize >= 0) {
         ruErrInit = 1;
     }
@@ -95,29 +91,24 @@ RUAPI alloc_chars ruGetHostname(void) {
 }
 
 RUAPI void* ruMallocSize(rusize count, rusize ofsize) {
-    ruClearError();
     if (!count || !ofsize) return NULL;
     void *p = calloc(count, ofsize);
     if (!p) {
-        ruCritLogf("failed to allocate %lu bytes", (count*ofsize));
-        ruAbort();
+        ruAbortf("failed to allocate %lu bytes", (count*ofsize));
     }
     return p;
 }
 
 RUAPI alloc_ptr ruReallocSize(alloc_ptr buf, rusize count, rusize ofsize) {
-    ruClearError();
     if (!count || !ofsize || !buf) return NULL;
     alloc_ptr p = realloc(buf, count*ofsize);
     if (!p) {
-        ruCritLogf("failed to reallocate %lu bytes", count*ofsize);
-        ruAbort();
+        ruAbortf("failed to reallocate %lu bytes", count*ofsize);
     }
     return p;
 }
 
 RUAPI alloc_ptr ruMemDup(trans_ptr buf, rusize size) {
-    ruClearError();
     if (!size || !buf) return NULL;
     alloc_ptr dest = ruMallocSize(size, 1);
     memcpy(dest, buf, size);
@@ -125,7 +116,6 @@ RUAPI alloc_ptr ruMemDup(trans_ptr buf, rusize size) {
 }
 
 RUAPI trans_chars ruGetenv(const char *variable) {
-    ruClearError();
     if (!variable) return NULL;
     return getenv (variable);
 }

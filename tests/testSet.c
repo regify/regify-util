@@ -241,7 +241,7 @@ START_TEST ( iter ) {
     const char *retText = "failed wanted ret '%x' but got '%x'";
     perm_chars k1 = "23";
 
-    ruSet rs = ruSetNew(ruTypeStrRef());
+    ruSet rs = ruSetNew(ruTypeIntPtr());
     fail_if(NULL == rs, retText, rs, NULL);
 
     ret = ruSetPut(rs, k1);

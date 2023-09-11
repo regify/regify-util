@@ -49,9 +49,16 @@ RUAPI bool ruDoesLog(uint32_t log_level) {
     return logLevel_ >= log_level;
 }
 
+// tracks recursive ruMakeLogMsgV within a thread
+RU_THREAD_LOCAL int lmCall = 0;
+
 RUAPI alloc_chars ruMakeLogMsgV(uint32_t log_level, trans_chars filePath,
                                 trans_chars func, int32_t line,
                                 trans_chars format, va_list args) {
+    if (lmCall) {
+        ruAbortm("ruMakeLogMsgV is called recursively");
+    }
+    lmCall++;
     char *lv;
     if (log_level >= RU_LOG_DBUG)
         lv = "DBUG";
@@ -105,6 +112,7 @@ RUAPI alloc_chars ruMakeLogMsgV(uint32_t log_level, trans_chars filePath,
         pidEnd = logPidEnd;
     }
 #endif
+
     // estimate
     char *ret = NULL;
 #ifdef __EMSCRIPTEN__
@@ -133,6 +141,7 @@ RUAPI alloc_chars ruMakeLogMsgV(uint32_t log_level, trans_chars filePath,
     ptr += msgsize;
     *ptr++ = '\n';
     *ptr = '\0';
+    lmCall--;
     return ret;
 }
 

@@ -413,7 +413,7 @@ static famCtx* famNew(void) {
     famCtx* fctx = ruMalloc0(1, famCtx);
     fctx->events = ruListNew(ruTypePtr(ruFamEventFree));
     fctx->wctx = wrkNew(fctx);
-    fam_dbg("returning 0x%x", fctx);
+    fam_dbg("returning 0x%p", fctx);
     return fctx;
 }
 

@@ -88,7 +88,7 @@ void myLogFunc (perm_ptr ud, trans_chars message) {
         cur += len;
     } while(left && !feof(wh) && !ferror(wh));
 
-    fprintf(stdout, "%s", message);
+    //fprintf(stdout, "%s", message);
 }
 
 #ifdef DO_IOS

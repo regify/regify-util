@@ -1274,7 +1274,6 @@ static alloc_chars myprintf(trans_chars format, ...) {
 }
 
 START_TEST (ruvprintf) {
-    int32_t want, got;
     perm_chars test = "ruDupvPrintf";
     alloc_chars str = NULL;
     perm_chars exp = "foo";
@@ -1290,9 +1289,10 @@ START_TEST (ruvprintf) {
     ck_assert_str_eq(exp, str);
     ruFree(str);
 
-    int64_t id = 23;
-    exp = "id: 23";
-    str = myprintf("id: %ld", id);
+    int64_t power = 23;
+    int answer = 42;
+    exp = "power: 23 = 42";
+    str = myprintf("power: %" PRId64 " = %d", power, answer);
     ck_assert_str_eq(exp, str);
     ruFree(str);
 }

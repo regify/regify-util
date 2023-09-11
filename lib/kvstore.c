@@ -25,14 +25,12 @@
 ruMakeTypeGetter(KvStore, KvStoreMagic)
 
 RUAPI KvStore* ruNewStore(void) {
-    ruClearError();
     KvStore* kvs = ruMalloc0(1, KvStore);
     kvs->type = KvStoreMagic;
     return kvs;
 }
 
 RUAPI void ruFreeStore(void* obj) {
-    ruClearError();
     KvStore *kvs = KvStoreGet(obj, NULL);
     if (!kvs) return;
     if (kvs->ctxFree) kvs->ctxFree(kvs->ctx);
@@ -41,7 +39,6 @@ RUAPI void ruFreeStore(void* obj) {
 }
 
 RUAPI int32_t ruValidStore(void* obj) {
-    ruClearError();
     int32_t ret = RUE_OK;
     KvStoreGet(obj, &ret);
     return ret;
@@ -64,7 +61,6 @@ ruFileStore ruKvFileFree(ruFileStore ctx) {
 }
 
 RUAPI KvStore* ruNewFileStore(const char *folderPath, int32_t* code) {
-    ruClearError();
     // check folder path and writability first
     if (!folderPath) ruRetWithCode(code, RUE_PARAMETER_NOT_SET, NULL);
     if (!ruIsDir(folderPath)) {
@@ -223,7 +219,6 @@ RUAPI int32_t ruFileStoreSet (KvStore *kvs, const char* key,
 
 RUAPI int32_t ruFileStoreGet (KvStore *kvs, const char* key, char **val,
                             rusize* len) {
-    ruClearError();
     if (!key || !val || !len) return RUE_PARAMETER_NOT_SET;
     if (!strlen(key)) return RUE_INVALID_PARAMETER;
     int32_t ret = RUE_OK;
@@ -252,7 +247,6 @@ static int lister(const char*fullPath, bool isDir, void* o) {
 }
 
 RUAPI int32_t ruFileStoreList (KvStore *kvs, const char* key, ruList* result) {
-    ruClearError();
     if (!key || !result) return RUE_PARAMETER_NOT_SET;
     if (!strlen(key)) return RUE_INVALID_PARAMETER;
     int32_t ret = RUE_OK;
@@ -295,7 +289,6 @@ RUAPI KvStore* ruNewNullStore(void) {
 
 RUAPI int32_t ruNullStoreSet (KvStore *kvs, const char* key,
                               const char *val, rusize len) {
-    ruClearError();
     if (!key) return RUE_PARAMETER_NOT_SET;
     if (!strlen(key)) return RUE_INVALID_PARAMETER;
     return RUE_OK;
@@ -303,7 +296,6 @@ RUAPI int32_t ruNullStoreSet (KvStore *kvs, const char* key,
 
 RUAPI int32_t ruNullStoreGet (KvStore *kvs, const char* key, char **val,
                             rusize* len) {
-    ruClearError();
     if (!key || !val || !len) return RUE_PARAMETER_NOT_SET;
     if (!strlen(key)) return RUE_INVALID_PARAMETER;
     *val = NULL;
@@ -312,7 +304,6 @@ RUAPI int32_t ruNullStoreGet (KvStore *kvs, const char* key, char **val,
 }
 
 RUAPI int32_t ruNullStoreList (KvStore *kvs, const char* key, ruList* list) {
-    ruClearError();
     if (!key || !list) return RUE_PARAMETER_NOT_SET;
     if (!strlen(key)) return RUE_INVALID_PARAMETER;
     *list = NULL;

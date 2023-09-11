@@ -152,19 +152,28 @@ RUAPI ruMutex ruMutexInit(void);
  * @param m The mutex to lock.
  * @return false if the mutex was locked. If true the acquired lock must be unlocked after use.
  */
-RUAPI bool ruMutexTryLock(ruMutex m);
+RUAPI bool ruMutexTryLockLoc(ruMutex m, trans_chars filePath, trans_chars func,
+                          int32_t line);
+
+#define ruMutexTryLock(m) ruMutexTryLockLoc(m, __FILE__, __func__, __LINE__)
 
 /**
  * \brief Aquire a lock for the given \ref ruMutex blocking until it is given.
  * @param m The mutex to lock.
  */
-RUAPI void ruMutexLock(ruMutex m);
+RUAPI void ruMutexLockLoc(ruMutex m, trans_chars filePath, trans_chars func,
+                       int32_t line);
+
+#define ruMutexLock(m) ruMutexLockLoc(m, __FILE__, __func__, __LINE__)
 
 /**
  * \brief Return the aquired mutex lock so other threads can use it.
  * @param m The mutex to unlock.
  */
-RUAPI void ruMutexUnlock(ruMutex m);
+RUAPI void ruMutexUnlockLoc(ruMutex m, trans_chars filePath, trans_chars func,
+                            int32_t line);
+
+#define ruMutexUnlock(m) ruMutexUnlockLoc(m, __FILE__, __func__, __LINE__)
 
 /**
  * \brief Free up given \ref ruMutex object.

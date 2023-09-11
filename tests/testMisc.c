@@ -119,18 +119,24 @@ START_TEST ( misc ) {
     memset(&tv, 0, sizeof(ruTimeVal));
     ret = ruGetTimeVal(&tv);
     fail_unless(exp == ret, retText, test, exp, ret);
-    fail_if(0 == tv.sec, zeroText, test, "tv.sec");
-    fail_if(0 == tv.usec, zeroText, test, "tv.usec");
+    fail_if(0 >= tv.sec, zeroText, test, "tv.sec");
+    fail_if(0 >= tv.usec, zeroText, test, "tv.usec");
+
+    msec_t msec = ruTimeMs();
+    fail_if(0 >= msec, zeroText, test, "msec");
+
+    usec_t usec = ruTimeUs();
+    fail_if(0 >= usec, zeroText, test, "usec");
 
     test = "ruSetError";
+    ruSetError("foo #%d", 2);
+    ck_assert_str_eq("foo #2", ruLastError());
+
     ruSetError("foo");
     ck_assert_str_eq("foo", ruLastError());
 
     ruSetError(NULL);
     ck_assert_str_eq("", ruLastError());
-
-    ruSetError("foo #%d", 2);
-    ck_assert_str_eq("foo #2", ruLastError());
 
     bool is, want = true;
     test = "ruIsInt64";

@@ -52,8 +52,7 @@ UConverter* getConverter(void) {
     // get a converter
     UConverter *conv = ucnv_open("utf8", &errorCode);
     if(U_FAILURE(errorCode)) {
-        ruCritLogf("error in ucnv_open error=%s\n", u_errorName(errorCode));
-        ruAbort();
+        ruAbortf("error in ucnv_open error=%s\n", u_errorName(errorCode));
     }
     return conv;
 

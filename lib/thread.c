@@ -21,22 +21,29 @@
  */
 #include "lib.h"
 
+// Mutex debugging instrumentation
+#define muxDbg 0
+
 ruMakeTypeGetter(Mux, MagicMux)
 ruMakeTypeGetter(Thr, MagicThr)
 ruMakeTypeGetter(tsc, MagicTsc)
 
 RU_THREAD_LOCAL char* logPidEnd = NULL;
 
+//<editor-fold desc="Threading">
 #ifdef _WIN32
 static DWORD WINAPI threadRunner(LPVOID context) {
     Thr *tc = (Thr *) context;
     DWORD res = 0;
     if (tc->start) {
+        ru_tid tid = ruThreadGetId();
+        ruDbgLogf("Starting thread 0x%p with id: %ld", tc, tid);
         tc->exitRes = tc->start(tc->user);
-        res |= (intptr_t) tc->exitRes;
+        res = (DWORD)(intptr_t) tc->exitRes;
         tc->finished = true;
-        CloseHandle(tc->tid);
+        ruDbgLogf("Finished thread 0x%p with id: %ld", tc, tid);
     }
+    ruThreadSetName(NULL);
     return res;
 }
 #else
@@ -47,12 +54,15 @@ static void* threadRunner(void* context) {
         tc->finished = true;
         pthread_exit(tc->exitRes);
     }
+    ruThreadSetName(NULL);
     return tc->exitRes;
 }
 #endif
 
 static Thr* threadFree(Thr* tc) {
     if (!tc) return NULL;
+    ruDbgLogf("Freeing thread 0x%p", tc);
+    if (tc->tid) CloseHandle(tc->tid);
     memset(tc, 0, sizeof(Thr));
     ruFree(tc);
     return NULL;
@@ -61,6 +71,7 @@ static Thr* threadFree(Thr* tc) {
 static int32_t threadKill(Thr* tc) {
     int32_t ret = RUE_PARAMETER_NOT_SET;
     if (tc) {
+        ruDbgLogf("Killing thread 0x%p", tc);
         ret = RUE_OK;
 #ifdef _WIN32
         TerminateThread(tc->tid, 0);
@@ -147,6 +158,7 @@ RUAPI ruThread ruThreadCreate(ruStartFunc start, void* context) {
     tc->type = MagicThr;
     tc->start = start;
     tc->user = context;
+    ruDbgLogf("Created thread 0x%p", tc);
 #ifdef _WIN32
     tc->tid = CreateThread(NULL, 0,
                            threadRunner, tc,
@@ -245,109 +257,127 @@ RUAPI int ruThreadJoin(ruThread tid, void** exitVal) {
     threadFree(tc);
     return ret;
 }
+//</editor-fold>
 
-Mux* ruMuxInit(void) {
-    Mux *mx = ruMalloc0(1, Mux);
-    mx->type = MagicMux;
+//<editor-fold desc="Mutex">
+RUAPI ruMutex ruMutexInit(void) {
+    ruClearError();
+    Mux *mux = ruMalloc0(1, Mux);
+    mux->type = MagicMux;
 #ifdef _WIN32
-    mx->mux = CreateMutex( NULL, FALSE, NULL);
-    if (!mx->mux) {
+    InitializeSRWLock(&mux->mux);
+    if (mux->mux.Ptr) {
         ruSetError("mutex init failed: %d\n", GetLastError());
-		ruFree(mx);
-		return NULL;
+        ruFree(mux);
+        return NULL;
     }
 #else
     int ret;
-    if ((ret = pthread_mutex_init(&mx->mux, NULL))) {
+    if ((ret = pthread_mutex_init(&mux->mux, NULL))) {
         ruSetError("mutex init failed ec: %d", ret);
-        ruFree(mx);
+        ruFree(mux);
         return NULL;
     }
 #endif
-    return mx;
-}
-
-RUAPI ruMutex ruMutexInit(void) {
-    ruClearError();
-    return (ruMutex)ruMuxInit();
+    return (ruMutex)mux;
 }
 
 RUAPI ruMutex ruMutexFree(ruMutex m) {
-    ruClearError();
     int32_t ret;
     Mux *mux = MuxGet(m, &ret);
     if (!mux) return NULL;
-#ifdef _WIN32
-    CloseHandle(mux->mux);
-#else
+#ifndef _WIN32
     pthread_mutex_destroy(&mux->mux);
 #endif
+    ruFree(mux->lastCall);
     memset(mux, 0, sizeof(Mux));
     ruFree(mux);
     return NULL;
 }
 
-RUAPI bool ruMutexTryLock(ruMutex m) {
-    ruClearError();
+RUAPI bool ruMutexTryLockLoc(ruMutex m, trans_chars filePath, trans_chars func,
+                          int32_t line) {
     int32_t ret;
     Mux *mux = MuxGet(m, &ret);
     if (!mux) {
-        ruCritLogf("failed getting mutex %d", ret);
-        ruAbort();
+        ruAbortf("failed getting mutex %d", ret);
     }
 #ifdef _WIN32
-    DWORD res = WaitForSingleObject(mux->mux, 0);
-    if (res != WAIT_OBJECT_0 && res != WAIT_TIMEOUT) {
-        ruCritLogf("failed locking mutex ec:%d", GetLastError());
-        ruAbort();
-    }
-    return res == WAIT_OBJECT_0;
+    bool success = TryAcquireSRWLockExclusive(&mux->mux);
 #else
-    return 0 == pthread_mutex_trylock(&mux->mux);
+    bool success = 0 == pthread_mutex_trylock(&mux->mux);
 #endif
+    if (success) {
+        mux->tlCnt++;
+#if muxDbg
+        ruReplace(mux->lastCall, ruDupPrintf(
+                "TL: %s(%s:%d) l:%d t:%d u:%d", func, ruBaseName((char*)filePath),
+                line, mux->lCnt, mux->tlCnt, mux->ulCnt));
+#endif
+    }
+    return success;
 }
 
-void ruMuxLock(Mux *mux) {
-#ifdef _WIN32
-    if (WAIT_OBJECT_0 != WaitForSingleObject(mux->mux, INFINITE)) {
-        ruCritLogf("failed locking mutex ec:%d", GetLastError());
-        ruAbort();
+RUAPI void ruMutexLockLoc(ruMutex m, trans_chars filePath, trans_chars func,
+                          int32_t line) {
+    int32_t ret;
+    Mux *mux = MuxGet(m, &ret);
+    if (!mux) {
+        ruAbortf("failed getting mutex %d", ret);
     }
+#ifdef _WIN32
+#if muxDbg
+    bool success = false;
+    long end = ruTimeSec() + 10;
+    while (end > ruTimeSec()) {
+        if (TryAcquireSRWLockExclusive(&mux->mux)) {
+            success = true;
+            break;
+        }
+        ruSleepUs(10);
+    }
+    if (!success) {
+        ruAbortf("failed locking mutex lastLoc: %s", mux->lastCall);
+    }
+#else
+    AcquireSRWLockExclusive(&mux->mux);
+#endif
 #else
     pthread_mutex_lock(&mux->mux);
 #endif
+    mux->lCnt++;
+#if muxDbg
+    ruReplace(mux->lastCall, ruDupPrintf(
+            "L: %s(%s:%d) l:%d t:%d u:%d", func, ruBaseName((char*)filePath),
+            line, mux->lCnt, mux->tlCnt, mux->ulCnt));
+#endif
 }
 
-RUAPI void ruMutexLock(ruMutex m) {
-    ruClearError();
+RUAPI void ruMutexUnlockLoc(ruMutex m, trans_chars filePath, trans_chars func,
+                         int32_t line) {
     int32_t ret;
     Mux *mux = MuxGet(m, &ret);
     if (!mux) {
-        ruCritLogf("failed getting mutex %d", ret);
-        ruAbort();
+        ruAbortf("failed getting mutex %d", ret);
     }
-    ruMuxLock(mux);
-}
-
-void ruMuxUnlock(Mux *mux) {
+    mux->ulCnt++;
+#if muxDbg
+    if (mux->ulCnt != (mux->lCnt + mux->tlCnt)) {
+        ruAbortm("Extra release error");
+    }
+    ruReplace(mux->lastCall, ruDupPrintf(
+            "UL: %s(%s:%d) l:%d t:%d u:%d", func, ruBaseName((char*)filePath),
+            line, mux->lCnt, mux->tlCnt, mux->ulCnt));
+#endif
 #ifdef _WIN32
-    ReleaseMutex(mux->mux);
+    ReleaseSRWLockExclusive(&mux->mux);
 #else
     pthread_mutex_unlock(&mux->mux);
 #endif
 }
+//</editor-fold>
 
-RUAPI void ruMutexUnlock(ruMutex m) {
-    ruClearError();
-    int32_t ret;
-    Mux *mux = MuxGet(m, &ret);
-    if (!mux) {
-        ruCritLogf("failed getting mutex %d", ret);
-        ruAbort();
-    }
-    ruMuxUnlock(mux);
-}
-
+//<editor-fold desc="Thread Safe Counter">
 RUAPI ruCount ruCounterNew(int64_t initialCount) {
     tsc* ac = ruMalloc0(1, tsc);
     ac->type = MagicTsc;
@@ -389,3 +419,4 @@ RUAPI ruCount ruCountFree(ruCount counter) {
     ruFree(ac);
     return NULL;
 }
+//</editor-fold>

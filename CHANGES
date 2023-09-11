@@ -47,3 +47,6 @@ The inplace functions have been removed. The following updates are suggested:
 - ruStrStrip - ruStrStrip(instr, asciichars) -> ruStrTrim(instr, asciichars, ruTrimEnd, &newstr)
 - ruStripChars - ruStripChars(instr, chars) -> ruStrStrip(instr, chars, &newstr)
 
+* File system paths are accepted and assumed to be Unix style on all platforms
+- ruPathJoin now joins using unix slashes
+- ruPathJoinNative has been added to use Windows slashes on Windows
