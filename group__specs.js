@@ -6,6 +6,7 @@ var group__specs =
     [ "16 Bit Integer", "group__typeint16.html", "group__typeint16" ],
     [ "8 Bit Integer", "group__typeint8.html", "group__typeint8" ],
     [ "Boolean", "group__typebool.html", "group__typebool" ],
+    [ "Pointer size Integer", "group__typeintptr.html", "group__typeintptr" ],
     [ "Strings", "group__typestring.html", "group__typestring" ],
     [ "ruCloneFunc", "group__specs.html#ga9cd5256b4f669c7da4d83aaffcbdd668", null ],
     [ "ruCompFunc", "group__specs.html#ga5b76db9aa7b4857b410ed3c7bcae3cc3", null ],

@@ -124,6 +124,9 @@ Modules</h2></td></tr>
 <tr class="memitem:group__typebool"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__typebool.html">Boolean</a></td></tr>
 <tr class="memdesc:group__typebool"><td class="mdescLeft">&#160;</td><td class="mdescRight">This section contains collection support for booleans such as bool. <br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:group__typeintptr"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__typeintptr.html">Pointer size Integer</a></td></tr>
+<tr class="memdesc:group__typeintptr"><td class="mdescLeft">&#160;</td><td class="mdescRight">This section contains collection support for Pointer size Integers such as intptr_t or ru_int. <br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:group__typestring"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__typestring.html">Strings</a></td></tr>
 <tr class="memdesc:group__typestring"><td class="mdescLeft">&#160;</td><td class="mdescRight">This section contains collection support for single byte strings such as char*. <br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -133,7 +136,7 @@ Typedefs</h2></td></tr>
 <tr class="memitem:ga44e5e590e1e962d3ff605c847ebbf9c3"><td class="memItemLeft" align="right" valign="top">typedef void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__specs.html#ga44e5e590e1e962d3ff605c847ebbf9c3">ruType</a></td></tr>
 <tr class="memdesc:ga44e5e590e1e962d3ff605c847ebbf9c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">An opaque type representing a type specification.  <a href="group__specs.html#ga44e5e590e1e962d3ff605c847ebbf9c3">More...</a><br /></td></tr>
 <tr class="separator:ga44e5e590e1e962d3ff605c847ebbf9c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga71667e232bf6a6db737a5ac33535b39b"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="group__misc.html#ga6bccfa079bb265c356aca7fb702dd71b">ru_uint</a>(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__specs.html#ga71667e232bf6a6db737a5ac33535b39b">ruHashFunc</a>) (<a class="el" href="group__misc.html#ga147d80ce3325dd56fbfb0e07cedcf757">trans_ptr</a> key)</td></tr>
+<tr class="memitem:ga71667e232bf6a6db737a5ac33535b39b"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="group__misc.html#ga611a151ba84334811d0fb33131116abe">ru_uint</a>(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__specs.html#ga71667e232bf6a6db737a5ac33535b39b">ruHashFunc</a>) (<a class="el" href="group__misc.html#ga147d80ce3325dd56fbfb0e07cedcf757">trans_ptr</a> key)</td></tr>
 <tr class="memdesc:ga71667e232bf6a6db737a5ac33535b39b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function signature of a hashing function for <a class="el" href="group__hashmap.html#gaad879dbca17e7740cbab5651cafe677d">ruMap</a> or <a class="el" href="group__hashset.html#gae7552ee2efa05ecb72079b00ccd81466">ruSet</a> keys.  <a href="group__specs.html#ga71667e232bf6a6db737a5ac33535b39b">More...</a><br /></td></tr>
 <tr class="separator:ga71667e232bf6a6db737a5ac33535b39b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga60c90b03efaa80d47cc29e71ec93fb1d"><td class="memItemLeft" align="right" valign="top">typedef bool(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__specs.html#ga60c90b03efaa80d47cc29e71ec93fb1d">ruMatchFunc</a>) (<a class="el" href="group__misc.html#ga147d80ce3325dd56fbfb0e07cedcf757">trans_ptr</a> testKey, <a class="el" href="group__misc.html#ga147d80ce3325dd56fbfb0e07cedcf757">trans_ptr</a> existingKey)</td></tr>
@@ -158,7 +161,7 @@ Functions</h2></td></tr>
 <tr class="memdesc:gaffcd92fa7c57aaac4ef591cbd2fc82aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a custom type specification usable as a map key.  <a href="group__specs.html#gaffcd92fa7c57aaac4ef591cbd2fc82aa">More...</a><br /></td></tr>
 <tr class="separator:gaffcd92fa7c57aaac4ef591cbd2fc82aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga230108d3a17c6ec38df13fd65f06affc"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__specs.html#ga44e5e590e1e962d3ff605c847ebbf9c3">ruType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__specs.html#ga230108d3a17c6ec38df13fd65f06affc">ruTypePtr</a> (<a class="el" href="group__memory.html#ga37adb48aac1ef8401ce1e5b910170b7b">ruClearFunc</a> free)</td></tr>
-<tr class="memdesc:ga230108d3a17c6ec38df13fd65f06affc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a custom pointer type specification.  <a href="group__specs.html#ga230108d3a17c6ec38df13fd65f06affc">More...</a><br /></td></tr>
+<tr class="memdesc:ga230108d3a17c6ec38df13fd65f06affc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a custom <a class="el" href="group__typeintptr.html#gae491babb084b0fe1e2311cb5d39a642a">ruTypeIntPtr</a> specification.  <a href="group__specs.html#ga230108d3a17c6ec38df13fd65f06affc">More...</a><br /></td></tr>
 <tr class="separator:ga230108d3a17c6ec38df13fd65f06affc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga1e4c9aebffc79ddc6d162eebb3490723"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__specs.html#ga44e5e590e1e962d3ff605c847ebbf9c3">ruType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__specs.html#ga1e4c9aebffc79ddc6d162eebb3490723">ruTypeClone</a> (<a class="el" href="group__specs.html#ga44e5e590e1e962d3ff605c847ebbf9c3">ruType</a> tp)</td></tr>
 <tr class="memdesc:ga1e4c9aebffc79ddc6d162eebb3490723"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a copy of the given <a class="el" href="group__specs.html#ga44e5e590e1e962d3ff605c847ebbf9c3">ruType</a>.  <a href="group__specs.html#ga1e4c9aebffc79ddc6d162eebb3490723">More...</a><br /></td></tr>
@@ -216,7 +219,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef <a class="el" href="group__misc.html#ga6bccfa079bb265c356aca7fb702dd71b">ru_uint</a>(* ruHashFunc) (<a class="el" href="group__misc.html#ga147d80ce3325dd56fbfb0e07cedcf757">trans_ptr</a> key)</td>
+          <td class="memname">typedef <a class="el" href="group__misc.html#ga611a151ba84334811d0fb33131116abe">ru_uint</a>(* ruHashFunc) (<a class="el" href="group__misc.html#ga147d80ce3325dd56fbfb0e07cedcf757">trans_ptr</a> key)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -450,7 +453,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Creates a custom pointer type specification. </p>
+<p>Creates a custom <a class="el" href="group__typeintptr.html#gae491babb084b0fe1e2311cb5d39a642a">ruTypeIntPtr</a> specification. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">free</td><td>The free function to be called when the type is removed from a collection. </td></tr>
@@ -487,7 +490,7 @@ Functions</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Wed Aug 30 2023 11:53:51 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Mon Sep 11 2023 11:43:52 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

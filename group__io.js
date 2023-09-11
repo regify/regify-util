@@ -4,6 +4,7 @@ var group__io =
     [ "RU_WALK_FOLDER_LAST", "group__io.html#ga055a96a5883241e585332496a09cf671", null ],
     [ "RU_WALK_NO_RECURSE", "group__io.html#ga7f8970ea7304cf95817cac910c9070dc", null ],
     [ "RU_WALK_NO_SELF", "group__io.html#ga4683be3cd4a5ec2a466217a599d370c9", null ],
+    [ "RU_WALK_UNIX_SLASHES", "group__io.html#ga6da7d23aef82df753a1a66b6fae10ba5", null ],
     [ "entryFilter", "group__io.html#ga96b2df183649f58bd746edc4a0c6161c", null ],
     [ "entryMgr", "group__io.html#gae838891e096d47726baeec65b792fd51", null ],
     [ "ruStat_t", "group__io.html#gae389f0b8ef30d38c2c5ee1be60330ede", null ],
@@ -35,6 +36,8 @@ var group__io =
     [ "ruOpen", "group__io.html#gae5dc81a0de9eafb956c253be9e66948e", null ],
     [ "ruOpenTmp", "group__io.html#gacf30a0eee9096e022b112167988a4f06", null ],
     [ "ruPathJoin", "group__io.html#ga8f9b928f302905a50cd91860e384c7fa", null ],
+    [ "ruPathJoinNative", "group__io.html#ga99e7777547f7a0ac8de619f6e0144b96", null ],
     [ "ruPathMultiJoin", "group__io.html#gaa0bd3e2ab8ca42cf6c26dda0f0bf5836", null ],
+    [ "ruPathMultiJoinNative", "group__io.html#gaa6a6db5109523291907cb606dc922fda", null ],
     [ "ruStat", "group__io.html#ga3c01cc11c4ab4e14c29a12fa5cb1bc7e", null ]
 ];

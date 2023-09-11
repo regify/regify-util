@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['trans_5fbytes_938',['trans_bytes',['../group__misc.html#gab5445910fbc90fb0a6db407f8f608422',1,'regify-util.h']]],
-  ['trans_5fchars_939',['trans_chars',['../group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc',1,'regify-util.h']]],
-  ['trans_5fptr_940',['trans_ptr',['../group__misc.html#ga147d80ce3325dd56fbfb0e07cedcf757',1,'regify-util.h']]],
-  ['trans_5funi_941',['trans_uni',['../group__misc.html#ga583a16c595210574018e6bd10fe925b7',1,'regify-util.h']]]
+  ['trans_5fbytes_955',['trans_bytes',['../group__misc.html#gab5445910fbc90fb0a6db407f8f608422',1,'regify-util.h']]],
+  ['trans_5fchars_956',['trans_chars',['../group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc',1,'regify-util.h']]],
+  ['trans_5fptr_957',['trans_ptr',['../group__misc.html#ga147d80ce3325dd56fbfb0e07cedcf757',1,'regify-util.h']]],
+  ['trans_5funi_958',['trans_uni',['../group__misc.html#ga583a16c595210574018e6bd10fe925b7',1,'regify-util.h']]]
 ];

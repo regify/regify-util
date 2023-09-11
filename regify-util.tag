@@ -242,17 +242,17 @@
       <arglist></arglist>
     </member>
     <member kind="typedef">
-      <type>long</type>
+      <type>intptr_t</type>
       <name>ru_int</name>
       <anchorfile>group__misc.html</anchorfile>
-      <anchor>ga9304b6c6b14b62616d983b36f15a7210</anchor>
+      <anchor>ga08ea7d9b63ae62c0b2f4f666841ee48e</anchor>
       <arglist></arglist>
     </member>
     <member kind="typedef">
-      <type>unsigned long</type>
+      <type>uintptr_t</type>
       <name>ru_uint</name>
       <anchorfile>group__misc.html</anchorfile>
-      <anchor>ga6bccfa079bb265c356aca7fb702dd71b</anchor>
+      <anchor>ga611a151ba84334811d0fb33131116abe</anchor>
       <arglist></arglist>
     </member>
     <member kind="typedef">
@@ -887,6 +887,13 @@
       <anchor>ga4683be3cd4a5ec2a466217a599d370c9</anchor>
       <arglist></arglist>
     </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>RU_WALK_UNIX_SLASHES</name>
+      <anchorfile>group__io.html</anchorfile>
+      <anchor>ga6da7d23aef82df753a1a66b6fae10ba5</anchor>
+      <arglist></arglist>
+    </member>
     <member kind="typedef">
       <type>struct stat</type>
       <name>ruStat_t</name>
@@ -1106,6 +1113,13 @@
     </member>
     <member kind="function">
       <type>RUAPI alloc_chars</type>
+      <name>ruPathJoinNative</name>
+      <anchorfile>group__io.html</anchorfile>
+      <anchor>ga99e7777547f7a0ac8de619f6e0144b96</anchor>
+      <arglist>(trans_chars base, trans_chars file)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI alloc_chars</type>
       <name>ruPathJoin</name>
       <anchorfile>group__io.html</anchorfile>
       <anchor>ga8f9b928f302905a50cd91860e384c7fa</anchor>
@@ -1116,6 +1130,13 @@
       <name>ruPathMultiJoin</name>
       <anchorfile>group__io.html</anchorfile>
       <anchor>gaa0bd3e2ab8ca42cf6c26dda0f0bf5836</anchor>
+      <arglist>(int parts,...)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI alloc_chars</type>
+      <name>ruPathMultiJoinNative</name>
+      <anchorfile>group__io.html</anchorfile>
+      <anchor>gaa6a6db5109523291907cb606dc922fda</anchor>
       <arglist>(int parts,...)</arglist>
     </member>
   </compound>
@@ -2957,6 +2978,27 @@
     <filename>group__threading.html</filename>
     <member kind="define">
       <type>#define</type>
+      <name>ruMutexTryLock</name>
+      <anchorfile>group__threading.html</anchorfile>
+      <anchor>ga2823b6e5823e1c23513d37a294d4425d</anchor>
+      <arglist>(m)</arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>ruMutexLock</name>
+      <anchorfile>group__threading.html</anchorfile>
+      <anchor>ga3d2d4d3baa0e6426275df05cdfdb58cb</anchor>
+      <arglist>(m)</arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>ruMutexUnlock</name>
+      <anchorfile>group__threading.html</anchorfile>
+      <anchor>gad4287a16cc2a5c7a48318ec09a53280c</anchor>
+      <arglist>(m)</arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
       <name>ruCounterInc</name>
       <anchorfile>group__threading.html</anchorfile>
       <anchor>ga492be40dd95c10610c21289a393539f2</anchor>
@@ -3090,24 +3132,24 @@
     </member>
     <member kind="function">
       <type>RUAPI bool</type>
-      <name>ruMutexTryLock</name>
+      <name>ruMutexTryLockLoc</name>
       <anchorfile>group__threading.html</anchorfile>
-      <anchor>ga0856c60adc3b35d8a5eec3937ebcdb51</anchor>
-      <arglist>(ruMutex m)</arglist>
+      <anchor>ga2e66680a0bcce96473ac8b8b2eb99008</anchor>
+      <arglist>(ruMutex m, trans_chars filePath, trans_chars func, int32_t line)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI void</type>
-      <name>ruMutexLock</name>
+      <name>ruMutexLockLoc</name>
       <anchorfile>group__threading.html</anchorfile>
-      <anchor>ga1ba4661b6f200a9a01182c062b5fc463</anchor>
-      <arglist>(ruMutex m)</arglist>
+      <anchor>ga4a6644f65d1ae04408f20f77548889f0</anchor>
+      <arglist>(ruMutex m, trans_chars filePath, trans_chars func, int32_t line)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI void</type>
-      <name>ruMutexUnlock</name>
+      <name>ruMutexUnlockLoc</name>
       <anchorfile>group__threading.html</anchorfile>
-      <anchor>ga29343db7caf7ceb43470dff97cf2668b</anchor>
-      <arglist>(ruMutex m)</arglist>
+      <anchor>ga15c7ee9e33ec5d230450b722f9afbc39</anchor>
+      <arglist>(ruMutex m, trans_chars filePath, trans_chars func, int32_t line)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI ruMutex</type>
@@ -3155,6 +3197,7 @@
     <subgroup>typeint16</subgroup>
     <subgroup>typeint8</subgroup>
     <subgroup>typebool</subgroup>
+    <subgroup>typeintptr</subgroup>
     <subgroup>typestring</subgroup>
     <member kind="typedef">
       <type>void *</type>
@@ -3520,6 +3563,39 @@
       <name>ruTypeBool</name>
       <anchorfile>group__typebool.html</anchorfile>
       <anchor>gac8b5b99b1b9a9927a4503e6082a7339a</anchor>
+      <arglist>(void)</arglist>
+    </member>
+  </compound>
+  <compound kind="group">
+    <name>typeintptr</name>
+    <title>Pointer size Integer</title>
+    <filename>group__typeintptr.html</filename>
+    <member kind="function">
+      <type>RUAPI ru_uint</type>
+      <name>ruPtrHash</name>
+      <anchorfile>group__typeintptr.html</anchorfile>
+      <anchor>ga30cb2465a341aeaef724ef0e6097f24f</anchor>
+      <arglist>(trans_ptr key)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI bool</type>
+      <name>ruPtrMatch</name>
+      <anchorfile>group__typeintptr.html</anchorfile>
+      <anchor>ga4988edbdfeb3d4a7be3ec3f01d1cd19c</anchor>
+      <arglist>(trans_ptr s1, trans_ptr s2)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI int32_t</type>
+      <name>ruPtrComp</name>
+      <anchorfile>group__typeintptr.html</anchorfile>
+      <anchor>ga362472230035da8a1c97bd710d9e275c</anchor>
+      <arglist>(trans_ptr testVal, trans_ptr existingVal)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI ruType</type>
+      <name>ruTypeIntPtr</name>
+      <anchorfile>group__typeintptr.html</anchorfile>
+      <anchor>gae491babb084b0fe1e2311cb5d39a642a</anchor>
       <arglist>(void)</arglist>
     </member>
   </compound>

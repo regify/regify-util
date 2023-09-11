@@ -106,6 +106,12 @@ $(document).ready(function(){initNavTree('group__threading.html',''); initResiza
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
+<tr class="memitem:ga2823b6e5823e1c23513d37a294d4425d"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__threading.html#ga2823b6e5823e1c23513d37a294d4425d">ruMutexTryLock</a>(m)&#160;&#160;&#160;<a class="el" href="group__threading.html#ga2e66680a0bcce96473ac8b8b2eb99008">ruMutexTryLockLoc</a>(m, __FILE__, __func__, __LINE__)</td></tr>
+<tr class="separator:ga2823b6e5823e1c23513d37a294d4425d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga3d2d4d3baa0e6426275df05cdfdb58cb"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__threading.html#ga3d2d4d3baa0e6426275df05cdfdb58cb">ruMutexLock</a>(m)&#160;&#160;&#160;<a class="el" href="group__threading.html#ga4a6644f65d1ae04408f20f77548889f0">ruMutexLockLoc</a>(m, __FILE__, __func__, __LINE__)</td></tr>
+<tr class="separator:ga3d2d4d3baa0e6426275df05cdfdb58cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gad4287a16cc2a5c7a48318ec09a53280c"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__threading.html#gad4287a16cc2a5c7a48318ec09a53280c">ruMutexUnlock</a>(m)&#160;&#160;&#160;<a class="el" href="group__threading.html#ga15c7ee9e33ec5d230450b722f9afbc39">ruMutexUnlockLoc</a>(m, __FILE__, __func__, __LINE__)</td></tr>
+<tr class="separator:gad4287a16cc2a5c7a48318ec09a53280c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga492be40dd95c10610c21289a393539f2"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__threading.html#ga492be40dd95c10610c21289a393539f2">ruCounterInc</a>(counter,  value)&#160;&#160;&#160;<a class="el" href="group__threading.html#gadc7eb7e92f2f1b0f574f9a1d5779436a">ruCounterIncValue</a>(counter, value, NULL)</td></tr>
 <tr class="separator:ga492be40dd95c10610c21289a393539f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga5f9e0635ce4714e64afebc1e2ad56bd6"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__threading.html#ga5f9e0635ce4714e64afebc1e2ad56bd6">ruCounterRead</a>(counter)&#160;&#160;&#160;<a class="el" href="group__threading.html#gadc7eb7e92f2f1b0f574f9a1d5779436a">ruCounterIncValue</a>(counter, 0, NULL)</td></tr>
@@ -154,15 +160,15 @@ Functions</h2></td></tr>
 <tr class="memitem:gac8236a5017586c076516fb17dae0809c"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__threading.html#gaa2f2224294aab80c5b5fdadf8c50a2de">ruMutex</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__threading.html#gac8236a5017586c076516fb17dae0809c">ruMutexInit</a> (void)</td></tr>
 <tr class="memdesc:gac8236a5017586c076516fb17dae0809c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize a new <a class="el" href="group__threading.html#gaa2f2224294aab80c5b5fdadf8c50a2de">ruMutex</a>.  <a href="group__threading.html#gac8236a5017586c076516fb17dae0809c">More...</a><br /></td></tr>
 <tr class="separator:gac8236a5017586c076516fb17dae0809c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga0856c60adc3b35d8a5eec3937ebcdb51"><td class="memItemLeft" align="right" valign="top">RUAPI bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__threading.html#ga0856c60adc3b35d8a5eec3937ebcdb51">ruMutexTryLock</a> (<a class="el" href="group__threading.html#gaa2f2224294aab80c5b5fdadf8c50a2de">ruMutex</a> m)</td></tr>
-<tr class="memdesc:ga0856c60adc3b35d8a5eec3937ebcdb51"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tries to aquire a lock for the given <a class="el" href="group__threading.html#gaa2f2224294aab80c5b5fdadf8c50a2de">ruMutex</a> without blocking.  <a href="group__threading.html#ga0856c60adc3b35d8a5eec3937ebcdb51">More...</a><br /></td></tr>
-<tr class="separator:ga0856c60adc3b35d8a5eec3937ebcdb51"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga1ba4661b6f200a9a01182c062b5fc463"><td class="memItemLeft" align="right" valign="top">RUAPI void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__threading.html#ga1ba4661b6f200a9a01182c062b5fc463">ruMutexLock</a> (<a class="el" href="group__threading.html#gaa2f2224294aab80c5b5fdadf8c50a2de">ruMutex</a> m)</td></tr>
-<tr class="memdesc:ga1ba4661b6f200a9a01182c062b5fc463"><td class="mdescLeft">&#160;</td><td class="mdescRight">Aquire a lock for the given <a class="el" href="group__threading.html#gaa2f2224294aab80c5b5fdadf8c50a2de">ruMutex</a> blocking until it is given.  <a href="group__threading.html#ga1ba4661b6f200a9a01182c062b5fc463">More...</a><br /></td></tr>
-<tr class="separator:ga1ba4661b6f200a9a01182c062b5fc463"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga29343db7caf7ceb43470dff97cf2668b"><td class="memItemLeft" align="right" valign="top">RUAPI void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__threading.html#ga29343db7caf7ceb43470dff97cf2668b">ruMutexUnlock</a> (<a class="el" href="group__threading.html#gaa2f2224294aab80c5b5fdadf8c50a2de">ruMutex</a> m)</td></tr>
-<tr class="memdesc:ga29343db7caf7ceb43470dff97cf2668b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the aquired mutex lock so other threads can use it.  <a href="group__threading.html#ga29343db7caf7ceb43470dff97cf2668b">More...</a><br /></td></tr>
-<tr class="separator:ga29343db7caf7ceb43470dff97cf2668b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga2e66680a0bcce96473ac8b8b2eb99008"><td class="memItemLeft" align="right" valign="top">RUAPI bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__threading.html#ga2e66680a0bcce96473ac8b8b2eb99008">ruMutexTryLockLoc</a> (<a class="el" href="group__threading.html#gaa2f2224294aab80c5b5fdadf8c50a2de">ruMutex</a> m, <a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> filePath, <a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> func, int32_t line)</td></tr>
+<tr class="memdesc:ga2e66680a0bcce96473ac8b8b2eb99008"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tries to aquire a lock for the given <a class="el" href="group__threading.html#gaa2f2224294aab80c5b5fdadf8c50a2de">ruMutex</a> without blocking.  <a href="group__threading.html#ga2e66680a0bcce96473ac8b8b2eb99008">More...</a><br /></td></tr>
+<tr class="separator:ga2e66680a0bcce96473ac8b8b2eb99008"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga4a6644f65d1ae04408f20f77548889f0"><td class="memItemLeft" align="right" valign="top">RUAPI void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__threading.html#ga4a6644f65d1ae04408f20f77548889f0">ruMutexLockLoc</a> (<a class="el" href="group__threading.html#gaa2f2224294aab80c5b5fdadf8c50a2de">ruMutex</a> m, <a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> filePath, <a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> func, int32_t line)</td></tr>
+<tr class="memdesc:ga4a6644f65d1ae04408f20f77548889f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Aquire a lock for the given <a class="el" href="group__threading.html#gaa2f2224294aab80c5b5fdadf8c50a2de">ruMutex</a> blocking until it is given.  <a href="group__threading.html#ga4a6644f65d1ae04408f20f77548889f0">More...</a><br /></td></tr>
+<tr class="separator:ga4a6644f65d1ae04408f20f77548889f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga15c7ee9e33ec5d230450b722f9afbc39"><td class="memItemLeft" align="right" valign="top">RUAPI void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__threading.html#ga15c7ee9e33ec5d230450b722f9afbc39">ruMutexUnlockLoc</a> (<a class="el" href="group__threading.html#gaa2f2224294aab80c5b5fdadf8c50a2de">ruMutex</a> m, <a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> filePath, <a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> func, int32_t line)</td></tr>
+<tr class="memdesc:ga15c7ee9e33ec5d230450b722f9afbc39"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the aquired mutex lock so other threads can use it.  <a href="group__threading.html#ga15c7ee9e33ec5d230450b722f9afbc39">More...</a><br /></td></tr>
+<tr class="separator:ga15c7ee9e33ec5d230450b722f9afbc39"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gafa04ae8066591ed11d6494f80527cfa2"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__threading.html#gaa2f2224294aab80c5b5fdadf8c50a2de">ruMutex</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__threading.html#gafa04ae8066591ed11d6494f80527cfa2">ruMutexFree</a> (<a class="el" href="group__threading.html#gaa2f2224294aab80c5b5fdadf8c50a2de">ruMutex</a> m)</td></tr>
 <tr class="memdesc:gafa04ae8066591ed11d6494f80527cfa2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Free up given <a class="el" href="group__threading.html#gaa2f2224294aab80c5b5fdadf8c50a2de">ruMutex</a> object.  <a href="group__threading.html#gafa04ae8066591ed11d6494f80527cfa2">More...</a><br /></td></tr>
 <tr class="separator:gafa04ae8066591ed11d6494f80527cfa2"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -256,6 +262,60 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Calls <a class="el" href="group__threading.html#ga3c1c5ad2c95c127a45b20cca74a8b9cc">ruCountSetValue</a> without the code parameter </p>
+
+</div>
+</div>
+<a id="ga3d2d4d3baa0e6426275df05cdfdb58cb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga3d2d4d3baa0e6426275df05cdfdb58cb">&#9670;&nbsp;</a></span>ruMutexLock</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ruMutexLock</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">m</td><td>)</td>
+          <td>&#160;&#160;&#160;<a class="el" href="group__threading.html#ga4a6644f65d1ae04408f20f77548889f0">ruMutexLockLoc</a>(m, __FILE__, __func__, __LINE__)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ga2823b6e5823e1c23513d37a294d4425d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga2823b6e5823e1c23513d37a294d4425d">&#9670;&nbsp;</a></span>ruMutexTryLock</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ruMutexTryLock</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">m</td><td>)</td>
+          <td>&#160;&#160;&#160;<a class="el" href="group__threading.html#ga2e66680a0bcce96473ac8b8b2eb99008">ruMutexTryLockLoc</a>(m, __FILE__, __func__, __LINE__)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="gad4287a16cc2a5c7a48318ec09a53280c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gad4287a16cc2a5c7a48318ec09a53280c">&#9670;&nbsp;</a></span>ruMutexUnlock</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ruMutexUnlock</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">m</td><td>)</td>
+          <td>&#160;&#160;&#160;<a class="el" href="group__threading.html#ga15c7ee9e33ec5d230450b722f9afbc39">ruMutexUnlockLoc</a>(m, __FILE__, __func__, __LINE__)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -544,18 +604,40 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ga1ba4661b6f200a9a01182c062b5fc463"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga1ba4661b6f200a9a01182c062b5fc463">&#9670;&nbsp;</a></span>ruMutexLock()</h2>
+<a id="ga4a6644f65d1ae04408f20f77548889f0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga4a6644f65d1ae04408f20f77548889f0">&#9670;&nbsp;</a></span>ruMutexLockLoc()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">RUAPI void ruMutexLock </td>
+          <td class="memname">RUAPI void ruMutexLockLoc </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="group__threading.html#gaa2f2224294aab80c5b5fdadf8c50a2de">ruMutex</a>&#160;</td>
-          <td class="paramname"><em>m</em></td><td>)</td>
+          <td class="paramname"><em>m</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a>&#160;</td>
+          <td class="paramname"><em>filePath</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a>&#160;</td>
+          <td class="paramname"><em>func</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int32_t&#160;</td>
+          <td class="paramname"><em>line</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -570,18 +652,40 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ga0856c60adc3b35d8a5eec3937ebcdb51"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga0856c60adc3b35d8a5eec3937ebcdb51">&#9670;&nbsp;</a></span>ruMutexTryLock()</h2>
+<a id="ga2e66680a0bcce96473ac8b8b2eb99008"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga2e66680a0bcce96473ac8b8b2eb99008">&#9670;&nbsp;</a></span>ruMutexTryLockLoc()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">RUAPI bool ruMutexTryLock </td>
+          <td class="memname">RUAPI bool ruMutexTryLockLoc </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="group__threading.html#gaa2f2224294aab80c5b5fdadf8c50a2de">ruMutex</a>&#160;</td>
-          <td class="paramname"><em>m</em></td><td>)</td>
+          <td class="paramname"><em>m</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a>&#160;</td>
+          <td class="paramname"><em>filePath</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a>&#160;</td>
+          <td class="paramname"><em>func</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int32_t&#160;</td>
+          <td class="paramname"><em>line</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -597,18 +701,40 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ga29343db7caf7ceb43470dff97cf2668b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga29343db7caf7ceb43470dff97cf2668b">&#9670;&nbsp;</a></span>ruMutexUnlock()</h2>
+<a id="ga15c7ee9e33ec5d230450b722f9afbc39"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga15c7ee9e33ec5d230450b722f9afbc39">&#9670;&nbsp;</a></span>ruMutexUnlockLoc()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">RUAPI void ruMutexUnlock </td>
+          <td class="memname">RUAPI void ruMutexUnlockLoc </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="group__threading.html#gaa2f2224294aab80c5b5fdadf8c50a2de">ruMutex</a>&#160;</td>
-          <td class="paramname"><em>m</em></td><td>)</td>
+          <td class="paramname"><em>m</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a>&#160;</td>
+          <td class="paramname"><em>filePath</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a>&#160;</td>
+          <td class="paramname"><em>func</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int32_t&#160;</td>
+          <td class="paramname"><em>line</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -917,7 +1043,7 @@ Functions</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Wed Aug 30 2023 11:53:51 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Mon Sep 11 2023 11:43:52 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

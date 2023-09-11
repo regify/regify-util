@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['threading_20related_985',['Threading Related',['../group__threading.html',1,'']]],
-  ['typed_20list_20api_986',['Typed List API',['../group__listtype.html',1,'']]]
+  ['string_20functions_1000',['String Functions',['../group__string.html',1,'']]],
+  ['string_20object_1001',['String Object',['../group__ru_string.html',1,'']]],
+  ['strings_1002',['Strings',['../group__typestring.html',1,'']]]
 ];
