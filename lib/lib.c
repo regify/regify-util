@@ -23,7 +23,7 @@
 
 static void ruAbort(void) {
     // crash here
-    *(int*)0 = 0;
+    abort();
 }
 
 void ruAbortf(trans_chars format, ...) {

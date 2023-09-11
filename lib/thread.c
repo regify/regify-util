@@ -62,7 +62,9 @@ static void* threadRunner(void* context) {
 static Thr* threadFree(Thr* tc) {
     if (!tc) return NULL;
     ruDbgLogf("Freeing thread 0x%p", tc);
+#ifdef _WIN32
     if (tc->tid) CloseHandle(tc->tid);
+#endif
     memset(tc, 0, sizeof(Thr));
     ruFree(tc);
     return NULL;
