@@ -164,7 +164,7 @@ RUAPI int32_t ruGetOptMap(ruMap* parms, trans_chars opts, int argc, char** argv)
     if (!parms || !opts || !argc || !argv) return RUE_PARAMETER_NOT_SET;
     int32_t ret = RUE_FILE_NOT_FOUND;
     ruMap params = ruMapNew(ruTypeStrFree(), ruTypeStrDup());
-    optind = 0;
+    optind = 1;
     do {
         // needed for GNU implementations to be more strict and consistent
         putenv("POSIXLY_CORRECT=1");

@@ -403,7 +403,7 @@ START_TEST (getoptmap) {
     int32_t ret, exp, argc;
     perm_chars retText = "failed wanted ret '%d' but got '%d'";
     ruMap params = NULL;
-    optest t1 = {"a:", 3, {[1]="-a", "opta"}};
+    optest t1 = {"a:", 3, {"foo.app", "-a", "opta"}};
     optest* ot = &t1;
 
     argc = 0;
