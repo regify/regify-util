@@ -24,13 +24,17 @@
 #include <dispatch/dispatch.h>
 #include <CoreServices/CoreServices.h>
 
-//#define fam_dbg
+// fam debugging
+#if 0
 #define fam_dbg(fmt, ...) ruLog_(RU_LOG_DBUG, fmt, __VA_ARGS__)
+#else
+#define fam_dbg(fmt, ...)
+#endif
 
 // File renames and deletes due to moves out of our watched area must be handled
-// by the CFRunloop and a cleaner thread. We use an array of maps to store file
+// by the fam and a cleaner thread. We use an array of maps to store file
 // moves in. These are accessed in a ring fashion to facilitate event timeouts.
-// The cleaner thread always works on now+2 while the CFRunloop operates on now
+// The cleaner thread always works on now+2 while the fam operates on now
 // and now-1.
 // The main fam runloop populates (k:inode v:old filename) the current (now) out
 // of 4 maps with the moveout event (kFSEv..Renamed no stat). It also removes
@@ -51,7 +55,6 @@
 typedef struct {
     alloc_chars name;       // the name of the thread
     alloc_chars topDir;     // path to the top level directory
-    ruThread tid;           // thread id of fam thread
     ruThread ctid;          // thread id of cleaner thread
 
     ruFamHandler eventCb;   // the given user event callback function
@@ -67,8 +70,6 @@ typedef struct {
     // keys of each map so we can retain order
     ruList mrLst[moveRingBuckets];
 
-    // set true when run thread has initialized folder have been scanned
-    bool hasInit;
     // set when it's time to quit cleaner
     bool quit;
 
@@ -83,7 +84,7 @@ typedef struct {
 #define ap(str) if (!out) { \
         out = ruStringNew(str); \
     } else { \
-        ruStringAppendf("|%s", str); \
+        ruStringAppendf(out, "|%s", str); \
     }
 
 static alloc_chars flagsToString(int32_t flags) {
@@ -192,6 +193,7 @@ static int32_t handleFile(famCtx *fctx, trans_chars path,
     int32_t ret = fam_ignore;
     uint64_t mInode = 0;
     ruMapGet(fctx->pathInode, path, &mInode);
+    fam_dbg("pathInode mapping got mInode: %ld for path: '%s'", mInode, path);
 
     if (inode) { // file there;
         perm_chars mPath = NULL;
@@ -235,6 +237,7 @@ static int32_t handleFile(famCtx *fctx, trans_chars path,
         if (!mPath) {
             // all others check our maps
             ruMapGet(fctx->inodePath, &inode, &mPath);
+            fam_dbg("inodePath mapping got mPath: '%s' for inode: %ld", mPath, inode);
             if (!mPath && mInode) {
                 mPath = path ; // so modified swapped out works
             }
@@ -254,7 +257,13 @@ static int32_t handleFile(famCtx *fctx, trans_chars path,
                 ret = RU_FAM_MODIFIED;
 
             } else {
-                fam_dbg("path: '%s' is unchanged", path);
+                if ((kFSEventStreamEventFlagItemInodeMetaMod |
+                    kFSEventStreamEventFlagItemModified) & op) {
+                    ret = RU_FAM_MODIFIED;
+                    fam_dbg("path: '%s' got modified", path);
+                } else {
+                    fam_dbg("path: '%s' is unchanged", path);
+                }
             }
 
         } else { // 0, 1
@@ -292,7 +301,7 @@ static int32_t handleFile(famCtx *fctx, trans_chars path,
             // reaps it in a while and triggers a deleted event
             int32_t b = getBucketNum(0);
             alloc_chars newPath = ruStrDup(path);
-            fam_dbg("putting path: '%s' inode: %ld into bucket: %d", newPath, mInode, b);
+            fam_dbg("putting path: '%s' mInode: %ld into bucket: %d", newPath, mInode, b);
             ruListAppend(fctx->mrLst[b], mInode);
             ruMapPut(fctx->mrMap[b], &mInode, newPath);
             // The file is removed from our maps regardless of delete or move
@@ -320,7 +329,9 @@ static int32_t handleFile(famCtx *fctx, trans_chars path,
 
 static int32_t scanLst(trans_chars fullPath, bool isFolder, ptr o) {
     famCtx *fctx = (famCtx*)o;
-    handleFile(fctx, fullPath, kFSEventStreamEventFlagNone, NULL);
+    alloc_chars nfcPath = ruStrFromNfd(fullPath);
+    handleFile(fctx, nfcPath, kFSEventStreamEventFlagNone, NULL);
+    ruFree(nfcPath);
     return RUE_OK;
 }
 
@@ -330,6 +341,10 @@ static void fseCb(ConstFSEventStreamRef stream, void* ctx,
                   const FSEventStreamEventId* eventIds_q) {
 
     famCtx* fctx = (famCtx*)ctx;
+    if (!ru_threadName) {
+        // this is usually an anonymous thread, so name it here
+        ruThreadSetName("fsev");
+    }
     perm_chars* paths = (perm_chars*) eventPaths;
     fam_dbg("event count: %d", numEvents);
     for(size_t i = 0; i < numEvents; i++) {
@@ -341,22 +356,23 @@ static void fseCb(ConstFSEventStreamRef stream, void* ctx,
             ruCritLogf("Failed to convert '%s' from NFD", dcPath);
         }
         FSEventStreamEventFlags flags = eventFlags_l[i];
-        FSEventStreamEventId evId = eventIds_q[i];
         if (ruDoesLog(RU_LOG_DBUG)) {
             // Dump out the arguments.
             if (flags == kFSEventStreamEventFlagNone) {
                 fam_dbg("path[%d]: '%s' id: %ld flags: 0x%x something happened",
-                        i, filePath, evId, flags);
+                        i, filePath, eventIds_q[i], flags);
             } else {
                 alloc_chars ev = flagsToString(flags);
                 fam_dbg("path[%d]: '%s' id: %ld flags: 0x%x [%s]",
-                        i, filePath, evId, flags, ev);
+                        i, filePath, eventIds_q[i], flags, ev);
                 ruFree(ev);
             }
         }
 
         alloc_chars srcFile = NULL;
         int32_t status = handleFile(fctx, filePath, flags, &srcFile);
+        fam_dbg("handleFile returned %d - '%s'", status,
+                status == fam_ignore? "ignore" : ruFamEventTypeString(status));
 
         if (status == fam_ignore) {
             fam_dbg("Ignoring transient path %s event", srcFile);
@@ -413,34 +429,9 @@ static void fseCb(ConstFSEventStreamRef stream, void* ctx,
     }
 }
 
-static ptr runThread(ptr o) {
-    famCtx *fctx = (famCtx*)o;
-    ruThreadSetName(fctx->name);
-    ruInfoLog("starting");
-    fctx->dq = dispatch_queue_create("FSMonitor", NULL);
-    FSEventStreamSetDispatchQueue(fctx->stream, fctx->dq);
-    if (!FSEventStreamStart(fctx->stream)) {
-        ruCritLog("could not start FSEvent stream");
-        return NULL;
-    }
-    // scan dirs for inodes after starting the stream to not miss any,
-    // but before we work off the events, so we have all inodes mapped
-    ruFolderWalk(fctx->topDir, RU_WALK_FOLDER_FIRST,
-                 scanLst, fctx);
-    fam_dbg("Loaded existing directory structure '%s'.", fctx->topDir);
-    fctx->hasInit = true;
-    fam_dbg("%s", "entering CFRunLoop");
-    CFRunLoopRun();
-    ruInfoLog("stopping");
-    ruThreadSetName(NULL);
-    return NULL;
-}
-
 static ptr cleanerThread(ptr o) {
     famCtx *fctx = (famCtx*)o;
-    alloc_chars tname = ruDupPrintf("%sCleaner", fctx->name);
-    ruThreadSetName(tname);
-    ruFree(tname);
+    ruThreadSetName(fctx->name);
     ruInfoLog("starting");
 
     do {
@@ -465,8 +456,8 @@ static ptr cleanerThread(ptr o) {
         ruListClear(fctx->mrLst[bucket]);
 
         do {
-            // quittable delay til next epoch. Example calculation:
-            // We started at 3000 and took 300, so epoch = 3, elasped 3300
+            // quitable delay til next epoch. Example calculation:
+            // We started at 3000 and took 300, so epoch = 3, elapsed 3300
             // delay = (3+1 * 1000) - 3300 = 4000 - 3300 = 700
             msec_t delay = (epoch+1) * bucketMillies - ruTimeMs();
             if (delay > 100) delay = 100;
@@ -495,7 +486,7 @@ static void stopStream(famCtx *fctx) {
 // public functions
 RUAPI ruFamCtx ruFamMonitorFilePath(trans_chars filePath, trans_chars threadName,
                               ruFamHandler eventCallBack, perm_ptr ctx) {
-    ruVerbLogf( "Getting ready to monitor: %s", filePath);
+    ruVerbLogf("Getting ready to monitor: %s", filePath);
     famCtx* fctx = ruMalloc0(1, famCtx);
 
     do {
@@ -529,14 +520,6 @@ RUAPI ruFamCtx ruFamMonitorFilePath(trans_chars filePath, trans_chars threadName
         fam_dbg("stream:%x famCtx:%x", fctx->stream, fctx);
         fctx->eventCb = eventCallBack;
         fctx->ctx = ctx;
-        fctx->tid = ruThreadCreate(runThread, fctx);
-        if (!fctx->tid) {
-            ruCritLog("Failed to spawn CFRunLoop thread");
-            break;
-        }
-        ruVerbLogf("Launched CFRunLoop thread: 0x%x",
-                   ruThreadNativeId(fctx->tid, NULL));
-        // wait for thread to initialize
         fctx->ctid = ruThreadCreate(cleanerThread, fctx);
         if (!fctx->ctid) {
             ruCritLog("Failed to spawn cleaner thread");
@@ -544,8 +527,17 @@ RUAPI ruFamCtx ruFamMonitorFilePath(trans_chars filePath, trans_chars threadName
         }
         ruVerbLogf("Launched cleaner thread: 0x%x",
                    ruThreadNativeId(fctx->ctid, NULL));
-        while (!fctx->hasInit) ruSleepMs(RU_FAM_QUEUE_TIMEOUT);
-
+        fctx->dq = dispatch_queue_create("FSMonitor", NULL);
+        FSEventStreamSetDispatchQueue(fctx->stream, fctx->dq);
+        if (!FSEventStreamStart(fctx->stream)) {
+            ruCritLog("could not start FSEvent stream");
+            break;
+        }
+        // scan dirs for inodes after starting the stream to not miss any,
+        // but before we work off the events, so we have all inodes mapped
+        ruFolderWalk(fctx->topDir, RU_WALK_FOLDER_FIRST,
+                     scanLst, fctx);
+        fam_dbg("Loaded existing directory structure '%s'.", fctx->topDir);
         return fctx;
 
     } while (false);
@@ -557,19 +549,9 @@ RUAPI ruFamCtx ruFamMonitorFilePath(trans_chars filePath, trans_chars threadName
 
 RUAPI ruFamCtx ruFamKillMonitor(ruFamCtx o) {
     famCtx* fctx = (famCtx*)o;
-    ruInfoLogf("Request to kill fam thread %x", fctx->tid);
+    ruInfoLogf("Request to kill fam thread %x", fctx->ctid);
     fctx->quit = true;
     stopStream(fctx);
-    if (fctx->tid) {
-        bool res = ruThreadWait(fctx->tid, RU_FAM_KILL_TIMEOUT, NULL);
-        if (res) {
-            ruInfoLogf("Fam thread %s has been shut down", fctx->name);
-        } else {
-            ruWarnLogf("Fam thread %s timed out and was killed", fctx->name);
-        }
-    } else {
-        ruWarnLogf("Fam thread %s is invalid", fctx->name);
-    }
     if (fctx->ctid) {
         bool res = ruThreadWait(fctx->ctid, RU_FAM_KILL_TIMEOUT, NULL);
         if (res) {

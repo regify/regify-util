@@ -29,6 +29,8 @@ ruMakeTypeGetter(Thr, MagicThr)
 ruMakeTypeGetter(tsc, MagicTsc)
 
 RU_THREAD_LOCAL char* logPidEnd = NULL;
+RU_THREAD_LOCAL char* ru_threadName = NULL;
+perm_chars staticPidEnd = "]:";
 
 //<editor-fold desc="Threading">
 #ifdef _WIN32
@@ -144,9 +146,16 @@ RUAPI ru_tid ruThreadGetId(void) {
 }
 
 RUAPI void ruThreadSetName(trans_chars name) {
-    ruFree(logPidEnd);
+    static int threadcnt = 0;
+    if (logPidEnd && logPidEnd != staticPidEnd) ruFree(logPidEnd);
+    ruFree(ru_threadName);
     if (name) {
         logPidEnd = ruDupPrintf(".%ld]:[%s]:", ruThreadGetId(), name);
+        ru_threadName = ruStrDup(name);
+    } else if(getpid() != ruThreadGetId()) {
+        logPidEnd = ruDupPrintf(".%ld]:[thread-%03d]", ruThreadGetId(), ++threadcnt);
+    } else {
+        logPidEnd = (char*)staticPidEnd;
     }
 }
 

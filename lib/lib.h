@@ -145,6 +145,7 @@ extern "C" {
 
 extern unsigned int ruIntChunk;
 extern RU_THREAD_LOCAL char* logPidEnd;
+extern RU_THREAD_LOCAL char* ru_threadName;
 
 void ruSetError(const char *format, ...);
 void ruClearError(void);

@@ -459,7 +459,7 @@ START_TEST(run) {
             myfamHandler, &ctx);
     ruSleepMs(500);
 
-    ruVerbLog( "Starting test");
+    ruVerbLog("Starting test");
     bool pass = testit(&ctx);
 
     if (isWatching) {
