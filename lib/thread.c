@@ -152,7 +152,7 @@ RUAPI void ruThreadSetName(trans_chars name) {
     if (name) {
         logPidEnd = ruDupPrintf(".%ld]:[%s]:", ruThreadGetId(), name);
         ru_threadName = ruStrDup(name);
-    } else if(getpid() != ruThreadGetId()) {
+    } else if((ru_tid)getpid() != ruThreadGetId()) {
         logPidEnd = ruDupPrintf(".%ld]:[thread-%03d]", ruThreadGetId(), ++threadcnt);
     } else {
         logPidEnd = (char*)staticPidEnd;
