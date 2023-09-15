@@ -104,12 +104,14 @@ macro (installLicensePath var name newname path)
     set(${var}_LICENSE_PATH ${DEF_LICENSE_PATH} CACHE STRING
             "Where the ${name} License file for packaging can be found")
     if(${var}_LICENSE_PATH MATCHES "$^")
-        message(FATAL_ERROR "We need the ${name} License file for packaging set ${var}_LICENSE_PATH to its location. There's no license file at ${path}")
+        # make this fail on install
+        install(FILES ${newname} DESTINATION share/${NAME})
+    else()
+        message("Bundling ${name} License ${${var}_LICENSE_PATH}")
+        install(FILES ${${var}_LICENSE_PATH}
+                DESTINATION share/${NAME}
+                RENAME ${newname})
     endif()
-    message("Bundling ${name} License ${${var}_LICENSE_PATH}")
-    install(FILES ${${var}_LICENSE_PATH}
-            DESTINATION share/${NAME}
-            RENAME ${newname})
 endmacro()
 
 if(MSVC AND MSVC_STATIC_RUNTIME)
