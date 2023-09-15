@@ -62,7 +62,7 @@ install -d $RPM_BUILD_ROOT/%{_libdir}/pkgconfig/
 install -m 644 $bld/%{_lib}/pkgconfig/%{name}.pc $RPM_BUILD_ROOT/%{_libdir}/pkgconfig/
 
 install -d $RPM_BUILD_ROOT/%{_datadir}/%{name}
-install -m 644 $bld/share/%{name}/LICENSE $RPM_BUILD_ROOT/%{_datadir}/%{name}/
+install -m 644 $bld/share/%{name}/regify-util-license.txt $RPM_BUILD_ROOT/%{_datadir}/%{name}/
 
 %post
 ldconfig 
