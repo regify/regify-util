@@ -168,20 +168,12 @@ endif()
 add_custom_target(entities
         COMMAND ${CMAKE_SOURCE_DIR}/resources/mkmap.py > ${CMAKE_SOURCE_DIR}/lib/htmlEntities.c)
 
-if(DOCS)
-    if(INCLUDE_ICU)
-        installLicensePath(ICU ICU ICU-license.txt
-                ${ICU_PREFIX}/share/icu/LICENSE)
-    endif()
-    if(INCLUDE_YAJL)
-        installLicensePath(YAJL YAJL YAJL-license.txt
-                ${YAJL_PREFIX}/share/yajl/LICENSE)
-    endif()
-    if(INCLUDE_TIDY)
-        installLicensePath(TIDY tidy tidy-license.txt
-                ${TIDY_PREFIX}/share/tidy/LICENSE)
-    endif()
-endif()
+installLicensePath(ICU ICU ICU-license.txt
+        ${ICU_PREFIX}/share/icu/LICENSE)
+installLicensePath(YAJL YAJL YAJL-license.txt
+        ${YAJL_PREFIX}/share/yajl/LICENSE)
+installLicensePath(TIDY tidy tidy-license.txt
+        ${TIDY_PREFIX}/share/tidy/LICENSE)
 
 add_compile_definitions(BUILD_VERSION=\"${VERSION}-${REVISION}\")
 add_subdirectory(lib)
@@ -245,10 +237,10 @@ if(NOT MSVC AND NOT WASM)
             @ONLY)
     install(FILES ${PROJECT_BINARY_DIR}/${NAME}.pc DESTINATION ${LIB_FOLDER}/pkgconfig)
 endif()
+install(FILES LICENSE DESTINATION share/${NAME} RENAME regify-util-license.txt)
 
 # documentation & packaging
 if(DOCS)
-    install(FILES LICENSE DESTINATION share/${NAME})
 
     # add a target to generate API documentation with Doxygen
     # add these to your PATH id they're not found even though they are installed

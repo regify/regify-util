@@ -106,15 +106,25 @@ START_TEST ( mem ) {
 END_TEST
 
 START_TEST ( misc ) {
-    const char *test = "ruGetTimeVal";
-    const char *retText = "%s failed wanted ret '%d' but got '%d'";
-    const char *zeroText = "%s failed got 0 for '%s'";
+    perm_chars test = "ruTryLoop";
+    perm_chars retText = "%s failed wanted ret '%d' but got '%d'";
+    perm_chars zeroText = "%s failed got 0 for '%s'";
     ruTimeVal tv;
     int ret, exp = RUE_PARAMETER_NOT_SET;
 
     ret = ruGetTimeVal(NULL);
     fail_unless(exp == ret, retText, test, exp, ret);
 
+    ruTryLoop tl;
+    ruTryLoopInit(&tl, 1, 5);
+    int iter = 0;
+    do {
+        iter++;
+    } while (!ruTryLoopDone(&tl));
+    exp = 5;
+    fail_unless(exp == iter, retText, test, exp, iter);
+
+    test = "ruGetTimeVal";
     exp = RUE_OK;
     memset(&tv, 0, sizeof(ruTimeVal));
     ret = ruGetTimeVal(&tv);

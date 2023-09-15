@@ -729,7 +729,7 @@ RUAPI int ruFileTryRename(const char* oldName, const char* newName) {
     return fileRename(oldName, newName, false);
 }
 
-rusize_s ruWrite(int oh, const void* contents, rusize length) {
+RUAPI rusize_s ruWrite(int oh, trans_ptr contents, rusize length) {
 #ifdef _WIN32
     if (length > (rusize)ruIoChunk) {
         uint32_t sz = ruIoChunk;

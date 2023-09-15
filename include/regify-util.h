@@ -373,6 +373,13 @@ typedef struct {
     usec_t usec;
 } ruTimeVal;
 
+
+typedef struct {
+    msec_t start;
+    msec_t finish;
+    msec_t retry;
+} ruTryLoop;
+
 /**
  * \brief Returns the build version of this package
  * \ingroup misc
@@ -551,6 +558,33 @@ RUAPI void ruSleepMs(msec_t milliseconds);
  * @param secs time to sleep
  */
 #define ruSleep(secs) ruSleepMs(((msec_t)(secs))*1000)
+
+/**
+ * Handles the details of looping delayed until a timeout is reached.
+ * Example:
+ * ~~~~~{.c}
+    ruTryLoop tl;
+    ruTryLoopInit(&tl, 10, 8000);
+
+    do {
+      // do something
+      // break out if done early
+    while(!ruTryLoopDone(&tl));
+ * ~~~~~
+ *
+ * @param cycle pointer to a \ref ruTryLoop structure
+ * @param retryMs how long \ref ruTryLoopDone should block when not done
+ * @param timeoutMs how long \ref ruTryLoopDone should return false after blocking
+ */
+RUAPI void ruTryLoopInit(ruTryLoop* cycle, msec_t retryMs, msec_t timeoutMs);
+
+/**
+ * Blocks and returns whether loop is done or not.
+ * \see \ref ruTryLoopInit
+ * @param cycle pointer to a \ref ruTryLoop structure
+ * @return true if cycle is done or false after blocking for retryMs milliseconds
+ */
+RUAPI bool ruTryLoopDone(ruTryLoop* cycle);
 
 /**
  * \brief Convert a string representation of time to a time stamp

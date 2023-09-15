@@ -181,6 +181,15 @@ RUAPI FILE* ruFOpen(const char *filepath, const char *mode, int32_t* code);
 RUAPI int ruOpenTmp(char *pathTemplate, int flags, int mode, int32_t *code);
 
 /**
+ * Abstracted version of the standard write function.
+ * @param oh A handle returned by \ref ruOpenTmp or \ref ruOpen
+ * @param contents buffer to write
+ * @param length number of bytes to write
+ * @return number of bytes written or < 0 on error then check errno
+ */
+RUAPI rusize_s ruWrite(int oh, trans_ptr contents, rusize length);
+
+/**
  * Write the string stored in contents into a new file at filename. Any old file
  * at that location will be overwritten by the new file.
  * @param filename Path to the file to create.

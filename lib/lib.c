@@ -55,7 +55,7 @@ void U_CALLCONV traceData( const void *context, int32_t fnNumber, int32_t level,
 #endif
 
 /*
- * Source libcurl - escape.c -- Thank you Daniel.
+ * Source libcurl - escape.c -- Thank you, Daniel.
  * Portable character check (remember EBCDIC). Do not use isalnum() because
  * its behavior is altered by the current locale.
  * See https://tools.ietf.org/html/rfc3986#section-2.3
@@ -323,6 +323,25 @@ RUAPI void ruSleepUs(usec_t microseconds) {
     request.tv_nsec = 1000 * (microseconds % 1000000);
     while (nanosleep (&request, &remaining) == -1 && errno == EINTR) request = remaining;
 #endif
+}
+
+RUAPI void ruTryLoopInit(ruTryLoop* cycle, msec_t retryMs, msec_t timeoutMs) {
+    if (!cycle) return;
+    // start is set to properly handle overflow
+    cycle->start = ruTimeMs();
+    cycle->finish = cycle->start + timeoutMs;
+    cycle->retry = retryMs;
+}
+
+RUAPI bool ruTryLoopDone(ruTryLoop* cycle) {
+    if (!cycle) return true;
+    msec_t retry = cycle->retry;
+    msec_t left = cycle->finish - ruTimeMs();
+    if (left < retry) retry = left;
+    if(retry > 0) ruSleepMs(retry);
+    // the first clause checks that were not overflowed
+    // the second that were before the finish
+    return ruTimeMs() >= cycle->finish;
 }
 
 #ifndef _WIN32
