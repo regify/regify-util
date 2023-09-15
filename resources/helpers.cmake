@@ -105,7 +105,7 @@ macro (installLicensePath var name newname path)
             "Where the ${name} License file for packaging can be found")
     if(${var}_LICENSE_PATH MATCHES "$^")
         # make this fail on install
-        install(FILES ${newname} DESTINATION share/${NAME})
+        install(FILES ${path} DESTINATION share/${NAME})
     else()
         message("Bundling ${name} License ${${var}_LICENSE_PATH}")
         install(FILES ${${var}_LICENSE_PATH}
