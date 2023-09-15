@@ -39,5 +39,6 @@ var group__io =
     [ "ruPathJoinNative", "group__io.html#ga99e7777547f7a0ac8de619f6e0144b96", null ],
     [ "ruPathMultiJoin", "group__io.html#gaa0bd3e2ab8ca42cf6c26dda0f0bf5836", null ],
     [ "ruPathMultiJoinNative", "group__io.html#gaa6a6db5109523291907cb606dc922fda", null ],
-    [ "ruStat", "group__io.html#ga3c01cc11c4ab4e14c29a12fa5cb1bc7e", null ]
+    [ "ruStat", "group__io.html#ga3c01cc11c4ab4e14c29a12fa5cb1bc7e", null ],
+    [ "ruWrite", "group__io.html#ga88adb5e54e84a894525f18dc99ae9ef9", null ]
 ];

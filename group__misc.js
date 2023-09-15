@@ -4,6 +4,11 @@ var group__misc =
       [ "sec", "structru_time_val.html#ab79c03c47db0065ef4c2a2d00f33c94f", null ],
       [ "usec", "structru_time_val.html#aebdd1a6e510874064a7f3a3a6ff935bd", null ]
     ] ],
+    [ "ruTryLoop", "structru_try_loop.html", [
+      [ "finish", "structru_try_loop.html#a0c410c40292e389122db773795a8bcb3", null ],
+      [ "retry", "structru_try_loop.html#a380751189bd4c1898d245265539adb62", null ],
+      [ "start", "structru_try_loop.html#a13a4cd84853a32765061e01c0eff2e84", null ]
+    ] ],
     [ "RU_NO_TIMEOUT", "group__misc.html#ga3a6bd0d17663435e5e96679ffe03f900", null ],
     [ "RU_NON_BLOCK", "group__misc.html#ga934df7587a942f224560208b555e8826", null ],
     [ "RU_SIZE_AUTO", "group__misc.html#ga0282856ae8c37b20f28093d6cdfdd8b7", null ],
@@ -54,6 +59,8 @@ var group__misc =
     [ "ruTimeUs", "group__misc.html#gae4c0911efb3cf5eeb0f67330f1c074de", null ],
     [ "ruTimeUsEllapsed", "group__misc.html#gac70a35ed3009974a77b3724429c294c4", null ],
     [ "ruTimeUtcToLocal", "group__misc.html#ga3e7596f5512ddf7baa26a049a8ada132", null ],
+    [ "ruTryLoopDone", "group__misc.html#ga9648b409f49336252353d76f663b1724", null ],
+    [ "ruTryLoopInit", "group__misc.html#ga1beda4858ceb50233ded1be5de54e85f", null ],
     [ "ruUtcFormat", "group__misc.html#gaecf4a0b06c4d0268fdd64c378d9facc1", null ],
     [ "ruUtcParse", "group__misc.html#gabad41e4d218b3038e4e6df69b4f85926", null ],
     [ "ruVersion", "group__misc.html#ga71dec8ccc9b4947b4142514696e78795", null ],

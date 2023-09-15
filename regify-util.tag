@@ -75,11 +75,37 @@
       <arglist></arglist>
     </member>
   </compound>
+  <compound kind="struct">
+    <name>ruTryLoop</name>
+    <filename>structru_try_loop.html</filename>
+    <member kind="variable">
+      <type>msec_t</type>
+      <name>start</name>
+      <anchorfile>structru_try_loop.html</anchorfile>
+      <anchor>a13a4cd84853a32765061e01c0eff2e84</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>msec_t</type>
+      <name>finish</name>
+      <anchorfile>structru_try_loop.html</anchorfile>
+      <anchor>a0c410c40292e389122db773795a8bcb3</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>msec_t</type>
+      <name>retry</name>
+      <anchorfile>structru_try_loop.html</anchorfile>
+      <anchor>a380751189bd4c1898d245265539adb62</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
   <compound kind="group">
     <name>misc</name>
     <title>Miscellaneous Functions</title>
     <filename>group__misc.html</filename>
     <class kind="struct">ruTimeVal</class>
+    <class kind="struct">ruTryLoop</class>
     <member kind="define">
       <type>#define</type>
       <name>RU_SIZE_AUTO</name>
@@ -401,6 +427,20 @@
       <anchorfile>group__misc.html</anchorfile>
       <anchor>gacb5828ac39a00aa84781c841afb64623</anchor>
       <arglist>(msec_t milliseconds)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI void</type>
+      <name>ruTryLoopInit</name>
+      <anchorfile>group__misc.html</anchorfile>
+      <anchor>ga1beda4858ceb50233ded1be5de54e85f</anchor>
+      <arglist>(ruTryLoop *cycle, msec_t retryMs, msec_t timeoutMs)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI bool</type>
+      <name>ruTryLoopDone</name>
+      <anchorfile>group__misc.html</anchorfile>
+      <anchor>ga9648b409f49336252353d76f663b1724</anchor>
+      <arglist>(ruTryLoop *cycle)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI sec_t</type>
@@ -1005,6 +1045,13 @@
       <anchorfile>group__io.html</anchorfile>
       <anchor>gacf30a0eee9096e022b112167988a4f06</anchor>
       <arglist>(char *pathTemplate, int flags, int mode, int32_t *code)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI rusize_s</type>
+      <name>ruWrite</name>
+      <anchorfile>group__io.html</anchorfile>
+      <anchor>ga88adb5e54e84a894525f18dc99ae9ef9</anchor>
+      <arglist>(int oh, trans_ptr contents, rusize length)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI int32_t</type>

@@ -110,6 +110,8 @@ Data Structures</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structru_time_val.html">ruTimeVal</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Abstracted version of the Posix struct timeval.  <a href="structru_time_val.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structru_try_loop.html">ruTryLoop</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
@@ -257,6 +259,10 @@ Functions</h2></td></tr>
 <tr class="memitem:gacb5828ac39a00aa84781c841afb64623"><td class="memItemLeft" align="right" valign="top">RUAPI void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__misc.html#gacb5828ac39a00aa84781c841afb64623">ruSleepMs</a> (<a class="el" href="group__misc.html#gae416893e8160c5b7c6da3765e4707d5d">msec_t</a> milliseconds)</td></tr>
 <tr class="memdesc:gacb5828ac39a00aa84781c841afb64623"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sleeps for the given number of milli seconds.  <a href="group__misc.html#gacb5828ac39a00aa84781c841afb64623">More...</a><br /></td></tr>
 <tr class="separator:gacb5828ac39a00aa84781c841afb64623"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga1beda4858ceb50233ded1be5de54e85f"><td class="memItemLeft" align="right" valign="top">RUAPI void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__misc.html#ga1beda4858ceb50233ded1be5de54e85f">ruTryLoopInit</a> (<a class="el" href="structru_try_loop.html">ruTryLoop</a> *cycle, <a class="el" href="group__misc.html#gae416893e8160c5b7c6da3765e4707d5d">msec_t</a> retryMs, <a class="el" href="group__misc.html#gae416893e8160c5b7c6da3765e4707d5d">msec_t</a> timeoutMs)</td></tr>
+<tr class="separator:ga1beda4858ceb50233ded1be5de54e85f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga9648b409f49336252353d76f663b1724"><td class="memItemLeft" align="right" valign="top">RUAPI bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__misc.html#ga9648b409f49336252353d76f663b1724">ruTryLoopDone</a> (<a class="el" href="structru_try_loop.html">ruTryLoop</a> *cycle)</td></tr>
+<tr class="separator:ga9648b409f49336252353d76f663b1724"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga5d78052ada3c62b7a77e773ae53158c1"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__misc.html#ga8573cc8637a470b127a19d54b0e94cb9">sec_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__misc.html#ga5d78052ada3c62b7a77e773ae53158c1">ruTimeParse</a> (<a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> dateformat, <a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> datestr)</td></tr>
 <tr class="memdesc:ga5d78052ada3c62b7a77e773ae53158c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert a string representation of time to a time stamp.  <a href="group__misc.html#ga5d78052ada3c62b7a77e773ae53158c1">More...</a><br /></td></tr>
 <tr class="separator:ga5d78052ada3c62b7a77e773ae53158c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1044,7 +1050,7 @@ Functions</h2></td></tr>
 <p>Runs given program. </p>
 <p>Example: </p><div class="fragment"><div class="line"><span class="keyword">const</span> <span class="keywordtype">char</span>* command[] = {<span class="stringliteral">&quot;/bin/sleep&quot;</span>, <span class="stringliteral">&quot;3&quot;</span>, NULL};</div>
 <div class="line"><span class="keywordtype">int</span> ret = <a class="code" href="group__misc.html#gaa1ee1acfc9e71c9beba03b4b547f8abc">ruRunProg</a>(command, <a class="code" href="group__misc.html#ga3a6bd0d17663435e5e96679ffe03f900">RU_NO_TIMEOUT</a>);</div>
-<div class="ttc" id="agroup__misc_html_ga3a6bd0d17663435e5e96679ffe03f900"><div class="ttname"><a href="group__misc.html#ga3a6bd0d17663435e5e96679ffe03f900">RU_NO_TIMEOUT</a></div><div class="ttdeci">#define RU_NO_TIMEOUT</div><div class="ttdoc">Indicates that an operation that has no timeout. Used by ruRunProg.</div><div class="ttdef"><b>Definition:</b> regify-util.h:438</div></div>
+<div class="ttc" id="agroup__misc_html_ga3a6bd0d17663435e5e96679ffe03f900"><div class="ttname"><a href="group__misc.html#ga3a6bd0d17663435e5e96679ffe03f900">RU_NO_TIMEOUT</a></div><div class="ttdeci">#define RU_NO_TIMEOUT</div><div class="ttdoc">Indicates that an operation that has no timeout. Used by ruRunProg.</div><div class="ttdef"><b>Definition:</b> regify-util.h:445</div></div>
 <div class="ttc" id="agroup__misc_html_gaa1ee1acfc9e71c9beba03b4b547f8abc"><div class="ttname"><a href="group__misc.html#gaa1ee1acfc9e71c9beba03b4b547f8abc">ruRunProg</a></div><div class="ttdeci">RUAPI int32_t ruRunProg(const char **argv, sec_t timeout)</div><div class="ttdoc">Runs given program.</div></div>
 </div><!-- fragment --><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -1435,6 +1441,84 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="ga9648b409f49336252353d76f663b1724"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga9648b409f49336252353d76f663b1724">&#9670;&nbsp;</a></span>ruTryLoopDone()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI bool ruTryLoopDone </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structru_try_loop.html">ruTryLoop</a> *&#160;</td>
+          <td class="paramname"><em>cycle</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Blocks and returns whether loop is done or not. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="group__misc.html#ga1beda4858ceb50233ded1be5de54e85f">ruTryLoopInit</a> </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">cycle</td><td>pointer to a <a class="el" href="structru_try_loop.html">ruTryLoop</a> structure </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if cycle is done or false after blocking for retryMs milliseconds </dd></dl>
+
+</div>
+</div>
+<a id="ga1beda4858ceb50233ded1be5de54e85f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga1beda4858ceb50233ded1be5de54e85f">&#9670;&nbsp;</a></span>ruTryLoopInit()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI void ruTryLoopInit </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structru_try_loop.html">ruTryLoop</a> *&#160;</td>
+          <td class="paramname"><em>cycle</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__misc.html#gae416893e8160c5b7c6da3765e4707d5d">msec_t</a>&#160;</td>
+          <td class="paramname"><em>retryMs</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__misc.html#gae416893e8160c5b7c6da3765e4707d5d">msec_t</a>&#160;</td>
+          <td class="paramname"><em>timeoutMs</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Handles the details of looping delayed until a timeout is reached. Example: </p><div class="fragment"><div class="line"><a class="code" href="structru_try_loop.html">ruTryLoop</a> tl;</div>
+<div class="line"><a class="code" href="group__misc.html#ga1beda4858ceb50233ded1be5de54e85f">ruTryLoopInit</a>(&amp;tl, 10, 8000);</div>
+<div class="line"> </div>
+<div class="line"><span class="keywordflow">do</span> {</div>
+<div class="line">  <span class="comment">// do something</span></div>
+<div class="line">  <span class="comment">// break out if done early</span></div>
+<div class="line"><span class="keywordflow">while</span>(!<a class="code" href="group__misc.html#ga9648b409f49336252353d76f663b1724">ruTryLoopDone</a>(&amp;tl));</div>
+<div class="ttc" id="agroup__misc_html_ga1beda4858ceb50233ded1be5de54e85f"><div class="ttname"><a href="group__misc.html#ga1beda4858ceb50233ded1be5de54e85f">ruTryLoopInit</a></div><div class="ttdeci">RUAPI void ruTryLoopInit(ruTryLoop *cycle, msec_t retryMs, msec_t timeoutMs)</div></div>
+<div class="ttc" id="agroup__misc_html_ga9648b409f49336252353d76f663b1724"><div class="ttname"><a href="group__misc.html#ga9648b409f49336252353d76f663b1724">ruTryLoopDone</a></div><div class="ttdeci">RUAPI bool ruTryLoopDone(ruTryLoop *cycle)</div></div>
+<div class="ttc" id="astructru_try_loop_html"><div class="ttname"><a href="structru_try_loop.html">ruTryLoop</a></div><div class="ttdef"><b>Definition:</b> regify-util.h:377</div></div>
+</div><!-- fragment --><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">cycle</td><td>pointer to a <a class="el" href="structru_try_loop.html">ruTryLoop</a> structure </td></tr>
+    <tr><td class="paramname">retryMs</td><td>how long <a class="el" href="group__misc.html#ga9648b409f49336252353d76f663b1724">ruTryLoopDone</a> should block when not done </td></tr>
+    <tr><td class="paramname">timeoutMs</td><td>how long <a class="el" href="group__misc.html#ga9648b409f49336252353d76f663b1724">ruTryLoopDone</a> should return false after blocking </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="gaecf4a0b06c4d0268fdd64c378d9facc1"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#gaecf4a0b06c4d0268fdd64c378d9facc1">&#9670;&nbsp;</a></span>ruUtcFormat()</h2>
 
@@ -1589,7 +1673,7 @@ Functions</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Thu Sep 14 2023 14:25:46 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Fri Sep 15 2023 13:29:06 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

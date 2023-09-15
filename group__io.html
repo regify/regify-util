@@ -159,6 +159,8 @@ Functions</h2></td></tr>
 <tr class="separator:ga3716b147f53dd26c805547556b9608be"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gacf30a0eee9096e022b112167988a4f06"><td class="memItemLeft" align="right" valign="top">RUAPI int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__io.html#gacf30a0eee9096e022b112167988a4f06">ruOpenTmp</a> (char *pathTemplate, int flags, int mode, int32_t *code)</td></tr>
 <tr class="separator:gacf30a0eee9096e022b112167988a4f06"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga88adb5e54e84a894525f18dc99ae9ef9"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__misc.html#gac23a4c7337daa8f22a561f49096b06b8">rusize_s</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__io.html#ga88adb5e54e84a894525f18dc99ae9ef9">ruWrite</a> (int oh, <a class="el" href="group__misc.html#ga147d80ce3325dd56fbfb0e07cedcf757">trans_ptr</a> contents, <a class="el" href="group__misc.html#gaaa0102d444a5dd14474b7951caae0459">rusize</a> length)</td></tr>
+<tr class="separator:ga88adb5e54e84a894525f18dc99ae9ef9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga2280aaaa8bb5c208cb53a696444c5ebd"><td class="memItemLeft" align="right" valign="top">RUAPI int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__io.html#ga2280aaaa8bb5c208cb53a696444c5ebd">ruFileSetContents</a> (const char *filename, const char *contents, <a class="el" href="group__misc.html#gaaa0102d444a5dd14474b7951caae0459">rusize</a> length)</td></tr>
 <tr class="separator:ga2280aaaa8bb5c208cb53a696444c5ebd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gac2d2628ae0710cfa181d65116b0786c6"><td class="memItemLeft" align="right" valign="top">RUAPI int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__io.html#gac2d2628ae0710cfa181d65116b0786c6">ruFileGetContents</a> (<a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> filename, <a class="el" href="group__misc.html#ga972d4f4f858964bb2381d186ea96d88d">alloc_chars</a> *contents, <a class="el" href="group__misc.html#gaaa0102d444a5dd14474b7951caae0459">rusize</a> *length)</td></tr>
@@ -1513,12 +1515,55 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="ga88adb5e54e84a894525f18dc99ae9ef9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga88adb5e54e84a894525f18dc99ae9ef9">&#9670;&nbsp;</a></span>ruWrite()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI <a class="el" href="group__misc.html#gac23a4c7337daa8f22a561f49096b06b8">rusize_s</a> ruWrite </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>oh</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga147d80ce3325dd56fbfb0e07cedcf757">trans_ptr</a>&#160;</td>
+          <td class="paramname"><em>contents</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__misc.html#gaaa0102d444a5dd14474b7951caae0459">rusize</a>&#160;</td>
+          <td class="paramname"><em>length</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Abstracted version of the standard write function. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">oh</td><td>A handle returned by <a class="el" href="group__io.html#gacf30a0eee9096e022b112167988a4f06">ruOpenTmp</a> or <a class="el" href="group__io.html#gae5dc81a0de9eafb956c253be9e66948e">ruOpen</a> </td></tr>
+    <tr><td class="paramname">contents</td><td>buffer to write </td></tr>
+    <tr><td class="paramname">length</td><td>number of bytes to write </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>number of bytes written or &lt; 0 on error then check errno </dd></dl>
+
+</div>
+</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Thu Sep 14 2023 14:25:46 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Fri Sep 15 2023 13:29:06 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>
