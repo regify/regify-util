@@ -200,7 +200,7 @@ RUAPI ruList ruIpAddrs(int32_t ipfilter) {
                 continue;
             }
             if (!out) out = ruListNew(ruTypeStrDup());
-            ruDbgLogf("adding: %s", ip);
+            ruDbgLogf("adding from %s: %s", ia->ifa_name, ip);
             ruListAppend(out, ip);
         }
     } while (0);
