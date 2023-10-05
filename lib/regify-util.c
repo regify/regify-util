@@ -160,6 +160,56 @@ RUAPI int ruVersionComp(trans_chars ver1, trans_chars ver2) {
     }
 }
 
+RUAPI ruList ruIpAddrs(int32_t ipfilter) {
+    bool errset = false;
+    ruList out = NULL;
+    // to free
+    struct ifaddrs* ias = NULL;
+
+    do {
+        if(getifaddrs(&ias)) {
+            ruSetError("getifaddrs failed with %d - '%s'",
+                       errno, strerror(errno));
+           break;
+        }
+        for(struct ifaddrs* ia = ias; ia; ia = ia->ifa_next) {
+            char buffer[INET6_ADDRSTRLEN] = {0, };
+            perm_chars ip = NULL;
+            if (!ia->ifa_addr) continue;
+            sa_family_t af = ia->ifa_addr->sa_family;
+            if (af == AF_INET && ipfilter & RU_IP4) {
+                // Be aware that the `ifa_addr`, `ifa_netmask` and `ifa_data`
+                // fields may be NULL
+                ip = inet_ntoa(((struct sockaddr_in*)ia->ifa_addr)->sin_addr);
+            } else if (af == AF_INET6 && ipfilter & RU_IP6) {
+                ip = inet_ntop(af,
+                          &((struct sockaddr_in6*)ia->ifa_addr)->sin6_addr,
+                          buffer,INET6_ADDRSTRLEN);
+            } else {
+                continue;
+            }
+            if (!ip) {
+                if (errset) {
+                    ruWarnLogf("failed to get ip %d - '%s'",
+                               errno, strerror(errno));
+                } else {
+                    ruSetError("failed to get ip %d - '%s'",
+                               errno, strerror(errno));
+                    errset = true;
+                }
+                continue;
+            }
+            if (!out) out = ruListNew(ruTypeStrDup());
+            ruDbgLogf("adding: %s", ip);
+            ruListAppend(out, ip);
+        }
+    } while (0);
+
+    // cleanup
+    if (ias) freeifaddrs(ias);
+    return out;
+}
+
 RUAPI int32_t ruGetOptMap(ruMap* parms, trans_chars opts, int argc, char** argv) {
     if (!parms || !opts || !argc || !argv) return RUE_PARAMETER_NOT_SET;
     int32_t ret = RUE_FILE_NOT_FOUND;

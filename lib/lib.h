@@ -48,6 +48,9 @@
     #include <sys/param.h>
     #include <sys/syscall.h>
     #include <sys/wait.h>
+    #include <ifaddrs.h>
+    #include <netinet/in.h>
+    #include <arpa/inet.h>
 #if defined(ITS_OSX) || defined(ITS_IOS)
     #include <signal.h>
     #include <sys/statvfs.h>

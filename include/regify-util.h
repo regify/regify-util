@@ -712,6 +712,27 @@ extern "C" {
 #endif /* __cplusplus */
 
 /**
+* Used by \ref ruIpAddrs to specify filtering for IPv4 numbers.
+*/
+#define RU_IP4 0x1
+/**
+* Used by \ref ruIpAddrs to specify filtering for IPv6 numbers.
+ */
+#define RU_IP6 0x2
+/**
+* Used by \ref ruIpAddrs to specify filtering for IP numbers.
+ */
+#define RU_IP (RU_IP4 | RU_IP6)
+
+/**
+ * Returns the IP numbers bound to the host
+ * @param ipfilter Whether to filter for IPv4(\ref RU_IP4), IPv6(\ref RU_IP6)
+ *                 or both (\ref RU_IP).
+ * @return \ref ruList of IP strings. Caller to free with \ref ruListFree
+ */
+RUAPI ruList ruIpAddrs(int32_t ipfilter);
+
+/**
  * \brief Runs getopt short with given parameters.
  * \ingroup misc
  *

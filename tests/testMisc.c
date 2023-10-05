@@ -288,7 +288,32 @@ START_TEST ( misc ) {
     char *out = ruGetHostname();
     fail_if(NULL == out, retText, test, NULL, out);
     ruFree(out);
+}
+END_TEST
 
+START_TEST(ips) {
+    perm_chars retText = "failed wanted ret '%d' but got '%d'";
+    uint32_t ipcnt = 0;
+    int32_t ret, exp = RUE_OK;
+
+    ruList ips = ruIpAddrs(RU_IP4);
+    fail_if(NULL == ips, retText, NULL, ips);
+    ipcnt += ruListSize(ips, &ret);
+    fail_unless(exp == ret, retText, exp, ret);
+    ips = ruListFree(ips);
+
+    ips = ruIpAddrs(RU_IP6);
+    fail_if(NULL == ips, retText, NULL, ips);
+    ipcnt += ruListSize(ips, &ret);
+    fail_unless(exp == ret, retText, exp, ret);
+    ips = ruListFree(ips);
+
+    ips = ruIpAddrs(RU_IP);
+    fail_if(NULL == ips, retText, NULL, ips);
+    uint32_t allipcnt = ruListSize(ips, &ret);
+    fail_unless(exp == ret, retText, exp, ret);
+    fail_unless(ipcnt == allipcnt, retText, ipcnt, allipcnt);
+    ips = ruListFree(ips);
 }
 END_TEST
 
@@ -302,7 +327,7 @@ START_TEST ( mux ) {
 END_TEST
 
 START_TEST(counter) {
-    const char *retText = "failed wanted ret '%d' but got '%d'";
+    perm_chars retText = "failed wanted ret '%d' but got '%d'";
     ruCount rc = NULL;
     int32_t ret, exp = RUE_PARAMETER_NOT_SET;
     int64_t val, want = 0;
@@ -642,6 +667,7 @@ END_TEST
 
 TCase* miscTests(void) {
     TCase *tcase = tcase_create("misc");
+    tcase_add_test(tcase, ips);
     tcase_add_test(tcase, mem);
     tcase_add_test(tcase, misc);
     tcase_add_test(tcase, mux);
