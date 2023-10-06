@@ -259,7 +259,7 @@ Functions</h2></td></tr>
 <div class="ttc" id="agroup__hashmap_html_ga864d402bda9961fc1b07a0b99e44197c"><div class="ttname"><a href="group__hashmap.html#ga864d402bda9961fc1b07a0b99e44197c">ruMapGet</a></div><div class="ttdeci">#define ruMapGet(rm, key, val)</div><div class="ttdoc">Runs ruMapGetValue with a ptr cast.</div><div class="ttdef"><b>Definition:</b> map.h:134</div></div>
 <div class="ttc" id="agroup__hashmap_html_ga91b1a3cae7702eb9ebb82ba77d896571"><div class="ttname"><a href="group__hashmap.html#ga91b1a3cae7702eb9ebb82ba77d896571">ruMapPut</a></div><div class="ttdeci">#define ruMapPut(map, key, val)</div><div class="ttdoc">Runs ruMapPutData with ptr casts.</div><div class="ttdef"><b>Definition:</b> map.h:75</div></div>
 <div class="ttc" id="agroup__hashmap_html_gaad879dbca17e7740cbab5651cafe677d"><div class="ttname"><a href="group__hashmap.html#gaad879dbca17e7740cbab5651cafe677d">ruMap</a></div><div class="ttdeci">void * ruMap</div><div class="ttdoc">An opaque type representing a map object.</div><div class="ttdef"><b>Definition:</b> map.h:33</div></div>
-<div class="ttc" id="agroup__misc_html_ga7dd744dc0ee350f7de2c38f51f5c0bbe"><div class="ttname"><a href="group__misc.html#ga7dd744dc0ee350f7de2c38f51f5c0bbe">perm_chars</a></div><div class="ttdeci">const char * perm_chars</div><div class="ttdoc">A permanent NULL terminated string pointer.</div><div class="ttdef"><b>Definition:</b> regify-util.h:179</div></div>
+<div class="ttc" id="agroup__misc_html_ga7dd744dc0ee350f7de2c38f51f5c0bbe"><div class="ttname"><a href="group__misc.html#ga7dd744dc0ee350f7de2c38f51f5c0bbe">perm_chars</a></div><div class="ttdeci">const char * perm_chars</div><div class="ttdoc">A permanent NULL terminated string pointer.</div><div class="ttdef"><b>Definition:</b> regify-util.h:176</div></div>
 <div class="ttc" id="agroup__typestring_html_ga5d216c496a260a04e5eb2dbc84a84660"><div class="ttname"><a href="group__typestring.html#ga5d216c496a260a04e5eb2dbc84a84660">ruTypeStrDup</a></div><div class="ttdeci">RUAPI ruType ruTypeStrDup(void)</div><div class="ttdoc">Returns an ruType used for transient strings.</div></div>
 </div><!-- fragment --><p> Given keys will be copied when added and freed on removal or <a class="el" href="group__hashmap.html#ga533dee52a4d05df820c614bfc9ea426e">ruMapFree</a>. </p><dl class="section return"><dt>Returns</dt><dd>Duplicating string type specification. Caller need not free. </dd></dl>
 
@@ -292,7 +292,7 @@ Functions</h2></td></tr>
 <div class="line"><a class="code" href="group__hashmap.html#ga864d402bda9961fc1b07a0b99e44197c">ruMapGet</a>(rm, <span class="stringliteral">&quot;23&quot;</span>, &amp;r);</div>
 <div class="line">printf(<span class="stringliteral">&quot;k: &#39;23&#39; v: &#39;%s&#39;\n&quot;</span>, r);</div>
 <div class="line"><a class="code" href="group__hashmap.html#ga533dee52a4d05df820c614bfc9ea426e">ruMapFree</a>(rm);</div>
-<div class="ttc" id="agroup__misc_html_ga972d4f4f858964bb2381d186ea96d88d"><div class="ttname"><a href="group__misc.html#ga972d4f4f858964bb2381d186ea96d88d">alloc_chars</a></div><div class="ttdeci">char * alloc_chars</div><div class="ttdoc">An allocated NULL terminated string pointer.</div><div class="ttdef"><b>Definition:</b> regify-util.h:202</div></div>
+<div class="ttc" id="agroup__misc_html_ga972d4f4f858964bb2381d186ea96d88d"><div class="ttname"><a href="group__misc.html#ga972d4f4f858964bb2381d186ea96d88d">alloc_chars</a></div><div class="ttdeci">char * alloc_chars</div><div class="ttdoc">An allocated NULL terminated string pointer.</div><div class="ttdef"><b>Definition:</b> regify-util.h:199</div></div>
 <div class="ttc" id="agroup__string_html_ga337c8eba8887cba279a13dce4d59c7b0"><div class="ttname"><a href="group__string.html#ga337c8eba8887cba279a13dce4d59c7b0">ruStrDup</a></div><div class="ttdeci">RUAPI char * ruStrDup(const char *str)</div><div class="ttdoc">Returns a copy of given string.</div></div>
 <div class="ttc" id="agroup__typestring_html_gab0e7e644240923d0227101b893609080"><div class="ttname"><a href="group__typestring.html#gab0e7e644240923d0227101b893609080">ruTypeStrFree</a></div><div class="ttdeci">RUAPI ruType ruTypeStrFree(void)</div><div class="ttdoc">Returns an ruType used for externally allocated string.</div></div>
 </div><!-- fragment --><p> Given keys will not be copied when added but freed on removal or <a class="el" href="group__hashmap.html#ga533dee52a4d05df820c614bfc9ea426e">ruMapFree</a>. </p><dl class="section return"><dt>Returns</dt><dd>Freeable string type specification. Caller need not free. </dd></dl>
@@ -336,7 +336,7 @@ Functions</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Thu Oct 5 2023 12:05:03 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Fri Oct 6 2023 11:15:48 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>
