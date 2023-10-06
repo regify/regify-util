@@ -160,6 +160,8 @@ RUAPI int ruVersionComp(trans_chars ver1, trans_chars ver2) {
     }
 }
 
+#if !defined(__ANDROID__)
+
 RUAPI ruList ruIpAddrs(int32_t ipfilter) {
     ruList out = NULL;
     // to free
@@ -290,6 +292,7 @@ RUAPI ruList ruIpAddrs(int32_t ipfilter) {
 #endif
     return out;
 }
+#endif
 
 RUAPI int32_t ruGetOptMap(ruMap* parms, trans_chars opts, int argc, char** argv) {
     if (!parms || !opts || !argc || !argv) return RUE_PARAMETER_NOT_SET;

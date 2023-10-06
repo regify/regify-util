@@ -44,9 +44,9 @@ extern "C" {
  *         <           |  &amp;lt;
  *         >           |  &amp;gt;
  *      2 spaces       |  &amp;nbsp;&amp;nbsp;
- *         \r\\n       |  &lt;br/&gt;\\n
+ *         \\r\\n      |  &lt;br/&gt;\\n
  *         \\n         |  &lt;br/&gt;\\n
- *         \r          |  &lt;br/&gt;\\n
+ *         \\r         |  &lt;br/&gt;\\n
  *
  * @param text Text to HTML encode
  * @return HTML encoded version of given text. Caller must free.

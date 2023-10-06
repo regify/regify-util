@@ -291,6 +291,7 @@ START_TEST ( misc ) {
 }
 END_TEST
 
+#if !defined(__ANDROID__)
 START_TEST(ips) {
     perm_chars retText = "failed wanted ret '%d' but got '%d'";
     uint32_t ipcnt = 0;
@@ -316,6 +317,7 @@ START_TEST(ips) {
     ips = ruListFree(ips);
 }
 END_TEST
+#endif
 
 START_TEST ( mux ) {
     ruMutex mx = ruMutexInit();
@@ -667,7 +669,9 @@ END_TEST
 
 TCase* miscTests(void) {
     TCase *tcase = tcase_create("misc");
+#if !defined(__ANDROID__)
     tcase_add_test(tcase, ips);
+#endif
     tcase_add_test(tcase, mem);
     tcase_add_test(tcase, misc);
     tcase_add_test(tcase, mux);

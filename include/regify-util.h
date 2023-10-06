@@ -708,26 +708,34 @@ RUAPI ptr ruClear(ptr o);
 extern "C" {
 #endif /* __cplusplus */
 
+#if !defined(__ANDROID__)
 /**
-* Used by \ref ruIpAddrs to specify filtering for IPv4 numbers.
-*/
+ * \cond (!android)
+ * \brief Used by \ref ruIpAddrs to specify filtering for IPv4 numbers.
+ * \ingroup misc
+ */
 #define RU_IP4 0x1
 /**
-* Used by \ref ruIpAddrs to specify filtering for IPv6 numbers.
+ * \brief Used by \ref ruIpAddrs to specify filtering for IPv6 numbers.
+ * \ingroup misc
  */
 #define RU_IP6 0x2
 /**
-* Used by \ref ruIpAddrs to specify filtering for IP numbers.
+ * \brief Used by \ref ruIpAddrs to specify filtering for IP numbers.
+ * \ingroup misc
  */
 #define RU_IP (RU_IP4 | RU_IP6)
 
 /**
- * Returns the IP numbers bound to the host
+ * \brief Returns the IP numbers bound to the host
+ * \ingroup misc
  * @param ipfilter Whether to filter for IPv4(\ref RU_IP4), IPv6(\ref RU_IP6)
  *                 or both (\ref RU_IP).
  * @return \ref ruList of IP strings. Caller to free with \ref ruListFree
  */
 RUAPI ruList ruIpAddrs(int32_t ipfilter);
+/** \endcond */
+#endif
 
 /**
  * \brief Runs getopt short with given parameters.

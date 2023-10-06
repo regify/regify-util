@@ -83,28 +83,36 @@ string(SUBSTRING ${NAME_OS} 0 3 NAME_OS)
 # platform switches
 if(CMAKE_SYSTEM_NAME MATCHES "^Linux$")
     set(LINUX 1)
+    set(CONDS "linux")
 
 elseif(CMAKE_SYSTEM_NAME MATCHES "^Emscripten$")
     set(LINUX 1)
     set(WASM 1)
+    set(CONDS "wasm")
 
 elseif(CMAKE_SYSTEM_NAME MATCHES "^Android$")
     set(ANDROID 1)
+    set(CONDS "android")
 
 elseif(CMAKE_SYSTEM_NAME MATCHES "^Darwin$")
     set(MAC 1)
     set(NAME_OS mac)
     add_definitions (-DITS_OSX)
+    set(CONDS "mac")
 
 elseif(CMAKE_SYSTEM_NAME MATCHES "^Windows$")
     set(WIN 1)
     if(NAME_ARCH MATCHES "^mingw")
+        set(CONDS "win mingw")
         set(MINGW 1)
+    else()
+        set(CONDS "win")
     endif()
 
 elseif(CMAKE_SYSTEM_NAME MATCHES "^iOS$")
     set(IOS 1)
     add_definitions (-DITS_IOS)
+    set(CONDS "ios")
 
 else()
     message(FATAL_ERROR "Unknown platform")
