@@ -9,6 +9,9 @@ var group__misc =
       [ "retry", "structru_try_loop.html#a380751189bd4c1898d245265539adb62", null ],
       [ "start", "structru_try_loop.html#a13a4cd84853a32765061e01c0eff2e84", null ]
     ] ],
+    [ "RU_IP", "group__misc.html#gaad7353818af831a344b4e86ab0d48699", null ],
+    [ "RU_IP4", "group__misc.html#ga529a07fc8add86acc57c4a661b8ad197", null ],
+    [ "RU_IP6", "group__misc.html#ga74da3e46e98a84ac71ec15f1e91e447f", null ],
     [ "RU_NO_TIMEOUT", "group__misc.html#ga3a6bd0d17663435e5e96679ffe03f900", null ],
     [ "RU_NON_BLOCK", "group__misc.html#ga934df7587a942f224560208b555e8826", null ],
     [ "RU_SIZE_AUTO", "group__misc.html#ga0282856ae8c37b20f28093d6cdfdd8b7", null ],
@@ -42,6 +45,7 @@ var group__misc =
     [ "ruGetOptMap", "group__misc.html#ga69bc1bcc96b1bb92b0735bee76c4dd32", null ],
     [ "ruGetOs", "group__misc.html#ga9514522bf5289236d07a8b714ab8e0b0", null ],
     [ "ruGetTimeVal", "group__misc.html#ga23dfc8d19e01fe0aba08aa87b2966989", null ],
+    [ "ruIpAddrs", "group__misc.html#gac402e82af49cc6e4f3d81dda6135ef9c", null ],
     [ "ruIsInt64", "group__misc.html#ga61f7ab20b2760c5cb849d3b442eb4402", null ],
     [ "ruLastError", "group__misc.html#gaea3d529fecc1bbad25f943943b6e9ef2", null ],
     [ "ruProcessId", "group__misc.html#gafb168a8376876c132f91f3568110a676", null ],

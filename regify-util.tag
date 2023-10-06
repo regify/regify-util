@@ -141,6 +141,27 @@
       <anchor>ga0bd4973612c1de9454caa98b7792fb8e</anchor>
       <arglist>(ptr, code, res)</arglist>
     </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>RU_IP4</name>
+      <anchorfile>group__misc.html</anchorfile>
+      <anchor>ga529a07fc8add86acc57c4a661b8ad197</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>RU_IP6</name>
+      <anchorfile>group__misc.html</anchorfile>
+      <anchor>ga74da3e46e98a84ac71ec15f1e91e447f</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>RU_IP</name>
+      <anchorfile>group__misc.html</anchorfile>
+      <anchor>gaad7353818af831a344b4e86ab0d48699</anchor>
+      <arglist></arglist>
+    </member>
     <member kind="typedef">
       <type>signed long</type>
       <name>rusize_s</name>
@@ -490,6 +511,13 @@
       <anchorfile>group__misc.html</anchorfile>
       <anchor>gabb9ece7b53e9e95a196adc53be69b099</anchor>
       <arglist>(char *in)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI ruList</type>
+      <name>ruIpAddrs</name>
+      <anchorfile>group__misc.html</anchorfile>
+      <anchor>gac402e82af49cc6e4f3d81dda6135ef9c</anchor>
+      <arglist>(int32_t ipfilter)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI int32_t</type>

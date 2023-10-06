@@ -130,6 +130,15 @@ Macros</h2></td></tr>
 <tr class="memitem:ga0bd4973612c1de9454caa98b7792fb8e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__misc.html#ga0bd4973612c1de9454caa98b7792fb8e">ruRetWithCode</a>(<a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a>,  code,  res)</td></tr>
 <tr class="memdesc:ga0bd4973612c1de9454caa98b7792fb8e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convenience macro for setting a potentially passed in result pointer and returning a result.  <a href="group__misc.html#ga0bd4973612c1de9454caa98b7792fb8e">More...</a><br /></td></tr>
 <tr class="separator:ga0bd4973612c1de9454caa98b7792fb8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga529a07fc8add86acc57c4a661b8ad197"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__misc.html#ga529a07fc8add86acc57c4a661b8ad197">RU_IP4</a>&#160;&#160;&#160;0x1</td></tr>
+<tr class="memdesc:ga529a07fc8add86acc57c4a661b8ad197"><td class="mdescLeft">&#160;</td><td class="mdescRight">Used by <a class="el" href="group__misc.html#gac402e82af49cc6e4f3d81dda6135ef9c">ruIpAddrs</a> to specify filtering for IPv4 numbers.  <a href="group__misc.html#ga529a07fc8add86acc57c4a661b8ad197">More...</a><br /></td></tr>
+<tr class="separator:ga529a07fc8add86acc57c4a661b8ad197"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga74da3e46e98a84ac71ec15f1e91e447f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__misc.html#ga74da3e46e98a84ac71ec15f1e91e447f">RU_IP6</a>&#160;&#160;&#160;0x2</td></tr>
+<tr class="memdesc:ga74da3e46e98a84ac71ec15f1e91e447f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Used by <a class="el" href="group__misc.html#gac402e82af49cc6e4f3d81dda6135ef9c">ruIpAddrs</a> to specify filtering for IPv6 numbers.  <a href="group__misc.html#ga74da3e46e98a84ac71ec15f1e91e447f">More...</a><br /></td></tr>
+<tr class="separator:ga74da3e46e98a84ac71ec15f1e91e447f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaad7353818af831a344b4e86ab0d48699"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__misc.html#gaad7353818af831a344b4e86ab0d48699">RU_IP</a>&#160;&#160;&#160;(<a class="el" href="group__misc.html#ga529a07fc8add86acc57c4a661b8ad197">RU_IP4</a> | <a class="el" href="group__misc.html#ga74da3e46e98a84ac71ec15f1e91e447f">RU_IP6</a>)</td></tr>
+<tr class="memdesc:gaad7353818af831a344b4e86ab0d48699"><td class="mdescLeft">&#160;</td><td class="mdescRight">Used by <a class="el" href="group__misc.html#gac402e82af49cc6e4f3d81dda6135ef9c">ruIpAddrs</a> to specify filtering for IP numbers.  <a href="group__misc.html#gaad7353818af831a344b4e86ab0d48699">More...</a><br /></td></tr>
+<tr class="separator:gaad7353818af831a344b4e86ab0d48699"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
@@ -284,6 +293,9 @@ Functions</h2></td></tr>
 <tr class="memitem:gabb9ece7b53e9e95a196adc53be69b099"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__misc.html#gabb9ece7b53e9e95a196adc53be69b099">ruCharPtrDup</a> (char *in)</td></tr>
 <tr class="memdesc:gabb9ece7b53e9e95a196adc53be69b099"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copies the given string and returns the pointer.  <a href="group__misc.html#gabb9ece7b53e9e95a196adc53be69b099">More...</a><br /></td></tr>
 <tr class="separator:gabb9ece7b53e9e95a196adc53be69b099"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gac402e82af49cc6e4f3d81dda6135ef9c"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__list.html#gab25c1662a91a5e0d68a3f04efd1a0cc2">ruList</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__misc.html#gac402e82af49cc6e4f3d81dda6135ef9c">ruIpAddrs</a> (int32_t ipfilter)</td></tr>
+<tr class="memdesc:gac402e82af49cc6e4f3d81dda6135ef9c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the IP numbers bound to the host.  <a href="group__misc.html#gac402e82af49cc6e4f3d81dda6135ef9c">More...</a><br /></td></tr>
+<tr class="separator:gac402e82af49cc6e4f3d81dda6135ef9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga69bc1bcc96b1bb92b0735bee76c4dd32"><td class="memItemLeft" align="right" valign="top">RUAPI int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__misc.html#ga69bc1bcc96b1bb92b0735bee76c4dd32">ruGetOptMap</a> (<a class="el" href="group__hashmap.html#gaad879dbca17e7740cbab5651cafe677d">ruMap</a> *parms, <a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> opts, int argc, char **argv)</td></tr>
 <tr class="memdesc:ga69bc1bcc96b1bb92b0735bee76c4dd32"><td class="mdescLeft">&#160;</td><td class="mdescRight">Runs getopt short with given parameters.  <a href="group__misc.html#ga69bc1bcc96b1bb92b0735bee76c4dd32">More...</a><br /></td></tr>
 <tr class="separator:ga69bc1bcc96b1bb92b0735bee76c4dd32"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -291,6 +303,54 @@ Functions</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Abstracted functions pertaining to other areas. </p>
 <h2 class="groupheader">Macro Definition Documentation</h2>
+<a id="gaad7353818af831a344b4e86ab0d48699"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaad7353818af831a344b4e86ab0d48699">&#9670;&nbsp;</a></span>RU_IP</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define RU_IP&#160;&#160;&#160;(<a class="el" href="group__misc.html#ga529a07fc8add86acc57c4a661b8ad197">RU_IP4</a> | <a class="el" href="group__misc.html#ga74da3e46e98a84ac71ec15f1e91e447f">RU_IP6</a>)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Used by <a class="el" href="group__misc.html#gac402e82af49cc6e4f3d81dda6135ef9c">ruIpAddrs</a> to specify filtering for IP numbers. </p>
+
+</div>
+</div>
+<a id="ga529a07fc8add86acc57c4a661b8ad197"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga529a07fc8add86acc57c4a661b8ad197">&#9670;&nbsp;</a></span>RU_IP4</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define RU_IP4&#160;&#160;&#160;0x1</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Used by <a class="el" href="group__misc.html#gac402e82af49cc6e4f3d81dda6135ef9c">ruIpAddrs</a> to specify filtering for IPv4 numbers. </p>
+
+</div>
+</div>
+<a id="ga74da3e46e98a84ac71ec15f1e91e447f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga74da3e46e98a84ac71ec15f1e91e447f">&#9670;&nbsp;</a></span>RU_IP6</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define RU_IP6&#160;&#160;&#160;0x2</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Used by <a class="el" href="group__misc.html#gac402e82af49cc6e4f3d81dda6135ef9c">ruIpAddrs</a> to specify filtering for IPv6 numbers. </p>
+
+</div>
+</div>
 <a id="ga3a6bd0d17663435e5e96679ffe03f900"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ga3a6bd0d17663435e5e96679ffe03f900">&#9670;&nbsp;</a></span>RU_NO_TIMEOUT</h2>
 
@@ -948,6 +1008,33 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Return code of the operation or <a class="el" href="group__ruerror.html#ga7e2f97cce8af8020834e685a2482556d">RUE_OK</a> on success. </dd></dl>
+
+</div>
+</div>
+<a id="gac402e82af49cc6e4f3d81dda6135ef9c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gac402e82af49cc6e4f3d81dda6135ef9c">&#9670;&nbsp;</a></span>ruIpAddrs()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI <a class="el" href="group__list.html#gab25c1662a91a5e0d68a3f04efd1a0cc2">ruList</a> ruIpAddrs </td>
+          <td>(</td>
+          <td class="paramtype">int32_t&#160;</td>
+          <td class="paramname"><em>ipfilter</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the IP numbers bound to the host. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ipfilter</td><td>Whether to filter for IPv4(<a class="el" href="group__misc.html#ga529a07fc8add86acc57c4a661b8ad197">RU_IP4</a>), IPv6(<a class="el" href="group__misc.html#ga74da3e46e98a84ac71ec15f1e91e447f">RU_IP6</a>) or both (<a class="el" href="group__misc.html#gaad7353818af831a344b4e86ab0d48699">RU_IP</a>). </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="group__list.html#gab25c1662a91a5e0d68a3f04efd1a0cc2">ruList</a> of IP strings. Caller to free with <a class="el" href="group__list.html#ga8f7ce9a43ad50071bc1161ecb21a38d5">ruListFree</a> </dd></dl>
 
 </div>
 </div>
@@ -1673,7 +1760,7 @@ Functions</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Fri Oct 6 2023 11:15:47 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Fri Oct 6 2023 12:07:37 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>
