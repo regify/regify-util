@@ -77,9 +77,6 @@ extern "C" {
         #define RUMS
     #endif
 
-    #ifdef RUMS
-        #pragma comment(lib, "Ws2_32.lib")
-    #endif
     #include <windows.h>
 
     #ifndef int32_t
@@ -128,7 +125,7 @@ extern "C" {
      * \return \ref RUE_OK on success else an error code.
      */
     RUAPI int32_t ruGetVolumeInfo(const char* mountPoint,
-            u_long* serialNo, u_long* maxCompLen, u_long* fsFlags,
+            unsigned long* serialNo, unsigned long* maxCompLen, unsigned long* fsFlags,
             char** volumeName, char** fsName);
 
 #else

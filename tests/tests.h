@@ -36,7 +36,6 @@
 #ifdef __clang__
 #pragma clang diagnostic pop
 #endif
-#include <regify-util.h>
 #include "../lib/lib.h"
 
 /* Only need to export C interface if used by C++ source code */

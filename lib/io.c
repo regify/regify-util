@@ -26,7 +26,6 @@ unsigned int ruIntChunk = (unsigned int)-1;
 int ruIoChunk = 0x7ffff000;
 
 #ifdef _WIN32
-#include <windows.h>
 #include <direct.h>
 #define open _open
 #define read _read

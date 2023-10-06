@@ -161,9 +161,89 @@ RUAPI int ruVersionComp(trans_chars ver1, trans_chars ver2) {
 }
 
 RUAPI ruList ruIpAddrs(int32_t ipfilter) {
-    bool errset = false;
     ruList out = NULL;
     // to free
+#ifdef _WIN32
+    // Set the flags to pass to GetAdaptersAddresses
+    ULONG flags = GAA_FLAG_INCLUDE_PREFIX;
+    // default to unspecified address family (both)
+    ULONG family = AF_UNSPEC;
+    if (ipfilter == RU_IP4) {
+        family = AF_INET;
+    } else if (ipfilter == RU_IP6) {
+        family = AF_INET6;
+    }
+
+    PIP_ADAPTER_ADDRESSES ias = NULL;
+    ULONG bufLen = 15000;
+
+    DWORD ret = NO_ERROR;
+    do {
+        for (int tries = 1; tries <= 3; tries++) {
+            ias = (IP_ADAPTER_ADDRESSES *) ruMalloc0(bufLen, char);
+            ret = GetAdaptersAddresses(family, flags, NULL, ias, &bufLen);
+            if (ret == ERROR_BUFFER_OVERFLOW) {
+                ruFree(ias);
+                ias = NULL;
+            } else {
+                break;
+            }
+        }
+        if (ret != NO_ERROR) {
+            if (ret == ERROR_NO_DATA) {
+                ruDbgLog("No addresses were found for the requested parameters");
+                break;
+            }
+            ruWarnLogf("Call to GetAdaptersAddresses failed with error: %d", ret);
+            LPVOID lpMsgBuf = NULL;
+            if (FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER |
+                              FORMAT_MESSAGE_FROM_SYSTEM |
+                              FORMAT_MESSAGE_IGNORE_INSERTS,
+                              NULL, ret,
+                              MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+                                // Default language
+                              (LPTSTR) &lpMsgBuf, 0, NULL)) {
+                ruSetError("Error: %s", lpMsgBuf);
+                LocalFree(lpMsgBuf);
+                ruFree(ias);
+                break;
+            }
+        }
+
+        // If successful, output some information from the data we received
+        PIP_ADAPTER_ADDRESSES ia = ias;
+        while (ia) {
+            PIP_ADAPTER_UNICAST_ADDRESS pUnicast = ia->FirstUnicastAddress;
+            if (pUnicast != NULL) {
+                for (int i = 0; pUnicast != NULL; i++) {
+                    char buffer[INET6_ADDRSTRLEN] = {0,};
+                    perm_chars ip = NULL;
+                    LPSOCKADDR sa = pUnicast->Address.lpSockaddr;
+                    ADDRESS_FAMILY af = sa->sa_family;
+                    if (af == AF_INET && ipfilter & RU_IP4) {
+                        ip = inet_ntop(af,
+                                       &((struct sockaddr_in *) sa)->sin_addr,
+                                       buffer, INET_ADDRSTRLEN);
+                    } else if (af == AF_INET6 && ipfilter & RU_IP6) {
+                        ip = inet_ntop(af,
+                                       &((struct sockaddr_in6 *) sa)->sin6_addr,
+                                       buffer, INET6_ADDRSTRLEN);
+                    }
+                    if (ip) {
+                        if (!out) out = ruListNew(ruTypeStrDup());
+                        ruDbgLogf("adding: %s", ip);
+                        ruListAppend(out, ip);
+                    }
+                    pUnicast = pUnicast->Next;
+                }
+            }
+            ia = ia->Next;
+        }
+    } while (0);
+
+    ruFree(ias);
+#else
+    bool errset = false;
     struct ifaddrs* ias = NULL;
 
     do {
@@ -207,6 +287,7 @@ RUAPI ruList ruIpAddrs(int32_t ipfilter) {
 
     // cleanup
     if (ias) freeifaddrs(ias);
+#endif
     return out;
 }
 

@@ -29,6 +29,12 @@
 #endif
 #define RU_BUILDING
 
+#ifdef _WIN32
+#include <WS2tcpip.h>
+#include <winsock2.h>
+#include <iphlpapi.h>
+#include <windows.h>
+#endif
 #include <regify-util.h>
 #ifndef RUMS
     #include <dirent.h>
@@ -41,7 +47,6 @@
     #include "wingetopt.h"
 #endif
 #ifdef _WIN32
-    #include <windows.h>
     #include <sys/types.h>
     #include <process.h>
 #else
@@ -178,7 +183,6 @@ void ruClearError(void);
  *  Mutex
  */
 #ifdef _WIN32
-#include <windows.h>
 typedef SRWLOCK ruMutex_t;
 #else
 #include <pthread.h>

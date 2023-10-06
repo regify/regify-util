@@ -72,13 +72,8 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <errno.h>
-#include <stdlib.h>
-#include <string.h>
+#include "lib.h"
 #include <wingetopt.h>
-#include <stdarg.h>
-#include <stdio.h>
-#include <windows.h>
 
 #define REPLACE_GETOPT        /* use this getopt as the system getopt(3) */
 
