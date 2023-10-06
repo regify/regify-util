@@ -116,13 +116,16 @@ START_TEST ( misc ) {
     fail_unless(exp == ret, retText, test, exp, ret);
 
     ruTryLoop tl;
+    msec_t done = ruTimeMs() + 5;
     ruTryLoopInit(&tl, 1, 5);
     int iter = 0;
     do {
         iter++;
     } while (!ruTryLoopDone(&tl));
+    msec_t now = ruTimeMs();
+    fail_unless(now >= done, retText, test, now, done);
     exp = 5;
-    fail_unless(exp == iter, retText, test, exp, iter);
+    fail_unless(iter <= exp, retText, test, iter, exp);
 
     test = "ruGetTimeVal";
     exp = RUE_OK;
