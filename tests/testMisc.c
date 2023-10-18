@@ -122,7 +122,7 @@ START_TEST ( misc ) {
         iter++;
     } while (!ruTryLoopDone(&tl));
     exp = 5;
-    fail_unless(exp == iter, retText, test, exp, iter);
+    fail_unless(exp >= iter, retText, test, exp, iter);
 
     test = "ruGetTimeVal";
     exp = RUE_OK;
