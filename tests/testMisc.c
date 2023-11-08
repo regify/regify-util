@@ -183,9 +183,8 @@ START_TEST ( misc ) {
     fail_if(ret < 0, retText, test, 0, ret);
     fail_if(ret > 11, retText, test, 11, ret);
 
-    ret = ruSemiRandomNumber(11, -6);
-    fail_if(ret < -6, retText, test, -6, ret);
-    fail_if(ret > 5, retText, test, 5, ret);
+    ret = ruSemiRandomNumber(0, -6);
+    fail_unless(ret == -6, retText, test, -6, ret);
 
     test = "ruTimeFormat";
     char timeStr[20];

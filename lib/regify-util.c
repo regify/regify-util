@@ -125,6 +125,7 @@ RUAPI unsigned long ruSemiRandomNumber(unsigned long max, long offset) {
     ruTimeVal tv;
     ruGetTimeVal(&tv);
     long value = (long)((tv.usec ^ tv.sec ) + threadcounter++);
+    max += 1;
     return (value % max) + offset;
 }
 
