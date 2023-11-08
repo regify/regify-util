@@ -106,7 +106,7 @@ function (doLink lib shared)
     endif()
 
     if(MAC)
-        target_link_libraries(${lib} PRIVATE ${CORESVC})
+        target_link_libraries(${lib} PRIVATE "-framework CoreServices")
     endif()
 
     if(shared)
