@@ -987,36 +987,36 @@
       <type>RUAPI bool</type>
       <name>ruFileExists</name>
       <anchorfile>group__io.html</anchorfile>
-      <anchor>ga920bc0bfa5bb35a204bdaf8172ba228e</anchor>
-      <arglist>(const char *filename)</arglist>
+      <anchor>gaa45e43b76105ee0e7db75a2c6a040c75</anchor>
+      <arglist>(trans_chars filename)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI bool</type>
       <name>ruIsFile</name>
       <anchorfile>group__io.html</anchorfile>
-      <anchor>gae7723e5ef579dbfd3d862286365d41f1</anchor>
-      <arglist>(const char *filename)</arglist>
+      <anchor>ga76721ff8f3511501ffe1bead61a37dd2</anchor>
+      <arglist>(trans_chars filename)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI bool</type>
       <name>ruIsDir</name>
       <anchorfile>group__io.html</anchorfile>
-      <anchor>ga1d8e3aea6c159a286cb6c410b32893ca</anchor>
-      <arglist>(const char *filename)</arglist>
+      <anchor>ga65a6130e9d67563b43957b60e4073fa5</anchor>
+      <arglist>(trans_chars filename)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI bool</type>
       <name>ruIsExecutable</name>
       <anchorfile>group__io.html</anchorfile>
-      <anchor>ga8de64b54e1e68f46b1a79e5c264138ba</anchor>
-      <arglist>(const char *filename)</arglist>
+      <anchor>ga71de9c87633d7a60d995c5b646220cd9</anchor>
+      <arglist>(trans_chars filename)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI bool</type>
       <name>ruIsSymlink</name>
       <anchorfile>group__io.html</anchorfile>
-      <anchor>gab7628a26fded54a4e19f5a5043d46e16</anchor>
-      <arglist>(const char *filename)</arglist>
+      <anchor>ga4da746375276dd897ef8c8b9a8ed297a</anchor>
+      <arglist>(trans_chars filename)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI int32_t</type>
@@ -1057,15 +1057,15 @@
       <type>RUAPI int</type>
       <name>ruOpen</name>
       <anchorfile>group__io.html</anchorfile>
-      <anchor>gae5dc81a0de9eafb956c253be9e66948e</anchor>
-      <arglist>(const char *filepath, int flags, int mode, int32_t *code)</arglist>
+      <anchor>gac24bb64060b1f4e07968d528cfb30746</anchor>
+      <arglist>(trans_chars filepath, int flags, int mode, int32_t *code)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI FILE *</type>
       <name>ruFOpen</name>
       <anchorfile>group__io.html</anchorfile>
-      <anchor>ga3716b147f53dd26c805547556b9608be</anchor>
-      <arglist>(const char *filepath, const char *mode, int32_t *code)</arglist>
+      <anchor>gaaf60d483f5ec520635d5260e0cfe287d</anchor>
+      <arglist>(trans_chars filepath, trans_chars mode, int32_t *code)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI int</type>
@@ -1085,8 +1085,8 @@
       <type>RUAPI int32_t</type>
       <name>ruFileSetContents</name>
       <anchorfile>group__io.html</anchorfile>
-      <anchor>ga2280aaaa8bb5c208cb53a696444c5ebd</anchor>
-      <arglist>(const char *filename, const char *contents, rusize length)</arglist>
+      <anchor>ga93d02ae36ba4ae21dee4170e666413b2</anchor>
+      <arglist>(trans_chars filename, trans_chars contents, rusize length)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI int</type>
@@ -1106,22 +1106,22 @@
       <type>RUAPI int</type>
       <name>ruFileRename</name>
       <anchorfile>group__io.html</anchorfile>
-      <anchor>ga8f8cf9398240f654b7168706eb8a1095</anchor>
-      <arglist>(const char *oldName, const char *newName)</arglist>
+      <anchor>ga461a95e523612ed15a7967f08b5a8d21</anchor>
+      <arglist>(trans_chars oldName, trans_chars newName)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI int</type>
       <name>ruFileTryRename</name>
       <anchorfile>group__io.html</anchorfile>
-      <anchor>ga73b475d19298205315ec716522eb5005</anchor>
-      <arglist>(const char *oldName, const char *newName)</arglist>
+      <anchor>ga21e19dd9939a90a28d36e96804dea0db</anchor>
+      <arglist>(trans_chars oldName, trans_chars newName)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI int</type>
       <name>ruFileRemove</name>
       <anchorfile>group__io.html</anchorfile>
-      <anchor>ga037f61b6aa2a41e5966e75799c3b7626</anchor>
-      <arglist>(const char *filename)</arglist>
+      <anchor>gaf6fcc788ed55841fe69349355897d31a</anchor>
+      <arglist>(trans_chars filename)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI int32_t</type>
