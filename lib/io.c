@@ -1048,9 +1048,15 @@ RUAPI int ruFileRemove(const char* filename) {
     return ret;
 #else
     if (!ruIsSymlink(filename) && ruIsDir(filename)) {
-        return rmdir(filename);
+        if (!rmdir(filename)) return RUE_OK;
+        int ret = errno2rfec(errno);
+        if (!ruFileExists(filename)) return RUE_OK;
+        return ret;
     }
-    return unlink(filename);
+    if(!unlink(filename)) return RUE_OK;
+    int ret = errno2rfec(errno);
+    if (!ruFileExists(filename)) return RUE_OK;
+    return ret;
 #endif
 }
 
