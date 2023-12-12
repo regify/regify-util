@@ -752,11 +752,11 @@ RUAPI rusize_s ruWrite(int oh, trans_ptr contents, rusize length) {
 #endif
 }
 
-static int remover(trans_chars fullPath, bool isDir, ptr ctx) {
+static int32_t remover(trans_chars fullPath, bool isDir, ptr ctx) {
     if (strlen(fullPath) == 0) return RUE_INVALID_PARAMETER;
     if (strcmp("/", fullPath) == 0) return RUE_INVALID_PARAMETER;
-    if (!ruFileExists(fullPath)) return RUE_OK;
     if(ruFileRemove(fullPath)) {
+        if (!ruFileExists(fullPath)) return RUE_OK;
         ruSetError("failed removing '%s' error: %d - %s",
                  fullPath, errno, strerror(errno));
         return RUE_GENERAL;
@@ -1028,11 +1028,21 @@ RUAPI int ruFileRemove(const char* filename) {
     wchar_t *wpath = getWPath(filename);
     int ret = 0, waDir = 0;
     if (ruWIsDir(wpath)) {
+        _set_errno(0);
         ret = _wrmdir(wpath);
+        if (ret != 0) {
+            if (errno == ENOENT) ret = RUE_FILE_NOT_FOUND;
+            else ret = RUE_CANT_WRITE;
+        }
         waDir = 1;
     }
     if (!waDir) {
+        _set_errno(0);
         ret = _wunlink(wpath);
+        if (ret != 0) {
+            if (errno == ENOENT) ret = RUE_FILE_NOT_FOUND;
+            else ret = RUE_CANT_WRITE;
+        }
     }
     ruFree (wpath);
     return ret;

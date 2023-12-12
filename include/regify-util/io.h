@@ -41,7 +41,7 @@ extern "C" {
  * @param filename Name of file, folder or other filesystem entity.
  * @return Return true if the path exists else false.
  */
-RUAPI bool ruFileExists(const char* filename);
+RUAPI bool ruFileExists(trans_chars filename);
 
 /**
  * Returns true if the given path exists and is a regular file.
@@ -50,7 +50,7 @@ RUAPI bool ruFileExists(const char* filename);
  * @param filename File path to test
  * @return Returns true if it is a regular file.
  */
-RUAPI bool ruIsFile(const char* filename);
+RUAPI bool ruIsFile(trans_chars filename);
 
 /**
  * Returns true if the given path exists and is a folder.
@@ -59,7 +59,7 @@ RUAPI bool ruIsFile(const char* filename);
  * @param filename File path to test
  * @return Returns true if it is a folder.
  */
-RUAPI bool ruIsDir(const char* filename);
+RUAPI bool ruIsDir(trans_chars filename);
 
 /**
  * Returns true if the given path exists and is executable.
@@ -71,7 +71,7 @@ RUAPI bool ruIsDir(const char* filename);
  * @param filename File path to test
  * @return Returns true if it is executable.
  */
-RUAPI bool ruIsExecutable(const char* filename);
+RUAPI bool ruIsExecutable(trans_chars filename);
 
 #ifndef _WIN32
 /**
@@ -79,7 +79,7 @@ RUAPI bool ruIsExecutable(const char* filename);
  * @param filename File path to test
  * @return Returns true if it is a symlink.
  */
-RUAPI bool ruIsSymlink(const char* filename);
+RUAPI bool ruIsSymlink(trans_chars filename);
 #endif
 
 /**
@@ -153,7 +153,7 @@ RUAPI int32_t ruFileSetUtcTime(trans_chars filePath, sec_t date);
  * @param code Parameter validation error or \ref RUE_OK if parameters are good.
  * @return A valid file handle or -1 in case of error. Then check errno.
  */
-RUAPI int ruOpen(const char *filepath, int flags, int mode, int32_t* code);
+RUAPI int ruOpen(trans_chars filepath, int flags, int mode, int32_t* code);
 
 /**
  * Abstracted version of the Posix fopen call.
@@ -162,7 +162,7 @@ RUAPI int ruOpen(const char *filepath, int flags, int mode, int32_t* code);
  * @param code Parameter validation error or \ref RUE_OK if parameters are good.
  * @return A valid file handle or -1 in case of error. Then check errno.
  */
-RUAPI FILE* ruFOpen(const char *filepath, const char *mode, int32_t* code);
+RUAPI FILE* ruFOpen(trans_chars filepath, trans_chars mode, int32_t* code);
 
 /**
  * Creates and returns the file handle to a new temporary file.
@@ -200,7 +200,7 @@ RUAPI rusize_s ruWrite(int oh, trans_ptr contents, rusize length);
  *               terminated string.
  * @return Return code of the operation or \ref RUE_OK on success.
  */
-RUAPI int32_t ruFileSetContents(const char *filename, const char *contents, rusize length);
+RUAPI int32_t ruFileSetContents(trans_chars filename, trans_chars contents, rusize length);
 
 /**
  * Reads the contents out of the given filepath into the variable and sets the
@@ -228,7 +228,7 @@ RUAPI int ruFileCopy(trans_chars srcpath, trans_chars destpath);
  * @param newName The new file path.
  * @return Return code of the operation or \ref RUE_OK on success.
  */
-RUAPI int ruFileRename(const char* oldName, const char* newName);
+RUAPI int ruFileRename(trans_chars oldName, trans_chars newName);
 
 /**
  * \brief Renames a given file like \ref ruFileRename, but fails when newName
@@ -237,14 +237,14 @@ RUAPI int ruFileRename(const char* oldName, const char* newName);
  * @param newName The new file path.
  * @return Return code of the operation or \ref RUE_OK on success.
  */
-RUAPI int ruFileTryRename(const char* oldName, const char* newName);
+RUAPI int ruFileTryRename(trans_chars oldName, trans_chars newName);
 
 /**
  * Delete a given file or empty folder.
  * @param filename File or folder to delete.
- * @return 0 on success or Posix remove error codes.
+ * @return Return code of the operation or \ref RUE_OK on success.
  */
-RUAPI int ruFileRemove(const char* filename);
+RUAPI int ruFileRemove(trans_chars filename);
 
 /**
  * Used by \ref ruFolderWalk to specify that the folder be handled before its contents.
