@@ -1045,6 +1045,7 @@ RUAPI int ruFileRemove(const char* filename) {
         }
     }
     ruFree (wpath);
+    if (ret != RUE_OK && !ruFileExists(filename)) return RUE_OK;
     return ret;
 #else
     if (!ruIsSymlink(filename) && ruIsDir(filename)) {
