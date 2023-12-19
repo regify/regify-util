@@ -25,7 +25,7 @@
 #include <CoreServices/CoreServices.h>
 
 // fam debugging
-#if 0
+#if 1
 #define fam_dbg(fmt, ...) ruLog_(RU_LOG_DBUG, fmt, __VA_ARGS__)
 #else
 #define fam_dbg(fmt, ...)
@@ -257,7 +257,9 @@ static int32_t handleFile(famCtx *fctx, trans_chars path,
                 ret = RU_FAM_MODIFIED;
 
             } else {
+                // kFSEventStreamEventFlagItemChangeOwner for perm changes
                 if ((kFSEventStreamEventFlagItemInodeMetaMod |
+                    kFSEventStreamEventFlagItemChangeOwner |
                     kFSEventStreamEventFlagItemModified) & op) {
                     ret = RU_FAM_MODIFIED;
                     fam_dbg("path: '%s' got modified", path);
