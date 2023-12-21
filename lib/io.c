@@ -1099,8 +1099,7 @@ int32_t ruMkdirRecurse(char *pathname, int mode, bool deep) {
 #ifdef _WIN32
     wchar_t *wpath = getWPath(pathname);
     if (_wmkdir(wpath)) {
-        ruFree(wpath);
-        return RUE_CANT_WRITE;
+        if (!ruWIsDir(wpath)) ret = RUE_CANT_WRITE;
     }
     ruFree(wpath);
 #else
