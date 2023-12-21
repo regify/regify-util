@@ -1145,17 +1145,17 @@
       <arglist>(trans_chars folder)</arglist>
     </member>
     <member kind="function">
-      <type>RUAPI int</type>
+      <type>RUAPI int32_t</type>
       <name>ruFolderRemove</name>
       <anchorfile>group__io.html</anchorfile>
-      <anchor>ga3770186e0678760f4c6ab93751d6e4ad</anchor>
+      <anchor>gab3fab68f12b2f27bac5fdd1d951ddc2e</anchor>
       <arglist>(trans_chars folder)</arglist>
     </member>
     <member kind="function">
-      <type>RUAPI int</type>
+      <type>RUAPI int32_t</type>
       <name>ruMkdir</name>
       <anchorfile>group__io.html</anchorfile>
-      <anchor>ga3602170134b8290324e6aca3a0b23650</anchor>
+      <anchor>gaf5f3d6bf791c69eda53a9da77f128a6d</anchor>
       <arglist>(trans_chars pathname, int mode, bool deep)</arglist>
     </member>
     <member kind="function">

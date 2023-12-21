@@ -184,11 +184,11 @@ Functions</h2></td></tr>
 <tr class="memitem:ga1c58cc0d6dd45ca69fbf9878327a0695"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__misc.html#ga08ea7d9b63ae62c0b2f4f666841ee48e">ru_int</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__io.html#ga1c58cc0d6dd45ca69fbf9878327a0695">ruFolderEntries</a> (<a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> folder)</td></tr>
 <tr class="memdesc:ga1c58cc0d6dd45ca69fbf9878327a0695"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the number of folder entries including itself.  <a href="group__io.html#ga1c58cc0d6dd45ca69fbf9878327a0695">More...</a><br /></td></tr>
 <tr class="separator:ga1c58cc0d6dd45ca69fbf9878327a0695"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga3770186e0678760f4c6ab93751d6e4ad"><td class="memItemLeft" align="right" valign="top">RUAPI int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__io.html#ga3770186e0678760f4c6ab93751d6e4ad">ruFolderRemove</a> (<a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> folder)</td></tr>
-<tr class="memdesc:ga3770186e0678760f4c6ab93751d6e4ad"><td class="mdescLeft">&#160;</td><td class="mdescRight">Recursively delete given folder and all it's sub contents. If given path is a file or symlink, it will also be removed.  <a href="group__io.html#ga3770186e0678760f4c6ab93751d6e4ad">More...</a><br /></td></tr>
-<tr class="separator:ga3770186e0678760f4c6ab93751d6e4ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga3602170134b8290324e6aca3a0b23650"><td class="memItemLeft" align="right" valign="top">RUAPI int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__io.html#ga3602170134b8290324e6aca3a0b23650">ruMkdir</a> (<a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> pathname, int mode, bool deep)</td></tr>
-<tr class="separator:ga3602170134b8290324e6aca3a0b23650"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gab3fab68f12b2f27bac5fdd1d951ddc2e"><td class="memItemLeft" align="right" valign="top">RUAPI int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__io.html#gab3fab68f12b2f27bac5fdd1d951ddc2e">ruFolderRemove</a> (<a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> folder)</td></tr>
+<tr class="memdesc:gab3fab68f12b2f27bac5fdd1d951ddc2e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Recursively delete given folder and all it's sub contents. If given path is a file or symlink, it will also be removed.  <a href="group__io.html#gab3fab68f12b2f27bac5fdd1d951ddc2e">More...</a><br /></td></tr>
+<tr class="separator:gab3fab68f12b2f27bac5fdd1d951ddc2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaf5f3d6bf791c69eda53a9da77f128a6d"><td class="memItemLeft" align="right" valign="top">RUAPI int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__io.html#gaf5f3d6bf791c69eda53a9da77f128a6d">ruMkdir</a> (<a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> pathname, int mode, bool deep)</td></tr>
+<tr class="separator:gaf5f3d6bf791c69eda53a9da77f128a6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gabf71d082e151f87d4f31b819a293236b"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__misc.html#ga972d4f4f858964bb2381d186ea96d88d">alloc_chars</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__io.html#gabf71d082e151f87d4f31b819a293236b">ruDirName</a> (<a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> filePath)</td></tr>
 <tr class="memdesc:gabf71d082e151f87d4f31b819a293236b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the dirname part of a full path without the trailing slash.  <a href="group__io.html#gabf71d082e151f87d4f31b819a293236b">More...</a><br /></td></tr>
 <tr class="separator:gabf71d082e151f87d4f31b819a293236b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -933,14 +933,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ga3770186e0678760f4c6ab93751d6e4ad"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga3770186e0678760f4c6ab93751d6e4ad">&#9670;&nbsp;</a></span>ruFolderRemove()</h2>
+<a id="gab3fab68f12b2f27bac5fdd1d951ddc2e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gab3fab68f12b2f27bac5fdd1d951ddc2e">&#9670;&nbsp;</a></span>ruFolderRemove()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">RUAPI int ruFolderRemove </td>
+          <td class="memname">RUAPI int32_t ruFolderRemove </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a>&#160;</td>
           <td class="paramname"><em>folder</em></td><td>)</td>
@@ -1182,14 +1182,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ga3602170134b8290324e6aca3a0b23650"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga3602170134b8290324e6aca3a0b23650">&#9670;&nbsp;</a></span>ruMkdir()</h2>
+<a id="gaf5f3d6bf791c69eda53a9da77f128a6d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaf5f3d6bf791c69eda53a9da77f128a6d">&#9670;&nbsp;</a></span>ruMkdir()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">RUAPI int ruMkdir </td>
+          <td class="memname">RUAPI int32_t ruMkdir </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a>&#160;</td>
           <td class="paramname"><em>pathname</em>, </td>
@@ -1563,7 +1563,7 @@ Functions</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Tue Dec 19 2023 15:34:09 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Thu Dec 21 2023 13:18:43 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>
