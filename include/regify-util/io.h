@@ -337,7 +337,7 @@ RUAPI ru_int ruFolderEntries(trans_chars folder);
  * @return \ref RUE_OK on success else \ref RUE_GENERAL and call \ref
  *         ruLastError for details.
  */
-RUAPI int ruFolderRemove(trans_chars folder);
+RUAPI int32_t ruFolderRemove(trans_chars folder);
 
 /**
  * Creates the requested folder with the requested permissions.
@@ -346,7 +346,7 @@ RUAPI int ruFolderRemove(trans_chars folder);
  * @param deep Whether to create any upper level folders.
  * @return \ref RUE_OK on success, else a regify error code.
  */
-RUAPI int ruMkdir(trans_chars pathname, int mode, bool deep);
+RUAPI int32_t ruMkdir(trans_chars pathname, int mode, bool deep);
 
 /**
  * \brief Returns the dirname part of a full path without the trailing slash.

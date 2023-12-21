@@ -1007,7 +1007,7 @@ RUAPI ru_int ruFolderEntries(trans_chars folder) {
     return cnt;
 }
 
-RUAPI int ruFolderRemove(trans_chars folder) {
+RUAPI int32_t ruFolderRemove(trans_chars folder) {
     ruClearError();
     ruDbgLogf("delete '%s'", folder);
     if (!folder) return RUE_PARAMETER_NOT_SET;
@@ -1077,7 +1077,7 @@ char* getDirNameTerminator(trans_chars filePath) {
     return NULL;
 }
 
-int ruMkdirRecurse(char *pathname, int mode, bool deep) {
+int32_t ruMkdirRecurse(char *pathname, int mode, bool deep) {
     if (!pathname) return RUE_PARAMETER_NOT_SET;
     if (ruIsDir(pathname)) return RUE_OK; // already there
     if (ruFileExists(pathname)) return RUE_FILE_EXISTS; // there but not folder
@@ -1086,9 +1086,10 @@ int ruMkdirRecurse(char *pathname, int mode, bool deep) {
     if (!ptr) return RUE_GENERAL;
     char oldVal = *ptr; // remember that character
     *ptr = '\0'; // set the terminator
+    int32_t ret = RUE_OK;
     if (strlen(pathname) && !ruIsDir(pathname)) {
         if (deep) {
-            int ret = ruMkdirRecurse(pathname, mode, deep);
+            ret = ruMkdirRecurse(pathname, mode, deep);
             if (ret != RUE_OK) return ret;
         } else {
             return RUE_FILE_NOT_FOUND;
@@ -1104,13 +1105,13 @@ int ruMkdirRecurse(char *pathname, int mode, bool deep) {
     ruFree(wpath);
 #else
     if (mkdir(pathname, mode)) {
-        return RUE_CANT_WRITE;
+        if (!ruIsDir(pathname)) ret = RUE_CANT_WRITE;
     }
 #endif
-    return RUE_OK;
+    return ret;
 }
 
-RUAPI int ruMkdir(const char *pathname, int mode, bool deep) {
+RUAPI int32_t ruMkdir(const char *pathname, int mode, bool deep) {
     if (!pathname || !strlen(pathname)) return RUE_PARAMETER_NOT_SET;
     if (ruIsDir(pathname)) return RUE_OK; // already there
 #ifndef _WIN32
