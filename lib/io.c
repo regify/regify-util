@@ -1080,7 +1080,7 @@ char* getDirNameTerminator(trans_chars filePath) {
 int32_t ruMkdirRecurse(char *pathname, int mode, bool deep) {
     if (!pathname) return RUE_PARAMETER_NOT_SET;
     if (ruIsDir(pathname)) return RUE_OK; // already there
-    if (ruFileExists(pathname)) return RUE_FILE_EXISTS; // there but not folder
+    if (ruIsFile(pathname)) return RUE_FILE_EXISTS; // there but not folder
 
     char *ptr = getDirNameTerminator(pathname);
     if (!ptr) return RUE_GENERAL;
