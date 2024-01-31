@@ -177,7 +177,7 @@ RUAPI int32_t ruListAppendPtr(ruList rl, perm_ptr data);
  * \ingroup list
  * \brief Inserts given object at indexed position in list in given list element.
  * @param rl List in which to insert object.
- * @param index Index at which to insert the object. 0 for first element.
+ * @param index Index at which to insert the object. 0(first)/-1(last)  element.
  *              If index is > list size the item will be appended.
  * @param data Object to insert.
  * @return \ref RUE_OK on success
@@ -406,7 +406,7 @@ RUAPI ptr ruListIdxData(ruList rl, int32_t index, int32_t* code);
  * @param rle Pointer to element to remove, will be set to the previous element
  *            to allow for deletion during iteration.
  * @param dest Optional. Where the returned object will be stored as its given
- *             type.
+ *             type. When not set object will be freed.
  * @return regify error code of this operation.
  *         \ref RUE_OK on success
  *         \ref RUE_USER_ABORT when a threaded list has quit
@@ -433,9 +433,9 @@ RUAPI int32_t ruListRemoveDataTo(ruList rl, ruListElmt* rle, ptr* dest);
  * \ingroup listtype
  * \brief Remove and return the list element at index position from list.
  * @param rl List to remove object from.
- * @param index 0 based postion of the element to remove in the list.
+ * @param index 0(first)/-1(last) position of the element to remove in the list.
  * @param dest Optional. Where the returned object will be stored as its given
- *             type.
+ *             type. When not set object will be freed.
  * @return regify error code of this operation.
  *         \ref RUE_OK on success
  *         \ref RUE_USER_ABORT when a threaded list has quit
@@ -447,7 +447,7 @@ RUAPI int32_t ruListRemoveIdxDataTo(ruList rl, int32_t index, ptr* dest);
  * \ingroup listtype
  * \brief Remove and return the list element at index position from list.
  * @param rl List to remove object from.
- * @param index 0 based postion of the element to remove in the list.
+ * @param index 0(first)/-1(last) position of the element to remove in the list.
  * @param dest Optional. Where the returned object will be stored as its given
  *             type. (casts added)
  * @return regify error code of this operation.

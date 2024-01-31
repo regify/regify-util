@@ -177,6 +177,7 @@ void ruClearError(void);
 #define MagicJson           2311
 #define MagicTypeSpec       2312
 #define MagicRegex          2313
+#define MagicTrace          2314
 // cleaner.c #define MagicCleaner 2410
 
 /*
@@ -189,6 +190,17 @@ typedef SRWLOCK ruMutex_t;
 #include <sched.h>
 typedef pthread_mutex_t ruMutex_t;
 #endif
+
+typedef struct Trace_ {
+    ru_uint type;     // magic
+    alloc_chars filePath;
+    perm_chars file;
+    uint32_t line;
+    alloc_chars func;
+    perm_ptr offset;
+    perm_ptr addr;
+    alloc_chars str;
+} Trace;
 
 typedef struct mux_ {
     ru_uint type;
@@ -388,6 +400,7 @@ void U_CALLCONV traceData( const void *context, int32_t fnNumber, int32_t level,
                            const char *fmt, va_list args);
 bool ruIsunreserved(unsigned char in);
 sec_t timeParse(trans_chars dateformat, trans_chars datestr, bool utc);
+void setPidEnd(void);
 
 // ICU stuff
 UConverter* getConverter(void);

@@ -24,13 +24,280 @@
 // Mutex debugging instrumentation
 #define muxDbg 0
 
+ruMakeTypeGetter(Trace, MagicTrace)
 ruMakeTypeGetter(Mux, MagicMux)
 ruMakeTypeGetter(Thr, MagicThr)
 ruMakeTypeGetter(tsc, MagicTsc)
 
 RU_THREAD_LOCAL char* logPidEnd = NULL;
 RU_THREAD_LOCAL char* ru_threadName = NULL;
-perm_chars staticPidEnd = "]:";
+RU_THREAD_LOCAL char genPidBuf[32];
+char* staticPidEnd = "]:";
+
+//<editor-fold desc="Backtrace">
+#if defined(UNWIND) || defined(ILTBacktrace) || defined(STACKWALK)
+static Trace* newTrace(trans_chars filePath, int32_t line, trans_chars func,
+                       perm_ptr offset, perm_ptr addr) {
+    Trace* tr = ruMallocSize(1, sizeof(Trace));
+    tr->type = MagicTrace;
+    tr->filePath = ruStrDup(filePath);
+    tr->file = ruBaseName(tr->filePath);
+    tr->line = line;
+    tr->func = ruStrDup(func);
+    tr->offset = offset;
+    tr->addr = addr;
+    return tr;
+}
+
+static ruTrace freeTrace(ruTrace rt) {
+    Trace* tr = TraceGet(rt, NULL);
+    if (!tr) return NULL;
+    ruFree(tr->filePath);
+    ruFree(tr->func);
+    ruFree(tr->str);
+    tr->file = NULL;
+    tr->type = 0;
+    tr->offset = 0;
+    tr->addr = 0;
+    tr->line = 0;
+    ruFree(tr);
+    return NULL;
+}
+#endif
+
+#if defined(ILTBacktrace)
+#include <backtrace.h>
+
+struct backtrace_state* btState = NULL;
+
+void btErrorCb (void *data, trans_chars msg, int error) {
+    if (error == -1) {
+        ruWarnLog("If you want backtraces, you have to compile with -g");
+    } else {
+        ruWarnLogf("Backtrace error %d: %s", error, msg);
+    }
+}
+
+static int btFullCb (void* data, uintptr_t pc, trans_chars file,
+                     int line, trans_chars func) {
+    ruList callers = (ruList)data;
+    //ruDbgLogf("file: %s line: %d func: %s() addr: 0x%p",
+    //          file, line, func, pc);
+    ruListInsertIdx(callers, 0,
+                    newTrace(file, line, func, 0, (perm_ptr)pc));
+    return 0;
+}
+
+#elif defined(UNWIND)
+#define UNW_LOCAL_ONLY
+#include <libunwind.h>
+
+static void unwindTo(ruList callers) {
+    unw_cursor_t cursor;
+    unw_context_t context;
+
+    // Initialize cursor to current frame for local unwinding.
+    unw_getcontext(&context);
+    unw_init_local(&cursor, &context);
+
+    // Unwind frames one by one, going up the frame stack.
+    while (unw_step(&cursor) > 0) {
+        unw_word_t offset = 0, pc = 0;
+        unw_get_reg(&cursor, UNW_REG_IP, &pc);
+        if (!pc) break;
+
+        char sym[256];
+        if (unw_get_proc_name(&cursor, sym, sizeof(sym), &offset) == 0) {
+            //ruDbgLogf("TRACE: %s+0x%lx", sym, offset);
+            ruListInsertIdx(callers, 0, newTrace(
+                    NULL, 0, sym,
+                    (perm_ptr)offset, (perm_ptr)pc));
+        } else {
+            //ruDbgLogf("TRACE: (null)+0x%lx", offset);
+            ruListInsertIdx(callers, 0, newTrace(
+                    NULL, 0, NULL,
+                    (perm_ptr)offset, (perm_ptr)pc));
+        }
+    }
+}
+
+#elif defined(STACKWALK)
+#include <dbghelp.h>
+
+static void stackWalk(ruList callers) {
+    static HANDLE process = 0;
+    if (!process) {
+        process = GetCurrentProcess();
+        if (!SymInitialize(process, NULL, true)) {
+            ruWarnLogf("SymInitialize failed Ec: %d", GetLastError());
+        } else {
+            ruDbgLog("SymInitialize succeeded");
+        }
+        char path[1024];
+        char* p = &path[0];
+        memset(p, 0, 1024);
+        if (SymGetSearchPath(process, p, 1024)) {
+            ruDbgLogf("search path: '%s'", p);
+        } else {
+            ruWarnLogf("SymGetSearchPath failed Ec: %d", GetLastError());
+        }
+    }
+
+    CONTEXT context;
+    RtlCaptureContext(&context);
+
+    ruZeroedStruct(STACKFRAME, stack);
+    stack.AddrPC.Mode      = AddrModeFlat;
+    stack.AddrStack.Mode   = AddrModeFlat;
+    stack.AddrFrame.Mode   = AddrModeFlat;
+#ifdef _M_X64
+    DWORD machine = IMAGE_FILE_MACHINE_AMD64;
+    stack.AddrPC.Offset    = context.Rip;
+    stack.AddrStack.Offset = context.Rsp;
+    stack.AddrFrame.Offset = context.Rbp;
+#elif _M_IX86
+    DWORD machine = IMAGE_FILE_MACHINE_I386;
+    stack.AddrPC.Offset    = context.Eip;
+    stack.AddrStack.Offset = context.Esp;
+    stack.AddrFrame.Offset = context.Ebp;
+#else
+#error "platform not supported!"
+#endif
+
+    for(;;) {
+        bool result = StackWalk(machine, process, GetCurrentThread(), &stack,
+                              &context, NULL, SymFunctionTableAccess,
+                              SymGetModuleBase, NULL);
+        if(!result) break;
+
+        // get the function name
+        perm_chars func = NULL;
+        #define max_sym_name (MAX_SYM_NAME * sizeof(char))
+        char store[sizeof(SYMBOL_INFO) + max_sym_name];
+        PSYMBOL_INFO sym = (PSYMBOL_INFO)store;
+        memset(sym, 0, sizeof(store));
+        sym->SizeOfStruct = sizeof(SYMBOL_INFO);
+        sym->MaxNameLen = MAX_SYM_NAME;
+        if (SymFromAddr(process, stack.AddrPC.Offset, NULL, sym)) {
+            func = sym->Name;
+        }
+
+        // get the line and file name
+        alloc_chars token = NULL;
+        ruZeroedStruct(IMAGEHLP_LINE, line_num);
+        line_num.SizeOfStruct = sizeof(IMAGEHLP_LINE);
+        if (SymGetLineFromAddr(process, stack.AddrPC.Offset, NULL, &line_num)) {
+            perm_chars file = ruBaseName(line_num.FileName);
+            token = ruDupPrintf("%s(%s:%lu)", func, file, line_num.LineNumber);
+        } else {
+            if (sym->Size) {
+                token = ruDupPrintf("%s(0x%p)", func, stack.AddrPC.Offset);
+            } else {
+                token = ruDupPrintf("0x%p", stack.AddrPC.Offset);
+            }
+        }
+        ruDbgLogf("addr: %p Size: %lu Flags: %x",
+                  stack.AddrPC.Offset, sym->Size, sym->Flags);
+        ruListInsertIdx(callers, 0, token);
+    }
+}
+#endif
+
+RUAPI ruList ruBacktrace(int32_t* code) {
+    ruList callers =  NULL;
+    int32_t ret = RUE_FEATURE_NOT_SUPPORTED;
+#if defined(UNWIND) || defined(ILTBacktrace) || defined(STACKWALK)
+    callers =  ruListNew(ruTypePtr(freeTrace));
+#if defined(ILTBacktrace)
+    if (!btState) {
+        btState = backtrace_create_state(NULL, 1, btErrorCb, NULL);
+    }
+    backtrace_full(btState, 0, btFullCb, btErrorCb, callers);
+#elif defined(UNWIND)
+    unwindTo(callers);
+#elif defined(STACKWALK)
+    stackWalk(callers);
+#endif
+    ret = RUE_OK;
+#endif
+    ruRetWithCode(code, ret, callers);
+}
+
+RUAPI void ruTraceLog(trans_chars tag, int32_t skip) {
+    ruList callers = ruBacktrace(NULL);
+    while(0 < skip--) ruListRemoveIdxDataTo(callers, -1, NULL);
+    ruIterator li = ruListIter(callers);
+    ruTrace item;
+    for(ruIterTo(li, item); li; ruIterTo(li, item)) {
+        perm_chars tr = ruTraceStr(item);
+        ruVerbLogf("%s %s", tag, tr);
+    }
+    ruListFree(callers);
+}
+
+RUAPI perm_chars ruTraceStr(ruTrace rt) {
+    Trace* tr = TraceGet(rt, NULL);
+    if (!tr) return NULL;
+    if (tr->str) return tr->str;
+    if (tr->func) {
+        if (tr->file && tr->line) {
+            tr->str = ruDupPrintf("%s(%s:%d)",
+                                  tr->func, tr->file, tr->line);
+        } else {
+            if (tr->offset) {
+                tr->str = ruDupPrintf("%s(0x%p) 0x%p",
+                                      tr->func, tr->offset, tr->addr);
+            } else {
+                tr->str = ruDupPrintf("%s() 0x%p", tr->func, tr->addr);
+            }
+        }
+    } else {
+        if (tr->file && tr->line) {
+            tr->str = ruDupPrintf("%s:%d", tr->file, tr->line);
+        } else {
+            tr->str = ruDupPrintf("0x%p", tr->addr);
+        }
+    }
+    return tr->str;
+}
+
+RUAPI perm_chars ruTraceFilePath(ruTrace rt) {
+    Trace* tr = TraceGet(rt, NULL);
+    if (!tr) return NULL;
+    return tr->filePath;
+}
+
+RUAPI perm_chars ruTraceFileName(ruTrace rt) {
+    Trace* tr = TraceGet(rt, NULL);
+    if (!tr) return NULL;
+    return tr->file;
+}
+
+RUAPI perm_chars ruTraceFunc(ruTrace rt) {
+    Trace* tr = TraceGet(rt, NULL);
+    if (!tr) return NULL;
+    return tr->func;
+}
+
+RUAPI uint32_t ruTraceLine(ruTrace rt) {
+    Trace* tr = TraceGet(rt, NULL);
+    if (!tr) return 0;
+    return tr->line;
+}
+
+RUAPI perm_ptr ruTraceOffset(ruTrace rt) {
+    Trace* tr = TraceGet(rt, NULL);
+    if (!tr) return 0;
+    return tr->offset;
+}
+
+RUAPI perm_ptr ruTraceAddr(ruTrace rt) {
+    Trace* tr = TraceGet(rt, NULL);
+    if (!tr) return 0;
+    return tr->addr;
+}
+
+//</editor-fold>
 
 //<editor-fold desc="Threading">
 #ifdef _WIN32
@@ -130,6 +397,22 @@ static bool threadWait(Thr* tc, long tosecs, void** exitVal) {
     return false;
 }
 
+void freePidEnd(void) {
+    if (logPidEnd && logPidEnd != staticPidEnd && logPidEnd != &genPidBuf[0]) ruFree(logPidEnd);
+}
+
+void setPidEnd(void) {
+    static int threadcnt = 0;
+    freePidEnd();
+    if((ru_tid)getpid() != ruThreadGetId()) {
+        snprintf(&genPidBuf[0], 32, ".%ld]:[thread-%03d]:",
+                 ruThreadGetId(), ++threadcnt);
+        logPidEnd = &genPidBuf[0];
+    } else {
+        logPidEnd = (char*)staticPidEnd;
+    }
+}
+
 RUAPI ru_tid ruThreadGetId(void) {
 #if defined(__EMSCRIPTEN__)
     return 0;
@@ -146,16 +429,12 @@ RUAPI ru_tid ruThreadGetId(void) {
 }
 
 RUAPI void ruThreadSetName(trans_chars name) {
-    static int threadcnt = 0;
-    if (logPidEnd && logPidEnd != staticPidEnd) ruFree(logPidEnd);
+    freePidEnd();
     ruFree(ru_threadName);
     if (name) {
         logPidEnd = ruDupPrintf(".%ld]:[%s]:", ruThreadGetId(), name);
         ru_threadName = ruStrDup(name);
-    } else if((ru_tid)getpid() != ruThreadGetId()) {
-        logPidEnd = ruDupPrintf(".%ld]:[thread-%03d]", ruThreadGetId(), ++threadcnt);
-    } else {
-        logPidEnd = (char*)staticPidEnd;
+        if (!logPidEnd) setPidEnd();
     }
 }
 

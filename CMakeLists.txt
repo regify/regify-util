@@ -18,7 +18,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-# options
+#<editor-fold desc="options">
 set(VERSION 2.0.0 CACHE STRING "The package version")
 set(REVISION 0 CACHE STRING "The build revision")
 set(DEPS_PREFIX ${CMAKE_INSTALL_PREFIX} CACHE STRING "General dependency installation prefix")
@@ -36,8 +36,9 @@ option(TESTING "Whether to build the tests" OFF)
 option(TGZSOURCE "Whether to generate a source tar file instead of zip" OFF)
 
 option(MSVC_STATIC_RUNTIME "Whether to link against the static runtime library" ON)
+#</editor-fold>
 
-# general
+#<editor-fold desc="general">
 cmake_minimum_required(VERSION 3.13)
 set(NAME regify-util)
 set(staticlib ${NAME}_static)
@@ -75,12 +76,13 @@ if (CMAKE_BUILD_TYPE MATCHES "Debug")
 else()
     set(logLevel LOG_INFO)
 endif()
+#</editor-fold>
 
+#<editor-fold desc="platform switches">
 doLog(LOG_VERB "CMAKE_SYSTEM_NAME: ${CMAKE_SYSTEM_NAME}")
 
 string(TOLOWER ${CMAKE_SYSTEM_NAME} NAME_OS)
 string(SUBSTRING ${NAME_OS} 0 3 NAME_OS)
-# platform switches
 if(CMAKE_SYSTEM_NAME MATCHES "^Linux$")
     set(LINUX 1)
     set(CONDS "linux")
@@ -131,10 +133,35 @@ endif()
 if(NOT NAME_ARCH)
     message(FATAL_ERROR "NAME_ARCH not set")
 endif()
+#</editor-fold>
 
-# dependencies
+#<editor-fold desc="dependencies">
 if(LINUX OR MAC OR MINGW)
     find_package(Threads REQUIRED)
+endif()
+
+if(SKIP_TRACE)
+    message("Skipping backtrace functionality")
+else()
+    if (WIN)
+        #set(STACKWALK 1)
+    else()
+        CHECK_INCLUDE_FILE(backtrace.h ILTBacktrace
+                CMAKE_REQUIRED_DEFINITIONS=backtrace_create_state;backtrace_full)
+        if (NOT ILTBacktrace)
+            find_path (Unwind_INCLUDE_DIR
+                    NAMES unwind.h libunwind.h
+                    DOC "unwind include directory")
+            find_library (Unwind_LIBRARY
+                    NAMES unwind
+                    DOC "unwind library")
+            if (Unwind_INCLUDE_DIR OR Unwind_LIBRARY)
+                #message("Unwind_INCLUDE_DIR: '${Unwind_INCLUDE_DIR}'")
+                #message("Unwind_LIBRARY: '${Unwind_LIBRARY}'")
+                set(Unwind_FOUND 1)
+            endif()
+        endif()
+    endif()
 endif()
 
 if ("${DEPS_PREFIX}" MATCHES "^$")
@@ -185,8 +212,9 @@ installLicensePath(TIDY tidy tidy-license.txt
 
 add_compile_definitions(BUILD_VERSION=\"${VERSION}-${REVISION}\")
 add_subdirectory(lib)
+#</editor-fold>
 
-# installation
+#<editor-fold desc="installation">
 include(CMakePackageConfigHelpers)
 # generate the config file that is includes the exports
 configure_package_config_file(${CMAKE_CURRENT_SOURCE_DIR}/resources/Config.cmake.in
@@ -246,8 +274,9 @@ if(NOT MSVC AND NOT WASM)
     install(FILES ${PROJECT_BINARY_DIR}/${NAME}.pc DESTINATION ${LIB_FOLDER}/pkgconfig)
 endif()
 install(FILES LICENSE DESTINATION share/${NAME} RENAME regify-util-license.txt)
+#</editor-fold>
 
-# documentation & packaging
+#<editor-fold desc="documentation & packaging">
 if(DOCS)
 
     # add a target to generate API documentation with Doxygen
@@ -293,8 +322,9 @@ if(DOCS)
     include(CPack)
 
 endif()
+#</editor-fold>
 
-# tests
+#<editor-fold desc="tests">
 if(TESTING)
     doLog(LOG_INFO "Adding unit tests")
     add_subdirectory(tests)
@@ -302,3 +332,4 @@ else()
     doLog(LOG_INFO "Skipping unit tests")
 endif()
 #dump("")
+#</editor-fold>

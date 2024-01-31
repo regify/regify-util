@@ -41,6 +41,74 @@
  */
 
 /**
+ * Backtrace Element
+ */
+typedef void* ruTrace;
+
+/**
+ * \brief Returns a list of \ref ruTrace elements ordered so that the caller is last.
+ * @param code (Optional) Stores \ref RUE_OK on success or
+ *             \ref RUE_FEATURE_NOT_SUPPORTED when backtrace was not built in.
+ * @return NULL on error or a list to be freed with \ref ruListFree.
+ */
+RUAPI ruList ruBacktrace(int32_t* code);
+
+/**
+ * \brief Logs a backtrace
+ * @param skip Number of frames to skip usually 2 to skip ruTraceLog & ruBacktrace
+ */
+RUAPI void ruTraceLog(trans_chars tag, int32_t skip);
+
+/**
+ * \brief Returns an optimized string representation of the given \ref ruTrace object.
+ * @param rt \ref ruTrace object in question.
+ * @return The string belongs to the given \ref ruTrace object and must not be freed.
+ */
+RUAPI perm_chars ruTraceStr(ruTrace rt);
+
+/**
+ * \brief Returns the full path to the filename of the given \ref ruTrace object if set.
+ * @param rt \ref ruTrace object in question.
+ * @return The string belongs to the given \ref ruTrace object and must not be freed.
+ */
+RUAPI perm_chars ruTraceFilePath(ruTrace rt);
+
+/**
+ * \brief Returns the basename of the filename of the given \ref ruTrace object if set.
+ * @param rt \ref ruTrace object in question.
+ * @return The string belongs to the given \ref ruTrace object and must not be freed.
+ */
+RUAPI perm_chars ruTraceFileName(ruTrace rt);
+
+/**
+ * \brief Returns the function name of the given \ref ruTrace object if set.
+ * @param rt \ref ruTrace object in question.
+ * @return The string belongs to the given \ref ruTrace object and must not be freed.
+ */
+RUAPI perm_chars ruTraceFunc(ruTrace rt);
+
+/**
+ * \brief Returns the line number of the given \ref ruTrace object if set.
+ * @param rt \ref ruTrace object in question.
+ * @return Yields 0 if not set.
+ */
+RUAPI uint32_t ruTraceLine(ruTrace rt);
+
+/**
+ * \brief Returns the offset from the given function of the given \ref ruTrace object if set.
+ * @param rt \ref ruTrace object in question.
+ * @return The offset location.
+ */
+RUAPI perm_ptr ruTraceOffset(ruTrace rt);
+
+/**
+ * \brief Returns the instruction pointer of the given \ref ruTrace object.
+ * @param rt \ref ruTrace object in question.
+ * @return The instruction pointer.
+ */
+RUAPI perm_ptr ruTraceAddr(ruTrace rt);
+
+/**
  * Thread Id type
  */
 typedef unsigned long ru_tid;
@@ -68,6 +136,7 @@ typedef void* ruCount;
  * Signature of a thread starting function.
  */
 typedef void* (*ruStartFunc) (void* context);
+
 
 /**
  * Returns the id of the running thread

@@ -687,10 +687,10 @@ RUAPI ptr ruClear(ptr o);
 #endif /* __cplusplus */
 
 #include <regify-util/errors.h>
-#include <regify-util/thread.h>
 #include <regify-util/logging.h>
 #include <regify-util/types.h>
 #include <regify-util/list.h>
+#include <regify-util/thread.h>
 #include <regify-util/string.h>
 #include <regify-util/map.h>
 #include <regify-util/cleaner.h>

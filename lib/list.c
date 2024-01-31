@@ -317,7 +317,6 @@ RUAPI int32_t ruListRemoveIdxDataTo(ruList rl, int32_t index, ptr* dest) {
     int32_t ret;
     List *list = ListGet(rl, &ret);
     if (!list) return ret;
-    if (!dest) return RUE_PARAMETER_NOT_SET;
     if (list->doQuit) return RUE_USER_ABORT;
     ruMutexLock(list->mux);
     if (list->doQuit) {
