@@ -203,8 +203,8 @@ static void stackWalk(ruList callers) {
                               (perm_ptr)stack.AddrPC.Offset);
             }
         }
-        ruDbgLogf("addr: %p frame: %p Size: %lu Flags: %x",
-                  stack.AddrPC.Offset, stack.AddrFrame.Offset, sym->Size, sym->Flags);
+        //ruDbgLogf("addr: %p frame: %p Size: %lu Flags: %x",
+        //          stack.AddrPC.Offset, stack.AddrFrame.Offset, sym->Size, sym->Flags);
         ruListInsertIdx(callers, 0, tr);
     }
 }
@@ -264,12 +264,7 @@ RUAPI perm_chars ruTraceStr(ruTrace rt) {
             tr->str = ruDupPrintf("%s(%s:%d)",
                                   tr->func, tr->file, tr->line);
         } else {
-            if (tr->offset) {
-                tr->str = ruDupPrintf("%s(0x%p) 0x%p",
-                                      tr->func, tr->offset, tr->addr);
-            } else {
-                tr->str = ruDupPrintf("%s() 0x%p", tr->func, tr->addr);
-            }
+            tr->str = ruDupPrintf("%s(0x%p)", tr->func, tr->addr);
         }
     } else {
         if (tr->file && tr->line) {
