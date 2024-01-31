@@ -182,6 +182,7 @@ Functions</h2></td></tr>
 <tr class="memdesc:ga1a85ffdcb7817b11ef0279ddfcc80ee6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether thraed has finished and is joinable.  <a href="group__threading.html#ga1a85ffdcb7817b11ef0279ddfcc80ee6">More...</a><br /></td></tr>
 <tr class="separator:ga1a85ffdcb7817b11ef0279ddfcc80ee6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga60572955d0909ffed16ce77a6c8e4058"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__threading.html#gacc47be754ef522e477d51aedd1361301">ruThreadId</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__threading.html#ga60572955d0909ffed16ce77a6c8e4058">ruThreadNativeId</a> (<a class="el" href="group__threading.html#gac7df455fe262f5fe1d6a40c48fb5a343">ruThread</a> tid, int32_t *code)</td></tr>
+<tr class="memdesc:ga60572955d0909ffed16ce77a6c8e4058"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the thread id of the given <a class="el" href="group__threading.html#gac7df455fe262f5fe1d6a40c48fb5a343">ruThread</a>.  <a href="group__threading.html#ga60572955d0909ffed16ce77a6c8e4058">More...</a><br /></td></tr>
 <tr class="separator:ga60572955d0909ffed16ce77a6c8e4058"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gac09b1c7af6581c4cdbbd8232f80a1e53"><td class="memItemLeft" align="right" valign="top">RUAPI bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__threading.html#gac09b1c7af6581c4cdbbd8232f80a1e53">ruThreadWait</a> (<a class="el" href="group__threading.html#gac7df455fe262f5fe1d6a40c48fb5a343">ruThread</a> tid, <a class="el" href="group__misc.html#ga8573cc8637a470b127a19d54b0e94cb9">sec_t</a> tosecs, void **exitVal)</td></tr>
 <tr class="separator:gac09b1c7af6581c4cdbbd8232f80a1e53"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1077,6 +1078,16 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Returns the thread id of the given <a class="el" href="group__threading.html#gac7df455fe262f5fe1d6a40c48fb5a343">ruThread</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">tid</td><td><a class="el" href="group__threading.html#gac7df455fe262f5fe1d6a40c48fb5a343">ruThread</a> to return the native id of. </td></tr>
+    <tr><td class="paramname">code</td><td>Optional where error code will be stored </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The native <a class="el" href="group__threading.html#gac7df455fe262f5fe1d6a40c48fb5a343">ruThread</a> id o r 0 on error. </dd></dl>
+
 </div>
 </div>
 <a id="ga9e6cbe26799920ac795bc967c504ae9f"></a>
@@ -1311,6 +1322,7 @@ Functions</h2></td></tr>
 <p>Logs a backtrace. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
+    <tr><td class="paramname">tag</td><td>Content to log in front of the trace values. </td></tr>
     <tr><td class="paramname">skip</td><td>Number of frames to skip usually 2 to skip ruTraceLog &amp; ruBacktrace </td></tr>
   </table>
   </dd>
@@ -1377,7 +1389,7 @@ Functions</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Wed Jan 31 2024 13:59:19 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Wed Jan 31 2024 14:34:29 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>
