@@ -61,6 +61,7 @@ RUAPI ruList ruBacktrace(int32_t* code);
 
 /**
  * \brief Logs a backtrace
+ * @param tag Content to log in front of the trace values.
  * @param skip Number of frames to skip usually 2 to skip ruTraceLog & ruBacktrace
  */
 RUAPI void ruTraceLog(trans_chars tag, int32_t skip);
@@ -180,6 +181,12 @@ RUAPI ruThread ruThreadCreateBg(ruStartFunc start, void* context);
  */
 RUAPI bool ruThreadFinished(ruThread tid, int32_t* code);
 
+/**
+ * \brief Returns the thread id of the given \ref ruThread.
+ * @param tid \ref ruThread to return the native id of.
+ * @param code Optional where error code will be stored
+ * @return The native \ref ruThread id o r 0 on error.
+ */
 RUAPI ruThreadId ruThreadNativeId(ruThread tid, int32_t* code);
 
 /**
