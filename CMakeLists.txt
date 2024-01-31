@@ -146,8 +146,17 @@ else()
     if (WIN)
         set(STACKWALK 1)
     else()
-        CHECK_INCLUDE_FILE(backtrace.h ILTBacktrace
-                CMAKE_REQUIRED_DEFINITIONS=backtrace_create_state;backtrace_full)
+        # this nonsense is needed because CHECK_INCLUDE_FILE doesn't exists for
+        # android and ios while it does exist for darwin on the same system
+        get_directory_property(DEFINED_MACROS DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} MACROS)
+        list(FIND DEFINED_MACROS "CHECK_INCLUDE_FILE" MACRO_INDEX)
+        if(MACRO_INDEX EQUAL -1)
+            # Macro does not exist
+            message("no CHECK_INCLUDE_FILE")
+        else()
+            CHECK_INCLUDE_FILE(backtrace.h ILTBacktrace
+                    CMAKE_REQUIRED_DEFINITIONS=backtrace_create_state;backtrace_full)
+        endif()
         if (NOT ILTBacktrace)
             find_path (Unwind_INCLUDE_DIR
                     NAMES unwind.h libunwind.h
@@ -155,9 +164,9 @@ else()
             find_library (Unwind_LIBRARY
                     NAMES unwind
                     DOC "unwind library")
-            if (Unwind_INCLUDE_DIR OR Unwind_LIBRARY)
-                #message("Unwind_INCLUDE_DIR: '${Unwind_INCLUDE_DIR}'")
-                #message("Unwind_LIBRARY: '${Unwind_LIBRARY}'")
+            if (Unwind_INCLUDE_DIR AND Unwind_LIBRARY)
+                message("Unwind_INCLUDE_DIR: '${Unwind_INCLUDE_DIR}'")
+                message("Unwind_LIBRARY: '${Unwind_LIBRARY}'")
                 set(Unwind_FOUND 1)
             endif()
         endif()
