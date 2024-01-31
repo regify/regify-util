@@ -144,7 +144,7 @@ if(SKIP_TRACE)
     message("Skipping backtrace functionality")
 else()
     if (WIN)
-        #set(STACKWALK 1)
+        set(STACKWALK 1)
     else()
         CHECK_INCLUDE_FILE(backtrace.h ILTBacktrace
                 CMAKE_REQUIRED_DEFINITIONS=backtrace_create_state;backtrace_full)

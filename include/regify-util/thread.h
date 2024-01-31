@@ -46,6 +46,12 @@
 typedef void* ruTrace;
 
 /**
+ * \brief Sets the path to the current executable.
+ * @param exePath Optional for helping to find symbols.
+ */
+RUAPI void ruBacktraceInit(perm_chars exePath);
+
+/**
  * \brief Returns a list of \ref ruTrace elements ordered so that the caller is last.
  * @param code (Optional) Stores \ref RUE_OK on success or
  *             \ref RUE_FEATURE_NOT_SUPPORTED when backtrace was not built in.

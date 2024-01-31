@@ -33,6 +33,7 @@ RU_THREAD_LOCAL char* logPidEnd = NULL;
 RU_THREAD_LOCAL char* ru_threadName = NULL;
 RU_THREAD_LOCAL char genPidBuf[32];
 char* staticPidEnd = "]:";
+perm_chars procPath = NULL;
 
 //<editor-fold desc="Backtrace">
 #if defined(UNWIND) || defined(ILTBacktrace) || defined(STACKWALK)
@@ -81,7 +82,7 @@ void btErrorCb (void *data, trans_chars msg, int error) {
 static int btFullCb (void* data, uintptr_t pc, trans_chars file,
                      int line, trans_chars func) {
     ruList callers = (ruList)data;
-    //ruDbgLogf("file: %s line: %d func: %s() addr: 0x%p",
+    //ruDbgLogf("file: %s line: %d func: %s addr: 0x%p",
     //          file, line, func, pc);
     ruListInsertIdx(callers, 0,
                     newTrace(file, line, func, 0, (perm_ptr)pc));
@@ -128,7 +129,7 @@ static void stackWalk(ruList callers) {
     static HANDLE process = 0;
     if (!process) {
         process = GetCurrentProcess();
-        if (!SymInitialize(process, NULL, true)) {
+        if (!SymInitialize(process, ruDirName(procPath), true)) {
             ruWarnLogf("SymInitialize failed Ec: %d", GetLastError());
         } else {
             ruDbgLog("SymInitialize succeeded");
@@ -183,25 +184,40 @@ static void stackWalk(ruList callers) {
         }
 
         // get the line and file name
-        alloc_chars token = NULL;
         ruZeroedStruct(IMAGEHLP_LINE, line_num);
         line_num.SizeOfStruct = sizeof(IMAGEHLP_LINE);
+        ruTrace tr = NULL;
         if (SymGetLineFromAddr(process, stack.AddrPC.Offset, NULL, &line_num)) {
             perm_chars file = ruBaseName(line_num.FileName);
-            token = ruDupPrintf("%s(%s:%lu)", func, file, line_num.LineNumber);
+            tr = newTrace(file, line_num.LineNumber, func,
+                          (perm_ptr)stack.AddrFrame.Offset,
+                          (perm_ptr)stack.AddrPC.Offset);
         } else {
             if (sym->Size) {
-                token = ruDupPrintf("%s(0x%p)", func, stack.AddrPC.Offset);
+                tr = newTrace(NULL, 0, func,
+                              (perm_ptr)stack.AddrFrame.Offset,
+                              (perm_ptr)stack.AddrPC.Offset);
             } else {
-                token = ruDupPrintf("0x%p", stack.AddrPC.Offset);
+                tr = newTrace(NULL, 0, NULL,
+                              (perm_ptr)stack.AddrFrame.Offset,
+                              (perm_ptr)stack.AddrPC.Offset);
             }
         }
-        ruDbgLogf("addr: %p Size: %lu Flags: %x",
-                  stack.AddrPC.Offset, sym->Size, sym->Flags);
-        ruListInsertIdx(callers, 0, token);
+        ruDbgLogf("addr: %p frame: %p Size: %lu Flags: %x",
+                  stack.AddrPC.Offset, stack.AddrFrame.Offset, sym->Size, sym->Flags);
+        ruListInsertIdx(callers, 0, tr);
     }
 }
 #endif
+
+RUAPI void ruBacktraceInit(perm_chars exePath) {
+    procPath = exePath;
+#if defined(ILTBacktrace)
+    if (!btState) {
+        btState = backtrace_create_state(exePath, 1, btErrorCb, NULL);
+    }
+#endif
+}
 
 RUAPI ruList ruBacktrace(int32_t* code) {
     ruList callers =  NULL;
@@ -225,6 +241,10 @@ RUAPI ruList ruBacktrace(int32_t* code) {
 
 RUAPI void ruTraceLog(trans_chars tag, int32_t skip) {
     ruList callers = ruBacktrace(NULL);
+    if (!ruListSize(callers, NULL)) {
+        ruVerbLogf("%s ruBacktrace not supported", tag);
+        return;
+    }
     while(0 < skip--) ruListRemoveIdxDataTo(callers, -1, NULL);
     ruIterator li = ruListIter(callers);
     ruTrace item;

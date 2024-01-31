@@ -106,6 +106,7 @@ int32_t main ( int32_t argc, char *argv[] ) {
     Suite *suite = getSuite();
     SRunner *runner = srunner_create ( suite );
     srunner_set_fork_status (runner, CK_NOFORK);
+    ruBacktraceInit(argv[0]);
 #ifdef DO_IOS
     setenv("TEMP", tmpDir, 1);
     testBase = treepath;
