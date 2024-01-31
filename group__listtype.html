@@ -339,7 +339,7 @@ Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">rl</td><td>List to remove object from. </td></tr>
-    <tr><td class="paramname">index</td><td>0 based postion of the element to remove in the list. </td></tr>
+    <tr><td class="paramname">index</td><td>0(first)/-1(last) position of the element to remove in the list. </td></tr>
     <tr><td class="paramname">dest</td><td>Optional. Where the returned object will be stored as its given type. (casts added) </td></tr>
   </table>
   </dd>
@@ -597,7 +597,7 @@ Functions</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">rl</td><td>List to remove object from. </td></tr>
     <tr><td class="paramname">rle</td><td>Pointer to element to remove, will be set to the previous element to allow for deletion during iteration. </td></tr>
-    <tr><td class="paramname">dest</td><td>Optional. Where the returned object will be stored as its given type. </td></tr>
+    <tr><td class="paramname">dest</td><td>Optional. Where the returned object will be stored as its given type. When not set object will be freed. </td></tr>
   </table>
   </dd>
 </dl>
@@ -641,8 +641,8 @@ Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">rl</td><td>List to remove object from. </td></tr>
-    <tr><td class="paramname">index</td><td>0 based postion of the element to remove in the list. </td></tr>
-    <tr><td class="paramname">dest</td><td>Optional. Where the returned object will be stored as its given type. </td></tr>
+    <tr><td class="paramname">index</td><td>0(first)/-1(last) position of the element to remove in the list. </td></tr>
+    <tr><td class="paramname">dest</td><td>Optional. Where the returned object will be stored as its given type. When not set object will be freed. </td></tr>
   </table>
   </dd>
 </dl>
@@ -700,7 +700,7 @@ Functions</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Fri Dec 22 2023 12:35:56 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Wed Jan 31 2024 10:36:37 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

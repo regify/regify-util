@@ -12,6 +12,8 @@ var group__threading =
     [ "ruStartFunc", "group__threading.html#ga9fb7315bef26c1ae9b399b5779ed230b", null ],
     [ "ruThread", "group__threading.html#gac7df455fe262f5fe1d6a40c48fb5a343", null ],
     [ "ruThreadId", "group__threading.html#gacc47be754ef522e477d51aedd1361301", null ],
+    [ "ruTrace", "group__threading.html#ga02635b4a2c90a35c107c742d01230d34", null ],
+    [ "ruBacktrace", "group__threading.html#ga903ed2bcdbc3c579d877ad935f325196", null ],
     [ "ruCounterIncValue", "group__threading.html#gadc7eb7e92f2f1b0f574f9a1d5779436a", null ],
     [ "ruCounterNew", "group__threading.html#gafc1d31eb0e26e2aae3ed53a1b38295b2", null ],
     [ "ruCountFree", "group__threading.html#ga1d4cb711bdf68899277b323cce866233", null ],
@@ -29,5 +31,13 @@ var group__threading =
     [ "ruThreadKill", "group__threading.html#ga7f548388deccb5a3e695a8b335684a6c", null ],
     [ "ruThreadNativeId", "group__threading.html#ga60572955d0909ffed16ce77a6c8e4058", null ],
     [ "ruThreadSetName", "group__threading.html#ga9e6cbe26799920ac795bc967c504ae9f", null ],
-    [ "ruThreadWait", "group__threading.html#gac09b1c7af6581c4cdbbd8232f80a1e53", null ]
+    [ "ruThreadWait", "group__threading.html#gac09b1c7af6581c4cdbbd8232f80a1e53", null ],
+    [ "ruTraceAddr", "group__threading.html#ga413080665fcb72324786941721eed893", null ],
+    [ "ruTraceFileName", "group__threading.html#gab9b51b6a8ac492bca75701c2bb0f4546", null ],
+    [ "ruTraceFilePath", "group__threading.html#gaeebd79d1deb3efda47928582d3f8a376", null ],
+    [ "ruTraceFunc", "group__threading.html#gadee4c69093b165ce357f1324c3ffcded", null ],
+    [ "ruTraceLine", "group__threading.html#ga71fdaea7d36c69a06ead3a1506e1fb36", null ],
+    [ "ruTraceLog", "group__threading.html#gac298a2452bcd352a4c71c89f3f6506f4", null ],
+    [ "ruTraceOffset", "group__threading.html#ga417645b21d474431eb9a665f20fe5c62", null ],
+    [ "ruTraceStr", "group__threading.html#gac67ec85ffb8a18f951560e7b97289159", null ]
 ];

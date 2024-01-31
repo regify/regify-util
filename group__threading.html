@@ -121,6 +121,8 @@ Macros</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
+<tr class="memitem:ga02635b4a2c90a35c107c742d01230d34"><td class="memItemLeft" align="right" valign="top">typedef void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__threading.html#ga02635b4a2c90a35c107c742d01230d34">ruTrace</a></td></tr>
+<tr class="separator:ga02635b4a2c90a35c107c742d01230d34"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gadaf55aee31fee401108c789338f5a5d0"><td class="memItemLeft" align="right" valign="top">typedef unsigned long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__threading.html#gadaf55aee31fee401108c789338f5a5d0">ru_tid</a></td></tr>
 <tr class="separator:gadaf55aee31fee401108c789338f5a5d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gacc47be754ef522e477d51aedd1361301"><td class="memItemLeft" align="right" valign="top">typedef pthread_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__threading.html#gacc47be754ef522e477d51aedd1361301">ruThreadId</a></td></tr>
@@ -137,6 +139,33 @@ Typedefs</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:ga903ed2bcdbc3c579d877ad935f325196"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__list.html#gab25c1662a91a5e0d68a3f04efd1a0cc2">ruList</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__threading.html#ga903ed2bcdbc3c579d877ad935f325196">ruBacktrace</a> (int32_t *code)</td></tr>
+<tr class="memdesc:ga903ed2bcdbc3c579d877ad935f325196"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a list of <a class="el" href="group__threading.html#ga02635b4a2c90a35c107c742d01230d34">ruTrace</a> elements ordered so that the caller is last.  <a href="group__threading.html#ga903ed2bcdbc3c579d877ad935f325196">More...</a><br /></td></tr>
+<tr class="separator:ga903ed2bcdbc3c579d877ad935f325196"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gac298a2452bcd352a4c71c89f3f6506f4"><td class="memItemLeft" align="right" valign="top">RUAPI void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__threading.html#gac298a2452bcd352a4c71c89f3f6506f4">ruTraceLog</a> (<a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> tag, int32_t skip)</td></tr>
+<tr class="memdesc:gac298a2452bcd352a4c71c89f3f6506f4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Logs a backtrace.  <a href="group__threading.html#gac298a2452bcd352a4c71c89f3f6506f4">More...</a><br /></td></tr>
+<tr class="separator:gac298a2452bcd352a4c71c89f3f6506f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gac67ec85ffb8a18f951560e7b97289159"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__misc.html#ga7dd744dc0ee350f7de2c38f51f5c0bbe">perm_chars</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__threading.html#gac67ec85ffb8a18f951560e7b97289159">ruTraceStr</a> (<a class="el" href="group__threading.html#ga02635b4a2c90a35c107c742d01230d34">ruTrace</a> rt)</td></tr>
+<tr class="memdesc:gac67ec85ffb8a18f951560e7b97289159"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns an optimized string representation of the given <a class="el" href="group__threading.html#ga02635b4a2c90a35c107c742d01230d34">ruTrace</a> object.  <a href="group__threading.html#gac67ec85ffb8a18f951560e7b97289159">More...</a><br /></td></tr>
+<tr class="separator:gac67ec85ffb8a18f951560e7b97289159"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaeebd79d1deb3efda47928582d3f8a376"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__misc.html#ga7dd744dc0ee350f7de2c38f51f5c0bbe">perm_chars</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__threading.html#gaeebd79d1deb3efda47928582d3f8a376">ruTraceFilePath</a> (<a class="el" href="group__threading.html#ga02635b4a2c90a35c107c742d01230d34">ruTrace</a> rt)</td></tr>
+<tr class="memdesc:gaeebd79d1deb3efda47928582d3f8a376"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the full path to the filename of the given <a class="el" href="group__threading.html#ga02635b4a2c90a35c107c742d01230d34">ruTrace</a> object if set.  <a href="group__threading.html#gaeebd79d1deb3efda47928582d3f8a376">More...</a><br /></td></tr>
+<tr class="separator:gaeebd79d1deb3efda47928582d3f8a376"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gab9b51b6a8ac492bca75701c2bb0f4546"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__misc.html#ga7dd744dc0ee350f7de2c38f51f5c0bbe">perm_chars</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__threading.html#gab9b51b6a8ac492bca75701c2bb0f4546">ruTraceFileName</a> (<a class="el" href="group__threading.html#ga02635b4a2c90a35c107c742d01230d34">ruTrace</a> rt)</td></tr>
+<tr class="memdesc:gab9b51b6a8ac492bca75701c2bb0f4546"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the basename of the filename of the given <a class="el" href="group__threading.html#ga02635b4a2c90a35c107c742d01230d34">ruTrace</a> object if set.  <a href="group__threading.html#gab9b51b6a8ac492bca75701c2bb0f4546">More...</a><br /></td></tr>
+<tr class="separator:gab9b51b6a8ac492bca75701c2bb0f4546"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gadee4c69093b165ce357f1324c3ffcded"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__misc.html#ga7dd744dc0ee350f7de2c38f51f5c0bbe">perm_chars</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__threading.html#gadee4c69093b165ce357f1324c3ffcded">ruTraceFunc</a> (<a class="el" href="group__threading.html#ga02635b4a2c90a35c107c742d01230d34">ruTrace</a> rt)</td></tr>
+<tr class="memdesc:gadee4c69093b165ce357f1324c3ffcded"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the function name of the given <a class="el" href="group__threading.html#ga02635b4a2c90a35c107c742d01230d34">ruTrace</a> object if set.  <a href="group__threading.html#gadee4c69093b165ce357f1324c3ffcded">More...</a><br /></td></tr>
+<tr class="separator:gadee4c69093b165ce357f1324c3ffcded"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga71fdaea7d36c69a06ead3a1506e1fb36"><td class="memItemLeft" align="right" valign="top">RUAPI uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__threading.html#ga71fdaea7d36c69a06ead3a1506e1fb36">ruTraceLine</a> (<a class="el" href="group__threading.html#ga02635b4a2c90a35c107c742d01230d34">ruTrace</a> rt)</td></tr>
+<tr class="memdesc:ga71fdaea7d36c69a06ead3a1506e1fb36"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the line number of the given <a class="el" href="group__threading.html#ga02635b4a2c90a35c107c742d01230d34">ruTrace</a> object if set.  <a href="group__threading.html#ga71fdaea7d36c69a06ead3a1506e1fb36">More...</a><br /></td></tr>
+<tr class="separator:ga71fdaea7d36c69a06ead3a1506e1fb36"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga417645b21d474431eb9a665f20fe5c62"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__misc.html#ga517aac830d9ce5c6ab7deec46adf54d5">perm_ptr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__threading.html#ga417645b21d474431eb9a665f20fe5c62">ruTraceOffset</a> (<a class="el" href="group__threading.html#ga02635b4a2c90a35c107c742d01230d34">ruTrace</a> rt)</td></tr>
+<tr class="memdesc:ga417645b21d474431eb9a665f20fe5c62"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the offset from the given function of the given <a class="el" href="group__threading.html#ga02635b4a2c90a35c107c742d01230d34">ruTrace</a> object if set.  <a href="group__threading.html#ga417645b21d474431eb9a665f20fe5c62">More...</a><br /></td></tr>
+<tr class="separator:ga417645b21d474431eb9a665f20fe5c62"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga413080665fcb72324786941721eed893"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__misc.html#ga517aac830d9ce5c6ab7deec46adf54d5">perm_ptr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__threading.html#ga413080665fcb72324786941721eed893">ruTraceAddr</a> (<a class="el" href="group__threading.html#ga02635b4a2c90a35c107c742d01230d34">ruTrace</a> rt)</td></tr>
+<tr class="memdesc:ga413080665fcb72324786941721eed893"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the instruction pointer of the given <a class="el" href="group__threading.html#ga02635b4a2c90a35c107c742d01230d34">ruTrace</a> object.  <a href="group__threading.html#ga413080665fcb72324786941721eed893">More...</a><br /></td></tr>
+<tr class="separator:ga413080665fcb72324786941721eed893"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga6966399aea06d9be87db2004b5b624d2"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__threading.html#gadaf55aee31fee401108c789338f5a5d0">ru_tid</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__threading.html#ga6966399aea06d9be87db2004b5b624d2">ruThreadGetId</a> (void)</td></tr>
 <tr class="separator:ga6966399aea06d9be87db2004b5b624d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga9e6cbe26799920ac795bc967c504ae9f"><td class="memItemLeft" align="right" valign="top">RUAPI void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__threading.html#ga9e6cbe26799920ac795bc967c504ae9f">ruThreadSetName</a> (<a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> name)</td></tr>
@@ -411,7 +440,49 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="ga02635b4a2c90a35c107c742d01230d34"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga02635b4a2c90a35c107c742d01230d34">&#9670;&nbsp;</a></span>ruTrace</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef void* <a class="el" href="group__threading.html#ga02635b4a2c90a35c107c742d01230d34">ruTrace</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Backtrace Element </p>
+
+</div>
+</div>
 <h2 class="groupheader">Function Documentation</h2>
+<a id="ga903ed2bcdbc3c579d877ad935f325196"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga903ed2bcdbc3c579d877ad935f325196">&#9670;&nbsp;</a></span>ruBacktrace()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI <a class="el" href="group__list.html#gab25c1662a91a5e0d68a3f04efd1a0cc2">ruList</a> ruBacktrace </td>
+          <td>(</td>
+          <td class="paramtype">int32_t *&#160;</td>
+          <td class="paramname"><em>code</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns a list of <a class="el" href="group__threading.html#ga02635b4a2c90a35c107c742d01230d34">ruTrace</a> elements ordered so that the caller is last. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">code</td><td>(Optional) Stores <a class="el" href="group__ruerror.html#ga7e2f97cce8af8020834e685a2482556d">RUE_OK</a> on success or <a class="el" href="group__ruerror.html#gaebe638fa43dc94bf0a20f2e2211e7322">RUE_FEATURE_NOT_SUPPORTED</a> when backtrace was not built in. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>NULL on error or a list to be freed with <a class="el" href="group__list.html#ga8f7ce9a43ad50071bc1161ecb21a38d5">ruListFree</a>. </dd></dl>
+
+</div>
+</div>
 <a id="gadc7eb7e92f2f1b0f574f9a1d5779436a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#gadc7eb7e92f2f1b0f574f9a1d5779436a">&#9670;&nbsp;</a></span>ruCounterIncValue()</h2>
 
@@ -1047,12 +1118,237 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="ga413080665fcb72324786941721eed893"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga413080665fcb72324786941721eed893">&#9670;&nbsp;</a></span>ruTraceAddr()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI <a class="el" href="group__misc.html#ga517aac830d9ce5c6ab7deec46adf54d5">perm_ptr</a> ruTraceAddr </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__threading.html#ga02635b4a2c90a35c107c742d01230d34">ruTrace</a>&#160;</td>
+          <td class="paramname"><em>rt</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the instruction pointer of the given <a class="el" href="group__threading.html#ga02635b4a2c90a35c107c742d01230d34">ruTrace</a> object. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">rt</td><td><a class="el" href="group__threading.html#ga02635b4a2c90a35c107c742d01230d34">ruTrace</a> object in question. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The instruction pointer. </dd></dl>
+
+</div>
+</div>
+<a id="gab9b51b6a8ac492bca75701c2bb0f4546"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gab9b51b6a8ac492bca75701c2bb0f4546">&#9670;&nbsp;</a></span>ruTraceFileName()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI <a class="el" href="group__misc.html#ga7dd744dc0ee350f7de2c38f51f5c0bbe">perm_chars</a> ruTraceFileName </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__threading.html#ga02635b4a2c90a35c107c742d01230d34">ruTrace</a>&#160;</td>
+          <td class="paramname"><em>rt</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the basename of the filename of the given <a class="el" href="group__threading.html#ga02635b4a2c90a35c107c742d01230d34">ruTrace</a> object if set. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">rt</td><td><a class="el" href="group__threading.html#ga02635b4a2c90a35c107c742d01230d34">ruTrace</a> object in question. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The string belongs to the given <a class="el" href="group__threading.html#ga02635b4a2c90a35c107c742d01230d34">ruTrace</a> object and must not be freed. </dd></dl>
+
+</div>
+</div>
+<a id="gaeebd79d1deb3efda47928582d3f8a376"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaeebd79d1deb3efda47928582d3f8a376">&#9670;&nbsp;</a></span>ruTraceFilePath()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI <a class="el" href="group__misc.html#ga7dd744dc0ee350f7de2c38f51f5c0bbe">perm_chars</a> ruTraceFilePath </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__threading.html#ga02635b4a2c90a35c107c742d01230d34">ruTrace</a>&#160;</td>
+          <td class="paramname"><em>rt</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the full path to the filename of the given <a class="el" href="group__threading.html#ga02635b4a2c90a35c107c742d01230d34">ruTrace</a> object if set. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">rt</td><td><a class="el" href="group__threading.html#ga02635b4a2c90a35c107c742d01230d34">ruTrace</a> object in question. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The string belongs to the given <a class="el" href="group__threading.html#ga02635b4a2c90a35c107c742d01230d34">ruTrace</a> object and must not be freed. </dd></dl>
+
+</div>
+</div>
+<a id="gadee4c69093b165ce357f1324c3ffcded"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gadee4c69093b165ce357f1324c3ffcded">&#9670;&nbsp;</a></span>ruTraceFunc()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI <a class="el" href="group__misc.html#ga7dd744dc0ee350f7de2c38f51f5c0bbe">perm_chars</a> ruTraceFunc </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__threading.html#ga02635b4a2c90a35c107c742d01230d34">ruTrace</a>&#160;</td>
+          <td class="paramname"><em>rt</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the function name of the given <a class="el" href="group__threading.html#ga02635b4a2c90a35c107c742d01230d34">ruTrace</a> object if set. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">rt</td><td><a class="el" href="group__threading.html#ga02635b4a2c90a35c107c742d01230d34">ruTrace</a> object in question. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The string belongs to the given <a class="el" href="group__threading.html#ga02635b4a2c90a35c107c742d01230d34">ruTrace</a> object and must not be freed. </dd></dl>
+
+</div>
+</div>
+<a id="ga71fdaea7d36c69a06ead3a1506e1fb36"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga71fdaea7d36c69a06ead3a1506e1fb36">&#9670;&nbsp;</a></span>ruTraceLine()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI uint32_t ruTraceLine </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__threading.html#ga02635b4a2c90a35c107c742d01230d34">ruTrace</a>&#160;</td>
+          <td class="paramname"><em>rt</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the line number of the given <a class="el" href="group__threading.html#ga02635b4a2c90a35c107c742d01230d34">ruTrace</a> object if set. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">rt</td><td><a class="el" href="group__threading.html#ga02635b4a2c90a35c107c742d01230d34">ruTrace</a> object in question. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Yields 0 if not set. </dd></dl>
+
+</div>
+</div>
+<a id="gac298a2452bcd352a4c71c89f3f6506f4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gac298a2452bcd352a4c71c89f3f6506f4">&#9670;&nbsp;</a></span>ruTraceLog()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI void ruTraceLog </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a>&#160;</td>
+          <td class="paramname"><em>tag</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int32_t&#160;</td>
+          <td class="paramname"><em>skip</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Logs a backtrace. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">skip</td><td>Number of frames to skip usually 2 to skip ruTraceLog &amp; ruBacktrace </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ga417645b21d474431eb9a665f20fe5c62"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga417645b21d474431eb9a665f20fe5c62">&#9670;&nbsp;</a></span>ruTraceOffset()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI <a class="el" href="group__misc.html#ga517aac830d9ce5c6ab7deec46adf54d5">perm_ptr</a> ruTraceOffset </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__threading.html#ga02635b4a2c90a35c107c742d01230d34">ruTrace</a>&#160;</td>
+          <td class="paramname"><em>rt</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the offset from the given function of the given <a class="el" href="group__threading.html#ga02635b4a2c90a35c107c742d01230d34">ruTrace</a> object if set. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">rt</td><td><a class="el" href="group__threading.html#ga02635b4a2c90a35c107c742d01230d34">ruTrace</a> object in question. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The offset location. </dd></dl>
+
+</div>
+</div>
+<a id="gac67ec85ffb8a18f951560e7b97289159"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gac67ec85ffb8a18f951560e7b97289159">&#9670;&nbsp;</a></span>ruTraceStr()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI <a class="el" href="group__misc.html#ga7dd744dc0ee350f7de2c38f51f5c0bbe">perm_chars</a> ruTraceStr </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__threading.html#ga02635b4a2c90a35c107c742d01230d34">ruTrace</a>&#160;</td>
+          <td class="paramname"><em>rt</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns an optimized string representation of the given <a class="el" href="group__threading.html#ga02635b4a2c90a35c107c742d01230d34">ruTrace</a> object. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">rt</td><td><a class="el" href="group__threading.html#ga02635b4a2c90a35c107c742d01230d34">ruTrace</a> object in question. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The string belongs to the given <a class="el" href="group__threading.html#ga02635b4a2c90a35c107c742d01230d34">ruTrace</a> object and must not be freed. </dd></dl>
+
+</div>
+</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Fri Dec 22 2023 12:35:56 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Wed Jan 31 2024 10:36:37 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

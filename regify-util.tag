@@ -3094,6 +3094,13 @@
       <arglist>(counter, value)</arglist>
     </member>
     <member kind="typedef">
+      <type>void *</type>
+      <name>ruTrace</name>
+      <anchorfile>group__threading.html</anchorfile>
+      <anchor>ga02635b4a2c90a35c107c742d01230d34</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
       <type>unsigned long</type>
       <name>ru_tid</name>
       <anchorfile>group__threading.html</anchorfile>
@@ -3134,6 +3141,69 @@
       <anchorfile>group__threading.html</anchorfile>
       <anchor>gaa2f2224294aab80c5b5fdadf8c50a2de</anchor>
       <arglist></arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI ruList</type>
+      <name>ruBacktrace</name>
+      <anchorfile>group__threading.html</anchorfile>
+      <anchor>ga903ed2bcdbc3c579d877ad935f325196</anchor>
+      <arglist>(int32_t *code)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI void</type>
+      <name>ruTraceLog</name>
+      <anchorfile>group__threading.html</anchorfile>
+      <anchor>gac298a2452bcd352a4c71c89f3f6506f4</anchor>
+      <arglist>(trans_chars tag, int32_t skip)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI perm_chars</type>
+      <name>ruTraceStr</name>
+      <anchorfile>group__threading.html</anchorfile>
+      <anchor>gac67ec85ffb8a18f951560e7b97289159</anchor>
+      <arglist>(ruTrace rt)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI perm_chars</type>
+      <name>ruTraceFilePath</name>
+      <anchorfile>group__threading.html</anchorfile>
+      <anchor>gaeebd79d1deb3efda47928582d3f8a376</anchor>
+      <arglist>(ruTrace rt)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI perm_chars</type>
+      <name>ruTraceFileName</name>
+      <anchorfile>group__threading.html</anchorfile>
+      <anchor>gab9b51b6a8ac492bca75701c2bb0f4546</anchor>
+      <arglist>(ruTrace rt)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI perm_chars</type>
+      <name>ruTraceFunc</name>
+      <anchorfile>group__threading.html</anchorfile>
+      <anchor>gadee4c69093b165ce357f1324c3ffcded</anchor>
+      <arglist>(ruTrace rt)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI uint32_t</type>
+      <name>ruTraceLine</name>
+      <anchorfile>group__threading.html</anchorfile>
+      <anchor>ga71fdaea7d36c69a06ead3a1506e1fb36</anchor>
+      <arglist>(ruTrace rt)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI perm_ptr</type>
+      <name>ruTraceOffset</name>
+      <anchorfile>group__threading.html</anchorfile>
+      <anchor>ga417645b21d474431eb9a665f20fe5c62</anchor>
+      <arglist>(ruTrace rt)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI perm_ptr</type>
+      <name>ruTraceAddr</name>
+      <anchorfile>group__threading.html</anchorfile>
+      <anchor>ga413080665fcb72324786941721eed893</anchor>
+      <arglist>(ruTrace rt)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI ru_tid</type>
