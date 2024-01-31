@@ -3143,6 +3143,13 @@
       <arglist></arglist>
     </member>
     <member kind="function">
+      <type>RUAPI void</type>
+      <name>ruBacktraceInit</name>
+      <anchorfile>group__threading.html</anchorfile>
+      <anchor>ga28aee036dee4c50a0bb06a8aa0a8af55</anchor>
+      <arglist>(perm_chars exePath)</arglist>
+    </member>
+    <member kind="function">
       <type>RUAPI ruList</type>
       <name>ruBacktrace</name>
       <anchorfile>group__threading.html</anchorfile>

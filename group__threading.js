@@ -14,6 +14,7 @@ var group__threading =
     [ "ruThreadId", "group__threading.html#gacc47be754ef522e477d51aedd1361301", null ],
     [ "ruTrace", "group__threading.html#ga02635b4a2c90a35c107c742d01230d34", null ],
     [ "ruBacktrace", "group__threading.html#ga903ed2bcdbc3c579d877ad935f325196", null ],
+    [ "ruBacktraceInit", "group__threading.html#ga28aee036dee4c50a0bb06a8aa0a8af55", null ],
     [ "ruCounterIncValue", "group__threading.html#gadc7eb7e92f2f1b0f574f9a1d5779436a", null ],
     [ "ruCounterNew", "group__threading.html#gafc1d31eb0e26e2aae3ed53a1b38295b2", null ],
     [ "ruCountFree", "group__threading.html#ga1d4cb711bdf68899277b323cce866233", null ],
