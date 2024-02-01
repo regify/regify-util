@@ -34,7 +34,7 @@ static ptr thRunner(ptr o) {
     ruDbgLogf("starting id: %ld param: '%s'", ruThreadGetId(), str);
     while(!quit) ruSleepUs(10);
 
-    ruTraceLog("THREAD", 2);
+    ruTraceLog("THREAD", 0);
     finished = true;
     ruDbgLogf("quitting %ld", ruThreadGetId());
     return (ptr)23;
@@ -88,7 +88,7 @@ START_TEST ( run ) {
     fail_unless(exp == ret, retText, test, exp, ret);
     fail_unless(want == is, retText, test, want, is);
 
-    ruTraceLog("MAIN", 2);
+    ruTraceLog("MAIN", 0);
 
     // stop it
     quit = true;

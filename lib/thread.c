@@ -102,7 +102,7 @@ static void unwindTo(ruList callers) {
     unw_init_local(&cursor, &context);
 
     // Unwind frames one by one, going up the frame stack.
-    while (unw_step(&cursor) > 0) {
+    do {
         unw_word_t offset = 0, pc = 0;
         unw_get_reg(&cursor, UNW_REG_IP, &pc);
         if (!pc) break;
@@ -119,7 +119,7 @@ static void unwindTo(ruList callers) {
                     NULL, 0, NULL,
                     (perm_ptr)offset, (perm_ptr)pc));
         }
-    }
+    } while (unw_step(&cursor) > 0);
 }
 
 #elif defined(STACKWALK)
