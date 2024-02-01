@@ -233,6 +233,7 @@ RUAPI ruList ruBacktrace(int32_t* code) {
     unwindTo(callers);
 #elif defined(STACKWALK)
     stackWalk(callers);
+    ruListRemoveIdxDataTo(callers, -1, NULL); // trace implementation
 #endif
     ret = RUE_OK;
 #endif
