@@ -62,7 +62,8 @@ RUAPI ruList ruBacktrace(int32_t* code);
 /**
  * \brief Logs a backtrace
  * @param tag Content to log in front of the trace values.
- * @param skip Number of frames to skip usually 2 to skip ruTraceLog & ruBacktrace
+ * @param skip Number of frames to skip usually 3 to skip ruTraceLog,
+ *             ruBacktrace and the trace implementation.
  */
 RUAPI void ruTraceLog(trans_chars tag, int32_t skip);
 
