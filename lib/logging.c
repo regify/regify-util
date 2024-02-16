@@ -140,6 +140,8 @@ RUAPI alloc_chars ruMakeLogMsgV(uint32_t log_level, trans_chars filePath,
 #undef prefix
     vsnprintf(ptr, msgsize+1, format, args);
     ptr += msgsize;
+    // trim WS
+    while (ptr > ret && (*(ptr-1) == '\n' || *(ptr-1) == '\r' || *(ptr-1) == '\t' || *(ptr-1) == ' ')) ptr--;
     *ptr++ = '\n';
     *ptr = '\0';
     lmCall--;
