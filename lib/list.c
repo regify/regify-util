@@ -462,16 +462,14 @@ RUAPI int32_t ruListTryPopDataTo(ruList rl, msec_t timeoutMs, ptr* dest) {
     List *list = ListGet(rl, &ret);
     if (!list) return ret;
     bool done = false;
-    usec_t delay = 50;
-    usec_t try = delay;
+    usec_t lstStep = 50;
+    usec_t locStep = 10;
     msec_t end = ruTimeMs()+timeoutMs;
+
     do {
         if (list->doQuit) return RUE_USER_ABORT;
         if (!ruMutexTryLock(list->mux)) {
-            ruSleepUs(1);
-            try--;
-            if (try) continue;
-            try = delay;
+            ruSleepUs(locStep);
         } else {
             if (list->doQuit) {
                 ruMutexUnlock(list->mux);
@@ -483,8 +481,7 @@ RUAPI int32_t ruListTryPopDataTo(ruList rl, msec_t timeoutMs, ptr* dest) {
             }
             ruMutexUnlock(list->mux);
             if (done) return ret;
-            ruSleepUs(delay);
-            try = delay;
+            ruSleepUs(lstStep);
         }
     } while (end > ruTimeMs());
     return RUE_FILE_NOT_FOUND;

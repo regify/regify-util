@@ -100,7 +100,7 @@ RUAPI ptr ruClear(ptr o) {
 }
 
 RUAPI ru_pid ruProcessId(void) {
-#ifdef RUMS
+#ifdef _WIN32
     return GetCurrentProcessId();
 #else
     return getpid();
@@ -241,7 +241,7 @@ RUAPI alloc_chars ruGetLanguage(void) {
 
 RUAPI int32_t ruGetTimeVal(ruTimeVal *result) {
     if (!result) return RUE_PARAMETER_NOT_SET;
-#ifndef RUMS
+#ifndef _WIN32
     ruZeroedStruct(struct timeval, r);
 
     gettimeofday (&r, NULL);
@@ -300,7 +300,7 @@ RUAPI bool ruTimeEllapsed(sec_t stamp) {
 }
 
 RUAPI void ruSleepMs(msec_t milliseconds) {
-#ifdef RUMS
+#ifdef _WIN32
     Sleep ((DWORD)milliseconds);
 #else
     ruZeroedStruct(struct timespec, request);
@@ -312,7 +312,7 @@ RUAPI void ruSleepMs(msec_t milliseconds) {
 }
 
 RUAPI void ruSleepUs(usec_t microseconds) {
-#ifdef RUMS
+#ifdef _WIN32
     DWORD msecs = (DWORD)(microseconds / 1000);
     if ((microseconds % 1000) != 0) msecs++; // round up
     Sleep (msecs);

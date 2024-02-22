@@ -156,7 +156,7 @@ extern "C" {
 /**
  * \brief Abstracted process id type.
  */
-#ifdef RUMS
+#ifdef _WIN32
 typedef DWORD ru_pid;
 #else
 #include <sys/types.h>
