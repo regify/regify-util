@@ -3227,18 +3227,25 @@
       <arglist>(trans_chars name)</arglist>
     </member>
     <member kind="function">
+      <type>RUAPI perm_chars</type>
+      <name>ruThreadGetName</name>
+      <anchorfile>group__threading.html</anchorfile>
+      <anchor>gabb21ee16c2b8c4607683ccdbdfa44370</anchor>
+      <arglist>(void)</arglist>
+    </member>
+    <member kind="function">
       <type>RUAPI ruThread</type>
       <name>ruThreadCreate</name>
       <anchorfile>group__threading.html</anchorfile>
-      <anchor>gabb9b39b7a1629a15dac89ba0a450ef13</anchor>
-      <arglist>(ruStartFunc start, void *context)</arglist>
+      <anchor>ga2377be9acff9cdcb70b8ae3b09f5e48c</anchor>
+      <arglist>(ruStartFunc start, alloc_chars name, void *usrCtx)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI ruThread</type>
       <name>ruThreadCreateBg</name>
       <anchorfile>group__threading.html</anchorfile>
-      <anchor>ga435c7c75b1ecb5175a42b8010c9581fd</anchor>
-      <arglist>(ruStartFunc start, void *context)</arglist>
+      <anchor>gae23b4a15404739112e5492948075831c</anchor>
+      <arglist>(ruStartFunc start, alloc_chars name, void *usrCtx)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI bool</type>
