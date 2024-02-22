@@ -433,7 +433,6 @@ static void fseCb(ConstFSEventStreamRef stream, void* ctx,
 
 static ptr cleanerThread(ptr o) {
     famCtx *fctx = (famCtx*)o;
-    ruThreadSetName(fctx->name);
     ruInfoLog("starting");
 
     do {
@@ -472,7 +471,6 @@ static ptr cleanerThread(ptr o) {
     } while (!fctx->quit);
 
     ruInfoLog("stopping");
-    ruThreadSetName(NULL);
     return NULL;
 }
 
@@ -522,7 +520,7 @@ RUAPI ruFamCtx ruFamMonitorFilePath(trans_chars filePath, trans_chars threadName
         fam_dbg("stream:%x famCtx:%x", fctx->stream, fctx);
         fctx->eventCb = eventCallBack;
         fctx->ctx = ctx;
-        fctx->ctid = ruThreadCreate(cleanerThread, fctx);
+        fctx->ctid = ruThreadCreate(cleanerThread,  ruStrDup(threadName), fctx);
         if (!fctx->ctid) {
             ruCritLog("Failed to spawn cleaner thread");
             break;

@@ -47,10 +47,10 @@ START_TEST ( api ) {
     bool is, want;
 
     ruThread t1;
-    t1 = ruThreadCreate(NULL, NULL);
+    t1 = ruThreadCreate(NULL, NULL, NULL);
     fail_unless(NULL == t1, retText, test, NULL, t1);
 
-    t1 = ruThreadCreateBg(NULL, NULL);
+    t1 = ruThreadCreateBg(NULL, NULL, NULL);
     fail_unless(NULL == t1, retText, test, NULL, t1);
 
     exp = RUE_PARAMETER_NOT_SET;
@@ -79,7 +79,7 @@ START_TEST ( run ) {
     ruThread t1;
 
     reset();
-    t1 = ruThreadCreate(thRunner, NULL);
+    t1 = ruThreadCreate(thRunner, NULL, NULL);
     fail_if(NULL == t1, retText, test, NULL, t1);
 
     exp = RUE_OK;
@@ -105,7 +105,7 @@ START_TEST ( run ) {
     fail_unless(23 == (intptr_t)exitRes, retText, test, 23, (intptr_t)exitRes);
 
     reset();
-    t1 = ruThreadCreate(thRunner, "just kill");
+    t1 = ruThreadCreate(thRunner, NULL, "just kill");
     fail_if(NULL == t1, retText, test, NULL, t1);
     ruSleepMs(100);
 
@@ -117,7 +117,7 @@ START_TEST ( run ) {
     fail_unless(exp == ret, retText, test, exp, ret);
 
     reset();
-    t1 = ruThreadCreate(thRunner, "wait kill");
+    t1 = ruThreadCreate(thRunner, NULL, "wait kill");
     fail_if(NULL == t1, retText, test, NULL, t1);
     ruSleepMs(100);
 

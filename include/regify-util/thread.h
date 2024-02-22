@@ -159,20 +159,28 @@ RUAPI ru_tid ruThreadGetId(void);
 RUAPI void ruThreadSetName(trans_chars name);
 
 /**
+ * Returns the current thread name or NULL
+ * @return Must not be freed.
+ */
+RUAPI perm_chars ruThreadGetName(void);
+
+/**
  * Creates a new thread
  * @param start The start function
- * @param context The start function's argument.
+ * @param name The name of the thread must be alloced will be freed, or NULL
+ * @param usrCtx The start function's argument.
  * @return The thread identifier or NULL on failure in which case call \ref ruLastError for details.
  */
-RUAPI ruThread ruThreadCreate(ruStartFunc start, void* context);
+RUAPI ruThread ruThreadCreate(ruStartFunc start, alloc_chars name, void* usrCtx);
 
 /**
  * \brief Creates a new thread with background priority
  * @param start The start function
- * @param context The start function's argument.
+ * @param name The name of the thread must be alloced will be freed, or NULL
+ * @param usrCtx The start function's argument.
  * @return The thread identifier or NULL on failure in which case call \ref ruLastError for details.
  */
-RUAPI ruThread ruThreadCreateBg(ruStartFunc start, void* context);
+RUAPI ruThread ruThreadCreateBg(ruStartFunc start, alloc_chars name, void* usrCtx);
 
 /**
  * \brief Whether thraed has finished and is joinable

@@ -420,7 +420,6 @@ static int32_t fam_runLoop(famCtx* fctx) {
 
 static void* fam_runThread(void* ctx) {
     famCtx* fctx = (famCtx*) ctx;
-    ruThreadSetName(fctx->name);
     fctx->buf = ruMallocSize(BUF_LEN, 1);
     fctx->wdPath = ruMapNew(ruTypeInt32(), ruTypeStrDup());
     fctx->pathWd = ruMapNew(ruTypeStrDup(), ruTypeInt32());
@@ -446,7 +445,6 @@ static void* fam_runThread(void* ctx) {
     fctx->pathWd = ruMapFree(fctx->pathWd);
     fctx->cookie = ruMapFree(fctx->cookie);
     ruInfoLog("Fam thread quitting.");
-    ruThreadSetName(NULL);
     return (void*)(ru_int)ret;
 }
 
@@ -469,7 +467,7 @@ ruFamCtx ruFamMonitorFilePath(trans_chars filePath, trans_chars threadName,
     fctx->id = inotify_init();
     fctx->eventCb = eventCallBack;
     fctx->ctx = ctx;
-    fctx->tid = ruThreadCreate(fam_runThread, (void*) fctx);
+    fctx->tid = ruThreadCreate(fam_runThread, ruStrDup(threadName), (void*) fctx);
     if (!fctx->tid) {
         ruCritLogf("Failed to spawn fam thread ec: %s", ruLastError());
         return fam_freeCtx(fctx);

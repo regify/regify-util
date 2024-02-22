@@ -321,13 +321,14 @@ static DWORD WINAPI threadRunner(LPVOID context) {
     Thr *tc = (Thr *) context;
     DWORD res = 0;
     if (tc->start) {
-        ru_tid tid = ruThreadGetId();
-        ruDbgLogf("Starting thread 0x%p with id: %ld", tc, tid);
+        if (tc->name) ruThreadSetName(tc->name);
+        ruDbgLogf("Starting thread 0x%p", tc);
         tc->exitRes = tc->start(tc->user);
         res = (DWORD)(intptr_t) tc->exitRes;
         tc->finished = true;
-        ruDbgLogf("Finished thread 0x%p with id: %ld", tc, tid);
+        ruDbgLogf("Finished thread 0x%p with 0x%p", tc, tc->exitRes);
     }
+    ruFree(tc->name);
     ruThreadSetName(NULL);
     return res;
 }
@@ -335,10 +336,14 @@ static DWORD WINAPI threadRunner(LPVOID context) {
 static void* threadRunner(void* context) {
     Thr* tc = (Thr*) context;
     if (tc->start) {
+        if (tc->name) ruThreadSetName(tc->name);
+        ruDbgLogf("Starting thread 0x%p", tc);
         tc->exitRes = tc->start(tc->user);
         tc->finished = true;
+        ruDbgLogf("Finished thread 0x%p with 0x%p", tc, tc->exitRes);
         pthread_exit(tc->exitRes);
     }
+    ruFree(tc->name);
     ruThreadSetName(NULL);
     return tc->exitRes;
 }
@@ -454,7 +459,11 @@ RUAPI void ruThreadSetName(trans_chars name) {
     }
 }
 
-RUAPI ruThread ruThreadCreate(ruStartFunc start, void* context) {
+RUAPI perm_chars ruThreadGetName(void) {
+    return ru_threadName;
+}
+
+RUAPI ruThread ruThreadCreate(ruStartFunc start, alloc_chars name, void* usrCtx) {
     ruClearError();
     if (!start) {
         ruSetError("%s", "ruStartFunc is required but NULL");
@@ -463,8 +472,9 @@ RUAPI ruThread ruThreadCreate(ruStartFunc start, void* context) {
     Thr* tc = ruMalloc0(1, Thr);
     tc->type = MagicThr;
     tc->start = start;
-    tc->user = context;
-    ruDbgLogf("Created thread 0x%p", tc);
+    tc->user = usrCtx;
+    tc->name = name;
+    ruDbgLogf("Created thread 0x%p with name: %s", tc, name);
 #ifdef _WIN32
     tc->tid = CreateThread(NULL, 0,
                            threadRunner, tc,
@@ -486,8 +496,8 @@ RUAPI ruThread ruThreadCreate(ruStartFunc start, void* context) {
     return tc;
 }
 
-RUAPI ruThread ruThreadCreateBg(ruStartFunc startFunc, void* user) {
-    Thr* tc = ruThreadCreate(startFunc, user);
+RUAPI ruThread ruThreadCreateBg(ruStartFunc startFunc, alloc_chars name, void* usrCtx) {
+    Thr* tc = ruThreadCreate(startFunc, name, usrCtx);
     if(!tc) return tc;
     if (tc->tid) {
 #ifdef _WIN32

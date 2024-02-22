@@ -124,9 +124,6 @@ void CALLBACK monCompNotify(DWORD evCode, DWORD transferLen,
 //<editor-fold desc="callback thread">
 static ptr cbRun(ptr ctx) {
     famCtx *mon = (famCtx*) ctx;
-    alloc_chars tname = ruDupPrintf("%sCb", mon->name);
-    ruThreadSetName(tname);
-    ruFree(tname);
     msec_t pollTimeout = RU_FAM_POLL_TIMEOUT;
     mon->cbInit = true;
     ruInfoLog("Started");
@@ -149,7 +146,6 @@ static ptr cbRun(ptr ctx) {
     } while (!mon->quit);
 
     ruInfoLog("Stopping");
-    ruThreadSetName(NULL);
     return NULL;
 }
 
@@ -361,15 +357,11 @@ static worker* wrkFree(worker* wt) {
 
 static ptr wrkRun(ptr o) {
     worker *wt = (worker*)o;
-    alloc_chars tname = ruDupPrintf("%sWrk", wt->mon->name);
-    ruThreadSetName(tname);
-    ruFree(tname);
     ruInfoLog("starting");
     while (!wt->quit) {
         SleepEx(100, true);
     }
     ruInfoLog("ending");
-    ruThreadSetName(NULL);
     return NULL;
 }
 
@@ -441,10 +433,14 @@ static famCtx* famFree(famCtx* fctx) {
 
 static void famInit(famCtx* fctx) {
     // Kick off the wctx thread, which will be managed by wctx.
-    fctx->wrkThread = ruThreadCreate(wrkRun, fctx->wctx);
+    fctx->wrkThread = ruThreadCreate(wrkRun,
+                                     ruDupPrintf("%sWrk", fctx->name),
+                                     fctx->wctx);
     fctx->wrkTid = ruThreadNativeId(fctx->wrkThread, NULL);
     if (fctx->eventCb) {
-        fctx->cbThread = ruThreadCreate(cbRun, fctx);
+        fctx->cbThread = ruThreadCreate(cbRun,
+                                        ruDupPrintf("%sCb", fctx->name),
+                                        fctx);
         while (!fctx->cbInit) {
             ruSleepMs(RU_FAM_QUEUE_TIMEOUT);
         }

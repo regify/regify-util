@@ -215,6 +215,7 @@ typedef struct thr_ {
     ru_uint type;
     ruThreadId tid;
     ruStartFunc start;
+    alloc_chars name;
     void* user;
     void* exitRes;
     bool finished;
