@@ -163,18 +163,18 @@ Macros</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
-<tr class="memitem:ga20be8e436d37b23248d98325f40a5d9e"><td class="memItemLeft" align="right" valign="top">typedef void(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__logging.html#ga20be8e436d37b23248d98325f40a5d9e">ruLogFunc</a>) (<a class="el" href="group__misc.html#ga517aac830d9ce5c6ab7deec46adf54d5">perm_ptr</a> user_data, <a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> message)</td></tr>
-<tr class="memdesc:ga20be8e436d37b23248d98325f40a5d9e"><td class="mdescLeft">&#160;</td><td class="mdescRight">The type of function to pass to <a class="el" href="group__logging.html#ga45e42503b652bda7bc147f5c514f5172">ruSetLogger</a> in order to hook up logging.  <a href="group__logging.html#ga20be8e436d37b23248d98325f40a5d9e">More...</a><br /></td></tr>
-<tr class="separator:ga20be8e436d37b23248d98325f40a5d9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gadec0525119b0c06c58521398ef713355"><td class="memItemLeft" align="right" valign="top">typedef void(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__logging.html#gadec0525119b0c06c58521398ef713355">ruLogFunc</a>) (<a class="el" href="group__misc.html#ga517aac830d9ce5c6ab7deec46adf54d5">perm_ptr</a> userData, uint32_t logLevel, <a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> msg)</td></tr>
+<tr class="memdesc:gadec0525119b0c06c58521398ef713355"><td class="mdescLeft">&#160;</td><td class="mdescRight">The type of function to pass to <a class="el" href="group__logging.html#ga389028e2a2f03e15f94a8ad238d1d2bb">ruSetLogger</a> in order to hook up logging.  <a href="group__logging.html#gadec0525119b0c06c58521398ef713355">More...</a><br /></td></tr>
+<tr class="separator:gadec0525119b0c06c58521398ef713355"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:gafbb4cdd0ff940ab6a253c3b69dba1fa1"><td class="memItemLeft" align="right" valign="top">RUAPI void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__logging.html#gafbb4cdd0ff940ab6a253c3b69dba1fa1">ruStdErrorLogger</a> (<a class="el" href="group__misc.html#ga517aac830d9ce5c6ab7deec46adf54d5">perm_ptr</a> udata, <a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> msg)</td></tr>
-<tr class="memdesc:gafbb4cdd0ff940ab6a253c3b69dba1fa1"><td class="mdescLeft">&#160;</td><td class="mdescRight">A convenience logging implementation that logs to stderr.  <a href="group__logging.html#gafbb4cdd0ff940ab6a253c3b69dba1fa1">More...</a><br /></td></tr>
-<tr class="separator:gafbb4cdd0ff940ab6a253c3b69dba1fa1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga45e42503b652bda7bc147f5c514f5172"><td class="memItemLeft" align="right" valign="top">RUAPI void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__logging.html#ga45e42503b652bda7bc147f5c514f5172">ruSetLogger</a> (<a class="el" href="group__logging.html#ga20be8e436d37b23248d98325f40a5d9e">ruLogFunc</a> logger, uint32_t logLevel, <a class="el" href="group__misc.html#ga517aac830d9ce5c6ab7deec46adf54d5">perm_ptr</a> userData)</td></tr>
-<tr class="memdesc:ga45e42503b652bda7bc147f5c514f5172"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the global logging function for this process.  <a href="group__logging.html#ga45e42503b652bda7bc147f5c514f5172">More...</a><br /></td></tr>
-<tr class="separator:ga45e42503b652bda7bc147f5c514f5172"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gad0253bb33120ff2f58ce14474a8ba8e6"><td class="memItemLeft" align="right" valign="top">RUAPI void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__logging.html#gad0253bb33120ff2f58ce14474a8ba8e6">ruStdErrorLogger</a> (<a class="el" href="group__misc.html#ga517aac830d9ce5c6ab7deec46adf54d5">perm_ptr</a> userData, uint32_t logLevel, <a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> msg)</td></tr>
+<tr class="memdesc:gad0253bb33120ff2f58ce14474a8ba8e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">A convenience logging implementation that logs to stderr.  <a href="group__logging.html#gad0253bb33120ff2f58ce14474a8ba8e6">More...</a><br /></td></tr>
+<tr class="separator:gad0253bb33120ff2f58ce14474a8ba8e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga389028e2a2f03e15f94a8ad238d1d2bb"><td class="memItemLeft" align="right" valign="top">RUAPI void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__logging.html#ga389028e2a2f03e15f94a8ad238d1d2bb">ruSetLogger</a> (<a class="el" href="group__logging.html#gadec0525119b0c06c58521398ef713355">ruLogFunc</a> logger, uint32_t logLevel, <a class="el" href="group__misc.html#ga517aac830d9ce5c6ab7deec46adf54d5">perm_ptr</a> userData, <a class="el" href="group__cleaner.html#ga2ef14c6aa2f1434ccc78e1df73d5a31d">ruCleaner</a> cleaner, bool threaded)</td></tr>
+<tr class="memdesc:ga389028e2a2f03e15f94a8ad238d1d2bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the global logging function for this process.  <a href="group__logging.html#ga389028e2a2f03e15f94a8ad238d1d2bb">More...</a><br /></td></tr>
+<tr class="separator:ga389028e2a2f03e15f94a8ad238d1d2bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga8bad1bbc647fe91103771eb1583c697a"><td class="memItemLeft" align="right" valign="top">RUAPI void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__logging.html#ga8bad1bbc647fe91103771eb1583c697a">ruSetLogLevel</a> (uint32_t logLevel)</td></tr>
 <tr class="memdesc:ga8bad1bbc647fe91103771eb1583c697a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adjusts the current log level.  <a href="group__logging.html#ga8bad1bbc647fe91103771eb1583c697a">More...</a><br /></td></tr>
 <tr class="separator:ga8bad1bbc647fe91103771eb1583c697a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -440,7 +440,7 @@ Functions</h2></td></tr>
 <div class="line">        (uint8_t)*((start)+4), (uint8_t)*((start)+5), (uint8_t)*((start)+6), (uint8_t)*((start)+7), \</div>
 <div class="line">        (uint8_t)*((start)+8), (uint8_t)*((start)+9), (uint8_t)*((start)+10), (uint8_t)*((start)+11), \</div>
 <div class="line">        (uint8_t)*((start)+12), (uint8_t)*((start)+13), (uint8_t)*((start)+14), (uint8_t)*((start)+15))</div>
-<div class="ttc" id="agroup__logging_html_ga3d3ffaf6bf4fa6d4c69329ad93f301b3"><div class="ttname"><a href="group__logging.html#ga3d3ffaf6bf4fa6d4c69329ad93f301b3">ruDbgLogf</a></div><div class="ttdeci">#define ruDbgLogf(fmt,...)</div><div class="ttdoc">Emits a DBUG level log message.</div><div class="ttdef"><b>Definition:</b> logging.h:254</div></div>
+<div class="ttc" id="agroup__logging_html_ga3d3ffaf6bf4fa6d4c69329ad93f301b3"><div class="ttname"><a href="group__logging.html#ga3d3ffaf6bf4fa6d4c69329ad93f301b3">ruDbgLogf</a></div><div class="ttdeci">#define ruDbgLogf(fmt,...)</div><div class="ttdoc">Emits a DBUG level log message.</div><div class="ttdef"><b>Definition:</b> logging.h:269</div></div>
 </div><!-- fragment -->
 <p>Debug logs the 16 bytes following start preceded by given message. </p>
 <dl class="params"><dt>Parameters</dt><dd>
@@ -683,19 +683,28 @@ Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Typedef Documentation</h2>
-<a id="ga20be8e436d37b23248d98325f40a5d9e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga20be8e436d37b23248d98325f40a5d9e">&#9670;&nbsp;</a></span>ruLogFunc</h2>
+<a id="gadec0525119b0c06c58521398ef713355"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gadec0525119b0c06c58521398ef713355">&#9670;&nbsp;</a></span>ruLogFunc</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef void(* ruLogFunc) (<a class="el" href="group__misc.html#ga517aac830d9ce5c6ab7deec46adf54d5">perm_ptr</a> user_data, <a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> message)</td>
+          <td class="memname">typedef void(* ruLogFunc) (<a class="el" href="group__misc.html#ga517aac830d9ce5c6ab7deec46adf54d5">perm_ptr</a> userData, uint32_t logLevel, <a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> msg)</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>The type of function to pass to <a class="el" href="group__logging.html#ga45e42503b652bda7bc147f5c514f5172">ruSetLogger</a> in order to hook up logging. </p>
+<p>The type of function to pass to <a class="el" href="group__logging.html#ga389028e2a2f03e15f94a8ad238d1d2bb">ruSetLogger</a> in order to hook up logging. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">userData</td><td>The userData reference that was passed to <a class="el" href="group__logging.html#ga389028e2a2f03e15f94a8ad238d1d2bb">ruSetLogger</a>. </td></tr>
+    <tr><td class="paramname">logLevel</td><td>Log level pertaining to this message. Log filtering has been done at this point, and this is to facilitate further log level based processing decisions. </td></tr>
+    <tr><td class="paramname">msg</td><td>The message to log.</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>When this function receives NULL for message, it means that this is the last log call this function will receive in the current context. This allows it to finalize whatever resources it may have. </p>
 
 </div>
 </div>
@@ -748,8 +757,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ga45e42503b652bda7bc147f5c514f5172"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga45e42503b652bda7bc147f5c514f5172">&#9670;&nbsp;</a></span>ruSetLogger()</h2>
+<a id="ga389028e2a2f03e15f94a8ad238d1d2bb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga389028e2a2f03e15f94a8ad238d1d2bb">&#9670;&nbsp;</a></span>ruSetLogger()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -757,7 +766,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">RUAPI void ruSetLogger </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="group__logging.html#ga20be8e436d37b23248d98325f40a5d9e">ruLogFunc</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="group__logging.html#gadec0525119b0c06c58521398ef713355">ruLogFunc</a>&#160;</td>
           <td class="paramname"><em>logger</em>, </td>
         </tr>
         <tr>
@@ -770,7 +779,19 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="group__misc.html#ga517aac830d9ce5c6ab7deec46adf54d5">perm_ptr</a>&#160;</td>
-          <td class="paramname"><em>userData</em>&#160;</td>
+          <td class="paramname"><em>userData</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__cleaner.html#ga2ef14c6aa2f1434ccc78e1df73d5a31d">ruCleaner</a>&#160;</td>
+          <td class="paramname"><em>cleaner</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>threaded</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -785,7 +806,9 @@ Functions</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">logger</td><td>Logging function that will be called with messages. </td></tr>
     <tr><td class="paramname">logLevel</td><td>Loglevel to determine what gets logged. </td></tr>
-    <tr><td class="paramname">userData</td><td>Opaque custum user data that will be passed to the <a class="el" href="group__logging.html#ga20be8e436d37b23248d98325f40a5d9e">ruLogFunc</a> implementation. </td></tr>
+    <tr><td class="paramname">userData</td><td>Opaque custom user data that will be passed to the <a class="el" href="group__logging.html#gadec0525119b0c06c58521398ef713355">ruLogFunc</a> implementation. </td></tr>
+    <tr><td class="paramname">cleaner</td><td>Optional <a class="el" href="group__cleaner.html#ga2ef14c6aa2f1434ccc78e1df73d5a31d">ruCleaner</a> instance for real time password cleaning. </td></tr>
+    <tr><td class="paramname">threaded</td><td>Whether to receive all logger calls from a dedicated thread. This is useful when many threads do lots of logging. </td></tr>
   </table>
   </dd>
 </dl>
@@ -818,8 +841,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="gafbb4cdd0ff940ab6a253c3b69dba1fa1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gafbb4cdd0ff940ab6a253c3b69dba1fa1">&#9670;&nbsp;</a></span>ruStdErrorLogger()</h2>
+<a id="gad0253bb33120ff2f58ce14474a8ba8e6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gad0253bb33120ff2f58ce14474a8ba8e6">&#9670;&nbsp;</a></span>ruStdErrorLogger()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -828,7 +851,13 @@ Functions</h2></td></tr>
           <td class="memname">RUAPI void ruStdErrorLogger </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="group__misc.html#ga517aac830d9ce5c6ab7deec46adf54d5">perm_ptr</a>&#160;</td>
-          <td class="paramname"><em>udata</em>, </td>
+          <td class="paramname"><em>userData</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>logLevel</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -847,7 +876,8 @@ Functions</h2></td></tr>
 <p>A convenience logging implementation that logs to stderr. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">udata</td><td>User data. This is ignored in this function. </td></tr>
+    <tr><td class="paramname">userData</td><td>User data. This is ignored in this function. </td></tr>
+    <tr><td class="paramname">logLevel</td><td>Log level pertaining to this message. </td></tr>
     <tr><td class="paramname">msg</td><td>The message to log. </td></tr>
   </table>
   </dd>
@@ -860,7 +890,7 @@ Functions</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Thu Feb 22 2024 11:06:25 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Thu Mar 14 2024 15:10:33 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

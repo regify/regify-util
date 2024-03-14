@@ -168,6 +168,8 @@ Functions</h2></td></tr>
 <tr class="separator:ga47bb57305cd3bc5e19b3daec7c2315b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga611dbce7fd4035f372dd43e82f6b93ab"><td class="memItemLeft" align="right" valign="top">RUAPI double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__json.html#ga611dbce7fd4035f372dd43e82f6b93ab">ruJsonKeyDouble</a> (<a class="el" href="group__json.html#gac1a01d0cd3ab047d989a7cdd1b5bfc52">ruJson</a> rj, <a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> key, int32_t *status)</td></tr>
 <tr class="separator:ga611dbce7fd4035f372dd43e82f6b93ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga56cb15242efc760258fbcce8a037dca2"><td class="memItemLeft" align="right" valign="top">RUAPI bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__json.html#ga56cb15242efc760258fbcce8a037dca2">ruJsonKeyBool</a> (<a class="el" href="group__json.html#gac1a01d0cd3ab047d989a7cdd1b5bfc52">ruJson</a> rj, <a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> key, int32_t *status)</td></tr>
+<tr class="separator:ga56cb15242efc760258fbcce8a037dca2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga831be2acfa0d92bf8d0ec292b96fd6b8"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__json.html#gac1a01d0cd3ab047d989a7cdd1b5bfc52">ruJson</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__json.html#ga831be2acfa0d92bf8d0ec292b96fd6b8">ruJsonKeyMap</a> (<a class="el" href="group__json.html#gac1a01d0cd3ab047d989a7cdd1b5bfc52">ruJson</a> rj, <a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> key, int32_t *status)</td></tr>
 <tr class="separator:ga831be2acfa0d92bf8d0ec292b96fd6b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga2ed0f5478d2d160f9dac9d87ddeb5883"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__json.html#gac1a01d0cd3ab047d989a7cdd1b5bfc52">ruJson</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__json.html#ga2ed0f5478d2d160f9dac9d87ddeb5883">ruJsonKeyArray</a> (<a class="el" href="group__json.html#gac1a01d0cd3ab047d989a7cdd1b5bfc52">ruJson</a> rj, <a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> key, int32_t *status)</td></tr>
@@ -696,6 +698,49 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><a class="el" href="group__json.html#gac1a01d0cd3ab047d989a7cdd1b5bfc52">ruJson</a> referencing the array </dd></dl>
+
+</div>
+</div>
+<a id="ga56cb15242efc760258fbcce8a037dca2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga56cb15242efc760258fbcce8a037dca2">&#9670;&nbsp;</a></span>ruJsonKeyBool()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI bool ruJsonKeyBool </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__json.html#gac1a01d0cd3ab047d989a7cdd1b5bfc52">ruJson</a>&#160;</td>
+          <td class="paramname"><em>rj</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a>&#160;</td>
+          <td class="paramname"><em>key</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int32_t *&#160;</td>
+          <td class="paramname"><em>status</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Return bool of the key element from underlying <a class="el" href="group__json.html#gac1a01d0cd3ab047d989a7cdd1b5bfc52">ruJson</a> map reference. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">rj</td><td><a class="el" href="group__json.html#gac1a01d0cd3ab047d989a7cdd1b5bfc52">ruJson</a> in question. </td></tr>
+    <tr><td class="paramname">key</td><td>key under which boolean resides </td></tr>
+    <tr><td class="paramname">status</td><td>where the <a class="el" href="group__ruerror.html#ga7e2f97cce8af8020834e685a2482556d">RUE_OK</a> on success or an error code will be stored. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>boolean in question and false on error. </dd></dl>
 
 </div>
 </div>
@@ -1707,7 +1752,7 @@ Functions</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Thu Feb 22 2024 11:06:25 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Thu Mar 14 2024 15:10:33 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

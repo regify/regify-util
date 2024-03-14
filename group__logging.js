@@ -18,10 +18,10 @@ var group__logging =
     [ "ruVerbLogf", "group__logging.html#ga75167ec8202e6e2a632afdb0a60fabb0", null ],
     [ "ruWarnLog", "group__logging.html#ga21164d698d4775724fd710a6bf6cfa15", null ],
     [ "ruWarnLogf", "group__logging.html#gaebf1e2035fa3c2d930c925c93e2e6706", null ],
-    [ "ruLogFunc", "group__logging.html#ga20be8e436d37b23248d98325f40a5d9e", null ],
+    [ "ruLogFunc", "group__logging.html#gadec0525119b0c06c58521398ef713355", null ],
     [ "ruDoesLog", "group__logging.html#gaccddd3017ad9c9fd2f1bf9865dcbf699", null ],
     [ "ruGetLogLevel", "group__logging.html#ga55a8b3d268484f95bc91525110491606", null ],
-    [ "ruSetLogger", "group__logging.html#ga45e42503b652bda7bc147f5c514f5172", null ],
+    [ "ruSetLogger", "group__logging.html#ga389028e2a2f03e15f94a8ad238d1d2bb", null ],
     [ "ruSetLogLevel", "group__logging.html#ga8bad1bbc647fe91103771eb1583c697a", null ],
-    [ "ruStdErrorLogger", "group__logging.html#gafbb4cdd0ff940ab6a253c3b69dba1fa1", null ]
+    [ "ruStdErrorLogger", "group__logging.html#gad0253bb33120ff2f58ce14474a8ba8e6", null ]
 ];

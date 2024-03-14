@@ -1423,6 +1423,13 @@
       <arglist>(ruJson rj, trans_chars key, int32_t *status)</arglist>
     </member>
     <member kind="function">
+      <type>RUAPI bool</type>
+      <name>ruJsonKeyBool</name>
+      <anchorfile>group__json.html</anchorfile>
+      <anchor>ga56cb15242efc760258fbcce8a037dca2</anchor>
+      <arglist>(ruJson rj, trans_chars key, int32_t *status)</arglist>
+    </member>
+    <member kind="function">
       <type>RUAPI ruJson</type>
       <name>ruJsonKeyMap</name>
       <anchorfile>group__json.html</anchorfile>
@@ -2052,22 +2059,22 @@
       <type>void(*</type>
       <name>ruLogFunc</name>
       <anchorfile>group__logging.html</anchorfile>
-      <anchor>ga20be8e436d37b23248d98325f40a5d9e</anchor>
-      <arglist>)(perm_ptr user_data, trans_chars message)</arglist>
+      <anchor>gadec0525119b0c06c58521398ef713355</anchor>
+      <arglist>)(perm_ptr userData, uint32_t logLevel, trans_chars msg)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI void</type>
       <name>ruStdErrorLogger</name>
       <anchorfile>group__logging.html</anchorfile>
-      <anchor>gafbb4cdd0ff940ab6a253c3b69dba1fa1</anchor>
-      <arglist>(perm_ptr udata, trans_chars msg)</arglist>
+      <anchor>gad0253bb33120ff2f58ce14474a8ba8e6</anchor>
+      <arglist>(perm_ptr userData, uint32_t logLevel, trans_chars msg)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI void</type>
       <name>ruSetLogger</name>
       <anchorfile>group__logging.html</anchorfile>
-      <anchor>ga45e42503b652bda7bc147f5c514f5172</anchor>
-      <arglist>(ruLogFunc logger, uint32_t logLevel, perm_ptr userData)</arglist>
+      <anchor>ga389028e2a2f03e15f94a8ad238d1d2bb</anchor>
+      <arglist>(ruLogFunc logger, uint32_t logLevel, perm_ptr userData, ruCleaner cleaner, bool threaded)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI void</type>
