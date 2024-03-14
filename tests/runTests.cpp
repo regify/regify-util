@@ -78,7 +78,7 @@ perm_chars makePath(const char *filepath) {
     return &pathBuffer[0];
 }
 
-void myLogFunc (perm_ptr ud, trans_chars message) {
+void myLogFunc (perm_ptr ud, uint32_t log_level, trans_chars message) {
     FILE* wh = (FILE*)ud;
     rusize len, left = strlen(message);
     perm_chars cur = message;
@@ -102,8 +102,11 @@ int32_t main ( int32_t argc, char *argv[] ) {
     if (!ruStrEmpty(logfile)) {
         wh = ruFOpen((const char*) logfile, "w", NULL);
     }
-    ruSetLogger(myLogFunc, RU_LOG_DBUG, wh);
+    ruCleaner rc = ruCleanNew(0);
+    ruCleanAdd(rc, "testsecret", "^^^TEST_SECRET^^^");
+    ruSetLogger(myLogFunc, RU_LOG_DBUG, wh, rc, false);
     Suite *suite = getSuite();
+    ruInfoLog("starting with testsecret and cleaner");
     SRunner *runner = srunner_create ( suite );
     srunner_set_fork_status (runner, CK_NOFORK);
     ruBacktraceInit(argv[0]);
@@ -115,5 +118,6 @@ int32_t main ( int32_t argc, char *argv[] ) {
     number_failed = srunner_ntests_failed ( runner );
     srunner_free ( runner );
     if (wh) fclose(wh);
+    ruCleanFree(rc);
     return number_failed;
 }

@@ -98,10 +98,6 @@ extern "C" {
 *  ---------------------- Public Cleaner Interface ------------------------  *
 *                                                                            *
 *****************************************************************************/
-/**
- * Opaque pointer to cleaner object. See \ref cleaner
- */
-typedef void* ruCleaner;
 
 /**
  * The type function for the write operation when cleaning a data stream.

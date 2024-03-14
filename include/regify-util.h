@@ -679,6 +679,12 @@ RUAPI ptr ruClear(ptr o);
     } ruMacEnd
 
 /**
+ * \ingroup cleaner
+ * Opaque pointer to cleaner object. See \ref cleaner
+ */
+typedef void* ruCleaner;
+
+/**
  * @}
  */
 

@@ -50,3 +50,7 @@ The inplace functions have been removed. The following updates are suggested:
 * File system paths are accepted and assumed to be Unix style on all platforms
 - ruPathJoin now joins using unix slashes
 - ruPathJoinNative has been added to use Windows slashes on Windows
+
+* Logging API has been reworked to integrate realtime log cleaning and an optional logging thread
+- ruSetLogger has new ruCleaner and threaded params. Just add ,NULL, false for compatibility
+- ruLogFunc now also receives the log level ruStdErrorLogger(perm_ptr, trans_chars) -> ruStdErrorLogger(perm_ptr, uint32_t, trans_chars)

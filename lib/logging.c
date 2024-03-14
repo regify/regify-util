@@ -22,31 +22,161 @@
 #include "lib.h"
 
 /* log context */
-static ruLogFunc logger_ = NULL;
-static uint32_t logLevel_ = RU_LOG_NONE;
-static perm_ptr userLogData_ = NULL;
+typedef struct {
+    // submit function syncQ or asyncQ
+    ruLogFunc queuer;
+    // users log sink
+    ruLogFunc logger;
+    uint32_t level;
+    // user context
+    perm_ptr ctx;
+    // potential cleaner instance
+    ruCleaner cleaner;
+    // buffer to use for potential cleaning
+    ruString clnBuf;
+    // asyncQ queue if logger is threaded
+    ruList queue;
+    // thread reference
+    ruThread logThread;
+    // sync flag
+    volatile bool syncing;
+} ruLogSink;
 
-RUAPI void ruSetLogger(ruLogFunc logger, uint32_t logLevel, perm_ptr userData) {
-    logger_ = logger;
-    logLevel_ = logLevel;
-    userLogData_ = userData;
+typedef struct {
+    uint32_t logLevel;
+    alloc_chars msg;
+} logMsg;
+
+static ruLogSink* ls_ = NULL;
+#define MAX_LOG_LEN 2048
+
+static ptr freeMsg(ptr p) {
+    logMsg* m = (logMsg*)p;
+    if (!m) return NULL;
+    ruFree(m->msg);
+    ruFree(m);
+    return NULL;
 }
 
-RUAPI void ruStdErrorLogger(perm_ptr udata, trans_chars msg) {
+static void asyncQ(perm_ptr userData, uint32_t logLevel, trans_chars msg) {
+    ruLogSink* ls = (ruLogSink*)userData;
+    if (!ls->queue) return;
+    logMsg* m = ruMalloc0(1, logMsg);
+    m->logLevel = logLevel;
+    m->msg = ruStrDup(msg);
+    int32_t ret = ruListPush(ls->queue, m);
+    if (ret != RUE_OK) freeMsg(m);
+}
+
+static rusize_s cb2Writer (perm_ptr ctx, trans_ptr buf, rusize len) {
+    ruString io = (ruString)ctx;
+    if (RUE_OK == ruBufferAppend(io, buf, len)) return (rusize_s)len;
+    return -1;
+}
+
+static void syncQ(perm_ptr userData, uint32_t logLevel, trans_chars msg) {
+    ruLogSink* ls = (ruLogSink*)userData;
+    perm_chars out = msg;
+    if (ls->cleaner) {
+        ruStringReset(ls->clnBuf);
+        ruCleanToWriter(ls->cleaner, msg, 0,
+                        &cb2Writer, ls->clnBuf);
+        out = ruStringGetCString(ls->clnBuf);
+    }
+    ls->logger(ls->ctx, ls->level, out);
+}
+
+static void freeLogger(ruLogSink* ls) {
+    if (!ls) return;
+    ls->queuer = NULL;
+    ls->level = RU_LOG_NONE;
+    ls->logger = NULL;
+    ls->cleaner = NULL;
+    ls->ctx = NULL;
+    if (ls->clnBuf) ls->clnBuf = ruBufferFree(ls->clnBuf, false);
+    if (ls->queue) ls->queue = ruListFree(ls->queue);
+    ruFree(ls);
+    return;
+}
+
+static ptr logThread(ptr p) {
+    ruLogSink* ls = (ruLogSink*)p;
+    msec_t to = 10;
+    int32_t ret = RUE_OK;
+    while (true) {
+        logMsg* m = ruListTryPop(ls->queue, to, &ret);
+        if (m) {
+            syncQ(ls, m->logLevel, m->msg);
+            freeMsg(m);
+        }
+        // when quitting continue while we pop messages to flush the queue
+        if (ls->syncing && ret != RUE_OK) break;
+    }
+    // send termination signal to log sink
+    ls->logger(ls->ctx, ls->level, NULL);
+    ls->logThread = NULL;
+    ls->syncing = false;
+    return NULL;
+}
+
+static ruLogSink* newLogger(ruLogFunc logger, uint32_t logLevel, perm_ptr userData,
+                            ruCleaner cleaner, bool threaded) {
+    ruLogSink* ls = ruMalloc0(1, ruLogSink);
+    ls->logger = logger;
+    ls->level = logLevel;
+    ls->ctx = userData;
+    if (cleaner) {
+        ls->clnBuf = ruBufferNew(MAX_LOG_LEN);
+        ls->cleaner = cleaner;
+    }
+    if (threaded) {
+        ls->queue = ruListNew(ruTypePtr(freeMsg));
+        ls->queuer = asyncQ;
+        ls->logThread = ruThreadCreateBg(
+                logThread, ruStrDup("logger"), ls);
+    } else {
+        ls->queuer = syncQ;
+    }
+    return ls;
+}
+
+RUAPI void ruSetLogger(ruLogFunc logger, uint32_t logLevel, perm_ptr userData,
+                       ruCleaner cleaner, bool threaded) {
+    ruLogSink *ps = ls_;
+    if (logger) {
+        ls_ = newLogger(logger, logLevel, userData, cleaner, threaded);
+    } else {
+        ls_ = NULL;
+    }
+    if (!ps) return;
+    if (ps->logThread) {
+        ps->syncing = true;
+        while (ps->syncing) ruSleepMs(1);
+    } else {
+        // hopefully time for all logging to migrate
+        ruSleepMs(10);
+        // closing call for the last logger
+        ps->logger(ps->ctx, ps->level, NULL);
+    }
+    freeLogger(ps);
+}
+
+RUAPI void ruStdErrorLogger(perm_ptr udata, uint32_t logLevel, trans_chars msg) {
     if (msg) fputs(msg, stderr);
 }
 
 RUAPI void ruSetLogLevel(uint32_t logLevel) {
-    logLevel_ = logLevel;
+    if (ls_) ls_->level = logLevel;
 }
 
 RUAPI uint32_t ruGetLogLevel(void) {
-    return logLevel_;
+    if (ls_) return ls_->level;
+    return RU_LOG_NONE;
 }
 
 RUAPI bool ruDoesLog(uint32_t log_level) {
-    if (!logger_ || !logLevel_ || !log_level) return false;
-    return logLevel_ >= log_level;
+    if (!ls_ || !ls_->level || !log_level) return false;
+    return ls_->level >= log_level;
 }
 
 // tracks recursive ruMakeLogMsgV within a thread
@@ -162,11 +292,8 @@ RUAPI void ruDoLog(uint32_t log_level, trans_chars filePath, trans_chars func,
     if (!ruDoesLog(log_level)) return;
     va_list args;
     va_start(args, format);
-    alloc_chars _log_str_ = ruMakeLogMsgV(log_level, filePath, func, line, format,
-                                     args);
+    ruDoLogV(log_level, filePath, func, line, format, args);
     va_end(args);
-    logger_(userLogData_, _log_str_);
-    free(_log_str_);
 }
 
 RUAPI void ruDoLogV(uint32_t log_level, trans_chars filePath, trans_chars func,
@@ -174,11 +301,11 @@ RUAPI void ruDoLogV(uint32_t log_level, trans_chars filePath, trans_chars func,
     if (!ruDoesLog(log_level)) return;
     alloc_chars _log_str_ = ruMakeLogMsgV(log_level, filePath, func, line, format,
                                      args);
-    logger_(userLogData_, _log_str_);
+    ls_->queuer(ls_, log_level, _log_str_);
     free(_log_str_);
 }
 
 RUAPI void ruRawLog(uint32_t log_level, trans_chars msg) {
     if (!ruDoesLog(log_level)) return;
-    logger_(userLogData_, msg);
+    ls_->queuer(ls_, log_level, msg);
 }

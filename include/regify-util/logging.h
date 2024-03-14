@@ -70,25 +70,40 @@ extern "C" {
 /**
  * \brief The type of function to pass to \ref ruSetLogger in order to hook up
  * logging.
+ *
+ * @param userData The userData reference that was passed to \ref ruSetLogger.
+ * @param logLevel Log level pertaining to this message. Log filtering has been
+ *                 done at this point, and this is to facilitate further log
+ *                 level based processing decisions.
+ * @param msg The message to log.
+ *
+ * When this function receives NULL for message, it means that this is the last
+ * log call this function will receive in the current context. This allows it to
+ * finalize whatever resources it may have.
  */
-typedef void (*ruLogFunc) (perm_ptr user_data, trans_chars message);
+typedef void (*ruLogFunc) (perm_ptr userData, uint32_t logLevel, trans_chars msg);
 
 
 /**
  * \brief A convenience logging implementation that logs to stderr
- * @param udata User data. This is ignored in this function.
+ * @param userData User data. This is ignored in this function.
+ * @param logLevel Log level pertaining to this message.
  * @param msg The message to log.
  */
-RUAPI void ruStdErrorLogger(perm_ptr udata, trans_chars msg);
+RUAPI void ruStdErrorLogger(perm_ptr userData, uint32_t logLevel, trans_chars msg);
 
 /**
  * \brief Sets the global logging function for this process.
  * @param logger Logging function that will be called with messages.
  * @param logLevel Loglevel to determine what gets logged.
- * @param userData Opaque custum user data that will be passed to the
+ * @param userData Opaque custom user data that will be passed to the
  *                 \ref ruLogFunc implementation.
+ * @param cleaner Optional \ref ruCleaner instance for real time password cleaning.
+ * @param threaded Whether to receive all logger calls from a dedicated thread.
+ *                 This is useful when many threads do lots of logging.
  */
-RUAPI void ruSetLogger(ruLogFunc logger, uint32_t logLevel, perm_ptr userData);
+RUAPI void ruSetLogger(ruLogFunc logger, uint32_t logLevel, perm_ptr userData,
+                       ruCleaner cleaner, bool threaded);
 
 /**
  * \brief Adjusts the current log level.
