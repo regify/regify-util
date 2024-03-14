@@ -269,7 +269,8 @@ START_TEST(get) {
     uint32_t ecnt, cnt;
 
     // {"map": {"key": "2342", "num": 2342, "dbl": 23.42}, "arr": [2342, "2342", 23.42]}
-    jsonStr = "{\"map\": {\"key\": \"2342\", \"num\": 2342, \"dbl\": 23.42}, \"arr\": [2342, \"2342\", 23.42]}";
+    jsonStr = "{\"map\": {\"key\": \"2342\", \"num\": 2342, \"dbl\": 23.42,"
+              " \"good\": true, \"bad\": false}, \"arr\": [2342, \"2342\", 23.42]}";
     jsn = ruJsonParse(jsonStr, &ret);
     fail_if(NULL == jsn, retText, NULL, jsn);
     fail_unless(ret == exp, retText, exp, ret);
@@ -292,7 +293,7 @@ START_TEST(get) {
     fail_unless(ret == exp, retText, exp, ret);
     fail_if(NULL == keys, retText, NULL, keys);
 
-    ecnt = 3;
+    ecnt = 5;
     cnt = ruListSize(keys, &ret);
     fail_unless(ret == exp, retText, exp, ret);
     fail_unless(cnt == ecnt, retText, cnt, ecnt);
@@ -312,6 +313,22 @@ START_TEST(get) {
     fail_unless(ret == exp, retText, exp, ret);
     fail_unless(edb == db, retText, edb, db);
 
+    bool bl, ebl = true;
+    bl = ruJsonKeyBool(jm, "good", &ret);
+    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(ebl == bl, retText, ebl, bl);
+
+    ebl = false;
+    bl = ruJsonKeyBool(jm, "bad", &ret);
+    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(ebl == bl, retText, ebl, bl);
+
+    exp = RUE_INVALID_PARAMETER;
+    bl = ruJsonKeyBool(jm, "num", &ret);
+    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(ebl == bl, retText, ebl, bl);
+
+    exp = RUE_OK;
     ja = ruJsonKeyArray(jsn, "arr", &ret);
     fail_unless(ret == exp, retText, exp, ret);
     fail_if(NULL == ja, retText, NULL, ja);

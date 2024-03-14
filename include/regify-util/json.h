@@ -379,6 +379,15 @@ RUAPI int64_t ruJsonKeyInt(ruJson rj, trans_chars key, int32_t* status);
 RUAPI double ruJsonKeyDouble(ruJson rj, trans_chars key, int32_t* status);
 
 /**
+ * Return bool of the key element from underlying \ref ruJson map reference.
+ * @param rj \ref ruJson in question.
+ * @param key key under which boolean resides
+ * @param status where the \ref RUE_OK on success or an error code will be stored.
+ * @return boolean in question and false on error.
+ */
+RUAPI bool ruJsonKeyBool(ruJson rj, trans_chars key, int32_t* status);
+
+/**
  * Retuens a \ref ruJson reference to the map under given key
  * @param rj \ref ruJson in question.
  * @param key key under which map resides

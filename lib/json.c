@@ -150,6 +150,19 @@ static perm_chars nodeStr(yajl_val node, int32_t* status) {
     ruRetWithCode(status, RUE_OK, out);
 }
 
+bool nodeBool(yajl_val node, int32_t* status) {
+    bool out = false;
+    if (!node) ruRetWithCode(status, RUE_FILE_NOT_FOUND, out);
+    if (YAJL_IS_TRUE(node)) {
+        out = true;
+        ruRetWithCode(status, RUE_OK, out);
+    }
+    if (YAJL_IS_FALSE(node)) {
+        ruRetWithCode(status, RUE_OK, out);
+    }
+    ruRetWithCode(status, RUE_INVALID_PARAMETER, out);
+}
+
 int64_t nodeInt(yajl_val node, int32_t* status) {
     int64_t out = 0;
     if (!node) ruRetWithCode(status, RUE_FILE_NOT_FOUND, out);
@@ -613,6 +626,12 @@ RUAPI double ruJsonKeyDouble(ruJson rj, trans_chars key, int32_t* status) {
     yajl_val v = jsonKey(rj, key, yajl_t_number, status);
     if (!v) return 0;
     return nodeDouble(v, status);
+}
+
+RUAPI bool ruJsonKeyBool(ruJson rj, trans_chars key, int32_t* status) {
+    yajl_val v = jsonKey(rj, key, yajl_t_any, status);
+    if (!v) return 0;
+    return nodeBool(v, status);
 }
 
 RUAPI ruJson ruJsonKeyMap(ruJson rj, trans_chars key, int32_t* status) {
