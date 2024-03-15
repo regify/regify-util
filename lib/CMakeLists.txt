@@ -66,7 +66,7 @@ function (doLink lib shared)
             target_include_directories(${lib} PRIVATE ${Unwind_INCLUDE_DIR})
         endif()
         if (Unwind_LIBRARY)
-            target_link_libraries(${lib} PRIVATE ${Unwind_LIBRARY})
+            target_link_libraries(${lib} PRIVATE unwind)
         endif()
     endif()
 
