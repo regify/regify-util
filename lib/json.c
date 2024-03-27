@@ -534,6 +534,7 @@ RUAPI int32_t ruJsonWrite(ruJson rj, perm_chars* output) {
 
 //<editor-fold desc="getter">
 RUAPI ruJson ruJsonParse(trans_chars jsonStr, int32_t* status) {
+    ruClearError();
     if (!jsonStr) ruRetWithCode(status, RUE_PARAMETER_NOT_SET, NULL);
     ruVerbLogf("Parsing: %s", jsonStr);
     json* j = ruMalloc0(1, json);
@@ -543,8 +544,10 @@ RUAPI ruJson ruJsonParse(trans_chars jsonStr, int32_t* status) {
     /* parse error handling */
     if (j->node == NULL) {
         if (ruStrLen(errbuf)) {
+            ruSetError("parse_error: '%s' Content: '%s'", errbuf, jsonStr);
             ruWarnLogf("parse_error: '%s' Content: '%s'", errbuf, jsonStr);
         } else {
+            ruSetError("parse_error: 'unknown' Content: '%s'", jsonStr);
             ruWarnLogf("parse_error: 'unknown' Content: '%s'", jsonStr);
         }
         ruFree(j);

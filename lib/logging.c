@@ -96,7 +96,6 @@ static void freeLogger(ruLogSink* ls) {
     if (ls->clnBuf) ls->clnBuf = ruBufferFree(ls->clnBuf, false);
     if (ls->queue) ls->queue = ruListFree(ls->queue);
     ruFree(ls);
-    return;
 }
 
 static ptr logThread(ptr p) {
@@ -159,6 +158,11 @@ RUAPI void ruSetLogger(ruLogFunc logger, uint32_t logLevel, perm_ptr userData,
         ps->logger(ps->ctx, ps->level, NULL);
     }
     freeLogger(ps);
+}
+
+RUAPI void ruStopLogger(void) {
+    ruSetLogger(NULL, RU_LOG_NONE, NULL,
+                NULL, false);
 }
 
 RUAPI void ruStdErrorLogger(perm_ptr udata, uint32_t logLevel, trans_chars msg) {

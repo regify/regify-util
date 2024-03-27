@@ -106,6 +106,11 @@ RUAPI void ruSetLogger(ruLogFunc logger, uint32_t logLevel, perm_ptr userData,
                        ruCleaner cleaner, bool threaded);
 
 /**
+ * \brief Stop the current logger and flushes the queue before returning.
+ */
+RUAPI void ruStopLogger(void);
+
+/**
  * \brief Adjusts the current log level.
  * @param logLevel New log level to log at.
  */

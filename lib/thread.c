@@ -339,8 +339,8 @@ static void* threadRunner(void* context) {
         if (tc->name) ruThreadSetName(tc->name);
         ruDbgLogf("Starting thread 0x%p", tc);
         tc->exitRes = tc->start(tc->user);
-        tc->finished = true;
         ruDbgLogf("Finished thread 0x%p with 0x%p", tc, tc->exitRes);
+        tc->finished = true;
         pthread_exit(tc->exitRes);
     }
     ruFree(tc->name);
