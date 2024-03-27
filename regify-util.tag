@@ -2078,6 +2078,13 @@
     </member>
     <member kind="function">
       <type>RUAPI void</type>
+      <name>ruStopLogger</name>
+      <anchorfile>group__logging.html</anchorfile>
+      <anchor>gaa510d8fa7776ea1fc73389583b046d5e</anchor>
+      <arglist>(void)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI void</type>
       <name>ruSetLogLevel</name>
       <anchorfile>group__logging.html</anchorfile>
       <anchor>ga8bad1bbc647fe91103771eb1583c697a</anchor>

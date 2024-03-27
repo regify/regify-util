@@ -23,5 +23,6 @@ var group__logging =
     [ "ruGetLogLevel", "group__logging.html#ga55a8b3d268484f95bc91525110491606", null ],
     [ "ruSetLogger", "group__logging.html#ga389028e2a2f03e15f94a8ad238d1d2bb", null ],
     [ "ruSetLogLevel", "group__logging.html#ga8bad1bbc647fe91103771eb1583c697a", null ],
-    [ "ruStdErrorLogger", "group__logging.html#gad0253bb33120ff2f58ce14474a8ba8e6", null ]
+    [ "ruStdErrorLogger", "group__logging.html#gad0253bb33120ff2f58ce14474a8ba8e6", null ],
+    [ "ruStopLogger", "group__logging.html#gaa510d8fa7776ea1fc73389583b046d5e", null ]
 ];
