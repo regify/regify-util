@@ -22,30 +22,31 @@
 /**
  * \defgroup logging Logging Facility
  * \brief This section contains logging specific APIs.
+ *
  * Example:
  * ~~~~~{.c}
- *  #include <regify-util.h>
+ * #include <regify-util.h>
  *
- *  void testlog(trans_chars logPath, bool cleaning, bool threaded) {
- *      ruCleaner rc = NULL;
- *      ruSinkCtx sc = NULL;
+ * void testlog(trans_chars logPath, bool cleaning, bool threaded) {
+ *     ruCleaner rc = NULL;
+ *     ruSinkCtx sc = NULL;
  *
- *      if (cleaning) {
- *          rc = ruCleanNew(0);
- *          ruCleanAdd(rc, "testsecret", "^^^TEST_SECRET^^^");
- *      }
- *      if (ruStrEmpty(logfile)) {
- *          ruSetLogger(ruStdErrLogSink, RU_LOG_DBUG, NULL, rc, threaded);
- *      } else {
- *          sc = ruSinkCtxNew(logfile, NULL, NULL);
- *          ruSetLogger(ruFileLogSink, RU_LOG_DBUG, sc, rc, threaded);
- *      }
- *      ruInfoLog("starting with testsecret and cleaner");
- *      ruInfoLog("stopping logger");
- *      ruStopLogger();
- *      ruSinkCtxFree(sc);
- *      ruCleanFree(rc);
- *  }
+ *     if (cleaning) {
+ *         rc = ruCleanNew(0);
+ *         ruCleanAdd(rc, "testsecret", "^^^TEST_SECRET^^^");
+ *     }
+ *     if (ruStrEmpty(logfile)) {
+ *         ruSetLogger(ruStdErrLogSink, RU_LOG_DBUG, NULL, rc, threaded);
+ *     } else {
+ *         sc = ruSinkCtxNew(logfile, NULL, NULL);
+ *         ruSetLogger(ruFileLogSink, RU_LOG_DBUG, sc, rc, threaded);
+ *     }
+ *     ruInfoLog("starting with testsecret and cleaner");
+ *     ruInfoLog("stopping logger");
+ *     ruStopLogger();
+ *     ruSinkCtxFree(sc);
+ *     ruCleanFree(rc);
+ * }
  * ~~~~~
  * @{
  */
