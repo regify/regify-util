@@ -26,8 +26,15 @@ static perm_chars bAppendMode = "ab";
 // no inodes here
 #elif defined(ITS_OSX) || defined(ITS_IOS)
 typedef ino_t ru_inode;
+#elif defined(__EMSCRIPTEN__)
+typedef ino_t ru_inode;
+#else
+// linux android
+#ifdef __x86_64__
+typedef __ino64_t ru_inode;
 #else
 typedef __ino_t ru_inode;
+#endif
 #endif
 
 // <editor-fold desc="sink internals">

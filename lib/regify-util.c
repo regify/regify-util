@@ -63,6 +63,8 @@ void ruSetError(const char *format, ...) {
 RUAPI perm_chars ruGetOs(void) {
 #if defined (_WIN32)
     return "windows";
+#elif defined(__EMSCRIPTEN__)
+    return "wasm";
 #elif defined(__ANDROID__)
     return "android";
 #elif defined(__linux__)
