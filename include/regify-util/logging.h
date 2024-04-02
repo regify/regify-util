@@ -24,28 +24,28 @@
  * \brief This section contains logging specific APIs.
  * Example:
  * ~~~~~{.c}
-    #include <regify-util.h>
-
-    void testlog(trans_chars logPath, bool cleaning, bool threaded) {
-        ruCleaner rc = NULL;
-        ruSinkCtx sc = NULL;
-
-        if (cleaning) {
-            rc = ruCleanNew(0);
-            ruCleanAdd(rc, "testsecret", "^^^TEST_SECRET^^^");
-        }
-        if (ruStrEmpty(logfile)) {
-            ruSetLogger(ruStdErrLogSink, RU_LOG_DBUG, NULL, rc, threaded);
-        } else {
-            sc = ruSinkCtxNew(logfile, NULL, NULL);
-            ruSetLogger(ruFileLogSink, RU_LOG_DBUG, sc, rc, threaded);
-        }
-        ruInfoLog("starting with testsecret and cleaner");
-        ruInfoLog("stopping logger");
-        ruStopLogger();
-        ruSinkCtxFree(sc);
-        ruCleanFree(rc);
-    }
+ *  #include <regify-util.h>
+ *
+ *  void testlog(trans_chars logPath, bool cleaning, bool threaded) {
+ *      ruCleaner rc = NULL;
+ *      ruSinkCtx sc = NULL;
+ *
+ *      if (cleaning) {
+ *          rc = ruCleanNew(0);
+ *          ruCleanAdd(rc, "testsecret", "^^^TEST_SECRET^^^");
+ *      }
+ *      if (ruStrEmpty(logfile)) {
+ *          ruSetLogger(ruStdErrLogSink, RU_LOG_DBUG, NULL, rc, threaded);
+ *      } else {
+ *          sc = ruSinkCtxNew(logfile, NULL, NULL);
+ *          ruSetLogger(ruFileLogSink, RU_LOG_DBUG, sc, rc, threaded);
+ *      }
+ *      ruInfoLog("starting with testsecret and cleaner");
+ *      ruInfoLog("stopping logger");
+ *      ruStopLogger();
+ *      ruSinkCtxFree(sc);
+ *      ruCleanFree(rc);
+ *  }
  * ~~~~~
  * @{
  */
@@ -224,7 +224,7 @@ RUAPI bool ruDoesLog(uint32_t log_level);
  *
  * This function is really internal and used by the log macros.
  * @param log_level Log level of this message.
- * @param file The source file where this message originates from.
+ * @param filePath The source file where this message originates from.
  * @param func The function that created this log entry.
  * @param line The line where the log was created at.
  * @param format The format specifier for the remaining arguments.
@@ -238,7 +238,7 @@ RUAPI void ruDoLog(uint32_t log_level, trans_chars filePath, trans_chars func,
  *
  * This function is advanced and designed to be used by custom log macros.
  * @param log_level Log level of this message.
- * @param file The source file where this message originates from.
+ * @param filePath The source file where this message originates from.
  * @param func The function that created this log entry.
  * @param line The line where the log was created at.
  * @param format The format specifier for the remaining arguments.
@@ -250,7 +250,7 @@ RUAPI void ruDoLogV(uint32_t log_level, trans_chars filePath, trans_chars func,
 /**
  * Internal logging function used by the log macros.
  * @param log_level Log level of this message.
- * @param file The source file where this message originates from.
+ * @param filePath The source file where this message originates from.
  * @param func The function that created this log entry.
  * @param line The line where the log was created at.
  * @param format The format specifier for the remaining arguments.
