@@ -244,10 +244,10 @@ var NAVTREEINDEX0 =
 "group__listtype.html#gaa1190dec03f6b4f81f761f24bbf328e7":[0,9,1,11],
 "group__listtype.html#gaad4caee78361adbc01004aa115413747":[0,9,1,4],
 "group__logging.html":[0,10],
+"group__logging.html#ga09a127ed8c38df82ea0adcf59b566f04":[0,10,23],
+"group__logging.html#ga0a64dc52c40a404e03806238b56c14ba":[0,10,29],
 "group__logging.html#ga21164d698d4775724fd710a6bf6cfa15":[0,10,16],
 "group__logging.html#ga28a12b3d8bfbc6022ad920435b2cef72":[0,10,10],
 "group__logging.html#ga350ca5f040ec24dc02dd77155fbb61d0":[0,10,11],
-"group__logging.html#ga389028e2a2f03e15f94a8ad238d1d2bb":[0,10,21],
-"group__logging.html#ga3d3ffaf6bf4fa6d4c69329ad93f301b3":[0,10,9],
-"group__logging.html#ga4388ae060e29101e3458cc625b53f327":[0,10,5]
+"group__logging.html#ga389028e2a2f03e15f94a8ad238d1d2bb":[0,10,30]
 };

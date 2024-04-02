@@ -2062,12 +2062,54 @@
       <anchor>gadec0525119b0c06c58521398ef713355</anchor>
       <arglist>)(perm_ptr userData, uint32_t logLevel, trans_chars msg)</arglist>
     </member>
+    <member kind="typedef">
+      <type>void(*</type>
+      <name>ruCloseFunc</name>
+      <anchorfile>group__logging.html</anchorfile>
+      <anchor>ga77c55e2df2bfb7c125931cbe9e5f3381</anchor>
+      <arglist>)(perm_ptr userData)</arglist>
+    </member>
+    <member kind="typedef">
+      <type>ptr</type>
+      <name>ruSinkCtx</name>
+      <anchorfile>group__logging.html</anchorfile>
+      <anchor>gad8a1b0826a4300220564607a1c25ece9</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI ruSinkCtx</type>
+      <name>ruSinkCtxNew</name>
+      <anchorfile>group__logging.html</anchorfile>
+      <anchor>gae1af44f28c3a3acff3900991068d17f0</anchor>
+      <arglist>(trans_chars filePath, ruCloseFunc closeCb, perm_ptr closeCtx)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI int32_t</type>
+      <name>ruSinkCtxPath</name>
+      <anchorfile>group__logging.html</anchorfile>
+      <anchor>ga8fd2681d3fa2abcf0f1db599128d074f</anchor>
+      <arglist>(ruSinkCtx rsc, trans_chars filePath)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI ruSinkCtx</type>
+      <name>ruSinkCtxFree</name>
+      <anchorfile>group__logging.html</anchorfile>
+      <anchor>ga944f341c3cee3932f61389c50e90b94c</anchor>
+      <arglist>(ruSinkCtx rsc)</arglist>
+    </member>
     <member kind="function">
       <type>RUAPI void</type>
-      <name>ruStdErrorLogger</name>
+      <name>ruFileLogSink</name>
       <anchorfile>group__logging.html</anchorfile>
-      <anchor>gad0253bb33120ff2f58ce14474a8ba8e6</anchor>
-      <arglist>(perm_ptr userData, uint32_t logLevel, trans_chars msg)</arglist>
+      <anchor>ga54bf651c01ea4e30e95637b64d90a933</anchor>
+      <arglist>(perm_ptr rsc, uint32_t logLevel, trans_chars msg)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI void</type>
+      <name>ruStdErrLogSink</name>
+      <anchorfile>group__logging.html</anchorfile>
+      <anchor>gaff3e36d62b4aeecc54cfd10cf8e649fe</anchor>
+      <arglist>(perm_ptr udata, uint32_t logLevel, trans_chars msg)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI void</type>
@@ -2103,6 +2145,48 @@
       <anchorfile>group__logging.html</anchorfile>
       <anchor>gaccddd3017ad9c9fd2f1bf9865dcbf699</anchor>
       <arglist>(uint32_t log_level)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI void</type>
+      <name>ruDoLog</name>
+      <anchorfile>group__logging.html</anchorfile>
+      <anchor>gabd98a0c7b45bb134541f03fbf32adcca</anchor>
+      <arglist>(uint32_t log_level, trans_chars filePath, trans_chars func, int32_t line, trans_chars format,...)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI void</type>
+      <name>ruDoLogV</name>
+      <anchorfile>group__logging.html</anchorfile>
+      <anchor>ga09a127ed8c38df82ea0adcf59b566f04</anchor>
+      <arglist>(uint32_t log_level, trans_chars filePath, trans_chars func, int32_t line, trans_chars format, va_list args)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI alloc_chars</type>
+      <name>ruMakeLogMsgV</name>
+      <anchorfile>group__logging.html</anchorfile>
+      <anchor>ga68901146640b2e22a832ad4884fd04cd</anchor>
+      <arglist>(uint32_t log_level, trans_chars filePath, trans_chars func, int32_t line, trans_chars format, va_list args)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI void</type>
+      <name>ruRawLog</name>
+      <anchorfile>group__logging.html</anchorfile>
+      <anchor>ga0a64dc52c40a404e03806238b56c14ba</anchor>
+      <arglist>(uint32_t log_level, trans_chars msg)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI void</type>
+      <name>ruFlushLog</name>
+      <anchorfile>group__logging.html</anchorfile>
+      <anchor>ga6c875c4c7949052579432bbb24028921</anchor>
+      <arglist>(void)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI char *</type>
+      <name>ruMakeLogMsg</name>
+      <anchorfile>group__logging.html</anchorfile>
+      <anchor>gaba251eab71de5a652f71acdcd4281e8b</anchor>
+      <arglist>(uint32_t log_level, trans_chars file, trans_chars func, int32_t line, trans_chars format,...)</arglist>
     </member>
   </compound>
   <compound kind="group">

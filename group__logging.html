@@ -101,7 +101,7 @@ $(document).ready(function(){initNavTree('group__logging.html',''); initResizabl
 </div><!--header-->
 <div class="contents">
 
-<p>This section contains logging specific APIs.  
+<p>This section contains logging specific APIs. Example:  
 <a href="#details">More...</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
@@ -166,17 +166,34 @@ Typedefs</h2></td></tr>
 <tr class="memitem:gadec0525119b0c06c58521398ef713355"><td class="memItemLeft" align="right" valign="top">typedef void(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__logging.html#gadec0525119b0c06c58521398ef713355">ruLogFunc</a>) (<a class="el" href="group__misc.html#ga517aac830d9ce5c6ab7deec46adf54d5">perm_ptr</a> userData, uint32_t logLevel, <a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> msg)</td></tr>
 <tr class="memdesc:gadec0525119b0c06c58521398ef713355"><td class="mdescLeft">&#160;</td><td class="mdescRight">The type of function to pass to <a class="el" href="group__logging.html#ga389028e2a2f03e15f94a8ad238d1d2bb">ruSetLogger</a> in order to hook up logging.  <a href="group__logging.html#gadec0525119b0c06c58521398ef713355">More...</a><br /></td></tr>
 <tr class="separator:gadec0525119b0c06c58521398ef713355"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga77c55e2df2bfb7c125931cbe9e5f3381"><td class="memItemLeft" align="right" valign="top">typedef void(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__logging.html#ga77c55e2df2bfb7c125931cbe9e5f3381">ruCloseFunc</a>) (<a class="el" href="group__misc.html#ga517aac830d9ce5c6ab7deec46adf54d5">perm_ptr</a> userData)</td></tr>
+<tr class="memdesc:ga77c55e2df2bfb7c125931cbe9e5f3381"><td class="mdescLeft">&#160;</td><td class="mdescRight">The type of function to pass to <a class="el" href="group__logging.html#gae1af44f28c3a3acff3900991068d17f0">ruSinkCtxNew</a> which will be called when <a class="el" href="group__logging.html#ga54bf651c01ea4e30e95637b64d90a933">ruFileLogSink</a> has closed its logfile.  <a href="group__logging.html#ga77c55e2df2bfb7c125931cbe9e5f3381">More...</a><br /></td></tr>
+<tr class="separator:ga77c55e2df2bfb7c125931cbe9e5f3381"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gad8a1b0826a4300220564607a1c25ece9"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__logging.html#gad8a1b0826a4300220564607a1c25ece9">ruSinkCtx</a></td></tr>
+<tr class="separator:gad8a1b0826a4300220564607a1c25ece9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:gad0253bb33120ff2f58ce14474a8ba8e6"><td class="memItemLeft" align="right" valign="top">RUAPI void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__logging.html#gad0253bb33120ff2f58ce14474a8ba8e6">ruStdErrorLogger</a> (<a class="el" href="group__misc.html#ga517aac830d9ce5c6ab7deec46adf54d5">perm_ptr</a> userData, uint32_t logLevel, <a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> msg)</td></tr>
-<tr class="memdesc:gad0253bb33120ff2f58ce14474a8ba8e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">A convenience logging implementation that logs to stderr.  <a href="group__logging.html#gad0253bb33120ff2f58ce14474a8ba8e6">More...</a><br /></td></tr>
-<tr class="separator:gad0253bb33120ff2f58ce14474a8ba8e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gae1af44f28c3a3acff3900991068d17f0"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__logging.html#gad8a1b0826a4300220564607a1c25ece9">ruSinkCtx</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__logging.html#gae1af44f28c3a3acff3900991068d17f0">ruSinkCtxNew</a> (<a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> filePath, <a class="el" href="group__logging.html#ga77c55e2df2bfb7c125931cbe9e5f3381">ruCloseFunc</a> closeCb, <a class="el" href="group__misc.html#ga517aac830d9ce5c6ab7deec46adf54d5">perm_ptr</a> closeCtx)</td></tr>
+<tr class="memdesc:gae1af44f28c3a3acff3900991068d17f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a new context to use with <a class="el" href="group__logging.html#ga54bf651c01ea4e30e95637b64d90a933">ruFileLogSink</a>.  <a href="group__logging.html#gae1af44f28c3a3acff3900991068d17f0">More...</a><br /></td></tr>
+<tr class="separator:gae1af44f28c3a3acff3900991068d17f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga8fd2681d3fa2abcf0f1db599128d074f"><td class="memItemLeft" align="right" valign="top">RUAPI int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__logging.html#ga8fd2681d3fa2abcf0f1db599128d074f">ruSinkCtxPath</a> (<a class="el" href="group__logging.html#gad8a1b0826a4300220564607a1c25ece9">ruSinkCtx</a> rsc, <a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> filePath)</td></tr>
+<tr class="memdesc:ga8fd2681d3fa2abcf0f1db599128d074f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allows changing the file path of the given <a class="el" href="group__logging.html#gad8a1b0826a4300220564607a1c25ece9">ruSinkCtx</a>. This will have immediate effect on logs sent to <a class="el" href="group__logging.html#ga54bf651c01ea4e30e95637b64d90a933">ruFileLogSink</a>.  <a href="group__logging.html#ga8fd2681d3fa2abcf0f1db599128d074f">More...</a><br /></td></tr>
+<tr class="separator:ga8fd2681d3fa2abcf0f1db599128d074f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga944f341c3cee3932f61389c50e90b94c"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__logging.html#gad8a1b0826a4300220564607a1c25ece9">ruSinkCtx</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__logging.html#ga944f341c3cee3932f61389c50e90b94c">ruSinkCtxFree</a> (<a class="el" href="group__logging.html#gad8a1b0826a4300220564607a1c25ece9">ruSinkCtx</a> rsc)</td></tr>
+<tr class="memdesc:ga944f341c3cee3932f61389c50e90b94c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Frees the given <a class="el" href="group__logging.html#gad8a1b0826a4300220564607a1c25ece9">ruSinkCtx</a> after <a class="el" href="group__logging.html#gaa510d8fa7776ea1fc73389583b046d5e">ruStopLogger</a> has been called. This must not be called when the context is still in use.  <a href="group__logging.html#ga944f341c3cee3932f61389c50e90b94c">More...</a><br /></td></tr>
+<tr class="separator:ga944f341c3cee3932f61389c50e90b94c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga54bf651c01ea4e30e95637b64d90a933"><td class="memItemLeft" align="right" valign="top">RUAPI void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__logging.html#ga54bf651c01ea4e30e95637b64d90a933">ruFileLogSink</a> (<a class="el" href="group__misc.html#ga517aac830d9ce5c6ab7deec46adf54d5">perm_ptr</a> rsc, uint32_t logLevel, <a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> msg)</td></tr>
+<tr class="memdesc:ga54bf651c01ea4e30e95637b64d90a933"><td class="mdescLeft">&#160;</td><td class="mdescRight">A log sink that logs into the filepath set in the given <a class="el" href="group__logging.html#gad8a1b0826a4300220564607a1c25ece9">ruSinkCtx</a>.  <a href="group__logging.html#ga54bf651c01ea4e30e95637b64d90a933">More...</a><br /></td></tr>
+<tr class="separator:ga54bf651c01ea4e30e95637b64d90a933"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaff3e36d62b4aeecc54cfd10cf8e649fe"><td class="memItemLeft" align="right" valign="top">RUAPI void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__logging.html#gaff3e36d62b4aeecc54cfd10cf8e649fe">ruStdErrLogSink</a> (<a class="el" href="group__misc.html#ga517aac830d9ce5c6ab7deec46adf54d5">perm_ptr</a> udata, uint32_t logLevel, <a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> msg)</td></tr>
+<tr class="memdesc:gaff3e36d62b4aeecc54cfd10cf8e649fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">A convenience logging implementation that logs to stderr.  <a href="group__logging.html#gaff3e36d62b4aeecc54cfd10cf8e649fe">More...</a><br /></td></tr>
+<tr class="separator:gaff3e36d62b4aeecc54cfd10cf8e649fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga389028e2a2f03e15f94a8ad238d1d2bb"><td class="memItemLeft" align="right" valign="top">RUAPI void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__logging.html#ga389028e2a2f03e15f94a8ad238d1d2bb">ruSetLogger</a> (<a class="el" href="group__logging.html#gadec0525119b0c06c58521398ef713355">ruLogFunc</a> logger, uint32_t logLevel, <a class="el" href="group__misc.html#ga517aac830d9ce5c6ab7deec46adf54d5">perm_ptr</a> userData, <a class="el" href="group__cleaner.html#ga2ef14c6aa2f1434ccc78e1df73d5a31d">ruCleaner</a> cleaner, bool threaded)</td></tr>
 <tr class="memdesc:ga389028e2a2f03e15f94a8ad238d1d2bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the global logging function for this process.  <a href="group__logging.html#ga389028e2a2f03e15f94a8ad238d1d2bb">More...</a><br /></td></tr>
 <tr class="separator:ga389028e2a2f03e15f94a8ad238d1d2bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gaa510d8fa7776ea1fc73389583b046d5e"><td class="memItemLeft" align="right" valign="top">RUAPI void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__logging.html#gaa510d8fa7776ea1fc73389583b046d5e">ruStopLogger</a> (void)</td></tr>
-<tr class="memdesc:gaa510d8fa7776ea1fc73389583b046d5e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stop the current logger and flushes the queue before returning.  <a href="group__logging.html#gaa510d8fa7776ea1fc73389583b046d5e">More...</a><br /></td></tr>
+<tr class="memdesc:gaa510d8fa7776ea1fc73389583b046d5e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stop the current logger and flush the queue before returning.  <a href="group__logging.html#gaa510d8fa7776ea1fc73389583b046d5e">More...</a><br /></td></tr>
 <tr class="separator:gaa510d8fa7776ea1fc73389583b046d5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga8bad1bbc647fe91103771eb1583c697a"><td class="memItemLeft" align="right" valign="top">RUAPI void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__logging.html#ga8bad1bbc647fe91103771eb1583c697a">ruSetLogLevel</a> (uint32_t logLevel)</td></tr>
 <tr class="memdesc:ga8bad1bbc647fe91103771eb1583c697a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adjusts the current log level.  <a href="group__logging.html#ga8bad1bbc647fe91103771eb1583c697a">More...</a><br /></td></tr>
@@ -187,10 +204,63 @@ Functions</h2></td></tr>
 <tr class="memitem:gaccddd3017ad9c9fd2f1bf9865dcbf699"><td class="memItemLeft" align="right" valign="top">RUAPI bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__logging.html#gaccddd3017ad9c9fd2f1bf9865dcbf699">ruDoesLog</a> (uint32_t log_level)</td></tr>
 <tr class="memdesc:gaccddd3017ad9c9fd2f1bf9865dcbf699"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether the given log level should log.  <a href="group__logging.html#gaccddd3017ad9c9fd2f1bf9865dcbf699">More...</a><br /></td></tr>
 <tr class="separator:gaccddd3017ad9c9fd2f1bf9865dcbf699"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gabd98a0c7b45bb134541f03fbf32adcca"><td class="memItemLeft" align="right" valign="top">RUAPI void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__logging.html#gabd98a0c7b45bb134541f03fbf32adcca">ruDoLog</a> (uint32_t log_level, <a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> filePath, <a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> func, int32_t line, <a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> format,...)</td></tr>
+<tr class="memdesc:gabd98a0c7b45bb134541f03fbf32adcca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Logs the given parameters if logging is set.  <a href="group__logging.html#gabd98a0c7b45bb134541f03fbf32adcca">More...</a><br /></td></tr>
+<tr class="separator:gabd98a0c7b45bb134541f03fbf32adcca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga09a127ed8c38df82ea0adcf59b566f04"><td class="memItemLeft" align="right" valign="top">RUAPI void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__logging.html#ga09a127ed8c38df82ea0adcf59b566f04">ruDoLogV</a> (uint32_t log_level, <a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> filePath, <a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> func, int32_t line, <a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> format, va_list args)</td></tr>
+<tr class="memdesc:ga09a127ed8c38df82ea0adcf59b566f04"><td class="mdescLeft">&#160;</td><td class="mdescRight">Logs the given parameters if logging is set.  <a href="group__logging.html#ga09a127ed8c38df82ea0adcf59b566f04">More...</a><br /></td></tr>
+<tr class="separator:ga09a127ed8c38df82ea0adcf59b566f04"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga68901146640b2e22a832ad4884fd04cd"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__misc.html#ga972d4f4f858964bb2381d186ea96d88d">alloc_chars</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__logging.html#ga68901146640b2e22a832ad4884fd04cd">ruMakeLogMsgV</a> (uint32_t log_level, <a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> filePath, <a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> func, int32_t line, <a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> format, va_list args)</td></tr>
+<tr class="separator:ga68901146640b2e22a832ad4884fd04cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga0a64dc52c40a404e03806238b56c14ba"><td class="memItemLeft" align="right" valign="top">RUAPI void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__logging.html#ga0a64dc52c40a404e03806238b56c14ba">ruRawLog</a> (uint32_t log_level, <a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> msg)</td></tr>
+<tr class="memdesc:ga0a64dc52c40a404e03806238b56c14ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sends the given message as is to the current log sink.  <a href="group__logging.html#ga0a64dc52c40a404e03806238b56c14ba">More...</a><br /></td></tr>
+<tr class="separator:ga0a64dc52c40a404e03806238b56c14ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga6c875c4c7949052579432bbb24028921"><td class="memItemLeft" align="right" valign="top">RUAPI void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__logging.html#ga6c875c4c7949052579432bbb24028921">ruFlushLog</a> (void)</td></tr>
+<tr class="memdesc:ga6c875c4c7949052579432bbb24028921"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sends a NULL message to the current log sink, usually causing it to flush or close the log file.  <a href="group__logging.html#ga6c875c4c7949052579432bbb24028921">More...</a><br /></td></tr>
+<tr class="separator:ga6c875c4c7949052579432bbb24028921"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaba251eab71de5a652f71acdcd4281e8b"><td class="memItemLeft" align="right" valign="top">RUAPI char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__logging.html#gaba251eab71de5a652f71acdcd4281e8b">ruMakeLogMsg</a> (uint32_t log_level, <a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> file, <a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> func, int32_t line, <a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> format,...)</td></tr>
+<tr class="separator:gaba251eab71de5a652f71acdcd4281e8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<p>This section contains logging specific APIs. </p>
-<h2 class="groupheader">Macro Definition Documentation</h2>
+<p>This section contains logging specific APIs. Example: </p>
+<div class="fragment"><div class="line"><span class="preprocessor">#include &lt;regify-util.h&gt;</span></div>
+<div class="line"> </div>
+<div class="line"><span class="keywordtype">void</span> testlog(<a class="code" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> logPath, <span class="keywordtype">bool</span> cleaning, <span class="keywordtype">bool</span> threaded) {</div>
+<div class="line">    <a class="code" href="group__cleaner.html#ga2ef14c6aa2f1434ccc78e1df73d5a31d">ruCleaner</a> rc = NULL;</div>
+<div class="line">    <a class="code" href="group__logging.html#gad8a1b0826a4300220564607a1c25ece9">ruSinkCtx</a> sc = NULL;</div>
+<div class="line"> </div>
+<div class="line">    <span class="keywordflow">if</span> (cleaning) {</div>
+<div class="line">        rc = <a class="code" href="group__cleaner.html#gae1f001a43bf9b80bbebc76855815fc68">ruCleanNew</a>(0);</div>
+<div class="line">        <a class="code" href="group__cleaner.html#ga10601de10e51a7ce8cb59044be5489fa">ruCleanAdd</a>(rc, <span class="stringliteral">&quot;testsecret&quot;</span>, <span class="stringliteral">&quot;^^^TEST_SECRET^^^&quot;</span>);</div>
+<div class="line">    }</div>
+<div class="line">    <span class="keywordflow">if</span> (<a class="code" href="group__string.html#ga5df8af06cf764fc696b3bfc0efc3b39c">ruStrEmpty</a>(logfile)) {</div>
+<div class="line">        <a class="code" href="group__logging.html#ga389028e2a2f03e15f94a8ad238d1d2bb">ruSetLogger</a>(<a class="code" href="group__logging.html#gaff3e36d62b4aeecc54cfd10cf8e649fe">ruStdErrLogSink</a>, <a class="code" href="group__logging.html#ga87450aef2aa1444e5f86301c28d0907d">RU_LOG_DBUG</a>, NULL, rc, threaded);</div>
+<div class="line">    } <span class="keywordflow">else</span> {</div>
+<div class="line">        sc = <a class="code" href="group__logging.html#gae1af44f28c3a3acff3900991068d17f0">ruSinkCtxNew</a>(logfile, NULL, NULL);</div>
+<div class="line">        <a class="code" href="group__logging.html#ga389028e2a2f03e15f94a8ad238d1d2bb">ruSetLogger</a>(<a class="code" href="group__logging.html#ga54bf651c01ea4e30e95637b64d90a933">ruFileLogSink</a>, <a class="code" href="group__logging.html#ga87450aef2aa1444e5f86301c28d0907d">RU_LOG_DBUG</a>, sc, rc, threaded);</div>
+<div class="line">    }</div>
+<div class="line">    <a class="code" href="group__logging.html#gaf9ca44fd51225d8a837745dda302341f">ruInfoLog</a>(<span class="stringliteral">&quot;starting with testsecret and cleaner&quot;</span>);</div>
+<div class="line">    <a class="code" href="group__logging.html#gaf9ca44fd51225d8a837745dda302341f">ruInfoLog</a>(<span class="stringliteral">&quot;stopping logger&quot;</span>);</div>
+<div class="line">    <a class="code" href="group__logging.html#gaa510d8fa7776ea1fc73389583b046d5e">ruStopLogger</a>();</div>
+<div class="line">    <a class="code" href="group__logging.html#ga944f341c3cee3932f61389c50e90b94c">ruSinkCtxFree</a>(sc);</div>
+<div class="line">    <a class="code" href="group__cleaner.html#gab618d626b1824ba7fd21ac61c5132902">ruCleanFree</a>(rc);</div>
+<div class="line">}</div>
+<div class="ttc" id="agroup__cleaner_html_ga10601de10e51a7ce8cb59044be5489fa"><div class="ttname"><a href="group__cleaner.html#ga10601de10e51a7ce8cb59044be5489fa">ruCleanAdd</a></div><div class="ttdeci">RUAPI int32_t ruCleanAdd(ruCleaner rc, trans_chars instr, trans_chars substitute)</div></div>
+<div class="ttc" id="agroup__cleaner_html_ga2ef14c6aa2f1434ccc78e1df73d5a31d"><div class="ttname"><a href="group__cleaner.html#ga2ef14c6aa2f1434ccc78e1df73d5a31d">ruCleaner</a></div><div class="ttdeci">void * ruCleaner</div><div class="ttdef"><b>Definition:</b> regify-util.h:685</div></div>
+<div class="ttc" id="agroup__cleaner_html_gab618d626b1824ba7fd21ac61c5132902"><div class="ttname"><a href="group__cleaner.html#gab618d626b1824ba7fd21ac61c5132902">ruCleanFree</a></div><div class="ttdeci">RUAPI ruCleaner ruCleanFree(ruCleaner rc)</div></div>
+<div class="ttc" id="agroup__cleaner_html_gae1f001a43bf9b80bbebc76855815fc68"><div class="ttname"><a href="group__cleaner.html#gae1f001a43bf9b80bbebc76855815fc68">ruCleanNew</a></div><div class="ttdeci">RUAPI ruCleaner ruCleanNew(rusize chunkSize)</div><div class="ttdoc">Creates a new ruCleaner object. To be freed with ruCleanFree.</div></div>
+<div class="ttc" id="agroup__logging_html_ga389028e2a2f03e15f94a8ad238d1d2bb"><div class="ttname"><a href="group__logging.html#ga389028e2a2f03e15f94a8ad238d1d2bb">ruSetLogger</a></div><div class="ttdeci">RUAPI void ruSetLogger(ruLogFunc logger, uint32_t logLevel, perm_ptr userData, ruCleaner cleaner, bool threaded)</div><div class="ttdoc">Sets the global logging function for this process.</div></div>
+<div class="ttc" id="agroup__logging_html_ga54bf651c01ea4e30e95637b64d90a933"><div class="ttname"><a href="group__logging.html#ga54bf651c01ea4e30e95637b64d90a933">ruFileLogSink</a></div><div class="ttdeci">RUAPI void ruFileLogSink(perm_ptr rsc, uint32_t logLevel, trans_chars msg)</div><div class="ttdoc">A log sink that logs into the filepath set in the given ruSinkCtx.</div></div>
+<div class="ttc" id="agroup__logging_html_ga87450aef2aa1444e5f86301c28d0907d"><div class="ttname"><a href="group__logging.html#ga87450aef2aa1444e5f86301c28d0907d">RU_LOG_DBUG</a></div><div class="ttdeci">#define RU_LOG_DBUG</div><div class="ttdoc">This is a debugging logging level used for debugging things that are normally assumed to be working....</div><div class="ttdef"><b>Definition:</b> logging.h:93</div></div>
+<div class="ttc" id="agroup__logging_html_ga944f341c3cee3932f61389c50e90b94c"><div class="ttname"><a href="group__logging.html#ga944f341c3cee3932f61389c50e90b94c">ruSinkCtxFree</a></div><div class="ttdeci">RUAPI ruSinkCtx ruSinkCtxFree(ruSinkCtx rsc)</div><div class="ttdoc">Frees the given ruSinkCtx after ruStopLogger has been called. This must not be called when the contex...</div></div>
+<div class="ttc" id="agroup__logging_html_gaa510d8fa7776ea1fc73389583b046d5e"><div class="ttname"><a href="group__logging.html#gaa510d8fa7776ea1fc73389583b046d5e">ruStopLogger</a></div><div class="ttdeci">RUAPI void ruStopLogger(void)</div><div class="ttdoc">Stop the current logger and flush the queue before returning.</div></div>
+<div class="ttc" id="agroup__logging_html_gad8a1b0826a4300220564607a1c25ece9"><div class="ttname"><a href="group__logging.html#gad8a1b0826a4300220564607a1c25ece9">ruSinkCtx</a></div><div class="ttdeci">ptr ruSinkCtx</div><div class="ttdef"><b>Definition:</b> logging.h:121</div></div>
+<div class="ttc" id="agroup__logging_html_gae1af44f28c3a3acff3900991068d17f0"><div class="ttname"><a href="group__logging.html#gae1af44f28c3a3acff3900991068d17f0">ruSinkCtxNew</a></div><div class="ttdeci">RUAPI ruSinkCtx ruSinkCtxNew(trans_chars filePath, ruCloseFunc closeCb, perm_ptr closeCtx)</div><div class="ttdoc">Creates a new context to use with ruFileLogSink.</div></div>
+<div class="ttc" id="agroup__logging_html_gaf9ca44fd51225d8a837745dda302341f"><div class="ttname"><a href="group__logging.html#gaf9ca44fd51225d8a837745dda302341f">ruInfoLog</a></div><div class="ttdeci">#define ruInfoLog(msg)</div><div class="ttdoc">Emits a INFO level log message.</div><div class="ttdef"><b>Definition:</b> logging.h:334</div></div>
+<div class="ttc" id="agroup__logging_html_gaff3e36d62b4aeecc54cfd10cf8e649fe"><div class="ttname"><a href="group__logging.html#gaff3e36d62b4aeecc54cfd10cf8e649fe">ruStdErrLogSink</a></div><div class="ttdeci">RUAPI void ruStdErrLogSink(perm_ptr udata, uint32_t logLevel, trans_chars msg)</div><div class="ttdoc">A convenience logging implementation that logs to stderr.</div></div>
+<div class="ttc" id="agroup__misc_html_ga5a4bcdee6a3cc6c7ed75da5bb77d49bc"><div class="ttname"><a href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a></div><div class="ttdeci">const char * trans_chars</div><div class="ttdoc">A transient NULL terminated string pointer.</div><div class="ttdef"><b>Definition:</b> regify-util.h:186</div></div>
+<div class="ttc" id="agroup__string_html_ga5df8af06cf764fc696b3bfc0efc3b39c"><div class="ttname"><a href="group__string.html#ga5df8af06cf764fc696b3bfc0efc3b39c">ruStrEmpty</a></div><div class="ttdeci">RUAPI bool ruStrEmpty(trans_chars str)</div><div class="ttdoc">Checks whether given string has any content other than whitespace.</div></div>
+</div><!-- fragment --> <h2 class="groupheader">Macro Definition Documentation</h2>
 <a id="ga5ce14b97da761ebb505b022d7b777600"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ga5ce14b97da761ebb505b022d7b777600">&#9670;&nbsp;</a></span>RU_LOG_CRIT</h2>
 
@@ -443,7 +513,7 @@ Functions</h2></td></tr>
 <div class="line">        (uint8_t)*((start)+4), (uint8_t)*((start)+5), (uint8_t)*((start)+6), (uint8_t)*((start)+7), \</div>
 <div class="line">        (uint8_t)*((start)+8), (uint8_t)*((start)+9), (uint8_t)*((start)+10), (uint8_t)*((start)+11), \</div>
 <div class="line">        (uint8_t)*((start)+12), (uint8_t)*((start)+13), (uint8_t)*((start)+14), (uint8_t)*((start)+15))</div>
-<div class="ttc" id="agroup__logging_html_ga3d3ffaf6bf4fa6d4c69329ad93f301b3"><div class="ttname"><a href="group__logging.html#ga3d3ffaf6bf4fa6d4c69329ad93f301b3">ruDbgLogf</a></div><div class="ttdeci">#define ruDbgLogf(fmt,...)</div><div class="ttdoc">Emits a DBUG level log message.</div><div class="ttdef"><b>Definition:</b> logging.h:274</div></div>
+<div class="ttc" id="agroup__logging_html_ga3d3ffaf6bf4fa6d4c69329ad93f301b3"><div class="ttname"><a href="group__logging.html#ga3d3ffaf6bf4fa6d4c69329ad93f301b3">ruDbgLogf</a></div><div class="ttdeci">#define ruDbgLogf(fmt,...)</div><div class="ttdoc">Emits a DBUG level log message.</div><div class="ttdef"><b>Definition:</b> logging.h:367</div></div>
 </div><!-- fragment -->
 <p>Debug logs the 16 bytes following start preceded by given message. </p>
 <dl class="params"><dt>Parameters</dt><dd>
@@ -686,6 +756,28 @@ Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Typedef Documentation</h2>
+<a id="ga77c55e2df2bfb7c125931cbe9e5f3381"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga77c55e2df2bfb7c125931cbe9e5f3381">&#9670;&nbsp;</a></span>ruCloseFunc</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef void(* ruCloseFunc) (<a class="el" href="group__misc.html#ga517aac830d9ce5c6ab7deec46adf54d5">perm_ptr</a> userData)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The type of function to pass to <a class="el" href="group__logging.html#gae1af44f28c3a3acff3900991068d17f0">ruSinkCtxNew</a> which will be called when <a class="el" href="group__logging.html#ga54bf651c01ea4e30e95637b64d90a933">ruFileLogSink</a> has closed its logfile. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">userData</td><td>The closeCtx reference that was passed to <a class="el" href="group__logging.html#gae1af44f28c3a3acff3900991068d17f0">ruSinkCtxNew</a>. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="gadec0525119b0c06c58521398ef713355"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#gadec0525119b0c06c58521398ef713355">&#9670;&nbsp;</a></span>ruLogFunc</h2>
 
@@ -699,15 +791,30 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>The type of function to pass to <a class="el" href="group__logging.html#ga389028e2a2f03e15f94a8ad238d1d2bb">ruSetLogger</a> in order to hook up logging. </p>
+<p>When this function receives NULL for msg, it means that this may be the last log call this function will receive in the current context. This is intended to finalize whatever resources it may have, or simply to flush data.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">userData</td><td>The userData reference that was passed to <a class="el" href="group__logging.html#ga389028e2a2f03e15f94a8ad238d1d2bb">ruSetLogger</a>. </td></tr>
     <tr><td class="paramname">logLevel</td><td>Log level pertaining to this message. Log filtering has been done at this point, and this is to facilitate further log level based processing decisions. </td></tr>
-    <tr><td class="paramname">msg</td><td>The message to log.</td></tr>
+    <tr><td class="paramname">msg</td><td>The message to log, or NULL for flushing or closing. </td></tr>
   </table>
   </dd>
 </dl>
-<p>When this function receives NULL for message, it means that this is the last log call this function will receive in the current context. This allows it to finalize whatever resources it may have. </p>
+
+</div>
+</div>
+<a id="gad8a1b0826a4300220564607a1c25ece9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gad8a1b0826a4300220564607a1c25ece9">&#9670;&nbsp;</a></span>ruSinkCtx</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef <a class="el" href="group__misc.html#gab4cf5759c3753c2308f163953ee154f0">ptr</a> <a class="el" href="group__logging.html#gad8a1b0826a4300220564607a1c25ece9">ruSinkCtx</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Opaque pointer to <a class="el" href="group__logging.html#ga54bf651c01ea4e30e95637b64d90a933">ruFileLogSink</a> object. </p>
 
 </div>
 </div>
@@ -739,6 +846,201 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="gabd98a0c7b45bb134541f03fbf32adcca"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gabd98a0c7b45bb134541f03fbf32adcca">&#9670;&nbsp;</a></span>ruDoLog()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI void ruDoLog </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>log_level</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a>&#160;</td>
+          <td class="paramname"><em>filePath</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a>&#160;</td>
+          <td class="paramname"><em>func</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int32_t&#160;</td>
+          <td class="paramname"><em>line</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a>&#160;</td>
+          <td class="paramname"><em>format</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Logs the given parameters if logging is set. </p>
+<p>This function is really internal and used by the log macros. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">log_level</td><td>Log level of this message. </td></tr>
+    <tr><td class="paramname">file</td><td>The source file where this message originates from. </td></tr>
+    <tr><td class="paramname">func</td><td>The function that created this log entry. </td></tr>
+    <tr><td class="paramname">line</td><td>The line where the log was created at. </td></tr>
+    <tr><td class="paramname">format</td><td>The format specifier for the remaining arguments. </td></tr>
+    <tr><td class="paramname">...</td><td>The remaining arguments that make up the log message. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ga09a127ed8c38df82ea0adcf59b566f04"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga09a127ed8c38df82ea0adcf59b566f04">&#9670;&nbsp;</a></span>ruDoLogV()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI void ruDoLogV </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>log_level</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a>&#160;</td>
+          <td class="paramname"><em>filePath</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a>&#160;</td>
+          <td class="paramname"><em>func</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int32_t&#160;</td>
+          <td class="paramname"><em>line</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a>&#160;</td>
+          <td class="paramname"><em>format</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">va_list&#160;</td>
+          <td class="paramname"><em>args</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Logs the given parameters if logging is set. </p>
+<p>This function is advanced and designed to be used by custom log macros. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">log_level</td><td>Log level of this message. </td></tr>
+    <tr><td class="paramname">file</td><td>The source file where this message originates from. </td></tr>
+    <tr><td class="paramname">func</td><td>The function that created this log entry. </td></tr>
+    <tr><td class="paramname">line</td><td>The line where the log was created at. </td></tr>
+    <tr><td class="paramname">format</td><td>The format specifier for the remaining arguments. </td></tr>
+    <tr><td class="paramname">args</td><td>variable argument list </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ga54bf651c01ea4e30e95637b64d90a933"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga54bf651c01ea4e30e95637b64d90a933">&#9670;&nbsp;</a></span>ruFileLogSink()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI void ruFileLogSink </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga517aac830d9ce5c6ab7deec46adf54d5">perm_ptr</a>&#160;</td>
+          <td class="paramname"><em>rsc</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>logLevel</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a>&#160;</td>
+          <td class="paramname"><em>msg</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>A log sink that logs into the filepath set in the given <a class="el" href="group__logging.html#gad8a1b0826a4300220564607a1c25ece9">ruSinkCtx</a>. </p>
+<p>This sink checks its underlying file every 3 seconds to see whether it has moved or the <a class="el" href="group__logging.html#gad8a1b0826a4300220564607a1c25ece9">ruSinkCtx</a> filePath has changed. When it does, it closes its current file handle and reopens it to allow for logrotation to work. When it receives a NULL message, like through <a class="el" href="group__logging.html#ga6c875c4c7949052579432bbb24028921">ruFlushLog</a>, it closes its file. Through the use of <a class="el" href="group__logging.html#ga8fd2681d3fa2abcf0f1db599128d074f">ruSinkCtxPath</a>, output files can be changed on the fly. Every time it closes its log file, the <a class="el" href="group__logging.html#gad8a1b0826a4300220564607a1c25ece9">ruSinkCtx</a> closeCb is called.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">rsc</td><td>User data. Must be a <a class="el" href="group__logging.html#gad8a1b0826a4300220564607a1c25ece9">ruSinkCtx</a>. </td></tr>
+    <tr><td class="paramname">logLevel</td><td>Ignored log level pertaining to this message. </td></tr>
+    <tr><td class="paramname">msg</td><td>The message to log. NULL will cause it to close the log file. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ga6c875c4c7949052579432bbb24028921"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga6c875c4c7949052579432bbb24028921">&#9670;&nbsp;</a></span>ruFlushLog()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI void ruFlushLog </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sends a NULL message to the current log sink, usually causing it to flush or close the log file. </p>
+
+</div>
+</div>
 <a id="ga55a8b3d268484f95bc91525110491606"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ga55a8b3d268484f95bc91525110491606">&#9670;&nbsp;</a></span>ruGetLogLevel()</h2>
 
@@ -757,6 +1059,171 @@ Functions</h2></td></tr>
 
 <p>Returns the currently set log level. </p>
 <dl class="section return"><dt>Returns</dt><dd>The currently set log level. </dd></dl>
+
+</div>
+</div>
+<a id="gaba251eab71de5a652f71acdcd4281e8b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaba251eab71de5a652f71acdcd4281e8b">&#9670;&nbsp;</a></span>ruMakeLogMsg()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI char* ruMakeLogMsg </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>log_level</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a>&#160;</td>
+          <td class="paramname"><em>file</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a>&#160;</td>
+          <td class="paramname"><em>func</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int32_t&#160;</td>
+          <td class="paramname"><em>line</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a>&#160;</td>
+          <td class="paramname"><em>format</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Internal logging function used by the log macros. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">log_level</td><td>Log level of this message. </td></tr>
+    <tr><td class="paramname">file</td><td>The source file where this message originates from. </td></tr>
+    <tr><td class="paramname">func</td><td>The function that created this log entry. </td></tr>
+    <tr><td class="paramname">line</td><td>The line where the log was created at. </td></tr>
+    <tr><td class="paramname">format</td><td>The format specifier for the remaining arguments. </td></tr>
+    <tr><td class="paramname">...</td><td>The remaining arguments that make up the log message. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The allocated log message to be freed by the caller after usage. </dd></dl>
+
+</div>
+</div>
+<a id="ga68901146640b2e22a832ad4884fd04cd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga68901146640b2e22a832ad4884fd04cd">&#9670;&nbsp;</a></span>ruMakeLogMsgV()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI <a class="el" href="group__misc.html#ga972d4f4f858964bb2381d186ea96d88d">alloc_chars</a> ruMakeLogMsgV </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>log_level</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a>&#160;</td>
+          <td class="paramname"><em>filePath</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a>&#160;</td>
+          <td class="paramname"><em>func</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int32_t&#160;</td>
+          <td class="paramname"><em>line</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a>&#160;</td>
+          <td class="paramname"><em>format</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">va_list&#160;</td>
+          <td class="paramname"><em>args</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Internal logging function used by the log macros. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">log_level</td><td>Log level of this message. </td></tr>
+    <tr><td class="paramname">file</td><td>The source file where this message originates from. </td></tr>
+    <tr><td class="paramname">func</td><td>The function that created this log entry. </td></tr>
+    <tr><td class="paramname">line</td><td>The line where the log was created at. </td></tr>
+    <tr><td class="paramname">format</td><td>The format specifier for the remaining arguments. </td></tr>
+    <tr><td class="paramname">args</td><td>variable argument list </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The allocated log message to be freed by the caller after usage. </dd></dl>
+
+</div>
+</div>
+<a id="ga0a64dc52c40a404e03806238b56c14ba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga0a64dc52c40a404e03806238b56c14ba">&#9670;&nbsp;</a></span>ruRawLog()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI void ruRawLog </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>log_level</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a>&#160;</td>
+          <td class="paramname"><em>msg</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sends the given message as is to the current log sink. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">log_level</td><td>Log level of this message used solely for filtering. </td></tr>
+    <tr><td class="paramname">msg</td><td>string to be logged without modification </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -805,6 +1272,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Sets the global logging function for this process. </p>
+<p>When threaded is set, the log thread always follows up with one NULL message when there are no more messages to log. This is intended to facilitate log flushing. In the absense of the log thread this can also be accomplished by calling <a class="el" href="group__logging.html#ga6c875c4c7949052579432bbb24028921">ruFlushLog</a>. At the end <a class="el" href="group__logging.html#gaa510d8fa7776ea1fc73389583b046d5e">ruStopLogger</a> should be called to flush and close the log file.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">logger</td><td>Logging function that will be called with messages. </td></tr>
@@ -844,17 +1312,127 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="gad0253bb33120ff2f58ce14474a8ba8e6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gad0253bb33120ff2f58ce14474a8ba8e6">&#9670;&nbsp;</a></span>ruStdErrorLogger()</h2>
+<a id="ga944f341c3cee3932f61389c50e90b94c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga944f341c3cee3932f61389c50e90b94c">&#9670;&nbsp;</a></span>ruSinkCtxFree()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">RUAPI void ruStdErrorLogger </td>
+          <td class="memname">RUAPI <a class="el" href="group__logging.html#gad8a1b0826a4300220564607a1c25ece9">ruSinkCtx</a> ruSinkCtxFree </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__logging.html#gad8a1b0826a4300220564607a1c25ece9">ruSinkCtx</a>&#160;</td>
+          <td class="paramname"><em>rsc</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Frees the given <a class="el" href="group__logging.html#gad8a1b0826a4300220564607a1c25ece9">ruSinkCtx</a> after <a class="el" href="group__logging.html#gaa510d8fa7776ea1fc73389583b046d5e">ruStopLogger</a> has been called. This must not be called when the context is still in use. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">rsc</td><td><a class="el" href="group__logging.html#gad8a1b0826a4300220564607a1c25ece9">ruSinkCtx</a> to free. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>NULL </dd></dl>
+
+</div>
+</div>
+<a id="gae1af44f28c3a3acff3900991068d17f0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gae1af44f28c3a3acff3900991068d17f0">&#9670;&nbsp;</a></span>ruSinkCtxNew()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI <a class="el" href="group__logging.html#gad8a1b0826a4300220564607a1c25ece9">ruSinkCtx</a> ruSinkCtxNew </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a>&#160;</td>
+          <td class="paramname"><em>filePath</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__logging.html#ga77c55e2df2bfb7c125931cbe9e5f3381">ruCloseFunc</a>&#160;</td>
+          <td class="paramname"><em>closeCb</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga517aac830d9ce5c6ab7deec46adf54d5">perm_ptr</a>&#160;</td>
+          <td class="paramname"><em>closeCtx</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Creates a new context to use with <a class="el" href="group__logging.html#ga54bf651c01ea4e30e95637b64d90a933">ruFileLogSink</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">filePath</td><td>Path to where log file will be written. Directory must be writable. </td></tr>
+    <tr><td class="paramname">closeCb</td><td>Optional callback to run when file close has completed. </td></tr>
+    <tr><td class="paramname">closeCtx</td><td>Optional context which will be passed to closeCb </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>New <a class="el" href="group__logging.html#gad8a1b0826a4300220564607a1c25ece9">ruSinkCtx</a> to free with <a class="el" href="group__logging.html#ga944f341c3cee3932f61389c50e90b94c">ruSinkCtxFree</a>. </dd></dl>
+
+</div>
+</div>
+<a id="ga8fd2681d3fa2abcf0f1db599128d074f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga8fd2681d3fa2abcf0f1db599128d074f">&#9670;&nbsp;</a></span>ruSinkCtxPath()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI int32_t ruSinkCtxPath </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__logging.html#gad8a1b0826a4300220564607a1c25ece9">ruSinkCtx</a>&#160;</td>
+          <td class="paramname"><em>rsc</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a>&#160;</td>
+          <td class="paramname"><em>filePath</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Allows changing the file path of the given <a class="el" href="group__logging.html#gad8a1b0826a4300220564607a1c25ece9">ruSinkCtx</a>. This will have immediate effect on logs sent to <a class="el" href="group__logging.html#ga54bf651c01ea4e30e95637b64d90a933">ruFileLogSink</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">rsc</td><td><a class="el" href="group__logging.html#gad8a1b0826a4300220564607a1c25ece9">ruSinkCtx</a> to update. </td></tr>
+    <tr><td class="paramname">filePath</td><td>Path to new log file. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Status of the operation. </dd></dl>
+
+</div>
+</div>
+<a id="gaff3e36d62b4aeecc54cfd10cf8e649fe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaff3e36d62b4aeecc54cfd10cf8e649fe">&#9670;&nbsp;</a></span>ruStdErrLogSink()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI void ruStdErrLogSink </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="group__misc.html#ga517aac830d9ce5c6ab7deec46adf54d5">perm_ptr</a>&#160;</td>
-          <td class="paramname"><em>userData</em>, </td>
+          <td class="paramname"><em>udata</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -879,7 +1457,7 @@ Functions</h2></td></tr>
 <p>A convenience logging implementation that logs to stderr. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">userData</td><td>User data. This is ignored in this function. </td></tr>
+    <tr><td class="paramname">udata</td><td>User data. This is ignored in this function. </td></tr>
     <tr><td class="paramname">logLevel</td><td>Log level pertaining to this message. </td></tr>
     <tr><td class="paramname">msg</td><td>The message to log. </td></tr>
   </table>
@@ -904,7 +1482,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Stop the current logger and flushes the queue before returning. </p>
+<p>Stop the current logger and flush the queue before returning. </p>
 
 </div>
 </div>
@@ -913,7 +1491,7 @@ Functions</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Wed Mar 27 2024 10:35:20 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Tue Apr 2 2024 06:18:59 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>
