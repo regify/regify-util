@@ -21,6 +21,15 @@
  */
 #include "lib.h"
 
+#if defined(_WIN32)
+static perm_chars bAppendMode = "ab";
+// no inodes here
+#elif defined(ITS_OSX) || defined(ITS_IOS)
+typedef ino_t ru_inode;
+#else
+typedef __ino_t ru_inode;
+#endif
+
 // <editor-fold desc="sink internals">
 typedef struct {
     ru_int type;
@@ -29,10 +38,10 @@ typedef struct {
     perm_ptr closeCtx;
     sec_t checkTime;
     FILE* wh;
-#ifdef _WIN32
+#if defined(_WIN32)
     alloc_chars curPath;
 #else
-    __ino_t curNode;
+    ru_inode curNode;
 #endif
 } sinkCtx;
 
@@ -42,12 +51,10 @@ static void setCheckTime(sinkCtx* sc) {
     sc->checkTime = ruTimeSec() + 3;
 }
 
-#ifdef WIN32
-static perm_chars bAppendMode = "ab";
-#else
+#ifndef WIN32
 static perm_chars bAppendMode = "a";
 
-static __ino_t getInode(sinkCtx* sc) {
+static ru_inode getInode(sinkCtx* sc) {
     ruStat_t st;
     int32_t ret = ruStat(sc->filePath, &st);
     if (ret == RUE_OK) {
@@ -86,7 +93,7 @@ static bool fileGone(sinkCtx* sc) {
 #ifdef _WIN32
     return !ruStrEquals(sc->filePath, sc->curPath);
 #else
-    __ino_t curNode = getInode(sc);
+    ru_inode curNode = getInode(sc);
     return curNode != sc->curNode;
 #endif
 }
