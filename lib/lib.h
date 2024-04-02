@@ -178,6 +178,7 @@ void ruClearError(void);
 #define MagicTypeSpec       2312
 #define MagicRegex          2313
 #define MagicTrace          2314
+#define MagicSinkCtx        2315
 // cleaner.c #define MagicCleaner 2410
 
 /*

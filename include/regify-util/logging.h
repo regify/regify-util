@@ -22,6 +22,31 @@
 /**
  * \defgroup logging Logging Facility
  * \brief This section contains logging specific APIs.
+ * Example:
+ * ~~~~~{.c}
+    #include <regify-util.h>
+
+    void testlog(trans_chars logPath, bool cleaning, bool threaded) {
+        ruCleaner rc = NULL;
+        ruSinkCtx sc = NULL;
+
+        if (cleaning) {
+            rc = ruCleanNew(0);
+            ruCleanAdd(rc, "testsecret", "^^^TEST_SECRET^^^");
+        }
+        if (ruStrEmpty(logfile)) {
+            ruSetLogger(ruStdErrLogSink, RU_LOG_DBUG, NULL, rc, threaded);
+        } else {
+            sc = ruSinkCtxNew(logfile, NULL, NULL);
+            ruSetLogger(ruFileLogSink, RU_LOG_DBUG, sc, rc, threaded);
+        }
+        ruInfoLog("starting with testsecret and cleaner");
+        ruInfoLog("stopping logger");
+        ruStopLogger();
+        ruSinkCtxFree(sc);
+        ruCleanFree(rc);
+    }
+ * ~~~~~
  * @{
  */
 
@@ -71,29 +96,91 @@ extern "C" {
  * \brief The type of function to pass to \ref ruSetLogger in order to hook up
  * logging.
  *
+ * When this function receives NULL for msg, it means that this may be the
+ * last log call this function will receive in the current context. This is
+ * intended to finalize whatever resources it may have, or simply to flush data.
+ *
  * @param userData The userData reference that was passed to \ref ruSetLogger.
  * @param logLevel Log level pertaining to this message. Log filtering has been
  *                 done at this point, and this is to facilitate further log
  *                 level based processing decisions.
- * @param msg The message to log.
- *
- * When this function receives NULL for message, it means that this is the last
- * log call this function will receive in the current context. This allows it to
- * finalize whatever resources it may have.
+ * @param msg The message to log, or NULL for flushing or closing.
  */
 typedef void (*ruLogFunc) (perm_ptr userData, uint32_t logLevel, trans_chars msg);
 
+/**
+ * \brief The type of function to pass to \ref ruSinkCtxNew which will be called
+ * when \ref ruFileLogSink has closed its logfile.
+ * @param userData The closeCtx reference that was passed to \ref ruSinkCtxNew.
+ */
+typedef void (*ruCloseFunc) (perm_ptr userData);
+
+/**
+ * Opaque pointer to \ref ruFileLogSink object.
+ */
+typedef ptr ruSinkCtx;
+
+/**
+ * \brief Creates a new context to use with \ref ruFileLogSink
+ * @param filePath Path to where log file will be written. Directory must be
+ *                 writable.
+ * @param closeCb Optional callback to run when file close has completed.
+ * @param closeCtx Optional context which will be passed to closeCb
+ * @return New \ref ruSinkCtx to free with \ref ruSinkCtxFree.
+ */
+RUAPI ruSinkCtx ruSinkCtxNew(trans_chars filePath, ruCloseFunc closeCb,
+                             perm_ptr closeCtx);
+
+/**
+ * \brief Allows changing the file path of the given \ref ruSinkCtx.
+ * This will have immediate effect on logs sent to \ref ruFileLogSink
+ * @param rsc \ref ruSinkCtx to update.
+ * @param filePath Path to new log file.
+ * @return Status of the operation.
+ */
+RUAPI int32_t ruSinkCtxPath(ruSinkCtx rsc, trans_chars filePath);
+
+/**
+ * \brief Frees the given \ref ruSinkCtx after \ref ruStopLogger has been called.
+ * This must not be called when the context is still in use.
+ * @param rsc \ref ruSinkCtx to free.
+ * @return NULL
+ */
+RUAPI ruSinkCtx ruSinkCtxFree(ruSinkCtx rsc);
+
+/**
+ * \brief A log sink that logs into the filepath set in the given \ref ruSinkCtx
+ *
+ * This sink checks its underlying file every 3 seconds to see whether it has
+ * moved or the \ref ruSinkCtx filePath has changed. When it does, it closes its
+ * current file handle and reopens it to allow for logrotation to work.
+ * When it receives a NULL message, like through \ref ruFlushLog, it closes its file.
+ * Through the use of \ref ruSinkCtxPath, output files can be changed on the
+ * fly. Every time it closes its log file, the \ref ruSinkCtx closeCb is called.
+ *
+ * @param rsc User data. Must be a \ref ruSinkCtx.
+ * @param logLevel Ignored log level pertaining to this message.
+ * @param msg The message to log. NULL will cause it to close the log file.
+ */
+RUAPI void ruFileLogSink(perm_ptr rsc, uint32_t logLevel, trans_chars msg);
 
 /**
  * \brief A convenience logging implementation that logs to stderr
- * @param userData User data. This is ignored in this function.
+ * @param udata User data. This is ignored in this function.
  * @param logLevel Log level pertaining to this message.
  * @param msg The message to log.
  */
-RUAPI void ruStdErrorLogger(perm_ptr userData, uint32_t logLevel, trans_chars msg);
+RUAPI void ruStdErrLogSink(perm_ptr udata, uint32_t logLevel, trans_chars msg);
 
 /**
  * \brief Sets the global logging function for this process.
+ *
+ * When threaded is set, the log thread always follows up with one NULL message
+ * when there are no more messages to log. This is intended to facilitate log
+ * flushing. In the absense of the log thread this can also be accomplished by
+ * calling \ref ruFlushLog.
+ * At the end \ref ruStopLogger should be called to flush and close the log file.
+ *
  * @param logger Logging function that will be called with messages.
  * @param logLevel Loglevel to determine what gets logged.
  * @param userData Opaque custom user data that will be passed to the
@@ -106,7 +193,7 @@ RUAPI void ruSetLogger(ruLogFunc logger, uint32_t logLevel, perm_ptr userData,
                        ruCleaner cleaner, bool threaded);
 
 /**
- * \brief Stop the current logger and flushes the queue before returning.
+ * \brief Stop the current logger and flush the queue before returning.
  */
 RUAPI void ruStopLogger(void);
 
@@ -133,7 +220,6 @@ RUAPI uint32_t ruGetLogLevel(void);
 RUAPI bool ruDoesLog(uint32_t log_level);
 
 /**
- * \cond noworry Internal
  * \brief Logs the given parameters if logging is set.
  *
  * This function is really internal and used by the log macros.
@@ -176,11 +262,17 @@ RUAPI alloc_chars ruMakeLogMsgV(uint32_t log_level, trans_chars filePath,
                                 trans_chars format, va_list args);
 
 /**
- * Sends the given message as is to the current log sink.
+ * \brief Sends the given message as is to the current log sink.
  * @param log_level Log level of this message used solely for filtering.
  * @param msg string to be logged without modification
  */
 RUAPI void ruRawLog(uint32_t log_level, trans_chars msg);
+
+/**
+ * \brief Sends a NULL message to the current log sink, usually causing it to
+ * flush or close the log file.
+ */
+RUAPI void ruFlushLog(void);
 
 /**
  * Internal logging function used by the log macros.
@@ -196,6 +288,7 @@ RUAPI char* ruMakeLogMsg(uint32_t log_level, trans_chars file, trans_chars func,
                    int32_t line, trans_chars format, ...);
 
 /**
+ * \cond noworry Internal
  * Internal logging macro used by the public log macros.
  * @param lvl Log level of this message.
  * @param format The format specifier for the remaining arguments.

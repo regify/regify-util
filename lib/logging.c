@@ -21,6 +21,147 @@
  */
 #include "lib.h"
 
+// <editor-fold desc="sink internals">
+typedef struct {
+    ru_int type;
+    alloc_chars filePath;
+    ruCloseFunc closeCb;
+    perm_ptr closeCtx;
+    sec_t checkTime;
+    FILE* wh;
+#ifdef _WIN32
+    alloc_chars curPath;
+#else
+    __ino_t curNode;
+#endif
+} sinkCtx;
+
+ruMakeTypeGetter(sinkCtx, MagicSinkCtx)
+
+static void setCheckTime(sinkCtx* sc) {
+    sc->checkTime = ruTimeSec() + 3;
+}
+
+#ifdef WIN32
+static perm_chars bAppendMode = "ab";
+#else
+static perm_chars bAppendMode = "a";
+
+static __ino_t getInode(sinkCtx* sc) {
+    ruStat_t st;
+    int32_t ret = ruStat(sc->filePath, &st);
+    if (ret == RUE_OK) {
+        return st.st_ino;
+    }
+    return 0;
+}
+#endif
+
+static void fileOpen(sinkCtx* sc) {
+    int32_t ret;
+    sc->wh = ruFOpen(sc->filePath, bAppendMode, &ret);
+    if (ret != RUE_OK) return;
+    setCheckTime(sc);
+#ifdef _WIN32
+    ruReplace(sc->curPath, ruStrDup(sc->filePath));
+#else
+    sc->curNode = getInode(sc);
+#endif
+}
+
+static void fileClose(sinkCtx* sc) {
+    if (sc->wh) fclose(sc->wh);
+    sc->wh = NULL;
+    sc->checkTime = 0;
+#ifdef _WIN32
+    ruFree(sc->curPath);
+#else
+    sc->curNode = 0;
+#endif
+    if (sc->closeCb) sc->closeCb(sc->closeCtx);
+}
+
+static bool fileGone(sinkCtx* sc) {
+    setCheckTime(sc);
+#ifdef _WIN32
+    return !ruStrEquals(sc->filePath, sc->curPath);
+#else
+    __ino_t curNode = getInode(sc);
+    return curNode != sc->curNode;
+#endif
+}
+// </editor-fold>
+
+// <editor-fold desc="sink public">
+RUAPI ruSinkCtx ruSinkCtxNew(trans_chars filePath, ruCloseFunc closeCb,
+                             perm_ptr closeCtx) {
+    if (!filePath) return NULL;
+    sinkCtx* sc = ruMalloc0(1, sinkCtx);
+    sc->type = MagicSinkCtx;
+    sc->filePath = ruStrDup(filePath);
+    sc->closeCb = closeCb;
+    sc->closeCtx = closeCtx;
+    return sc;
+}
+
+RUAPI int32_t ruSinkCtxPath(ruSinkCtx rsc, trans_chars filePath) {
+    if (!filePath) return RUE_PARAMETER_NOT_SET;
+    int32_t ret;
+    sinkCtx* sc = sinkCtxGet(rsc, &ret);
+    if (ret != RUE_OK) return ret;
+    ruReplace(sc->filePath, ruStrDup(filePath));
+    return ret;
+}
+
+RUAPI ruSinkCtx ruSinkCtxFree(ruSinkCtx rsc) {
+    sinkCtx* sc = sinkCtxGet(rsc, NULL);
+    if (sc) {
+        sc->type = 0;
+        ruFree(sc->filePath);
+#ifdef _WIN32
+        ruFree(sc->curPath);
+#endif
+        memset(sc, 0, sizeof(sinkCtx));
+        ruFree(sc);
+    }
+    return NULL;
+}
+
+RUAPI void ruFileLogSink(perm_ptr rsc, uint32_t logLevel, trans_chars msg) {
+    sinkCtx* sc = sinkCtxGet((ptr)rsc, NULL);
+    if (!sc) {
+        if (msg) {
+            fputs(msg, stderr);
+        }
+        return;
+    }
+    if (sc->wh) {
+        if (!msg) {
+            fileClose(sc);
+        } else if (ruTimeEllapsed(sc->checkTime)) {
+            if (fileGone(sc)) {
+                fileClose(sc);
+            } else {
+                fflush(sc->wh);
+            }
+        }
+    }
+    if (!msg) return;
+    if (!sc->wh) fileOpen(sc);
+    if (sc->wh) {
+        fputs(msg, sc->wh);
+    } else {
+        fputs(msg, stderr);
+    }
+}
+
+RUAPI void ruStdErrLogSink(perm_ptr udata, uint32_t logLevel, trans_chars msg) {
+    if (msg) fputs(msg, stderr);
+}
+
+// </editor-fold>
+
+// <editor-fold desc="log internals">
 /* log context */
 typedef struct {
     // submit function syncQ or asyncQ
@@ -40,14 +181,14 @@ typedef struct {
     ruThread logThread;
     // sync flag
     volatile bool syncing;
-} ruLogSink;
+} logSinkCtx;
 
 typedef struct {
     uint32_t logLevel;
     alloc_chars msg;
 } logMsg;
 
-static ruLogSink* ls_ = NULL;
+static logSinkCtx* ls_ = NULL;
 #define MAX_LOG_LEN 2048
 
 static ptr freeMsg(ptr p) {
@@ -59,7 +200,7 @@ static ptr freeMsg(ptr p) {
 }
 
 static void asyncQ(perm_ptr userData, uint32_t logLevel, trans_chars msg) {
-    ruLogSink* ls = (ruLogSink*)userData;
+    logSinkCtx* ls = (logSinkCtx*)userData;
     if (!ls->queue) return;
     logMsg* m = ruMalloc0(1, logMsg);
     m->logLevel = logLevel;
@@ -75,7 +216,7 @@ static rusize_s cb2Writer (perm_ptr ctx, trans_ptr buf, rusize len) {
 }
 
 static void syncQ(perm_ptr userData, uint32_t logLevel, trans_chars msg) {
-    ruLogSink* ls = (ruLogSink*)userData;
+    logSinkCtx* ls = (logSinkCtx*)userData;
     perm_chars out = msg;
     if (ls->cleaner) {
         ruStringReset(ls->clnBuf);
@@ -86,7 +227,7 @@ static void syncQ(perm_ptr userData, uint32_t logLevel, trans_chars msg) {
     ls->logger(ls->ctx, ls->level, out);
 }
 
-static void freeLogger(ruLogSink* ls) {
+static void freeLogger(logSinkCtx* ls) {
     if (!ls) return;
     ls->queuer = NULL;
     ls->level = RU_LOG_NONE;
@@ -99,14 +240,20 @@ static void freeLogger(ruLogSink* ls) {
 }
 
 static ptr logThread(ptr p) {
-    ruLogSink* ls = (ruLogSink*)p;
+    logSinkCtx* ls = (logSinkCtx*)p;
     msec_t to = 10;
+    bool flushed = false;
     int32_t ret = RUE_OK;
     while (true) {
         logMsg* m = ruListTryPop(ls->queue, to, &ret);
         if (m) {
             syncQ(ls, m->logLevel, m->msg);
             freeMsg(m);
+            flushed = false;
+        } else if (!flushed) {
+            // send flush signal to logger
+            ls->logger(ls->ctx, ls->level, NULL);
+            flushed = true;
         }
         // when quitting continue while we pop messages to flush the queue
         if (ls->syncing && ret != RUE_OK) break;
@@ -118,9 +265,9 @@ static ptr logThread(ptr p) {
     return NULL;
 }
 
-static ruLogSink* newLogger(ruLogFunc logger, uint32_t logLevel, perm_ptr userData,
-                            ruCleaner cleaner, bool threaded) {
-    ruLogSink* ls = ruMalloc0(1, ruLogSink);
+static logSinkCtx* newLogger(ruLogFunc logger, uint32_t logLevel, perm_ptr userData,
+                             ruCleaner cleaner, bool threaded) {
+    logSinkCtx* ls = ruMalloc0(1, logSinkCtx);
     ls->logger = logger;
     ls->level = logLevel;
     ls->ctx = userData;
@@ -138,10 +285,12 @@ static ruLogSink* newLogger(ruLogFunc logger, uint32_t logLevel, perm_ptr userDa
     }
     return ls;
 }
+// </editor-fold>
 
+// <editor-fold desc="log public">
 RUAPI void ruSetLogger(ruLogFunc logger, uint32_t logLevel, perm_ptr userData,
                        ruCleaner cleaner, bool threaded) {
-    ruLogSink *ps = ls_;
+    logSinkCtx *ps = ls_;
     if (logger) {
         ls_ = newLogger(logger, logLevel, userData, cleaner, threaded);
     } else {
@@ -163,10 +312,6 @@ RUAPI void ruSetLogger(ruLogFunc logger, uint32_t logLevel, perm_ptr userData,
 RUAPI void ruStopLogger(void) {
     ruSetLogger(NULL, RU_LOG_NONE, NULL,
                 NULL, false);
-}
-
-RUAPI void ruStdErrorLogger(perm_ptr udata, uint32_t logLevel, trans_chars msg) {
-    if (msg) fputs(msg, stderr);
 }
 
 RUAPI void ruSetLogLevel(uint32_t logLevel) {
@@ -313,3 +458,8 @@ RUAPI void ruRawLog(uint32_t log_level, trans_chars msg) {
     if (!ruDoesLog(log_level)) return;
     ls_->queuer(ls_, log_level, msg);
 }
+
+RUAPI void ruFlushLog(void) {
+    ls_->queuer(ls_, RU_LOG_NONE, NULL);
+}
+// </editor-fold>

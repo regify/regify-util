@@ -78,19 +78,6 @@ perm_chars makePath(const char *filepath) {
     return &pathBuffer[0];
 }
 
-void myLogFunc (perm_ptr ud, uint32_t log_level, trans_chars message) {
-    FILE* wh = (FILE*)ud;
-    rusize len, left = strlen(message);
-    perm_chars cur = message;
-    do {
-        len = fwrite(cur, sizeof(char), left, wh);
-        left -= len;
-        cur += len;
-    } while(left && !feof(wh) && !ferror(wh));
-
-    //fprintf(stdout, "%s", message);
-}
-
 #ifdef DO_IOS
 int32_t mainTest (const char *tmpDir, const char *treepath) {
 #else
@@ -98,13 +85,15 @@ int32_t main ( int32_t argc, char *argv[] ) {
 #endif
     int32_t number_failed;
     // for failure debugging
-    FILE* wh = NULL;
-    if (!ruStrEmpty(logfile)) {
-        wh = ruFOpen((const char*) logfile, "w", NULL);
-    }
     ruCleaner rc = ruCleanNew(0);
     ruCleanAdd(rc, "testsecret", "^^^TEST_SECRET^^^");
-    ruSetLogger(myLogFunc, RU_LOG_DBUG, wh, rc, false);
+    ruSinkCtx sc = NULL;
+    if (!ruStrEmpty(logfile)) {
+        sc = ruSinkCtxNew(logfile, NULL, NULL);
+        ruSetLogger(ruFileLogSink, RU_LOG_DBUG, sc, rc, false);
+    } else {
+        ruSetLogger(ruStdErrLogSink, RU_LOG_DBUG, NULL, rc, false);
+    }
     Suite *suite = getSuite();
     ruInfoLog("starting with testsecret and cleaner");
     SRunner *runner = srunner_create ( suite );
@@ -117,7 +106,32 @@ int32_t main ( int32_t argc, char *argv[] ) {
     srunner_run_all ( runner, CK_NORMAL );
     number_failed = srunner_ntests_failed ( runner );
     srunner_free ( runner );
-    if (wh) fclose(wh);
+    ruFlushLog();
+    ruVerbLog("sending more data");
+    ruInfoLog("stopping logger");
+    ruStopLogger();
+    ruSinkCtxFree(sc);
     ruCleanFree(rc);
     return number_failed;
+}
+
+void testlog(perm_chars logPath, bool cleaning, bool threaded) {
+    ruCleaner rc = NULL;
+    ruSinkCtx sc = NULL;
+
+    if (cleaning) {
+        rc = ruCleanNew(0);
+        ruCleanAdd(rc, "testsecret", "^^^TEST_SECRET^^^");
+    }
+    if (!ruStrEmpty(logfile)) {
+        sc = ruSinkCtxNew(logfile, NULL, NULL);
+        ruSetLogger(ruFileLogSink, RU_LOG_DBUG, sc, rc, threaded);
+    } else {
+        ruSetLogger(ruStdErrLogSink, RU_LOG_DBUG, NULL, rc, threaded);
+    }
+    ruInfoLog("starting with testsecret and cleaner");
+    ruInfoLog("stopping logger");
+    ruStopLogger();
+    ruSinkCtxFree(sc);
+    ruCleanFree(rc);
 }
