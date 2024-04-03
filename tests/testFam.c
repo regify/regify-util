@@ -21,7 +21,7 @@
  */
 #include "tests.h"
 
-#define topDir TMPDIR
+#define topDir OUT_BASE
 #define topD2 topDir "/d2"
 #define topfoo topDir "/foo"
 #define watchDir topDir "/watch"

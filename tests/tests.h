@@ -51,6 +51,7 @@ int32_t mainTest (const char *tmpDir, const char *treepath);
 extern const char* testBase;
 extern char pathBuffer[];
 perm_chars makePath(const char *filepath);
+perm_chars makeOutPath(const char *filepath);
 char* insureTestFolder(const char* folderName);
 
 TCase* miscTests(void);

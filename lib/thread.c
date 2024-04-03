@@ -29,10 +29,11 @@ ruMakeTypeGetter(Mux, MagicMux)
 ruMakeTypeGetter(Thr, MagicThr)
 ruMakeTypeGetter(tsc, MagicTsc)
 
-RU_THREAD_LOCAL char* logPidEnd = NULL;
-RU_THREAD_LOCAL char* ru_threadName = NULL;
-RU_THREAD_LOCAL char genPidBuf[32];
-char* staticPidEnd = "]:";
+static RU_THREAD_LOCAL char pidEnd[64];
+RU_THREAD_LOCAL perm_chars logPidEnd = NULL;
+static RU_THREAD_LOCAL char threadName[64];
+RU_THREAD_LOCAL perm_chars ru_threadName = NULL;
+perm_chars staticPidEnd = "]:";
 perm_chars procPath = NULL;
 
 //<editor-fold desc="Backtrace">
@@ -355,6 +356,7 @@ static Thr* threadFree(Thr* tc) {
 #ifdef _WIN32
     if (tc->tid) CloseHandle(tc->tid);
 #endif
+    ruFree(tc->name);
     memset(tc, 0, sizeof(Thr));
     ruFree(tc);
     return NULL;
@@ -419,16 +421,17 @@ static bool threadWait(Thr* tc, long tosecs, void** exitVal) {
 }
 
 void freePidEnd(void) {
-    if (logPidEnd && logPidEnd != staticPidEnd && logPidEnd != &genPidBuf[0]) ruFree(logPidEnd);
+    logPidEnd = NULL;
+    pidEnd[0] = '\0';
 }
 
 void setPidEnd(void) {
     static int threadcnt = 0;
     freePidEnd();
     if((ru_tid)getpid() != ruThreadGetId()) {
-        snprintf(&genPidBuf[0], 32, ".%ld]:[thread-%03d]:",
+        snprintf(&pidEnd[0], 64, ".%ld]:[thread-%03d]:",
                  ruThreadGetId(), ++threadcnt);
-        logPidEnd = &genPidBuf[0];
+        logPidEnd = &pidEnd[0];
     } else {
         logPidEnd = (char*)staticPidEnd;
     }
@@ -451,11 +454,13 @@ RUAPI ru_tid ruThreadGetId(void) {
 
 RUAPI void ruThreadSetName(trans_chars name) {
     freePidEnd();
-    ruFree(ru_threadName);
+    ru_threadName = NULL;
+    threadName[0] = '\0';
     if (name) {
-        logPidEnd = ruDupPrintf(".%ld]:[%s]:", ruThreadGetId(), name);
-        ru_threadName = ruStrDup(name);
-        if (!logPidEnd) setPidEnd();
+        snprintf(&pidEnd[0], 64,".%ld]:[%s]:", ruThreadGetId(), name);
+        logPidEnd = &pidEnd[0];
+        snprintf(&threadName[0], 64, "%s", name);
+        ru_threadName = &threadName[0];
     }
 }
 
@@ -481,7 +486,7 @@ RUAPI ruThread ruThreadCreate(ruStartFunc start, alloc_chars name, void* usrCtx)
                            0, NULL);
     if (!tc->tid) {
         ruSetError("thread creation failed ec: %d", GetLastError());
-        ruFree(tc);
+        threadFree(tc);
         return NULL;
     }
 #else
@@ -489,7 +494,7 @@ RUAPI ruThread ruThreadCreate(ruStartFunc start, alloc_chars name, void* usrCtx)
                                  threadRunner, tc);
     if (ret) {
         ruSetError("thread creation failed ec: %d", ret);
-        ruFree(tc);
+        threadFree(tc);
         return NULL;
     }
 #endif

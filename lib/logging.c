@@ -400,7 +400,7 @@ RUAPI alloc_chars ruMakeLogMsgV(uint32_t log_level, trans_chars filePath,
 #endif
     char *file = (char*)ruBaseName((char*)filePath);
 #ifndef __EMSCRIPTEN__
-    char* pidEnd = "]:";
+    perm_chars pidEnd = "]:";
     if (!logPidEnd) setPidEnd();
     if (logPidEnd) {
         pidEnd = logPidEnd;

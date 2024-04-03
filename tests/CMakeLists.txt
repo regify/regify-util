@@ -22,6 +22,7 @@ set(CHECK_LIBRARY_DIRS ${ICU_LIBRARY_DIRS} CACHE STRING
         "Where the check libraries are located")
 set(CHECK_INCLUDE_DIR ${ICU_INCLUDE_DIRS} CACHE STRING
         "Where the check libraries are located")
+option(TEST_ON_SMB "Whether tests are running on a SMB share. Disables some tests" OFF)
 
 if(MSVC)
     set(CHECK_LIBRARIES check.lib)
@@ -54,9 +55,22 @@ else()
     target_include_directories(runTests
             PRIVATE ${PROJECT_SOURCE_DIR}/include/ ${CHECK_INCLUDE_DIR})
     target_compile_definitions(runTests PRIVATE
-            TEST_BASE=\"${CMAKE_CURRENT_SOURCE_DIR}/tree\"
-            TMPDIR="${CMAKE_CURRENT_BINARY_DIR}"
+            SRC_BASE=\"${CMAKE_CURRENT_SOURCE_DIR}/tree\"
+            OUT_BASE="${CMAKE_CURRENT_BINARY_DIR}"
             logfile=\"${CMAKE_BINARY_DIR}/test.log\")
+    if(TEST_ON_SMB)
+        target_compile_definitions(runTests PRIVATE ON_SMB_SHARE)
+    endif()
+
+    if(NOT WIN)
+        add_custom_command(OUTPUT loeh
+            COMMAND ln -s ${CMAKE_CURRENT_SOURCE_DIR}/tree/doeh loeh )
+        add_custom_command(OUTPUT löss
+            COMMAND ln -s ${CMAKE_CURRENT_SOURCE_DIR}/tree/föss löss )
+        add_custom_target(symlinks DEPENDS löss loeh)
+        add_dependencies(runTests symlinks)
+    endif()
+
     if(MINGW)
         # we want this to remove dependencies to:
         #  /msys64/mingw64/bin/libgcc_s_seh-1.dll

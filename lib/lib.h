@@ -152,8 +152,8 @@ extern "C" {
 #endif
 
 extern unsigned int ruIntChunk;
-extern RU_THREAD_LOCAL char* logPidEnd;
-extern RU_THREAD_LOCAL char* ru_threadName;
+extern RU_THREAD_LOCAL perm_chars logPidEnd;
+extern RU_THREAD_LOCAL perm_chars ru_threadName;
 
 void ruSetError(const char *format, ...);
 void ruClearError(void);

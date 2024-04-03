@@ -166,8 +166,10 @@ START_TEST(filetest) {
     ret = ruIsDir(file);
     fail_unless(exp == ret, retText, test, exp, ret);
 
+#ifndef ON_SMB_SHARE
     ret = ruIsExecutable(file);
     fail_unless(exp == ret, retText, test, exp, ret);
+#endif
 
 #ifndef _WIN32
     ret = ruIsSymlink(file);
@@ -200,8 +202,10 @@ START_TEST(filetest) {
     ret = ruIsDir(file);
     fail_unless(exp == ret, retText, test, exp, ret);
 
+#ifndef ON_SMB_SHARE
     ret = ruIsExecutable(file);
     fail_unless(exp == ret, retText, test, exp, ret);
+#endif
 
 #ifndef _WIN32
     ret = ruIsSymlink(file);
@@ -226,8 +230,10 @@ START_TEST(filetest) {
     fail_unless(exp == ret, retText, test, exp, ret);
 
 #ifndef DO_IOS // borked on ios
+#ifndef ON_SMB_SHARE
     ret = ruIsExecutable(file);
     fail_unless(exp == ret, retText, test, exp, ret);
+#endif
 #endif
 
     exp = false;
@@ -248,7 +254,7 @@ START_TEST(filetest) {
     fail_unless(exp == ret, retText, test, exp, ret);
 
 #ifndef _WIN32
-    file = makePath("löss");
+    file = makeOutPath("löss");
 
     exp = true;
     ret = ruFileExists(file);
@@ -263,13 +269,15 @@ START_TEST(filetest) {
     fail_unless(exp == ret, retText, test, exp, ret);
 
     exp = false;
+#ifndef ON_SMB_SHARE
     ret = ruIsExecutable(file);
     fail_unless(exp == ret, retText, test, exp, ret);
+#endif
 
     ret = ruIsDir(file);
     fail_unless(exp == ret, retText, test, exp, ret);
 
-    file = makePath("loeh");
+    file = makeOutPath("loeh");
 
     exp = true;
     ret = ruFileExists(file);
@@ -283,8 +291,10 @@ START_TEST(filetest) {
     ret = ruIsDir(file);
     fail_unless(exp == ret, retText, test, exp, ret);
 
+#ifndef ON_SMB_SHARE
     ret = ruIsExecutable(file);
     fail_unless(exp == ret, retText, test, exp, ret);
+#endif
 
     exp = false;
     ret = ruIsFile(file);

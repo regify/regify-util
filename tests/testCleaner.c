@@ -354,7 +354,7 @@ START_TEST ( regibox ) {
     FILE *rh = ruFOpen(file, "r", &ret);
     fail_unless(ret == exp, retText, test, exp, ret);
 
-    perm_chars outfile = makePath("regibox.out");
+    perm_chars outfile = makeOutPath("regibox.out");
     FILE *wh = ruFOpen(outfile, "w", &ret);
     fail_unless(ret == exp, retText, test, exp, ret);
 
@@ -1517,7 +1517,7 @@ START_TEST ( regibox2 ) {
     FILE *rh = ruFOpen(file, "r", &ret);
             fail_unless(ret == exp, retText, test, exp, ret);
 
-    perm_chars outfile = makePath("regibox2.out");
+    perm_chars outfile = makeOutPath("regibox2.out");
     FILE *wh = ruFOpen(outfile, "w", &ret);
             fail_unless(ret == exp, retText, test, exp, ret);
 
@@ -1532,7 +1532,7 @@ START_TEST ( regibox2 ) {
     rh = ruFOpen(file, "r", &ret);
             fail_unless(ret == exp, retText, test, exp, ret);
 
-    outfile = makePath("regibox.out");
+    outfile = makeOutPath("regibox.out");
     wh = ruFOpen(outfile, "w", &ret);
             fail_unless(ret == exp, retText, test, exp, ret);
 

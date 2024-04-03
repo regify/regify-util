@@ -51,7 +51,7 @@ Suite* getSuite(void) {
 
 char* insureTestFolder(const char* folderName) {
     int ret;
-    const char *tmp = TMPDIR;
+    const char *tmp = OUT_BASE;
     char *tmpDir;
     if(folderName) {
         tmpDir = ruDupPrintf("%s/ruTest/%s", tmp, folderName);
@@ -70,12 +70,18 @@ char* insureTestFolder(const char* folderName) {
     return tmpDir;
 }
 
-const char* testBase = TEST_BASE;
+const char* testBase = SRC_BASE;
 char pathBuffer[1024];
-
 perm_chars makePath(const char *filepath) {
     snprintf(&pathBuffer[0], 1023, "%s/%s", testBase, filepath);
     return &pathBuffer[0];
+}
+
+const char* outBase = OUT_BASE;
+char outBuffer[1024];
+perm_chars makeOutPath(const char *filepath) {
+    snprintf(&outBuffer[0], 1023, "%s/%s", outBase, filepath);
+    return &outBuffer[0];
 }
 
 #ifdef DO_IOS
