@@ -178,7 +178,7 @@ Functions</h2></td></tr>
 <tr class="memdesc:gae1af44f28c3a3acff3900991068d17f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a new context to use with <a class="el" href="group__logging.html#ga54bf651c01ea4e30e95637b64d90a933">ruFileLogSink</a>.  <a href="group__logging.html#gae1af44f28c3a3acff3900991068d17f0">More...</a><br /></td></tr>
 <tr class="separator:gae1af44f28c3a3acff3900991068d17f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga8fd2681d3fa2abcf0f1db599128d074f"><td class="memItemLeft" align="right" valign="top">RUAPI int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__logging.html#ga8fd2681d3fa2abcf0f1db599128d074f">ruSinkCtxPath</a> (<a class="el" href="group__logging.html#gad8a1b0826a4300220564607a1c25ece9">ruSinkCtx</a> rsc, <a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> filePath)</td></tr>
-<tr class="memdesc:ga8fd2681d3fa2abcf0f1db599128d074f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allows changing the file path of the given <a class="el" href="group__logging.html#gad8a1b0826a4300220564607a1c25ece9">ruSinkCtx</a>. This will have immediate effect on logs sent to <a class="el" href="group__logging.html#ga54bf651c01ea4e30e95637b64d90a933">ruFileLogSink</a>.  <a href="group__logging.html#ga8fd2681d3fa2abcf0f1db599128d074f">More...</a><br /></td></tr>
+<tr class="memdesc:ga8fd2681d3fa2abcf0f1db599128d074f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allows changing the file path of the given <a class="el" href="group__logging.html#gad8a1b0826a4300220564607a1c25ece9">ruSinkCtx</a>.  <a href="group__logging.html#ga8fd2681d3fa2abcf0f1db599128d074f">More...</a><br /></td></tr>
 <tr class="separator:ga8fd2681d3fa2abcf0f1db599128d074f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga944f341c3cee3932f61389c50e90b94c"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__logging.html#gad8a1b0826a4300220564607a1c25ece9">ruSinkCtx</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__logging.html#ga944f341c3cee3932f61389c50e90b94c">ruSinkCtxFree</a> (<a class="el" href="group__logging.html#gad8a1b0826a4300220564607a1c25ece9">ruSinkCtx</a> rsc)</td></tr>
 <tr class="memdesc:ga944f341c3cee3932f61389c50e90b94c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Frees the given <a class="el" href="group__logging.html#gad8a1b0826a4300220564607a1c25ece9">ruSinkCtx</a> after <a class="el" href="group__logging.html#gaa510d8fa7776ea1fc73389583b046d5e">ruStopLogger</a> has been called. This must not be called when the context is still in use.  <a href="group__logging.html#ga944f341c3cee3932f61389c50e90b94c">More...</a><br /></td></tr>
@@ -256,7 +256,7 @@ Functions</h2></td></tr>
 <div class="ttc" id="agroup__logging_html_gaa510d8fa7776ea1fc73389583b046d5e"><div class="ttname"><a href="group__logging.html#gaa510d8fa7776ea1fc73389583b046d5e">ruStopLogger</a></div><div class="ttdeci">RUAPI void ruStopLogger(void)</div><div class="ttdoc">Stop the current logger and flush the queue before returning.</div></div>
 <div class="ttc" id="agroup__logging_html_gad8a1b0826a4300220564607a1c25ece9"><div class="ttname"><a href="group__logging.html#gad8a1b0826a4300220564607a1c25ece9">ruSinkCtx</a></div><div class="ttdeci">ptr ruSinkCtx</div><div class="ttdef"><b>Definition:</b> logging.h:122</div></div>
 <div class="ttc" id="agroup__logging_html_gae1af44f28c3a3acff3900991068d17f0"><div class="ttname"><a href="group__logging.html#gae1af44f28c3a3acff3900991068d17f0">ruSinkCtxNew</a></div><div class="ttdeci">RUAPI ruSinkCtx ruSinkCtxNew(trans_chars filePath, ruCloseFunc closeCb, perm_ptr closeCtx)</div><div class="ttdoc">Creates a new context to use with ruFileLogSink.</div></div>
-<div class="ttc" id="agroup__logging_html_gaf9ca44fd51225d8a837745dda302341f"><div class="ttname"><a href="group__logging.html#gaf9ca44fd51225d8a837745dda302341f">ruInfoLog</a></div><div class="ttdeci">#define ruInfoLog(msg)</div><div class="ttdoc">Emits a INFO level log message.</div><div class="ttdef"><b>Definition:</b> logging.h:335</div></div>
+<div class="ttc" id="agroup__logging_html_gaf9ca44fd51225d8a837745dda302341f"><div class="ttname"><a href="group__logging.html#gaf9ca44fd51225d8a837745dda302341f">ruInfoLog</a></div><div class="ttdeci">#define ruInfoLog(msg)</div><div class="ttdoc">Emits a INFO level log message.</div><div class="ttdef"><b>Definition:</b> logging.h:344</div></div>
 <div class="ttc" id="agroup__logging_html_gaff3e36d62b4aeecc54cfd10cf8e649fe"><div class="ttname"><a href="group__logging.html#gaff3e36d62b4aeecc54cfd10cf8e649fe">ruStdErrLogSink</a></div><div class="ttdeci">RUAPI void ruStdErrLogSink(perm_ptr udata, uint32_t logLevel, trans_chars msg)</div><div class="ttdoc">A convenience logging implementation that logs to stderr.</div></div>
 <div class="ttc" id="agroup__misc_html_ga5a4bcdee6a3cc6c7ed75da5bb77d49bc"><div class="ttname"><a href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a></div><div class="ttdeci">const char * trans_chars</div><div class="ttdoc">A transient NULL terminated string pointer.</div><div class="ttdef"><b>Definition:</b> regify-util.h:186</div></div>
 <div class="ttc" id="agroup__string_html_ga5df8af06cf764fc696b3bfc0efc3b39c"><div class="ttname"><a href="group__string.html#ga5df8af06cf764fc696b3bfc0efc3b39c">ruStrEmpty</a></div><div class="ttdeci">RUAPI bool ruStrEmpty(trans_chars str)</div><div class="ttdoc">Checks whether given string has any content other than whitespace.</div></div>
@@ -513,7 +513,7 @@ Functions</h2></td></tr>
 <div class="line">        (uint8_t)*((start)+4), (uint8_t)*((start)+5), (uint8_t)*((start)+6), (uint8_t)*((start)+7), \</div>
 <div class="line">        (uint8_t)*((start)+8), (uint8_t)*((start)+9), (uint8_t)*((start)+10), (uint8_t)*((start)+11), \</div>
 <div class="line">        (uint8_t)*((start)+12), (uint8_t)*((start)+13), (uint8_t)*((start)+14), (uint8_t)*((start)+15))</div>
-<div class="ttc" id="agroup__logging_html_ga3d3ffaf6bf4fa6d4c69329ad93f301b3"><div class="ttname"><a href="group__logging.html#ga3d3ffaf6bf4fa6d4c69329ad93f301b3">ruDbgLogf</a></div><div class="ttdeci">#define ruDbgLogf(fmt,...)</div><div class="ttdoc">Emits a DBUG level log message.</div><div class="ttdef"><b>Definition:</b> logging.h:368</div></div>
+<div class="ttc" id="agroup__logging_html_ga3d3ffaf6bf4fa6d4c69329ad93f301b3"><div class="ttname"><a href="group__logging.html#ga3d3ffaf6bf4fa6d4c69329ad93f301b3">ruDbgLogf</a></div><div class="ttdeci">#define ruDbgLogf(fmt,...)</div><div class="ttdoc">Emits a DBUG level log message.</div><div class="ttdef"><b>Definition:</b> logging.h:377</div></div>
 </div><!-- fragment -->
 <p>Debug logs the 16 bytes following start preceded by given message. </p>
 <dl class="params"><dt>Parameters</dt><dd>
@@ -1038,6 +1038,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Sends a NULL message to the current log sink, usually causing it to flush or close the log file. </p>
+<p>If the logger is threaded this will block until a NULL has been sent to the given log sink. </p>
 
 </div>
 </div>
@@ -1220,7 +1221,7 @@ Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">log_level</td><td>Log level of this message used solely for filtering. </td></tr>
-    <tr><td class="paramname">msg</td><td>string to be logged without modification </td></tr>
+    <tr><td class="paramname">msg</td><td>string to be logged without modification. The trailing line feed must be given. </td></tr>
   </table>
   </dd>
 </dl>
@@ -1375,7 +1376,7 @@ Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">filePath</td><td>Path to where log file will be written. Directory must be writable. </td></tr>
-    <tr><td class="paramname">closeCb</td><td>Optional callback to run when file close has completed. </td></tr>
+    <tr><td class="paramname">closeCb</td><td>Optional callback to run when the old file has been closed after <a class="el" href="group__logging.html#ga8fd2681d3fa2abcf0f1db599128d074f">ruSinkCtxPath</a> was called. </td></tr>
     <tr><td class="paramname">closeCtx</td><td>Optional context which will be passed to closeCb </td></tr>
   </table>
   </dd>
@@ -1410,8 +1411,8 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Allows changing the file path of the given <a class="el" href="group__logging.html#gad8a1b0826a4300220564607a1c25ece9">ruSinkCtx</a>. This will have immediate effect on logs sent to <a class="el" href="group__logging.html#ga54bf651c01ea4e30e95637b64d90a933">ruFileLogSink</a>. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Allows changing the file path of the given <a class="el" href="group__logging.html#gad8a1b0826a4300220564607a1c25ece9">ruSinkCtx</a>. </p>
+<p>This will have immediate effect on logs sent to <a class="el" href="group__logging.html#ga54bf651c01ea4e30e95637b64d90a933">ruFileLogSink</a>. When the old log has been closed the closeCb function given to <a class="el" href="group__logging.html#gae1af44f28c3a3acff3900991068d17f0">ruSinkCtxNew</a> will be called exactly one time. This will not happen if the new filePath is equal to the old filePath. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">rsc</td><td><a class="el" href="group__logging.html#gad8a1b0826a4300220564607a1c25ece9">ruSinkCtx</a> to update. </td></tr>
     <tr><td class="paramname">filePath</td><td>Path to new log file. </td></tr>
@@ -1491,7 +1492,7 @@ Functions</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Wed Apr 3 2024 08:29:19 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Mon Apr 8 2024 12:45:58 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>
