@@ -22,10 +22,6 @@
 #ifndef _TESTS_H
 # define _TESTS_H 1
 
-// optional logging sink
-#ifndef logfile
-#define logfile NULL
-#endif
 
 #include <stdio.h>
 #ifdef __clang__
@@ -48,12 +44,15 @@ extern "C" {
 int32_t mainTest (const char *tmpDir, const char *treepath);
 #endif
 
+extern const char* logPath;
 extern const char* testBase;
 extern char pathBuffer[];
 perm_chars makePath(const char *filepath);
 perm_chars makeOutPath(const char *filepath);
 char* insureTestFolder(const char* folderName);
+void setLogger(void);
 
+TCase* logTests(void);
 TCase* miscTests(void);
 TCase* listTests(void);
 TCase* regexTests(void);

@@ -125,7 +125,8 @@ typedef ptr ruSinkCtx;
  * \brief Creates a new context to use with \ref ruFileLogSink
  * @param filePath Path to where log file will be written. Directory must be
  *                 writable.
- * @param closeCb Optional callback to run when file close has completed.
+ * @param closeCb Optional callback to run when the old file has been closed
+ *                after \ref ruSinkCtxPath was called.
  * @param closeCtx Optional context which will be passed to closeCb
  * @return New \ref ruSinkCtx to free with \ref ruSinkCtxFree.
  */
@@ -134,7 +135,11 @@ RUAPI ruSinkCtx ruSinkCtxNew(trans_chars filePath, ruCloseFunc closeCb,
 
 /**
  * \brief Allows changing the file path of the given \ref ruSinkCtx.
- * This will have immediate effect on logs sent to \ref ruFileLogSink
+ *
+ * This will have immediate effect on logs sent to \ref ruFileLogSink. When the
+ * old log has been closed the closeCb function given to \ref ruSinkCtxNew will
+ * be called exactly one time. This will not happen if the new filePath is equal
+ * to the old filePath.
  * @param rsc \ref ruSinkCtx to update.
  * @param filePath Path to new log file.
  * @return Status of the operation.
@@ -265,13 +270,17 @@ RUAPI alloc_chars ruMakeLogMsgV(uint32_t log_level, trans_chars filePath,
 /**
  * \brief Sends the given message as is to the current log sink.
  * @param log_level Log level of this message used solely for filtering.
- * @param msg string to be logged without modification
+ * @param msg string to be logged without modification. The trailing line feed
+ *            must be given.
  */
 RUAPI void ruRawLog(uint32_t log_level, trans_chars msg);
 
 /**
  * \brief Sends a NULL message to the current log sink, usually causing it to
  * flush or close the log file.
+ *
+ * If the logger is threaded this will block until a NULL has been sent to the
+ * given log sink.
  */
 RUAPI void ruFlushLog(void);
 

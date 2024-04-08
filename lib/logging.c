@@ -37,13 +37,21 @@ typedef __ino_t ru_inode;
 #endif
 #endif
 
+#if 0
+#define logDbg(fmt, ...) fprintf(stderr, fmt, __VA_ARGS__)
+#else
+#define logDbg(fmt, ...)
+#endif
+
 // <editor-fold desc="sink internals">
 typedef struct {
     ru_int type;
     alloc_chars filePath;
     ruCloseFunc closeCb;
     perm_ptr closeCtx;
+    bool callClose;
     sec_t checkTime;
+    ruMutex fmux;
     FILE* wh;
 #if defined(_WIN32)
     alloc_chars curPath;
@@ -72,27 +80,20 @@ static ru_inode getInode(sinkCtx* sc) {
 #endif
 
 static void fileOpen(sinkCtx* sc) {
-    int32_t ret;
-    sc->wh = ruFOpen(sc->filePath, bAppendMode, &ret);
-    if (ret != RUE_OK) return;
-    setCheckTime(sc);
+    ruMutexLock(sc->fmux);
+    if (!sc->wh) {
+        int32_t ret;
+        sc->wh = ruFOpen(sc->filePath, bAppendMode, &ret);
+        if (ret != RUE_OK) return;
+        logDbg("fileOpen opened: %s\n", sc->filePath);
+        setCheckTime(sc);
 #ifdef _WIN32
-    ruReplace(sc->curPath, ruStrDup(sc->filePath));
+        ruReplace(sc->curPath, ruStrDup(sc->filePath));
 #else
-    sc->curNode = getInode(sc);
+        sc->curNode = getInode(sc);
 #endif
-}
-
-static void fileClose(sinkCtx* sc) {
-    if (sc->wh) fclose(sc->wh);
-    sc->wh = NULL;
-    sc->checkTime = 0;
-#ifdef _WIN32
-    ruFree(sc->curPath);
-#else
-    sc->curNode = 0;
-#endif
-    if (sc->closeCb) sc->closeCb(sc->closeCtx);
+    }
+    ruMutexUnlock(sc->fmux);
 }
 
 static bool fileGone(sinkCtx* sc) {
@@ -104,6 +105,30 @@ static bool fileGone(sinkCtx* sc) {
     return curNode != sc->curNode;
 #endif
 }
+
+static void checkCb(sinkCtx* sc) {
+    if (sc->callClose) {
+        logDbg("checkCb calling sc->closeCb: %d\n", sc->callClose);
+        sc->callClose = false;
+        sc->closeCb(sc->closeCtx);
+        logDbg("checkCb sc->closeCb done: %d\n", sc->callClose);
+    }
+}
+
+static void fileClose(sinkCtx* sc) {
+    if (sc->wh) {
+        logDbg("fileClose closing: %s\n", sc->filePath);
+        fclose(sc->wh);
+    }
+    sc->wh = NULL;
+    sc->checkTime = 0;
+#ifdef _WIN32
+    ruFree(sc->curPath);
+#else
+    sc->curNode = 0;
+#endif
+    checkCb(sc);
+}
 // </editor-fold>
 
 // <editor-fold desc="sink public">
@@ -113,17 +138,27 @@ RUAPI ruSinkCtx ruSinkCtxNew(trans_chars filePath, ruCloseFunc closeCb,
     sinkCtx* sc = ruMalloc0(1, sinkCtx);
     sc->type = MagicSinkCtx;
     sc->filePath = ruStrDup(filePath);
+    sc->fmux = ruMutexInit();
     sc->closeCb = closeCb;
     sc->closeCtx = closeCtx;
     return sc;
 }
 
 RUAPI int32_t ruSinkCtxPath(ruSinkCtx rsc, trans_chars filePath) {
-    if (!filePath) return RUE_PARAMETER_NOT_SET;
+    if (ruStrEmpty(filePath)) return RUE_PARAMETER_NOT_SET;
     int32_t ret;
     sinkCtx* sc = sinkCtxGet(rsc, &ret);
     if (ret != RUE_OK) return ret;
-    ruReplace(sc->filePath, ruStrDup(filePath));
+    if (!ruStrEquals(sc->filePath, filePath)) {
+        if (!sc->wh) fileOpen(sc);
+        logDbg("ruSinkCtxPath '%s' -> '%s' sc->callClose: %d\n",
+               sc->filePath, filePath, sc->callClose);
+        ruReplace(sc->filePath, ruStrDup(filePath));
+        if (sc->closeCb) sc->callClose = true;
+        logDbg("ruSinkCtxPath calling ruFlushLog: %d\n", sc->callClose);
+        ruFlushLog();
+        logDbg("ruSinkCtxPath ruFlushLog done: %d\n", sc->callClose);
+    }
     return ret;
 }
 
@@ -135,6 +170,7 @@ RUAPI ruSinkCtx ruSinkCtxFree(ruSinkCtx rsc) {
 #ifdef _WIN32
         ruFree(sc->curPath);
 #endif
+        sc->fmux = ruMutexFree(sc->fmux);
         memset(sc, 0, sizeof(sinkCtx));
         ruFree(sc);
     }
@@ -160,7 +196,10 @@ RUAPI void ruFileLogSink(perm_ptr rsc, uint32_t logLevel, trans_chars msg) {
             }
         }
     }
-    if (!msg) return;
+    if (!msg) {
+        checkCb(sc);
+        return;
+    }
     if (!sc->wh) fileOpen(sc);
     if (sc->wh) {
         fputs(msg, sc->wh);
@@ -193,6 +232,8 @@ typedef struct {
     ruList queue;
     // thread reference
     ruThread logThread;
+    // flush flag
+    volatile bool flushReq;
     // sync flag
     volatile bool syncing;
 } logSinkCtx;
@@ -232,7 +273,7 @@ static rusize_s cb2Writer (perm_ptr ctx, trans_ptr buf, rusize len) {
 static void syncQ(perm_ptr userData, uint32_t logLevel, trans_chars msg) {
     logSinkCtx* ls = (logSinkCtx*)userData;
     perm_chars out = msg;
-    if (ls->cleaner) {
+    if (ls->cleaner && out) {
         ruStringReset(ls->clnBuf);
         ruCleanToWriter(ls->cleaner, msg, 0,
                         &cb2Writer, ls->clnBuf);
@@ -248,12 +289,22 @@ static void freeLogger(logSinkCtx* ls) {
     ls->logger = NULL;
     ls->cleaner = NULL;
     ls->ctx = NULL;
+    if (ls->logThread) {
+        ruThreadWait(ls->logThread, 1, NULL);
+        ls->logThread = NULL;
+    }
     if (ls->clnBuf) ls->clnBuf = ruBufferFree(ls->clnBuf, false);
     if (ls->queue) ls->queue = ruListFree(ls->queue);
     ruFree(ls);
 }
 
 static ptr logThread(ptr p) {
+#ifndef _WIN32
+    // don't dabble with signals
+    sigset_t set;
+    sigfillset(&set);
+    pthread_sigmask(SIG_SETMASK, &set, NULL);
+#endif
     logSinkCtx* ls = (logSinkCtx*)p;
     msec_t to = 10;
     bool flushed = false;
@@ -264,17 +315,20 @@ static ptr logThread(ptr p) {
             syncQ(ls, m->logLevel, m->msg);
             freeMsg(m);
             flushed = false;
-        } else if (!flushed) {
-            // send flush signal to logger
-            ls->logger(ls->ctx, ls->level, NULL);
-            flushed = true;
+        } else {
+
+            if (!flushed || ls->flushReq) {
+                // send flush signal to logger
+                ls->logger(ls->ctx, ls->level, NULL);
+                ls->flushReq = false;
+                flushed = true;
+            }
         }
         // when quitting continue while we pop messages to flush the queue
         if (ls->syncing && ret != RUE_OK) break;
     }
     // send termination signal to log sink
     ls->logger(ls->ctx, ls->level, NULL);
-    ls->logThread = NULL;
     ls->syncing = false;
     return NULL;
 }
@@ -474,6 +528,9 @@ RUAPI void ruRawLog(uint32_t log_level, trans_chars msg) {
 }
 
 RUAPI void ruFlushLog(void) {
+    if(!ls_) return;
+    if (ls_->logThread) ls_->flushReq = true;
     ls_->queuer(ls_, RU_LOG_NONE, NULL);
+    while (ls_->flushReq) ruSleepMs(1);
 }
 // </editor-fold>
