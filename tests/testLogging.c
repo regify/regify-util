@@ -65,7 +65,7 @@ static void sinkTest(bool threaded, bool cleaning) {
     fail_if(rpc == NULL, retText, rpc, NULL);
     fail_unless(clexp == closed, retText, test, clexp, closed);
 
-    ruSetLogger(ruPreLogSink, RU_LOG_DBUG, rpc, rc, threaded);
+    ruSetLogger(ruPreLogSink, RU_LOG_DBUG, rpc, rc, !threaded);
     ruInfoLogf("'%s' prelog entry 1", test);
     ruVerbLogf("'%s' prelog entry 2 with testsecret", test);
     ruDbgLogf("'%s' prelog entry 3", test);

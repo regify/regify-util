@@ -32,7 +32,7 @@
  *     ruSinkCtx sc = NULL;
  *     // Use the pre logger until we determine where to log to...
  *     ruPreCtx pc = ruPreCtxNew();
- *     ruSetLogger(ruPreLogSink, RU_LOG_DBUG, NULL, rc, threaded);
+ *     ruSetLogger(ruPreLogSink, RU_LOG_DBUG, pc, NULL, threaded);
  *
  *     if (cleaning) {
  *         ruInfoLog("Using log cleaner");
