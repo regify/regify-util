@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['ruregexflag_5f_1031',['ruRegexFlag_',['../group__regex.html#ga648259273846263eeb1ea75d19bd71bf',1,'regex.h']]],
-  ['rutrimside_1032',['ruTrimSide',['../group__string.html#ga1f4eb9b5f88a1b4cb67b9c9414a1377d',1,'string.h']]]
+  ['ruregexflag_5f_1039',['ruRegexFlag_',['../group__regex.html#ga648259273846263eeb1ea75d19bd71bf',1,'regex.h']]],
+  ['rutrimside_1040',['ruTrimSide',['../group__string.html#ga1f4eb9b5f88a1b4cb67b9c9414a1377d',1,'string.h']]]
 ];

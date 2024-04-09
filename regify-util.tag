@@ -2071,10 +2071,38 @@
     </member>
     <member kind="typedef">
       <type>ptr</type>
+      <name>ruPreCtx</name>
+      <anchorfile>group__logging.html</anchorfile>
+      <anchor>gab19866561d7f8e0b29799f20bd492ca4</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>ptr</type>
       <name>ruSinkCtx</name>
       <anchorfile>group__logging.html</anchorfile>
       <anchor>gad8a1b0826a4300220564607a1c25ece9</anchor>
       <arglist></arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI ruPreCtx</type>
+      <name>ruPreCtxNew</name>
+      <anchorfile>group__logging.html</anchorfile>
+      <anchor>ga292cfa535c2603141824b64cfdb224c7</anchor>
+      <arglist>(void)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI ruPreCtx</type>
+      <name>ruPreCtxFree</name>
+      <anchorfile>group__logging.html</anchorfile>
+      <anchor>ga60cb8af9d0a6703f9a9c9df34b6fb33a</anchor>
+      <arglist>(ruPreCtx rpc, bool flush)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI void</type>
+      <name>ruPreLogSink</name>
+      <anchorfile>group__logging.html</anchorfile>
+      <anchor>gadbfffcb111ff40362b687d6ecad63cf9</anchor>
+      <arglist>(perm_ptr rpc, uint32_t logLevel, trans_chars msg)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI ruSinkCtx</type>
