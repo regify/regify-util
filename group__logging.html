@@ -243,7 +243,7 @@ Functions</h2></td></tr>
 <div class="line">    <a class="code" href="group__logging.html#gad8a1b0826a4300220564607a1c25ece9">ruSinkCtx</a> sc = NULL;</div>
 <div class="line">    <span class="comment">// Use the pre logger until we determine where to log to...</span></div>
 <div class="line">    <a class="code" href="group__logging.html#gab19866561d7f8e0b29799f20bd492ca4">ruPreCtx</a> pc = <a class="code" href="group__logging.html#ga292cfa535c2603141824b64cfdb224c7">ruPreCtxNew</a>();</div>
-<div class="line">    <a class="code" href="group__logging.html#ga389028e2a2f03e15f94a8ad238d1d2bb">ruSetLogger</a>(<a class="code" href="group__logging.html#gadbfffcb111ff40362b687d6ecad63cf9">ruPreLogSink</a>, <a class="code" href="group__logging.html#ga87450aef2aa1444e5f86301c28d0907d">RU_LOG_DBUG</a>, NULL, rc, threaded);</div>
+<div class="line">    <a class="code" href="group__logging.html#ga389028e2a2f03e15f94a8ad238d1d2bb">ruSetLogger</a>(<a class="code" href="group__logging.html#gadbfffcb111ff40362b687d6ecad63cf9">ruPreLogSink</a>, <a class="code" href="group__logging.html#ga87450aef2aa1444e5f86301c28d0907d">RU_LOG_DBUG</a>, pc, NULL, threaded);</div>
 <div class="line"> </div>
 <div class="line">    <span class="keywordflow">if</span> (cleaning) {</div>
 <div class="line">        <a class="code" href="group__logging.html#gaf9ca44fd51225d8a837745dda302341f">ruInfoLog</a>(<span class="stringliteral">&quot;Using log cleaner&quot;</span>);</div>
@@ -1645,7 +1645,7 @@ Functions</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Tue Apr 9 2024 07:43:04 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Tue Apr 9 2024 09:00:58 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>
