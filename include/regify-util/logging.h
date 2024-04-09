@@ -30,18 +30,31 @@
  * void testlog(trans_chars logPath, bool cleaning, bool threaded) {
  *     ruCleaner rc = NULL;
  *     ruSinkCtx sc = NULL;
+ *     // Use the pre logger until we determine where to log to...
+ *     ruPreCtx pc = ruPreCtxNew();
+ *     ruSetLogger(ruPreLogSink, RU_LOG_DBUG, NULL, rc, threaded);
  *
  *     if (cleaning) {
+ *         ruInfoLog("Using log cleaner");
  *         rc = ruCleanNew(0);
  *         ruCleanAdd(rc, "testsecret", "^^^TEST_SECRET^^^");
+ *         ruVerbLog("keeping testsecret hidden");
  *     }
  *     if (ruStrEmpty(logfile)) {
+ *         ruInfoLog("Using std error logger");
  *         ruSetLogger(ruStdErrLogSink, RU_LOG_DBUG, NULL, rc, threaded);
  *     } else {
+ *         ruInfoLogf("Logging to '%s'", logfile);
  *         sc = ruSinkCtxNew(logfile, NULL, NULL);
  *         ruSetLogger(ruFileLogSink, RU_LOG_DBUG, sc, rc, threaded);
  *     }
+ *     // flush and free the pre logger
+ *     pc = ruPreCtxFree(pc, true);
+ *
+ *     // program logic here...
  *     ruInfoLog("starting with testsecret and cleaner");
+ *
+ *     // clean up when finished
  *     ruInfoLog("stopping logger");
  *     ruStopLogger();
  *     ruSinkCtxFree(sc);
@@ -117,7 +130,46 @@ typedef void (*ruLogFunc) (perm_ptr userData, uint32_t logLevel, trans_chars msg
 typedef void (*ruCloseFunc) (perm_ptr userData);
 
 /**
- * Opaque pointer to \ref ruFileLogSink object.
+ * \brief Opaque pointer to \ref ruPreLogSink object.
+ */
+typedef ptr ruPreCtx;
+
+/**
+ * \brief Creates a new pre logging context for use with \ref ruPreLogSink
+ *
+ * This context is useful for temporarily storing log entries until the final
+ * log sink has been established. At that point this context may be freed
+ * optionally logging its content into the current logsink.
+ * @return \ref ruPreCtx object
+ */
+RUAPI ruPreCtx ruPreCtxNew(void);
+
+/**
+ * \brief Frees the given \ref ruPreCtx
+ * @param rpc context to free
+ * @param flush log the accumulated entries before freeing them.
+ * @return NULL
+ */
+RUAPI ruPreCtx ruPreCtxFree(ruPreCtx rpc, bool flush);
+
+/**
+ * \brief Pre logging sink to store log entries until a final log sink has been
+ * established.
+ *
+ * When calling \ref ruSetLogger with this sink, the log level should be set to
+ * \ref RU_LOG_DBUG so that all potential entries will be accumulated. The actual
+ * filtering is done when this context is flushed. At that point entries will be
+ * filtered by the then current log level.
+ *
+ * @param rpc User data. Must be a \ref ruPreCtx.
+ * @param logLevel Log level pertaining to this message. Will be stored for
+ *                 flush time.
+ * @param msg The message to log. NULL will be ignored.
+ */
+RUAPI void ruPreLogSink(perm_ptr rpc, uint32_t logLevel, trans_chars msg);
+
+/**
+ * \brief Opaque pointer to \ref ruFileLogSink object.
  */
 typedef ptr ruSinkCtx;
 

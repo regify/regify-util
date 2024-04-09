@@ -59,19 +59,32 @@ static void sinkTest(bool threaded, bool cleaning) {
         rc = ruCleanNew(0);
         ruCleanAdd(rc, "testsecret", "^^^TEST_SECRET^^^");
     }
+
     int clexp = 0;
+    ruPreCtx rpc = ruPreCtxNew();
+    fail_if(rpc == NULL, retText, rpc, NULL);
+    fail_unless(clexp == closed, retText, test, clexp, closed);
+
+    ruSetLogger(ruPreLogSink, RU_LOG_DBUG, rpc, rc, threaded);
+    ruInfoLogf("'%s' prelog entry 1", test);
+    ruVerbLogf("'%s' prelog entry 2 with testsecret", test);
+    ruDbgLogf("'%s' prelog entry 3", test);
+
     ruSinkCtx rsc = ruSinkCtxNew(log, closeCb, NULL);
     fail_if(rsc == NULL, retText, rsc, NULL);
     fail_unless(clexp == closed, retText, test, clexp, closed);
 
-    ruSetLogger(ruFileLogSink, RU_LOG_DBUG, rsc, rc, threaded);
+    ruSetLogger(ruFileLogSink, RU_LOG_VERB, rsc, rc, threaded);
     fail_unless(clexp == closed, retText, test, clexp, closed);
+
+    // flush the log
+    rpc = ruPreCtxFree(rpc, true);
 
     ruInfoLogf("'%s' log1 is '%s'", test, log);
     ruFlushLog();
     fail_unless(clexp == closed, retText, test, clexp, closed);
 
-    ruSetLogLevel(RU_LOG_VERB);
+    ruSetLogLevel(RU_LOG_DBUG);
     fail_unless(clexp == closed, retText, test, clexp, closed);
 
     ruInfoLogf("starting '%s' with testsecret", test);

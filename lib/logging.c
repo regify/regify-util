@@ -43,6 +43,74 @@ typedef __ino_t ru_inode;
 #define logDbg(fmt, ...)
 #endif
 
+// <editor-fold desc="pre internals">
+typedef struct {
+    ru_int type;
+    ruList logs;
+} preCtx;
+
+typedef struct {
+    uint32_t logLevel;
+    alloc_chars msg;
+} logEntry;
+
+ruMakeTypeGetter(preCtx, MagicPreCtx)
+
+static ptr logEntryFree(ptr p) {
+    logEntry* le = (logEntry*)p;
+    if (!le) return NULL;
+    ruFree(le->msg);
+    ruFree(le);
+    return NULL;
+}
+
+static logEntry* logEntryNew(uint32_t logLevel, trans_chars msg) {
+    logEntry* le = ruMalloc0(1, logEntry);
+    le->logLevel = logLevel;
+    le->msg = ruStrDup(msg);
+    return le;
+}
+// </editor-fold>
+
+// <editor-fold desc="pre public">
+RUAPI ruPreCtx ruPreCtxNew(void) {
+    preCtx* pc = ruMalloc0(1, preCtx);
+    pc->type = MagicPreCtx;
+    pc->logs = ruListNew(ruTypePtr(logEntryFree));
+    return pc;
+}
+
+RUAPI ruPreCtx ruPreCtxFree(ruPreCtx rpc, bool flush) {
+    preCtx* pc = preCtxGet(rpc, NULL);
+    if (!pc) return NULL;
+    if (flush) {
+        ruIterator li = ruListIter(pc->logs);
+        logEntry* le;
+        for(ruIterTo(li, le); li; ruIterTo(li, le)) {
+            if (ruDoesLog(le->logLevel)) {
+                ruRawLog(le->logLevel, le->msg);
+            }
+        }
+    }
+    pc->logs = ruListFree(pc->logs);
+    ruFree(pc);
+    return NULL;
+}
+
+RUAPI void ruPreLogSink(perm_ptr rpc, uint32_t logLevel, trans_chars msg) {
+    if (!msg) return;
+    preCtx* pc = preCtxGet((ptr)rpc, NULL);
+    if (!pc) {
+        if (msg) {
+            fputs(msg, stderr);
+        }
+        return;
+    }
+    logEntry* le = logEntryNew(logLevel, msg);
+    ruListAppend(pc->logs, le);
+}
+// </editor-fold>
+
 // <editor-fold desc="sink internals">
 typedef struct {
     ru_int type;
@@ -279,7 +347,7 @@ static void syncQ(perm_ptr userData, uint32_t logLevel, trans_chars msg) {
                         &cb2Writer, ls->clnBuf);
         out = ruStringGetCString(ls->clnBuf);
     }
-    ls->logger(ls->ctx, ls->level, out);
+    ls->logger(ls->ctx, logLevel, out);
 }
 
 static void freeLogger(logSinkCtx* ls) {
