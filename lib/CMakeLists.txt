@@ -193,7 +193,9 @@ if (WIN)
     list(APPEND SRCS win.cpp)
 endif()
 
-if(NOT WASM)
+if(WASM)
+    list(APPEND SRCS wasm.cpp)
+else()
     if (LINUX OR WIN OR MAC)
         # fam
         list(APPEND SRCS fam/fam.c)

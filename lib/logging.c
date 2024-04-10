@@ -488,9 +488,8 @@ RUAPI alloc_chars ruMakeLogMsgV(uint32_t log_level, trans_chars filePath,
     else
         lv = "????";
 
-#ifdef __EMSCRIPTEN__
-    #define prefix "%s: %s(%s:%d): "
-#else
+    char *file = (char*)ruBaseName((char*)filePath);
+
     char timeStr[20]; /* yyyy/mm/dd HH:MM:SS */
     struct tm tm;
     ruTimeVal tv;
@@ -498,6 +497,16 @@ RUAPI alloc_chars ruMakeLogMsgV(uint32_t log_level, trans_chars filePath,
     ruGetTimeVal(&tv);
     int micros = (int)tv.usec;
 
+    alloc_chars ret = NULL;
+
+#ifdef __EMSCRIPTEN__
+    localtime_r(&tv.sec, &tm);
+    #define prefix "%s.%06d %s: %s(%s:%d): "
+    strftime(timeStr, 20, "%Y-%m-%d %H:%M:%S", &tm);
+    // estimate
+    int32_t prefixSize = snprintf(ret, 0, prefix,
+                                  timeStr, micros, lv, func, file, line);
+#else
 #ifdef _WIN32
     _localtime32_s(&tm, &tv.sec);
 #else
@@ -519,21 +528,14 @@ RUAPI alloc_chars ruMakeLogMsgV(uint32_t log_level, trans_chars filePath,
         #define prefix "%s.%06d [%d%s %s: %s(%s:%d): "
     #endif
 #endif
-#endif
-    char *file = (char*)ruBaseName((char*)filePath);
-#ifndef __EMSCRIPTEN__
+
     perm_chars pidEnd = "]:";
     if (!logPidEnd) setPidEnd();
     if (logPidEnd) {
         pidEnd = logPidEnd;
     }
-#endif
 
     // estimate
-    char *ret = NULL;
-#ifdef __EMSCRIPTEN__
-    int32_t prefixSize = snprintf(ret, 0, prefix, lv, func, file, line);
-#else
     int32_t prefixSize = snprintf(ret, 0, prefix,
                                   timeStr, micros, pid, pidEnd, lv, func, file, line);
 #endif
@@ -546,7 +548,8 @@ RUAPI alloc_chars ruMakeLogMsgV(uint32_t log_level, trans_chars filePath,
     ret = ruMalloc0(prefixSize+msgsize+2, char);
     char *ptr = ret;
 #ifdef __EMSCRIPTEN__
-    snprintf(ret, prefixSize+1, prefix, lv, func, file, line);
+    snprintf(ret, prefixSize+1, prefix,
+             timeStr, micros, lv, func, file, line);
 #else
     snprintf(ret, prefixSize+1, prefix,
              timeStr, micros, pid, pidEnd, lv, func, file, line);
@@ -573,7 +576,7 @@ RUAPI alloc_chars ruMakeLogMsg(uint32_t log_level, trans_chars filePath, trans_c
 }
 
 RUAPI void ruDoLog(uint32_t log_level, trans_chars filePath, trans_chars func,
-             int32_t line, trans_chars format, ...) {
+                   int32_t line, trans_chars format, ...) {
     if (!ruDoesLog(log_level)) return;
     va_list args;
     va_start(args, format);

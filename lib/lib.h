@@ -418,6 +418,10 @@ alloc_chars utf8SwitchCase(trans_chars instr, bool isUpper);
 int32_t errno2rfec(int err);
 rusize_s ruWrite(int oh, const void* contents, rusize length);
 
+#if defined(__EMSCRIPTEN__)
+// wasm
+int32_t getWasmTimeVal(ruTimeVal *result);
+#endif
 
 #ifdef __cplusplus
 }

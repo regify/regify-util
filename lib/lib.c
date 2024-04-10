@@ -241,7 +241,9 @@ RUAPI alloc_chars ruGetLanguage(void) {
 
 RUAPI int32_t ruGetTimeVal(ruTimeVal *result) {
     if (!result) return RUE_PARAMETER_NOT_SET;
-#ifndef _WIN32
+#if defined(__EMSCRIPTEN__)
+    getWasmTimeVal(result);
+#elif !defined(_WIN32)
     ruZeroedStruct(struct timeval, r);
 
     gettimeofday (&r, NULL);
