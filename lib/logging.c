@@ -21,6 +21,7 @@
  */
 #include "lib.h"
 
+// <editor-fold desc="common internals">
 #if defined(_WIN32)
 static perm_chars bAppendMode = "ab";
 // no inodes here
@@ -43,40 +44,39 @@ typedef __ino_t ru_inode;
 #define logDbg(fmt, ...)
 #endif
 
-// <editor-fold desc="pre internals">
-typedef struct {
-    ru_int type;
-    ruList logs;
-} preCtx;
-
 typedef struct {
     uint32_t logLevel;
     alloc_chars msg;
-} logEntry;
+} logMsg;
 
-ruMakeTypeGetter(preCtx, MagicPreCtx)
-
-static ptr logEntryFree(ptr p) {
-    logEntry* le = (logEntry*)p;
+static ptr logMsgFree(ptr p) {
+    logMsg* le = (logMsg*)p;
     if (!le) return NULL;
     ruFree(le->msg);
     ruFree(le);
     return NULL;
 }
 
-static logEntry* logEntryNew(uint32_t logLevel, trans_chars msg) {
-    logEntry* le = ruMalloc0(1, logEntry);
+static logMsg* logMsgNew(uint32_t logLevel, trans_chars msg) {
+    logMsg* le = ruMalloc0(1, logMsg);
     le->logLevel = logLevel;
     le->msg = ruStrDup(msg);
     return le;
 }
 // </editor-fold>
 
-// <editor-fold desc="pre public">
+// <editor-fold desc="pre logger">
+typedef struct {
+    ru_int type;
+    ruList logs;
+} preCtx;
+
+ruMakeTypeGetter(preCtx, MagicPreCtx)
+
 RUAPI ruPreCtx ruPreCtxNew(void) {
     preCtx* pc = ruMalloc0(1, preCtx);
     pc->type = MagicPreCtx;
-    pc->logs = ruListNew(ruTypePtr(logEntryFree));
+    pc->logs = ruListNew(ruTypePtr(logMsgFree));
     return pc;
 }
 
@@ -84,12 +84,20 @@ RUAPI ruPreCtx ruPreCtxFree(ruPreCtx rpc, bool flush) {
     preCtx* pc = preCtxGet(rpc, NULL);
     if (!pc) return NULL;
     if (flush) {
+        bool logged = false;
         ruIterator li = ruListIter(pc->logs);
-        logEntry* le;
-        for(ruIterTo(li, le); li; ruIterTo(li, le)) {
-            if (ruDoesLog(le->logLevel)) {
-                ruRawLog(le->logLevel, le->msg);
+        logMsg* lm;
+        for(ruIterTo(li, lm); li; ruIterTo(li, lm)) {
+            if (ruDoesLog(lm->logLevel)) {
+                if (!logged) {
+                    logged = true;
+                    ruVerbLog("* * * Start of flushed pre log messages");
+                }
+                ruRawLog(lm->logLevel, lm->msg);
             }
+        }
+        if (logged) {
+            ruVerbLog("* * * End of flushed pre log messages");
         }
     }
     pc->logs = ruListFree(pc->logs);
@@ -101,12 +109,10 @@ RUAPI void ruPreLogSink(perm_ptr rpc, uint32_t logLevel, trans_chars msg) {
     if (!msg) return;
     preCtx* pc = preCtxGet((ptr)rpc, NULL);
     if (!pc) {
-        if (msg) {
-            fputs(msg, stderr);
-        }
+        fputs(msg, stderr);
         return;
     }
-    logEntry* le = logEntryNew(logLevel, msg);
+    logMsg* le = logMsgNew(logLevel, msg);
     ruListAppend(pc->logs, le);
 }
 // </editor-fold>
@@ -306,30 +312,15 @@ typedef struct {
     volatile bool syncing;
 } logSinkCtx;
 
-typedef struct {
-    uint32_t logLevel;
-    alloc_chars msg;
-} logMsg;
-
 static logSinkCtx* ls_ = NULL;
 #define MAX_LOG_LEN 2048
-
-static ptr freeMsg(ptr p) {
-    logMsg* m = (logMsg*)p;
-    if (!m) return NULL;
-    ruFree(m->msg);
-    ruFree(m);
-    return NULL;
-}
 
 static void asyncQ(perm_ptr userData, uint32_t logLevel, trans_chars msg) {
     logSinkCtx* ls = (logSinkCtx*)userData;
     if (!ls->queue) return;
-    logMsg* m = ruMalloc0(1, logMsg);
-    m->logLevel = logLevel;
-    m->msg = ruStrDup(msg);
-    int32_t ret = ruListPush(ls->queue, m);
-    if (ret != RUE_OK) freeMsg(m);
+    logMsg* lm = logMsgNew(logLevel, msg);
+    int32_t ret = ruListPush(ls->queue, lm);
+    if (ret != RUE_OK) logMsgFree(lm);
 }
 
 static rusize_s cb2Writer (perm_ptr ctx, trans_ptr buf, rusize len) {
@@ -381,7 +372,7 @@ static ptr logThread(ptr p) {
         logMsg* m = ruListTryPop(ls->queue, to, &ret);
         if (m) {
             syncQ(ls, m->logLevel, m->msg);
-            freeMsg(m);
+            logMsgFree(m);
             flushed = false;
         } else {
 
@@ -412,7 +403,7 @@ static logSinkCtx* newLogger(ruLogFunc logger, uint32_t logLevel, perm_ptr userD
         ls->cleaner = cleaner;
     }
     if (threaded) {
-        ls->queue = ruListNew(ruTypePtr(freeMsg));
+        ls->queue = ruListNew(ruTypePtr(logMsgFree));
         ls->queuer = asyncQ;
         ls->logThread = ruThreadCreateBg(
                 logThread, ruStrDup("logger"), ls);
