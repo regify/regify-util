@@ -118,16 +118,23 @@ typedef rusize_s (*rcReadFn) (perm_ptr ctx, ptr buf, rusize len);
 typedef struct Tree_ Tree;
 
 struct Tree_ {
-    uint8_t me;
     Tree* kids[256];
     alloc_chars subst;
 };
+
+typedef struct {
+    Tree* tree;
+    int32_t idx;
+} treeTrail;
+
+typedef treeTrail trail_array[];
 
 typedef struct {
     uint32_t type;
     Tree *root;
     Tree *leaf;
 
+    trail_array* trail;
     bool buffered;
     char *inHeap;
     char *inBuf;
@@ -162,16 +169,58 @@ ruMakeTypeGetter(Cleaner, MagicCleaner)
 
 static Tree* newBranch(Cleaner *c, uint8_t letter) {
     Tree *t = ruMalloc0(1, Tree);
-    t->me = letter;
+    //t->me = letter;
     c->memsize += sizeof(Tree);
     return t;
 }
 
-static Tree* freeBranch(Cleaner *c, Tree *t) {
-    for (int i = 0; i < 256; i++) {
-        if (! t->kids[i]) continue;
-        t->kids[i] = freeBranch(c, t->kids[i]);
+static Tree* freeBranch(Cleaner *c, Tree* t) {
+    if (!t) return NULL;
+    // preDone
+    int32_t pos = 0, i = 0;
+    while(true) {
+        // done
+        if (i < 256) {
+            // preRecurse
+            if (!t->kids[i]) {
+                // preDone
+                i++;
+                continue;
+            }
+            // push
+            (*c->trail)[pos].tree = t;
+            (*c->trail)[pos].idx = i;
+            pos++;
+
+            // recurse
+            t = t->kids[i];
+            // reset our for loop
+            i = 0;
+            continue;
+        }
+        // pop
+        if (pos) {
+            pos--;
+
+            // postDone
+            ruFree(t->subst);
+            c->memsize -= sizeof(Tree);
+            ruFree(t);
+
+            // pop
+            t = (*c->trail)[pos].tree;
+            i = (*c->trail)[pos].idx;
+            // postRecurse
+            t->kids[i] = NULL;
+
+            // preDone
+            // increment for the continuing for loop
+            i++;
+            continue;
+        }
+        break;
     }
+    // postDone
     ruFree(t->subst);
     c->memsize -= sizeof(Tree);
     ruFree(t);
@@ -185,37 +234,81 @@ static bool entryUsed(Cleaner *c, Tree *t) {
     return false;
 }
 
-static void dumpEntry(Cleaner *c, Tree *t, char* instr, char* cur, rusize inlen,
+static void dumpEntry(Cleaner* c, Tree* t, perm_chars instr, int32_t inlen,
                       ruCleanerCb lf, perm_ptr lctx) {
-    if ((rusize)(cur-instr) < inlen) {
-        for (int i = 0; i < 256; i++) {
-            if (t->kids[i]) {
-                *cur = (char)i;
-                *(cur+1) = '\0';
-                dumpEntry(c, t->kids[i], instr, cur+1, inlen, lf, lctx);
+    int32_t pos = 0;
+    // preDone
+    int32_t i = 0;
+    char* cur = (char*)instr;
+    while(true) {
+        // done
+        if (pos < inlen) {
+            while (i < 256 && !t->kids[i]) i++;
+
+            if (i < 256) {
+                // preCurse
+                *cur = (char) i;
+                // push
+                (*c->trail)[pos].tree = t;
+                (*c->trail)[pos].idx = i;
+                pos++;
+                cur++;
+                // recurse
+                t = t->kids[i];
+                i = 0;
+                continue;
             }
         }
+        // pop
+        if (pos) {
+            pos--;
+            *cur = '\0';
+            // postDone
+            lf(lctx, instr, t->subst);
+            cur--;
+
+            // pop
+            t = (*c->trail)[pos].tree;
+            i = (*c->trail)[pos].idx;
+
+            // postRecurse
+            // preDone
+            // increment for the continuing for loop
+            i++;
+            continue;
+        }
+        break;
     }
+    // postDone
     *cur = '\0';
     lf(lctx, instr, t->subst);
 }
 
-static void addEntry(Cleaner *c, Tree *t, trans_chars instr, trans_chars subst) {
-    uint8_t b = *instr;
-    int i = (int) b;
-    if (!t->kids[i]) {
-        if (!subst) return; // should happen, but anyway
-        t->kids[i] = newBranch(c, b);
-    }
 
-    if (*(instr+1)) {
-        addEntry(c, t->kids[i], instr + 1, subst);
-        if (!subst) {
-            if (!entryUsed(c, t->kids[i])) {
-                t->kids[i] = freeBranch(c, t->kids[i]);
-            }
+static void addEntry(Cleaner* c, Tree* t, trans_chars instr, trans_chars subst) {
+    int32_t pos = 0, i;
+    while(true) {
+        // preRecurse
+        uint8_t b = *instr;
+        i = (int32_t) b;
+        if (!t->kids[i]) {
+            // We should not have to create branches when removing,
+            // but we'll handle it anyway.
+            if (!subst) return;
+            t->kids[i] = newBranch(c, b);
         }
-    } else {
+        if (*(instr+1)) {
+            // preRecurse
+            // push
+            (*c->trail)[pos].tree = t;
+            (*c->trail)[pos].idx = i;
+            pos++;
+            // recurse
+            t = t->kids[i];
+            instr++;
+            continue;
+        }
+        // postDone
         // free up potential duplicate entry
         ruFree(t->kids[i]->subst);
         if (subst) {
@@ -225,6 +318,21 @@ static void addEntry(Cleaner *c, Tree *t, trans_chars instr, trans_chars subst) 
                 t->kids[i] = freeBranch(c, t->kids[i]);
             }
         }
+        break;
+    }
+    if (!subst) {
+        while(pos--) {
+            // postDone
+            // pop
+            t = (*c->trail)[pos].tree;
+            i = (*c->trail)[pos].idx;
+            // postRecurse
+            if (!entryUsed(c, t->kids[i])) {
+                t->kids[i] = freeBranch(c, t->kids[i]);
+            }
+            if(!pos) break;
+        }
+
     }
 }
 
@@ -424,6 +532,7 @@ ruCleaner ruCleanFree(ruCleaner cp) {
     }
     ruFree(c->inHeap);
     ruFree(c->outBuf);
+    ruFree(c->trail);
 #ifndef CLEANER_ONLY
     c->mux = ruMutexFree(c->mux);
 #endif
@@ -441,7 +550,6 @@ int32_t ruCleanAdd(ruCleaner rc, trans_chars instr, trans_chars substitute) {
 #ifndef CLEANER_ONLY
     ruMutexLock(c->mux);
 #endif
-    addEntry(c, c->root, instr, substitute);
     rusize len = strlen(instr);
     if (len > c->longestEntry) {
         c->longestEntry = len;
@@ -449,7 +557,10 @@ int32_t ruCleanAdd(ruCleaner rc, trans_chars instr, trans_chars substitute) {
             ruFree(c->inHeap);
             ruFree(c->outBuf);
         }
+        ruFree(c->trail);
+        c->trail = (trail_array*) ruMalloc0(c->longestEntry, treeTrail);
     }
+    addEntry(c, c->root, instr, substitute);
 #ifndef CLEANER_ONLY
     ruMutexUnlock(c->mux);
 #endif
@@ -478,10 +589,9 @@ int32_t ruCleanDump(ruCleaner cp, ruCleanerCb lf, perm_ptr user_data) {
     if (!c) return code;
     if (!lf) return RUE_PARAMETER_NOT_SET;
 
-    char* instr = malloc(c->longestEntry + 1);
-    *instr = '\0';
-    dumpEntry(c, c->root, instr, instr, c->longestEntry, lf, user_data);
-    free(instr);
+    alloc_chars instr = ruMalloc0(c->longestEntry + 1, char);
+    dumpEntry(c, c->root, instr, (int32_t)c->longestEntry, lf, user_data);
+    ruFree(instr);
     return code;
 }
 
