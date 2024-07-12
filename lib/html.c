@@ -24,8 +24,8 @@
  */
 #include "lib.h"
 
-//#define html_dbg(fmt, ...)
-#define html_dbg(fmt, ...) ruLog_(RU_LOG_DBUG, fmt, __VA_ARGS__)
+#define html_dbg(fmt, ...)
+//#define html_dbg(fmt, ...) ruLog_(RU_LOG_DBUG, fmt, __VA_ARGS__)
 
 typedef struct parseCtx_ {
     TidyDoc doc;
@@ -199,6 +199,7 @@ static void filterText(parseCtx* pc, TidyNode tnod) {
          child = tidyGetNext(child)) {
         perm_chars name = NULL;
         TidyNodeType nt = tidyNodeGetType(child);
+        html_dbg("node type %d", nt);
         bool opened = false;
         bool hasText = tidyNodeHasText(pc->doc, child);
         if(nt == TidyNode_Start || nt == TidyNode_End || nt == TidyNode_StartEnd) {
@@ -224,7 +225,7 @@ static void filterText(parseCtx* pc, TidyNode tnod) {
             }
 
 
-        } else if (hasText) {
+        } else if (hasText && nt != TidyNode_Comment) {
             // if it does not have a name, then it's probably text, cdata, etc...
             TidyBuffer buf;
             tidyBufInit(&buf);
@@ -478,7 +479,9 @@ RUAPI bool ruHtmlTestFor(trans_chars content) {
         ruStrCaseStrLen(end, "</html>", endLen)) {
         /* say it is html only, if there is "<html" found in the first
             * 200 chars and </html> in the last 20. */
+        ruVerbLog("content looks like HTML");
         return true;
     }
+    ruVerbLog("content looks like plain text");
     return false;
 }

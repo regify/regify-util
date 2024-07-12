@@ -75,6 +75,11 @@ START_TEST (run) {
            "<meta charset=utf8>\n"
            "<title>Da title is here</title>\n"
            "</head>\n"
+           "  <!--\n"
+           "  AVAILABLE PLACEHOLDERS:\n"
+           "  [PROVIDERNAME], https://bp137.regify.com/, [PROVIDERHOMEPAGE],\n"
+           "  [MESSAGE], [NAME], [SENDER], [TITLE], [LANGUAGE]\n"
+           "  -->\n"
            "<body onsubmit=>\n"
            "<p onclick='huh'>foo &Ascr;   \n"
            "  <b>  is  </b>\n\n "
@@ -83,6 +88,7 @@ START_TEST (run) {
            "object"
            " onblur='s'/>"
            "<br onchange>"
+           "&nbsp;<!-- dont remove to get the line -->\n"
            "<p>bar <i>man</p>\n"
            "<ol>\n"
            "<li>the&nbsp;&#xa0; &nbsp;first &#35;item </li>\n"
@@ -96,9 +102,14 @@ START_TEST (run) {
              "  <meta charset=\"utf-8\" />" LF
              "  <meta name=\"generator\" content=\"HTML Tidy for HTML5 for " TIDY "\" />" LF
              "  <title>Da title is here</title>" LF
-             "</head>" LF
+             "</head><!--" LF
+             "  AVAILABLE PLACEHOLDERS:" LF
+             "  [PROVIDERNAME], https://bp137.regify.com/, [PROVIDERHOMEPAGE]," LF
+             "  [MESSAGE], [NAME], [SENDER], [TITLE], [LANGUAGE]" LF
+             "  -->" LF
              "<body>" LF
              "  <p>foo \xf0\x9d\x92\x9c <b>is</b> the</p><br />" LF
+             "  &nbsp; <!-- dont remove to get the line -->" LF
              "  <p>bar <i>man</i></p>" LF
              "  <ol>" LF
              "    <li>" LF
@@ -120,6 +131,7 @@ START_TEST (run) {
     fail_unless(body == res, retText, test, body, res);
     ruDbgLogf("plain text: '%s'", txt);
     expstr = "foo \xf0\x9d\x92\x9c is the\n"
+             " \n"
              "bar man\n"
              "* the    first #item\n"
              "  * & item &2\n";
