@@ -253,6 +253,15 @@ Functions</h2></td></tr>
 <tr class="memitem:gac02a41b8d206a2e7518420e8647c28b7"><td class="memItemLeft" align="right" valign="top">RUAPI char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__string.html#gac02a41b8d206a2e7518420e8647c28b7">ruDupPrintf</a> (const char *format,...)</td></tr>
 <tr class="memdesc:gac02a41b8d206a2e7518420e8647c28b7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns an allocated string from given printf call.  <a href="group__string.html#gac02a41b8d206a2e7518420e8647c28b7">More...</a><br /></td></tr>
 <tr class="separator:gac02a41b8d206a2e7518420e8647c28b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaeba580fa6260dd017d3ffb7cf3eebc8a"><td class="memItemLeft" align="right" valign="top">RUAPI bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__string.html#gaeba580fa6260dd017d3ffb7cf3eebc8a">ruIsInt64</a> (<a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> str)</td></tr>
+<tr class="memdesc:gaeba580fa6260dd017d3ffb7cf3eebc8a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if given string contains a valid 64 bit integer.  <a href="group__string.html#gaeba580fa6260dd017d3ffb7cf3eebc8a">More...</a><br /></td></tr>
+<tr class="separator:gaeba580fa6260dd017d3ffb7cf3eebc8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga45c6ec81ade73cb75d41f7a3ff089da4"><td class="memItemLeft" align="right" valign="top">RUAPI bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__string.html#ga45c6ec81ade73cb75d41f7a3ff089da4">ruIsBool</a> (<a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> str, bool *val)</td></tr>
+<tr class="memdesc:ga45c6ec81ade73cb75d41f7a3ff089da4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if given string contains a valid boolean.  <a href="group__string.html#ga45c6ec81ade73cb75d41f7a3ff089da4">More...</a><br /></td></tr>
+<tr class="separator:ga45c6ec81ade73cb75d41f7a3ff089da4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga89fedd170e889128cef0eb7730600034"><td class="memItemLeft" align="right" valign="top">RUAPI int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__string.html#ga89fedd170e889128cef0eb7730600034">ruStrParseBool</a> (<a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> str, <a class="el" href="group__misc.html#ga7dd744dc0ee350f7de2c38f51f5c0bbe">perm_chars</a> *endptr, bool *out)</td></tr>
+<tr class="memdesc:ga89fedd170e889128cef0eb7730600034"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parses boolean value out of given string.  <a href="group__string.html#ga89fedd170e889128cef0eb7730600034">More...</a><br /></td></tr>
+<tr class="separator:ga89fedd170e889128cef0eb7730600034"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga7e64fd093ac04b3a5d981894faeee746"><td class="memItemLeft" align="right" valign="top">RUAPI int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__string.html#ga7e64fd093ac04b3a5d981894faeee746">ruStrParseInt64</a> (<a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> str, <a class="el" href="group__misc.html#ga7dd744dc0ee350f7de2c38f51f5c0bbe">perm_chars</a> *endptr, uint32_t base, int64_t *num)</td></tr>
 <tr class="separator:ga7e64fd093ac04b3a5d981894faeee746"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga4e55be57400b2d05ddb2f444c746e5cb"><td class="memItemLeft" align="right" valign="top">RUAPI int64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__string.html#ga4e55be57400b2d05ddb2f444c746e5cb">ruStrToInt64</a> (<a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a> str)</td></tr>
@@ -651,6 +660,71 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Allocated string copy of formatted string. Free with <a class="el" href="group__memory.html#gafcc3628238450c77b4aa61e9d7001a56">ruFree</a>. </dd></dl>
+
+</div>
+</div>
+<a id="ga45c6ec81ade73cb75d41f7a3ff089da4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga45c6ec81ade73cb75d41f7a3ff089da4">&#9670;&nbsp;</a></span>ruIsBool()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI bool ruIsBool </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a>&#160;</td>
+          <td class="paramname"><em>str</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool *&#160;</td>
+          <td class="paramname"><em>val</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns true if given string contains a valid boolean. </p>
+<p>Valid booleans are case insensitive versions of true and false and any number that evaluates to 0 or 1. Evaluating to numbers other than 0 or 1 does not qualify as a valid boolean. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">str</td><td>String to parse </td></tr>
+    <tr><td class="paramname">val</td><td>Where the result will be stored on success. Value is unspecified on error. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>whether the string evaluates to a boolean </dd></dl>
+
+</div>
+</div>
+<a id="gaeba580fa6260dd017d3ffb7cf3eebc8a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaeba580fa6260dd017d3ffb7cf3eebc8a">&#9670;&nbsp;</a></span>ruIsInt64()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI bool ruIsInt64 </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a>&#160;</td>
+          <td class="paramname"><em>str</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns true if given string contains a valid 64 bit integer. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">str</td><td>String to parse </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>parse result overflow returns as false </dd></dl>
 
 </div>
 </div>
@@ -1570,6 +1644,51 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="ga89fedd170e889128cef0eb7730600034"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga89fedd170e889128cef0eb7730600034">&#9670;&nbsp;</a></span>ruStrParseBool()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI int32_t ruStrParseBool </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a>&#160;</td>
+          <td class="paramname"><em>str</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__misc.html#ga7dd744dc0ee350f7de2c38f51f5c0bbe">perm_chars</a> *&#160;</td>
+          <td class="paramname"><em>endptr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool *&#160;</td>
+          <td class="paramname"><em>out</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Parses boolean value out of given string. </p>
+<p>Leading and trailing whitespace is ignored. Valid booleans are case insensitive versions of true and false and any number that evaluates to 0 or 1. Evaluating to numbers other than 0 or 1 does not qualify as a valid boolean. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">str</td><td>String to parse </td></tr>
+    <tr><td class="paramname">endptr</td><td>(Optional) Points to the first character that did not parse properly </td></tr>
+    <tr><td class="paramname">out</td><td>Where the result will be stored on success. Value is unspecified on error. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="group__ruerror.html#ga7e2f97cce8af8020834e685a2482556d">RUE_OK</a> on success or <a class="el" href="group__ruerror.html#ga616dba9a5dafed8351aa98c68fab25e2">RUE_PARAMETER_NOT_SET</a> and <a class="el" href="group__ruerror.html#ga0860dfd6b6c4771bbdeb5c070c35d7d1">RUE_INVALID_PARAMETER</a> for not given or invalid input. </dd></dl>
+
+</div>
+</div>
 <a id="ga6a5fe3244fd42e0be9bd1fb70cb5bdcf"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ga6a5fe3244fd42e0be9bd1fb70cb5bdcf">&#9670;&nbsp;</a></span>ruStrParseInt()</h2>
 
@@ -2175,11 +2294,11 @@ Functions</h2></td></tr>
 <div class="line"><a class="code" href="group__misc.html#ga7dd744dc0ee350f7de2c38f51f5c0bbe">perm_chars</a> trimstr = <a class="code" href="group__string.html#ga258258f27f95aebd563a5a440f84cd79">ruStrTrim</a>(mystring, NULL, <a class="code" href="group__string.html#gga1f4eb9b5f88a1b4cb67b9c9414a1377da4d5a24d0b5b4cee3ad211730487a0e0e">ruTrimBoth</a>, &amp;newstr);</div>
 <div class="line"><span class="comment">// do whatever with trimstr</span></div>
 <div class="line"><a class="code" href="group__memory.html#gafcc3628238450c77b4aa61e9d7001a56">ruFree</a>(newstr);</div>
-<div class="ttc" id="agroup__memory_html_gafcc3628238450c77b4aa61e9d7001a56"><div class="ttname"><a href="group__memory.html#gafcc3628238450c77b4aa61e9d7001a56">ruFree</a></div><div class="ttdeci">#define ruFree(p)</div><div class="ttdoc">Frees given resource and sets paramater to NULL.</div><div class="ttdef"><b>Definition:</b> regify-util.h:662</div></div>
+<div class="ttc" id="agroup__memory_html_gafcc3628238450c77b4aa61e9d7001a56"><div class="ttname"><a href="group__memory.html#gafcc3628238450c77b4aa61e9d7001a56">ruFree</a></div><div class="ttdeci">#define ruFree(p)</div><div class="ttdoc">Frees given resource and sets paramater to NULL.</div><div class="ttdef"><b>Definition:</b> regify-util.h:655</div></div>
 <div class="ttc" id="agroup__misc_html_ga7dd744dc0ee350f7de2c38f51f5c0bbe"><div class="ttname"><a href="group__misc.html#ga7dd744dc0ee350f7de2c38f51f5c0bbe">perm_chars</a></div><div class="ttdeci">const char * perm_chars</div><div class="ttdoc">A permanent NULL terminated string pointer.</div><div class="ttdef"><b>Definition:</b> regify-util.h:176</div></div>
 <div class="ttc" id="agroup__misc_html_ga972d4f4f858964bb2381d186ea96d88d"><div class="ttname"><a href="group__misc.html#ga972d4f4f858964bb2381d186ea96d88d">alloc_chars</a></div><div class="ttdeci">char * alloc_chars</div><div class="ttdoc">An allocated NULL terminated string pointer.</div><div class="ttdef"><b>Definition:</b> regify-util.h:199</div></div>
 <div class="ttc" id="agroup__string_html_ga258258f27f95aebd563a5a440f84cd79"><div class="ttname"><a href="group__string.html#ga258258f27f95aebd563a5a440f84cd79">ruStrTrim</a></div><div class="ttdeci">RUAPI perm_chars ruStrTrim(perm_chars instr, trans_chars unwanted, enum ruTrimSide ends, alloc_chars *newstr)</div><div class="ttdoc">Checks given string for leading / trailing unwanted characters and returns trimmed copy if needed.</div></div>
-<div class="ttc" id="agroup__string_html_gga1f4eb9b5f88a1b4cb67b9c9414a1377da4d5a24d0b5b4cee3ad211730487a0e0e"><div class="ttname"><a href="group__string.html#gga1f4eb9b5f88a1b4cb67b9c9414a1377da4d5a24d0b5b4cee3ad211730487a0e0e">ruTrimBoth</a></div><div class="ttdeci">@ ruTrimBoth</div><div class="ttdef"><b>Definition:</b> string.h:600</div></div>
+<div class="ttc" id="agroup__string_html_gga1f4eb9b5f88a1b4cb67b9c9414a1377da4d5a24d0b5b4cee3ad211730487a0e0e"><div class="ttname"><a href="group__string.html#gga1f4eb9b5f88a1b4cb67b9c9414a1377da4d5a24d0b5b4cee3ad211730487a0e0e">ruTrimBoth</a></div><div class="ttdeci">@ ruTrimBoth</div><div class="ttdef"><b>Definition:</b> string.h:634</div></div>
 </div><!-- fragment --> 
 </div>
 </div>
@@ -2332,7 +2451,7 @@ Functions</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Fri Jul 12 2024 12:46:51 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Mon Aug 5 2024 14:54:33 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

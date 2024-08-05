@@ -341,15 +341,8 @@
       <type>RUAPI trans_chars</type>
       <name>ruGetenv</name>
       <anchorfile>group__misc.html</anchorfile>
-      <anchor>ga86dd88de865e954dc1d0ea82fd20f21c</anchor>
-      <arglist>(const char *variable)</arglist>
-    </member>
-    <member kind="function">
-      <type>RUAPI bool</type>
-      <name>ruIsInt64</name>
-      <anchorfile>group__misc.html</anchorfile>
-      <anchor>ga61f7ab20b2760c5cb849d3b442eb4402</anchor>
-      <arglist>(const char *numstr)</arglist>
+      <anchor>gac83ad3a3929e44c89b5fd8bb8d23cce9</anchor>
+      <arglist>(trans_chars variable)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI ru_pid</type>
@@ -2931,6 +2924,27 @@
       <anchorfile>group__string.html</anchorfile>
       <anchor>gac02a41b8d206a2e7518420e8647c28b7</anchor>
       <arglist>(const char *format,...)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI bool</type>
+      <name>ruIsInt64</name>
+      <anchorfile>group__string.html</anchorfile>
+      <anchor>gaeba580fa6260dd017d3ffb7cf3eebc8a</anchor>
+      <arglist>(trans_chars str)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI bool</type>
+      <name>ruIsBool</name>
+      <anchorfile>group__string.html</anchorfile>
+      <anchor>ga45c6ec81ade73cb75d41f7a3ff089da4</anchor>
+      <arglist>(trans_chars str, bool *val)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI int32_t</type>
+      <name>ruStrParseBool</name>
+      <anchorfile>group__string.html</anchorfile>
+      <anchor>ga89fedd170e889128cef0eb7730600034</anchor>
+      <arglist>(trans_chars str, perm_chars *endptr, bool *out)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI int32_t</type>
