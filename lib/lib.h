@@ -401,7 +401,7 @@ void ruAbortf(trans_chars format, ...);
 void ruAbortm(trans_chars msg);
 void U_CALLCONV traceData( const void *context, int32_t fnNumber, int32_t level,
                            const char *fmt, va_list args);
-bool ruIsunreserved(unsigned char in);
+bool isUnReserved(uint8_t in);
 sec_t timeParse(trans_chars dateformat, trans_chars datestr, bool utc);
 void setPidEnd(void);
 

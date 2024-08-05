@@ -178,6 +178,62 @@ START_TEST ( misc ) {
     is = ruIsInt64(" a123  ");
     fail_unless(want == is, retText, test, want, is);
 
+    want = true;
+    bool bres = false;
+    bool bexp = true;
+    test = "ruIsBool";
+    is = ruIsBool("true", &bres);
+    fail_unless(want == is, retText, test, want, is);
+    fail_unless(bexp == bres, retText, test, bexp, bres);
+
+    is = ruIsBool("\nTruE\t", &bres);
+    fail_unless(want == is, retText, test, want, is);
+    fail_unless(bexp == bres, retText, test, bexp, bres);
+
+    is = ruIsBool("1", &bres);
+    fail_unless(want == is, retText, test, want, is);
+    fail_unless(bexp == bres, retText, test, bexp, bres);
+
+    is = ruIsBool(" 0001 ", &bres);
+    fail_unless(want == is, retText, test, want, is);
+    fail_unless(bexp == bres, retText, test, bexp, bres);
+
+    bexp = false;
+    is = ruIsBool(" false ", &bres);
+    fail_unless(want == is, retText, test, want, is);
+    fail_unless(bexp == bres, retText, test, bexp, bres);
+
+    is = ruIsBool("fAlSe\n", &bres);
+    fail_unless(want == is, retText, test, want, is);
+    fail_unless(bexp == bres, retText, test, bexp, bres);
+
+    is = ruIsBool("0", &bres);
+    fail_unless(want == is, retText, test, want, is);
+    fail_unless(bexp == bres, retText, test, bexp, bres);
+
+    is = ruIsBool(" 000 ", &bres);
+    fail_unless(want == is, retText, test, want, is);
+    fail_unless(bexp == bres, retText, test, bexp, bres);
+
+    want = false;
+    is = ruIsBool(NULL, &bres);
+    fail_unless(want == is, retText, test, want, is);
+
+    is = ruIsBool(" \n", &bres);
+    fail_unless(want == is, retText, test, want, is);
+
+    is = ruIsBool("", &bres);
+    fail_unless(want == is, retText, test, want, is);
+
+    is = ruIsBool("0x1", &bres);
+    fail_unless(want == is, retText, test, want, is);
+
+    is = ruIsBool("2", &bres);
+    fail_unless(want == is, retText, test, want, is);
+
+    is = ruIsBool("010", NULL);
+    fail_unless(want == is, retText, test, want, is);
+
     test = "ruSemiRandomNumber";
     ret = ruSemiRandomNumber(11, 0);
     fail_if(ret < 0, retText, test, 0, ret);

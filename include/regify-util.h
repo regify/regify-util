@@ -416,14 +416,7 @@ RUAPI alloc_chars ruGetHostname(void);
  * @param variable Variable name to retrieve
  * @return A copy of the value. May not be freed by the caller.
  */
-RUAPI trans_chars ruGetenv(const char *variable);
-
-/**
- * \brief Returns true if given string contains a valid 64 bit integer
- * @param numstr String to parse
- * @return parse result overflow returns as false
- */
-RUAPI bool ruIsInt64(const char* numstr);
+RUAPI trans_chars ruGetenv(trans_chars variable);
 
 /**
  * \brief Return the current process id

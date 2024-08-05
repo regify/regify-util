@@ -505,6 +505,40 @@ RUAPI char* ruDupvPrintf(const char* format, va_list arglist);
 RUAPI char* ruDupPrintf(const char* format, ...);
 
 /**
+ * \brief Returns true if given string contains a valid 64 bit integer
+ * @param str String to parse
+ * @return parse result overflow returns as false
+ */
+RUAPI bool ruIsInt64(trans_chars str);
+
+/**
+ * \brief Returns true if given string contains a valid boolean
+ *
+ * Valid booleans are case insensitive versions of true and false and any number
+ * that evaluates to 0 or 1. Evaluating to numbers other than 0 or 1 does not
+ * qualify as a valid boolean.
+ * @param str String to parse
+ * @param val Where the result will be stored on success. Value is unspecified on error.
+ * @return whether the string evaluates to a boolean
+ */
+RUAPI bool ruIsBool(trans_chars str, bool* val);
+
+/**
+ * \brief Parses boolean value out of given string.
+ *
+ * Leading and trailing whitespace is ignored.
+ * Valid booleans are case insensitive versions of true and false and any number
+ * that evaluates to 0 or 1. Evaluating to numbers other than 0 or 1 does not
+ * qualify as a valid boolean.
+ * @param str String to parse
+ * @param endptr (Optional) Points to the first character that did not parse properly
+ * @param out Where the result will be stored on success. Value is unspecified on error.
+ * @return \ref RUE_OK on success or \ref RUE_PARAMETER_NOT_SET and
+ *         \ref RUE_INVALID_PARAMETER for not given or invalid input.
+ */
+RUAPI int32_t ruStrParseBool(trans_chars str, perm_chars* endptr, bool* out);
+
+/**
  * Parses the number out of the given string in given base assuming and ignoring
  * comma thousand separators. The decimal point is a period.
  *

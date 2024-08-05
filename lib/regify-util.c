@@ -117,7 +117,7 @@ RUAPI alloc_ptr ruMemDup(trans_ptr buf, rusize size) {
     return dest;
 }
 
-RUAPI trans_chars ruGetenv(const char *variable) {
+RUAPI trans_chars ruGetenv(trans_chars variable) {
     if (!variable) return NULL;
     return getenv (variable);
 }

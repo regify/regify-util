@@ -78,6 +78,16 @@ START_TEST ( api ) {
     fail_unless(exp == ret, retText, test, exp, ret);
     fail_unless(0 == num, retText, test, 0, num);
 
+    exp = RUE_PARAMETER_NOT_SET;
+    ret = ruStrParseBool(NULL, NULL, NULL);
+    fail_unless(exp == ret, retText, test, exp, ret);
+
+    ret = ruStrParseBool("0", NULL, NULL);
+    fail_unless(exp == ret, retText, test, exp, ret);
+
+    ret = ruStrParseBool(NULL, NULL, &does);
+    fail_unless(exp == ret, retText, test, exp, ret);
+
     ruStrStrip(NULL, NULL, NULL);
     ruStrStrip(" ", NULL, NULL);
 
@@ -329,6 +339,69 @@ START_TEST ( run ) {
     fail_unless(exp == ret, retText, test, exp, ret);
     fail_unless(lexp == lnum, retText, test, lexp, lnum);
     fail_unless(end == *endAddr, retText, test, end, *endAddr);
+
+    exp = RUE_INVALID_PARAMETER;
+    bool bres = false;
+    test = "ruStrParseBool";
+    ret = ruStrParseBool("2", &endAddr, &bres);
+    fail_unless(exp == ret, retText, test, exp, ret);
+
+    ret = ruStrParseBool("-0", &endAddr, &bres);
+    fail_unless(exp == ret, retText, test, exp, ret);
+
+    ret = ruStrParseBool("-1", &endAddr, &bres);
+    fail_unless(exp == ret, retText, test, exp, ret);
+
+    ret = ruStrParseBool("\t-000  ", &endAddr, &bres);
+    fail_unless(exp == ret, retText, test, exp, ret);
+
+    exp = RUE_OK;
+    bool bexp = false;
+    end = '6';
+    ret = ruStrParseBool(" 0678NULL", &endAddr, &bres);
+    fail_unless(exp == ret, retText, test, exp, ret);
+    fail_unless(bexp == bres, retText, test, bexp, bres);
+    fail_unless(end == *endAddr, retText, test, end, *endAddr);
+
+    end = '-';
+    ret = ruStrParseBool("0-0", &endAddr, &bres);
+    fail_unless(exp == ret, retText, test, exp, ret);
+    fail_unless(bexp == bres, retText, test, bexp, bres);
+    fail_unless(end == *endAddr, retText, test, end, *endAddr);
+
+    end = '\0';
+    ret = ruStrParseBool("0", &endAddr, &bres);
+    fail_unless(exp == ret, retText, test, exp, ret);
+    fail_unless(bexp == bres, retText, test, bexp, bres);
+
+    ret = ruStrParseBool(" 00\n", &endAddr, &bres);
+    fail_unless(exp == ret, retText, test, exp, ret);
+    fail_unless(bexp == bres, retText, test, bexp, bres);
+
+    ret = ruStrParseBool("false", &endAddr, &bres);
+    fail_unless(exp == ret, retText, test, exp, ret);
+    fail_unless(bexp == bres, retText, test, bexp, bres);
+
+    ret = ruStrParseBool("\tfalsE\n", &endAddr, &bres);
+    fail_unless(exp == ret, retText, test, exp, ret);
+    fail_unless(bexp == bres, retText, test, bexp, bres);
+
+    bexp = true;
+    ret = ruStrParseBool("1", &endAddr, &bres);
+    fail_unless(exp == ret, retText, test, exp, ret);
+    fail_unless(bexp == bres, retText, test, bexp, bres);
+
+    ret = ruStrParseBool("01", &endAddr, &bres);
+    fail_unless(exp == ret, retText, test, exp, ret);
+    fail_unless(bexp == bres, retText, test, bexp, bres);
+
+    ret = ruStrParseBool("True", &endAddr, &bres);
+    fail_unless(exp == ret, retText, test, exp, ret);
+    fail_unless(bexp == bres, retText, test, bexp, bres);
+
+    ret = ruStrParseBool("\ntRue\t ", &endAddr, &bres);
+    fail_unless(exp == ret, retText, test, exp, ret);
+    fail_unless(bexp == bres, retText, test, bexp, bres);
 
     test = "ruStrToLong";
     lexp = 666;

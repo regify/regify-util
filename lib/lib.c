@@ -60,7 +60,7 @@ void U_CALLCONV traceData( const void *context, int32_t fnNumber, int32_t level,
  * its behavior is altered by the current locale.
  * See https://tools.ietf.org/html/rfc3986#section-2.3
  */
-bool ruIsunreserved(unsigned char in) {
+bool isUnReserved(uint8_t in) {
     switch(in) {
         case '0': case '1': case '2': case '3': case '4':
         case '5': case '6': case '7': case '8': case '9':
@@ -80,18 +80,6 @@ bool ruIsunreserved(unsigned char in) {
             break;
     }
     return false;
-}
-
-RUAPI bool ruIsInt64(const char* numstr) {
-    if (!numstr) {
-        errno = EFAULT;
-        return false;
-    }
-    errno = 0;
-    char* end = (char*)numstr;
-    strtoll(numstr, &end, 10);
-    if (*end || errno == ERANGE) return false;
-    return true;
 }
 
 RUAPI ptr ruClear(ptr o) {

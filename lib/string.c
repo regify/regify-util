@@ -203,7 +203,7 @@ RUAPI int32_t ruBufferAppendUriEncoded(ruString rs, const char* instr, rusize le
     for (i = 0; i < ilen; i++) {
         char out[4];
         uint8_t c = instr[i];
-        if (ruIsunreserved(c)) {
+        if (isUnReserved(c)) {
             olen = 1;
             out[0] = c;
         } else {
@@ -888,6 +888,71 @@ int32_t parseInteger(trans_chars start, perm_chars* endptr,
     }
     *out = 0;
     return RUE_OK;
+}
+
+RUAPI int32_t ruStrParseBool(trans_chars str, perm_chars* endptr, bool* out) {
+    if (!out || !str) return RUE_PARAMETER_NOT_SET;
+    char* cur = (char*)str;
+    // start of the 'boolean'
+    if (endptr) *endptr = cur;
+    bool res = false;
+    int32_t ret = RUE_INVALID_PARAMETER;
+
+    do {
+        // Skip leading white space.
+        while (*cur == ' ' || *cur == '\n' || *cur == '\r' || *cur == '\t') ++cur;
+        if (*cur == '\0') break; // done
+        if (ruStrCaseStartsWith(cur, "false", &ret)) {
+            res = false;
+            cur += 5;
+        } else if (ruStrCaseStartsWith(cur, "true", &ret)) {
+            res = true;
+            cur += 4;
+        } else  {
+            ret = RUE_INVALID_PARAMETER;
+            if (*cur != '0' && *cur != '1') break;
+            ret = RUE_OK;
+            // allow leading 0s
+            while (*cur == '0') ++cur;
+            if (*cur == '1') {
+                res = true;
+                ++cur;
+            }
+        }
+        if (ret != RUE_OK) break;
+        // behind the boolean
+        if (endptr) *endptr = cur;
+        // Skip trailing white space.
+        while (*cur == ' ' || *cur == '\n' || *cur == '\r' || *cur == '\t') ++cur;
+        if (*cur != '\0') break; // done
+        ret = RUE_OK;
+        // behind the trailing white space
+        if (endptr) *endptr = cur;
+    } while (0);
+
+    if (ret == RUE_OK) *out = res;
+    return ret;
+}
+
+RUAPI bool ruIsInt64(trans_chars str) {
+    if (!str) return false;
+    int64_t out = 0;
+    perm_chars endPtr = str;
+    int32_t ret = parseInteger(str, &endPtr, sizeof(int64_t)*8-1, 10, &out);
+    if (ret != RUE_OK || endPtr == str) return false;
+    if (*endPtr == '\0') return true;
+    return false;
+}
+
+RUAPI bool ruIsBool(trans_chars str, bool* val) {
+    if (!str) return false;
+    bool res = false;
+    perm_chars endPtr = str;
+    int32_t ret = ruStrParseBool(str, &endPtr, &res);
+    if (ret != RUE_OK || endPtr == str) return false;
+    if (val) *val = res;
+    if (*endPtr == '\0') return true;
+    return false;
 }
 
 RUAPI int32_t ruStrParseInt64(trans_chars str, perm_chars* endptr, uint32_t base, int64_t* num) {
