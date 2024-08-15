@@ -342,7 +342,7 @@ RUAPI int32_t ruGetOptMapW(ruMap* parms, trans_chars opts, DWORD wargc, LPWSTR* 
     return ret;
 }
 
-RUAPI int32_t cd sr ruGetVolumeInfo(const char* mountPoint,
+RUAPI int32_t ruGetVolumeInfo(const char* mountPoint,
         u_long* serialNo, u_long* maxCompLen, u_long* fsFlags,
         char** volumeName, char** fsName) {
     if (!mountPoint) return RUE_PARAMETER_NOT_SET;
