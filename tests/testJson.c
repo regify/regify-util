@@ -68,6 +68,7 @@ static void runApi(ruJson rj, perm_chars test, int32_t exp) {
     perm_chars estr = NULL;
     int64_t i64, e64 = 0;
     double d, ed = 0.0;
+    bool b, eb = false;
     ruJson jsn, ejsn = NULL;
 
     str = ruJsonStr(rj, &ret);
@@ -79,6 +80,14 @@ static void runApi(ruJson rj, perm_chars test, int32_t exp) {
     fail_unless(e64 == i64, retText, test, e64, i64);
 
     i64 = ruJsonInt(rj, &ret);
+    fail_unless(exp == ret, retText, test, exp, ret);
+    fail_unless(e64 == i64, retText, test, e64, i64);
+
+    b = ruJsonParseBool(rj, &ret);
+    fail_if(RUE_OK == ret, retText, test, RUE_OK, ret);
+    fail_unless(e64 == i64, retText, test, e64, i64);
+
+    b = ruJsonBool(rj, &ret);
     fail_unless(exp == ret, retText, test, exp, ret);
     fail_unless(e64 == i64, retText, test, e64, i64);
 
@@ -97,6 +106,15 @@ static void runApi(ruJson rj, perm_chars test, int32_t exp) {
     i64 = ruJsonKeyParseInt(rj, NULL, &ret);
     fail_unless(RUE_PARAMETER_NOT_SET == ret, retText, test, RUE_PARAMETER_NOT_SET, ret);
     fail_unless(e64 == i64, retText, test, e64, i64);
+
+    eb = false;
+    b = ruJsonKeyBool(rj, NULL, &ret);
+    fail_unless(RUE_PARAMETER_NOT_SET == ret, retText, test, RUE_PARAMETER_NOT_SET, ret);
+    fail_unless(eb == b, retText, test, eb, b);
+
+    b = ruJsonKeyParseBool(rj, NULL, &ret);
+    fail_unless(RUE_PARAMETER_NOT_SET == ret, retText, test, RUE_PARAMETER_NOT_SET, ret);
+    fail_unless(eb == b, retText, test, eb, b);
 
     d = ruJsonKeyDouble(rj, NULL, &ret);
     fail_unless(RUE_PARAMETER_NOT_SET == ret, retText, test, RUE_PARAMETER_NOT_SET, ret);
@@ -130,6 +148,14 @@ static void runApi(ruJson rj, perm_chars test, int32_t exp) {
     i64 = ruJsonIdxInt(rj, 0, &ret);
     fail_unless(exp == ret, retText, test, exp, ret);
     fail_unless(e64 == i64, retText, test, e64, i64);
+
+    b = ruJsonIdxParseBool(rj, 0, &ret);
+    fail_unless(exp == ret, retText, test, exp, ret);
+    fail_unless(eb == b, retText, test, eb, b);
+
+    b = ruJsonIdxBool(rj, 0, &ret);
+    fail_unless(exp == ret, retText, test, exp, ret);
+    fail_unless(eb == b, retText, test, eb, b);
 
     d = ruJsonIdxDouble(rj, 0, &ret);
     fail_unless(exp == ret, retText, test, exp, ret);
@@ -172,23 +198,23 @@ START_TEST(get) {
 
     jsn = ruJsonParse(jsonStr, &ret);
     fail_unless(NULL == jsn, retText, NULL, jsn);
-    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(exp == ret, retText, exp, ret);
 
     jsonStr = "{\"key\":\"2342\", \"num\": 2342}";
     exp = RUE_OK;
     jsn = ruJsonParse(jsonStr, &ret);
     fail_if(NULL == jsn, retText, NULL, jsn);
-    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(exp == ret, retText, exp, ret);
 
     estr = "2342";
     str = ruJsonKeyStr(jsn, "key", &ret);
-    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(exp == ret, retText, exp, ret);
     ck_assert_str_eq(str, estr);
     fail_if(NULL == jsn, retText, NULL, jsn);
 
     int64_t i64, e64 = 2342;
     i64 = ruJsonKeyInt(jsn, "num", &ret);
-    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(exp == ret, retText, exp, ret);
     fail_unless(e64 == i64, retText, e64, i64);
 
     jsn = ruJsonFree(jsn);
@@ -197,26 +223,26 @@ START_TEST(get) {
     jsonStr = "[2342,\"2342\"]";
     jsn = ruJsonParse(jsonStr, &ret);
     fail_if(NULL == jsn, retText, NULL, jsn);
-    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(exp == ret, retText, exp, ret);
 
     ruJson jo = NULL;
     exp = RUE_WRONG_PARAMETER_LENGTH;
     str = ruJsonIdxStr(jsn, 9, &ret);
-    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(exp == ret, retText, exp, ret);
     fail_unless(NULL == str, retText, NULL, str);
 
     exp = RUE_OK;
     rusize sz, esz = 2;
     sz = ruJsonArrayLen(jsn, &ret);
-    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(exp == ret, retText, exp, ret);
     fail_unless(esz == sz, retText, esz, sz);
 
     i64 = ruJsonIdxInt(jsn, 0, &ret);
-    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(exp == ret, retText, exp, ret);
     fail_unless(e64 == i64, retText, e64, i64);
 
     str = ruJsonIdxStr(jsn, 1, &ret);
-    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(exp == ret, retText, exp, ret);
     ck_assert_str_eq(str, estr);
 
     jsn = ruJsonFree(jsn);
@@ -225,41 +251,41 @@ START_TEST(get) {
     jsonStr = "[{\"key\": \"2342\", \"num\": 2342}, [2342, \"2342\"]]";
     jsn = ruJsonParse(jsonStr, &ret);
     fail_if(NULL == jsn, retText, NULL, jsn);
-    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(exp == ret, retText, exp, ret);
 
     sz = ruJsonArrayLen(jsn, &ret);
-    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(exp == ret, retText, exp, ret);
     fail_unless(esz == sz, retText, esz, sz);
 
     ruJson jm;
     jm = ruJsonIdxMap(jsn, 0, &ret);
-    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(exp == ret, retText, exp, ret);
     fail_if(NULL == jm, retText, NULL, jm);
 
     str = ruJsonKeyStr(jm, "key", &ret);
-    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(exp == ret, retText, exp, ret);
     ck_assert_str_eq(str, estr);
     fail_if(NULL == jsn, retText, NULL, jsn);
 
     i64 = ruJsonKeyInt(jm, "num", &ret);
-    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(exp == ret, retText, exp, ret);
     fail_unless(e64 == i64, retText, e64, i64);
 
     ruJson ja;
     ja = ruJsonIdxArray(jsn, 1, &ret);
-    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(exp == ret, retText, exp, ret);
     fail_if(NULL == ja, retText, NULL, ja);
 
     sz = ruJsonArrayLen(ja, &ret);
-    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(exp == ret, retText, exp, ret);
     fail_unless(esz == sz, retText, esz, sz);
 
     i64 = ruJsonIdxInt(ja, 0, &ret);
-    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(exp == ret, retText, exp, ret);
     fail_unless(e64 == i64, retText, e64, i64);
 
     str = ruJsonIdxStr(ja, 1, &ret);
-    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(exp == ret, retText, exp, ret);
     ck_assert_str_eq(str, estr);
 
     jsn = ruJsonFree(jsn);
@@ -268,94 +294,116 @@ START_TEST(get) {
     ruList keys = NULL;
     uint32_t ecnt, cnt;
 
-    // {"map": {"key": "2342", "num": 2342, "dbl": 23.42}, "arr": [2342, "2342", 23.42]}
-    jsonStr = "{\"map\": {\"key\": \"2342\", \"num\": 2342, \"dbl\": 23.42,"
-              " \"good\": true, \"bad\": false}, \"arr\": [2342, \"2342\", 23.42]}";
+    jsonStr = "{\"map\": {\"key\": \"2342\", \"num\": 2342, \"dbl\": 23.42, \"truth\": \"TRUE\", "
+              " \"good\": true, \"bad\": false}, \"arr\": [2342, \"2342\", 23.42, 1]}";
     jsn = ruJsonParse(jsonStr, &ret);
     fail_if(NULL == jsn, retText, NULL, jsn);
-    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(exp == ret, retText, exp, ret);
 
     keys = ruJsonKeys(jsn, &ret);
-    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(exp == ret, retText, exp, ret);
     fail_if(NULL == keys, retText, NULL, keys);
 
     ecnt = 2;
     cnt = ruListSize(keys, &ret);
-    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(exp == ret, retText, exp, ret);
     fail_unless(cnt == ecnt, retText, cnt, ecnt);
     keys = ruListFree(keys);
 
     jm = ruJsonKeyMap(jsn, "map", &ret);
-    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(exp == ret, retText, exp, ret);
     fail_if(NULL == jm, retText, NULL, jm);
 
     keys = ruJsonKeys(jm, &ret);
-    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(exp == ret, retText, exp, ret);
     fail_if(NULL == keys, retText, NULL, keys);
 
-    ecnt = 5;
+    ecnt = 6;
     cnt = ruListSize(keys, &ret);
-    fail_unless(ret == exp, retText, exp, ret);
-    fail_unless(cnt == ecnt, retText, cnt, ecnt);
+    fail_unless(exp == ret, retText, exp, ret);
+    fail_unless(ecnt == cnt, retText, ecnt, cnt);
     keys = ruListFree(keys);
 
     str = ruJsonKeyStr(jm, "key", &ret);
-    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(exp == ret, retText, exp, ret);
     ck_assert_str_eq(str, estr);
     fail_if(NULL == jsn, retText, NULL, jsn);
 
     i64 = ruJsonKeyInt(jm, "num", &ret);
-    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(exp == ret, retText, exp, ret);
     fail_unless(e64 == i64, retText, e64, i64);
 
     double db, edb = 23.42;
     db = ruJsonKeyDouble(jm, "dbl", &ret);
-    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(exp == ret, retText, exp, ret);
     fail_unless(edb == db, retText, edb, db);
 
     bool bl, ebl = true;
     bl = ruJsonKeyBool(jm, "good", &ret);
-    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(exp == ret, retText, exp, ret);
+    fail_unless(ebl == bl, retText, ebl, bl);
+
+    bl = ruJsonKeyParseBool(jm, "good", &ret);
+    fail_unless(exp == ret, retText, exp, ret);
+    fail_unless(ebl == bl, retText, ebl, bl);
+
+    bl = ruJsonKeyParseBool(jm, "truth", &ret);
+    fail_unless(exp == ret, retText, exp, ret);
     fail_unless(ebl == bl, retText, ebl, bl);
 
     ebl = false;
     bl = ruJsonKeyBool(jm, "bad", &ret);
-    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(exp == ret, retText, exp, ret);
+    fail_unless(ebl == bl, retText, ebl, bl);
+
+    bl = ruJsonKeyParseBool(jm, "bad", &ret);
+    fail_unless(exp == ret, retText, exp, ret);
     fail_unless(ebl == bl, retText, ebl, bl);
 
     exp = RUE_INVALID_PARAMETER;
     bl = ruJsonKeyBool(jm, "num", &ret);
-    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(exp == ret, retText, exp, ret);
     fail_unless(ebl == bl, retText, ebl, bl);
 
     exp = RUE_OK;
     ja = ruJsonKeyArray(jsn, "arr", &ret);
-    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(exp == ret, retText, exp, ret);
     fail_if(NULL == ja, retText, NULL, ja);
 
     i64 = ruJsonIdxInt(ja, 0, &ret);
-    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(exp == ret, retText, exp, ret);
     fail_unless(e64 == i64, retText, e64, i64);
 
     str = ruJsonIdxStr(ja, 1, &ret);
-    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(exp == ret, retText, exp, ret);
     ck_assert_str_eq(str, estr);
 
     i64 = ruJsonIdxParseInt(ja, 1, &ret);
-    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(exp == ret, retText, exp, ret);
     fail_unless(e64 == i64, retText, e64, i64);
 
     db = ruJsonIdxDouble(ja, 2, &ret);
-    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(exp == ret, retText, exp, ret);
     fail_unless(edb == db, retText, edb, db);
 
     exp = RUE_INVALID_PARAMETER;
+    bl = ruJsonIdxBool(ja, 3, &ret);
+    fail_unless(exp == ret, retText, exp, ret);
+    fail_unless(ebl == bl, retText, ebl, bl);
+
+    exp = RUE_OK;
+    ebl = true;
+    bl = ruJsonIdxParseBool(ja, 3, &ret);
+    fail_unless(exp == ret, retText, exp, ret);
+    fail_unless(ebl == bl, retText, ebl, bl);
+
+    exp = RUE_INVALID_PARAMETER;
     str = ruJsonKeyToStr(jsn, "map", &ret);
-    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(exp == ret, retText, exp, ret);
     fail_unless(NULL == str, retText, NULL, str);
 
     str = ruJsonKeyToStr(jsn, "arr", &ret);
-    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(exp == ret, retText, exp, ret);
     fail_unless(NULL == str, retText, NULL, str);
 
     jsn = ruJsonFree(jsn);
@@ -366,14 +414,14 @@ START_TEST(get) {
     jsonStr = "\"2342\"";
     jsn = ruJsonParse(jsonStr, &ret);
     fail_if(NULL == jsn, retText, NULL, jsn);
-    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(exp == ret, retText, exp, ret);
 
     str = ruJsonStr(jsn, &ret);
-    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(exp == ret, retText, exp, ret);
     ck_assert_str_eq(str, estr);
 
     i64 = ruJsonParseInt(jsn, &ret);
-    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(exp == ret, retText, exp, ret);
     fail_unless(e64 == i64, retText, e64, i64);
 
     jsn = ruJsonFree(jsn);
@@ -383,10 +431,10 @@ START_TEST(get) {
     jsonStr = "2342";
     jsn = ruJsonParse(jsonStr, &ret);
     fail_if(NULL == jsn, retText, NULL, jsn);
-    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(exp == ret, retText, exp, ret);
 
     i64 = ruJsonInt(jsn, &ret);
-    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(exp == ret, retText, exp, ret);
     fail_unless(e64 == i64, retText, e64, i64);
 
     jsn = ruJsonFree(jsn);
@@ -395,30 +443,30 @@ START_TEST(get) {
     jsonStr = "{\"bool1\":true,\"bool0\":false,\"num\":1,\"decimal\":1.0,\"nada\":null}";
     jsn = ruJsonParse(jsonStr, &ret);
     fail_if(NULL == jsn, retText, NULL, jsn);
-    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(exp == ret, retText, exp, ret);
 
     alloc_chars val = ruJsonKeyToStr(jsn, "bool1", &ret);
-    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(exp == ret, retText, exp, ret);
     ck_assert_str_eq("true", val);
     ruFree(val);
 
     val = ruJsonKeyToStr(jsn, "bool0", &ret);
-    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(exp == ret, retText, exp, ret);
     ck_assert_str_eq("false", val);
     ruFree(val);
 
     val = ruJsonKeyToStr(jsn, "num", &ret);
-    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(exp == ret, retText, exp, ret);
     ck_assert_str_eq("1", val);
     ruFree(val);
 
     val = ruJsonKeyToStr(jsn, "decimal", &ret);
-    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(exp == ret, retText, exp, ret);
     ck_assert_str_eq("1.000000", val);
     ruFree(val);
 
     val = ruJsonKeyToStr(jsn, "nada", &ret);
-    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(exp == ret, retText, exp, ret);
     fail_unless(NULL == val, retText, NULL, val);
 
     jsn = ruJsonFree(jsn);
@@ -431,6 +479,7 @@ START_TEST(set) {
     perm_chars retText = "failed wanted ret '%d' but got '%d'";
     perm_chars key = "key";
     perm_chars val = "2342";
+    perm_chars slval = "23/42";
     perm_chars num = "num";
     int64_t n = 2342;
     perm_chars dbl = "dbl";
@@ -439,61 +488,61 @@ START_TEST(set) {
     // simple
     ruJson jsn = ruJsonStart(true);
     ret = ruJsonSetKeyStr(jsn, key, val);
-    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(exp == ret, retText, exp, ret);
     fail_if(NULL == jsn, retText, NULL, jsn);
 
     ret = ruJsonSetKeyInt(jsn, num, n);
-    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(exp == ret, retText, exp, ret);
 
     ret = ruJsonSetKeyDouble(jsn, dbl, d);
-    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(exp == ret, retText, exp, ret);
 
     perm_chars estr = "{\"key\":\"2342\",\"num\":2342,\"dbl\":23.0}";
     perm_chars str =  NULL;
     ret = ruJsonWrite(jsn, &str);
-    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(exp == ret, retText, exp, ret);
     ck_assert_str_eq(str, estr);
 
     jsn = ruJsonFree(jsn);
     fail_unless(NULL == jsn, retText, NULL, jsn);
 
     // nested array
-    jsn = ruJsonNew();
+    jsn = ruJsonNew(0, NULL);
     fail_if(NULL == jsn, retText, NULL, jsn);
 
     ret = ruJsonStartArray(jsn);
-    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(exp == ret, retText, exp, ret);
 
     ret = ruJsonSetStr(jsn, val);
-    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(exp == ret, retText, exp, ret);
     fail_if(NULL == jsn, retText, NULL, jsn);
 
     ret = ruJsonSetInt(jsn, n);
-    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(exp == ret, retText, exp, ret);
 
     ret = ruJsonSetDouble(jsn, d);
-    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(exp == ret, retText, exp, ret);
 
     ret = ruJsonStartMap(jsn);
-    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(exp == ret, retText, exp, ret);
 
     ret = ruJsonSetKeyStr(jsn, key, val);
-    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(exp == ret, retText, exp, ret);
     fail_if(NULL == jsn, retText, NULL, jsn);
 
     ret = ruJsonSetKeyInt(jsn, num, n);
-    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(exp == ret, retText, exp, ret);
 
     ret = ruJsonEndMap(jsn);
-    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(exp == ret, retText, exp, ret);
 
     ret = ruJsonEndArray(jsn);
-    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(exp == ret, retText, exp, ret);
 
     estr = "[\"2342\",2342,23.0,{\"key\":\"2342\",\"num\":2342}]";
     str = NULL;
     ret = ruJsonWrite(jsn, &str);
-    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(exp == ret, retText, exp, ret);
     ck_assert_str_eq(str, estr);
 
     jsn = ruJsonFree(jsn);
@@ -506,34 +555,106 @@ START_TEST(set) {
     fail_if(NULL == jsn, retText, NULL, jsn);
 
     ret = ruJsonStartKeyMap(jsn, map);
-    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(exp == ret, retText, exp, ret);
 
     ret = ruJsonSetKeyStr(jsn, key, val);
-    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(exp == ret, retText, exp, ret);
     fail_if(NULL == jsn, retText, NULL, jsn);
 
     ret = ruJsonSetKeyInt(jsn, num, n);
-    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(exp == ret, retText, exp, ret);
 
     ret = ruJsonEndMap(jsn);
-    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(exp == ret, retText, exp, ret);
 
     ret = ruJsonStartKeyArray(jsn, arr);
-    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(exp == ret, retText, exp, ret);
 
     ret = ruJsonSetStr(jsn, val);
-    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(exp == ret, retText, exp, ret);
     fail_if(NULL == jsn, retText, NULL, jsn);
 
     ret = ruJsonSetInt(jsn, n);
-    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(exp == ret, retText, exp, ret);
 
     ret = ruJsonEndArray(jsn);
-    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(exp == ret, retText, exp, ret);
 
     estr = "{\"map\":{\"key\":\"2342\",\"num\":2342},\"arr\":[\"2342\",2342]}";
     ret = ruJsonWrite(jsn, &str);
-    fail_unless(ret == exp, retText, exp, ret);
+    fail_unless(exp == ret, retText, exp, ret);
+    ck_assert_str_eq(str, estr);
+
+    jsn = ruJsonFree(jsn);
+    fail_unless(NULL == jsn, retText, NULL, jsn);
+
+    jsn = ruJsonNew(RU_JSON_ESCAPE_SLASH, NULL);
+    fail_if(NULL == jsn, retText, NULL, jsn);
+
+    ret = ruJsonStartMap(jsn);
+    fail_unless(exp == ret, retText, exp, ret);
+
+    ret = ruJsonSetKeyStr(jsn, key, slval);
+    fail_unless(exp == ret, retText, exp, ret);
+    fail_if(NULL == jsn, retText, NULL, jsn);
+
+    ret = ruJsonSetKeyInt(jsn, num, n);
+    fail_unless(exp == ret, retText, exp, ret);
+
+    ret = ruJsonEndMap(jsn);
+    fail_unless(exp == ret, retText, exp, ret);
+
+    estr = "{\"key\":\"23\\/42\",\"num\":2342}";
+    ret = ruJsonWrite(jsn, &str);
+    fail_unless(exp == ret, retText, exp, ret);
+    ck_assert_str_eq(str, estr);
+
+    jsn = ruJsonFree(jsn);
+    fail_unless(NULL == jsn, retText, NULL, jsn);
+
+    jsn = ruJsonNew(RU_JSON_PRETTIFY, NULL);
+    fail_if(NULL == jsn, retText, NULL, jsn);
+
+    ret = ruJsonStartMap(jsn);
+    fail_unless(exp == ret, retText, exp, ret);
+
+    ret = ruJsonSetKeyStr(jsn, key, slval);
+    fail_unless(exp == ret, retText, exp, ret);
+    fail_if(NULL == jsn, retText, NULL, jsn);
+
+    ret = ruJsonSetKeyInt(jsn, num, n);
+    fail_unless(exp == ret, retText, exp, ret);
+
+    ret = ruJsonEndMap(jsn);
+    fail_unless(exp == ret, retText, exp, ret);
+
+    estr = "{\n    \"key\": \"23/42\",\n    \"num\": 2342\n}\n";
+    ret = ruJsonWrite(jsn, &str);
+    fail_unless(exp == ret, retText, exp, ret);
+    ck_assert_str_eq(str, estr);
+
+    jsn = ruJsonFree(jsn);
+    fail_unless(NULL == jsn, retText, NULL, jsn);
+
+    jsn = ruJsonNew(RU_JSON_PRETTIFY, "  ");
+    fail_if(NULL == jsn, retText, NULL, jsn);
+
+    ret = ruJsonStartMap(jsn);
+    fail_unless(exp == ret, retText, exp, ret);
+
+    ret = ruJsonSetKeyStr(jsn, key, slval);
+    fail_unless(exp == ret, retText, exp, ret);
+    fail_if(NULL == jsn, retText, NULL, jsn);
+
+    ret = ruJsonSetKeyInt(jsn, num, n);
+    fail_unless(exp == ret, retText, exp, ret);
+
+    ret = ruJsonEndMap(jsn);
+    fail_unless(exp == ret, retText, exp, ret);
+
+    estr = "{\n  \"key\": \"23/42\",\n  \"num\": 2342\n}\n";
+    ret = ruJsonWrite(jsn, &str);
+    fail_unless(exp == ret, retText, exp, ret);
     ck_assert_str_eq(str, estr);
 
     jsn = ruJsonFree(jsn);

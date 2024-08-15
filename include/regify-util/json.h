@@ -42,6 +42,10 @@ extern "C" {
  */
 typedef void* ruJson;
 
+#define RU_JSON_PRETTIFY 0x01
+#define RU_JSON_ESCAPE_SLASH 0x02
+
+
 /**
  * Free the given \ref ruJson object
  * @param rj JSON ctx to free
@@ -52,11 +56,16 @@ RUAPI ruJson ruJsonFree(ruJson rj);
 /**
  * Creates a new \ref ruJson object for generating JSON
  *
+ * @param flags Optional ORing of \ref RU_JSON_PRETTIFY and
+ *              \ref RU_JSON_ESCAPE_SLASH
+ * @param ident Optional indent string to use when flags has
+ *              \ref RU_JSON_PRETTIFY set.
+ *
  * Example:
  * ~~~~~{.c}
     ruJson jsn = NULL;
     do{
-        jsn = ruJsonNew();
+        jsn = ruJsonNew(RU_JSON_PRETTIFY, NULL);
         if (!jsn) break;
 
         if (RUE_OK != ruJsonStartArray(jsn)) break;
@@ -78,7 +87,7 @@ RUAPI ruJson ruJsonFree(ruJson rj);
  *
  * @return ctx to generate JSON with.
  */
-RUAPI ruJson ruJsonNew(void);
+RUAPI ruJson ruJsonNew(int32_t flags, trans_chars ident);
 
 /**
  * Creates a new \ref ruJson object with a top level container for generating JSON.
@@ -315,6 +324,24 @@ RUAPI int64_t ruJsonParseInt(ruJson rj, int32_t* status);
 RUAPI int64_t ruJsonInt(ruJson rj, int32_t* status);
 
 /**
+ * Return parsed boolean of underlying \ref ruJson reference.
+ * The boolean may also be an integer 0, 1 or a quoted case insensitive true or false.
+ * @param rj \ref ruJson reference pointing to an integer.
+ * @param status where the \ref RUE_OK on success or an error code will be stored.
+ * @return boolean in question and false on error.
+ */
+RUAPI bool ruJsonParseBool(ruJson rj, int32_t* status);
+
+/**
+ * Return boolean of underlying \ref ruJson reference.
+ * This is only used if the JSON object consists of only a boolean.
+ * @param rj \ref ruJson reference pointing to a boolean.
+ * @param status where the \ref RUE_OK on success or an error code will be stored.
+ * @return boolean in question and false on error.
+ */
+RUAPI bool ruJsonBool(ruJson rj, int32_t* status);
+
+/**
  * \brief Returns an \ref ruList of keys in the current map.
  * @param rj \ref ruJson in question.
  * @param status where the \ref RUE_OK on success or an error code will be stored.
@@ -379,7 +406,17 @@ RUAPI int64_t ruJsonKeyInt(ruJson rj, trans_chars key, int32_t* status);
 RUAPI double ruJsonKeyDouble(ruJson rj, trans_chars key, int32_t* status);
 
 /**
- * Return bool of the key element from underlying \ref ruJson map reference.
+ * Return parsed boolean of the key element from underlying \ref ruJson map reference.
+ * The boolean may also be an integer 0, 1 or a quoted case insensitive true or false.
+ * @param rj \ref ruJson in question.
+ * @param key key under which boolean resides
+ * @param status where the \ref RUE_OK on success or an error code will be stored.
+ * @return boolean in question and false on error.
+ */
+RUAPI bool ruJsonKeyParseBool(ruJson rj, trans_chars key, int32_t* status);
+
+/**
+ * Return boolean of the key element from underlying \ref ruJson map reference.
  * @param rj \ref ruJson in question.
  * @param key key under which boolean resides
  * @param status where the \ref RUE_OK on success or an error code will be stored.
@@ -441,6 +478,25 @@ RUAPI int64_t ruJsonIdxParseInt(ruJson rj, rusize index, int32_t* status);
  * @return integer in question.
  */
 RUAPI int64_t ruJsonIdxInt(ruJson rj, rusize index, int32_t* status);
+
+/**
+ * Return parsed boolean of the indexed element from underlying \ref ruJson array reference.
+ * The boolean may also be an integer 0, 1 or a quoted case insensitive true or false.
+ * @param rj \ref ruJson in question.
+ * @param index index under which the string resides
+ * @param status where the \ref RUE_OK on success or an error code will be stored.
+ * @return boolean in question and false on error.
+ */
+RUAPI bool ruJsonIdxParseBool(ruJson rj, rusize index, int32_t* status);
+
+/**
+ * Return boolean of the indexed element from underlying \ref ruJson array reference.
+ * @param rj \ref ruJson in question.
+ * @param key key under which boolean resides
+ * @param status where the \ref RUE_OK on success or an error code will be stored.
+ * @return boolean in question and false on error.
+ */
+RUAPI bool ruJsonIdxBool(ruJson rj, rusize index, int32_t* status);
 
 /**
  * Return double of the indexed element from underlying \ref ruJson array reference.

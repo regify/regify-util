@@ -244,6 +244,7 @@ struct json_ {
     ru_uint type;
     yajl_val node;
     yajl_gen g;
+    alloc_chars indent;
     yajl_type open;
 };
 
