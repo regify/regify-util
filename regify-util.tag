@@ -1212,6 +1212,20 @@
     <name>json</name>
     <title>JSON</title>
     <filename>group__json.html</filename>
+    <member kind="define">
+      <type>#define</type>
+      <name>RU_JSON_PRETTIFY</name>
+      <anchorfile>group__json.html</anchorfile>
+      <anchor>gafb8c2aba104d7bcae73c0a0db36e8b5b</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>RU_JSON_ESCAPE_SLASH</name>
+      <anchorfile>group__json.html</anchorfile>
+      <anchor>ga3680af0705174cc0891e3fe825857f0b</anchor>
+      <arglist></arglist>
+    </member>
     <member kind="typedef">
       <type>void *</type>
       <name>ruJson</name>
@@ -1230,8 +1244,8 @@
       <type>RUAPI ruJson</type>
       <name>ruJsonNew</name>
       <anchorfile>group__json.html</anchorfile>
-      <anchor>ga4d888c7b5a23662c072028ab61e7704b</anchor>
-      <arglist>(void)</arglist>
+      <anchor>gab1e583b36ffad271e2dbd68da36bc486</anchor>
+      <arglist>(int32_t flags, trans_chars ident)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI ruJson</type>
@@ -1367,6 +1381,20 @@
       <arglist>(ruJson rj, int32_t *status)</arglist>
     </member>
     <member kind="function">
+      <type>RUAPI bool</type>
+      <name>ruJsonParseBool</name>
+      <anchorfile>group__json.html</anchorfile>
+      <anchor>ga269c2a6c2cca9324ae7e48b3df532557</anchor>
+      <arglist>(ruJson rj, int32_t *status)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI bool</type>
+      <name>ruJsonBool</name>
+      <anchorfile>group__json.html</anchorfile>
+      <anchor>ga0d4e6b1fda226c98b635ce72920a3936</anchor>
+      <arglist>(ruJson rj, int32_t *status)</arglist>
+    </member>
+    <member kind="function">
       <type>RUAPI ruList</type>
       <name>ruJsonKeys</name>
       <anchorfile>group__json.html</anchorfile>
@@ -1417,6 +1445,13 @@
     </member>
     <member kind="function">
       <type>RUAPI bool</type>
+      <name>ruJsonKeyParseBool</name>
+      <anchorfile>group__json.html</anchorfile>
+      <anchor>ga862186125a5422985e7ca153f6a6ad97</anchor>
+      <arglist>(ruJson rj, trans_chars key, int32_t *status)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI bool</type>
       <name>ruJsonKeyBool</name>
       <anchorfile>group__json.html</anchorfile>
       <anchor>ga56cb15242efc760258fbcce8a037dca2</anchor>
@@ -1462,6 +1497,20 @@
       <name>ruJsonIdxInt</name>
       <anchorfile>group__json.html</anchorfile>
       <anchor>gae9b13256bc3e79edafc85b5cfdfd8388</anchor>
+      <arglist>(ruJson rj, rusize index, int32_t *status)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI bool</type>
+      <name>ruJsonIdxParseBool</name>
+      <anchorfile>group__json.html</anchorfile>
+      <anchor>ga5d109729ffdb2679dabbdb2ec05bf90e</anchor>
+      <arglist>(ruJson rj, rusize index, int32_t *status)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI bool</type>
+      <name>ruJsonIdxBool</name>
+      <anchorfile>group__json.html</anchorfile>
+      <anchor>gaa3d48e337c39d70facf24a77856b4e75</anchor>
       <arglist>(ruJson rj, rusize index, int32_t *status)</arglist>
     </member>
     <member kind="function">
