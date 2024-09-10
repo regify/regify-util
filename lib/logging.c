@@ -38,11 +38,17 @@ typedef __ino_t ru_inode;
 #endif
 #endif
 
-#if 0
-#define logDbg(fmt, ...) fprintf(stderr, fmt, __VA_ARGS__)
+// logger debugging
+#define LOGDBG 0
+
+#if LOGDBG
+void doLogDbg(trans_chars filePath, trans_chars func, int32_t line, trans_chars format, ...);
+#define logDbg(fmt, ...) doLogDbg(__FILE__, __func__, __LINE__, fmt, __VA_ARGS__)
 #else
 #define logDbg(fmt, ...)
 #endif
+
+static void setFlushMark(bool callback);
 
 typedef struct {
     uint32_t logLevel;
@@ -63,6 +69,17 @@ static logMsg* logMsgNew(uint32_t logLevel, trans_chars msg) {
     le->msg = ruStrDup(msg);
     return le;
 }
+
+#if LOGDBG
+void doLogDbg(trans_chars filePath, trans_chars func, int32_t line, trans_chars format, ...) {
+    va_list args;
+    va_start(args, format);
+    alloc_chars msg = ruMakeLogMsgV(RU_LOG_CRIT, filePath, func, line, format, args);
+    va_end(args);
+    printf("%s", msg);
+    ruFree(msg);
+}
+#endif
 // </editor-fold>
 
 // <editor-fold desc="pre logger">
@@ -121,6 +138,7 @@ RUAPI void ruPreLogSink(perm_ptr rpc, uint32_t logLevel, trans_chars msg) {
 typedef struct {
     ru_int type;
     alloc_chars filePath;
+    alloc_chars newFilePath;
     ruCloseFunc closeCb;
     perm_ptr closeCtx;
     bool callClose;
@@ -153,13 +171,13 @@ static ru_inode getInode(sinkCtx* sc) {
 }
 #endif
 
-static void fileOpen(sinkCtx* sc) {
+static void fileOpen(sinkCtx* sc, trans_chars msg) {
     ruMutexLock(sc->fmux);
     if (!sc->wh) {
         int32_t ret;
         sc->wh = ruFOpen(sc->filePath, bAppendMode, &ret);
         if (ret != RUE_OK) return;
-        logDbg("fileOpen opened: %s\n", sc->filePath);
+        logDbg("0x%p opened: %s for %s", sc, sc->filePath, msg);
         setCheckTime(sc);
 #ifdef _WIN32
         ruReplace(sc->curPath, ruStrDup(sc->filePath));
@@ -182,16 +200,18 @@ static bool fileGone(sinkCtx* sc) {
 
 static void checkCb(sinkCtx* sc) {
     if (sc->callClose) {
-        logDbg("checkCb calling sc->closeCb: %d\n", sc->callClose);
+        logDbg("0x%p calling sc->callClose: %d", sc, sc->callClose);
         sc->callClose = false;
         sc->closeCb(sc->closeCtx);
-        logDbg("checkCb sc->closeCb done: %d\n", sc->callClose);
+        logDbg("0x%p sc->callClose done: %d", sc, sc->callClose);
     }
+    ruReplace(sc->filePath, sc->newFilePath);
+    sc->newFilePath = NULL;
 }
 
 static void fileClose(sinkCtx* sc) {
     if (sc->wh) {
-        logDbg("fileClose closing: %s\n", sc->filePath);
+        logDbg("0x%p closing: %s", sc, sc->filePath);
         fclose(sc->wh);
     }
     sc->wh = NULL;
@@ -201,7 +221,6 @@ static void fileClose(sinkCtx* sc) {
 #else
     sc->curNode = 0;
 #endif
-    checkCb(sc);
 }
 // </editor-fold>
 
@@ -215,6 +234,7 @@ RUAPI ruSinkCtx ruSinkCtxNew(trans_chars filePath, ruCloseFunc closeCb,
     sc->fmux = ruMutexInit();
     sc->closeCb = closeCb;
     sc->closeCtx = closeCtx;
+    logDbg("0x%p created filePath: %s", sc, sc->filePath);
     return sc;
 }
 
@@ -224,14 +244,12 @@ RUAPI int32_t ruSinkCtxPath(ruSinkCtx rsc, trans_chars filePath) {
     sinkCtx* sc = sinkCtxGet(rsc, &ret);
     if (ret != RUE_OK) return ret;
     if (!ruStrEquals(sc->filePath, filePath)) {
-        if (!sc->wh) fileOpen(sc);
-        logDbg("ruSinkCtxPath '%s' -> '%s' sc->callClose: %d\n",
-               sc->filePath, filePath, sc->callClose);
-        ruReplace(sc->filePath, ruStrDup(filePath));
+        ruReplace(sc->newFilePath, ruStrDup(filePath));
         if (sc->closeCb) sc->callClose = true;
-        logDbg("ruSinkCtxPath calling ruFlushLog: %d\n", sc->callClose);
-        ruFlushLog();
-        logDbg("ruSinkCtxPath ruFlushLog done: %d\n", sc->callClose);
+        logDbg("0x%p pre ruLastLog '%s' -> '%s' callClose: %d",
+               sc, sc->filePath, sc->newFilePath, sc->callClose);
+        ruLastLog();
+        logDbg("0x%p post ruLastLog callClose: %d", sc, sc->callClose);
     }
     return ret;
 }
@@ -241,11 +259,13 @@ RUAPI ruSinkCtx ruSinkCtxFree(ruSinkCtx rsc) {
     if (sc) {
         sc->type = 0;
         ruFree(sc->filePath);
+        ruFree(sc->newFilePath);
 #ifdef _WIN32
         ruFree(sc->curPath);
 #endif
         sc->fmux = ruMutexFree(sc->fmux);
         memset(sc, 0, sizeof(sinkCtx));
+        logDbg("freed 0x%p", sc);
         ruFree(sc);
     }
     return NULL;
@@ -271,10 +291,10 @@ RUAPI void ruFileLogSink(perm_ptr rsc, uint32_t logLevel, trans_chars msg) {
         }
     }
     if (!msg) {
-        checkCb(sc);
+        if (logLevel == RU_LOG_NONE) checkCb(sc);
         return;
     }
-    if (!sc->wh) fileOpen(sc);
+    if (!sc->wh) fileOpen(sc, msg);
     if (sc->wh) {
         fputs(msg, sc->wh);
     } else {
@@ -308,15 +328,38 @@ typedef struct {
     ruThread logThread;
     // flush flag
     volatile bool flushReq;
-    // sync flag
-    volatile bool syncing;
-} logSinkCtx;
+    // termination flag
+    volatile bool quitting;
+} loggerCtx;
 
-static logSinkCtx* ls_ = NULL;
+static loggerCtx l1_, l2_;
+static loggerCtx* lc_ = NULL;
+static ruMutex lmux_ = NULL;
+
 #define MAX_LOG_LEN 2048
 
+static void noQ(perm_ptr userData, uint32_t logLevel, trans_chars msg) {}
+
+static bool loggerValid(loggerCtx* lc) {
+    return lc->logger != NULL;
+}
+
+static void initLogger(loggerCtx* lc) {
+    memset(lc, 0, sizeof(loggerCtx));
+    lc->queuer = noQ;
+}
+
+static void initLog(void) {
+    if (lc_) return;
+    lmux_ = ruMutexInit();
+    initLogger(&l1_);
+    initLogger(&l2_);
+    lc_ = &l1_;
+    logDbg("l1_: 0x%p l2_: 0x%p lc_: 0x%p", &l1_, &l2_, lc_);
+}
+
 static void asyncQ(perm_ptr userData, uint32_t logLevel, trans_chars msg) {
-    logSinkCtx* ls = (logSinkCtx*)userData;
+    loggerCtx* ls = (loggerCtx*)userData;
     if (!ls->queue) return;
     logMsg* lm = logMsgNew(logLevel, msg);
     int32_t ret = ruListPush(ls->queue, lm);
@@ -330,7 +373,7 @@ static rusize_s cb2Writer (perm_ptr ctx, trans_ptr buf, rusize len) {
 }
 
 static void syncQ(perm_ptr userData, uint32_t logLevel, trans_chars msg) {
-    logSinkCtx* ls = (logSinkCtx*)userData;
+    loggerCtx* ls = (loggerCtx*)userData;
     perm_chars out = msg;
     if (ls->cleaner && out) {
         ruStringReset(ls->clnBuf);
@@ -341,20 +384,16 @@ static void syncQ(perm_ptr userData, uint32_t logLevel, trans_chars msg) {
     ls->logger(ls->ctx, logLevel, out);
 }
 
-static void freeLogger(logSinkCtx* ls) {
-    if (!ls) return;
-    ls->queuer = NULL;
-    ls->level = RU_LOG_NONE;
-    ls->logger = NULL;
-    ls->cleaner = NULL;
-    ls->ctx = NULL;
-    if (ls->logThread) {
-        ruThreadWait(ls->logThread, 1, NULL);
-        ls->logThread = NULL;
+static void freeLogger(loggerCtx* lc) {
+    logDbg("freeing 0x%p", lc);
+    if (lc->logThread) {
+        ruThreadWait(lc->logThread, 1, NULL);
+        lc->logThread = NULL;
     }
-    if (ls->clnBuf) ls->clnBuf = ruBufferFree(ls->clnBuf, false);
-    if (ls->queue) ls->queue = ruListFree(ls->queue);
-    ruFree(ls);
+    if (lc->clnBuf) lc->clnBuf = ruBufferFree(lc->clnBuf, false);
+    if (lc->queue) lc->queue = ruListFree(lc->queue);
+    initLogger(lc);
+    logDbg("0x%p freed", lc);
 }
 
 static ptr logThread(ptr p) {
@@ -364,7 +403,7 @@ static ptr logThread(ptr p) {
     sigfillset(&set);
     pthread_sigmask(SIG_SETMASK, &set, NULL);
 #endif
-    logSinkCtx* ls = (logSinkCtx*)p;
+    loggerCtx* ls = (loggerCtx*)p;
     msec_t to = 10;
     bool flushed = false;
     int32_t ret = RUE_OK;
@@ -384,17 +423,18 @@ static ptr logThread(ptr p) {
             }
         }
         // when quitting continue while we pop messages to flush the queue
-        if (ls->syncing && ret != RUE_OK) break;
+        if (ls->quitting && ret != RUE_OK) break;
     }
     // send termination signal to log sink
     ls->logger(ls->ctx, ls->level, NULL);
-    ls->syncing = false;
+    ls->quitting = false;
+    logDbg("0x%p finished", ls);
     return NULL;
 }
 
-static logSinkCtx* newLogger(ruLogFunc logger, uint32_t logLevel, perm_ptr userData,
-                             ruCleaner cleaner, bool threaded) {
-    logSinkCtx* ls = ruMalloc0(1, logSinkCtx);
+static void newLogger(loggerCtx* ls, ruLogFunc logger, uint32_t logLevel,
+                            perm_ptr userData, ruCleaner cleaner, bool threaded) {
+    logDbg("0x%p created ud: 0x%p threaded: %d", ls, userData, threaded);
     ls->logger = logger;
     ls->level = logLevel;
     ls->ctx = userData;
@@ -410,30 +450,46 @@ static logSinkCtx* newLogger(ruLogFunc logger, uint32_t logLevel, perm_ptr userD
     } else {
         ls->queuer = syncQ;
     }
-    return ls;
+}
+
+static void setFlushMark(bool callback) {
+    if (!lc_) initLog();
+    if (lc_->logThread) lc_->flushReq = true;
+    lc_->queuer(lc_, callback ? RU_LOG_NONE : RU_LOG_CRIT, NULL);
+    while (lc_->flushReq) ruSleepMs(1);
 }
 // </editor-fold>
 
 // <editor-fold desc="log public">
 RUAPI void ruSetLogger(ruLogFunc logger, uint32_t logLevel, perm_ptr userData,
                        ruCleaner cleaner, bool threaded) {
-    logSinkCtx *ps = ls_;
+    if (!lc_) initLog();
+    ruMutexLock(lmux_);
+    loggerCtx* pc = lc_;
+    loggerCtx* lc = (lc_ == &l1_) ? &l2_ : &l1_;
+    initLogger(lc);
     if (logger) {
-        ls_ = newLogger(logger, logLevel, userData, cleaner, threaded);
-    } else {
-        ls_ = NULL;
+        newLogger(lc, logger, logLevel, userData, cleaner, threaded);
     }
-    if (!ps) return;
-    if (ps->logThread) {
-        ps->syncing = true;
-        while (ps->syncing) ruSleepMs(1);
-    } else {
-        // hopefully time for all logging to migrate
-        ruSleepMs(10);
-        // closing call for the last logger
-        ps->logger(ps->ctx, ps->level, NULL);
+    lc_ = lc;
+    logDbg("now using logger 0x%p", lc_);
+    if (loggerValid(pc)) {
+        if (pc->logThread) {
+            logDbg("quitting 0x%p", pc);
+            pc->quitting = true;
+            while (pc->quitting) ruSleepMs(1);
+            logDbg("0x%p quit", pc);
+        } else {
+            // hopefully time for all logging to migrate
+            logDbg("flushing 0x%p", pc);
+            ruSleepMs(10);
+            // closing call for the last logger
+            pc->logger(pc->ctx, RU_LOG_NONE, NULL);
+            logDbg("0x%p flushed", pc);
+        }
     }
-    freeLogger(ps);
+    freeLogger(pc);
+    ruMutexUnlock(lmux_);
 }
 
 RUAPI void ruStopLogger(void) {
@@ -442,17 +498,19 @@ RUAPI void ruStopLogger(void) {
 }
 
 RUAPI void ruSetLogLevel(uint32_t logLevel) {
-    if (ls_) ls_->level = logLevel;
+    if (!lc_) initLog();
+    lc_->level = logLevel;
 }
 
 RUAPI uint32_t ruGetLogLevel(void) {
-    if (ls_) return ls_->level;
-    return RU_LOG_NONE;
+    if (!lc_) initLog();
+    return lc_->level;
 }
 
 RUAPI bool ruDoesLog(uint32_t log_level) {
-    if (!ls_ || !ls_->level || !log_level) return false;
-    return ls_->level >= log_level;
+    if (!lc_) initLog();
+    if (!lc_->level || !log_level) return false;
+    return lc_->level >= log_level;
 }
 
 // tracks recursive ruMakeLogMsgV within a thread
@@ -580,19 +638,20 @@ RUAPI void ruDoLogV(uint32_t log_level, trans_chars filePath, trans_chars func,
     if (!ruDoesLog(log_level)) return;
     alloc_chars _log_str_ = ruMakeLogMsgV(log_level, filePath, func, line, format,
                                      args);
-    ls_->queuer(ls_, log_level, _log_str_);
+    lc_->queuer(lc_, log_level, _log_str_);
     free(_log_str_);
 }
 
 RUAPI void ruRawLog(uint32_t log_level, trans_chars msg) {
     if (!ruDoesLog(log_level)) return;
-    ls_->queuer(ls_, log_level, msg);
+    lc_->queuer(lc_, log_level, msg);
 }
 
 RUAPI void ruFlushLog(void) {
-    if(!ls_) return;
-    if (ls_->logThread) ls_->flushReq = true;
-    ls_->queuer(ls_, RU_LOG_NONE, NULL);
-    while (ls_->flushReq) ruSleepMs(1);
+    setFlushMark(false);
+}
+
+RUAPI void ruLastLog(void) {
+    setFlushMark(true);
 }
 // </editor-fold>

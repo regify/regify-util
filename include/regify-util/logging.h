@@ -328,13 +328,23 @@ RUAPI alloc_chars ruMakeLogMsgV(uint32_t log_level, trans_chars filePath,
 RUAPI void ruRawLog(uint32_t log_level, trans_chars msg);
 
 /**
- * \brief Sends a NULL message to the current log sink, usually causing it to
- * flush or close the log file.
+ * \brief Sends a NULL message with log level \ref RU_LOG_CRIT to the current
+ * log sink, usually causing it to flush or close the log file.
  *
  * If the logger is threaded this will block until a NULL has been sent to the
  * given log sink.
  */
 RUAPI void ruFlushLog(void);
+
+/**
+ * \brief Sends a NULL message with log level \ref RU_LOG_NONE to the current
+ * log sink, usually causing it to close the log file and call a potential
+ * close callback.
+ *
+ * If the logger is threaded this will block until a NULL has been sent to the
+ * given log sink.
+ */
+RUAPI void ruLastLog(void);
 
 /**
  * Internal logging function used by the log macros.
