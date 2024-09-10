@@ -2252,6 +2252,13 @@
       <arglist>(void)</arglist>
     </member>
     <member kind="function">
+      <type>RUAPI void</type>
+      <name>ruLastLog</name>
+      <anchorfile>group__logging.html</anchorfile>
+      <anchor>ga6e746e4f9bc99f396cf33144b5e4a915</anchor>
+      <arglist>(void)</arglist>
+    </member>
+    <member kind="function">
       <type>RUAPI char *</type>
       <name>ruMakeLogMsg</name>
       <anchorfile>group__logging.html</anchorfile>

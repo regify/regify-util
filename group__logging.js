@@ -28,6 +28,7 @@ var group__logging =
     [ "ruFileLogSink", "group__logging.html#ga54bf651c01ea4e30e95637b64d90a933", null ],
     [ "ruFlushLog", "group__logging.html#ga6c875c4c7949052579432bbb24028921", null ],
     [ "ruGetLogLevel", "group__logging.html#ga55a8b3d268484f95bc91525110491606", null ],
+    [ "ruLastLog", "group__logging.html#ga6e746e4f9bc99f396cf33144b5e4a915", null ],
     [ "ruMakeLogMsg", "group__logging.html#gaba251eab71de5a652f71acdcd4281e8b", null ],
     [ "ruMakeLogMsgV", "group__logging.html#ga68901146640b2e22a832ad4884fd04cd", null ],
     [ "ruPreCtxFree", "group__logging.html#ga60cb8af9d0a6703f9a9c9df34b6fb33a", null ],
