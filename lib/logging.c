@@ -173,17 +173,18 @@ static ru_inode getInode(sinkCtx* sc) {
 
 static void fileOpen(sinkCtx* sc, trans_chars msg) {
     ruMutexLock(sc->fmux);
-    if (!sc->wh) {
+    while (!sc->wh && sc->filePath) {
         int32_t ret;
         sc->wh = ruFOpen(sc->filePath, bAppendMode, &ret);
-        if (ret != RUE_OK) return;
-        logDbg("0x%p opened: %s for %s", sc, sc->filePath, msg);
+        logDbg("0x%p opened: %s ret: %d for %s", sc, sc->filePath, ret, msg);
+        if (ret != RUE_OK) break;
         setCheckTime(sc);
 #ifdef _WIN32
         ruReplace(sc->curPath, ruStrDup(sc->filePath));
 #else
         sc->curNode = getInode(sc);
 #endif
+        break;
     }
     ruMutexUnlock(sc->fmux);
 }
@@ -205,8 +206,13 @@ static void checkCb(sinkCtx* sc) {
         sc->closeCb(sc->closeCtx);
         logDbg("0x%p sc->callClose done: %d", sc, sc->callClose);
     }
-    ruReplace(sc->filePath, sc->newFilePath);
-    sc->newFilePath = NULL;
+    if (sc->newFilePath) {
+        // This is only for ruSinkCtxPath calls.
+        // It is done here to better define the cut over moment.
+        ruReplace(sc->filePath, sc->newFilePath);
+        logDbg("0x%p new sc->filePath: %s", sc, sc->filePath);
+        sc->newFilePath = NULL;
+    }
 }
 
 static void fileClose(sinkCtx* sc) {
@@ -360,7 +366,6 @@ static void initLog(void) {
 
 static void asyncQ(perm_ptr userData, uint32_t logLevel, trans_chars msg) {
     loggerCtx* ls = (loggerCtx*)userData;
-    if (!ls->queue) return;
     logMsg* lm = logMsgNew(logLevel, msg);
     int32_t ret = ruListPush(ls->queue, lm);
     if (ret != RUE_OK) logMsgFree(lm);
@@ -493,8 +498,7 @@ RUAPI void ruSetLogger(ruLogFunc logger, uint32_t logLevel, perm_ptr userData,
 }
 
 RUAPI void ruStopLogger(void) {
-    ruSetLogger(NULL, RU_LOG_NONE, NULL,
-                NULL, false);
+    ruSetLogger(NULL, RU_LOG_NONE, NULL, NULL, false);
 }
 
 RUAPI void ruSetLogLevel(uint32_t logLevel) {
