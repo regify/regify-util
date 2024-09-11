@@ -107,6 +107,7 @@ static void sinkTest(bool threaded, bool cleaning) {
     ruFlushLog();
     fail_unless(clexp == closed, retText, test, clexp, closed);
 
+    clexp = 2;
     ruStopLogger();
     fail_unless(clexp == closed, retText, test, clexp, closed);
 

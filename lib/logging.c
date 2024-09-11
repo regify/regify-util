@@ -48,6 +48,9 @@ void doLogDbg(trans_chars filePath, trans_chars func, int32_t line, trans_chars 
 #define logDbg(fmt, ...)
 #endif
 
+#define RU_LOG_CLOSE RU_LOG_NONE
+#define RU_LOG_FLUSH RU_LOG_CRIT
+
 static void setFlushMark(bool callback);
 
 typedef struct {
@@ -141,7 +144,6 @@ typedef struct {
     alloc_chars newFilePath;
     ruCloseFunc closeCb;
     perm_ptr closeCtx;
-    bool callClose;
     sec_t checkTime;
     ruMutex fmux;
     FILE* wh;
@@ -200,11 +202,10 @@ static bool fileGone(sinkCtx* sc) {
 }
 
 static void checkCb(sinkCtx* sc) {
-    if (sc->callClose) {
-        logDbg("0x%p calling sc->callClose: %d", sc, sc->callClose);
-        sc->callClose = false;
+    if (sc->closeCb) {
+        logDbg("0x%p calling sc->closeCb", sc);
         sc->closeCb(sc->closeCtx);
-        logDbg("0x%p sc->callClose done: %d", sc, sc->callClose);
+        logDbg("0x%p sc->closeCb done", sc);
     }
     if (sc->newFilePath) {
         // This is only for ruSinkCtxPath calls.
@@ -251,11 +252,10 @@ RUAPI int32_t ruSinkCtxPath(ruSinkCtx rsc, trans_chars filePath) {
     if (ret != RUE_OK) return ret;
     if (!ruStrEquals(sc->filePath, filePath)) {
         ruReplace(sc->newFilePath, ruStrDup(filePath));
-        if (sc->closeCb) sc->callClose = true;
-        logDbg("0x%p pre ruLastLog '%s' -> '%s' callClose: %d",
-               sc, sc->filePath, sc->newFilePath, sc->callClose);
+        logDbg("0x%p pre ruLastLog '%s' -> '%s'",
+               sc, sc->filePath, sc->newFilePath);
         ruLastLog();
-        logDbg("0x%p post ruLastLog callClose: %d", sc, sc->callClose);
+        logDbg("0x%p post ruLastLog", sc);
     }
     return ret;
 }
@@ -297,7 +297,7 @@ RUAPI void ruFileLogSink(perm_ptr rsc, uint32_t logLevel, trans_chars msg) {
         }
     }
     if (!msg) {
-        if (logLevel == RU_LOG_NONE) checkCb(sc);
+        if (logLevel == RU_LOG_CLOSE) checkCb(sc);
         return;
     }
     if (!sc->wh) fileOpen(sc, msg);
@@ -422,7 +422,7 @@ static ptr logThread(ptr p) {
 
             if (!flushed || ls->flushReq) {
                 // send flush signal to logger
-                ls->logger(ls->ctx, ls->level, NULL);
+                ls->logger(ls->ctx, RU_LOG_FLUSH, NULL);
                 ls->flushReq = false;
                 flushed = true;
             }
@@ -431,7 +431,7 @@ static ptr logThread(ptr p) {
         if (ls->quitting && ret != RUE_OK) break;
     }
     // send termination signal to log sink
-    ls->logger(ls->ctx, ls->level, NULL);
+    ls->logger(ls->ctx, RU_LOG_CLOSE, NULL);
     ls->quitting = false;
     logDbg("0x%p finished", ls);
     return NULL;
@@ -460,7 +460,7 @@ static void newLogger(loggerCtx* ls, ruLogFunc logger, uint32_t logLevel,
 static void setFlushMark(bool callback) {
     if (!lc_) initLog();
     if (lc_->logThread) lc_->flushReq = true;
-    lc_->queuer(lc_, callback ? RU_LOG_NONE : RU_LOG_CRIT, NULL);
+    lc_->queuer(lc_, callback ? RU_LOG_CLOSE : RU_LOG_FLUSH, NULL);
     while (lc_->flushReq) ruSleepMs(1);
 }
 // </editor-fold>
@@ -489,7 +489,7 @@ RUAPI void ruSetLogger(ruLogFunc logger, uint32_t logLevel, perm_ptr userData,
             logDbg("flushing 0x%p", pc);
             ruSleepMs(10);
             // closing call for the last logger
-            pc->logger(pc->ctx, RU_LOG_NONE, NULL);
+            pc->logger(pc->ctx, RU_LOG_CLOSE, NULL);
             logDbg("0x%p flushed", pc);
         }
     }
