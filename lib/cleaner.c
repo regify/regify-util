@@ -527,6 +527,13 @@ ruCleaner ruCleanNew(rusize chunkSize) {
 ruCleaner ruCleanFree(ruCleaner cp) {
     Cleaner *c = CleanerGet(cp, NULL);
     if (!c) return NULL;
+#ifndef CLEANER_ONLY
+    if (c == pwCleaner_) {
+        // we're zapping the logger instance, so NULL that so it can be reset
+        pwCleaner_ = NULL;
+        logDbg("cleaner instance 0x%p zapped", c);
+    }
+#endif
     if (c->root) {
         c->root = c->leaf = freeBranch(c, c->root);
     }

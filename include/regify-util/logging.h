@@ -187,8 +187,9 @@ RUAPI ruSinkCtx ruSinkCtxNew(trans_chars filePath, ruCloseFunc closeCb,
  *
  * This will have immediate effect on logs sent to \ref ruFileLogSink. When the
  * old log has been closed the closeCb function given to \ref ruSinkCtxNew will
- * be called exactly one time. This will not happen if the new filePath is equal
- * to the old filePath.
+ * be called exactly one time. In either case this function will block until the
+ * old file has been closed. None of this will happen if the new filePath is
+ * equal to the old filePath.
  * @param rsc \ref ruSinkCtx to update.
  * @param filePath Path to new log file.
  * @return Status of the operation.
@@ -253,6 +254,9 @@ RUAPI perm_ptr ruGetLogCtx(void);
  * flushing. In the absense of the log thread this can also be accomplished by
  * calling \ref ruFlushLog.
  * At the end \ref ruStopLogger should be called to flush and close the log file.
+ * This function will block until the old logger has been stopped. If it used
+ * \ref ruFileLogSink then the log will also have been flushed and closed before
+ * this function returns.
  *
  * @param logger Logging function that will be called with messages.
  * @param logLevel Loglevel to determine what gets logged.

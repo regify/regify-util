@@ -38,16 +38,6 @@ typedef __ino_t ru_inode;
 #endif
 #endif
 
-// logger debugging
-#define LOGDBG 0
-
-#if LOGDBG
-void doLogDbg(trans_chars filePath, trans_chars func, int32_t line, trans_chars format, ...);
-#define logDbg(fmt, ...) doLogDbg(__FILE__, __func__, __LINE__, fmt, __VA_ARGS__)
-#else
-#define logDbg(fmt, ...)
-#endif
-
 #define RU_LOG_CLOSE RU_LOG_NONE
 #define RU_LOG_FLUSH RU_LOG_CRIT
 
@@ -342,13 +332,14 @@ static loggerCtx l1_, l2_;
 static loggerCtx* lc_ = NULL;
 static ruMutex lmux_ = NULL;
 // public cleaner singleton to be used by logger
-static ruCleaner pwCleaner_ = NULL;
+ruCleaner pwCleaner_ = NULL;
 
 #define MAX_LOG_LEN 2048
 
 static ruCleaner getCleaner(void) {
     if (!pwCleaner_) {
         pwCleaner_ = ruCleanNew(0);
+        logDbg("new cleaner instance 0x%p created", pwCleaner_);
     }
     return pwCleaner_;
 }
