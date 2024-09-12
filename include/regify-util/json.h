@@ -492,7 +492,7 @@ RUAPI bool ruJsonIdxParseBool(ruJson rj, rusize index, int32_t* status);
 /**
  * Return boolean of the indexed element from underlying \ref ruJson array reference.
  * @param rj \ref ruJson in question.
- * @param key key under which boolean resides
+ * @param index index under which the string resides
  * @param status where the \ref RUE_OK on success or an error code will be stored.
  * @return boolean in question and false on error.
  */

@@ -78,6 +78,9 @@
 extern "C" {
 #endif /* __cplusplus */
 
+// logger debugging 1 = logDbg, 2 = logQDbg
+#define LOGDBG 0
+
 #include <locale.h>
 #include <ctype.h>
 #include <stdio.h>
@@ -151,14 +154,16 @@ extern "C" {
 #define EOL "\n"
 #endif
 
-// logger debugging
-#define LOGDBG 0
-
 #if LOGDBG
 void doLogDbg(trans_chars filePath, trans_chars func, int32_t line, trans_chars format, ...);
 #define logDbg(fmt, ...) doLogDbg(__FILE__, __func__, __LINE__, fmt, __VA_ARGS__)
 #else
 #define logDbg(fmt, ...)
+#endif
+#if LOGDBG > 1
+#define logQDbg(fmt, ...) doLogDbg(__FILE__, __func__, __LINE__, fmt, __VA_ARGS__)
+#else
+#define logQDbg(fmt, ...)
 #endif
 
 

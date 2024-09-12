@@ -344,7 +344,36 @@ static ruCleaner getCleaner(void) {
     return pwCleaner_;
 }
 
-static void noQ(perm_ptr userData, uint32_t logLevel, trans_chars msg) {}
+static rusize_s cb2Writer (perm_ptr ctx, trans_ptr buf, rusize len) {
+    ruString io = (ruString)ctx;
+    if (RUE_OK == ruBufferAppend(io, buf, len)) return (rusize_s)len;
+    return -1;
+}
+
+static void noQ(perm_ptr userData, uint32_t logLevel, trans_chars msg) {
+    logQDbg("logger: 0x%p level: %d msg: %s", userData, logLevel, msg);
+}
+
+static void asyncQ(perm_ptr userData, uint32_t logLevel, trans_chars msg) {
+    logQDbg("logger: 0x%p level: %d msg: %s", userData, logLevel, msg);
+    loggerCtx* ls = (loggerCtx*)userData;
+    logMsg* lm = logMsgNew(logLevel, msg);
+    int32_t ret = ruListPush(ls->queue, lm);
+    if (ret != RUE_OK) logMsgFree(lm);
+}
+
+static void syncQ(perm_ptr userData, uint32_t logLevel, trans_chars msg) {
+    logQDbg("logger: 0x%p level: %d msg: %s", userData, logLevel, msg);
+    loggerCtx* ls = (loggerCtx*)userData;
+    perm_chars out = msg;
+    if (ls->cleaner && out) {
+        ruStringReset(ls->clnBuf);
+        ruCleanToWriter(ls->cleaner, msg, 0,
+                        &cb2Writer, ls->clnBuf);
+        out = ruStringGetCString(ls->clnBuf);
+    }
+    ls->logger(ls->ctx, logLevel, out);
+}
 
 static bool loggerValid(loggerCtx* lc) {
     return lc->logger != NULL;
@@ -362,31 +391,6 @@ static void initLog(void) {
     initLogger(&l2_);
     lc_ = &l1_;
     logDbg("l1_: 0x%p l2_: 0x%p lc_: 0x%p", &l1_, &l2_, lc_);
-}
-
-static void asyncQ(perm_ptr userData, uint32_t logLevel, trans_chars msg) {
-    loggerCtx* ls = (loggerCtx*)userData;
-    logMsg* lm = logMsgNew(logLevel, msg);
-    int32_t ret = ruListPush(ls->queue, lm);
-    if (ret != RUE_OK) logMsgFree(lm);
-}
-
-static rusize_s cb2Writer (perm_ptr ctx, trans_ptr buf, rusize len) {
-    ruString io = (ruString)ctx;
-    if (RUE_OK == ruBufferAppend(io, buf, len)) return (rusize_s)len;
-    return -1;
-}
-
-static void syncQ(perm_ptr userData, uint32_t logLevel, trans_chars msg) {
-    loggerCtx* ls = (loggerCtx*)userData;
-    perm_chars out = msg;
-    if (ls->cleaner && out) {
-        ruStringReset(ls->clnBuf);
-        ruCleanToWriter(ls->cleaner, msg, 0,
-                        &cb2Writer, ls->clnBuf);
-        out = ruStringGetCString(ls->clnBuf);
-    }
-    ls->logger(ls->ctx, logLevel, out);
 }
 
 static void freeLogger(loggerCtx* lc) {
@@ -428,7 +432,13 @@ static ptr logThread(ptr p) {
             }
         }
         // when quitting continue while we pop messages to flush the queue
-        if (ls->quitting && ret != RUE_OK) break;
+        if (ls->quitting) {
+            uint32_t sz = ruListSize(ls->queue, &ret);
+            if (!sz) {
+                logDbg("0x%p breaking loop size: %u ret: %d", ls, sz, ret);
+                break;
+            }
+        }
     }
     // send termination signal to log sink
     ls->logger(ls->ctx, RU_LOG_CLOSE, NULL);
@@ -459,9 +469,10 @@ static void newLogger(loggerCtx* ls, ruLogFunc logger, uint32_t logLevel,
 
 static void setFlushMark(bool callback) {
     if (!lc_) initLog();
-    if (lc_->logThread) lc_->flushReq = true;
-    lc_->queuer(lc_, callback ? RU_LOG_CLOSE : RU_LOG_FLUSH, NULL);
-    while (lc_->flushReq) ruSleepMs(1);
+    loggerCtx* lc = lc_;
+    if (lc->logThread) lc->flushReq = true;
+    lc->queuer(lc, callback ? RU_LOG_CLOSE : RU_LOG_FLUSH, NULL);
+    while (lc->flushReq) ruSleepMs(1);
 }
 // </editor-fold>
 
@@ -520,8 +531,8 @@ RUAPI uint32_t ruGetLogLevel(void) {
 }
 
 RUAPI bool ruDoesLog(uint32_t log_level) {
+    if (!log_level) return false;
     if (!lc_) initLog();
-    if (!lc_->level || !log_level) return false;
     return lc_->level >= log_level;
 }
 
@@ -648,15 +659,17 @@ RUAPI void ruDoLog(uint32_t log_level, trans_chars filePath, trans_chars func,
 RUAPI void ruDoLogV(uint32_t log_level, trans_chars filePath, trans_chars func,
              int32_t line, trans_chars format, va_list args) {
     if (!ruDoesLog(log_level)) return;
+    loggerCtx* lc = lc_;
     alloc_chars _log_str_ = ruMakeLogMsgV(log_level, filePath, func, line, format,
                                      args);
-    lc_->queuer(lc_, log_level, _log_str_);
+    lc->queuer(lc, log_level, _log_str_);
     free(_log_str_);
 }
 
 RUAPI void ruRawLog(uint32_t log_level, trans_chars msg) {
     if (!ruDoesLog(log_level)) return;
-    lc_->queuer(lc_, log_level, msg);
+    loggerCtx* lc = lc_;
+    lc->queuer(lc, log_level, msg);
 }
 
 RUAPI void ruFlushLog(void) {

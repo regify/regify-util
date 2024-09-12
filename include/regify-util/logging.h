@@ -70,12 +70,21 @@ extern "C" {
 
 /**
  * \brief This level disables logging altogether.
+ *
+ * This level is also used in conjunction with a NULL log message to prompt the
+ * log sink to flush and close the log file and call a potential close callback.
+ * If the logger is threaded it will also cause the thread to terminate.
+ * This is done using \ref ruLastLog.
  */
 #define RU_LOG_NONE 0
 
 /**
  * \brief This level reduces logging to fatal errors and generally unexpected
  * serious stuff.
+ *
+ * This level is also used in conjunction with a NULL log message to prompt the
+ * log sink to flush and close the log file.
+ * This is done using \ref ruFlushLog.
  */
 #define RU_LOG_CRIT 1
 
@@ -91,15 +100,15 @@ extern "C" {
 #define RU_LOG_INFO 3
 
 /**
- * \brief This is the verbose logging level used for debugging and usually
- * high quantity.
+ * \brief This level includes \ref RU_LOG_INFO and verbose logging used for
+ * debugging and is usually high quantity.
  */
 #define RU_LOG_VERB 4
 
 /**
- * \brief This is a debugging logging level used for debugging things that are
- * normally assumed to be working. It is usually off because it litters the logs
- * with often redundant data.
+ * \brief This level includes \ref RU_LOG_VERB and is a debugging logging level
+ * used for debugging things that are normally assumed to be working. It is
+ * usually off because it litters the logs with often redundant data.
  */
 #define RU_LOG_DBUG 5
 
@@ -212,7 +221,8 @@ RUAPI ruSinkCtx ruSinkCtxFree(ruSinkCtx rsc);
  * current file handle and reopens it to allow for logrotation to work.
  * When it receives a NULL message, like through \ref ruFlushLog, it closes its file.
  * Through the use of \ref ruSinkCtxPath, output files can be changed on the
- * fly. Every time it closes its log file, the \ref ruSinkCtx closeCb is called.
+ * fly. Every time \ref ruLastLog is called, it closes its log file and calls the
+ * \ref ruSinkCtx closeCb if set.
  *
  * @param rsc User data. Must be a \ref ruSinkCtx.
  * @param logLevel Ignored log level pertaining to this message.
@@ -351,8 +361,7 @@ RUAPI void ruRawLog(uint32_t log_level, trans_chars msg);
  * \brief Sends a NULL message with log level \ref RU_LOG_CRIT to the current
  * log sink, usually causing it to flush or close the log file.
  *
- * If the logger is threaded this will block until a NULL has been sent to the
- * given log sink.
+ * This call will block until a NULL has been sent to the given log sink.
  */
 RUAPI void ruFlushLog(void);
 
@@ -361,8 +370,7 @@ RUAPI void ruFlushLog(void);
  * log sink, usually causing it to close the log file and call a potential
  * close callback.
  *
- * If the logger is threaded this will block until a NULL has been sent to the
- * given log sink.
+ * This call will block until a NULL has been sent to the given log sink.
  */
 RUAPI void ruLastLog(void);
 

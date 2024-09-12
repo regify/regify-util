@@ -391,7 +391,7 @@ RUAPI const char* ruVersion(void);
  * Note, not all functions use this, so this function should only be
  * called after a function that does use it is called, else misleading
  * information will appear.
- * \ingroup errors
+ * \ingroup misc
  * @return Ephemeral error message. Must be copied if it is to persist.
  */
 RUAPI const char* ruLastError(void);
@@ -399,6 +399,7 @@ RUAPI const char* ruLastError(void);
 /**
  * \brief Returns a lowercase string representation of the current OS.
  *
+ * \ingroup misc
  * Currently knows about windows, android, linux, osx, ios and unix.
  * @return os string. Caller should copy this for persistence.
  */
@@ -406,6 +407,7 @@ RUAPI perm_chars ruGetOs(void);
 
 /**
  * \brief Returns the name of this host.
+ * \ingroup misc
  * @return hostname. Caller should free this with \ref ruFree.
  */
 RUAPI alloc_chars ruGetHostname(void);
@@ -413,6 +415,7 @@ RUAPI alloc_chars ruGetHostname(void);
 /**
  * \brief Returns the value of the requested environment vartiable or NULL if it is not
  * set.
+ * \ingroup misc
  * @param variable Variable name to retrieve
  * @return A copy of the value. May not be freed by the caller.
  */
@@ -420,18 +423,21 @@ RUAPI trans_chars ruGetenv(trans_chars variable);
 
 /**
  * \brief Return the current process id
+ * \ingroup misc
  * @return the current process id
  */
 RUAPI ru_pid ruProcessId(void);
 
 /**
  * \brief Indicates that an operation is non blocking. Used by \ref ruRunProg
+ * \ingroup misc
  */
 #define RU_NON_BLOCK (-1)
 
 /**
  * \brief Indicates that an operation that has no timeout. Used by \ref ruRunProg
- */
+  * \ingroup misc
+*/
 #define RU_NO_TIMEOUT 0
 
 /**
@@ -443,10 +449,11 @@ RUAPI ru_pid ruProcessId(void);
     int ret = ruRunProg(command, RU_NO_TIMEOUT);
  * ~~~~~
  *
- * @param argv program with params to run
- * @param timeout Use \ref RU_NON_BLOCK for non blocking, \ref RU_NO_TIMEOUT for
+ * \ingroup misc
+ * \param argv program with params to run
+ * \param timeout Use \ref RU_NON_BLOCK for non blocking, \ref RU_NO_TIMEOUT for
  *                blocking and > 0 to a timeout in seconds.
- * @return \ref RUE_FORK_FAILED for a fork failure,
+ * \return \ref RUE_FORK_FAILED for a fork failure,
  *         \ref RUE_RUN_FAILED for a launch failure,
  *         \ref RUE_TIMEOUT for a timeout,
  *         else the return code of the process
@@ -456,7 +463,8 @@ RUAPI int32_t ruRunProg(const char **argv, sec_t timeout);
 
 /**
  * \brief Returns the ISO-639-1 2 letter country code pertaining to the running system,
- * @return The country code. Caller must free with \ref ruFree.
+ * \ingroup misc
+ * \return The country code. Caller must free with \ref ruFree.
  */
 RUAPI alloc_chars ruGetLanguage(void);
 
@@ -465,6 +473,7 @@ RUAPI alloc_chars ruGetLanguage(void);
  *
  * This function ORs timevals usec with sec, so it is not designed for
  * cryptographic use.
+ * \ingroup misc
  * @param max The maximum random value.
  * @param offset An off set to add to the result to move the range.
  * @return A number between offset and offset + max.
@@ -479,21 +488,24 @@ RUAPI unsigned long ruSemiRandomNumber(unsigned long max, long offset);
  * mismatched tails so that 141.1.3 will come before 141.1.3.1. Finally NULLs
  * are also properly compared.
  *
- * @param ver1 First version to check
- * @param ver2 Second version to check
- * @return -1, 0 or 1 depending on whether ver1 is less equal or greater ver2
+ * \ingroup misc
+ * \param ver1 First version to check
+ * \param ver2 Second version to check
+ * \return -1, 0 or 1 depending on whether ver1 is less equal or greater ver2
  */
 RUAPI int ruVersionComp(trans_chars ver1, trans_chars ver2);
 
 /**
  * \brief Returns a \ref ruTimeVal representing the current time.
- * @param result Pointer to the \ref ruTimeVal structure to populate.
- * @return Return code of the operation or \ref RUE_OK on success.
+ * \ingroup misc
+ * \param result Pointer to the \ref ruTimeVal structure to populate.
+ * \return Return code of the operation or \ref RUE_OK on success.
  */
 RUAPI int32_t ruGetTimeVal(ruTimeVal *result);
 
 /**
  * \brief Return the current local time in microseconds since Jan. 1 1970
+ * \ingroup misc
  * @return Micro seconds since epoch
  */
 RUAPI usec_t ruTimeUs(void);
