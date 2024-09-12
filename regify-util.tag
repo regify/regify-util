@@ -2182,11 +2182,25 @@
       <arglist>(perm_ptr udata, uint32_t logLevel, trans_chars msg)</arglist>
     </member>
     <member kind="function">
+      <type>RUAPI ruCleaner</type>
+      <name>ruGetCleaner</name>
+      <anchorfile>group__logging.html</anchorfile>
+      <anchor>gaf1bd7249a47f8a9be1fa62343b3d60e5</anchor>
+      <arglist>(void)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI perm_ptr</type>
+      <name>ruGetLogCtx</name>
+      <anchorfile>group__logging.html</anchorfile>
+      <anchor>ga2f35a7d2d8872238c4db85fcb953b2c0</anchor>
+      <arglist>(void)</arglist>
+    </member>
+    <member kind="function">
       <type>RUAPI void</type>
       <name>ruSetLogger</name>
       <anchorfile>group__logging.html</anchorfile>
-      <anchor>ga389028e2a2f03e15f94a8ad238d1d2bb</anchor>
-      <arglist>(ruLogFunc logger, uint32_t logLevel, perm_ptr userData, ruCleaner cleaner, bool threaded)</arglist>
+      <anchor>gacfa926e70ddb1c3acb8854b70145a949</anchor>
+      <arglist>(ruLogFunc logger, uint32_t logLevel, perm_ptr userData, bool cleaned, bool threaded)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI void</type>
