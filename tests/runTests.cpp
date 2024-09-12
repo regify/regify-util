@@ -92,16 +92,14 @@ perm_chars makeOutPath(const char *filepath) {
     return &outBuffer[0];
 }
 
-ruCleaner rc = NULL;
 ruSinkCtx sc = NULL;
 
 void setLogger(void) {
-    if (!rc) rc = ruCleanNew(0);
     if (!sc) sc = ruSinkCtxNew(logPath, NULL, NULL);
     if (!ruStrEmpty(logPath)) {
-        ruSetLogger(ruFileLogSink, RU_LOG_DBUG, sc, rc, false);
+        ruSetLogger(ruFileLogSink, RU_LOG_DBUG, sc, true, false);
     } else {
-        ruSetLogger(ruStdErrLogSink, RU_LOG_DBUG, NULL, rc, false);
+        ruSetLogger(ruStdErrLogSink, RU_LOG_DBUG, NULL, true, false);
     }
 }
 
@@ -114,7 +112,7 @@ int32_t main ( int32_t argc, char *argv[] ) {
     // for failure debugging
     ruFileRemove(logPath);
     setLogger();
-    ruCleanAdd(rc, "mainSecrét", "^^^MAIN_SECRET^^^");
+    ruCleanAdd(ruGetCleaner(), "mainSecrét", "^^^MAIN_SECRET^^^");
     Suite *suite = getSuite();
     ruInfoLog("starting with mainSecrét and cleaner");
     SRunner *runner = srunner_create ( suite );
@@ -131,6 +129,5 @@ int32_t main ( int32_t argc, char *argv[] ) {
     ruInfoLog("stopping logger");
     ruStopLogger();
     ruSinkCtxFree(sc);
-    ruCleanFree(rc);
     return number_failed;
 }

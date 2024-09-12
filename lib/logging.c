@@ -341,8 +341,17 @@ typedef struct {
 static loggerCtx l1_, l2_;
 static loggerCtx* lc_ = NULL;
 static ruMutex lmux_ = NULL;
+// public cleaner singleton to be used by logger
+static ruCleaner pwCleaner_ = NULL;
 
 #define MAX_LOG_LEN 2048
+
+static ruCleaner getCleaner(void) {
+    if (!pwCleaner_) {
+        pwCleaner_ = ruCleanNew(0);
+    }
+    return pwCleaner_;
+}
 
 static void noQ(perm_ptr userData, uint32_t logLevel, trans_chars msg) {}
 
@@ -438,14 +447,14 @@ static ptr logThread(ptr p) {
 }
 
 static void newLogger(loggerCtx* ls, ruLogFunc logger, uint32_t logLevel,
-                            perm_ptr userData, ruCleaner cleaner, bool threaded) {
+                      perm_ptr userData, bool cleaned, bool threaded) {
     logDbg("0x%p created ud: 0x%p threaded: %d", ls, userData, threaded);
     ls->logger = logger;
     ls->level = logLevel;
     ls->ctx = userData;
-    if (cleaner) {
+    if (cleaned) {
         ls->clnBuf = ruBufferNew(MAX_LOG_LEN);
-        ls->cleaner = cleaner;
+        ls->cleaner = ruGetCleaner();
     }
     if (threaded) {
         ls->queue = ruListNew(ruTypePtr(logMsgFree));
@@ -466,15 +475,23 @@ static void setFlushMark(bool callback) {
 // </editor-fold>
 
 // <editor-fold desc="log public">
+RUAPI ruCleaner ruGetCleaner(void) {
+    return getCleaner();
+}
+
+RUAPI perm_ptr ruGetLogCtx(void) {
+    return lc_->ctx;
+}
+
 RUAPI void ruSetLogger(ruLogFunc logger, uint32_t logLevel, perm_ptr userData,
-                       ruCleaner cleaner, bool threaded) {
+                       bool cleaned, bool threaded) {
     if (!lc_) initLog();
     ruMutexLock(lmux_);
     loggerCtx* pc = lc_;
     loggerCtx* lc = (lc_ == &l1_) ? &l2_ : &l1_;
     initLogger(lc);
     if (logger) {
-        newLogger(lc, logger, logLevel, userData, cleaner, threaded);
+        newLogger(lc, logger, logLevel, userData, cleaned, threaded);
     }
     lc_ = lc;
     logDbg("now using logger 0x%p", lc_);
@@ -498,7 +515,7 @@ RUAPI void ruSetLogger(ruLogFunc logger, uint32_t logLevel, perm_ptr userData,
 }
 
 RUAPI void ruStopLogger(void) {
-    ruSetLogger(NULL, RU_LOG_NONE, NULL, NULL, false);
+    ruSetLogger(NULL, RU_LOG_NONE, NULL, false, false);
 }
 
 RUAPI void ruSetLogLevel(uint32_t logLevel) {

@@ -28,25 +28,23 @@
  * #include <regify-util.h>
  *
  * void testlog(trans_chars logPath, bool cleaning, bool threaded) {
- *     ruCleaner rc = NULL;
  *     ruSinkCtx sc = NULL;
  *     // Use the pre logger until we determine where to log to...
  *     ruPreCtx pc = ruPreCtxNew();
- *     ruSetLogger(ruPreLogSink, RU_LOG_DBUG, pc, NULL, threaded);
+ *     ruSetLogger(ruPreLogSink, RU_LOG_DBUG, pc, cleaning, threaded);
  *
  *     if (cleaning) {
  *         ruInfoLog("Using log cleaner");
- *         rc = ruCleanNew(0);
- *         ruCleanAdd(rc, "testsecret", "^^^TEST_SECRET^^^");
+ *         ruCleanAdd(ruGetCleaner(), "testsecret", "^^^TEST_SECRET^^^");
  *         ruVerbLog("keeping testsecret hidden");
  *     }
  *     if (ruStrEmpty(logfile)) {
  *         ruInfoLog("Using std error logger");
- *         ruSetLogger(ruStdErrLogSink, RU_LOG_DBUG, NULL, rc, threaded);
+ *         ruSetLogger(ruStdErrLogSink, RU_LOG_DBUG, NULL, cleaning, threaded);
  *     } else {
  *         ruInfoLogf("Logging to '%s'", logfile);
  *         sc = ruSinkCtxNew(logfile, NULL, NULL);
- *         ruSetLogger(ruFileLogSink, RU_LOG_DBUG, sc, rc, threaded);
+ *         ruSetLogger(ruFileLogSink, RU_LOG_DBUG, sc, cleaning, threaded);
  *     }
  *     // flush and free the pre logger
  *     pc = ruPreCtxFree(pc, true);
@@ -58,7 +56,6 @@
  *     ruInfoLog("stopping logger");
  *     ruStopLogger();
  *     ruSinkCtxFree(sc);
- *     ruCleanFree(rc);
  * }
  * ~~~~~
  * @{
@@ -231,6 +228,24 @@ RUAPI void ruFileLogSink(perm_ptr rsc, uint32_t logLevel, trans_chars msg);
 RUAPI void ruStdErrLogSink(perm_ptr udata, uint32_t logLevel, trans_chars msg);
 
 /**
+ * \brief Public \ref ruCleaner instance that is used by the logger when
+ * cleaning is enabled.
+ *
+ * @return Public \ref ruCleaner singleton.
+ */
+RUAPI ruCleaner ruGetCleaner(void);
+
+/**
+ * \brief Returns the \ref ruSetLogger userData in use by the current logger.
+ *
+ * This is useful to determine whether it is safe to delete a \ref ruSinkCtx
+ * without stopping a potentially otherwise used logger.
+ *
+ * @return Current logger userdata.
+ */
+RUAPI perm_ptr ruGetLogCtx(void);
+
+/**
  * \brief Sets the global logging function for this process.
  *
  * When threaded is set, the log thread always follows up with one NULL message
@@ -243,12 +258,13 @@ RUAPI void ruStdErrLogSink(perm_ptr udata, uint32_t logLevel, trans_chars msg);
  * @param logLevel Loglevel to determine what gets logged.
  * @param userData Opaque custom user data that will be passed to the
  *                 \ref ruLogFunc implementation.
- * @param cleaner Optional \ref ruCleaner instance for real time password cleaning.
+ * @param cleaned Whether to do real time password cleaning. Use the
+ *                \ref ruGetCleaner instance to add secrets to mask.
  * @param threaded Whether to receive all logger calls from a dedicated thread.
  *                 This is useful when many threads do lots of logging.
  */
 RUAPI void ruSetLogger(ruLogFunc logger, uint32_t logLevel, perm_ptr userData,
-                       ruCleaner cleaner, bool threaded);
+                       bool cleaned, bool threaded);
 
 /**
  * \brief Stop the current logger and flush the queue before returning.
