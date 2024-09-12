@@ -119,10 +119,10 @@ Macros</h2></td></tr>
 <tr class="memdesc:gac3860f00aa62056d7ca6cb40fd194bf6"><td class="mdescLeft">&#160;</td><td class="mdescRight">This level includes <a class="el" href="group__logging.html#ga4388ae060e29101e3458cc625b53f327">RU_LOG_WARN</a> and general information. Usual low quantity.  <a href="group__logging.html#gac3860f00aa62056d7ca6cb40fd194bf6">More...</a><br /></td></tr>
 <tr class="separator:gac3860f00aa62056d7ca6cb40fd194bf6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gaa48441dca350811c725a8096ccbd59f8"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__logging.html#gaa48441dca350811c725a8096ccbd59f8">RU_LOG_VERB</a>&#160;&#160;&#160;4</td></tr>
-<tr class="memdesc:gaa48441dca350811c725a8096ccbd59f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is the verbose logging level used for debugging and usually high quantity.  <a href="group__logging.html#gaa48441dca350811c725a8096ccbd59f8">More...</a><br /></td></tr>
+<tr class="memdesc:gaa48441dca350811c725a8096ccbd59f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">This level includes <a class="el" href="group__logging.html#gac3860f00aa62056d7ca6cb40fd194bf6">RU_LOG_INFO</a> and verbose logging used for debugging and is usually high quantity.  <a href="group__logging.html#gaa48441dca350811c725a8096ccbd59f8">More...</a><br /></td></tr>
 <tr class="separator:gaa48441dca350811c725a8096ccbd59f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga87450aef2aa1444e5f86301c28d0907d"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__logging.html#ga87450aef2aa1444e5f86301c28d0907d">RU_LOG_DBUG</a>&#160;&#160;&#160;5</td></tr>
-<tr class="memdesc:ga87450aef2aa1444e5f86301c28d0907d"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is a debugging logging level used for debugging things that are normally assumed to be working. It is usually off because it litters the logs with often redundant data.  <a href="group__logging.html#ga87450aef2aa1444e5f86301c28d0907d">More...</a><br /></td></tr>
+<tr class="memdesc:ga87450aef2aa1444e5f86301c28d0907d"><td class="mdescLeft">&#160;</td><td class="mdescRight">This level includes <a class="el" href="group__logging.html#gaa48441dca350811c725a8096ccbd59f8">RU_LOG_VERB</a> and is a debugging logging level used for debugging things that are normally assumed to be working. It is usually off because it litters the logs with often redundant data.  <a href="group__logging.html#ga87450aef2aa1444e5f86301c28d0907d">More...</a><br /></td></tr>
 <tr class="separator:ga87450aef2aa1444e5f86301c28d0907d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga52e07e352dbd0c7be2b0d37bc48cc8ac"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__logging.html#ga52e07e352dbd0c7be2b0d37bc48cc8ac">ruCritLog</a>(msg)&#160;&#160;&#160;ruLog_(<a class="el" href="group__logging.html#ga5ce14b97da761ebb505b022d7b777600">RU_LOG_CRIT</a>, &quot;%s&quot;, msg)</td></tr>
 <tr class="memdesc:ga52e07e352dbd0c7be2b0d37bc48cc8ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Emits a CRIT level log message.  <a href="group__logging.html#ga52e07e352dbd0c7be2b0d37bc48cc8ac">More...</a><br /></td></tr>
@@ -279,20 +279,20 @@ Functions</h2></td></tr>
 <div class="line">}</div>
 <div class="ttc" id="agroup__cleaner_html_ga10601de10e51a7ce8cb59044be5489fa"><div class="ttname"><a href="group__cleaner.html#ga10601de10e51a7ce8cb59044be5489fa">ruCleanAdd</a></div><div class="ttdeci">RUAPI int32_t ruCleanAdd(ruCleaner rc, trans_chars instr, trans_chars substitute)</div></div>
 <div class="ttc" id="agroup__logging_html_ga292cfa535c2603141824b64cfdb224c7"><div class="ttname"><a href="group__logging.html#ga292cfa535c2603141824b64cfdb224c7">ruPreCtxNew</a></div><div class="ttdeci">RUAPI ruPreCtx ruPreCtxNew(void)</div><div class="ttdoc">Creates a new pre logging context for use with ruPreLogSink.</div></div>
-<div class="ttc" id="agroup__logging_html_ga497ce15cdccb100b54759a94220e6d7f"><div class="ttname"><a href="group__logging.html#ga497ce15cdccb100b54759a94220e6d7f">ruVerbLog</a></div><div class="ttdeci">#define ruVerbLog(msg)</div><div class="ttdoc">Emits a VERB level log message.</div><div class="ttdef"><b>Definition:</b> logging.h:439</div></div>
-<div class="ttc" id="agroup__logging_html_ga4bf3472aaaf37ec918433cb983102338"><div class="ttname"><a href="group__logging.html#ga4bf3472aaaf37ec918433cb983102338">ruInfoLogf</a></div><div class="ttdeci">#define ruInfoLogf(fmt,...)</div><div class="ttdoc">Emits a INFO level log message.</div><div class="ttdef"><b>Definition:</b> logging.h:433</div></div>
+<div class="ttc" id="agroup__logging_html_ga497ce15cdccb100b54759a94220e6d7f"><div class="ttname"><a href="group__logging.html#ga497ce15cdccb100b54759a94220e6d7f">ruVerbLog</a></div><div class="ttdeci">#define ruVerbLog(msg)</div><div class="ttdoc">Emits a VERB level log message.</div><div class="ttdef"><b>Definition:</b> logging.h:447</div></div>
+<div class="ttc" id="agroup__logging_html_ga4bf3472aaaf37ec918433cb983102338"><div class="ttname"><a href="group__logging.html#ga4bf3472aaaf37ec918433cb983102338">ruInfoLogf</a></div><div class="ttdeci">#define ruInfoLogf(fmt,...)</div><div class="ttdoc">Emits a INFO level log message.</div><div class="ttdef"><b>Definition:</b> logging.h:441</div></div>
 <div class="ttc" id="agroup__logging_html_ga54bf651c01ea4e30e95637b64d90a933"><div class="ttname"><a href="group__logging.html#ga54bf651c01ea4e30e95637b64d90a933">ruFileLogSink</a></div><div class="ttdeci">RUAPI void ruFileLogSink(perm_ptr rsc, uint32_t logLevel, trans_chars msg)</div><div class="ttdoc">A log sink that logs into the filepath set in the given ruSinkCtx.</div></div>
 <div class="ttc" id="agroup__logging_html_ga60cb8af9d0a6703f9a9c9df34b6fb33a"><div class="ttname"><a href="group__logging.html#ga60cb8af9d0a6703f9a9c9df34b6fb33a">ruPreCtxFree</a></div><div class="ttdeci">RUAPI ruPreCtx ruPreCtxFree(ruPreCtx rpc, bool flush)</div><div class="ttdoc">Frees the given ruPreCtx.</div></div>
-<div class="ttc" id="agroup__logging_html_ga87450aef2aa1444e5f86301c28d0907d"><div class="ttname"><a href="group__logging.html#ga87450aef2aa1444e5f86301c28d0907d">RU_LOG_DBUG</a></div><div class="ttdeci">#define RU_LOG_DBUG</div><div class="ttdoc">This is a debugging logging level used for debugging things that are normally assumed to be working....</div><div class="ttdef"><b>Definition:</b> logging.h:104</div></div>
+<div class="ttc" id="agroup__logging_html_ga87450aef2aa1444e5f86301c28d0907d"><div class="ttname"><a href="group__logging.html#ga87450aef2aa1444e5f86301c28d0907d">RU_LOG_DBUG</a></div><div class="ttdeci">#define RU_LOG_DBUG</div><div class="ttdoc">This level includes RU_LOG_VERB and is a debugging logging level used for debugging things that are n...</div><div class="ttdef"><b>Definition:</b> logging.h:113</div></div>
 <div class="ttc" id="agroup__logging_html_ga944f341c3cee3932f61389c50e90b94c"><div class="ttname"><a href="group__logging.html#ga944f341c3cee3932f61389c50e90b94c">ruSinkCtxFree</a></div><div class="ttdeci">RUAPI ruSinkCtx ruSinkCtxFree(ruSinkCtx rsc)</div><div class="ttdoc">Frees the given ruSinkCtx after ruStopLogger has been called. This must not be called when the contex...</div></div>
 <div class="ttc" id="agroup__logging_html_gaa510d8fa7776ea1fc73389583b046d5e"><div class="ttname"><a href="group__logging.html#gaa510d8fa7776ea1fc73389583b046d5e">ruStopLogger</a></div><div class="ttdeci">RUAPI void ruStopLogger(void)</div><div class="ttdoc">Stop the current logger and flush the queue before returning.</div></div>
-<div class="ttc" id="agroup__logging_html_gab19866561d7f8e0b29799f20bd492ca4"><div class="ttname"><a href="group__logging.html#gab19866561d7f8e0b29799f20bd492ca4">ruPreCtx</a></div><div class="ttdeci">ptr ruPreCtx</div><div class="ttdoc">Opaque pointer to ruPreLogSink object.</div><div class="ttdef"><b>Definition:</b> logging.h:132</div></div>
+<div class="ttc" id="agroup__logging_html_gab19866561d7f8e0b29799f20bd492ca4"><div class="ttname"><a href="group__logging.html#gab19866561d7f8e0b29799f20bd492ca4">ruPreCtx</a></div><div class="ttdeci">ptr ruPreCtx</div><div class="ttdoc">Opaque pointer to ruPreLogSink object.</div><div class="ttdef"><b>Definition:</b> logging.h:141</div></div>
 <div class="ttc" id="agroup__logging_html_gacfa926e70ddb1c3acb8854b70145a949"><div class="ttname"><a href="group__logging.html#gacfa926e70ddb1c3acb8854b70145a949">ruSetLogger</a></div><div class="ttdeci">RUAPI void ruSetLogger(ruLogFunc logger, uint32_t logLevel, perm_ptr userData, bool cleaned, bool threaded)</div><div class="ttdoc">Sets the global logging function for this process.</div></div>
-<div class="ttc" id="agroup__logging_html_gad8a1b0826a4300220564607a1c25ece9"><div class="ttname"><a href="group__logging.html#gad8a1b0826a4300220564607a1c25ece9">ruSinkCtx</a></div><div class="ttdeci">ptr ruSinkCtx</div><div class="ttdoc">Opaque pointer to ruFileLogSink object.</div><div class="ttdef"><b>Definition:</b> logging.h:171</div></div>
+<div class="ttc" id="agroup__logging_html_gad8a1b0826a4300220564607a1c25ece9"><div class="ttname"><a href="group__logging.html#gad8a1b0826a4300220564607a1c25ece9">ruSinkCtx</a></div><div class="ttdeci">ptr ruSinkCtx</div><div class="ttdoc">Opaque pointer to ruFileLogSink object.</div><div class="ttdef"><b>Definition:</b> logging.h:180</div></div>
 <div class="ttc" id="agroup__logging_html_gadbfffcb111ff40362b687d6ecad63cf9"><div class="ttname"><a href="group__logging.html#gadbfffcb111ff40362b687d6ecad63cf9">ruPreLogSink</a></div><div class="ttdeci">RUAPI void ruPreLogSink(perm_ptr rpc, uint32_t logLevel, trans_chars msg)</div><div class="ttdoc">Pre logging sink to store log entries until a final log sink has been established.</div></div>
 <div class="ttc" id="agroup__logging_html_gae1af44f28c3a3acff3900991068d17f0"><div class="ttname"><a href="group__logging.html#gae1af44f28c3a3acff3900991068d17f0">ruSinkCtxNew</a></div><div class="ttdeci">RUAPI ruSinkCtx ruSinkCtxNew(trans_chars filePath, ruCloseFunc closeCb, perm_ptr closeCtx)</div><div class="ttdoc">Creates a new context to use with ruFileLogSink.</div></div>
 <div class="ttc" id="agroup__logging_html_gaf1bd7249a47f8a9be1fa62343b3d60e5"><div class="ttname"><a href="group__logging.html#gaf1bd7249a47f8a9be1fa62343b3d60e5">ruGetCleaner</a></div><div class="ttdeci">RUAPI ruCleaner ruGetCleaner(void)</div><div class="ttdoc">Public ruCleaner instance that is used by the logger when cleaning is enabled.</div></div>
-<div class="ttc" id="agroup__logging_html_gaf9ca44fd51225d8a837745dda302341f"><div class="ttname"><a href="group__logging.html#gaf9ca44fd51225d8a837745dda302341f">ruInfoLog</a></div><div class="ttdeci">#define ruInfoLog(msg)</div><div class="ttdoc">Emits a INFO level log message.</div><div class="ttdef"><b>Definition:</b> logging.h:426</div></div>
+<div class="ttc" id="agroup__logging_html_gaf9ca44fd51225d8a837745dda302341f"><div class="ttname"><a href="group__logging.html#gaf9ca44fd51225d8a837745dda302341f">ruInfoLog</a></div><div class="ttdeci">#define ruInfoLog(msg)</div><div class="ttdoc">Emits a INFO level log message.</div><div class="ttdef"><b>Definition:</b> logging.h:434</div></div>
 <div class="ttc" id="agroup__logging_html_gaff3e36d62b4aeecc54cfd10cf8e649fe"><div class="ttname"><a href="group__logging.html#gaff3e36d62b4aeecc54cfd10cf8e649fe">ruStdErrLogSink</a></div><div class="ttdeci">RUAPI void ruStdErrLogSink(perm_ptr udata, uint32_t logLevel, trans_chars msg)</div><div class="ttdoc">A convenience logging implementation that logs to stderr.</div></div>
 <div class="ttc" id="agroup__misc_html_ga5a4bcdee6a3cc6c7ed75da5bb77d49bc"><div class="ttname"><a href="group__misc.html#ga5a4bcdee6a3cc6c7ed75da5bb77d49bc">trans_chars</a></div><div class="ttdeci">const char * trans_chars</div><div class="ttdoc">A transient NULL terminated string pointer.</div><div class="ttdef"><b>Definition:</b> regify-util.h:186</div></div>
 <div class="ttc" id="agroup__string_html_ga5df8af06cf764fc696b3bfc0efc3b39c"><div class="ttname"><a href="group__string.html#ga5df8af06cf764fc696b3bfc0efc3b39c">ruStrEmpty</a></div><div class="ttdeci">RUAPI bool ruStrEmpty(trans_chars str)</div><div class="ttdoc">Checks whether given string has any content other than whitespace.</div></div>
@@ -310,6 +310,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>This level reduces logging to fatal errors and generally unexpected serious stuff. </p>
+<p>This level is also used in conjunction with a NULL log message to prompt the log sink to flush and close the log file. This is done using <a class="el" href="group__logging.html#ga6c875c4c7949052579432bbb24028921">ruFlushLog</a>. </p>
 
 </div>
 </div>
@@ -325,7 +326,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>This is a debugging logging level used for debugging things that are normally assumed to be working. It is usually off because it litters the logs with often redundant data. </p>
+<p>This level includes <a class="el" href="group__logging.html#gaa48441dca350811c725a8096ccbd59f8">RU_LOG_VERB</a> and is a debugging logging level used for debugging things that are normally assumed to be working. It is usually off because it litters the logs with often redundant data. </p>
 
 </div>
 </div>
@@ -358,6 +359,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>This level disables logging altogether. </p>
+<p>This level is also used in conjunction with a NULL log message to prompt the log sink to flush and close the log file and call a potential close callback. If the logger is threaded it will also cause the thread to terminate. This is done using <a class="el" href="group__logging.html#ga6e746e4f9bc99f396cf33144b5e4a915">ruLastLog</a>. </p>
 
 </div>
 </div>
@@ -373,7 +375,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>This is the verbose logging level used for debugging and usually high quantity. </p>
+<p>This level includes <a class="el" href="group__logging.html#gac3860f00aa62056d7ca6cb40fd194bf6">RU_LOG_INFO</a> and verbose logging used for debugging and is usually high quantity. </p>
 
 </div>
 </div>
@@ -549,7 +551,7 @@ Functions</h2></td></tr>
 <div class="line">        (uint8_t)*((start)+4), (uint8_t)*((start)+5), (uint8_t)*((start)+6), (uint8_t)*((start)+7), \</div>
 <div class="line">        (uint8_t)*((start)+8), (uint8_t)*((start)+9), (uint8_t)*((start)+10), (uint8_t)*((start)+11), \</div>
 <div class="line">        (uint8_t)*((start)+12), (uint8_t)*((start)+13), (uint8_t)*((start)+14), (uint8_t)*((start)+15))</div>
-<div class="ttc" id="agroup__logging_html_ga3d3ffaf6bf4fa6d4c69329ad93f301b3"><div class="ttname"><a href="group__logging.html#ga3d3ffaf6bf4fa6d4c69329ad93f301b3">ruDbgLogf</a></div><div class="ttdeci">#define ruDbgLogf(fmt,...)</div><div class="ttdoc">Emits a DBUG level log message.</div><div class="ttdef"><b>Definition:</b> logging.h:459</div></div>
+<div class="ttc" id="agroup__logging_html_ga3d3ffaf6bf4fa6d4c69329ad93f301b3"><div class="ttname"><a href="group__logging.html#ga3d3ffaf6bf4fa6d4c69329ad93f301b3">ruDbgLogf</a></div><div class="ttdeci">#define ruDbgLogf(fmt,...)</div><div class="ttdoc">Emits a DBUG level log message.</div><div class="ttdef"><b>Definition:</b> logging.h:467</div></div>
 </div><!-- fragment -->
 <p>Debug logs the 16 bytes following start preceded by given message. </p>
 <dl class="params"><dt>Parameters</dt><dd>
@@ -1062,7 +1064,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>A log sink that logs into the filepath set in the given <a class="el" href="group__logging.html#gad8a1b0826a4300220564607a1c25ece9">ruSinkCtx</a>. </p>
-<p>This sink checks its underlying file every 3 seconds to see whether it has moved or the <a class="el" href="group__logging.html#gad8a1b0826a4300220564607a1c25ece9">ruSinkCtx</a> filePath has changed. When it does, it closes its current file handle and reopens it to allow for logrotation to work. When it receives a NULL message, like through <a class="el" href="group__logging.html#ga6c875c4c7949052579432bbb24028921">ruFlushLog</a>, it closes its file. Through the use of <a class="el" href="group__logging.html#ga8fd2681d3fa2abcf0f1db599128d074f">ruSinkCtxPath</a>, output files can be changed on the fly. Every time it closes its log file, the <a class="el" href="group__logging.html#gad8a1b0826a4300220564607a1c25ece9">ruSinkCtx</a> closeCb is called.</p>
+<p>This sink checks its underlying file every 3 seconds to see whether it has moved or the <a class="el" href="group__logging.html#gad8a1b0826a4300220564607a1c25ece9">ruSinkCtx</a> filePath has changed. When it does, it closes its current file handle and reopens it to allow for logrotation to work. When it receives a NULL message, like through <a class="el" href="group__logging.html#ga6c875c4c7949052579432bbb24028921">ruFlushLog</a>, it closes its file. Through the use of <a class="el" href="group__logging.html#ga8fd2681d3fa2abcf0f1db599128d074f">ruSinkCtxPath</a>, output files can be changed on the fly. Every time <a class="el" href="group__logging.html#ga6e746e4f9bc99f396cf33144b5e4a915">ruLastLog</a> is called, it closes its log file and calls the <a class="el" href="group__logging.html#gad8a1b0826a4300220564607a1c25ece9">ruSinkCtx</a> closeCb if set.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">rsc</td><td>User data. Must be a <a class="el" href="group__logging.html#gad8a1b0826a4300220564607a1c25ece9">ruSinkCtx</a>. </td></tr>
@@ -1091,7 +1093,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Sends a NULL message with log level <a class="el" href="group__logging.html#ga5ce14b97da761ebb505b022d7b777600">RU_LOG_CRIT</a> to the current log sink, usually causing it to flush or close the log file. </p>
-<p>If the logger is threaded this will block until a NULL has been sent to the given log sink. </p>
+<p>This call will block until a NULL has been sent to the given log sink. </p>
 
 </div>
 </div>
@@ -1176,7 +1178,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Sends a NULL message with log level <a class="el" href="group__logging.html#ga4ab0a01a9d5b8c0fe1228e22a4a98b28">RU_LOG_NONE</a> to the current log sink, usually causing it to close the log file and call a potential close callback. </p>
-<p>If the logger is threaded this will block until a NULL has been sent to the given log sink. </p>
+<p>This call will block until a NULL has been sent to the given log sink. </p>
 
 </div>
 </div>
@@ -1713,7 +1715,7 @@ Functions</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Thu Sep 12 2024 09:22:39 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Thu Sep 12 2024 15:00:37 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>
