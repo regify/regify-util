@@ -40,7 +40,7 @@ static ptr thRunner(ptr o) {
     return (ptr)23;
 }
 
-START_TEST ( api ) {
+START_TEST(api) {
     const char *test = "";
     const char *retText = "%s failed wanted ret '%d' but got '%d'";
     int ret, exp;
@@ -71,7 +71,7 @@ START_TEST ( api ) {
 }
 END_TEST
 
-START_TEST ( run ) {
+START_TEST(run) {
     const char *test = "";
     const char *retText = "%s failed wanted ret '%d' but got '%d'";
     int ret, exp;
@@ -132,10 +132,100 @@ START_TEST ( run ) {
 }
 END_TEST
 
+volatile int shared_data = 0;
+int ticks = 0;
+int tocks = 0;
+int max = 3;
+int pos = 0;
+int ticktocks[6];
+ruMutex tmux = NULL;
+ruCond tcond = NULL;
+
+static void* producer(void* arg) {
+    while (ticks < max) {
+        ruVerbLog("lock start");
+        ruMutexLock(tmux);
+        while (!shared_data) {
+            shared_data = 1;
+            ticks++;
+            ticktocks[pos++] = ticks;
+            ruVerbLogf("pre signal ticks: %d tocks: %d", ticks, tocks);
+            ruCondSignal(tcond);
+            ruVerbLog("post signal");
+        }
+        ruMutexUnlock(tmux);
+        ruVerbLog("unlocked");
+        ruSleepMs(100);
+    }
+    return NULL;
+}
+
+void* consumer(void* arg) {
+    while (-tocks < max) {
+        ruVerbLog("lock start");
+        ruMutexLock(tmux);
+        ruVerbLogf("pre wait shared: %d", shared_data);
+        int tries = 0;
+        while (!shared_data) {
+            ruCondWaitTil(tcond, tmux, 25);
+            tries++;
+            if (tries < 5 && !shared_data) {
+                ruVerbLogf("post wait shared: %d tries: %d", shared_data, tries);
+            } else if (shared_data){
+                ruVerbLogf("post wait shared: %d tries: %d", shared_data, tries);
+            }
+        }
+        tocks--;
+        ticktocks[pos++] = tocks;
+        shared_data = 0;
+        ruVerbLogf("post wait has ticks: %d tocks: %d", ticks, tocks);
+        ruMutexUnlock(tmux);
+        ruVerbLog("unlocked");
+    }
+    return NULL;
+}
+
+START_TEST(conds) {
+    const char *test = "";
+    const char *retText = "%s failed wanted ret '%d' but got '%d'";
+    //int ret, exp;
+    bool is, want;
+    ruThread t1, t2;
+    tmux = ruMutexInit();
+    tcond = ruCondInit();
+    memset(&ticktocks[0], 0, sizeof(ticktocks));
+    alloc_chars tick = ruStrDup("tick");
+    alloc_chars tock = ruStrDup("tock");
+
+    t1 = ruThreadCreate(producer, tick, NULL);
+    fail_if(NULL == t1, retText, test, NULL, t1);
+
+    t2 = ruThreadCreate(consumer, tock, NULL);
+    fail_if(NULL == t2, retText, test, NULL, t2);
+
+    want = true;
+    is = ruThreadWait(t1, 5, NULL);
+    fail_unless(want == is, retText, test, want, is);
+
+    is = ruThreadWait(t2, 1, NULL);
+    fail_unless(want == is, retText, test, want, is);
+
+    ruMutexFree(tmux);
+    ruCondFree(tcond);
+
+    int wants[] = {1, -1, 2, -2, 3, -3};
+    int last = sizeof(ticktocks) / sizeof (ticktocks[0]);
+    for (int i = 0; i < last; i++) {
+        fail_unless(wants[i] == ticktocks[i], retText, test, wants[i], ticktocks[i]);
+    }
+}
+END_TEST
+
 TCase* threadTests(void) {
     TCase *tcase = tcase_create("thread");
     tcase_add_test(tcase, api);
     tcase_add_test(tcase, run);
+    tcase_add_test(tcase, conds);
     return tcase;
 }
 

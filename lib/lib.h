@@ -196,16 +196,19 @@ void ruClearError(void);
 #define MagicTrace          2314
 #define MagicSinkCtx        2315
 #define MagicPreCtx         2316
+#define MagicCond           2317
 // cleaner.c #define MagicCleaner 2410
 
 /*
  *  Mutex
  */
 #ifdef _WIN32
+typedef CONDITION_VARIABLE ruCond_t;
 typedef SRWLOCK ruMutex_t;
 #else
 #include <pthread.h>
 #include <sched.h>
+typedef pthread_cond_t ruCond_t;
 typedef pthread_mutex_t ruMutex_t;
 #endif
 
@@ -219,6 +222,11 @@ typedef struct Trace_ {
     perm_ptr addr;
     alloc_chars str;
 } Trace;
+
+typedef struct cond_ {
+    ru_uint type;
+    ruCond_t cond;
+} Cond;
 
 typedef struct mux_ {
     ru_uint type;
@@ -331,6 +339,7 @@ struct List_ {
     ListElmt* tail;
     // thread safety
     ruMutex mux;
+    ruCond hasEntries;
     bool doQuit;    // flag to initiate map shutdown
 };
 

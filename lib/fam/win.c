@@ -202,7 +202,7 @@ static bool monOpenDir(fileMon* fm) {
                                NULL);
 
     if (fm->dirHandle == INVALID_HANDLE_VALUE) {
-        ruCritLogf("failed opening %s with error: %ld", fm->dirName, GetLastError());
+        ruCritLogf("failed opening %s with error: %d", fm->dirName, GetLastError());
         return false;
     }
     fam_dbg("success opening %s", fm->dirName);
@@ -414,7 +414,7 @@ static void famTerm(famCtx* fctx) {
         DWORD ret = QueueUserAPC(wrkReqTermination,
                      fctx->wrkTid, (ULONG_PTR) fctx->wctx);
         if (!ret) {
-            ruCritLogf("Failed to run QueueUserAPC error: %ld", GetLastError());
+            ruCritLogf("Failed to run QueueUserAPC error: %d", GetLastError());
         }
         ruThreadJoin(fctx->wrkThread, NULL);
         fctx->wrkThread = NULL;
@@ -455,7 +455,7 @@ static void famAddDir(famCtx* fctx, trans_chars directory) {
     DWORD ret = QueueUserAPC(wrkAddDir, fctx->wrkTid,
                  (ULONG_PTR) fm);
     if (!ret) {
-        ruCritLogf("Failed to run QueueUserAPC error: %ld", GetLastError());
+        ruCritLogf("Failed to run QueueUserAPC error: %d", GetLastError());
     }
     fam_info("added %s", directory);
 }

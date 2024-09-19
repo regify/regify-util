@@ -25,6 +25,7 @@
 #define muxDbg 0
 
 ruMakeTypeGetter(Trace, MagicTrace)
+ruMakeTypeGetter(Cond, MagicCond)
 ruMakeTypeGetter(Mux, MagicMux)
 ruMakeTypeGetter(Thr, MagicThr)
 ruMakeTypeGetter(tsc, MagicTsc)
@@ -580,6 +581,85 @@ RUAPI int ruThreadJoin(ruThread tid, void** exitVal) {
 }
 //</editor-fold>
 
+//<editor-fold desc="Condition">
+RUAPI ruCond ruCondInit(void) {
+    ruClearError();
+    Cond* cond = ruMalloc0(1, Cond);
+    cond->type = MagicCond;
+#ifdef _WIN32
+    InitializeConditionVariable(&cond->cond);
+#else
+    int ret;
+    if ((ret = pthread_cond_init(&cond->cond, NULL))) {
+        ruSetError("mutex init failed ec: %d", ret);
+        ruFree(cond);
+        return NULL;
+    }
+#endif
+    return (ruCond)cond;
+}
+
+RUAPI ruCond ruCondFree(ruCond c) {
+    int32_t ret;
+    Cond *cond = CondGet(c, &ret);
+    if (!cond) return NULL;
+    memset(cond, 0, sizeof(Cond));
+    ruFree(cond);
+    return NULL;
+}
+
+RUAPI void ruCondSignal(ruCond c) {
+    int32_t ret;
+    Cond *cond = CondGet(c, &ret);
+    if (!cond) {
+        ruAbortf("failed getting condition %d", ret);
+        return;
+    }
+#ifdef _WIN32
+    WakeConditionVariable(&cond->cond);
+#else
+    pthread_cond_signal(&cond->cond);
+#endif
+}
+
+RUAPI void ruCondWaitTil(ruCond c, ruMutex m, int32_t msTimeout) {
+    int32_t ret;
+    Mux *mux = MuxGet(m, &ret);
+    if (!mux) {
+        ruAbortf("failed getting mutex %d", ret);
+        return;
+    }
+    Cond *cond = CondGet(c, &ret);
+    if (!cond) {
+        ruAbortf("failed getting condition %d", ret);
+        return;
+    }
+#ifdef _WIN32
+    if (!msTimeout) msTimeout = INFINITE;
+    if (!SleepConditionVariableSRW(&cond->cond, &mux->mux, msTimeout, 0) &&
+            GetLastError() != ERROR_TIMEOUT) {
+        ruCritLogf("failed SleepConditionVariableSRW error: %d", GetLastError());
+    }
+#else
+    if (msTimeout) {
+        ruZeroedStruct(struct timeval, r);
+        ruZeroedStruct(struct timespec, request);
+        gettimeofday (&r, NULL);
+        request.tv_sec = r.tv_sec + (msTimeout / 1000);
+        request.tv_nsec = (r.tv_usec * 1000) + (msTimeout * 1000000);
+        pthread_cond_timedwait(&cond->cond, &mux->mux, &request);
+    } else {
+        pthread_cond_wait(&cond->cond, &mux->mux);
+    }
+#endif
+}
+
+RUAPI void ruCondWait(ruCond c, ruMutex m) {
+    ruCondWaitTil(c, m, 0);
+}
+
+//</editor-fold>
+
 //<editor-fold desc="Mutex">
 RUAPI ruMutex ruMutexInit(void) {
     ruClearError();
@@ -588,7 +668,7 @@ RUAPI ruMutex ruMutexInit(void) {
 #ifdef _WIN32
     InitializeSRWLock(&mux->mux);
     if (mux->mux.Ptr) {
-        ruSetError("mutex init failed: %d\n", GetLastError());
+        ruSetError("mutex init failed: %d", GetLastError());
         ruFree(mux);
         return NULL;
     }

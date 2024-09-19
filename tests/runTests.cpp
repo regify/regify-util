@@ -97,9 +97,9 @@ ruSinkCtx sc = NULL;
 void setLogger(void) {
     if (!sc) sc = ruSinkCtxNew(logPath, NULL, NULL);
     if (!ruStrEmpty(logPath)) {
-        ruSetLogger(ruFileLogSink, RU_LOG_DBUG, sc, true, false);
+        ruSetLogger(ruFileLogSink, RU_LOG_DBUG, sc, true, true);
     } else {
-        ruSetLogger(ruStdErrLogSink, RU_LOG_DBUG, NULL, true, false);
+        ruSetLogger(ruStdErrLogSink, RU_LOG_DBUG, NULL, true, true);
     }
 }
 

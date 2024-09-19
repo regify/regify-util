@@ -228,9 +228,55 @@ RUAPI int ruThreadJoin(ruThread tid, void** exitVal );
 RUAPI int32_t ruThreadKill(ruThread tid);
 
 /**
+ * \brief Opaque object abstracting condition signaling.
+ */
+typedef void* ruCond;
+
+/**
  * \brief Opaque object abstracting object locking.
  */
 typedef void* ruMutex;
+
+/**
+ * \brief Initialize a new \ref ruCond condition variable
+ * @return The new condition variable or NULL in which case call
+ *         \ref ruLastError for details.
+ */
+RUAPI ruCond ruCondInit(void);
+
+/**
+ * \brief Free up given \ref ruCond object.
+ * @param c The condition variable to free.
+ * @return NULL
+ */
+RUAPI ruCond ruCondFree(ruCond c);
+
+/**
+ * \brief Unblock a thread waiting for the given condition variable
+ * @param c The condition variable to signal.
+ */
+RUAPI void ruCondSignal(ruCond c);
+
+/**
+ * \brief Wait on the given condition variable or the given timeout.
+ *
+ * This function blocks the current thread waiting on the given condition
+ * variable, unblocks the given mutex, and relocks it again.
+ * @param c The condition variable to wait on.
+ * @param m The mutex to unblock and relock.
+ * @param msTimeout Amount of millisecond to wait or 0 for infinitely
+ */
+RUAPI void ruCondWaitTil(ruCond c, ruMutex m, int32_t msTimeout);
+
+/**
+ * \brief Wait on the given condition variable.
+ *
+ * This function blocks the current thread waiting on the given condition
+ * variable, unblocks the given mutex, and relocks it again.
+ * @param c The condition variable to wait on.
+ * @param m The mutex to unblock and relock.
+ */
+RUAPI void ruCondWait(ruCond c, ruMutex m);
 
 /**
  * \brief Initialize a new \ref ruMutex

@@ -42,6 +42,7 @@ List* ListNewType(ruType vt) {
     vs = ruTypeFree(vs);
     list->type = MagicList;
     list->mux = ruMutexInit();
+    list->hasEntries = ruCondInit();
     // create the root node
     list->head = ruMalloc0(1, ListElmt);
     list->head->type = MagicListElmt;
@@ -114,6 +115,7 @@ void ListFree(List *list) {
     ruFree(list->head);
     // No operations are allowed now, but clear the structure as a precaution.
     list->mux = ruMutexFree(list->mux);
+    list->hasEntries = ruCondFree(list->hasEntries);
     memset(list, 0, sizeof(List));
     ruFree(list);
 }
@@ -133,6 +135,7 @@ int32_t ListInsertAfter(List *list, ruListElmt rle, ptr data) {
     runValIn(new_element, data);
     /* Adjust the size of the list to account for the inserted element. */
     list->size++;
+    ruCondSignal(list->hasEntries);
 
     ListElmt* next_element = element->next;
     if (next_element == NULL) {
@@ -461,30 +464,32 @@ RUAPI int32_t ruListTryPopDataTo(ruList rl, msec_t timeoutMs, ptr* dest) {
     int32_t ret;
     List *list = ListGet(rl, &ret);
     if (!list) return ret;
-    bool done = false;
-    usec_t lstStep = 50;
-    usec_t locStep = 10;
-    msec_t end = ruTimeMs()+timeoutMs;
+
+    if (list->doQuit) return RUE_USER_ABORT;
+    msec_t startMs = ruTimeMs();
+    ruMutexLock(list->mux);
 
     do {
-        if (list->doQuit) return RUE_USER_ABORT;
-        if (!ruMutexTryLock(list->mux)) {
-            ruSleepUs(locStep);
-        } else {
-            if (list->doQuit) {
-                ruMutexUnlock(list->mux);
-                return RUE_USER_ABORT;
-            }
-            if (list->size) {
-                ret = ListRemoveTo(list, list->head->next, dest);
-                done = true;
-            }
-            ruMutexUnlock(list->mux);
-            if (done) return ret;
-            ruSleepUs(lstStep);
+        if (list->doQuit) {
+            ret = RUE_USER_ABORT;
+            break;
         }
-    } while (end > ruTimeMs());
-    return RUE_FILE_NOT_FOUND;
+        ret = RUE_FILE_NOT_FOUND;
+        if (!list->size) {
+            // subtract the time waiting for the lock
+            int32_t to = (int32_t) (timeoutMs - (ruTimeMs() - startMs));
+            if (to < 1) {
+                break;
+            }
+            ruCondWaitTil(list->hasEntries, list->mux, to);
+        }
+        if (list->size) {
+            ret = ListRemoveTo(list, list->head->next, dest);
+        }
+    } while(0);
+
+    ruMutexUnlock(list->mux);
+    return ret;
 }
 
 RUAPI ptr ruListTryPop(ruList rl, msec_t timeoutMs, int32_t *code) {
