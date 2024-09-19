@@ -133,6 +133,9 @@ Typedefs</h2></td></tr>
 <tr class="separator:ga938ce40d266424abe35f3a21705d829e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga9fb7315bef26c1ae9b399b5779ed230b"><td class="memItemLeft" align="right" valign="top">typedef void *(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__threading.html#ga9fb7315bef26c1ae9b399b5779ed230b">ruStartFunc</a>) (void *context)</td></tr>
 <tr class="separator:ga9fb7315bef26c1ae9b399b5779ed230b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga7054ff41edeb99aab29ac412214779f5"><td class="memItemLeft" align="right" valign="top">typedef void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__threading.html#ga7054ff41edeb99aab29ac412214779f5">ruCond</a></td></tr>
+<tr class="memdesc:ga7054ff41edeb99aab29ac412214779f5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Opaque object abstracting condition signaling.  <a href="group__threading.html#ga7054ff41edeb99aab29ac412214779f5">More...</a><br /></td></tr>
+<tr class="separator:ga7054ff41edeb99aab29ac412214779f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gaa2f2224294aab80c5b5fdadf8c50a2de"><td class="memItemLeft" align="right" valign="top">typedef void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__threading.html#gaa2f2224294aab80c5b5fdadf8c50a2de">ruMutex</a></td></tr>
 <tr class="memdesc:gaa2f2224294aab80c5b5fdadf8c50a2de"><td class="mdescLeft">&#160;</td><td class="mdescRight">Opaque object abstracting object locking.  <a href="group__threading.html#gaa2f2224294aab80c5b5fdadf8c50a2de">More...</a><br /></td></tr>
 <tr class="separator:gaa2f2224294aab80c5b5fdadf8c50a2de"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -192,6 +195,21 @@ Functions</h2></td></tr>
 <tr class="separator:gad6e96ffbf89103bede5fbd2274cadac4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga7f548388deccb5a3e695a8b335684a6c"><td class="memItemLeft" align="right" valign="top">RUAPI int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__threading.html#ga7f548388deccb5a3e695a8b335684a6c">ruThreadKill</a> (<a class="el" href="group__threading.html#gac7df455fe262f5fe1d6a40c48fb5a343">ruThread</a> tid)</td></tr>
 <tr class="separator:ga7f548388deccb5a3e695a8b335684a6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga3c0a14346d6d67d8f4397511d7a359fb"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__threading.html#ga7054ff41edeb99aab29ac412214779f5">ruCond</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__threading.html#ga3c0a14346d6d67d8f4397511d7a359fb">ruCondInit</a> (void)</td></tr>
+<tr class="memdesc:ga3c0a14346d6d67d8f4397511d7a359fb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize a new <a class="el" href="group__threading.html#ga7054ff41edeb99aab29ac412214779f5">ruCond</a> condition variable.  <a href="group__threading.html#ga3c0a14346d6d67d8f4397511d7a359fb">More...</a><br /></td></tr>
+<tr class="separator:ga3c0a14346d6d67d8f4397511d7a359fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga12b25ee1c2d8023a0cf162121184f04b"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__threading.html#ga7054ff41edeb99aab29ac412214779f5">ruCond</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__threading.html#ga12b25ee1c2d8023a0cf162121184f04b">ruCondFree</a> (<a class="el" href="group__threading.html#ga7054ff41edeb99aab29ac412214779f5">ruCond</a> c)</td></tr>
+<tr class="memdesc:ga12b25ee1c2d8023a0cf162121184f04b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Free up given <a class="el" href="group__threading.html#ga7054ff41edeb99aab29ac412214779f5">ruCond</a> object.  <a href="group__threading.html#ga12b25ee1c2d8023a0cf162121184f04b">More...</a><br /></td></tr>
+<tr class="separator:ga12b25ee1c2d8023a0cf162121184f04b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga023b77d103a598ece0adc751032eba20"><td class="memItemLeft" align="right" valign="top">RUAPI void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__threading.html#ga023b77d103a598ece0adc751032eba20">ruCondSignal</a> (<a class="el" href="group__threading.html#ga7054ff41edeb99aab29ac412214779f5">ruCond</a> c)</td></tr>
+<tr class="memdesc:ga023b77d103a598ece0adc751032eba20"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unblock a thread waiting for the given condition variable.  <a href="group__threading.html#ga023b77d103a598ece0adc751032eba20">More...</a><br /></td></tr>
+<tr class="separator:ga023b77d103a598ece0adc751032eba20"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga9d4b6421385fcef4615fc1745fc7110a"><td class="memItemLeft" align="right" valign="top">RUAPI void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__threading.html#ga9d4b6421385fcef4615fc1745fc7110a">ruCondWaitTil</a> (<a class="el" href="group__threading.html#ga7054ff41edeb99aab29ac412214779f5">ruCond</a> c, <a class="el" href="group__threading.html#gaa2f2224294aab80c5b5fdadf8c50a2de">ruMutex</a> m, int32_t msTimeout)</td></tr>
+<tr class="memdesc:ga9d4b6421385fcef4615fc1745fc7110a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wait on the given condition variable or the given timeout.  <a href="group__threading.html#ga9d4b6421385fcef4615fc1745fc7110a">More...</a><br /></td></tr>
+<tr class="separator:ga9d4b6421385fcef4615fc1745fc7110a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaa99cbfd5800ac72cd1038f28c06a9fa8"><td class="memItemLeft" align="right" valign="top">RUAPI void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__threading.html#gaa99cbfd5800ac72cd1038f28c06a9fa8">ruCondWait</a> (<a class="el" href="group__threading.html#ga7054ff41edeb99aab29ac412214779f5">ruCond</a> c, <a class="el" href="group__threading.html#gaa2f2224294aab80c5b5fdadf8c50a2de">ruMutex</a> m)</td></tr>
+<tr class="memdesc:gaa99cbfd5800ac72cd1038f28c06a9fa8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wait on the given condition variable.  <a href="group__threading.html#gaa99cbfd5800ac72cd1038f28c06a9fa8">More...</a><br /></td></tr>
+<tr class="separator:gaa99cbfd5800ac72cd1038f28c06a9fa8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gac8236a5017586c076516fb17dae0809c"><td class="memItemLeft" align="right" valign="top">RUAPI <a class="el" href="group__threading.html#gaa2f2224294aab80c5b5fdadf8c50a2de">ruMutex</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__threading.html#gac8236a5017586c076516fb17dae0809c">ruMutexInit</a> (void)</td></tr>
 <tr class="memdesc:gac8236a5017586c076516fb17dae0809c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize a new <a class="el" href="group__threading.html#gaa2f2224294aab80c5b5fdadf8c50a2de">ruMutex</a>.  <a href="group__threading.html#gac8236a5017586c076516fb17dae0809c">More...</a><br /></td></tr>
 <tr class="separator:gac8236a5017586c076516fb17dae0809c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -370,6 +388,22 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="ga7054ff41edeb99aab29ac412214779f5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga7054ff41edeb99aab29ac412214779f5">&#9670;&nbsp;</a></span>ruCond</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef void* <a class="el" href="group__threading.html#ga7054ff41edeb99aab29ac412214779f5">ruCond</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Opaque object abstracting condition signaling. </p>
+
+</div>
+</div>
 <a id="ga938ce40d266424abe35f3a21705d829e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ga938ce40d266424abe35f3a21705d829e">&#9670;&nbsp;</a></span>ruCount</h2>
 
@@ -509,6 +543,161 @@ Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">exePath</td><td>Optional for helping to find symbols. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ga12b25ee1c2d8023a0cf162121184f04b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga12b25ee1c2d8023a0cf162121184f04b">&#9670;&nbsp;</a></span>ruCondFree()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI <a class="el" href="group__threading.html#ga7054ff41edeb99aab29ac412214779f5">ruCond</a> ruCondFree </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__threading.html#ga7054ff41edeb99aab29ac412214779f5">ruCond</a>&#160;</td>
+          <td class="paramname"><em>c</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Free up given <a class="el" href="group__threading.html#ga7054ff41edeb99aab29ac412214779f5">ruCond</a> object. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">c</td><td>The condition variable to free. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>NULL </dd></dl>
+
+</div>
+</div>
+<a id="ga3c0a14346d6d67d8f4397511d7a359fb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga3c0a14346d6d67d8f4397511d7a359fb">&#9670;&nbsp;</a></span>ruCondInit()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI <a class="el" href="group__threading.html#ga7054ff41edeb99aab29ac412214779f5">ruCond</a> ruCondInit </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Initialize a new <a class="el" href="group__threading.html#ga7054ff41edeb99aab29ac412214779f5">ruCond</a> condition variable. </p>
+<dl class="section return"><dt>Returns</dt><dd>The new condition variable or NULL in which case call <a class="el" href="group__misc.html#gaea3d529fecc1bbad25f943943b6e9ef2">ruLastError</a> for details. </dd></dl>
+
+</div>
+</div>
+<a id="ga023b77d103a598ece0adc751032eba20"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga023b77d103a598ece0adc751032eba20">&#9670;&nbsp;</a></span>ruCondSignal()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI void ruCondSignal </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__threading.html#ga7054ff41edeb99aab29ac412214779f5">ruCond</a>&#160;</td>
+          <td class="paramname"><em>c</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Unblock a thread waiting for the given condition variable. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">c</td><td>The condition variable to signal. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="gaa99cbfd5800ac72cd1038f28c06a9fa8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaa99cbfd5800ac72cd1038f28c06a9fa8">&#9670;&nbsp;</a></span>ruCondWait()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI void ruCondWait </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__threading.html#ga7054ff41edeb99aab29ac412214779f5">ruCond</a>&#160;</td>
+          <td class="paramname"><em>c</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__threading.html#gaa2f2224294aab80c5b5fdadf8c50a2de">ruMutex</a>&#160;</td>
+          <td class="paramname"><em>m</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Wait on the given condition variable. </p>
+<p>This function blocks the current thread waiting on the given condition variable, unblocks the given mutex, and relocks it again. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">c</td><td>The condition variable to wait on. </td></tr>
+    <tr><td class="paramname">m</td><td>The mutex to unblock and relock. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ga9d4b6421385fcef4615fc1745fc7110a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga9d4b6421385fcef4615fc1745fc7110a">&#9670;&nbsp;</a></span>ruCondWaitTil()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">RUAPI void ruCondWaitTil </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__threading.html#ga7054ff41edeb99aab29ac412214779f5">ruCond</a>&#160;</td>
+          <td class="paramname"><em>c</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__threading.html#gaa2f2224294aab80c5b5fdadf8c50a2de">ruMutex</a>&#160;</td>
+          <td class="paramname"><em>m</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int32_t&#160;</td>
+          <td class="paramname"><em>msTimeout</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Wait on the given condition variable or the given timeout. </p>
+<p>This function blocks the current thread waiting on the given condition variable, unblocks the given mutex, and relocks it again. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">c</td><td>The condition variable to wait on. </td></tr>
+    <tr><td class="paramname">m</td><td>The mutex to unblock and relock. </td></tr>
+    <tr><td class="paramname">msTimeout</td><td>Amount of millisecond to wait or 0 for infinitely </td></tr>
   </table>
   </dd>
 </dl>
@@ -1424,7 +1613,7 @@ Functions</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Thu Sep 12 2024 15:00:37 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Thu Sep 19 2024 07:47:15 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

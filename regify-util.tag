@@ -3347,6 +3347,13 @@
     </member>
     <member kind="typedef">
       <type>void *</type>
+      <name>ruCond</name>
+      <anchorfile>group__threading.html</anchorfile>
+      <anchor>ga7054ff41edeb99aab29ac412214779f5</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>void *</type>
       <name>ruMutex</name>
       <anchorfile>group__threading.html</anchorfile>
       <anchor>gaa2f2224294aab80c5b5fdadf8c50a2de</anchor>
@@ -3491,6 +3498,41 @@
       <anchorfile>group__threading.html</anchorfile>
       <anchor>ga7f548388deccb5a3e695a8b335684a6c</anchor>
       <arglist>(ruThread tid)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI ruCond</type>
+      <name>ruCondInit</name>
+      <anchorfile>group__threading.html</anchorfile>
+      <anchor>ga3c0a14346d6d67d8f4397511d7a359fb</anchor>
+      <arglist>(void)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI ruCond</type>
+      <name>ruCondFree</name>
+      <anchorfile>group__threading.html</anchorfile>
+      <anchor>ga12b25ee1c2d8023a0cf162121184f04b</anchor>
+      <arglist>(ruCond c)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI void</type>
+      <name>ruCondSignal</name>
+      <anchorfile>group__threading.html</anchorfile>
+      <anchor>ga023b77d103a598ece0adc751032eba20</anchor>
+      <arglist>(ruCond c)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI void</type>
+      <name>ruCondWaitTil</name>
+      <anchorfile>group__threading.html</anchorfile>
+      <anchor>ga9d4b6421385fcef4615fc1745fc7110a</anchor>
+      <arglist>(ruCond c, ruMutex m, int32_t msTimeout)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI void</type>
+      <name>ruCondWait</name>
+      <anchorfile>group__threading.html</anchorfile>
+      <anchor>gaa99cbfd5800ac72cd1038f28c06a9fa8</anchor>
+      <arglist>(ruCond c, ruMutex m)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI ruMutex</type>
