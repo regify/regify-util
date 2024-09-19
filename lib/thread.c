@@ -645,8 +645,15 @@ RUAPI void ruCondWaitTil(ruCond c, ruMutex m, int32_t msTimeout) {
         ruZeroedStruct(struct timeval, r);
         ruZeroedStruct(struct timespec, request);
         gettimeofday (&r, NULL);
-        request.tv_sec = r.tv_sec + (msTimeout / 1000);
-        request.tv_nsec = (r.tv_usec * 1000) + (msTimeout * 1000000);
+        r.tv_sec += (msTimeout / 1000);
+        r.tv_usec += (msTimeout % 1000) * 1000;
+        const int32_t uSec = 1000 * 1000;
+        while (r.tv_usec >= uSec) {
+            r.tv_sec++;
+            r.tv_usec -= uSec;
+        }
+        request.tv_sec = r.tv_sec;
+        request.tv_nsec = r.tv_usec * 1000;
         pthread_cond_timedwait(&cond->cond, &mux->mux, &request);
     } else {
         pthread_cond_wait(&cond->cond, &mux->mux);

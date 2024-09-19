@@ -464,23 +464,24 @@ RUAPI int32_t ruListTryPopDataTo(ruList rl, msec_t timeoutMs, ptr* dest) {
     int32_t ret;
     List *list = ListGet(rl, &ret);
     if (!list) return ret;
-
     if (list->doQuit) return RUE_USER_ABORT;
     msec_t startMs = ruTimeMs();
     ruMutexLock(list->mux);
-
+    logDbg("start timeoutMs: %" PRId64 " size: %u", timeoutMs, list->size);
+    int32_t loops = 0;
     do {
         if (list->doQuit) {
             ret = RUE_USER_ABORT;
             break;
         }
         ret = RUE_FILE_NOT_FOUND;
-        if (!list->size) {
+        while (!list->size) {
             // subtract the time waiting for the lock
             int32_t to = (int32_t) (timeoutMs - (ruTimeMs() - startMs));
             if (to < 1) {
                 break;
             }
+            loops++;
             ruCondWaitTil(list->hasEntries, list->mux, to);
         }
         if (list->size) {
@@ -488,6 +489,7 @@ RUAPI int32_t ruListTryPopDataTo(ruList rl, msec_t timeoutMs, ptr* dest) {
         }
     } while(0);
 
+    logDbg("end ret: %d loops: %d", ret, loops);
     ruMutexUnlock(list->mux);
     return ret;
 }

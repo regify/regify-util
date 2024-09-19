@@ -413,7 +413,7 @@ static ptr logThread(ptr p) {
     pthread_sigmask(SIG_SETMASK, &set, NULL);
 #endif
     loggerCtx* ls = (loggerCtx*)p;
-    msec_t to = 10;
+    msec_t to = 250;
     bool flushed = false;
     int32_t ret = RUE_OK;
     while (true) {
