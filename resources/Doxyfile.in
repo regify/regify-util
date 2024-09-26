@@ -654,7 +654,7 @@ WARN_LOGFILE           = @PROJECT_BINARY_DIR@/doxygen.warn
 # directories like "/usr/src/myproject". Separate the files or directories 
 # with spaces.
 
-INPUT                  = @CMAKE_SOURCE_DIR@/include/regify-util.h @DOXY_SOURCES@
+INPUT                  = @CMAKE_BINARY_DIR@/regify-util.h @DOXY_SOURCES@
 
 # This tag can be used to specify the character encoding of the source files 
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding, which is 
