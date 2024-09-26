@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['string_20functions_1115',['String Functions',['../group__string.html',1,'']]],
-  ['string_20object_1116',['String Object',['../group__ru_string.html',1,'']]],
-  ['strings_1117',['Strings',['../group__typestring.html',1,'']]]
+  ['string_20functions_1116',['String Functions',['../group__string.html',1,'']]],
+  ['string_20object_1117',['String Object',['../group__ru_string.html',1,'']]],
+  ['strings_1118',['Strings',['../group__typestring.html',1,'']]]
 ];

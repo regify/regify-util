@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['8_20bit_20integer_1092',['8 Bit Integer',['../group__typeint8.html',1,'']]]
+  ['8_20bit_20integer_1093',['8 Bit Integer',['../group__typeint8.html',1,'']]]
 ];

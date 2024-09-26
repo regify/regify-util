@@ -4212,7 +4212,7 @@
   </compound>
   <compound kind="page">
     <name>index</name>
-    <title></title>
+    <title>regify utility @VERSION@-@REVISION@</title>
     <filename>index.html</filename>
   </compound>
 </tagfile>
