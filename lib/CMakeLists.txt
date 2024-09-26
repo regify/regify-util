@@ -138,7 +138,8 @@ function (doLink lib shared)
     target_include_directories(${lib}
             PUBLIC $<INSTALL_INTERFACE:include>
             # make sure we're using the right version
-            PRIVATE $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
+            PRIVATE $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}>
+            $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
             $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
             ${ICU_INCLUDE_DIRS} ${TIDY_INCLUDE_DIRS}
             )

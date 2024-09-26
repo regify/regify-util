@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 /**
- * \mainpage
+ * \mainpage regify utility @VERSION@-@REVISION@
  * \copyright regify. This project is released under the MIT License.
  *
  * The regify utility package is a collection of general utilities ranging from

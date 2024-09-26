@@ -263,7 +263,9 @@ foreach(hdr IN LISTS INCLUDES)
     set(DOXY_SOURCES "${DOXY_SOURCES} ${CMAKE_CURRENT_SOURCE_DIR}/${hdr}")
 endforeach()
 
-install(FILES include/regify-util.h DESTINATION include)
+configure_file(include/regify-util.h regify-util.h @ONLY)
+
+install(FILES ${CMAKE_BINARY_DIR}/regify-util.h DESTINATION include)
 install(FILES ${INCLUDES} DESTINATION include/regify-util)
 install(FILES
         ${CMAKE_CURRENT_BINARY_DIR}/${NAME}Config.cmake
