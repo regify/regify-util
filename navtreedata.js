@@ -25,7 +25,7 @@
 var NAVTREE =
 [
   [ "regify utility", "index.html", [
-    [ "regify utility @VERSION@-@REVISION@", "index.html", null ],
+    [ "regify utility 2.0.0-0", "index.html", null ],
     [ "Modules", "modules.html", "modules" ],
     [ "Data Structures", "annotated.html", [
       [ "Data Structures", "annotated.html", "annotated_dup" ],

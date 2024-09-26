@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['regify_20utility_20_40version_40_2d_40revision_40_1121',['regify utility @VERSION@-@REVISION@',['../index.html',1,'']]]
+  ['regify_20utility_202_2e0_2e0_2d0_1121',['regify utility 2.0.0-0',['../index.html',1,'']]]
 ];
