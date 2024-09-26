@@ -31,6 +31,7 @@ var group__logging =
     [ "ruGetLogCtx", "group__logging.html#ga2f35a7d2d8872238c4db85fcb953b2c0", null ],
     [ "ruGetLogLevel", "group__logging.html#ga55a8b3d268484f95bc91525110491606", null ],
     [ "ruLastLog", "group__logging.html#ga6e746e4f9bc99f396cf33144b5e4a915", null ],
+    [ "ruLogDbg", "group__logging.html#ga7c869fcc0d6f0bf63dcfbf111919033b", null ],
     [ "ruMakeLogMsg", "group__logging.html#gaba251eab71de5a652f71acdcd4281e8b", null ],
     [ "ruMakeLogMsgV", "group__logging.html#ga68901146640b2e22a832ad4884fd04cd", null ],
     [ "ruPreCtxFree", "group__logging.html#ga60cb8af9d0a6703f9a9c9df34b6fb33a", null ],

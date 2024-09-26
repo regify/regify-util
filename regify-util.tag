@@ -2232,6 +2232,13 @@
     </member>
     <member kind="function">
       <type>RUAPI void</type>
+      <name>ruLogDbg</name>
+      <anchorfile>group__logging.html</anchorfile>
+      <anchor>ga7c869fcc0d6f0bf63dcfbf111919033b</anchor>
+      <arglist>(trans_chars filePath, trans_chars func, int32_t line, trans_chars format,...)</arglist>
+    </member>
+    <member kind="function">
+      <type>RUAPI void</type>
       <name>ruDoLog</name>
       <anchorfile>group__logging.html</anchorfile>
       <anchor>gabd98a0c7b45bb134541f03fbf32adcca</anchor>
