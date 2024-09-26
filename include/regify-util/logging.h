@@ -307,6 +307,35 @@ RUAPI uint32_t ruGetLogLevel(void);
  */
 RUAPI bool ruDoesLog(uint32_t log_level);
 
+
+/**
+ * \brief Prints given parameters to stdout.
+ *
+ * This function is primarily intended to debug logging itself by compiling its
+ * usage in or out.
+ *
+ * Example:
+ * ~~~~~{.c}
+ * // logger debugging
+ * #define LOGDBG 01
+ *
+ * #if LOGDBG
+ * #define logDbg(fmt, ...) ruLogDbg(__FILE__, __func__, __LINE__, fmt, __VA_ARGS__)
+ * #else
+ * #define logDbg(fmt, ...)
+ * #endif
+ *
+ * logDbg("%s", "a parameterless log statement");
+ * ~~~~~
+ *
+ * @param filePath The source file where this message originates from.
+ * @param func The function that created this log entry.
+ * @param line The line where the log was created at.
+ * @param format The format specifier for the remaining arguments.
+ * @param ... The remaining arguments that make up the log message.
+ */
+RUAPI void ruLogDbg(trans_chars filePath, trans_chars func, int32_t line, trans_chars format, ...);
+
 /**
  * \brief Logs the given parameters if logging is set.
  *

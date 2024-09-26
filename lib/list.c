@@ -467,8 +467,8 @@ RUAPI int32_t ruListTryPopDataTo(ruList rl, msec_t timeoutMs, ptr* dest) {
     if (list->doQuit) return RUE_USER_ABORT;
     msec_t startMs = ruTimeMs();
     ruMutexLock(list->mux);
-#if LOGDBG
-    logDbg("start timeoutMs: %" PRId64 " size: %u", timeoutMs, list->size);
+#if LOGDBG_TP
+    logTpDbg("start timeoutMs: %" PRId64 " size: %u", timeoutMs, list->size);
     int32_t loops = 0;
 #endif
     do {
@@ -483,17 +483,18 @@ RUAPI int32_t ruListTryPopDataTo(ruList rl, msec_t timeoutMs, ptr* dest) {
             if (to < 1) {
                 break;
             }
-#if LOGDBG
+#if LOGDBG_TP
             loops++;
 #endif
             ruCondWaitTil(list->hasEntries, list->mux, to);
         }
         if (list->size) {
+            logTpDbg("return one with size: %u", list->size);
             ret = ListRemoveTo(list, list->head->next, dest);
         }
     } while(0);
 
-    logDbg("end ret: %d loops: %d", ret, loops);
+    logTpDbg("end ret: %d loops: %d", ret, loops);
     ruMutexUnlock(list->mux);
     return ret;
 }

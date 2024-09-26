@@ -63,16 +63,6 @@ static logMsg* logMsgNew(uint32_t logLevel, trans_chars msg) {
     return le;
 }
 
-#if LOGDBG
-void doLogDbg(trans_chars filePath, trans_chars func, int32_t line, trans_chars format, ...) {
-    va_list args;
-    va_start(args, format);
-    alloc_chars msg = ruMakeLogMsgV(RU_LOG_CRIT, filePath, func, line, format, args);
-    va_end(args);
-    printf("%s", msg);
-    ruFree(msg);
-}
-#endif
 // </editor-fold>
 
 // <editor-fold desc="pre logger">
@@ -413,6 +403,7 @@ static ptr logThread(ptr p) {
     pthread_sigmask(SIG_SETMASK, &set, NULL);
 #endif
     loggerCtx* ls = (loggerCtx*)p;
+    logDbg("0x%p starting", ls);
     msec_t to = 250;
     bool flushed = false;
     int32_t ret = RUE_OK;
@@ -420,14 +411,17 @@ static ptr logThread(ptr p) {
         logMsg* m = ruListTryPop(ls->queue, to, &ret);
         if (m) {
             syncQ(ls, m->logLevel, m->msg);
+            if (!m->msg && ls->flushReq) {
+                ls->flushReq = false;
+                flushed = true;
+            } else {
+                flushed = false;
+            }
             logMsgFree(m);
-            flushed = false;
         } else {
-
-            if (!flushed || ls->flushReq) {
+            if (!flushed) {
                 // send flush signal to logger
                 ls->logger(ls->ctx, RU_LOG_FLUSH, NULL);
-                ls->flushReq = false;
                 flushed = true;
             }
         }
@@ -645,6 +639,16 @@ RUAPI alloc_chars ruMakeLogMsg(uint32_t log_level, trans_chars filePath, trans_c
     char *out = ruMakeLogMsgV(log_level, filePath, func, line, format, args);
     va_end(args);
     return out;
+}
+
+RUAPI void ruLogDbg(trans_chars filePath, trans_chars func, int32_t line, trans_chars format, ...) {
+    va_list args;
+    va_start(args, format);
+    alloc_chars msg = ruMakeLogMsgV(RU_LOG_CRIT, filePath, func, line, format, args);
+    va_end(args);
+    printf("%s", msg);
+    fflush(stdout);
+    ruFree(msg);
 }
 
 RUAPI void ruDoLog(uint32_t log_level, trans_chars filePath, trans_chars func,

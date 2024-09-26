@@ -78,8 +78,13 @@
 extern "C" {
 #endif /* __cplusplus */
 
-// logger debugging 1 = logDbg, 2 = logQDbg
+// logger debugging
+// 1 = logDbg -> general
 #define LOGDBG 0
+// 2 = logTpDbg -> ruListTryPopDataTo
+#define LOGDBG_TP 0
+// 4 = logQDbg -> logger queue calls
+#define LOGDBG_Q  0
 
 #include <locale.h>
 #include <ctype.h>
@@ -155,13 +160,17 @@ extern "C" {
 #endif
 
 #if LOGDBG
-void doLogDbg(trans_chars filePath, trans_chars func, int32_t line, trans_chars format, ...);
-#define logDbg(fmt, ...) doLogDbg(__FILE__, __func__, __LINE__, fmt, __VA_ARGS__)
+#define logDbg(fmt, ...) ruLogDbg(__FILE__, __func__, __LINE__, fmt, __VA_ARGS__)
 #else
 #define logDbg(fmt, ...)
 #endif
-#if LOGDBG > 1
-#define logQDbg(fmt, ...) doLogDbg(__FILE__, __func__, __LINE__, fmt, __VA_ARGS__)
+#if LOGDBG_TP
+#define logTpDbg(fmt, ...) ruLogDbg(__FILE__, __func__, __LINE__, fmt, __VA_ARGS__)
+#else
+#define logTpDbg(fmt, ...)
+#endif
+#if LOGDBG_Q
+#define logQDbg(fmt, ...) ruLogDbg(__FILE__, __func__, __LINE__, fmt, __VA_ARGS__)
 #else
 #define logQDbg(fmt, ...)
 #endif
