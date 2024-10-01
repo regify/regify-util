@@ -125,9 +125,13 @@ static int watcher(trans_chars fullPath, bool isDir, void *ctx) {
     if (!isDir) return RUE_OK;
     int32_t wd = inotify_add_watch(fctx->id, fullPath, IN_MY_EVENTS);
     if (wd < 0) {
-        ruCritLogf("Failed adding watch on '%s' errno: %d - %s",
-                   fullPath, errno, strerror(errno));
-        return RUE_CANT_OPEN_FILE;
+        if (ruIsDir(fullPath)) {
+            ruCritLogf("Failed adding watch on '%s' errno: %d - %s",
+                       fullPath, errno, strerror(errno));
+            return RUE_CANT_OPEN_FILE;
+        }
+        ruVerbLogf("It seems '%s' was deleted so not adding watch", fullPath);
+        return RUE_OK;
     }
     alloc_chars pathCopy = copyNoSlash(fullPath);
     ruMapPut(fctx->wdPath, &wd, pathCopy);
@@ -292,8 +296,10 @@ static void fam_processEv(famCtx* fctx, struct inotify_event* ev, int* pollTimeo
             fctx->eventCb(fe, fctx->ctx);
             if (ev->mask & IN_ISDIR) {
                 fam_dbg("The directory %s was created.", name_);
-                if (RUE_OK != fam_watchDir(fctx, fullPath)) {
-                    ruCritLog("aborting fam thread.");
+                ret = fam_watchDir(fctx, fullPath);
+                if (ret != RUE_OK) {
+                    ruCritLogf("aborting fam thread for ec: %d from fam_watchDir '%s'",
+                               ret, fullPath);
                     fctx->quit = true;
                 }
             } else {
