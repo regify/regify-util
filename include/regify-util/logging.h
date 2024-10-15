@@ -276,9 +276,22 @@ RUAPI perm_ptr ruGetLogCtx(void);
  *                \ref ruGetCleaner instance to add secrets to mask.
  * @param threaded Whether to receive all logger calls from a dedicated thread.
  *                 This is useful when many threads do lots of logging.
+ *                 This currently uses a bound \ref ruList a la \ref ruListNewBound
+ *                 with a size limit of 100000 entries.
+ *                 Call \ref ruLoggerUnblock to prevent a slow logger from
+ *                 impeding process termination.
  */
 RUAPI void ruSetLogger(ruLogFunc logger, uint32_t logLevel, perm_ptr userData,
                        bool cleaned, bool threaded);
+
+/**
+ * \brief Unblocks any thread blocked on logging by removing the size limit of
+ *        the log queue.
+ *
+ * This is used when shutting down the logger to unblock pending entries and
+ * their associated threads.
+ */
+RUAPI void ruLoggerUnblock(void);
 
 /**
  * \brief Stop the current logger and flush the queue before returning.

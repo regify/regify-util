@@ -39,7 +39,7 @@ START_TEST ( api ) {
 
     test = "ruListNew";
     rl = ruListNew(NULL);
-    fail_unless(rl != NULL, retText, test, 0, RUE_OUT_OF_MEMORY);
+    fail_if(NULL == rl, retText, test, 0, RUE_OUT_OF_MEMORY);
 
     test = "ruListClear";
     exp = RUE_PARAMETER_NOT_SET;
@@ -700,7 +700,6 @@ void bar() {
     ruMapFree(rm);
 }
 
-
 START_TEST (sort) {
     int32_t ret, exp = RUE_OK;
     const char *test = "ruListAppend";
@@ -729,6 +728,65 @@ START_TEST (sort) {
 }
 END_TEST
 
+static ruCount cnt = NULL;
+static ruList lst = NULL;
+
+static ptr listRunner(ptr o) {
+    ruDbgLog("starting");
+    int32_t i = ruCounterInc(cnt, 1);
+    ruDbgLogf("i = %d", i);
+    ruListAppend(lst, &i);
+    ruDbgLog("done");
+    return NULL;
+}
+
+START_TEST (bound) {
+    int32_t ret, exp = RUE_OK;
+    const char *test = "ruListAppend";
+    const char *retText = "%s failed wanted ret '%d' but got '%d'";
+    ruThreadSetName("main");
+    cnt = ruCounterNew(0);
+    lst = ruListNewBound(ruTypeInt32(), 1, true);
+
+    ruThread t1 = ruThreadCreate(listRunner, ruStrDup("t1"), NULL);
+    fail_if(NULL == t1, retText, test, NULL, t1);
+    while (ruCounterRead(cnt) < 1) ruSleepMs(50);
+
+    ruThread t2 = ruThreadCreate(listRunner, ruStrDup("t2"), NULL);
+    fail_if(NULL == t2, retText, test, NULL, t2);
+    while (ruCounterRead(cnt) < 2) ruSleepMs(50);
+
+    ruThread t3 = ruThreadCreate(listRunner, ruStrDup("t3"), NULL);
+    fail_if(NULL == t3, retText, test, NULL, t3);
+    while (ruCounterRead(cnt) < 3) ruSleepMs(50);
+
+    while (ruCounterRead(cnt) > 0) {
+        int32_t num = 0;
+        ret = ruListTryPopTo(lst, 150, num);
+        fail_if(RUE_PARAMETER_NOT_SET == ret, retText, test, RUE_PARAMETER_NOT_SET, ret);
+        fail_if(RUE_INVALID_PARAMETER == ret, retText, test, RUE_INVALID_PARAMETER, ret);
+        fail_if(0 == num, retText, test, 0, num);
+        if (ret == RUE_OK) {
+            ruDbgLogf("num = %d", num);
+            ruCounterInc(cnt, -1);
+        }
+    }
+
+    bool is, want = true;
+    is = ruThreadWait(t1, 1, NULL);
+    fail_unless(want == is, retText, test, want, is);
+    is = ruThreadWait(t2, 1, NULL);
+    fail_unless(want == is, retText, test, want, is);
+    is = ruThreadWait(t3, 1, NULL);
+    fail_unless(want == is, retText, test, want, is);
+
+    ruDbgLog("finish up");
+    cnt = ruCountFree(cnt);
+    lst = ruListFree(lst);
+    ruThreadSetName(NULL);
+}
+END_TEST
+
 TCase* listTests(void) {
     TCase *tcase = tcase_create("list");
     tcase_add_test(tcase, api);
@@ -736,5 +794,6 @@ TCase* listTests(void) {
     tcase_add_test(tcase, memalloc);
     tcase_add_test(tcase, types);
     tcase_add_test(tcase, sort);
+    tcase_add_test(tcase, bound);
     return tcase;
 }

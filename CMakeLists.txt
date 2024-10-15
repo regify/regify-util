@@ -140,6 +140,17 @@ if(LINUX OR MAC OR MINGW)
     find_package(Threads REQUIRED)
 endif()
 
+if(MINGW)
+    set(CV2PDB_DIR "" CACHE STRING "Folder where cv2pdb can be found")
+    find_program(CV2PDB
+            NAMES cv2pdb cv2pdb.exe
+            PATHS ${CV2PDB_DIR})
+    if(NOT "CV2PDB-NOTFOUND" STREQUAL "${CV2PDB}")
+        set(HAVE_CV2PDB 1)
+        message("Have cv2pdb")
+    endif()
+endif()
+
 if(SKIP_TRACE)
     message("Skipping backtrace functionality")
 else()
@@ -148,7 +159,8 @@ else()
     else()
         # this nonsense is needed because CHECK_INCLUDE_FILE doesn't exists for
         # android and ios while it does exist for darwin on the same system
-        get_directory_property(DEFINED_MACROS DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} MACROS)
+        get_directory_property(DEFINED_MACROS DIRECTORY
+                ${CMAKE_CURRENT_SOURCE_DIR} MACROS)
         list(FIND DEFINED_MACROS "CHECK_INCLUDE_FILE" MACRO_INDEX)
         if(MACRO_INDEX EQUAL -1)
             # Macro does not exist

@@ -168,9 +168,10 @@ static void stackWalk(ruList callers) {
 #endif
 
     for(;;) {
-        bool result = StackWalk(machine, process, GetCurrentThread(), &stack,
-                              &context, NULL, SymFunctionTableAccess,
-                              SymGetModuleBase, NULL);
+        bool result = StackWalk(machine, process, GetCurrentThread(),
+                                &stack, &context,
+                                NULL, &SymFunctionTableAccess,
+                                &SymGetModuleBase, NULL);
         if(!result) break;
 
         // get the function name
@@ -189,7 +190,8 @@ static void stackWalk(ruList callers) {
         ruZeroedStruct(IMAGEHLP_LINE, line_num);
         line_num.SizeOfStruct = sizeof(IMAGEHLP_LINE);
         ruTrace tr = NULL;
-        if (SymGetLineFromAddr(process, stack.AddrPC.Offset, NULL, &line_num)) {
+        DWORD displacement = 0;
+        if (SymGetLineFromAddr(process, stack.AddrPC.Offset, &displacement, &line_num)) {
             perm_chars file = ruBaseName(line_num.FileName);
             tr = newTrace(file, line_num.LineNumber, func,
                           (perm_ptr)stack.AddrFrame.Offset,
@@ -264,14 +266,14 @@ RUAPI perm_chars ruTraceStr(ruTrace rt) {
     if (tr->str) return tr->str;
     if (tr->func) {
         if (tr->file && tr->line) {
-            tr->str = ruDupPrintf("%s(%s:%d)",
-                                  tr->func, tr->file, tr->line);
+            tr->str = ruDupPrintf("%s(%s:%d 0x%p)",
+                                  tr->func, tr->file, tr->line, tr->addr);
         } else {
             tr->str = ruDupPrintf("%s(0x%p)", tr->func, tr->addr);
         }
     } else {
         if (tr->file && tr->line) {
-            tr->str = ruDupPrintf("%s:%d", tr->file, tr->line);
+            tr->str = ruDupPrintf("%s:%d 0x%p", tr->file, tr->line, tr->addr);
         } else {
             tr->str = ruDupPrintf("0x%p", tr->addr);
         }
@@ -324,11 +326,11 @@ static DWORD WINAPI threadRunner(LPVOID context) {
     DWORD res = 0;
     if (tc->start) {
         if (tc->name) ruThreadSetName(tc->name);
-        ruDbgLogf("Starting thread 0x%p", tc);
+        ruVerbLogf("Starting thread 0x%p", tc);
         tc->exitRes = tc->start(tc->user);
         res = (DWORD)(intptr_t) tc->exitRes;
         tc->finished = true;
-        ruDbgLogf("Finished thread 0x%p with 0x%p", tc, tc->exitRes);
+        ruVerbLogf("Finished thread 0x%p with 0x%p", tc, tc->exitRes);
     }
     ruFree(tc->name);
     ruThreadSetName(NULL);
@@ -339,9 +341,9 @@ static void* threadRunner(void* context) {
     Thr* tc = (Thr*) context;
     if (tc->start) {
         if (tc->name) ruThreadSetName(tc->name);
-        ruDbgLogf("Starting thread 0x%p", tc);
+        ruVerbLogf("Starting thread 0x%p", tc);
         tc->exitRes = tc->start(tc->user);
-        ruDbgLogf("Finished thread 0x%p with 0x%p", tc, tc->exitRes);
+        ruVerbLogf("Finished thread 0x%p with 0x%p", tc, tc->exitRes);
         tc->finished = true;
         pthread_exit(tc->exitRes);
     }
@@ -636,7 +638,7 @@ RUAPI void ruCondWaitTil(ruCond c, ruMutex m, int32_t msTimeout) {
     }
 #ifdef _WIN32
     if (!msTimeout) msTimeout = INFINITE;
-    if (!SleepConditionVariableSRW(&cond->cond, &mux->mux, msTimeout, 0) &&
+    if (!SleepConditionVariableCS(&cond->cond, &mux->mux, msTimeout) &&
             GetLastError() != ERROR_TIMEOUT) {
         ruCritLogf("failed SleepConditionVariableSRW error: %d", GetLastError());
     }
@@ -673,12 +675,7 @@ RUAPI ruMutex ruMutexInit(void) {
     Mux *mux = ruMalloc0(1, Mux);
     mux->type = MagicMux;
 #ifdef _WIN32
-    InitializeSRWLock(&mux->mux);
-    if (mux->mux.Ptr) {
-        ruSetError("mutex init failed: %d", GetLastError());
-        ruFree(mux);
-        return NULL;
-    }
+    InitializeCriticalSection(&mux->mux);
 #else
     int ret;
     if ((ret = pthread_mutex_init(&mux->mux, NULL))) {
@@ -694,7 +691,9 @@ RUAPI ruMutex ruMutexFree(ruMutex m) {
     int32_t ret;
     Mux *mux = MuxGet(m, &ret);
     if (!mux) return NULL;
-#ifndef _WIN32
+#ifdef _WIN32
+    DeleteCriticalSection(&mux->mux);
+#else
     pthread_mutex_destroy(&mux->mux);
 #endif
     ruFree(mux->lastCall);
@@ -711,7 +710,7 @@ RUAPI bool ruMutexTryLockLoc(ruMutex m, trans_chars filePath, trans_chars func,
         ruAbortf("failed getting mutex %d", ret);
     }
 #ifdef _WIN32
-    bool success = TryAcquireSRWLockExclusive(&mux->mux);
+    bool success = TryEnterCriticalSection(&mux->mux);
 #else
     bool success = 0 == pthread_mutex_trylock(&mux->mux);
 #endif
@@ -748,7 +747,7 @@ RUAPI void ruMutexLockLoc(ruMutex m, trans_chars filePath, trans_chars func,
         ruAbortf("failed locking mutex lastLoc: %s", mux->lastCall);
     }
 #else
-    AcquireSRWLockExclusive(&mux->mux);
+    EnterCriticalSection(&mux->mux);
 #endif
 #else
     pthread_mutex_lock(&mux->mux);
@@ -778,7 +777,7 @@ RUAPI void ruMutexUnlockLoc(ruMutex m, trans_chars filePath, trans_chars func,
             line, mux->lCnt, mux->tlCnt, mux->ulCnt));
 #endif
 #ifdef _WIN32
-    ReleaseSRWLockExclusive(&mux->mux);
+    LeaveCriticalSection(&mux->mux);
 #else
     pthread_mutex_unlock(&mux->mux);
 #endif

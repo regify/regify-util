@@ -23,12 +23,6 @@
 
 volatile int closed = 0;
 
-#if 0
-#define logDbg(fmt, ...) fprintf(stderr, fmt, __VA_ARGS__)
-#else
-#define logDbg(fmt, ...)
-#endif
-
 static void closeCb(perm_ptr p) {
     closed++;
     logDbg("called closed: %d\n", closed);

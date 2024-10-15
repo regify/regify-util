@@ -299,6 +299,9 @@ RUAPI bool ruMutexTryLockLoc(ruMutex m, trans_chars filePath, trans_chars func,
 
 /**
  * \brief Aquire a lock for the given \ref ruMutex blocking until it is given.
+ *
+ * The mutex is not meant to be reentrant, and is not on Windows. Meaning a
+ * thread calling ruMutexLock recursively will deadlock on the second call.
  * @param m The mutex to lock.
  * @param filePath source file
  * @param func function name

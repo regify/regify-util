@@ -77,6 +77,13 @@ else()
         #  /msys64/mingw64/bin/libwinpthread-1.dll
         # ...
         target_link_options(runTests PRIVATE -static)
+        if(HAVE_CV2PDB)
+            # to make stackwalk work on mingw for backtraces
+            add_custom_command(OUTPUT runTests.pdb
+                    COMMAND ${CV2PDB} runTests.exe
+                    DEPENDS runTests.exe)
+            add_custom_target(pdb DEPENDS runTests.pdb)
+        endif()
     endif()
     target_link_directories(runTests PRIVATE ${CHECK_LIBRARY_DIRS})
     target_link_libraries(runTests PRIVATE ${staticlib} ${CHECK_LIBRARIES})
@@ -85,6 +92,9 @@ else()
             COMMAND ${CMAKE_CURRENT_BINARY_DIR}/runTests > run.log 2>&1
             COMMAND echo "* * *   Success   * * *"
             DEPENDS runTests)
+    if(HAVE_CV2PDB)
+        add_dependencies(tests pdb)
+    endif()
 
     # memcheck on darwin
     find_program(LEAKS leaks)

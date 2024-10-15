@@ -68,7 +68,7 @@ RUAPI ruMap ruMapNew(ruType keyType, ruType valueType) {
     /* Initialize the buckets. */
     mp->buckets = expectedSize;
     for (uint32_t i = 0; i < mp->buckets; i++) {
-        mp->table[i] = ListNewType(ruTypePtr(kvFree));
+        mp->table[i] = ListNewType(ruTypePtr(kvFree), 0, false);
     }
 
     /* Set the type specs. */
@@ -121,7 +121,7 @@ static void remap(Map *mp) {
     uint32_t newSize = mp->buckets * 2;
     mp->table = ruMalloc0(newSize, List*);
     for (uint32_t i = 0; i < newSize; i++) {
-        mp->table[i] = ListNewType(ruTypePtr(kvFree));
+        mp->table[i] = ListNewType(ruTypePtr(kvFree), 0, false);
     }
 
     // migrate old entries to new buckets

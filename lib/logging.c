@@ -395,6 +395,9 @@ static void freeLogger(loggerCtx* lc) {
     logDbg("0x%p freed", lc);
 }
 
+// compulsory file close interval for our windows users
+#define FLUSH_INT 60
+
 static ptr logThread(ptr p) {
 #ifndef _WIN32
     // don't dabble with signals
@@ -406,6 +409,8 @@ static ptr logThread(ptr p) {
     logDbg("0x%p starting", ls);
     msec_t to = 250;
     bool flushed = false;
+    // this is only needed on windows, but is fine on *nix
+    sec_t flushTime = ruTimeSec() + FLUSH_INT;
     int32_t ret = RUE_OK;
     while (true) {
         logMsg* m = ruListTryPop(ls->queue, to, &ret);
@@ -413,6 +418,7 @@ static ptr logThread(ptr p) {
             syncQ(ls, m->logLevel, m->msg);
             if (!m->msg && ls->flushReq) {
                 ls->flushReq = false;
+                flushTime = ruTimeSec() + FLUSH_INT;
                 flushed = true;
             } else {
                 flushed = false;
@@ -420,10 +426,15 @@ static ptr logThread(ptr p) {
             logMsgFree(m);
         } else {
             if (!flushed) {
-                // send flush signal to logger
-                ls->logger(ls->ctx, RU_LOG_FLUSH, NULL);
-                flushed = true;
+                flushTime = 0;
             }
+        }
+        if (ruTimeEllapsed(flushTime)) {
+            logDbg("0x%p flushing log because flushTime is: %ld", ls, flushTime);
+            // send flush signal to logger
+            ls->logger(ls->ctx, RU_LOG_FLUSH, NULL);
+            flushTime = ruTimeSec() + FLUSH_INT;
+            flushed = true;
         }
         // when quitting continue while we pop messages to flush the queue
         if (ls->quitting) {
@@ -437,13 +448,14 @@ static ptr logThread(ptr p) {
     // send termination signal to log sink
     ls->logger(ls->ctx, RU_LOG_CLOSE, NULL);
     ls->quitting = false;
+    ls->flushReq = false; // just in case
     logDbg("0x%p finished", ls);
     return NULL;
 }
 
 static void newLogger(loggerCtx* ls, ruLogFunc logger, uint32_t logLevel,
-                      perm_ptr userData, bool cleaned, bool threaded) {
-    logDbg("0x%p created ud: 0x%p threaded: %d", ls, userData, threaded);
+                      perm_ptr userData, bool cleaned, uint32_t bufLen) {
+    logDbg("0x%p created ud: 0x%p threaded: %u", ls, userData, bufLen);
     ls->logger = logger;
     ls->level = logLevel;
     ls->ctx = userData;
@@ -451,11 +463,11 @@ static void newLogger(loggerCtx* ls, ruLogFunc logger, uint32_t logLevel,
         ls->clnBuf = ruBufferNew(MAX_LOG_LEN);
         ls->cleaner = ruGetCleaner();
     }
-    if (threaded) {
-        ls->queue = ruListNew(ruTypePtr(logMsgFree));
+    if (bufLen) {
+        ls->queue = ruListNewBound(ruTypePtr(logMsgFree), bufLen, true);
         ls->queuer = asyncQ;
         ls->logThread = ruThreadCreateBg(
-                logThread, ruStrDup("logger"), ls);
+                logThread, ruStrDup((ls == &l1_) ? "logger1" : "logger2"), ls);
     } else {
         ls->queuer = syncQ;
     }
@@ -487,11 +499,13 @@ RUAPI void ruSetLogger(ruLogFunc logger, uint32_t logLevel, perm_ptr userData,
     loggerCtx* lc = (lc_ == &l1_) ? &l2_ : &l1_;
     initLogger(lc);
     if (logger) {
-        newLogger(lc, logger, logLevel, userData, cleaned, threaded);
+        newLogger(lc, logger, logLevel, userData, cleaned,
+                  threaded? RU_LOG_BUFFER_LINE_COUNT : 0);
     }
     lc_ = lc;
     logDbg("now using logger 0x%p", lc_);
     if (loggerValid(pc)) {
+        ruListBind(pc->queue, false);
         if (pc->logThread) {
             logDbg("quitting 0x%p", pc);
             pc->quitting = true;
@@ -508,6 +522,13 @@ RUAPI void ruSetLogger(ruLogFunc logger, uint32_t logLevel, perm_ptr userData,
     }
     freeLogger(pc);
     ruMutexUnlock(lmux_);
+}
+
+RUAPI void ruLoggerUnblock(void) {
+    if (!lc_) return;
+    loggerCtx* lc = lc_;
+    int32_t ret = ruListBind(lc->queue, false);
+    ruInfoLogf("Unblocked logger 0x%p ec: %d", lc, ret);
 }
 
 RUAPI void ruStopLogger(void) {

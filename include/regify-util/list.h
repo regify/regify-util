@@ -124,6 +124,33 @@ RUAPI ruList ruListNew(ruType valueType);
 
 /**
  * \ingroup list
+ * \brief Creates a new bound list object. To be freed with \ref ruListFree.
+ * @param valueType A value specification. Will be freed by this call.
+ * @param maxSize A maximum entry size at which incoming additions will block.
+ *                If 0 will return an unbound list like \ref ruListNew.
+ * @param ordered If true guarantees unblocking in the same order in which
+ *                blocking occurred.
+ * @return Guaranteed to return new list object, or process abort.
+ */
+RUAPI ruList ruListNewBound(ruType valueType, uint32_t maxSize, bool ordered);
+
+/**
+ * \ingroup list
+ * \brief Allows ignoring or obeying the \ref ruListNewBound maxSize of a \ref ruList
+ *
+ * This is primarily used to unblock threads on termination.
+ *
+ * @param rl list to alter.
+ * @param bound Whether to obey (true) or ignore (false) the given maxSize.
+ * @return \ref RUE_OK on success
+ *         \ref RUE_USER_ABORT when a threaded list has quit
+ *         \ref RUE_INVALID_STATE if the given \ref ruList has no maxSize
+ *         else a regify error code.
+ */
+RUAPI int32_t ruListBind(ruList rl, bool bound);
+
+/**
+ * \ingroup list
  * \brief Frees the given list object.
  * @param rl list to free.
  * @return NULL

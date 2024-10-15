@@ -175,6 +175,15 @@ extern "C" {
 #define logQDbg(fmt, ...)
 #endif
 
+/**
+ * \brief A default suggestion for a log buffer line count currently used by
+ *        \ref ruSetLogger when threaded is on.
+ *
+ * The assumption here is that each line is 500 chars = 50M
+ *
+ * Keep in sync with \ref ruSetLogger documentation!
+ */
+#define RU_LOG_BUFFER_LINE_COUNT 100000
 
 extern unsigned int ruIntChunk;
 extern RU_THREAD_LOCAL perm_chars logPidEnd;
@@ -213,7 +222,7 @@ void ruClearError(void);
  */
 #ifdef _WIN32
 typedef CONDITION_VARIABLE ruCond_t;
-typedef SRWLOCK ruMutex_t;
+typedef CRITICAL_SECTION ruMutex_t;
 #else
 #include <pthread.h>
 #include <sched.h>
@@ -337,9 +346,14 @@ typedef struct ListElmt_ {
     struct ListElmt_* next;
 } ListElmt;
 
+typedef struct ListElmtCur_ {
+    struct ListElmt_* elmt;
+    bool before;
+} ListElmtCur;
+
 struct List_ {
     ru_uint type;
-    uint32_t size;
+    volatile uint32_t size;
     ruClearFunc destroy;
     ruCloneFunc valIn;
     ruPtr2TypeFunc valOut;
@@ -349,10 +363,19 @@ struct List_ {
     // thread safety
     ruMutex mux;
     ruCond hasEntries;
-    bool doQuit;    // flag to initiate map shutdown
+    // bounding
+    volatile int32_t waiters;
+    volatile bool unBound;
+    volatile bool haveCurrent;
+    uint32_t maxSize;
+    ruCond hasRoom;
+    List* threads;
+    List* currents;
+    // flag to initiate map shutdown
+    volatile bool doQuit;
 };
 
-List* ListNewType(ruType vt);
+List* ListNewType(ruType vt, uint32_t maxSize, bool ordered);
 void ListFree(List *list);
 int32_t ListRemoveTo(List* list, ListElmt* old_element, ptr* dest);
 int32_t ListInsertAfter(List *list, ruListElmt rle, ptr data);
