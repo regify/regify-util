@@ -1,9 +1,6 @@
 var searchData=
 [
-  ['key_20value_20storage_27',['Key Value Storage',['../group__kvstore__sec.html',1,'']]],
-  ['kvget_28',['kvget',['../group__kvstore__sec.html#ga446330a04500577d5331d33472f19d32',1,'kvstore.h']]],
-  ['kvlist_29',['kvlist',['../group__kvstore__sec.html#ga6ca4b7cac97b25236e64580ed0adfe7d',1,'kvstore.h']]],
-  ['kvset_30',['kvset',['../group__kvstore__sec.html#ga9048fec5cec2283bac868aa9a4a42c74',1,'kvstore.h']]],
-  ['kvstore_31',['KvStore',['../group__kvstore__sec.html#ga9abc942c577335834b99c80262ed4c84',1,'kvstore.h']]],
-  ['kvstore_5f_32',['KvStore_',['../struct_kv_store__.html',1,'']]]
+  ['i_20o_0',['File I/O',['../group__io.html',1,'']]],
+  ['ini_20file_20handling_1',['Ini File Handling',['../group__ini.html',1,'']]],
+  ['integer_2',['integer',['../group__typeint16.html',1,'16 Bit Integer'],['../group__typeint32.html',1,'32 Bit Integer'],['../group__typeint64.html',1,'64 Bit Integer'],['../group__typeint8.html',1,'8 Bit Integer'],['../group__typelong.html',1,'Long Integer'],['../group__typeintptr.html',1,'Pointer size Integer']]]
 ];

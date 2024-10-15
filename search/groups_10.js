@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['regify_2dutil_20error_20codes_1114',['regify-util Error Codes',['../group__ruerror.html',1,'']]],
-  ['regular_20expressions_1115',['Regular Expressions',['../group__regex.html',1,'']]]
+  ['o_0',['File I/O',['../group__io.html',1,'']]],
+  ['object_1',['object',['../group__ru_buffer.html',1,'Buffer Object'],['../group__ru_string.html',1,'String Object']]],
+  ['object_20list_20api_2',['Object List API',['../group__listobj.html',1,'']]]
 ];

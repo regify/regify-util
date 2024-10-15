@@ -1,5 +1,9 @@
 var searchData=
 [
-  ['container_20type_20specifications_11',['Container Type Specifications',['../group__specs.html',1,'']]],
-  ['ctx_12',['ctx',['../struct_kv_store__.html#a1f6d09b30c54854dfca659b7463ac207',1,'KvStore_']]]
+  ['access_20monitoring_0',['File Access Monitoring',['../group__fam.html',1,'']]],
+  ['alloc_5fbytes_1',['alloc_bytes',['../group__misc.html#ga282bddf4c8f74d03e5d1203a240cfa4f',1,'regify-util.h']]],
+  ['alloc_5fchars_2',['alloc_chars',['../group__misc.html#ga972d4f4f858964bb2381d186ea96d88d',1,'regify-util.h']]],
+  ['alloc_5fptr_3',['alloc_ptr',['../group__misc.html#ga9f2753cc325fa665aaf7925682462ecb',1,'regify-util.h']]],
+  ['alloc_5funi_4',['alloc_uni',['../group__misc.html#ga3b8ffe65acbdde945eb6668ac1226f5b',1,'regify-util.h']]],
+  ['api_5',['api',['../group__listobj.html',1,'Object List API'],['../group__listtype.html',1,'Typed List API']]]
 ];

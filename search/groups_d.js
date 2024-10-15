@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['memory_20management_1110',['Memory Management',['../group__memory.html',1,'']]],
-  ['miscellaneous_20functions_1111',['Miscellaneous Functions',['../group__misc.html',1,'']]]
+  ['key_20value_20storage_0',['Key Value Storage',['../group__kvstore__sec.html',1,'']]]
 ];

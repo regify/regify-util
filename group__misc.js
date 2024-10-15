@@ -46,7 +46,7 @@ var group__misc =
     [ "ruGetOs", "group__misc.html#ga9514522bf5289236d07a8b714ab8e0b0", null ],
     [ "ruGetTimeVal", "group__misc.html#ga23dfc8d19e01fe0aba08aa87b2966989", null ],
     [ "ruIpAddrs", "group__misc.html#gac402e82af49cc6e4f3d81dda6135ef9c", null ],
-    [ "ruLastError", "group__misc.html#gaea3d529fecc1bbad25f943943b6e9ef2", null ],
+    [ "ruLastError", "group__misc.html#ga5ebae3d99122d0e13430659994800846", null ],
     [ "ruProcessId", "group__misc.html#gafb168a8376876c132f91f3568110a676", null ],
     [ "ruRunProg", "group__misc.html#gaa1ee1acfc9e71c9beba03b4b547f8abc", null ],
     [ "ruSemiRandomNumber", "group__misc.html#gaf71c9663b075c4dbe4f665b51cde059b", null ],
@@ -66,6 +66,6 @@ var group__misc =
     [ "ruTryLoopInit", "group__misc.html#ga1beda4858ceb50233ded1be5de54e85f", null ],
     [ "ruUtcFormat", "group__misc.html#gaecf4a0b06c4d0268fdd64c378d9facc1", null ],
     [ "ruUtcParse", "group__misc.html#gabad41e4d218b3038e4e6df69b4f85926", null ],
-    [ "ruVersion", "group__misc.html#ga71dec8ccc9b4947b4142514696e78795", null ],
+    [ "ruVersion", "group__misc.html#ga4ff8e197dc8fd47a03dcd853afff5c94", null ],
     [ "ruVersionComp", "group__misc.html#gad5f20c00063066599020981359d2eba6", null ]
 ];

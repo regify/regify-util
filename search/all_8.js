@@ -1,6 +1,8 @@
 var searchData=
 [
-  ['entryfilter_15',['entryFilter',['../group__io.html#ga96b2df183649f58bd746edc4a0c6161c',1,'io.h']]],
-  ['entrymgr_16',['entryMgr',['../group__io.html#gae838891e096d47726baeec65b792fd51',1,'io.h']]],
-  ['eventtype_17',['eventType',['../structru_fam_event__.html#aa73ed1819d01004c05b8b1908ef91ef4',1,'ruFamEvent_']]]
+  ['cleaning_20utility_0',['Data Cleaning Utility',['../group__cleaner.html',1,'']]],
+  ['codes_1',['regify-util Error Codes',['../group__ruerror.html',1,'']]],
+  ['collection_2',['List Collection',['../group__list.html',1,'']]],
+  ['container_20type_20specifications_3',['Container Type Specifications',['../group__specs.html',1,'']]],
+  ['ctx_4',['ctx',['../struct_kv_store__.html#a1f6d09b30c54854dfca659b7463ac207',1,'KvStore_']]]
 ];

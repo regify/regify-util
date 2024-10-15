@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['file_20access_20monitoring_18',['File Access Monitoring',['../group__fam.html',1,'']]],
-  ['file_20i_2fo_19',['File I/O',['../group__io.html',1,'']]],
-  ['finish_20',['finish',['../structru_try_loop.html#a0c410c40292e389122db773795a8bcb3',1,'ruTryLoop']]]
+  ['data_20cleaning_20utility_0',['Data Cleaning Utility',['../group__cleaner.html',1,'']]],
+  ['dstpath_1',['dstPath',['../structru_fam_event__.html#a99c8743dc4a60b79ab3c548496d20f09',1,'ruFamEvent_']]]
 ];

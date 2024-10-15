@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['threading_20related_1119',['Threading Related',['../group__threading.html',1,'']]],
-  ['typed_20list_20api_1120',['Typed List API',['../group__listtype.html',1,'']]]
+  ['regify_20util_20error_20codes_0',['regify-util Error Codes',['../group__ruerror.html',1,'']]],
+  ['regular_20expressions_1',['Regular Expressions',['../group__regex.html',1,'']]],
+  ['related_2',['Threading Related',['../group__threading.html',1,'']]]
 ];
