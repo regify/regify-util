@@ -136,6 +136,11 @@ typedef void (*ruLogFunc) (perm_ptr userData, uint32_t logLevel, trans_chars msg
 typedef void (*ruCloseFunc) (perm_ptr userData);
 
 /**
+ * \brief The type of function to pass to \ref ruSinkWriteCb to substitute fputs
+ */
+typedef int (*ruWriteFunc) (trans_chars buf, FILE* wh);
+
+/**
  * \brief Opaque pointer to \ref ruPreLogSink object.
  */
 typedef ptr ruPreCtx;
@@ -190,6 +195,16 @@ typedef ptr ruSinkCtx;
  */
 RUAPI ruSinkCtx ruSinkCtxNew(trans_chars filePath, ruCloseFunc closeCb,
                              perm_ptr closeCtx);
+
+/**
+ * \brief Allow substituting fputs call with custom implementation.
+ *
+ * Mainly used for testing.
+ * @param rsc \ref ruSinkCtx to update.
+ * @param writeCb Custom write callback function or NULL to revert to standard fputs.
+ * @return Status of the operation.
+ */
+RUAPI int32_t ruSinkWriteCb(ruSinkCtx rsc, ruWriteFunc writeCb);
 
 /**
  * \brief Allows changing the file path of the given \ref ruSinkCtx.

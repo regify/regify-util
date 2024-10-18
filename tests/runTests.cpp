@@ -110,6 +110,7 @@ int32_t main ( int32_t argc, char *argv[] ) {
 #endif
     int32_t number_failed;
     // for failure debugging
+    ruThreadSetName("main");
     ruFileRemove(logPath);
     setLogger();
     ruCleanAdd(ruGetCleaner(), "mainSecrét", "^^^MAIN_SECRET^^^");

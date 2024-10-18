@@ -89,15 +89,12 @@ RUAPI ruPreCtx ruPreCtxFree(ruPreCtx rpc, bool flush) {
         logMsg* lm;
         for(ruIterTo(li, lm); li; ruIterTo(li, lm)) {
             if (ruDoesLog(lm->logLevel)) {
-                if (!logged) {
-                    logged = true;
-                    ruVerbLog("* * * Start of flushed pre log messages");
-                }
+                if (!logged) logged = true;
                 ruRawLog(lm->logLevel, lm->msg);
             }
         }
         if (logged) {
-            ruVerbLog("* * * End of flushed pre log messages");
+            ruInfoLog("* * * End of pre log messages");
         }
     }
     pc->logs = ruListFree(pc->logs);
@@ -122,6 +119,7 @@ typedef struct {
     ru_int type;
     alloc_chars filePath;
     alloc_chars newFilePath;
+    ruWriteFunc writeCb;
     ruCloseFunc closeCb;
     perm_ptr closeCtx;
     sec_t checkTime;
@@ -219,10 +217,23 @@ RUAPI ruSinkCtx ruSinkCtxNew(trans_chars filePath, ruCloseFunc closeCb,
     sc->type = MagicSinkCtx;
     sc->filePath = ruStrDup(filePath);
     sc->fmux = ruMutexInit();
+    sc->writeCb = &fputs;
     sc->closeCb = closeCb;
     sc->closeCtx = closeCtx;
     logDbg("0x%p created filePath: %s", sc, sc->filePath);
     return sc;
+}
+
+RUAPI int32_t ruSinkWriteCb(ruSinkCtx rsc, ruWriteFunc writeCb) {
+    int32_t ret;
+    sinkCtx* sc = sinkCtxGet(rsc, &ret);
+    if (ret != RUE_OK) return ret;
+    if (writeCb) {
+        sc->writeCb = writeCb;
+    } else {
+        sc->writeCb = &fputs;
+    }
+    return RUE_OK;
 }
 
 RUAPI int32_t ruSinkCtxPath(ruSinkCtx rsc, trans_chars filePath) {
@@ -282,9 +293,9 @@ RUAPI void ruFileLogSink(perm_ptr rsc, uint32_t logLevel, trans_chars msg) {
     }
     if (!sc->wh) fileOpen(sc, msg);
     if (sc->wh) {
-        fputs(msg, sc->wh);
+        sc->writeCb(msg, sc->wh);
     } else {
-        fputs(msg, stderr);
+        sc->writeCb(msg, stderr);
     }
 }
 
