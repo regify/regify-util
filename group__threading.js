@@ -10,7 +10,7 @@ var group__threading =
     [ "ruCond", "group__threading.html#ga7054ff41edeb99aab29ac412214779f5", null ],
     [ "ruCount", "group__threading.html#ga938ce40d266424abe35f3a21705d829e", null ],
     [ "ruMutex", "group__threading.html#gaa2f2224294aab80c5b5fdadf8c50a2de", null ],
-    [ "ruStartFunc", "group__threading.html#gab163096d3d2f32b3750cf6a43fd685b4", null ],
+    [ "ruStartFunc", "group__threading.html#ga9fb7315bef26c1ae9b399b5779ed230b", null ],
     [ "ruThread", "group__threading.html#gac7df455fe262f5fe1d6a40c48fb5a343", null ],
     [ "ruThreadId", "group__threading.html#gacc47be754ef522e477d51aedd1361301", null ],
     [ "ruTrace", "group__threading.html#ga02635b4a2c90a35c107c742d01230d34", null ],

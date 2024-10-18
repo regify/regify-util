@@ -26,7 +26,7 @@ var NAVTREE =
 [
   [ "regify utility", "index.html", [
     [ "regify utility 2.0.0-0", "index.html", null ],
-    [ "Topics", "topics.html", "topics" ],
+    [ "Modules", "modules.html", "modules" ],
     [ "Data Structures", "annotated.html", [
       [ "Data Structures", "annotated.html", "annotated_dup" ],
       [ "Data Structure Index", "classes.html", null ],
@@ -42,7 +42,7 @@ var NAVTREEINDEX =
 [
 "annotated.html",
 "group__listtype.html#gaa1190dec03f6b4f81f761f24bbf328e7",
-"group__threading.html#ga02635b4a2c90a35c107c742d01230d34"
+"group__threading.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

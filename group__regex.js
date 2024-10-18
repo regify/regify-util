@@ -19,5 +19,5 @@ var group__regex =
     [ "ruRegexMatch", "group__regex.html#ga42a94fd1130e550b7af978c45b88f617", null ],
     [ "ruRegexMatchGroups", "group__regex.html#gac1a8be0de8243bda230b1f4ed1159e26", null ],
     [ "ruRegexNew", "group__regex.html#ga9632dec916aacd02c0c93bd245d4c567", null ],
-    [ "ruRegexReplace", "group__regex.html#ga6207150c1f32937b7f34112c8be5b9e6", null ]
+    [ "ruRegexReplace", "group__regex.html#ga9ad8451ec30e8fc57db784f827489327", null ]
 ];

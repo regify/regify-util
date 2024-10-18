@@ -1,7 +1,5 @@
 var searchData=
 [
-  ['bit_20integer_0',['bit integer',['../group__typeint16.html',1,'16 Bit Integer'],['../group__typeint32.html',1,'32 Bit Integer'],['../group__typeint64.html',1,'64 Bit Integer'],['../group__typeint8.html',1,'8 Bit Integer']]],
-  ['boolean_1',['Boolean',['../group__typebool.html',1,'']]],
-  ['buffer_20functions_2',['Buffer Functions',['../group__buffer.html',1,'']]],
-  ['buffer_20object_3',['Buffer Object',['../group__ru_buffer.html',1,'']]]
+  ['data_20cleaning_20utility_13',['Data Cleaning Utility',['../group__cleaner.html',1,'']]],
+  ['dstpath_14',['dstPath',['../structru_fam_event__.html#a99c8743dc4a60b79ab3c548496d20f09',1,'ruFamEvent_']]]
 ];

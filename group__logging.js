@@ -22,6 +22,7 @@ var group__logging =
     [ "ruLogFunc", "group__logging.html#gadec0525119b0c06c58521398ef713355", null ],
     [ "ruPreCtx", "group__logging.html#gab19866561d7f8e0b29799f20bd492ca4", null ],
     [ "ruSinkCtx", "group__logging.html#gad8a1b0826a4300220564607a1c25ece9", null ],
+    [ "ruWriteFunc", "group__logging.html#ga4b30c0b22c423222790176691123d29a", null ],
     [ "ruDoesLog", "group__logging.html#gaccddd3017ad9c9fd2f1bf9865dcbf699", null ],
     [ "ruDoLog", "group__logging.html#gabd98a0c7b45bb134541f03fbf32adcca", null ],
     [ "ruDoLogV", "group__logging.html#ga09a127ed8c38df82ea0adcf59b566f04", null ],
@@ -33,7 +34,7 @@ var group__logging =
     [ "ruLastLog", "group__logging.html#ga6e746e4f9bc99f396cf33144b5e4a915", null ],
     [ "ruLogDbg", "group__logging.html#ga7c869fcc0d6f0bf63dcfbf111919033b", null ],
     [ "ruLoggerUnblock", "group__logging.html#ga983161597f109263ded3af90e99af36d", null ],
-    [ "ruMakeLogMsg", "group__logging.html#ga669c04b29868a80e96bb72b3c6f39aef", null ],
+    [ "ruMakeLogMsg", "group__logging.html#gaba251eab71de5a652f71acdcd4281e8b", null ],
     [ "ruMakeLogMsgV", "group__logging.html#ga68901146640b2e22a832ad4884fd04cd", null ],
     [ "ruPreCtxFree", "group__logging.html#ga60cb8af9d0a6703f9a9c9df34b6fb33a", null ],
     [ "ruPreCtxNew", "group__logging.html#ga292cfa535c2603141824b64cfdb224c7", null ],
@@ -44,6 +45,7 @@ var group__logging =
     [ "ruSinkCtxFree", "group__logging.html#ga944f341c3cee3932f61389c50e90b94c", null ],
     [ "ruSinkCtxNew", "group__logging.html#gae1af44f28c3a3acff3900991068d17f0", null ],
     [ "ruSinkCtxPath", "group__logging.html#ga8fd2681d3fa2abcf0f1db599128d074f", null ],
+    [ "ruSinkWriteCb", "group__logging.html#ga3d5c1d7c32df0bbd5713b88161586eee", null ],
     [ "ruStdErrLogSink", "group__logging.html#gaff3e36d62b4aeecc54cfd10cf8e649fe", null ],
     [ "ruStopLogger", "group__logging.html#gaa510d8fa7776ea1fc73389583b046d5e", null ]
 ];
