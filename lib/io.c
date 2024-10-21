@@ -879,9 +879,13 @@ static int32_t folderWalk(trans_chars folder, uint32_t flags,
 #else
         DIR *d = opendir(folder);
         if (!d) {
-            ruSetError("failed opening '%s' errno: %d - %s",
-                       folder, errno, strerror(errno));
-            ret = RUE_FILE_NOT_FOUND;
+            if (ruIsDir(folder)) {
+                ruSetError("failed opening '%s' errno: %d - %s",
+                           folder, errno, strerror(errno));
+                ret = RUE_FILE_NOT_FOUND;
+            } else {
+                ret = RUE_OK;
+            }
             goto cleanup;
         }
 

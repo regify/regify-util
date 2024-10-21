@@ -225,8 +225,12 @@ static void fam_handle_moveTo(famCtx* fctx, uint32_t cookie, char* fullPath,
         if (ev != 0 && ev->mask & IN_ISDIR) {
             fam_dbg("The directory %s was moved in.", ev->name);
             if (RUE_OK != fam_watchDir(fctx, fullPath)) {
-                ruCritLog("aborting fam thread.");
-                fctx->quit = true;
+                if (ruIsDir(fullPath)) {
+                    ruCritLog("aborting fam thread.");
+                    fctx->quit = true;
+                } else {
+                    fam_dbg("The directory %s was removed.", ev->name);
+                }
             }
         } else { ;
             fam_dbg("The file %s was moved in.", ev->name);
@@ -298,9 +302,13 @@ static void fam_processEv(famCtx* fctx, struct inotify_event* ev, int* pollTimeo
                 fam_dbg("The directory %s was created.", name_);
                 ret = fam_watchDir(fctx, fullPath);
                 if (ret != RUE_OK) {
-                    ruCritLogf("aborting fam thread for ec: %d from fam_watchDir '%s'",
-                               ret, fullPath);
-                    fctx->quit = true;
+                    if (ruIsDir(fullPath)) {
+                        ruCritLogf("aborting fam thread for ec: %d from "
+                                   "fam_watchDir '%s'", ret, fullPath);
+                        fctx->quit = true;
+                    } else {
+                        fam_dbg("The directory %s was removed again.", name_);
+                    }
                 }
             } else {
                 fam_dbg("The file %s was created.", name_);
@@ -315,8 +323,12 @@ static void fam_processEv(famCtx* fctx, struct inotify_event* ev, int* pollTimeo
             if (ev->mask & IN_ISDIR) {
                 fam_dbg("The directory %s had a meta data change.", name_);
                 if (RUE_OK != fam_watchDir(fctx, fullPath)) {
-                    ruCritLog("aborting fam thread.");
-                    fctx->quit = true;
+                    if (ruIsDir(fullPath)) {
+                        ruCritLog("aborting fam thread.");
+                        fctx->quit = true;
+                    } else {
+                        fam_dbg("The directory %s was removed.", name_);
+                    }
                 }
             } else {
                 fam_dbg("The file %s had a meta data change.", name_);
