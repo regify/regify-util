@@ -701,7 +701,7 @@ static int fileRename(const char* oldName, const char* newName, bool force) {
     if(rename(oldName, newName)) {
 #endif
 #else
-    // means darwin ATM nopt sure about iOS
+    // means darwin ATM not sure about iOS
     uint flags = force? 0 : RENAME_EXCL;
 #ifdef ITS_OSX
     alloc_chars nfdpath = ruStrToNfd(newName);
