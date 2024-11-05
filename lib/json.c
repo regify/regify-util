@@ -184,7 +184,8 @@ static perm_chars nodeStr(yajl_val node, int32_t* status) {
         ruRetWithCode(status, RUE_INVALID_PARAMETER, out);
     }
     out = YAJL_GET_STRING(node);
-    ruVerbLogf("returning '%s'" , out);
+    // logging this reveals potential secrets before they're added to the cleaner
+    //ruVerbLogf("returning '%s'" , out);
     ruRetWithCode(status, RUE_OK, out);
 }
 
@@ -596,7 +597,8 @@ RUAPI int32_t ruJsonWrite(ruJson rj, perm_chars* output) {
 RUAPI ruJson ruJsonParse(trans_chars jsonStr, int32_t* status) {
     ruClearError();
     if (!jsonStr) ruRetWithCode(status, RUE_PARAMETER_NOT_SET, NULL);
-    ruVerbLogf("Parsing: %s", jsonStr);
+    // logging this reveals potential secrets before they're added to the cleaner
+    //ruVerbLogf("Parsing: %s", jsonStr);
     json* j = ruMalloc0(1, json);
     j->type = MagicJson;
     char errbuf[1024];
@@ -605,10 +607,12 @@ RUAPI ruJson ruJsonParse(trans_chars jsonStr, int32_t* status) {
     if (j->node == NULL) {
         if (ruStrLen(errbuf)) {
             ruSetError("parse_error: '%s' Content: '%s'", errbuf, jsonStr);
-            ruWarnLogf("parse_error: '%s' Content: '%s'", errbuf, jsonStr);
+            // logging this reveals potential secrets before they're added to the cleaner
+            //ruWarnLogf("parse_error: '%s' Content: '%s'", errbuf, jsonStr);
         } else {
             ruSetError("parse_error: 'unknown' Content: '%s'", jsonStr);
-            ruWarnLogf("parse_error: 'unknown' Content: '%s'", jsonStr);
+            // logging this reveals potential secrets before they're added to the cleaner
+            //ruWarnLogf("parse_error: 'unknown' Content: '%s'", jsonStr);
         }
         ruFree(j);
         ruRetWithCode(status, RUE_INVALID_PARAMETER, NULL);

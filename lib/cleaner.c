@@ -26,7 +26,7 @@
  *
  */
 #ifdef CLEANER_ONLY
-// for including only the libpwcleaner without ICU and other depenedencies
+// for including only the libpwcleaner without ICU and other dependencies
 #include <stdlib.h>
 #include <stdint.h>
 #include <string.h>
@@ -167,9 +167,8 @@ typedef struct {
 #define MagicCleaner        2410
 ruMakeTypeGetter(Cleaner, MagicCleaner)
 
-static Tree* newBranch(Cleaner *c, uint8_t letter) {
+static Tree* newBranch(Cleaner *c) {
     Tree *t = ruMalloc0(1, Tree);
-    //t->me = letter;
     c->memsize += sizeof(Tree);
     return t;
 }
@@ -284,7 +283,6 @@ static void dumpEntry(Cleaner* c, Tree* t, perm_chars instr, int32_t inlen,
     lf(lctx, instr, t->subst);
 }
 
-
 static void addEntry(Cleaner* c, Tree* t, trans_chars instr, trans_chars subst) {
     int32_t pos = 0, i;
     while(true) {
@@ -294,8 +292,8 @@ static void addEntry(Cleaner* c, Tree* t, trans_chars instr, trans_chars subst) 
         if (!t->kids[i]) {
             // We should not have to create branches when removing,
             // but we'll handle it anyway.
-            if (!subst) return;
-            t->kids[i] = newBranch(c, b);
+            if (!subst) break;
+            t->kids[i] = newBranch(c);
         }
         if (*(instr+1)) {
             // preRecurse
@@ -332,7 +330,6 @@ static void addEntry(Cleaner* c, Tree* t, trans_chars instr, trans_chars subst) 
             }
             if(!pos) break;
         }
-
     }
 }
 
@@ -514,7 +511,7 @@ static int32_t cleanNow(Cleaner *c) {
 ruCleaner ruCleanNew(rusize chunkSize) {
     Cleaner *c = ruMalloc0(1, Cleaner);
     c->memsize += sizeof(Cleaner);
-    c->root = newBranch(c, '\0');
+    c->root = newBranch(c);
     c->chunkSize = chunkSize;
     if (!c->chunkSize) c->chunkSize = 1024 * 1024;
     c->type = MagicCleaner;
