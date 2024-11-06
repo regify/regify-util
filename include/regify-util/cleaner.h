@@ -188,6 +188,7 @@ RUAPI int32_t ruCleanIo(ruCleaner rc, rcReadFn reader, perm_ptr readCtx,
  * This can be an opened file with the corresponding file handle as context.
  * This function may be called multiple times and interchangeably with the
  * ruCleanTo*, ruCleanIo functions.
+ * This function is thread safe but locks allow only one thread at time.
  * @param rc The relevant ruCleaner object
  * @param in String to replace tokens in.
  * @param len Length of the string or 0 to use the null terminator for length
@@ -205,6 +206,7 @@ RUAPI int32_t ruCleanToWriter(ruCleaner rc, trans_chars in, rusize len,
  *
  * This function may be called multiple times and interchangeably with the
  * ruCleanTo*, ruCleanIo functions.
+ * This function is thread safe but locks allow only one thread at time.
  * @param rc The relevant ruCleaner object
  * @param in String to replace tokens in.
  * @param len Length of the string or 0 to use the null terminator for length

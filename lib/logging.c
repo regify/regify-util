@@ -358,7 +358,15 @@ static void noQ(perm_ptr userData, uint32_t logLevel, trans_chars msg) {
 static void asyncQ(perm_ptr userData, uint32_t logLevel, trans_chars msg) {
     logQDbg("logger: 0x%p level: %d msg: %s", userData, logLevel, msg);
     loggerCtx* ls = (loggerCtx*)userData;
-    logMsg* lm = logMsgNew(logLevel, msg);
+    perm_chars out = msg;
+    ruString clnBuf = NULL;
+    if (1 && ls->cleaner && out) {
+        clnBuf = ruBufferNew(MAX_LOG_LEN);
+        ruCleanToWriter(ls->cleaner, msg, 0, &cb2Writer, clnBuf);
+        out = ruStringGetCString(clnBuf);
+    }
+    logMsg* lm = logMsgNew(logLevel, out);
+    if (clnBuf) ruBufferFree(clnBuf, false);
     int32_t ret = ruListPush(ls->queue, lm);
     if (ret != RUE_OK) logMsgFree(lm);
 }
@@ -367,7 +375,8 @@ static void syncQ(perm_ptr userData, uint32_t logLevel, trans_chars msg) {
     logQDbg("logger: 0x%p level: %d msg: %s", userData, logLevel, msg);
     loggerCtx* ls = (loggerCtx*)userData;
     perm_chars out = msg;
-    if (ls->cleaner && out) {
+    // when threaded, asyncQ does the cleaning else we do
+    if (!ls->logThread && ls->cleaner && out) {
         ruStringReset(ls->clnBuf);
         ruCleanToWriter(ls->cleaner, msg, 0,
                         &cb2Writer, ls->clnBuf);

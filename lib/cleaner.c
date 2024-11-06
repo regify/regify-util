@@ -43,6 +43,7 @@ typedef void* ptr;
 
 #define RUE_OK 0
 #define RUE_INVALID_PARAMETER 64
+#define RUE_CANT_WRITE 70
 #define RUE_PARAMETER_NOT_SET 77
 #define RUE_INVALID_STATE	325
 #define ruFree(p) if(p) free((void*)(p)); (p) = NULL;
@@ -374,7 +375,7 @@ static void flush(Cleaner *c) {
         rusize_s ret = c->write(c->writeCtx, buf, len);
         if (ret < 0) {
             // write error
-            c->error = errno;
+            c->error = RUE_CANT_WRITE;
             return;
         }
         if ((rusize)ret < len) {
@@ -470,9 +471,6 @@ static bool walkText(Cleaner *c) {
 static int32_t cleanNow(Cleaner *c) {
     if (!c->write || (c->buffered && !c->read)) return RUE_PARAMETER_NOT_SET;
 
-#ifndef CLEANER_ONLY
-    ruMutexLock(c->mux);
-#endif
     if (!c->inHeap || !c->outBuf) {
         c->bufLen = c->chunkSize;
         if (c->bufLen < c->longestEntry) {
@@ -502,9 +500,6 @@ static int32_t cleanNow(Cleaner *c) {
     if (!c->error) {
         flush(c);
     }
-#ifndef CLEANER_ONLY
-    ruMutexUnlock(c->mux);
-#endif
     return c->error;
 }
 
@@ -604,12 +599,20 @@ int32_t ruCleanIo(ruCleaner rc, rcReadFn reader, perm_ptr readCtx,
     int32_t code;
     Cleaner *c = CleanerGet(rc, &code);
     if (!c) return code;
+
+#ifndef CLEANER_ONLY
+    ruMutexLock(c->mux);
+#endif
     c->buffered = true;
     c->read = reader;
     c->readCtx = readCtx;
     c->write = writer;
     c->writeCtx = writeCtx;
-    return cleanNow(c);
+    code = cleanNow(c);
+#ifndef CLEANER_ONLY
+    ruMutexUnlock(c->mux);
+#endif
+    return code;
 }
 
 int32_t ruCleanToWriter(ruCleaner rc, trans_chars in, rusize len,
@@ -619,14 +622,29 @@ int32_t ruCleanToWriter(ruCleaner rc, trans_chars in, rusize len,
     if (!c) return code;
     if (!in) return RUE_PARAMETER_NOT_SET;
     if (!len) len = strlen(in);
-
+    // Here it would be good to have the concept of reader/writer locks and
+    // cloned Cleaner instances that allow for unlocked parallel operations.
+    // The read lock allows threads to run in parallel as long as no write lock
+    // is set. Write locks are set when the common Cleaners Tree is modified.
+    // A write lock waits for all current readers to complete and commences.
+    // While a write is started or in progress, readers will wait until the write
+    // is finished. Lock ordering should be the order in which lock requests
+    // came in and not kernel order.
+    // Cloned instances share the Tree and lock infrastructure. This should be
+    // in a separate struct to allow reference sharing.
+#ifndef CLEANER_ONLY
+    ruMutexLock(c->mux);
+#endif
     c->buffered = false;
     c->inBuf = (char*) in;
     c->inEnd = c->inBuf + len;
     c->write = writer;
     c->writeCtx = writeCtx;
-
-    return cleanNow(c);
+    code = cleanNow(c);
+#ifndef CLEANER_ONLY
+    ruMutexUnlock(c->mux);
+#endif
+    return code;
 }
 
 #ifndef CLEANER_ONLY
