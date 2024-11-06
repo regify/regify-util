@@ -544,7 +544,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Does replacements in given string and returns out in given <a class="el" href="group__ru_string.html">String Object</a>. </p>
-<p>This function may be called multiple times and interchangeably with the ruCleanTo*, ruCleanIo functions. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>This function may be called multiple times and interchangeably with the ruCleanTo*, ruCleanIo functions. This function is thread safe but locks allow only one thread at time. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">rc</td><td>The relevant ruCleaner object </td></tr>
     <tr><td class="paramname">in</td><td>String to replace tokens in. </td></tr>
@@ -602,7 +602,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Does replacements on given string using the given Output function. </p>
-<p>This can be an opened file with the corresponding file handle as context. This function may be called multiple times and interchangeably with the ruCleanTo*, ruCleanIo functions. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>This can be an opened file with the corresponding file handle as context. This function may be called multiple times and interchangeably with the ruCleanTo*, ruCleanIo functions. This function is thread safe but locks allow only one thread at time. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">rc</td><td>The relevant ruCleaner object </td></tr>
     <tr><td class="paramname">in</td><td>String to replace tokens in. </td></tr>
@@ -621,7 +621,7 @@ Functions</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Tue Nov 5 2024 09:48:42 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Wed Nov 6 2024 14:35:15 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>
