@@ -412,12 +412,16 @@ static famCtx* famNew(void) {
 static void famTerm(famCtx* fctx) {
     if (fctx->wrkTid) {
         DWORD ret = QueueUserAPC(wrkReqTermination,
-                     fctx->wrkTid, (ULONG_PTR) fctx->wctx);
+                                 fctx->wrkTid, (ULONG_PTR) fctx->wctx);
         if (!ret) {
             ruCritLogf("Failed to run QueueUserAPC error: %d", GetLastError());
         }
         ruThreadJoin(fctx->wrkThread, NULL);
         fctx->wrkThread = NULL;
+        if (fctx->cbThread) {
+            ruThreadJoin(fctx->cbThread, NULL);
+            fctx->cbThread = NULL;
+        }
     }
 }
 
