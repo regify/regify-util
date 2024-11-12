@@ -116,17 +116,18 @@ Typedefs</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
 <tr class="memitem:ga648259273846263eeb1ea75d19bd71bf"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__regex.html#ga648259273846263eeb1ea75d19bd71bf">ruRegexFlag_</a> { <br />
-&#160;&#160;<a class="el" href="group__regex.html#gga648259273846263eeb1ea75d19bd71bfa486efddc99fa5ac1cf915da34ce83386">RUREGEX_CANON_EQ</a> = 128
+&#160;&#160;<a class="el" href="group__regex.html#gga648259273846263eeb1ea75d19bd71bfaaee99c5ca1289c112c235cb0cf8804f7">RUREGEX_NULL</a> = 0
+, <a class="el" href="group__regex.html#gga648259273846263eeb1ea75d19bd71bfa486efddc99fa5ac1cf915da34ce83386">RUREGEX_CANON_EQ</a> = 128
 , <a class="el" href="group__regex.html#gga648259273846263eeb1ea75d19bd71bfacce8f5274ca447940366aea7489a667d">RUREGEX_CASE_INSENSITIVE</a> = 2
 , <a class="el" href="group__regex.html#gga648259273846263eeb1ea75d19bd71bfa45e5a14bc42b51d42f2e9a65d2bb8a6b">RUREGEX_COMMENTS</a> = 4
-, <a class="el" href="group__regex.html#gga648259273846263eeb1ea75d19bd71bfad8b335ddf5890171941d7e37a3dd06d7">RUREGEX_DOTALL</a> = 32
 , <br />
-&#160;&#160;<a class="el" href="group__regex.html#gga648259273846263eeb1ea75d19bd71bfa67007fc0d7b98bf94b5ec0e6950e0480">RUREGEX_LITERAL</a> = 16
+&#160;&#160;<a class="el" href="group__regex.html#gga648259273846263eeb1ea75d19bd71bfad8b335ddf5890171941d7e37a3dd06d7">RUREGEX_DOTALL</a> = 32
+, <a class="el" href="group__regex.html#gga648259273846263eeb1ea75d19bd71bfa67007fc0d7b98bf94b5ec0e6950e0480">RUREGEX_LITERAL</a> = 16
 , <a class="el" href="group__regex.html#gga648259273846263eeb1ea75d19bd71bfa26331f11738b7b1168720821762a5895">RUREGEX_MULTILINE</a> = 8
 , <a class="el" href="group__regex.html#gga648259273846263eeb1ea75d19bd71bfaea2d63f16337c7515893b2769832fd40">RUREGEX_UNIX_LINES</a> = 1
-, <a class="el" href="group__regex.html#gga648259273846263eeb1ea75d19bd71bfa07fb14fbf2beb461874506b804d854dd">RUREGEX_UWORD</a> = 256
 , <br />
-&#160;&#160;<a class="el" href="group__regex.html#gga648259273846263eeb1ea75d19bd71bfa1f99eb030fea407e3c045c2a0cfc6b85">RUREGEX_ERROR_ON_UNKNOWN_ESCAPES</a> = 512
+&#160;&#160;<a class="el" href="group__regex.html#gga648259273846263eeb1ea75d19bd71bfa07fb14fbf2beb461874506b804d854dd">RUREGEX_UWORD</a> = 256
+, <a class="el" href="group__regex.html#gga648259273846263eeb1ea75d19bd71bfa1f99eb030fea407e3c045c2a0cfc6b85">RUREGEX_ERROR_ON_UNKNOWN_ESCAPES</a> = 512
 <br />
  }</td></tr>
 <tr class="memdesc:ga648259273846263eeb1ea75d19bd71bf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constants for Regular Expression Match Modes.  <a href="group__regex.html#ga648259273846263eeb1ea75d19bd71bf">More...</a><br /></td></tr>
@@ -179,9 +180,9 @@ Functions</h2></td></tr>
 <div class="ttc" id="agroup__listobj_html_ga12cf37a23b88afbdc64a3a584ed4b7cc"><div class="ttname"><a href="group__listobj.html#ga12cf37a23b88afbdc64a3a584ed4b7cc">ruListIdx</a></div><div class="ttdeci">#define ruListIdx(rl, index, type, code)</div><div class="ttdoc">Returns the data payload of the element at given 0 based index casted to type.</div><div class="ttdef"><b>Definition:</b> list.h:427</div></div>
 <div class="ttc" id="agroup__regex_html_ga28f90f28c13dc0e773ef94470600cfb2"><div class="ttname"><a href="group__regex.html#ga28f90f28c13dc0e773ef94470600cfb2">ruRegexFree</a></div><div class="ttdeci">RUAPI ruRegex ruRegexFree(ruRegex rr)</div><div class="ttdoc">Frees up the resources of the given ruRegex object.</div></div>
 <div class="ttc" id="agroup__regex_html_ga4890454d0d4fb06a6f32bd4b13e33236"><div class="ttname"><a href="group__regex.html#ga4890454d0d4fb06a6f32bd4b13e33236">ruRegexFindGroups</a></div><div class="ttdeci">RUAPI ruList ruRegexFindGroups(ruRegex rr, const char *original, int32_t *code)</div><div class="ttdoc">Returns the matches found in the given original if it matched part of the expression in rr.</div></div>
-<div class="ttc" id="agroup__regex_html_ga5c28c3ff50463237640750e9f18b1e56"><div class="ttname"><a href="group__regex.html#ga5c28c3ff50463237640750e9f18b1e56">ruRegex</a></div><div class="ttdeci">void * ruRegex</div><div class="ttdoc">Opaque pointer to regular expression object.</div><div class="ttdef"><b>Definition:</b> regex.h:128</div></div>
+<div class="ttc" id="agroup__regex_html_ga5c28c3ff50463237640750e9f18b1e56"><div class="ttname"><a href="group__regex.html#ga5c28c3ff50463237640750e9f18b1e56">ruRegex</a></div><div class="ttdeci">void * ruRegex</div><div class="ttdoc">Opaque pointer to regular expression object.</div><div class="ttdef"><b>Definition:</b> regex.h:131</div></div>
 <div class="ttc" id="agroup__regex_html_ga9632dec916aacd02c0c93bd245d4c567"><div class="ttname"><a href="group__regex.html#ga9632dec916aacd02c0c93bd245d4c567">ruRegexNew</a></div><div class="ttdeci">RUAPI ruRegex ruRegexNew(const char *pattern, ruRegexFlag flags, int32_t *code)</div><div class="ttdoc">Creates a new regular expression object to be used with ruRegex(Replace|Match|...) free with ruRegexF...</div></div>
-<div class="ttc" id="agroup__regex_html_gga648259273846263eeb1ea75d19bd71bfacce8f5274ca447940366aea7489a667d"><div class="ttname"><a href="group__regex.html#gga648259273846263eeb1ea75d19bd71bfacce8f5274ca447940366aea7489a667d">RUREGEX_CASE_INSENSITIVE</a></div><div class="ttdeci">@ RUREGEX_CASE_INSENSITIVE</div><div class="ttdef"><b>Definition:</b> regex.h:76</div></div>
+<div class="ttc" id="agroup__regex_html_gga648259273846263eeb1ea75d19bd71bfacce8f5274ca447940366aea7489a667d"><div class="ttname"><a href="group__regex.html#gga648259273846263eeb1ea75d19bd71bfacce8f5274ca447940366aea7489a667d">RUREGEX_CASE_INSENSITIVE</a></div><div class="ttdeci">@ RUREGEX_CASE_INSENSITIVE</div><div class="ttdef"><b>Definition:</b> regex.h:79</div></div>
 <div class="ttc" id="agroup__ruerror_html_ga7e2f97cce8af8020834e685a2482556d"><div class="ttname"><a href="group__ruerror.html#ga7e2f97cce8af8020834e685a2482556d">RUE_OK</a></div><div class="ttdeci">#define RUE_OK</div><div class="ttdef"><b>Definition:</b> errors.h:66</div></div>
 </div><!-- fragment --> <h2 class="groupheader">Typedef Documentation</h2>
 <a id="ga5c28c3ff50463237640750e9f18b1e56"></a>
@@ -233,7 +234,9 @@ Functions</h2></td></tr>
 <p>Constants for Regular Expression Match Modes. </p>
 <p>These are mirrored from ICU to avoid having to pull the entire includes folders when using regify-utils. </p>
 <table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="gga648259273846263eeb1ea75d19bd71bfa486efddc99fa5ac1cf915da34ce83386"></a>RUREGEX_CANON_EQ&#160;</td><td class="fielddoc"><p>Forces normalization of pattern and strings. Not implemented yet, just a placeholder, hence draft. </p>
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="gga648259273846263eeb1ea75d19bd71bfaaee99c5ca1289c112c235cb0cf8804f7"></a>RUREGEX_NULL&#160;</td><td class="fielddoc"><p>Represents no flags when passing this type as a parameter. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="gga648259273846263eeb1ea75d19bd71bfa486efddc99fa5ac1cf915da34ce83386"></a>RUREGEX_CANON_EQ&#160;</td><td class="fielddoc"><p>Forces normalization of pattern and strings. Not implemented yet, just a placeholder, hence draft. </p>
 </td></tr>
 <tr><td class="fieldname"><a id="gga648259273846263eeb1ea75d19bd71bfacce8f5274ca447940366aea7489a667d"></a>RUREGEX_CASE_INSENSITIVE&#160;</td><td class="fielddoc"><p>Enable case insensitive matching. </p>
 </td></tr>
@@ -565,7 +568,7 @@ Functions</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Fri Nov 8 2024 12:27:57 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Tue Nov 12 2024 12:54:46 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

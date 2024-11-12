@@ -3,6 +3,7 @@ var group__regex =
     [ "ruRegex", "group__regex.html#ga5c28c3ff50463237640750e9f18b1e56", null ],
     [ "ruRegexFlag", "group__regex.html#ga3120f309b1d9233ced1c84f80ec6482d", null ],
     [ "ruRegexFlag_", "group__regex.html#ga648259273846263eeb1ea75d19bd71bf", [
+      [ "RUREGEX_NULL", "group__regex.html#gga648259273846263eeb1ea75d19bd71bfaaee99c5ca1289c112c235cb0cf8804f7", null ],
       [ "RUREGEX_CANON_EQ", "group__regex.html#gga648259273846263eeb1ea75d19bd71bfa486efddc99fa5ac1cf915da34ce83386", null ],
       [ "RUREGEX_CASE_INSENSITIVE", "group__regex.html#gga648259273846263eeb1ea75d19bd71bfacce8f5274ca447940366aea7489a667d", null ],
       [ "RUREGEX_COMMENTS", "group__regex.html#gga648259273846263eeb1ea75d19bd71bfa45e5a14bc42b51d42f2e9a65d2bb8a6b", null ],

@@ -2603,6 +2603,12 @@
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
+      <name>RUREGEX_NULL</name>
+      <anchorfile>group__regex.html</anchorfile>
+      <anchor>gga648259273846263eeb1ea75d19bd71bfaaee99c5ca1289c112c235cb0cf8804f7</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
       <name>RUREGEX_CANON_EQ</name>
       <anchorfile>group__regex.html</anchorfile>
       <anchor>gga648259273846263eeb1ea75d19bd71bfa486efddc99fa5ac1cf915da34ce83386</anchor>
