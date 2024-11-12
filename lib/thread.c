@@ -207,7 +207,7 @@ static void stackWalk(ruList callers) {
                               (perm_ptr)stack.AddrPC.Offset);
             }
         }
-        //ruDbgLogf("addr: %p frame: %p Size: %lu Flags: %x",
+        //ruDbgLogf("addr: 0x%p frame: 0x%p Size: %lu Flags: %x",
         //          stack.AddrPC.Offset, stack.AddrFrame.Offset, sym->Size, sym->Flags);
         ruListInsertIdx(callers, 0, tr);
     }

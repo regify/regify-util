@@ -69,6 +69,9 @@ extern "C" {
  */
 typedef enum ruRegexFlag_ {
 
+    /** Represents no flags when passing this type as a parameter. */
+    RUREGEX_NULL = 0,
+
     /** Forces normalization of pattern and strings.
     Not implemented yet, just a placeholder, hence draft. */
     RUREGEX_CANON_EQ         = 128,

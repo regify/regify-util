@@ -48,17 +48,17 @@ struct famCtx_ {
     ruThreadId wrkTid;      // worker thread native id
     ruThread cbThread;      // callback thread id if user supplied *eventCb
     ruList events;          // event queue
-    bool quit;              // flag indicating termination
-    bool cbInit;          // true when callback thread is initialized
+    volatile bool quit;     // flag indicating termination
+    volatile bool cbInit;   // true when callback thread is initialized
 
     // user data
     perm_ptr ctx;           // the users void data pointer
-    ruFamHandler eventCb;     // the given user event callback function
+    ruFamHandler eventCb;   // the given user event callback function
 };
 
 struct worker_ {
-    ruList fileMons;
-    bool quit;
+    fileMon *fm;
+    volatile bool quit;
     famCtx* mon;
 };
 
@@ -126,7 +126,7 @@ static ptr cbRun(ptr ctx) {
     famCtx *mon = (famCtx*) ctx;
     msec_t pollTimeout = RU_FAM_POLL_TIMEOUT;
     mon->cbInit = true;
-    ruInfoLog("Started");
+    ruInfoLogf("Started 0x%p", mon);
 
     do {
         ruFamEvent *fe = ruListTryPop(mon->events, pollTimeout, NULL);
@@ -145,7 +145,7 @@ static ptr cbRun(ptr ctx) {
         }
     } while (!mon->quit);
 
-    ruInfoLog("Stopping");
+    ruInfoLogf("Stopping 0x%p", mon);
     return NULL;
 }
 
@@ -330,11 +330,13 @@ void CALLBACK monCompNotify(DWORD evCode, DWORD transferLen,
 }
 
 static void monReqTerm(fileMon *fm) {
-    fam_dbg("%s", "starting");
-    CancelIo(fm->dirHandle);
-    CloseHandle(fm->dirHandle);
-    fm->dirHandle = 0;
-    fam_dbg("%s", "ending");
+    fam_dbg("start 0x%p", fm);
+    if (fm) {
+        CancelIo(fm->dirHandle);
+        CloseHandle(fm->dirHandle);
+        fm->dirHandle = 0;
+    }
+    fam_dbg("end 0x%p", fm);
 }
 //</editor-fold>
 
@@ -346,7 +348,7 @@ static worker* wrkNew(famCtx *pParent) {
     fam_dbg("%s", "start");
     worker* wt = ruMalloc0(1, worker);
     wt->mon = pParent;
-    fam_dbg("%s", "end");
+    fam_dbg("returning 0x%p", wt);
     return wt;
 }
 
@@ -357,25 +359,24 @@ static worker* wrkFree(worker* wt) {
 
 static ptr wrkRun(ptr o) {
     worker *wt = (worker*)o;
-    ruInfoLog("starting");
+    ruInfoLogf("starting 0x%p", o);
     while (!wt->quit) {
-        SleepEx(100, true);
+        SleepEx(10, true);
     }
-    ruInfoLog("ending");
+    ruInfoLogf("ending 0x%p", o);
     return NULL;
 }
 
 // Called by QueueUserAPC
 void CALLBACK wrkAddDir(ULONG_PTR o) {
-    fileMon* fm = (fileMon*)o;
-    if (fm) {
-        fam_dbg("start dir: %s", fm->dirName);
-    } else {
-        fam_dbg("%s", "start null");
-    }
+    fam_dbg("start 0x%p", o);
+    if (!o) return;
 
+    fileMon* fm = (fileMon*)o;
+    fam_dbg("start dir: %s", fm->dirName);
     if (monOpenDir(fm)) {
-        ruListAppend(fm->worker->fileMons, fm);
+        // add the uplink
+        fm->worker->fm = fm;
         monBeginRead(fm);
     } else {
         monFree(fm);
@@ -384,18 +385,11 @@ void CALLBACK wrkAddDir(ULONG_PTR o) {
 
 // Called by QueueUserAPC
 void CALLBACK wrkReqTermination(ULONG_PTR o) {
+    fam_dbg("starting 0x%p", o);
     worker* wt = (worker*)o;
-    fam_dbg("starting with %d mons", ruListSize(wt->fileMons, NULL));
+    monReqTerm(wt->fm);
     wt->quit = true;
-    ruIterator li = ruListIter(wt->fileMons);
-    for (fileMon* mon = ruIterNext(li, fileMon*);
-         li; mon = ruIterNext(li, fileMon*)) {
-        // Each Request object will delete itself.
-        fam_dbg("Terminating mon %x", mon);
-        monReqTerm(mon);
-    }
-    ruListClear(wt->fileMons);
-    fam_dbg("%s", "ending");
+    fam_dbg("ending 0x%p", o);
 }
 //</editor-fold>
 
@@ -410,6 +404,7 @@ static famCtx* famNew(void) {
 }
 
 static void famTerm(famCtx* fctx) {
+    fam_dbg("start 0x%p", fctx);
     if (fctx->wrkTid) {
         DWORD ret = QueueUserAPC(wrkReqTermination,
                                  fctx->wrkTid, (ULONG_PTR) fctx->wctx);
@@ -418,19 +413,24 @@ static void famTerm(famCtx* fctx) {
         }
         ruThreadJoin(fctx->wrkThread, NULL);
         fctx->wrkThread = NULL;
+        fam_dbg("joined wrk 0x%p", fctx);
         if (fctx->cbThread) {
             ruThreadJoin(fctx->cbThread, NULL);
             fctx->cbThread = NULL;
+            fam_dbg("joined cb 0x%p", fctx);
         }
     }
+    fam_dbg("end 0x%p", fctx);
 }
 
 static famCtx* famFree(famCtx* fctx) {
+    fam_dbg("start 0x%p", fctx);
     fctx->quit = true;
     famTerm(fctx);
     fctx->wctx = wrkFree(fctx->wctx);
     fctx->events = ruListFree(fctx->events);
     ruFree(fctx->name);
+    fam_dbg("end 0x%p", fctx);
     ruFree(fctx);
     return NULL;
 }
@@ -478,6 +478,7 @@ RUAPI ruFamCtx ruFamMonitorFilePath(trans_chars filePath, trans_chars threadName
 }
 
 RUAPI ruFamCtx ruFamKillMonitor(ruFamCtx o) {
+    fam_dbg("start 0x%p", o);
     if (!o) return NULL;
     famCtx* mon = (famCtx*)o;
     return famFree(mon);

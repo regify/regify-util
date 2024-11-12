@@ -647,8 +647,9 @@ RUAPI int32_t ruListTryPopDataTo(ruList rl, msec_t timeoutMs, ptr* dest) {
         if (list->size) {
             logTpDbg("return one with size: %u", list->size);
             ret = ListRemoveTo(list, list->head->next, dest);
-            if (ret == RUE_PARAMETER_NOT_SET)
+            if (ret == RUE_PARAMETER_NOT_SET) {
                 logTpDbg("bad %d", 1);
+            }
         }
     } while(0);
 
