@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['boolean_1106',['Boolean',['../group__typebool.html',1,'']]],
-  ['buffer_20functions_1107',['Buffer Functions',['../group__buffer.html',1,'']]],
-  ['buffer_20object_1108',['Buffer Object',['../group__ru_buffer.html',1,'']]]
+  ['access_20monitoring_0',['File Access Monitoring',['../group__fam.html',1,'']]],
+  ['api_1',['api',['../group__listobj.html',1,'Object List API'],['../group__listtype.html',1,'Typed List API']]]
 ];

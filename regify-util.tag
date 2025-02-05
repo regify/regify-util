@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
-<tagfile doxygen_version="1.9.1">
+<tagfile doxygen_version="1.9.8">
   <compound kind="struct">
     <name>KvStore_</name>
     <filename>struct_kv_store__.html</filename>
@@ -313,14 +313,14 @@
       <type>RUAPI const char *</type>
       <name>ruVersion</name>
       <anchorfile>group__misc.html</anchorfile>
-      <anchor>ga71dec8ccc9b4947b4142514696e78795</anchor>
+      <anchor>ga4ff8e197dc8fd47a03dcd853afff5c94</anchor>
       <arglist>(void)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI const char *</type>
       <name>ruLastError</name>
       <anchorfile>group__misc.html</anchorfile>
-      <anchor>gaea3d529fecc1bbad25f943943b6e9ef2</anchor>
+      <anchor>ga5ebae3d99122d0e13430659994800846</anchor>
       <arglist>(void)</arglist>
     </member>
     <member kind="function">
@@ -1057,7 +1057,7 @@
       <type>RUAPI FILE *</type>
       <name>ruFOpen</name>
       <anchorfile>group__io.html</anchorfile>
-      <anchor>gaaf60d483f5ec520635d5260e0cfe287d</anchor>
+      <anchor>ga51c8e6bfbc8beb517e125637d5ccc9fc</anchor>
       <arglist>(trans_chars filepath, trans_chars mode, int32_t *code)</arglist>
     </member>
     <member kind="function">
@@ -1586,7 +1586,7 @@
       <type>RUAPI KvStore *</type>
       <name>ruNewStore</name>
       <anchorfile>group__kvstore__sec.html</anchorfile>
-      <anchor>ga04115021798bd77f9cba634740c97de7</anchor>
+      <anchor>ga8890dfdcee6168afc0cfffaaf705981f</anchor>
       <arglist>(void)</arglist>
     </member>
     <member kind="function">
@@ -1607,7 +1607,7 @@
       <type>RUAPI KvStore *</type>
       <name>ruNewFileStore</name>
       <anchorfile>group__kvstore__sec.html</anchorfile>
-      <anchor>ga6ca53476182ed415e0b2093318c57b10</anchor>
+      <anchor>ga5edea8ff77331e06bad27337ea3ec095</anchor>
       <arglist>(const char *folderPath, int32_t *code)</arglist>
     </member>
     <member kind="function">
@@ -1635,7 +1635,7 @@
       <type>RUAPI KvStore *</type>
       <name>ruNewNullStore</name>
       <anchorfile>group__kvstore__sec.html</anchorfile>
-      <anchor>gac738af5f4a57eb5a8c6c5d31e585bf8e</anchor>
+      <anchor>ga2b2513885504bc034cbb979935937943</anchor>
       <arglist>(void)</arglist>
     </member>
     <member kind="function">
@@ -2318,7 +2318,7 @@
       <type>RUAPI char *</type>
       <name>ruMakeLogMsg</name>
       <anchorfile>group__logging.html</anchorfile>
-      <anchor>gaba251eab71de5a652f71acdcd4281e8b</anchor>
+      <anchor>ga669c04b29868a80e96bb72b3c6f39aef</anchor>
       <arglist>(uint32_t log_level, trans_chars file, trans_chars func, int32_t line, trans_chars format,...)</arglist>
     </member>
   </compound>
@@ -2680,7 +2680,7 @@
       <type>RUAPI char *</type>
       <name>ruRegexReplace</name>
       <anchorfile>group__regex.html</anchorfile>
-      <anchor>ga9ad8451ec30e8fc57db784f827489327</anchor>
+      <anchor>ga6207150c1f32937b7f34112c8be5b9e6</anchor>
       <arglist>(ruRegex rr, const char *original, const char *replacement, int32_t *code)</arglist>
     </member>
     <member kind="function">
@@ -2781,7 +2781,7 @@
       <type>RUAPI char *</type>
       <name>ruUtf8CaseNormalize</name>
       <anchorfile>group__string.html</anchorfile>
-      <anchor>ga5618cc6aab057d1af3254e05a5127ace</anchor>
+      <anchor>ga3f4c8e763b8a4cef590b2af61d8d26ed</anchor>
       <arglist>(const char *instr, int32_t normMode, int32_t caseMode)</arglist>
     </member>
     <member kind="function">
@@ -3012,7 +3012,7 @@
       <type>RUAPI char *</type>
       <name>ruStrDup</name>
       <anchorfile>group__string.html</anchorfile>
-      <anchor>ga337c8eba8887cba279a13dce4d59c7b0</anchor>
+      <anchor>ga55d0b43e54fdaf2a679634d06d3e0b9a</anchor>
       <arglist>(const char *str)</arglist>
     </member>
     <member kind="function">
@@ -3026,21 +3026,21 @@
       <type>RUAPI char *</type>
       <name>ruStrNDup</name>
       <anchorfile>group__string.html</anchorfile>
-      <anchor>gaa7b86a3217edaba9202710d76e142842</anchor>
+      <anchor>ga72cf701ae1ffc85e86136cd7c41b86e8</anchor>
       <arglist>(const char *str, rusize len)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI char *</type>
       <name>ruDupvPrintf</name>
       <anchorfile>group__string.html</anchorfile>
-      <anchor>ga1125ada1e1d67bb70bc518015726fc97</anchor>
+      <anchor>gab765a7b2e0435ba333614acd1b4cd596</anchor>
       <arglist>(const char *format, va_list arglist)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI char *</type>
       <name>ruDupPrintf</name>
       <anchorfile>group__string.html</anchorfile>
-      <anchor>gac02a41b8d206a2e7518420e8647c28b7</anchor>
+      <anchor>gaf39d5adb2495f5646d3b7bfd0ce51210</anchor>
       <arglist>(const char *format,...)</arglist>
     </member>
     <member kind="function">
@@ -3227,7 +3227,7 @@
       <type>RUAPI char *</type>
       <name>ruStringGetCString</name>
       <anchorfile>group__ru_string.html</anchorfile>
-      <anchor>ga5a7397cd16cf53b6290a2072da091e81</anchor>
+      <anchor>gad82d9d8bb98f3d520573684ecfb18870</anchor>
       <arglist>(ruString rs)</arglist>
     </member>
     <member kind="function">
@@ -3390,7 +3390,7 @@
       <type>void *(*</type>
       <name>ruStartFunc</name>
       <anchorfile>group__threading.html</anchorfile>
-      <anchor>ga9fb7315bef26c1ae9b399b5779ed230b</anchor>
+      <anchor>gab163096d3d2f32b3750cf6a43fd685b4</anchor>
       <arglist>)(void *context)</arglist>
     </member>
     <member kind="typedef">
@@ -4219,7 +4219,7 @@
       <type>RUAPI const char *</type>
       <name>ruFamEventTypeString</name>
       <anchorfile>group__fam.html</anchorfile>
-      <anchor>gab3a4b072242d9faaeb8a8459b6392677</anchor>
+      <anchor>gaddf353eb5418c566762a0fa726be1b15</anchor>
       <arglist>(int32_t action)</arglist>
     </member>
     <member kind="function">
@@ -4233,14 +4233,14 @@
       <type>RUAPI char *</type>
       <name>ruFamEventString</name>
       <anchorfile>group__fam.html</anchorfile>
-      <anchor>ga2a2c124ab9905147782051eb9d65c14d</anchor>
+      <anchor>gaa160061d1e160b452ccbe4aa30d0bba8</anchor>
       <arglist>(ruFamEvent *fe)</arglist>
     </member>
     <member kind="function">
       <type>RUAPI ruFamEvent *</type>
       <name>ruFamEventNew</name>
       <anchorfile>group__fam.html</anchorfile>
-      <anchor>ga4f6feaed01cb324940b4956baafa8652</anchor>
+      <anchor>ga4f584ca560104c5e6911a9fde3280afa</anchor>
       <arglist>(int eventType, trans_chars filePath, trans_chars destPath)</arglist>
     </member>
     <member kind="function">

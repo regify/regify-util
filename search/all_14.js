@@ -1,11 +1,9 @@
 var searchData=
 [
-  ['sec_602',['sec',['../structru_time_val.html#ab79c03c47db0065ef4c2a2d00f33c94f',1,'ruTimeVal']]],
-  ['sec_5ft_603',['sec_t',['../group__misc.html#ga8573cc8637a470b127a19d54b0e94cb9',1,'regify-util.h']]],
-  ['set_604',['set',['../struct_kv_store__.html#ac3a3b7caea49b0e917e6db9a26476357',1,'KvStore_']]],
-  ['srcpath_605',['srcPath',['../structru_fam_event__.html#abb1a6c225865ea8d47fda5952978c8f9',1,'ruFamEvent_']]],
-  ['start_606',['start',['../structru_try_loop.html#a13a4cd84853a32765061e01c0eff2e84',1,'ruTryLoop']]],
-  ['string_20functions_607',['String Functions',['../group__string.html',1,'']]],
-  ['string_20object_608',['String Object',['../group__ru_string.html',1,'']]],
-  ['strings_609',['Strings',['../group__typestring.html',1,'']]]
+  ['perm_5fbytes_0',['perm_bytes',['../group__misc.html#gab07884b0d918059732da53117d12b8f8',1,'regify-util.h']]],
+  ['perm_5fchars_1',['perm_chars',['../group__misc.html#ga7dd744dc0ee350f7de2c38f51f5c0bbe',1,'regify-util.h']]],
+  ['perm_5fptr_2',['perm_ptr',['../group__misc.html#ga517aac830d9ce5c6ab7deec46adf54d5',1,'regify-util.h']]],
+  ['perm_5funi_3',['perm_uni',['../group__misc.html#ga85d684615b50943fd01e79d07bb1c6d2',1,'regify-util.h']]],
+  ['pointer_20size_20integer_4',['Pointer size Integer',['../group__typeintptr.html',1,'']]],
+  ['ptr_5',['ptr',['../group__misc.html#gab4cf5759c3753c2308f163953ee154f0',1,'regify-util.h']]]
 ];

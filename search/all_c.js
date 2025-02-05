@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['ini_20file_20handling_25',['Ini File Handling',['../group__ini.html',1,'']]]
+  ['get_0',['get',['../struct_kv_store__.html#a86e65a7a3b43fae351d8c70f705a3748',1,'KvStore_']]]
 ];
