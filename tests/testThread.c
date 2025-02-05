@@ -21,8 +21,8 @@
  */
 #include "tests.h"
 
-bool quit = false;
-bool finished = false;
+volatile bool quit = false;
+volatile bool finished = false;
 
 static void reset() {
     quit = false;
@@ -109,6 +109,9 @@ START_TEST(run) {
     fail_if(NULL == t1, retText, test, NULL, t1);
     ruSleepMs(100);
 
+#if defined(_WIN32) || defined(__ANDROID__)
+    exp = RUE_FEATURE_NOT_SUPPORTED;
+#endif
     ret = ruThreadKill(t1);
     fail_unless(exp == ret, retText, test, exp, ret);
 
@@ -131,6 +134,42 @@ START_TEST(run) {
 
 }
 END_TEST
+
+#if defined(_WIN32) || defined(__ANDROID__)
+START_TEST(timeout) {
+    const char *test = "";
+    const char *retText = "%s failed wanted ret '%d' but got '%d'";
+    int ret, exp;
+    bool is, want;
+    ruThread t1;
+    t1 = ruThreadCreate(thRunner, NULL, NULL);
+    fail_if(NULL == t1, retText, test, NULL, t1);
+
+    want = false;
+    is = ruThreadWait(t1, 1, NULL);
+    fail_unless(want == is, retText, test, want, is);
+
+    exp = RUE_INVALID_PARAMETER;
+    ret = ruThreadKill(t1);
+    fail_unless(exp == ret, retText, test, exp, ret);
+
+    exp = RUE_OK;
+    is = ruThreadFinished(t1, &ret);
+    fail_unless(exp == ret, retText, test, exp, ret);
+    fail_unless(want == is, retText, test, want, is);
+
+    // stop it
+    quit = true;
+    ruSleepMs(100);
+
+    want = true;
+    exp = RUE_INVALID_PARAMETER;
+    is = ruThreadFinished(t1, &ret);
+    fail_unless(exp == ret, retText, test, exp, ret);
+    fail_unless(want == is, retText, test, want, is);
+}
+END_TEST
+#endif
 
 volatile int shared_data = 0;
 int ticks = 0;
@@ -225,6 +264,9 @@ TCase* threadTests(void) {
     TCase *tcase = tcase_create("thread");
     tcase_add_test(tcase, api);
     tcase_add_test(tcase, run);
+#if defined(_WIN32) || defined(__ANDROID__)
+    tcase_add_test(tcase, timeout);
+#endif
     tcase_add_test(tcase, conds);
     return tcase;
 }

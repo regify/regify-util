@@ -320,6 +320,18 @@ RUAPI perm_ptr ruTraceAddr(ruTrace rt) {
 //</editor-fold>
 
 //<editor-fold desc="Threading">
+static Thr* threadFree(Thr* tc) {
+    if (!tc) return NULL;
+    ruDbgLogf("Freeing thread 0x%p", tc);
+#ifdef _WIN32
+    if (tc->tid) CloseHandle(tc->tid);
+#endif
+    ruFree(tc->name);
+    memset(tc, 0, sizeof(Thr));
+    ruFree(tc);
+    return NULL;
+}
+
 #ifdef _WIN32
 static DWORD WINAPI threadRunner(LPVOID context) {
     Thr *tc = (Thr *) context;
@@ -334,10 +346,11 @@ static DWORD WINAPI threadRunner(LPVOID context) {
     }
     ruFree(tc->name);
     ruThreadSetName(NULL);
+    if (tc->orphaned) threadFree(tc);
     return res;
 }
 #else
-static void* threadRunner(void* context) {
+static ptr threadRunner(ptr context) {
     Thr* tc = (Thr*) context;
     if (tc->start) {
         if (tc->name) ruThreadSetName(tc->name);
@@ -349,21 +362,11 @@ static void* threadRunner(void* context) {
     }
     ruFree(tc->name);
     ruThreadSetName(NULL);
-    return tc->exitRes;
+    ptr res = tc->exitRes;
+    if (tc->orphaned) threadFree(tc);
+    return res;
 }
 #endif
-
-static Thr* threadFree(Thr* tc) {
-    if (!tc) return NULL;
-    ruDbgLogf("Freeing thread 0x%p", tc);
-#ifdef _WIN32
-    if (tc->tid) CloseHandle(tc->tid);
-#endif
-    ruFree(tc->name);
-    memset(tc, 0, sizeof(Thr));
-    ruFree(tc);
-    return NULL;
-}
 
 static int32_t threadKill(Thr* tc) {
     int32_t ret = RUE_PARAMETER_NOT_SET;
@@ -371,7 +374,9 @@ static int32_t threadKill(Thr* tc) {
         ruDbgLogf("Killing thread 0x%p", tc);
         ret = RUE_OK;
 #ifdef _WIN32
-        TerminateThread(tc->tid, 0);
+        // no more flirting with disaster
+        // TerminateThread(tc->tid, 0);
+        ret = RUE_FEATURE_NOT_SUPPORTED;
 #else
 #ifndef __EMSCRIPTEN__
 #if defined(__ANDROID__)
@@ -381,7 +386,12 @@ static int32_t threadKill(Thr* tc) {
 #endif
 #endif
 #endif
-        tc->finished = true;
+        if (ret == RUE_FEATURE_NOT_SUPPORTED) {
+            ruDbgLogf("Lewaving thread 0x%p to clean up after itself", tc);
+            tc->orphaned = true;
+        } else {
+            tc->finished = true;
+        }
     }
     return ret;
 }
@@ -560,16 +570,18 @@ RUAPI int32_t ruThreadKill(ruThread tid) {
     int32_t ret;
     Thr* tc = ThrGet(tid, &ret);
     if (!tc) return ret;
+    // kill was already tried
+    if (tc->orphaned) return RUE_INVALID_PARAMETER;
     ret = threadKill(tc);
-    threadFree(tc);
+    if (!tc->orphaned) threadFree(tc);
     return ret;
 }
 
 RUAPI bool ruThreadWait(ruThread tid, sec_t tosecs, void** exitVal) {
     Thr* tc = ThrGet(tid, NULL);
-    if (!tc) return false;
+    if (!tc || tc->orphaned) return false;
     bool res = threadWait(tc, tosecs, exitVal);
-    threadFree(tc);
+    if (!tc->orphaned) threadFree(tc);
     return res;
 }
 
@@ -577,6 +589,7 @@ RUAPI int ruThreadJoin(ruThread tid, void** exitVal) {
     int32_t ret;
     Thr* tc = ThrGet(tid, &ret);
     if (!tc) return ret;
+    if (tc->orphaned) return RUE_INVALID_PARAMETER;
     ret = threadJoin(tc, exitVal);
     threadFree(tc);
     return ret;
