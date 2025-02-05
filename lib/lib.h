@@ -262,6 +262,8 @@ typedef struct thr_ {
     alloc_chars name;
     void* user;
     void* exitRes;
+    // thread couldn't be killed and should clean up after itself
+    bool orphaned;
     bool finished;
 } Thr;
 

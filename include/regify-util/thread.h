@@ -201,7 +201,12 @@ RUAPI ruThreadId ruThreadNativeId(ruThread tid, int32_t* code);
 /**
  * Waits for given thread to terminate for tosecs seconds and kills it after that
  *
- * NOTE: Killing is currently not supported on Android.
+ * \note Killing is currently not supported on Android.
+ *
+ * \note Killing is no longer supported on Windows due to it's dysfunctionality.
+ * \see https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-terminatethread#remarks
+ * \see \ref ruThreadKill
+ *
  * @param tid Thread id of thread to join.
  * @param tosecs Number of seconds to wait before killing the thread.
  * @param exitVal Where the threads return value will be store if not NULL and
@@ -221,9 +226,15 @@ RUAPI int ruThreadJoin(ruThread tid, void** exitVal );
 /**
  * Sends a kill signal to the specified thread.
  *
- * NOTE: Currently not supported on Android
+ * \note Currently not supported on Android
+ * \note No longer supported on Windows due to it's dysfunctionality.
+ * \see https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-terminatethread#remarks
+ *
+ * Threads that were not killed due to \ref RUE_FEATURE_NOT_SUPPORTED will clean
+ * up after themselves should they arrive at their end point.
  * @param tid Thread id to send kill signal to
  * @return \ref RUE_OK if the given thread id was valid
+ *         \ref RUE_FEATURE_NOT_SUPPORTED if thread termination is not implemented
  */
 RUAPI int32_t ruThreadKill(ruThread tid);
 
