@@ -1,0 +1,21 @@
+#!/usr/bin/make -f
+# kate: space-indent off; tab-width 4; indent-width 4; replace-tabs off; replace-tabs-save off; hl makefile
+# @PRE@ should be replaced caller
+export DH_VERBOSE = 1
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+export DEB_LDFLAGS_MAINT_APPEND = -Wl,--as-needed
+export NAME=regify-util
+
+%:
+	dh $@
+
+override_dh_auto_configure:
+	dh_auto_configure -- \
+		-DBUILD_SHARED_LIBS=ON \
+		-DDEBUG_SYMBOLS=OFF \
+		-DDEPS_PREFIX=$(PRE) \
+		-DICU_LICENSE_PATH=$(PRE)/share/icu/LICENSE \
+		-DDOC_FOLDER=share/doc/$(NAME) \
+		-DLIC_FOLDER=share/doc/$(NAME) \
+		-DLIB_FOLDER=lib/$(DEB_TARGET_MULTIARCH) \
+		-DCMAKE_LIBRARY_ARCHITECTURE="$(DEB_TARGET_MULTIARCH)"

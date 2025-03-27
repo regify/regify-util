@@ -117,7 +117,7 @@ function (doLink lib shared)
                         )
             endif()
 
-            set_target_properties(${lib} PROPERTIES SOVERSION ${SOVERSION})
+            set_target_properties(${lib} PROPERTIES VERSION ${SOVERSION} SOVERSION ${SOCUR})
         endif()
     endif()
 
@@ -241,7 +241,7 @@ if(BUILD_SHARED_LIBS)
             EXPORT ${NAME}Targets
             DESTINATION ${LIB_FOLDER}
             )
-    if(LINUX OR ANDROID)
+    if (DEBUG_SYMBOLS)
         extractdebug(${sharedlib})
     endif()
 endif()

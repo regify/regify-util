@@ -26,6 +26,8 @@ set(ICU_PREFIX ${DEPS_PREFIX} CACHE STRING "Prefix path under which to find ICU"
 set(TIDY_PREFIX ${DEPS_PREFIX} CACHE STRING "libtidy installation prefix")
 set(YAJL_PREFIX ${DEPS_PREFIX} CACHE STRING "yajl installation prefix")
 set(LIB_FOLDER "lib" CACHE STRING "Folder under prefix where the libs are stored")
+set(DOC_FOLDER "share/${NAME}/doc" CACHE STRING "Folder under prefix where the libs are stored")
+set(LIC_FOLDER "share/${NAME}" CACHE STRING "Folder under prefix where the libs are stored")
 option(BUILD_SHARED_LIBS "Whether to build dynamic libraries" OFF)
 option(INCLUDE_ICU "Whether to include ICU statically" ON)
 option(INCLUDE_TIDY "Whether to include libtidy statically" ON)
@@ -66,7 +68,10 @@ set(CLEANER pwcleaner)
 #  increment age.
 #  If any interfaces have been removed since the last public release, then set
 #  age to 0.
-set(SOVERSION 1.0.0)
+set(SOCUR 1)
+set(SOREV 0)
+set(SOAGE 0)
+set(SOVERSION ${SOCUR}.${SOREV}.${SOAGE})
 
 include(resources/helpers.cmake)
 
@@ -128,6 +133,10 @@ endif()
 
 if(MAC)
     find_library(CORESVC CoreServices)
+endif()
+
+if(LINUX OR ANDROID)
+    option(DEBUG_SYMBOLS "Whether to extract binary debug symbols" ON)
 endif()
 
 if(NOT NAME_ARCH)
@@ -298,7 +307,7 @@ if(NOT MSVC AND NOT WASM)
             @ONLY)
     install(FILES ${PROJECT_BINARY_DIR}/${NAME}.pc DESTINATION ${LIB_FOLDER}/pkgconfig)
 endif()
-install(FILES LICENSE DESTINATION share/${NAME} RENAME regify-util-license.txt)
+install(FILES LICENSE DESTINATION ${LIC_FOLDER} RENAME regify-util-license.txt)
 #</editor-fold>
 
 #<editor-fold desc="documentation & packaging">
@@ -324,7 +333,7 @@ if(DOCS)
             COMMENT "Generating API documentation with Doxygen" VERBATIM)
 
     install(DIRECTORY ${CMAKE_BINARY_DIR}/doc/html/
-            DESTINATION share/${NAME}/doc)
+            DESTINATION ${DOC_FOLDER})
 
     # packaging
     include(InstallRequiredSystemLibraries)

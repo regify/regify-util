@@ -1,0 +1,6 @@
+debian/tmp/usr/include/*   usr/include
+debian/tmp/usr/lib/${DEB_HOST_MULTIARCH}/*.a usr/lib/${DEB_HOST_MULTIARCH}
+debian/tmp/usr/lib/${DEB_HOST_MULTIARCH}/*.so usr/lib/${DEB_HOST_MULTIARCH}
+debian/tmp/usr/lib/${DEB_HOST_MULTIARCH}/cmake usr/lib/${DEB_HOST_MULTIARCH}
+debian/tmp/usr/lib/${DEB_HOST_MULTIARCH}/pkgconfig usr/lib/${DEB_HOST_MULTIARCH}
+debian/tmp/usr/share/doc/regify-util/*.txt usr/share/doc/libregify-util-dev

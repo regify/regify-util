@@ -1,0 +1,2 @@
+debian/tmp/usr/lib/${DEB_HOST_MULTIARCH}/libregify-util.so.1* usr/lib/${DEB_HOST_MULTIARCH}
+debian/tmp/usr/share/doc/regify-util/*.txt   usr/share/doc/libregify-util1
