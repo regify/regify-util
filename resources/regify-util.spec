@@ -45,8 +45,9 @@ mkdir build
 bld=build/_CPack_Packages/lin.x86_64/ZIP/regify-util/
 
 install -d $RPM_BUILD_ROOT/%{_libdir}
-install -m 755 $bld/%{_lib}/%{libname}.so.* $RPM_BUILD_ROOT%{_libdir}/
-(cd $RPM_BUILD_ROOT%{_libdir}/ && ln -s %{libname}.so.* %{libname}.so)
+install -m 755 $bld/%{_lib}/%{libname}.so.1.0.0 $RPM_BUILD_ROOT%{_libdir}/
+ln -s %{libname}.so.1.0.0 $RPM_BUILD_ROOT%{_libdir}/%{libname}.so.1
+ln -s %{libname}.so.1 $RPM_BUILD_ROOT%{_libdir}/%{libname}.so
 
 # devel
 install -d $RPM_BUILD_ROOT/%{_includedir}/%{name}
