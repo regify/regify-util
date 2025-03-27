@@ -19,6 +19,7 @@
 # SOFTWARE.
 
 #<editor-fold desc="options">
+set(NAME regify-util)
 set(VERSION 2.1.0 CACHE STRING "The package version")
 set(REVISION 0 CACHE STRING "The build revision")
 set(DEPS_PREFIX ${CMAKE_INSTALL_PREFIX} CACHE STRING "General dependency installation prefix")
@@ -42,7 +43,6 @@ option(MSVC_STATIC_RUNTIME "Whether to link against the static runtime library" 
 
 #<editor-fold desc="general">
 cmake_minimum_required(VERSION 3.13)
-set(NAME regify-util)
 set(staticlib ${NAME}_static)
 set(sharedlib ${NAME})
 project(${NAME}
