@@ -112,9 +112,7 @@ typedef rusize_s (*rcReadFn) (perm_ptr ctx, ptr buf, rusize len);
 /**
  * \brief Creates a new ruCleaner object. To be freed with \ref ruCleanFree.
  *
- * Unless the ruCleaner comes from a pwcleaner library which lacks the remaining
- * regify-util functionality, it is made thread safe by the internal use of a
- * mutex. pwcleaner users need to do their own locking in multi threaded use cases.
+ * ruCleaner is made thread safe by the internal use of a mutex.
  *
  * @param chunkSize Size of chunk to process at a time. Will be allocated twice.
  *                  Will be increased to the largest item to clean if that is
@@ -200,7 +198,6 @@ RUAPI int32_t ruCleanIo(ruCleaner rc, rcReadFn reader, perm_ptr readCtx,
 RUAPI int32_t ruCleanToWriter(ruCleaner rc, trans_chars in, rusize len,
                               rcWriteFn writer, perm_ptr writeCtx);
 
-#ifndef CLEANER_ONLY
 /**
  * \brief Does replacements in given string and returns out in given \ref ruString.
  *
@@ -216,7 +213,6 @@ RUAPI int32_t ruCleanToWriter(ruCleaner rc, trans_chars in, rusize len,
  * @return \ref RUE_OK on success else an error code.
  */
 RUAPI int32_t ruCleanToString(ruCleaner rc, trans_chars in, rusize len, ruString *out);
-#endif
 
 /**
  * @}

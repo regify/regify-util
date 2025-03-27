@@ -55,7 +55,6 @@ install -m 644 $bld/include/%{name}/*.h $RPM_BUILD_ROOT/%{_includedir}/%{name}/
 
 install -d $RPM_BUILD_ROOT/%{_libdir}
 install -m 755 $bld/%{_lib}/%{libname}.a $RPM_BUILD_ROOT%{_libdir}/
-install -m 755 $bld/%{_lib}/libpwcleaner.a $RPM_BUILD_ROOT%{_libdir}/
 install -d $RPM_BUILD_ROOT/%{_libdir}/cmake/%{name}
 install -m 644 $bld/%{_lib}/cmake/%{name}/*.cmake $RPM_BUILD_ROOT/%{_libdir}/cmake/%{name}/
 install -d $RPM_BUILD_ROOT/%{_libdir}/pkgconfig/
@@ -86,7 +85,6 @@ fi
 %{_includedir}/regify-util/
 %{_includedir}/regify-util.h
 %{_libdir}/cmake/%{name}/
-%{_libdir}/libpwcleaner.a
 %{_libdir}/%{libname}.a
 %{_libdir}/pkgconfig/regify-util.pc
 

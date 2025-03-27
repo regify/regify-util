@@ -210,13 +210,6 @@ else()
             list(APPEND SRCS fam/mac.c)
         endif()
     endif()
-    # pwcleaner.a
-    add_library(${CLEANER} STATIC cleaner.c)
-    target_compile_definitions(${CLEANER} PRIVATE CLEANER_ONLY )
-    install(TARGETS ${CLEANER}
-            EXPORT ${NAME}Targets
-            DESTINATION ${LIB_FOLDER}
-            )
 endif()
 
 # regify-util.a

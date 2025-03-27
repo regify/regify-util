@@ -25,93 +25,8 @@
  * logs and such.
  *
  */
-#ifdef CLEANER_ONLY
-// for including only the libpwcleaner without ICU and other dependencies
-#include <stdlib.h>
-#include <stdint.h>
-#include <string.h>
-#include <errno.h>
-#include <stdbool.h>
-#include <ctype.h>
-
-typedef const char* perm_chars;
-typedef const char* trans_chars;
-typedef char* alloc_chars;
-typedef const void* trans_ptr;
-typedef const void* perm_ptr;
-typedef void* ptr;
-
-#define RUE_OK 0
-#define RUE_INVALID_PARAMETER 64
-#define RUE_CANT_WRITE 70
-#define RUE_PARAMETER_NOT_SET 77
-#define RUE_INVALID_STATE	325
-#define ruFree(p) if(p) free((void*)(p)); (p) = NULL;
-typedef void (*ruCleanerCb) (perm_ptr user_data, trans_chars key, trans_chars subst);
-typedef size_t rusize;
-#if defined(WINDOWS) || defined(WIN32) || defined(__BORLANDC__)
-    #ifdef _WIN64
-        typedef int64_t rusize_s;
-    #else
-        typedef int rusize_s;
-    #endif
-#else
-typedef signed long rusize_s;
-#endif
-void* ruMallocSize(rusize count, rusize ofsize) {
-    if (!count || !ofsize) return NULL;
-    void *p = calloc(count, ofsize);
-    if (!p) {
-        exit(1);
-    }
-    return p;
-}
-#define ruMacStart do
-#define ruMacEnd while(0)
-#define ruMalloc0(count, ctype) (ctype*) ruMallocSize(count, sizeof(ctype));
-#define ruRetWithCode(ptr, code, res) ruMacStart { \
-    if (ptr) *(ptr) = code; return res; \
-    } ruMacEnd
-#define ruMakeTypeGetter(ctype, magic) \
-ctype* ctype ## Get(void* ptr, int32_t* code) { \
-    ctype* ret = (ctype*) ptr; \
-    if (!ptr) { \
-        ruRetWithCode(code, RUE_PARAMETER_NOT_SET, NULL); \
-    } \
-    if (ptr < (void*)0xffff || (magic) != ret->type) { \
-        ruRetWithCode(code, RUE_INVALID_PARAMETER, NULL); \
-    } \
-    ruRetWithCode(code, RUE_OK, ret); \
-}
-char* ruStrDup(const char* str) {
-    if (!str) return NULL;
-#if _WIN32
-    char *ret = _strdup(str);
-#else
-    char *ret = strdup(str);
-#endif
-    if (!ret) {
-        exit(1);
-    }
-    return ret;
-}
-
-bool ruStrEmpty(trans_chars str) {
-    if (!str) return true;
-    while (*str) {
-        if (!isspace((unsigned char)*str)) return false;
-        str++;
-    }
-    return true;
-}
-
-typedef void* ruCleaner;
-typedef rusize_s (*rcWriteFn) (perm_ptr ctx, trans_ptr buf, rusize len);
-typedef rusize_s (*rcReadFn) (perm_ptr ctx, ptr buf, rusize len);
-#else
 // standard part of libregify-util
 #include "lib.h"
-#endif
 
 /*
  * Cleaner
@@ -159,9 +74,7 @@ typedef struct {
     perm_ptr readCtx;
     rcWriteFn write;
     perm_ptr writeCtx;
-#ifndef CLEANER_ONLY
     ruMutex mux;
-#endif
 
     rusize memsize;
 } Cleaner;
@@ -510,31 +423,25 @@ ruCleaner ruCleanNew(rusize chunkSize) {
     c->chunkSize = chunkSize;
     if (!c->chunkSize) c->chunkSize = 1024 * 1024;
     c->type = MagicCleaner;
-#ifndef CLEANER_ONLY
     c->mux = ruMutexInit();
-#endif
     return (ruCleaner)c;
 }
 
 ruCleaner ruCleanFree(ruCleaner cp) {
     Cleaner *c = CleanerGet(cp, NULL);
     if (!c) return NULL;
-#ifndef CLEANER_ONLY
     if (c == pwCleaner_) {
         // we're zapping the logger instance, so NULL that so it can be reset
         pwCleaner_ = NULL;
         logDbg("cleaner instance 0x%p zapped", c);
     }
-#endif
     if (c->root) {
         c->root = c->leaf = freeBranch(c, c->root);
     }
     ruFree(c->inHeap);
     ruFree(c->outBuf);
     ruFree(c->trail);
-#ifndef CLEANER_ONLY
     c->mux = ruMutexFree(c->mux);
-#endif
     c->type = 0;
     ruFree(c);
     return NULL;
@@ -546,9 +453,7 @@ int32_t ruCleanAdd(ruCleaner rc, trans_chars instr, trans_chars substitute) {
     if (!c) return code;
     if (!instr || !strlen(instr) || !substitute) return RUE_PARAMETER_NOT_SET;
 
-#ifndef CLEANER_ONLY
     ruMutexLock(c->mux);
-#endif
     rusize len = strlen(instr);
     if (len > c->longestEntry) {
         c->longestEntry = len;
@@ -560,9 +465,7 @@ int32_t ruCleanAdd(ruCleaner rc, trans_chars instr, trans_chars substitute) {
         c->trail = (trail_array*) ruMalloc0(c->longestEntry, treeTrail);
     }
     addEntry(c, c->root, instr, substitute);
-#ifndef CLEANER_ONLY
     ruMutexUnlock(c->mux);
-#endif
     return code;
 }
 
@@ -572,13 +475,9 @@ int32_t ruCleanRemove(ruCleaner rc, trans_chars instr) {
     if (!c) return code;
     if (!instr) return RUE_PARAMETER_NOT_SET;
 
-#ifndef CLEANER_ONLY
     ruMutexLock(c->mux);
-#endif
     addEntry(c, c->root, instr, NULL);
-#ifndef CLEANER_ONLY
     ruMutexUnlock(c->mux);
-#endif
     return code;
 }
 
@@ -600,18 +499,14 @@ int32_t ruCleanIo(ruCleaner rc, rcReadFn reader, perm_ptr readCtx,
     Cleaner *c = CleanerGet(rc, &code);
     if (!c) return code;
 
-#ifndef CLEANER_ONLY
     ruMutexLock(c->mux);
-#endif
     c->buffered = true;
     c->read = reader;
     c->readCtx = readCtx;
     c->write = writer;
     c->writeCtx = writeCtx;
     code = cleanNow(c);
-#ifndef CLEANER_ONLY
     ruMutexUnlock(c->mux);
-#endif
     return code;
 }
 
@@ -632,22 +527,17 @@ int32_t ruCleanToWriter(ruCleaner rc, trans_chars in, rusize len,
     // came in and not kernel order.
     // Cloned instances share the Tree and lock infrastructure. This should be
     // in a separate struct to allow reference sharing.
-#ifndef CLEANER_ONLY
     ruMutexLock(c->mux);
-#endif
     c->buffered = false;
     c->inBuf = (char*) in;
     c->inEnd = c->inBuf + len;
     c->write = writer;
     c->writeCtx = writeCtx;
     code = cleanNow(c);
-#ifndef CLEANER_ONLY
     ruMutexUnlock(c->mux);
-#endif
     return code;
 }
 
-#ifndef CLEANER_ONLY
 static rusize_s myappend(perm_ptr ctx, trans_ptr buf, rusize len) {
     ruString io = (ruString)ctx;
     if (RUE_OK == ruBufferAppend(io, buf, len)) return len;
@@ -667,5 +557,4 @@ int32_t ruCleanToString(ruCleaner rc, trans_chars in, rusize len, ruString *out)
     }
     return ret;
 }
-#endif
 

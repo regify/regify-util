@@ -52,9 +52,6 @@ project(${NAME}
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_CXX_STANDARD 11)
 
-# A separate sub project that only cleans passwords. Does not need ICU.
-set(CLEANER pwcleaner)
-
 #  Here are a set of rules to help you update your library version information:
 #  Start with version information of `0.0.0' for each libtool library.
 #  Update the version information only immediately before a public release of
