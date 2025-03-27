@@ -460,7 +460,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Creates a new ruCleaner object. To be freed with <a class="el" href="group__cleaner.html#gab618d626b1824ba7fd21ac61c5132902">ruCleanFree</a>. </p>
-<p>Unless the ruCleaner comes from a pwcleaner library which lacks the remaining regify-util functionality, it is made thread safe by the internal use of a mutex. pwcleaner users need to do their own locking in multi threaded use cases.</p>
+<p>ruCleaner is made thread safe by the internal use of a mutex.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">chunkSize</td><td>Size of chunk to process at a time. Will be allocated twice. Will be increased to the largest item to clean if that is bigger. Defaults to 1M if set to 0. </td></tr>
@@ -623,7 +623,7 @@ Functions</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Thu Mar 27 2025 09:03:57 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8 </li>
+    <li class="footer">Generated on Thu Mar 27 2025 09:17:57 for regify utility by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8 </li>
   </ul>
 </div>
 </body>
