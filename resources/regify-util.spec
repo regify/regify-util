@@ -35,7 +35,7 @@ mkdir build
 (cd build && cmake -DCMAKE_VERBOSE_MAKEFILE=ON \
     -DCMAKE_BUILD_TYPE=Release -DCMAKE_SYSTEM_NAME=Linux \
     -DREVISION=%{buildrev} -DVERSION=%{ver} \
-    -DCMAKE_INSTALL_PREFIX=%{_prefix} -DLIB_FOLDER=%{_lib} \
+    -DCMAKE_INSTALL_PREFIX=%{_prefix} -DCMAKE_INSTALL_LIBDIR=%{_lib} \
     -DCPACK_PACKAGE_FILE_NAME=%{name} -DDOCS=ON \
     %{cmakeparams} -DBUILD_SHARED_LIBS=ON .. && \
     make package)

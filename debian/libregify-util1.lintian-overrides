@@ -1,4 +1,2 @@
 # part of appliance migration
 libregify-util1: initial-upload-closes-no-bugs
-# cannot find these anywhere
-libregify-util1: spelling-error-in-binary *

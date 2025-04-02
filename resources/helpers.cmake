@@ -95,7 +95,7 @@ function(extractdebug target)
             VERBATIM
             )
     install(FILES $<TARGET_FILE:${target}>.debug
-            DESTINATION ${LIB_FOLDER}/debug
+            DESTINATION ${CMAKE_INSTALL_LIBDIR}/debug
             RENAME $<TARGET_FILE_NAME:${target}>)
 endfunction()
 

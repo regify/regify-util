@@ -141,7 +141,7 @@ function (doLink lib shared)
             PRIVATE $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}>
             $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
             $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-            ${ICU_INCLUDE_DIRS} ${TIDY_INCLUDE_DIRS}
+            ${ICU_INCLUDE_DIRS} ${TIDY_HEADER_DIR}
             )
 
 endfunction()
@@ -220,10 +220,10 @@ if(NOT WIN OR MINGW)
 endif()
 install(TARGETS ${staticlib}
         EXPORT ${NAME}Targets
-        DESTINATION ${LIB_FOLDER}
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}
         )
 if(INSTALL_DEPS AND INCLUDE_ICU)
-    install(FILES ${ICU_ARCHIVES} DESTINATION ${LIB_FOLDER})
+    install(FILES ${ICU_ARCHIVES} DESTINATION ${CMAKE_INSTALL_LIBDIR})
 endif()
 
 # regify-util.so
@@ -232,7 +232,7 @@ if(BUILD_SHARED_LIBS)
     doLink(${sharedlib} ON)
     install(TARGETS ${sharedlib}
             EXPORT ${NAME}Targets
-            DESTINATION ${LIB_FOLDER}
+            DESTINATION ${CMAKE_INSTALL_LIBDIR}
             )
     if (DEBUG_SYMBOLS)
         extractdebug(${sharedlib})

@@ -1,4 +1,4 @@
-regify-util (2.1.0-1) stable; urgency=low
+regify-util (@VER@) @DIST@; urgency=low
 
   * Initial release
 

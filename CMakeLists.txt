@@ -26,7 +26,7 @@ set(DEPS_PREFIX ${CMAKE_INSTALL_PREFIX} CACHE STRING "General dependency install
 set(ICU_PREFIX ${DEPS_PREFIX} CACHE STRING "Prefix path under which to find ICU")
 set(TIDY_PREFIX ${DEPS_PREFIX} CACHE STRING "libtidy installation prefix")
 set(YAJL_PREFIX ${DEPS_PREFIX} CACHE STRING "yajl installation prefix")
-set(LIB_FOLDER "lib" CACHE STRING "Folder under prefix where the libs are stored")
+set(CMAKE_INSTALL_LIBDIR "lib" CACHE STRING "Folder under prefix where the libs are stored")
 set(DOC_FOLDER "share/${NAME}/doc" CACHE STRING "Folder under prefix where the libs are stored")
 set(LIC_FOLDER "share/${NAME}" CACHE STRING "Folder under prefix where the libs are stored")
 option(BUILD_SHARED_LIBS "Whether to build dynamic libraries" OFF)
@@ -36,6 +36,7 @@ option(INCLUDE_YAJL "Whether to include YAJL statically" ON)
 option(INSTALL_DEPS "Whether this configuration installs its included dependencies. Used for packaging" OFF)
 option(DOCS "Whether to generate the documentation" OFF)
 option(TESTING "Whether to build the tests" OFF)
+option(PACKAGING "Whether to generate a package targets" OFF)
 option(TGZSOURCE "Whether to generate a source tar file instead of zip" OFF)
 
 option(MSVC_STATIC_RUNTIME "Whether to link against the static runtime library" ON)
@@ -193,33 +194,48 @@ else()
     endif()
 endif()
 
-if ("${DEPS_PREFIX}" MATCHES "^$")
-    find_package(PkgConfig REQUIRED)
-    pkg_check_modules(ICU REQUIRED icu-io)
-    pkg_check_modules(YAJL REQUIRED yajl)
-else()
-    # where static dependencies are found
+find_package(PkgConfig)
+doLog(LOG_VERB "PkgConfig_FOUND: '${PkgConfig_FOUND}'")
+if(PkgConfig_FOUND)
+    if ("${ICU_PREFIX}" MATCHES "^$")
+        pkg_check_modules(ICU icu-io)
+        doLog(LOG_VERB "ICU_FOUND: '${ICU_FOUND}'")
+    endif()
+    if ("${YAJL_PREFIX}" MATCHES "^$")
+        pkg_check_modules(YAJL yajl)
+        doLog(LOG_VERB "YAJL_FOUND: '${YAJL_FOUND}'")
+    endif()
+    if ("${TIDY_PREFIX}" MATCHES "^$")
+        pkg_check_modules(TIDY tidy)
+        doLog(LOG_VERB "TIDY_FOUND: '${TIDY_FOUND}'")
+    endif()
+endif()
+
+if(NOT ICU_FOUND)
     set(ICU_INCLUDE_DIRS ${ICU_PREFIX}/include)
     set(ICU_LIBRARY_DIRS ${ICU_PREFIX}/lib)
-    set(YAJL_INCLUDE_DIRS ${YAJL_PREFIX}/include)
-    set(YAJL_LIBRARY_DIRS ${YAJL_PREFIX}/lib)
     if(WIN AND NOT MINGW)
-        set(YAJL_LIBRARIES yajl)
         if(BUILD_SHARED_LIBS AND NOT INCLUDE_ICU)
             set(ICU_LIBRARIES icuio icuin icuuc icudt)
         else()
             set(ICU_LIBRARIES sicuio sicuin sicuuc sicudt)
         endif()
     else()
-        set(YAJL_LIBRARIES -lyajl)
         set(ICU_LIBRARIES -licuio -licui18n -licuuc -licudata -lm -lstdc++)
     endif()
 endif()
-if ("${TIDY_PREFIX}" MATCHES "^$")
-    find_package(PkgConfig REQUIRED)
-    pkg_check_modules(TIDY REQUIRED tidy)
-else()
-    # where static dependencies are found
+
+if(NOT YAJL_FOUND)
+    set(YAJL_INCLUDE_DIRS ${YAJL_PREFIX}/include)
+    set(YAJL_LIBRARY_DIRS ${YAJL_PREFIX}/lib)
+    if(WIN AND NOT MINGW)
+        set(YAJL_LIBRARIES yajl)
+    else()
+        set(YAJL_LIBRARIES -lyajl)
+    endif()
+endif()
+
+if(NOT TIDY_FOUND)
     set(TIDY_INCLUDE_DIRS ${TIDY_PREFIX}/include)
     set(TIDY_LIBRARY_DIRS ${TIDY_PREFIX}/lib)
     if(WIN AND NOT MINGW)
@@ -228,16 +244,24 @@ else()
         set(TIDY_LIBRARIES -ltidy)
     endif()
 endif()
+# tidy header storage is a mess
+find_path(TIDY_HEADER_DIR tidy.h
+        PATHS ${TIDY_INCLUDE_DIRS}
+        PATH_SUFFIXES tidy)
+message("TIDY_HEADER_DIR: '${TIDY_HEADER_DIR}'")
 
 add_custom_target(entities
         COMMAND ${CMAKE_SOURCE_DIR}/resources/mkmap.py > ${CMAKE_SOURCE_DIR}/lib/htmlEntities.c)
 
-installLicensePath(ICU ICU ICU-license.txt
-        ${ICU_PREFIX}/share/icu/LICENSE)
-installLicensePath(YAJL YAJL YAJL-license.txt
-        ${YAJL_PREFIX}/share/yajl/LICENSE)
-installLicensePath(TIDY tidy tidy-license.txt
-        ${TIDY_PREFIX}/share/tidy/LICENSE)
+if(INCLUDE_ICU)
+    installLicensePath(ICU ICU ICU-license.txt ${ICU_PREFIX}/share/icu/LICENSE)
+endif()
+if(INCLUDE_YAJL)
+    installLicensePath(YAJL YAJL YAJL-license.txt ${YAJL_PREFIX}/share/yajl/LICENSE)
+endif()
+if(INCLUDE_TIDY)
+    installLicensePath(TIDY tidy tidy-license.txt ${TIDY_PREFIX}/share/tidy/LICENSE)
+endif()
 
 add_compile_definitions(BUILD_VERSION=\"${VERSION}-${REVISION}\")
 add_subdirectory(lib)
@@ -248,7 +272,7 @@ include(CMakePackageConfigHelpers)
 # generate the config file that is includes the exports
 configure_package_config_file(${CMAKE_CURRENT_SOURCE_DIR}/resources/Config.cmake.in
         "${CMAKE_CURRENT_BINARY_DIR}/${NAME}Config.cmake"
-        INSTALL_DESTINATION "${LIB_FOLDER}/cmake/${NAME}"
+        INSTALL_DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/${NAME}"
         NO_SET_AND_CHECK_MACRO
         NO_CHECK_REQUIRED_COMPONENTS_MACRO )
 write_basic_package_version_file(
@@ -288,12 +312,12 @@ install(FILES ${INCLUDES} DESTINATION include/regify-util)
 install(FILES
         ${CMAKE_CURRENT_BINARY_DIR}/${NAME}Config.cmake
         ${CMAKE_CURRENT_BINARY_DIR}/${NAME}ConfigVersion.cmake
-        DESTINATION ${LIB_FOLDER}/cmake/${NAME}
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${NAME}
         )
 install(EXPORT ${NAME}Targets
         FILE ${NAME}Targets.cmake
         NAMESPACE RegifyUtil::
-        DESTINATION ${LIB_FOLDER}/cmake/${NAME} )
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${NAME} )
 if(NOT MSVC AND NOT WASM)
     if(NOT INCLUDE_ICU)
         dojoin("-l${ICU_LIBRARIES}" " -l" ICU_LIBS)
@@ -302,14 +326,13 @@ if(NOT MSVC AND NOT WASM)
             "${PROJECT_SOURCE_DIR}/resources/${NAME}.pc.in"
             "${PROJECT_BINARY_DIR}/${NAME}.pc"
             @ONLY)
-    install(FILES ${PROJECT_BINARY_DIR}/${NAME}.pc DESTINATION ${LIB_FOLDER}/pkgconfig)
+    install(FILES ${PROJECT_BINARY_DIR}/${NAME}.pc DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
 endif()
 install(FILES LICENSE DESTINATION ${LIC_FOLDER} RENAME regify-util-license.txt)
 #</editor-fold>
 
 #<editor-fold desc="documentation & packaging">
 if(DOCS)
-
     # add a target to generate API documentation with Doxygen
     # add these to your PATH id they're not found even though they are installed
     find_package(Doxygen REQUIRED)
@@ -331,7 +354,8 @@ if(DOCS)
 
     install(DIRECTORY ${CMAKE_BINARY_DIR}/doc/html/
             DESTINATION ${DOC_FOLDER})
-
+endif()
+if(PACKAGING)
     # packaging
     include(InstallRequiredSystemLibraries)
     set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/LICENSE")
@@ -344,14 +368,14 @@ if(DOCS)
     list(APPEND CPACK_SOURCE_IGNORE_FILES ${CMAKE_SOURCE_DIR}/.git/)
     list(APPEND CPACK_SOURCE_IGNORE_FILES ${CMAKE_SOURCE_DIR}/.idea/)
     list(APPEND CPACK_SOURCE_IGNORE_FILES ${CMAKE_SOURCE_DIR}/tests/tree/.*out)
-    set(CPACK_SOURCE_PACKAGE_FILE_NAME "${PROJECT_NAME}-${PROJECT_VERSION}")
+    set(CPACK_SOURCE_PACKAGE_FILE_NAME "${PROJECT_NAME}-${PROJECT_VERSION}"
+            CACHE STRING "The source package base name")
     if(TGZSOURCE)
         set(CPACK_SOURCE_GENERATOR TGZ)
     else()
         set(CPACK_SOURCE_GENERATOR ZIP)
     endif()
     include(CPack)
-
 endif()
 #</editor-fold>
 
