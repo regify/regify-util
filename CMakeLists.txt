@@ -36,7 +36,7 @@ option(INCLUDE_YAJL "Whether to include YAJL statically" ON)
 option(INSTALL_DEPS "Whether this configuration installs its included dependencies. Used for packaging" OFF)
 option(DOCS "Whether to generate the documentation" OFF)
 option(TESTING "Whether to build the tests" OFF)
-option(PACKAGING "Whether to generate a package targets" OFF)
+option(PACKAGING "Whether to generate a package targets" ON)
 option(TGZSOURCE "Whether to generate a source tar file instead of zip" OFF)
 
 option(MSVC_STATIC_RUNTIME "Whether to link against the static runtime library" ON)
