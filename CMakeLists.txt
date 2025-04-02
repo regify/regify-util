@@ -247,7 +247,9 @@ endif()
 # tidy header storage is a mess
 find_path(TIDY_HEADER_DIR tidy.h
         PATHS ${TIDY_INCLUDE_DIRS}
-        PATH_SUFFIXES tidy)
+        PATH_SUFFIXES tidy
+        NO_DEFAULT_PATH
+        NO_CMAKE_FIND_ROOT_PATH)
 message("TIDY_HEADER_DIR: '${TIDY_HEADER_DIR}'")
 
 add_custom_target(entities
