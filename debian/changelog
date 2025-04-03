@@ -1,4 +1,4 @@
-regify-util (@VER@) @DIST@; urgency=low
+regify-util (@BLDVER@) @DIST@; urgency=low
 
   * Initial release
 

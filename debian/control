@@ -8,6 +8,7 @@ Build-Depends: cmake,
     libicu-dev,
     libyajl-dev,
     libtidy-dev,
+    pkg-config,
 Standards-Version: 4.6.2
 Homepage: https://www.regify.com
 

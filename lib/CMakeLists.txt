@@ -134,7 +134,6 @@ function (doLink lib shared)
                 PRIVATE ${ICU_LIBRARY_DIRS})
     endif()
 
-
     target_include_directories(${lib}
             PUBLIC $<INSTALL_INTERFACE:include>
             # make sure we're using the right version

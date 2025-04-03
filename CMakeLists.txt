@@ -244,13 +244,13 @@ if(NOT TIDY_FOUND)
         set(TIDY_LIBRARIES -ltidy)
     endif()
 endif()
+
 # tidy header storage is a mess
 find_path(TIDY_HEADER_DIR tidy.h
-        PATHS ${TIDY_INCLUDE_DIRS}
+        PATHS ${TIDY_INCLUDE_DIRS} ${TIDY_INCLUDEDIR}
         PATH_SUFFIXES tidy
         NO_DEFAULT_PATH
         NO_CMAKE_FIND_ROOT_PATH)
-message("TIDY_HEADER_DIR: '${TIDY_HEADER_DIR}'")
 
 add_custom_target(entities
         COMMAND ${CMAKE_SOURCE_DIR}/resources/mkmap.py > ${CMAKE_SOURCE_DIR}/lib/htmlEntities.c)
