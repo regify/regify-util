@@ -130,26 +130,6 @@ For OS X only x86_64 is currently supported.
 === iOS
 For iOS we currently have the following architectures:
 
-* armv7
-
- mkdir build
- cd build
- cmake -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_BUILD_TYPE=Release \
-    -G "Unix Makefiles" -DNAME_ARCH=armv7 -DCMAKE_SYSTEM_NAME=iOS \
-    -DCMAKE_OSX_ARCHITECTURES=armv7 -DCMAKE_OSX_DEPLOYMENT_TARGET=9 \
-    -DCMAKE_IOS_INSTALL_COMBINED=YES ..
- make
-
-* armv7s
-
- mkdir build
- cd build
- cmake -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_BUILD_TYPE=Release \
-    -G "Unix Makefiles" -DNAME_ARCH=armv7s -DCMAKE_SYSTEM_NAME=iOS \
-    -DCMAKE_OSX_ARCHITECTURES=armv7s -DCMAKE_OSX_DEPLOYMENT_TARGET=9 \
-    -DCMAKE_IOS_INSTALL_COMBINED=YES ..
- make
-
 * arm64
 
  mkdir build
