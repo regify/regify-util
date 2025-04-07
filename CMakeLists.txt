@@ -38,6 +38,7 @@ option(DOCS "Whether to generate the documentation" OFF)
 option(TESTING "Whether to build the tests" OFF)
 option(PACKAGING "Whether to generate a package targets" ON)
 option(TGZSOURCE "Whether to generate a source tar file instead of zip" OFF)
+option(SRC_ONLY "Whether to only generate a source tarball, ignore dependencies" OFF)
 
 option(MSVC_STATIC_RUNTIME "Whether to link against the static runtime library" ON)
 #</editor-fold>
@@ -143,6 +144,7 @@ endif()
 #</editor-fold>
 
 #<editor-fold desc="dependencies">
+if(NOT SRC_ONLY)
 if(LINUX OR MAC OR MINGW)
     find_package(Threads REQUIRED)
 endif()
@@ -267,9 +269,11 @@ endif()
 
 add_compile_definitions(BUILD_VERSION=\"${VERSION}-${REVISION}\")
 add_subdirectory(lib)
+endif(NOT SRC_ONLY)
 #</editor-fold>
 
 #<editor-fold desc="installation">
+if(NOT SRC_ONLY)
 include(CMakePackageConfigHelpers)
 # generate the config file that is includes the exports
 configure_package_config_file(${CMAKE_CURRENT_SOURCE_DIR}/resources/Config.cmake.in
@@ -331,6 +335,7 @@ if(NOT MSVC AND NOT WASM)
     install(FILES ${PROJECT_BINARY_DIR}/${NAME}.pc DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
 endif()
 install(FILES LICENSE DESTINATION ${LIC_FOLDER} RENAME regify-util-license.txt)
+endif(NOT SRC_ONLY)
 #</editor-fold>
 
 #<editor-fold desc="documentation & packaging">
@@ -365,11 +370,11 @@ if(PACKAGING)
     set(CPACK_PACKAGE_VERSION ${PROJECT_VERSION}-${REVISION})
     set(CPACK_SYSTEM_NAME ${NAME_OS}.${NAME_ARCH})
     set(CPACK_GENERATOR ZIP)
-    list(APPEND CPACK_SOURCE_IGNORE_FILES ${CMAKE_SOURCE_DIR}/cmake-.*)
-    list(APPEND CPACK_SOURCE_IGNORE_FILES ${CMAKE_SOURCE_DIR}/build.*)
-    list(APPEND CPACK_SOURCE_IGNORE_FILES ${CMAKE_SOURCE_DIR}/.git/)
+    list(APPEND CPACK_SOURCE_IGNORE_FILES ${CMAKE_SOURCE_DIR}/cmake-)
+    list(APPEND CPACK_SOURCE_IGNORE_FILES ${CMAKE_SOURCE_DIR}/build)
+    list(APPEND CPACK_SOURCE_IGNORE_FILES .git)
     list(APPEND CPACK_SOURCE_IGNORE_FILES ${CMAKE_SOURCE_DIR}/.idea/)
-    list(APPEND CPACK_SOURCE_IGNORE_FILES ${CMAKE_SOURCE_DIR}/tests/tree/.*out)
+    list(APPEND CPACK_SOURCE_IGNORE_FILES ${CMAKE_SOURCE_DIR}/tests/tree/[^/]+\.out)
     set(CPACK_SOURCE_PACKAGE_FILE_NAME "${PROJECT_NAME}-${PROJECT_VERSION}"
             CACHE STRING "The source package base name")
     if(TGZSOURCE)

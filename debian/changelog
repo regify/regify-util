@@ -1,5 +1,5 @@
 regify-util (@BLDVER@) @DIST@; urgency=low
 
-  * Initial release
+  * regify-util @BLDVER@ Release
 
- -- Mario Theodoridis <mario.theodoridis@regify.com>  Mon, 24 Mar 2025 11:17:04 +0100
+ -- Mario Theodoridis <mario.theodoridis@regify.com>  @DATE@
