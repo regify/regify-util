@@ -1135,7 +1135,7 @@ RUAPI int32_t ruMkdir(const char *pathname, int mode, bool deep) {
         char c = p[0] | 0x20;
         if (c >= 'a' && c <= 'z' && p[1] == ':' &&
             (p[2] == '\\' || p[2] == '/')) {
-            p += 2;
+            //p += 2; // leave the driveletter
         } else if ((p[0] == '\\' && p[1] == '\\') ||
                    (p[0] == '/' && p[1] == '/')) {
             ret = RUE_INVALID_PARAMETER;
