@@ -223,6 +223,7 @@ START_TEST(filetest) {
     file = makePath("föss.bat");
 
     exp = true;
+    test = "fileTest";
     ret = ruFileExists(file);
     fail_unless(exp == ret, retText, test, exp, ret);
 

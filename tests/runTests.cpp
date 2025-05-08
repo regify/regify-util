@@ -107,18 +107,6 @@ int32_t main ( int32_t argc, char *argv[] ) {
     int32_t number_failed;
     // for failure debugging
     ruThreadSetName("main");
-    perm_chars base = OUT_BASE;
-    int32_t ret = ruFolderRemove(base);
-    if (ret != RUE_OK) {
-        printf("got error %d removing folder '%s' error: '%s'", ret, base, ruLastError());
-        return ret;
-    }
-    ret = ruMkdir(base, 0755, true);
-    if (ret != RUE_OK) {
-        printf("got error %d ruMkdir '%s' error: '%s'", ret, base, ruLastError());
-        return ret;
-    }
-
     setLogger();
 
     ruCleanAdd(ruGetCleaner(), "mainSecrét", "^^^MAIN_SECRET^^^");

@@ -76,11 +76,15 @@ else()
     endif()
 
     if(NOT WIN)
-        add_custom_command(OUTPUT loeh
-            COMMAND ln -s ${CMAKE_CURRENT_SOURCE_DIR}/tree/doeh loeh )
-        add_custom_command(OUTPUT löss
-            COMMAND ln -s ${CMAKE_CURRENT_SOURCE_DIR}/tree/föss löss )
-        add_custom_target(symlinks DEPENDS löss loeh)
+        add_custom_command(OUTPUT ${TEST_OUT_DIR}
+                COMMAND mkdir -p ${TEST_OUT_DIR})
+        add_custom_command(OUTPUT ${TEST_OUT_DIR}/loeh
+            COMMAND ln -s ${CMAKE_CURRENT_SOURCE_DIR}/tree/doeh ${TEST_OUT_DIR}/loeh)
+        add_custom_command(OUTPUT ${TEST_OUT_DIR}/löss
+            COMMAND ln -s ${CMAKE_CURRENT_SOURCE_DIR}/tree/föss ${TEST_OUT_DIR}/löss)
+        add_custom_target(outdir DEPENDS ${TEST_OUT_DIR})
+        add_custom_target(symlinks DEPENDS ${TEST_OUT_DIR}/löss ${TEST_OUT_DIR}/loeh)
+        add_dependencies(symlinks outdir)
         add_dependencies(runTests symlinks)
     endif()
 
