@@ -23,6 +23,20 @@ set(CHECK_LIBRARY_DIRS ${ICU_LIBRARY_DIRS} CACHE STRING
 set(CHECK_INCLUDE_DIR ${ICU_INCLUDE_DIRS} CACHE STRING
         "Where the check libraries are located")
 option(TEST_ON_SMB "Whether tests are running on a SMB share. Disables some tests" OFF)
+set(TEST_OUTPUT_DIR "${CMAKE_CURRENT_BINARY_DIR}/test dir" CACHE STRING
+        "Where output files of the tests go. For testing other drives on windows")
+
+set(TEST_OUT_DIR ${TEST_OUTPUT_DIR})
+if(WIN)
+    set(CYGPATH_DIR "" CACHE STRING "Folder where cygpath can be found")
+    find_program(CYGPATH
+            NAMES cygpath cygpath.exe
+            PATHS ${CYGPATH_DIR})
+    if(NOT "CYGPATH-NOTFOUND" STREQUAL "${CYGPATH}")
+        execute_process(COMMAND CYGPATH -m ${TEST_OUTPUT_DIR}
+                OUTPUT_VARIABLE TEST_OUT_DIR)
+    endif()
+endif()
 
 if(MSVC)
     set(CHECK_LIBRARIES check.lib)
@@ -56,8 +70,7 @@ else()
             PRIVATE ${PROJECT_SOURCE_DIR}/include/ ${CHECK_INCLUDE_DIR})
     target_compile_definitions(runTests PRIVATE
             SRC_BASE=\"${CMAKE_CURRENT_SOURCE_DIR}/tree\"
-            OUT_BASE="${CMAKE_CURRENT_BINARY_DIR}"
-            logfile=\"${CMAKE_BINARY_DIR}/test.log\")
+            OUT_BASE="${TEST_OUT_DIR}")
     if(TEST_ON_SMB)
         target_compile_definitions(runTests PRIVATE ON_SMB_SHARE)
     endif()
@@ -89,7 +102,7 @@ else()
     target_link_libraries(runTests PRIVATE ${staticlib} ${CHECK_LIBRARIES})
 
     add_custom_target(tests
-            COMMAND ${CMAKE_CURRENT_BINARY_DIR}/runTests > run.log 2>&1
+            COMMAND ${CMAKE_CURRENT_BINARY_DIR}/runTests >run.log 2>&1
             COMMAND echo "* * *   Success   * * *"
             DEPENDS runTests)
     if(HAVE_CV2PDB)
@@ -102,7 +115,7 @@ else()
         add_custom_target(leaks
                 COMMAND CK_FORK=no MallocStackLogging=1 ${LEAKS}
                 --list --atExit --
-                ${CMAKE_CURRENT_BINARY_DIR}/runTests > run.log 2>&1
+                ${CMAKE_CURRENT_BINARY_DIR}/runTests >run.log 2>&1
                 USES_TERMINAL
                 DEPENDS runTests)
     endif()
@@ -114,7 +127,7 @@ else()
                 COMMAND CK_FORK=no ${VALGRIND} --num-callers=50
                     --read-var-info=yes --show-reachable=yes
                     --leak-check=full --log-file=grind.log
-                    ${CMAKE_CURRENT_BINARY_DIR}/runTests > run.log 2>&1
+                    ${CMAKE_CURRENT_BINARY_DIR}/runTests >run.log 2>&1
                 COMMAND ! grep -A5 'are definitely lost' grind.log
                 COMMAND echo "* * *   Success   * * *"
                 DEPENDS runTests)
