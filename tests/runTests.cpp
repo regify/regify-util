@@ -105,10 +105,18 @@ int32_t mainTest (const char *tmpDir, const char *treepath) {
 int32_t main ( int32_t argc, char *argv[] ) {
 #endif
     int32_t number_failed;
-    // for failure debugging
     ruThreadSetName("main");
+#ifdef _WIN32
+    // cmake does not create the folder for windows
+    perm_chars base = OUT_BASE;
+    int32_t ret = ruMkdir(base, 0755, true);
+    if (ret != RUE_OK) {
+        printf("got error %d ruMkdir '%s' error: '%s'", ret, base, ruLastError());
+        return ret;
+    }
+#endif
+    // for failure debugging
     setLogger();
-
     ruCleanAdd(ruGetCleaner(), "mainSecrét", "^^^MAIN_SECRET^^^");
     Suite *suite = getSuite();
     ruInfoLog("starting with mainSecrét and cleaner");
