@@ -34,7 +34,8 @@ if(WIN)
             PATHS ${CYGPATH_DIR})
     if(NOT "CYGPATH-NOTFOUND" STREQUAL "${CYGPATH}")
         execute_process(COMMAND CYGPATH -m ${TEST_OUTPUT_DIR}
-                OUTPUT_VARIABLE TEST_OUT_DIR)
+                OUTPUT_VARIABLE TEST_OUT_DIR
+                OUTPUT_STRIP_TRAILING_WHITESPACE)
     endif()
 endif()
 
