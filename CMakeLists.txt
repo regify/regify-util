@@ -20,7 +20,7 @@
 
 #<editor-fold desc="options">
 set(NAME regify-util)
-set(VERSION 2.1.0 CACHE STRING "The package version")
+set(VERSION 2.2.0 CACHE STRING "The package version")
 set(REVISION 0 CACHE STRING "The build revision")
 set(DEPS_PREFIX ${CMAKE_INSTALL_PREFIX} CACHE STRING "General dependency installation prefix")
 set(ICU_PREFIX ${DEPS_PREFIX} CACHE STRING "Prefix path under which to find ICU")
@@ -52,7 +52,7 @@ project(${NAME}
         VERSION ${VERSION}
         )
 set(CMAKE_C_STANDARD 99)
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 
 #  Here are a set of rules to help you update your library version information:
 #  Start with version information of `0.0.0' for each libtool library.
