@@ -3,7 +3,7 @@ var searchData=
   ['rcreadfn_0',['rcReadFn',['../group__cleaner.html#ga3adc6576a1cb10dade26d7ff7cfc04e5',1,'cleaner.h']]],
   ['rcwritefn_1',['rcWriteFn',['../group__cleaner.html#gaff866bff30cab44b2f0a14c3e0c6fb2b',1,'cleaner.h']]],
   ['regify_20util_20error_20codes_2',['regify-util Error Codes',['../group__ruerror.html',1,'']]],
-  ['regify_20utility_202_201_200_200_3',['regify utility 2.1.0-0',['../index.html',1,'']]],
+  ['regify_20utility_202_202_200_200_3',['regify utility 2.2.0-0',['../index.html',1,'']]],
   ['regular_20expressions_4',['Regular Expressions',['../group__regex.html',1,'']]],
   ['related_5',['Threading Related',['../group__threading.html',1,'']]],
   ['retry_6',['retry',['../structru_try_loop.html#a380751189bd4c1898d245265539adb62',1,'ruTryLoop']]],

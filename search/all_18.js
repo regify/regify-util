@@ -5,5 +5,5 @@ var searchData=
   ['util_20error_20codes_2',['regify-util Error Codes',['../group__ruerror.html',1,'']]],
   ['utilities_3',['HTML Utilities',['../group__html.html',1,'']]],
   ['utility_4',['Data Cleaning Utility',['../group__cleaner.html',1,'']]],
-  ['utility_202_201_200_200_5',['regify utility 2.1.0-0',['../index.html',1,'']]]
+  ['utility_202_202_200_200_5',['regify utility 2.2.0-0',['../index.html',1,'']]]
 ];

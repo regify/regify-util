@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['1_200_200_0',['regify utility 2.1.0-0',['../index.html',1,'']]]
+  ['2_202_200_200_0',['regify utility 2.2.0-0',['../index.html',1,'']]]
 ];
