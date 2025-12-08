@@ -197,7 +197,7 @@ START_TEST ( groups ) {
     fail_unless(exp == ret, retText, test, exp, ret);
     fail_if(NULL == matches, retText, test, NULL, matches);
 
-    int32_t expSz = 2, sz = ruListSize(matches, &ret);
+    uint32_t expSz = 2, sz = ruListSize(matches, &ret);
     fail_unless(exp == ret, retText, test, exp, ret);
     fail_unless(expSz == sz, retText, test, expSz, sz);
 
@@ -235,10 +235,52 @@ START_TEST ( groups ) {
 }
 END_TEST
 
+START_TEST ( groups2 ) {
+    int32_t ret, exp;
+    const char *test = "ruRegexNew";
+    const char *retText = "%s failed wanted ret '%d' but got '%d'";
+
+    exp = RUE_OK;
+    ruRegex rr = ruRegexNew("^(.*?)(?:\\s*encryptmail\\s*)(.*?)$", RUREGEX_CASE_INSENSITIVE, &ret);
+    fail_unless(ret == exp, retText, test, exp, ret);
+    fail_if(rr == NULL, retText, test, NULL, rr);
+
+    char *orig = "encryptmail foo";
+    char *foo = "foo";
+    ruList matches = NULL;
+
+    test = "ruRegexFindGroups";
+    matches = ruRegexFindGroups(rr, orig, &ret);
+    fail_unless(exp == ret, retText, test, exp, ret);
+    fail_if(NULL == matches, retText, test, NULL, matches);
+
+    uint32_t expSz = 3, sz = ruListSize(matches, &ret);
+    fail_unless(exp == ret, retText, test, exp, ret);
+    fail_unless(expSz == sz, retText, test, expSz, sz);
+
+    char* entry = ruListIdx(matches, 0, char*, &ret);
+    fail_unless(exp == ret, retText, test, exp, ret);
+    ck_assert_str_eq(entry, orig);
+
+    entry = ruListIdx(matches, 1, char*, &ret);
+    fail_unless(exp == ret, retText, test, exp, ret);
+    ck_assert_str_eq(entry, "");
+
+    entry = ruListIdx(matches, 2, char*, &ret);
+    fail_unless(exp == ret, retText, test, exp, ret);
+    ck_assert_str_eq(entry, foo);
+
+    matches = ruListFree(matches);
+    ruRegexFree(rr);
+
+}
+END_TEST
+
 TCase* regexTests ( void ) {
     TCase *tcase = tcase_create ( "regex" );
     tcase_add_test ( tcase, api );
     tcase_add_test ( tcase, run );
     tcase_add_test ( tcase, groups );
+    tcase_add_test ( tcase, groups2 );
     return tcase;
 }

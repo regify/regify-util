@@ -172,8 +172,11 @@ bool ruRegexSearch(ruRegex rr, const char* original, bool fully, ruList matches,
             int32_t needLen = uregex_group(re->ex, i,
                                            NULL, 0,
                                            &errorCode);
-            if (U_BUFFER_OVERFLOW_ERROR != errorCode) {
-                ruSetError("error in uregex_group error=%s",
+            // we usually get U_BUFFER_OVERFLOW_ERROR but when optioonal matches
+            // fail we get U_STRING_NOT_TERMINATED_WARNING and needLen == 0
+            if (!(errorCode == U_BUFFER_OVERFLOW_ERROR ||
+                (errorCode == U_STRING_NOT_TERMINATED_WARNING && !needLen))) {
+                ruSetError("error in uregex_group estimate error=%s",
                            u_errorName(errorCode));
                 ret = RUE_GENERAL;
                 break;

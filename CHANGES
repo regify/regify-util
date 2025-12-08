@@ -54,3 +54,6 @@ The inplace functions have been removed. The following updates are suggested:
 * Logging API has been reworked to integrate realtime log cleaning and an optional logging thread
 - ruSetLogger has new cleaned and threaded params. Just add ,false, false for compatibility
 - ruLogFunc now also receives the log level ruStdErrorLogger(perm_ptr, trans_chars) -> ruStdErrorLogger(perm_ptr, uint32_t, trans_chars)
+
+Changes in 2.2
+Fixed ruRegexFindGroups and ruRegexMatchGroups calls to cope with empty matches without returning RUE_GENERAL
