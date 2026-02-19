@@ -79,15 +79,19 @@ RUAPI perm_chars ruGetOs(void) {
 }
 
 RUAPI alloc_chars ruGetHostname(void) {
-    char name[256] = "";
 #ifdef _WIN32
-    DWORD len = 256;
-    if(GetComputerNameA(name, &len)) {
+    uint16_t name[MAX_COMPUTERNAME_LENGTH + 1] = L"";
+    memset(&name[0], 0, sizeof(name));
+    DWORD len = MAX_COMPUTERNAME_LENGTH;
+    if(GetComputerNameW(name, &len)) {
+        return ruStrFromUtf16(name);
 #else
-    int len = 256;
+    char name[256] = "";
+    memset(&name[0], 0, sizeof(name));
+    int len = 255;
     if(!gethostname(name, len)) {
-#endif
         return ruStrDup(name);
+#endif
     }
     return NULL;
 }
